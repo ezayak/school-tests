@@ -1,0 +1,500 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>La Rencontre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one worksheet card on graph paper; picture on top, answers below, energy meter as progress */
+:root{
+  --paper:#F2F6FC; --grid:#DCE6F3; --card:#FFFFFF; --ink:#1B2440; --muted:#56637F;
+  --ke:#E8661A; --pe:#14899A; --heat:#DD3B34; --cool:#3474CF; --good:#1C8F4E; --bad:#CF3E3E; --hl:#FFE14D;
+  --sky:#E4F0FB; --ground:#C6DBAE; --grass:#8DC46C; --wood:#C48955; --water:#5AB0E2; --rock:#9AA3AE;
+  --deep:#0E2A47; --metal:#B9C3CD; --road:#5B6170; --glow:#9BE7FF;
+  --red:#E0443A; --blue:#2F6FD0; --green:#2C9B4F; --sand:#F2D08A; --sand2:#E7B964; --snow:#F7FAFD; --wheat:#E9D58A;
+  --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#111827; --grid:#1B2540; --card:#19223A; --ink:#EAF0FF; --muted:#A1ADC9;
+  --ke:#FF8A3D; --pe:#39C2D3; --heat:#FF6A5F; --cool:#6FA2F0; --good:#3CCB7F; --bad:#FF6B6B; --hl:#FFD84D;
+  --sky:#1E2C47; --ground:#2C4231; --grass:#3E6E3B; --wood:#8E6440; --water:#2F7FB0; --rock:#6C7480;
+  --deep:#06162A; --metal:#6F7A86; --road:#383E4B; --glow:#7FDcff;
+  --red:#FF6A5F; --blue:#6FA2F0; --green:#3CCB7F; --sand:#B8924A; --sand2:#A07C38; --snow:#DCE4EE; --wheat:#8F7F3E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1B2540; --card:#19223A; --ink:#EAF0FF; --muted:#A1ADC9;
+  --ke:#FF8A3D; --pe:#39C2D3; --heat:#FF6A5F; --cool:#6FA2F0; --good:#3CCB7F; --bad:#FF6B6B; --hl:#FFD84D;
+  --sky:#1E2C47; --ground:#2C4231; --grass:#3E6E3B; --wood:#8E6440; --water:#2F7FB0; --rock:#6C7480;
+  --deep:#06162A; --metal:#6F7A86; --road:#383E4B; --glow:#7FDcff;
+  --red:#FF6A5F; --blue:#6FA2F0; --green:#3CCB7F; --sand:#B8924A; --sand2:#A07C38; --snow:#DCE4EE; --wheat:#8F7F3E; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.45;
+  padding-inline:16px; padding-block:20px 40px; min-height:100%;
+}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:20px;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.01em}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
+.btn{font-family:var(--display);font-size:1.25rem;border:2.5px solid var(--ink);border-radius:14px;padding:12px 26px;background:var(--hl);color:#1B2440;box-shadow:4px 4px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:4px 4px 0 var(--ink)}
+.btn.ghost{background:var(--card);color:var(--ink)}
+.btn.big{font-size:1.6rem;padding:14px 44px}
+
+/* start */
+.hero-title{font-size:clamp(2.6rem,9vw,4.2rem);line-height:.95}
+.hero-title .k{color:var(--ke)} .hero-title .p{color:var(--pe)}
+.eyebrow{font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:700;font-size:.9rem;background:var(--card)}
+.chip.pe{background:color-mix(in srgb,var(--pe) 22%,var(--card))}
+.chip.ke{background:color-mix(in srgb,var(--ke) 22%,var(--card))}
+.chip.ht{background:color-mix(in srgb,var(--heat) 18%,var(--card))}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{border:2px solid var(--ink);border-radius:12px;padding:8px 16px;background:var(--card);font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.back{align-self:flex-start;font-weight:700;color:var(--muted);text-decoration:none;font-size:.95rem}.back:hover{color:var(--ink);text-decoration:underline}
+.howto{color:var(--muted);margin:0;max-width:60ch}
+
+/* hud */
+.hud{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.qnum{font-family:var(--display);font-size:1.15rem}
+.meter{flex:1 1 160px;min-width:0;height:18px;border:2.5px solid var(--ink);border-radius:999px;background:var(--card);overflow:hidden;position:relative}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pe),var(--ke));transition:width .4s ease}
+.score{font-family:var(--display);font-size:1.15rem;border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px;background:var(--hl);color:#1B2440;display:flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.score svg{width:16px;height:16px}
+
+/* scene */
+.scene{width:100%;max-width:100%;aspect-ratio:16/9;border:2.5px solid var(--ink);border-radius:14px;overflow:hidden;display:block;background:var(--sky)}
+.scene svg{width:100%;height:100%;display:block}
+.qtype{display:inline-block;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;padding:2px 10px;border-radius:999px;border:2px solid var(--ink);align-self:flex-start}
+.qtype.mc{background:color-mix(in srgb,var(--pe) 22%,var(--card))}
+.qtype.dr{background:color-mix(in srgb,var(--hl) 45%,var(--card))}
+.line{min-height:66px;border:2.5px dashed var(--ink);border-radius:14px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:color-mix(in srgb,var(--hl) 10%,var(--card));transition:background .15s}
+.line.over{background:color-mix(in srgb,var(--hl) 40%,var(--card))}
+.line.ok{border-style:solid;border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--card))}
+.line.no{border-style:solid;border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.line .ph{color:var(--muted);font-weight:700}
+.bank{display:flex;flex-wrap:wrap;gap:10px;min-height:56px;align-items:center}
+.tile{font-family:var(--display);font-size:1.3rem;padding:8px 14px;border:2.5px solid var(--ink);border-radius:12px;background:var(--hl);color:#1B2440;box-shadow:3px 3px 0 var(--ink);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.line .tile{background:var(--card);color:var(--ink)}
+.tile.ghost{opacity:.25}
+.tile:disabled{cursor:default;opacity:1}
+.drag{position:fixed;pointer-events:none;z-index:50;transform:rotate(-3deg) scale(1.06);cursor:grabbing;margin:0}
+.qtype.mt{background:color-mix(in srgb,var(--ke) 22%,var(--card))}
+.qtext{font-size:1.3rem;font-weight:700;margin:0;text-wrap:pretty}
+
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts.long{grid-template-columns:1fr}
+@media (max-width:560px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;border:2.5px solid var(--ink);border-radius:14px;background:var(--card);padding:10px 14px;min-height:56px;font-weight:700;transition:transform .08s,background .15s}
+.opt:hover:not(:disabled){transform:translateY(-2px);background:color-mix(in srgb,var(--hl) 30%,var(--card))}
+.opt .L{flex:none;width:30px;height:30px;border-radius:9px;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-size:1rem}
+.opt span:last-child{min-width:0}
+.opt:disabled{cursor:default}
+.opt.right{background:color-mix(in srgb,var(--good) 22%,var(--card));border-color:var(--good)}
+.opt.right .L{background:var(--good);color:#fff;border-color:var(--good)}
+.opt.wrong{background:color-mix(in srgb,var(--bad) 18%,var(--card));border-color:var(--bad)}
+.opt.wrong .L{background:var(--bad);color:#fff;border-color:var(--bad)}
+.opt.dim{opacity:.55}
+
+.fb{border-radius:14px;padding:12px 16px;border:2.5px solid;display:flex;flex-direction:column;gap:4px}
+.fb.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--card))}
+.fb.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.fb b{font-family:var(--display);font-weight:400;font-size:1.25rem}
+.fb.ok b{color:var(--good)} .fb.no b{color:var(--bad)}
+.next{align-self:flex-end}
+
+/* matching */
+.match{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:10px 14px}
+.mcol{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mi{position:relative;display:flex;align-items:center;gap:10px;text-align:left;border:2.5px solid var(--ink);border-radius:14px;background:var(--card);padding:10px 12px;min-height:58px;font-weight:700;transition:transform .08s,background .15s}
+.mi:hover:not(:disabled){transform:translateY(-2px)}
+.mi .ic{font-family:var(--emoji);font-size:1.7rem;line-height:1;flex:none}
+.mi .tx{min-width:0;overflow-wrap:anywhere}
+.mi.sel{background:var(--hl);color:#1B2440;transform:translateY(-2px)}
+.mi .tag{position:absolute;top:-10px;right:-8px;width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-size:.95rem;color:#fff}
+.mi.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 16%,var(--card))}
+.mi.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--card))}
+.mi .fix{display:block;font-weight:400;font-size:.9rem;color:var(--muted);margin-top:2px}
+.mi:disabled{cursor:default}
+@media (max-width:480px){.match{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:8px}.mi{padding:8px;font-size:.92rem}.mi .ic{font-size:1.35rem}}
+.hint{color:var(--muted);margin:0}
+
+/* end */
+.big-score{font-family:var(--display);font-size:clamp(3rem,12vw,5rem);line-height:1;font-variant-numeric:tabular-nums}
+.big-score small{font-size:.4em;color:var(--muted)}
+.stars{display:flex;gap:6px}
+.stars svg{width:48px;height:48px}
+.review{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.review li{border:2px solid var(--grid);border-left:6px solid var(--bad);border-radius:10px;padding:10px 12px;background:var(--card)}
+.review .q{font-weight:700}
+.review .a{color:var(--muted);font-size:.95rem}
+.review .a em{font-style:normal;color:var(--good);font-weight:700}
+.review .a s{color:var(--bad)}
+
+/* svg scene classes */
+.f-sky{fill:var(--sky)} .f-ground{fill:var(--ground)} .f-grass{fill:var(--grass)} .f-wood{fill:var(--wood)} .f-water{fill:var(--water)}
+.f-rock{fill:var(--rock)} .f-deep{fill:var(--deep)} .f-metal{fill:var(--metal)} .f-road{fill:var(--road)} .f-ink{fill:var(--ink)} .f-card{fill:var(--card)}
+.f-ke{fill:var(--ke)} .f-pe{fill:var(--pe)} .f-heat{fill:var(--heat)} .f-cool{fill:var(--cool)} .f-glow{fill:var(--glow)}
+.f-hl{fill:var(--hl)} .f-sand{fill:var(--sand)} .f-sand2{fill:var(--sand2)} .f-snow{fill:var(--snow)} .f-wheat{fill:var(--wheat)} .st-hl{stroke:var(--hl);fill:none} .f-red{fill:var(--red)} .f-blue{fill:var(--blue)} .f-green{fill:var(--green)}
+.st-ink{stroke:var(--ink);fill:none} .st-ke{stroke:var(--ke);fill:none} .st-pe{stroke:var(--pe);fill:none} .st-heat{stroke:var(--heat);fill:none}
+.st-cool{stroke:var(--cool);fill:none} .st-green{stroke:var(--green);fill:none} .st-wave{stroke:var(--cool);fill:none} .st-glow{stroke:var(--glow);fill:none} .st-card{stroke:var(--card);fill:none} .st-wood{stroke:var(--wood);fill:none}
+.lbl{font:700 13px var(--body);fill:var(--ink)} .lbl-big{font:400 18px var(--display);fill:var(--ink)}
+.lbl-ke{font:400 18px var(--display);fill:var(--ke)} .lbl-heat{font:700 13px var(--body);fill:var(--heat)} .lbl-light{font:700 13px var(--body);fill:#EAF6FF}
+.emo{font-family:var(--emoji)}
+.wob{transform-box:fill-box;transform-origin:center;animation:wob 1.6s ease-in-out infinite}
+@keyframes wob{50%{transform:translateY(-3px)}}
+.pop{animation:pop .35s ease}
+@keyframes pop{from{transform:scale(.96);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.wob,.pop{animation:none}.meter i{transition:none}}
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+</style>
+
+<svg class="defs" aria-hidden="true"><defs>
+  <marker id="ah-ink" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-ink"/></marker>
+  <marker id="ah-ke" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-ke"/></marker>
+  <marker id="ah-pe" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-pe"/></marker>
+  <marker id="ah-heat" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-heat"/></marker>
+  <marker id="ah-cool" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-cool"/></marker>
+  <marker id="ah-hl" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-hl"/></marker>
+</defs></svg>
+
+<main class="wrap" id="app"></main>
+
+<script>
+(function(){
+/* ---------- drawing helpers ---------- */
+const em=(x,y,s,c,ex='')=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
+const tx=(x,y,t,c='lbl',a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
+const ar=(x1,y1,x2,y2,c='ink',w=4)=>`<line class="st-${c}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${w}" stroke-linecap="round" marker-end="url(#ah-${c})"/>`;
+const ml=(x,y,d=1,c='ink')=>[0,1,2].map(i=>`<line class="st-${c}" x1="${x}" y1="${y-10+i*10}" x2="${x+d*(14+(i%2)*10)}" y2="${y-10+i*10}" stroke-width="3" stroke-linecap="round"/>`).join('');
+const wv=(x,y,len,amp,per,c='wave',w=3)=>{let d=`M${x},${y}`;for(let t=1;t<=len;t+=2){d+=` L${x+t},${(y+amp*Math.sin(t/per*2*Math.PI)).toFixed(1)}`}return `<path class="st-${c}" d="${d}" stroke-width="${w}" stroke-linecap="round"/>`};
+const arcs=(x,y,d=1,c='wave')=>[10,20,30].map(r=>`<path class="st-${c}" d="M${x+d*r},${y-r*.8} Q${x+d*(r+9)},${y} ${x+d*r},${y+r*.8}" stroke-width="3" stroke-linecap="round"/>`).join('');
+const heat=(x,y,c='heat')=>[-14,0,14].map(o=>`<path class="st-${c}" d="M${x+o},${y} q6,-8 0,-16 q-6,-8 0,-16" stroke-width="3" stroke-linecap="round"/>`).join('');
+const SKY='<rect class="f-sky" width="320" height="180"/>';
+const G=(y=150,c='ground')=>`<rect class="f-${c}" y="${y}" width="320" height="${180-y}"/>`;
+const dominos=(fallen)=>{let s='';for(let i=0;i<8;i++){const x=48+i*30;let rot=0;if(fallen){rot=[72,62,48,26,0,0,0,0][i]}s+=`<g transform="rotate(${rot} ${x+12} 150)"><rect class="f-ink" x="${x}" y="98" width="12" height="52" rx="2"/><circle class="f-card" cx="${x+6}" cy="112" r="2.4"/><circle class="f-card" cx="${x+6}" cy="136" r="2.4"/><line class="st-card" x1="${x+2}" y1="124" x2="${x+10}" y2="124" stroke-width="1.5"/></g>`}return s};
+const rocket=(strong)=>`<rect class="f-deep" width="320" height="180"/>${[[30,20],[290,30],[250,150],[60,140],[200,15],[110,35]].map(([x,y])=>`<circle class="f-glow" cx="${x}" cy="${y}" r="1.8"/>`).join('')}${em(160,92,64,'🚀','transform="rotate(-45 160 92)"')}${strong?ar(70,160,70,40,'ke',9)+ar(250,60,250,110,'cool',4):ar(70,160,70,125,'ke',4)+ar(250,30,250,150,'cool',9)}${tx(70,172,'push up','lbl-light')}${tx(250,165,'weight','lbl-light')}`;
+
+const CH={Mounir:['👦','il'],Fouad:['👦🏽','il'],Bouli:['alien','il'],Minou:['🐱','il'],Nounours:['🧸','il'],Lapinou:['🐰','il'],"Stéphanie":['👧🏼','elle'],Alice:['👧','elle'],Noura:['👧🏽','elle'],Sara:['👧🏻','elle']};
+const alien=(x,y,s)=>{const k=s/70;return `<g transform="translate(${x} ${y}) scale(${k})"><line class="st-green" x1="-12" y1="-30" x2="-20" y2="-50" stroke-width="3"/><line class="st-green" x1="12" y1="-30" x2="20" y2="-50" stroke-width="3"/><circle class="f-green" cx="-20" cy="-52" r="5"/><circle class="f-green" cx="20" cy="-52" r="5"/><ellipse class="f-green" cx="0" cy="-14" rx="26" ry="22"/><circle class="f-card" cx="-9" cy="-16" r="6"/><circle class="f-card" cx="9" cy="-16" r="6"/><circle class="f-ink" cx="-9" cy="-16" r="3"/><circle class="f-ink" cx="9" cy="-16" r="3"/><path class="st-ink" d="M-8,-4 Q0,2 8,-4" stroke-width="2"/><rect class="f-cool" x="-18" y="8" width="36" height="34" rx="8"/><text class="lbl-big" x="0" y="26" text-anchor="middle" dominant-baseline="central" style="fill:#fff">B</text><line class="st-green" x1="-18" y1="14" x2="-38" y2="4" stroke-width="5" stroke-linecap="round"/><line class="st-green" x1="18" y1="14" x2="38" y2="4" stroke-width="5" stroke-linecap="round"/></g>`};
+const fig=(n,x,y,s)=>CH[n][0]==='alien'?alien(x,y,s):em(x,y,s,CH[n][0]);
+const tag=(x,y,t)=>`<rect class="f-hl" x="${x-48}" y="${y-13}" width="96" height="26" rx="8"/><rect class="st-ink" x="${x-48}" y="${y-13}" width="96" height="26" rx="8" stroke-width="2"/>${tx(x,y+1,t,'lbl-big').replace('lbl-big','lbl-big" style="font-size:16px')}`;
+const bubble=(x,y,t,w=120)=>`<rect class="f-card" x="${x-w/2}" y="${y-18}" width="${w}" height="36" rx="16"/><rect class="st-ink" x="${x-w/2}" y="${y-18}" width="${w}" height="36" rx="16" stroke-width="2"/><polygon class="f-card" points="${x-10},${y+16} ${x+4},${y+16} ${x-14},${y+30}"/><path class="st-ink" d="M${x-10},${y+18} L${x-14},${y+30} L${x+4},${y+18}" stroke-width="2"/>${tx(x,y,t,'lbl')}`;
+const BG=SKY+G(150,'grass');
+const SC={
+hello:()=>BG+fig('Bouli',90,100,90)+fig('Alice',230,100,80)+bubble(90,26,'Bonjour !',110)+bubble(230,26,'Bonjour !',110),
+duo:()=>BG+fig('Stéphanie',80,104,80)+fig('Alice',240,104,80)+bubble(110,24,'… Et toi ?',130)+bubble(250,24,'Moi, …',100),
+ou:()=>`<rect class="f-card" width="320" height="180"/>${em(60,90,64,'👄')}${tx(190,70,'ou = [u]','lbl-ke').replace('lbl-ke','lbl-ke" style="font-size:40px')}${tx(190,120,'Bonjour · Bouli · Nounours','lbl')}`,
+ou2:()=>`<rect class="f-card" width="320" height="180"/>${em(70,90,64,'👂')}${tx(200,90,'« ou » ?','lbl-ke').replace('lbl-ke','lbl-ke" style="font-size:40px')}`,
+conj:()=>`<rect class="f-card" width="320" height="180"/>${[['Je',"m'appelle",'Noura.'],['Tu',"t'appelles",'Mounir ?'],['Il',"s'appelle",'Bouli.'],['Elle',"s'appelle",'Alice.']].map((r,i)=>`<rect class="f-${['hl','sky','sky','sky'][0]}" x="16" y="${16+i*38}" width="288" height="32" rx="8" opacity="${i%2?.35:.7}"/>${tx(40,32+i*38,r[0],'lbl-heat').replace('lbl-heat','lbl-heat" style="font-size:16px')}${tx(150,32+i*38,r[1],'lbl-big')}${tx(256,32+i*38,r[2],'lbl')}`).join('')}`,
+conjQ:()=>`<rect class="f-card" width="320" height="180"/>${[['Je',"m'……",'Noura.'],['Tu',"t'……",'Mounir ?'],['Il',"s'……",'Bouli.'],['Elle',"s'……",'Alice.']].map((r,i)=>`<rect class="f-sky" x="16" y="${16+i*38}" width="288" height="32" rx="8"/>${tx(40,32+i*38,r[0],'lbl-heat').replace('lbl-heat','lbl-heat" style="font-size:16px')}${tx(150,32+i*38,r[1],'lbl-big')}${tx(256,32+i*38,r[2],'lbl')}`).join('')}`,
+elyssa:()=>`<rect class="f-card" width="320" height="180"/><rect class="st-ink" x="10" y="10" width="300" height="160" rx="10" stroke-width="2"/>${em(272,52,46,'👧')}${em(274,128,34,'🎒')}${["Bonjour ! Je suis Elyssa,","je suis une fille. J'ai huit ans.","Ma sœur s'appelle Lina,","mon frère s'appelle Amine.","Je suis une élève,","mon cartable est rouge."].map((l,i)=>tx(22,32+i*23,l,'lbl','start').replace('class="lbl"','class="lbl" style="font-size:14px"')).join('')}`,
+};
+Object.keys(CH).forEach(n=>{
+  SC['c_'+n]=()=>BG+fig(n,160,92,92)+tag(160,160,n);
+  SC['b_'+n]=()=>BG+fig(n,110,96,92)+bubble(230,46,"Je …",90)+tag(110,162,n);
+  SC['q_'+n]=()=>BG+fig(n,160,92,92)+tag(160,160,'?');
+});
+// word tiles for "Mets en ordre"
+const tiles=ws=>()=>{let x=12;const parts=ws.map(w=>{const wd=Math.max(40,w.length*9+18);const r={w,x,wd};x+=wd+8;return r});const tot=x-8,off=(320-tot)/2-12;return `<rect class="f-card" width="320" height="180"/>${tx(160,40,'Mets en ordre :','lbl-big')}${parts.map(p=>`<rect class="f-hl" x="${p.x+off}" y="76" width="${p.wd}" height="40" rx="8"/><rect class="st-ink" x="${p.x+off}" y="76" width="${p.wd}" height="40" rx="8" stroke-width="2"/>${tx(p.x+off+p.wd/2,96,p.w,'lbl-big').replace('lbl-big','lbl-big" style="font-size:16px')}`).join('')}`};
+SC.o1=tiles(["t'","Comment","appelles ?","tu"]);
+SC.o2=tiles(["Mounir.","appelle","Il","s'"]);
+SC.o3=tiles(["Fouad.","appelle","s'","Il"]);
+SC.o4=tiles(["m'","Mark.","Je","appelle"]);
+SC.o5=tiles(["Amélie.","s'appelle","Elle"]);
+SC.o6=tiles(["appelles","Stéphanie ?","Tu","t'"]);
+
+const IL=n=>CH[n][1]==='il'?'Il':'Elle';
+const WR=n=>CH[n][1]==='il'?'Elle':'Il';
+const MC=[];
+// Comment il/elle s'appelle ?
+["Mounir","Bouli","Minou","Nounours","Lapinou","Stéphanie","Alice","Noura","Fouad"].forEach(n=>{
+  const p=IL(n);
+  MC.push({s:'c_'+n,q:`Comment ${p.toLowerCase()} s'appelle ?`,o:[`${p} s'appelle ${n}.`,`${WR(n)} s'appelle ${n}.`,`${p} m'appelle ${n}.`,`${p} t'appelles ${n}.`],x:`${p} s'appelle ${n}. Use « ${p.toLowerCase()} » for ${p==='Il'?'a boy or a male animal/character':'a girl'}, and « s'appelle » goes with il / elle.`});
+});
+// il ou elle ?
+["Noura","Lapinou","Alice","Minou"].forEach(n=>{
+  MC.push({s:'c_'+n,q:`Comment ___ s'appelle ? (${n})`,o:['il','elle'],k:1,c:IL(n)==='Il'?0:1,x:`${n} is ${IL(n)==='Il'?'a boy / male character → il':'a girl → elle'}.`});
+});
+// Je m'appelle
+["Mounir","Fouad","Noura","Bouli"].forEach(n=>{
+  MC.push({s:'b_'+n,q:`${n} se présente. Qu'est-ce qu'${IL(n).toLowerCase()} dit ?`,o:[`Je m'appelle ${n}.`,`Je s'appelle ${n}.`,`Je t'appelles ${n}.`,`Il m'appelle ${n}.`],x:`When you talk about yourself: « Je m'appelle … » (My name is …).`});
+});
+// Qui est-ce ?
+["Bouli","Nounours","Alice","Lapinou"].forEach(n=>{
+  MC.push({s:'c_'+n,q:'Qui est-ce ?',o:[`C'est ${n}.`,`Je m'appelle ${n}.`,`Tu t'appelles ${n}.`],x:`« Qui est-ce ? » (Who is it?) → « C'est ${n}. » (It's ${n}.)`});
+});
+MC.push(
+{s:'c_Sara',q:"Tu ______ Sara ?",o:["t'appelles","m'appelle","s'appelle"],x:"Tu t'appelles Sara ? With « tu » the verb ends in -es: t'appelles."},
+{s:'c_Minou',q:"Il ______ Minou.",o:["s'appelle","m'appelle","t'appelles"],x:"Il s'appelle Minou."},
+{s:'c_Bouli',q:"Je ______ Bouli.",o:["m'appelle","s'appelle","t'appelles"],x:"Je m'appelle Bouli."},
+{s:'c_Stéphanie',q:"Elle ______ Stéphanie.",o:["s'appelle","m'appelle","t'appelles"],x:"Elle s'appelle Stéphanie."},
+{s:'c_Alice',q:"Elle (s'appeler) ______ Alice.",o:["s'appelle","s'appeles","m'appelle"],x:"Elle s'appelle Alice."},
+{s:'c_Bouli',q:"Tu (s'appeler) ______ Bouli ?",o:["t'appelles","t'appelle","s'appelle"],x:"Tu t'appelles Bouli ?"},
+{s:'conjQ',q:"Je m'app___",o:["elle","elles","el"],k:1,x:"Je m'appelle: the ending is -elle."},
+{s:'conjQ',q:"Tu t'app___",o:["elle","elles","ell"],k:1,c:1,x:"Tu t'appelles: with tu, add -s → -elles."},
+{s:'conjQ',q:"Il s'app___",o:["elle","elles","el"],k:1,x:"Il s'appelle: the ending is -elle."},
+{s:'conjQ',q:"___ m'appelle Noura.",o:["Je","Tu","Il"],k:1,x:"m' goes with Je: Je m'appelle."},
+{s:'conjQ',q:"___ t'appelles Mounir ?",o:["Tu","Je","Elle"],k:1,x:"t' goes with Tu: Tu t'appelles."},
+{s:'conjQ',q:"Elle ___appelle Alice.",o:["s'","m'","t'"],k:1,x:"Elle s'appelle. Il / Elle → s'."},
+{s:'conjQ',q:"Je ___appelle Fouad.",o:["m'","t'","s'"],k:1,x:"Je m'appelle."},
+{s:'conjQ',q:"Tu ___appelles Alice ?",o:["t'","m'","s'"],k:1,x:"Tu t'appelles."},
+{s:'duo',q:"« Bonjour ! Je m'appelle Stéphanie ! Et toi, comment tu t'appelles ? » What does Alice answer?",o:["Moi, je m'appelle Alice.","Moi, tu t'appelles Alice.","Moi, il s'appelle Alice."],x:"Moi, je m'appelle Alice."},
+{s:'hello',q:"« Bonjour ! » means…",o:["Hello / Good morning","Goodbye","Thank you"],x:"Bonjour = Hello."},
+{s:'duo',q:"« Comment tu t'appelles ? » means…",o:["What is your name?","How old are you?","Where do you live?"],x:"Comment tu t'appelles ? = What is your name?"},
+{s:'ou',q:'Which word has the sound « ou » [u]?',o:["Nounours","Alice","Stéphanie"],x:"Nou-nours has « ou » twice!"},
+{s:'ou2',q:'Which word has the sound « ou » [u]?',o:["Bonjour","Alice","Lina"],x:"Bon-jour has « ou »."},
+{s:'ou2',q:'Which word has the sound « ou » [u]?',o:["Fouad","Sara","Amine"],x:"F-ou-ad has « ou »."},
+{s:'ou2',q:'Which word has the sound « ou » [u]?',o:["Lapinou","Elyssa","Stéphanie"],x:"Lapin-ou has « ou »."},
+{s:'ou',q:'Which word does NOT have the sound « ou »?',o:["Alice","Bouli","Mounir","Noura"],x:"Bouli, Mounir and Noura all have « ou ». Alice does not."},
+{s:'ou',q:'Which word does NOT have the sound « ou »?',o:["Stéphanie","Minou","Nounours","Lapinou"],x:"Minou, Nounours and Lapinou all have « ou »."},
+{s:'elyssa',q:'Elyssa est…',o:['une fille','un garçon'],k:1,x:'« Je suis une fille. »'},
+{s:'elyssa',q:'Elyssa a…',o:['8 ans','7 ans','9 ans'],x:"« J'ai huit ans. » Huit = 8."},
+{s:'elyssa',q:'Lina est…',o:["la sœur d'Elyssa","la mère d'Elyssa","la grand-mère d'Elyssa"],x:"« Ma sœur s'appelle Lina. »"},
+{s:'elyssa',q:'Amine est…',o:["le frère d'Elyssa","la mère d'Elyssa","la sœur d'Elyssa"],x:"« Mon frère s'appelle Amine. »"},
+{s:'elyssa',q:"Le cartable d'Elyssa est…",o:['rouge','bleu','vert'],x:"« Mon cartable est rouge. »"},
+{s:'elyssa',q:'Elyssa est…',o:['une élève','une maîtresse','une maman'],x:"« Je suis une élève. » (a pupil)"},
+);
+const DR=[
+{w:["Comment","tu","t'","appelles","?"],s:'duo'},
+{w:["Il","s'","appelle","Mounir."],s:'c_Mounir'},
+{w:["Il","s'","appelle","Fouad."],s:'c_Fouad'},
+{w:["Je","m'appelle","Mark."],s:'b_Mounir'},
+{w:["Il","s'appelle","Luc."],s:'c_Mounir'},
+{w:["Elle","s'appelle","Amélie."],s:'c_Alice'},
+{w:["Toi,","tu","t'","appelles","Stéphanie","?"],s:'c_Stéphanie'},
+{w:["Bonjour !","Je","m'appelle","Stéphanie !"],s:'duo'},
+{w:["Moi,","je","m'appelle","Alice."],s:'duo'},
+{w:["Comment","il","s'appelle","?"],s:'q_Minou'},
+{w:["Comment","elle","s'appelle","?"],s:'q_Noura'},
+{w:["Elle","s'appelle","Noura."],s:'c_Noura'},
+{w:["C'est","Bouli."],s:'c_Bouli'},
+{w:["Je","m'appelle","Bouli."],s:'b_Bouli'},
+{w:["Il","s'appelle","Nounours."],s:'c_Nounours'},
+];
+const MT=[
+{t:'Associe : match the start to the end',p:[['🙋','Je','m\'appelle Noura.'],['👉','Tu',"t'appelles Mounir ?"],['👦','Il',"s'appelle Bouli."],['👧','Elle',"s'appelle Alice."]]},
+{t:'Match the French to the English',p:[['👋','Bonjour !','Hello!'],['❓',"Comment tu t'appelles ?",'What is your name?'],['🙋',"Je m'appelle …",'My name is …'],['🔍','Qui est-ce ?','Who is it?']]},
+{t:'Match each question to its answer',p:[['🙋',"Comment tu t'appelles ?","Je m'appelle Fouad."],['👦',"Comment il s'appelle ?","Il s'appelle Mounir."],['👧',"Comment elle s'appelle ?","Elle s'appelle Noura."],['🔍','Qui est-ce ?',"C'est Lapinou."]]},
+{t:"Qui est-ce ? Match the picture to the name",p:[['🐱','Le chat','Minou'],['🧸',"L'ours",'Nounours'],['🐰','Le lapin','Lapinou'],['👽',"L'extraterrestre",'Bouli']]},
+{t:"Elyssa's family: match",p:[['👧','Elyssa','Une fille de 8 ans'],['👭','Lina',"La sœur d'Elyssa"],['👦','Amine',"Le frère d'Elyssa"],['🎒','Le cartable','Rouge']]},
+{t:'Complete the verb: match the start to the ending',p:[['🙋',"Je m'app…",'…elle Mark.'],['👉',"Tu t'app…",'…elles Sara ?'],['👦',"Il s'app…",'…elle Luc.']]},
+];
+
+/* ---------- game state ---------- */
+const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
+const LENS=[{n:10,mc:6,mt:2,dr:2,l:'Quick · 10'},{n:20,mc:12,mt:3,dr:5,l:'Normal · 20'},{n:0,mc:MC.length,mt:MT.length,dr:DR.length,l:'All · '+(MC.length+MT.length+DR.length)}];
+let lenIdx=1;
+try{const v=localStorage.getItem('fr-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
+const S={list:[],i:0,score:0,max:0,miss:[]};
+const app=document.getElementById('app');
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KID=(()=>{try{const q=new URLSearchParams(location.search).get('name');if(q)return q.slice(0,30);return localStorage.getItem('st-name')||''}catch(e){return ''}})();
+const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+const scene=k=>`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${SC[k]()}</svg></div>`;
+
+function start(){
+  const L=LENS[lenIdx];
+  const mc=shuf(MC).slice(0,L.mc).map(q=>({type:'mc',...q}));
+  const mt=shuf(MT).slice(0,L.mt).map(q=>({type:'mt',...q}));
+  const dr=shuf(DR).slice(0,L.dr).map(q=>({type:'dr',...q}));
+  let list=shuf(mc.concat(mt,dr));
+  // avoid two matching rounds in a row when possible
+  for(let i=1;i<list.length;i++){if(list[i].type==='mt'&&list[i-1].type==='mt'){const j=list.findIndex((q,k)=>k>i&&q.type==='mc');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
+  S.list=list;S.i=0;S.score=0;S.miss=[];
+  S.max=list.reduce((t,q)=>t+(q.type==='mt'?q.p.length:1),0);
+  render();
+}
+
+function hud(){
+  const pct=Math.round(S.i/S.list.length*100);
+  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+}
+
+function render(){
+  if(!S.list.length) return home();
+  if(S.i>=S.list.length) return end();
+  const q=S.list[S.i];
+  q.type==='mc'?renderMC(q):q.type==='dr'?renderDR(q):renderMT(q);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function home(){
+  app.innerHTML=`<section class="card pop">
+    <a class="back" href="../../../index.html">← All games</a>
+    <span class="eyebrow">Grade 4 French · Leçon 1 · Midterm practice</span>
+    <h1 class="hero-title"><span class="p">La</span> <span class="k">Rencontre</span></h1>
+    ${scene('hello')}
+    <p class="howto">Ready${KID?', '+esc(KID):''}? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. In “Mets en ordre” rounds, drag the words into the right order. The questions are mixed up every time you play.</p>
+    <div class="chips"><span class="chip pe">Le verbe s'appeler</span><span class="chip ke">Qui est-ce ? C'est…</span><span class="chip">Le son « ou »</span><span class="chip">Mets en ordre (drag)</span><span class="chip ht">Compréhension</span></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${l.l}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
+  </section>`;
+  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;try{localStorage.setItem('fr-len',lenIdx)}catch(e){}home()});
+  document.getElementById('startBtn').onclick=start;
+}
+
+function renderMC(q){
+  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
+  if(!q.k) opts=shuf(opts);
+  const long=opts.some(o=>o.t.length>34);
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mc">Choose the answer</span>
+    ${scene(q.s)}
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="fbx"></div>
+  </section>`;
+  const btns=[...app.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.i];
+    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
+    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
+    document.getElementById('pts').textContent=S.score;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x)}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  });
+}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+function renderMT(q){
+  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
+  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
+  const pair={}; // leftIdx -> rightIdx
+  let sel=null, checked=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    <p class="qtext">${esc(q.t)}</p>
+    <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
+    <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
+  </section>`;
+  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
+  function color(li){const keys=Object.keys(pair).map(Number).sort((a,b)=>a-b);return PAIRC[left.findIndex(x=>x.i===li)%PAIRC.length]}
+  function draw(){
+    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
+      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
+    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
+      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
+    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
+    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
+      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
+      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    checked=true;let got=0;
+    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
+    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
+    const all=got===q.p.length;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right meaning under the word.'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  };
+}
+
+function renderDR(q){
+  const target=q.w;
+  let bank=shuf(target.map((t,i)=>({t,i})));
+  for(let n=0;n<5&&bank.every((b,k)=>b.i===k);n++)bank=shuf(bank);
+  let line=[];let done=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype dr">Drag the words · Mets en ordre</span>
+    ${scene(q.s)}
+    <p class="qtext">Drag the words onto the line to make a correct sentence.</p>
+    <div class="line" id="line" aria-label="Your sentence"></div>
+    <div class="bank" id="bank" aria-label="Words"></div>
+    <p class="hint">Tip: you can also tap a word to move it.</p>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my sentence</button></div></div>
+  </section>`;
+  const L=document.getElementById('line'),B=document.getElementById('bank');
+  function draw(){
+    L.innerHTML=line.length?line.map((w,k)=>`<button type="button" class="tile" id="tl-${k}" data-from="line" data-k="${k}">${esc(w.t)}</button>`).join(''):'<span class="ph">Drop the words here</span>';
+    B.innerHTML=bank.map((w,k)=>`<button type="button" class="tile" id="tb-${k}" data-from="bank" data-k="${k}">${esc(w.t)}</button>`).join('');
+    if(done){L.querySelectorAll('.tile').forEach(t=>t.disabled=true);return}
+    document.querySelectorAll('#line .tile,#bank .tile').forEach(bindTile);
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=bank.length>0;
+  }
+  function move(from,k,to,idx){
+    const src=from==='line'?line:bank;const [w]=src.splice(k,1);
+    const dst=to==='line'?line:bank;
+    if(idx!=null&&from===to&&idx>k)idx--;
+    if(idx==null||idx>dst.length)idx=dst.length;
+    dst.splice(idx,0,w);draw();
+  }
+  function insertIndex(x,y){
+    const tiles=[...L.querySelectorAll('.tile:not(.ghost)')];let idx=0;const all=[...L.querySelectorAll('.tile')];
+    for(const t of all){const r=t.getBoundingClientRect();if(y<r.top-4)break;if(y<=r.bottom+4&&x<r.left+r.width/2)break;idx++}
+    return idx;
+  }
+  function bindTile(el){
+    el.onpointerdown=e=>{
+      if(done)return;e.preventDefault();
+      const from=el.dataset.from,k=+el.dataset.k,sx=e.clientX,sy=e.clientY;let ghost=null;
+      const r=el.getBoundingClientRect();const ox=sx-r.left,oy=sy-r.top;
+      try{el.setPointerCapture(e.pointerId)}catch(_){}
+      const mv=ev=>{
+        if(!ghost&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>6){ghost=el.cloneNode(true);ghost.classList.add('drag');ghost.removeAttribute('id');document.body.appendChild(ghost);el.classList.add('ghost')}
+        if(ghost){ghost.style.left=(ev.clientX-ox)+'px';ghost.style.top=(ev.clientY-oy)+'px';const lr=L.getBoundingClientRect();L.classList.toggle('over',ev.clientX>=lr.left&&ev.clientX<=lr.right&&ev.clientY>=lr.top-10&&ev.clientY<=lr.bottom+10)}
+      };
+      const up=ev=>{
+        el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);
+        L.classList.remove('over');
+        if(!ghost){ // tap
+          from==='bank'?move('bank',k,'line',null):move('line',k,'bank',null);return}
+        ghost.remove();el.classList.remove('ghost');
+        const lr=L.getBoundingClientRect(),br=B.getBoundingClientRect();
+        const inLine=ev.clientX>=lr.left&&ev.clientX<=lr.right&&ev.clientY>=lr.top-10&&ev.clientY<=lr.bottom+10;
+        if(inLine){move(from,k,'line',insertIndex(ev.clientX,ev.clientY))}
+        else if(from==='line'){move('line',k,'bank',null)}
+        else draw();
+      };
+      el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
+    };
+    el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const from=el.dataset.from,k=+el.dataset.k;from==='bank'?move('bank',k,'line',null):move('line',k,'bank',null)}};
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    done=true;const nice=t=>t.replace(/' /g,"'");const mineRaw=line.map(w=>w.t).join(' '),rightRaw=target.join(' ');const ok=mineRaw===rightRaw;const mine=nice(mineRaw),right=nice(rightRaw);
+    if(ok)S.score++;else S.miss.push({q:'Mets en ordre',your:mine,right});
+    document.getElementById('pts').textContent=S.score;
+    L.classList.add(ok?'ok':'no');draw();
+    document.getElementById('fbx').innerHTML=`<div class="fb ${ok?'ok':'no'}"><b>${ok?pick(['Bravo !','Très bien !','Super !','Correct!']):'Not quite.'}</b><span>${ok?'Your sentence is correct.':'The correct sentence is: <strong>'+esc(right)+'</strong>'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  };
+}
+
+function star(on){return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 21l1.6-7L2 9.2l7.1-.6z" fill="${on?'var(--hl)':'var(--card)'}" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/></svg>`}
+
+function end(){
+  const pct=Math.round(S.score/S.max*100);
+  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const msg=pct===100?'Perfect score! You are ready for the midterm.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below and play again.';
+  app.innerHTML=`<section class="card pop">
+    <span class="eyebrow">Your score</span>
+    <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
+    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <h2>${pct}% · ${msg}</h2>
+    <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
+  </section>
+  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
+  document.getElementById('againBtn').onclick=start;
+  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+home();
+})();
+</script>
+</body></html>

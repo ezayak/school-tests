@@ -1,0 +1,426 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>USA Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one worksheet card on graph paper; picture on top, answers below, energy meter as progress */
+:root{
+  --paper:#F2F6FC; --grid:#DCE6F3; --card:#FFFFFF; --ink:#1B2440; --muted:#56637F;
+  --ke:#E8661A; --pe:#14899A; --heat:#DD3B34; --cool:#3474CF; --good:#1C8F4E; --bad:#CF3E3E; --hl:#FFE14D;
+  --sky:#E4F0FB; --ground:#C6DBAE; --grass:#8DC46C; --wood:#C48955; --water:#5AB0E2; --rock:#9AA3AE;
+  --deep:#0E2A47; --metal:#B9C3CD; --road:#5B6170; --glow:#9BE7FF;
+  --red:#E0443A; --blue:#2F6FD0; --green:#2C9B4F; --sand:#F2D08A; --sand2:#E7B964; --snow:#F7FAFD; --wheat:#E9D58A;
+  --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#111827; --grid:#1B2540; --card:#19223A; --ink:#EAF0FF; --muted:#A1ADC9;
+  --ke:#FF8A3D; --pe:#39C2D3; --heat:#FF6A5F; --cool:#6FA2F0; --good:#3CCB7F; --bad:#FF6B6B; --hl:#FFD84D;
+  --sky:#1E2C47; --ground:#2C4231; --grass:#3E6E3B; --wood:#8E6440; --water:#2F7FB0; --rock:#6C7480;
+  --deep:#06162A; --metal:#6F7A86; --road:#383E4B; --glow:#7FDcff;
+  --red:#FF6A5F; --blue:#6FA2F0; --green:#3CCB7F; --sand:#B8924A; --sand2:#A07C38; --snow:#DCE4EE; --wheat:#8F7F3E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1B2540; --card:#19223A; --ink:#EAF0FF; --muted:#A1ADC9;
+  --ke:#FF8A3D; --pe:#39C2D3; --heat:#FF6A5F; --cool:#6FA2F0; --good:#3CCB7F; --bad:#FF6B6B; --hl:#FFD84D;
+  --sky:#1E2C47; --ground:#2C4231; --grass:#3E6E3B; --wood:#8E6440; --water:#2F7FB0; --rock:#6C7480;
+  --deep:#06162A; --metal:#6F7A86; --road:#383E4B; --glow:#7FDcff;
+  --red:#FF6A5F; --blue:#6FA2F0; --green:#3CCB7F; --sand:#B8924A; --sand2:#A07C38; --snow:#DCE4EE; --wheat:#8F7F3E; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.45;
+  padding-inline:16px; padding-block:20px 40px; min-height:100%;
+}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:20px;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.01em}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
+.btn{font-family:var(--display);font-size:1.25rem;border:2.5px solid var(--ink);border-radius:14px;padding:12px 26px;background:var(--hl);color:#1B2440;box-shadow:4px 4px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:4px 4px 0 var(--ink)}
+.btn.ghost{background:var(--card);color:var(--ink)}
+.btn.big{font-size:1.6rem;padding:14px 44px}
+
+/* start */
+.hero-title{font-size:clamp(2.6rem,9vw,4.2rem);line-height:.95}
+.hero-title .k{color:var(--ke)} .hero-title .p{color:var(--pe)}
+.eyebrow{font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:700;font-size:.9rem;background:var(--card)}
+.chip.pe{background:color-mix(in srgb,var(--pe) 22%,var(--card))}
+.chip.ke{background:color-mix(in srgb,var(--ke) 22%,var(--card))}
+.chip.ht{background:color-mix(in srgb,var(--heat) 18%,var(--card))}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{border:2px solid var(--ink);border-radius:12px;padding:8px 16px;background:var(--card);font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.back{align-self:flex-start;font-weight:700;color:var(--muted);text-decoration:none;font-size:.95rem}.back:hover{color:var(--ink);text-decoration:underline}
+.howto{color:var(--muted);margin:0;max-width:60ch}
+
+/* hud */
+.hud{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.qnum{font-family:var(--display);font-size:1.15rem}
+.meter{flex:1 1 160px;min-width:0;height:18px;border:2.5px solid var(--ink);border-radius:999px;background:var(--card);overflow:hidden;position:relative}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pe),var(--ke));transition:width .4s ease}
+.score{font-family:var(--display);font-size:1.15rem;border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px;background:var(--hl);color:#1B2440;display:flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.score svg{width:16px;height:16px}
+
+/* scene */
+.scene{width:100%;max-width:100%;aspect-ratio:16/9;border:2.5px solid var(--ink);border-radius:14px;overflow:hidden;display:block;background:var(--sky)}
+.scene svg{width:100%;height:100%;display:block}
+.qtype{display:inline-block;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;padding:2px 10px;border-radius:999px;border:2px solid var(--ink);align-self:flex-start}
+.qtype.mc{background:color-mix(in srgb,var(--pe) 22%,var(--card))}
+.qtype.mt{background:color-mix(in srgb,var(--ke) 22%,var(--card))}
+.qtext{font-size:1.3rem;font-weight:700;margin:0;text-wrap:pretty}
+
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts.long{grid-template-columns:1fr}
+@media (max-width:560px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;border:2.5px solid var(--ink);border-radius:14px;background:var(--card);padding:10px 14px;min-height:56px;font-weight:700;transition:transform .08s,background .15s}
+.opt:hover:not(:disabled){transform:translateY(-2px);background:color-mix(in srgb,var(--hl) 30%,var(--card))}
+.opt .L{flex:none;width:30px;height:30px;border-radius:9px;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-size:1rem}
+.opt span:last-child{min-width:0}
+.opt:disabled{cursor:default}
+.opt.right{background:color-mix(in srgb,var(--good) 22%,var(--card));border-color:var(--good)}
+.opt.right .L{background:var(--good);color:#fff;border-color:var(--good)}
+.opt.wrong{background:color-mix(in srgb,var(--bad) 18%,var(--card));border-color:var(--bad)}
+.opt.wrong .L{background:var(--bad);color:#fff;border-color:var(--bad)}
+.opt.dim{opacity:.55}
+
+.fb{border-radius:14px;padding:12px 16px;border:2.5px solid;display:flex;flex-direction:column;gap:4px}
+.fb.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--card))}
+.fb.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.fb b{font-family:var(--display);font-weight:400;font-size:1.25rem}
+.fb.ok b{color:var(--good)} .fb.no b{color:var(--bad)}
+.next{align-self:flex-end}
+
+/* matching */
+.match{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:10px 14px}
+.mcol{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mi{position:relative;display:flex;align-items:center;gap:10px;text-align:left;border:2.5px solid var(--ink);border-radius:14px;background:var(--card);padding:10px 12px;min-height:58px;font-weight:700;transition:transform .08s,background .15s}
+.mi:hover:not(:disabled){transform:translateY(-2px)}
+.mi .ic{font-family:var(--emoji);font-size:1.7rem;line-height:1;flex:none}
+.mi .tx{min-width:0;overflow-wrap:anywhere}
+.mi.sel{background:var(--hl);color:#1B2440;transform:translateY(-2px)}
+.mi .tag{position:absolute;top:-10px;right:-8px;width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-size:.95rem;color:#fff}
+.mi.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 16%,var(--card))}
+.mi.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--card))}
+.mi .fix{display:block;font-weight:400;font-size:.9rem;color:var(--muted);margin-top:2px}
+.mi:disabled{cursor:default}
+@media (max-width:480px){.match{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:8px}.mi{padding:8px;font-size:.92rem}.mi .ic{font-size:1.35rem}}
+.hint{color:var(--muted);margin:0}
+
+/* end */
+.big-score{font-family:var(--display);font-size:clamp(3rem,12vw,5rem);line-height:1;font-variant-numeric:tabular-nums}
+.big-score small{font-size:.4em;color:var(--muted)}
+.stars{display:flex;gap:6px}
+.stars svg{width:48px;height:48px}
+.review{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.review li{border:2px solid var(--grid);border-left:6px solid var(--bad);border-radius:10px;padding:10px 12px;background:var(--card)}
+.review .q{font-weight:700}
+.review .a{color:var(--muted);font-size:.95rem}
+.review .a em{font-style:normal;color:var(--good);font-weight:700}
+.review .a s{color:var(--bad)}
+
+/* svg scene classes */
+.f-sky{fill:var(--sky)} .f-ground{fill:var(--ground)} .f-grass{fill:var(--grass)} .f-wood{fill:var(--wood)} .f-water{fill:var(--water)}
+.f-rock{fill:var(--rock)} .f-deep{fill:var(--deep)} .f-metal{fill:var(--metal)} .f-road{fill:var(--road)} .f-ink{fill:var(--ink)} .f-card{fill:var(--card)}
+.f-ke{fill:var(--ke)} .f-pe{fill:var(--pe)} .f-heat{fill:var(--heat)} .f-cool{fill:var(--cool)} .f-glow{fill:var(--glow)}
+.f-hl{fill:var(--hl)} .f-sand{fill:var(--sand)} .f-sand2{fill:var(--sand2)} .f-snow{fill:var(--snow)} .f-wheat{fill:var(--wheat)} .st-hl{stroke:var(--hl);fill:none} .f-red{fill:var(--red)} .f-blue{fill:var(--blue)} .f-green{fill:var(--green)}
+.st-ink{stroke:var(--ink);fill:none} .st-ke{stroke:var(--ke);fill:none} .st-pe{stroke:var(--pe);fill:none} .st-heat{stroke:var(--heat);fill:none}
+.st-cool{stroke:var(--cool);fill:none} .st-wave{stroke:var(--cool);fill:none} .st-glow{stroke:var(--glow);fill:none} .st-card{stroke:var(--card);fill:none} .st-wood{stroke:var(--wood);fill:none}
+.lbl{font:700 13px var(--body);fill:var(--ink)} .lbl-big{font:400 18px var(--display);fill:var(--ink)}
+.lbl-ke{font:400 18px var(--display);fill:var(--ke)} .lbl-heat{font:700 13px var(--body);fill:var(--heat)} .lbl-light{font:700 13px var(--body);fill:#EAF6FF}
+.emo{font-family:var(--emoji)}
+.wob{transform-box:fill-box;transform-origin:center;animation:wob 1.6s ease-in-out infinite}
+@keyframes wob{50%{transform:translateY(-3px)}}
+.pop{animation:pop .35s ease}
+@keyframes pop{from{transform:scale(.96);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.wob,.pop{animation:none}.meter i{transition:none}}
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+</style>
+
+<svg class="defs" aria-hidden="true"><defs>
+  <marker id="ah-ink" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-ink"/></marker>
+  <marker id="ah-ke" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-ke"/></marker>
+  <marker id="ah-pe" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-pe"/></marker>
+  <marker id="ah-heat" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-heat"/></marker>
+  <marker id="ah-cool" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-cool"/></marker>
+  <marker id="ah-hl" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-hl"/></marker>
+</defs></svg>
+
+<main class="wrap" id="app"></main>
+
+<script>
+(function(){
+/* ---------- drawing helpers ---------- */
+const em=(x,y,s,c,ex='')=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
+const tx=(x,y,t,c='lbl',a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
+const ar=(x1,y1,x2,y2,c='ink',w=4)=>`<line class="st-${c}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${w}" stroke-linecap="round" marker-end="url(#ah-${c})"/>`;
+const ml=(x,y,d=1,c='ink')=>[0,1,2].map(i=>`<line class="st-${c}" x1="${x}" y1="${y-10+i*10}" x2="${x+d*(14+(i%2)*10)}" y2="${y-10+i*10}" stroke-width="3" stroke-linecap="round"/>`).join('');
+const wv=(x,y,len,amp,per,c='wave',w=3)=>{let d=`M${x},${y}`;for(let t=1;t<=len;t+=2){d+=` L${x+t},${(y+amp*Math.sin(t/per*2*Math.PI)).toFixed(1)}`}return `<path class="st-${c}" d="${d}" stroke-width="${w}" stroke-linecap="round"/>`};
+const arcs=(x,y,d=1,c='wave')=>[10,20,30].map(r=>`<path class="st-${c}" d="M${x+d*r},${y-r*.8} Q${x+d*(r+9)},${y} ${x+d*r},${y+r*.8}" stroke-width="3" stroke-linecap="round"/>`).join('');
+const heat=(x,y,c='heat')=>[-14,0,14].map(o=>`<path class="st-${c}" d="M${x+o},${y} q6,-8 0,-16 q-6,-8 0,-16" stroke-width="3" stroke-linecap="round"/>`).join('');
+const SKY='<rect class="f-sky" width="320" height="180"/>';
+const G=(y=150,c='ground')=>`<rect class="f-${c}" y="${y}" width="320" height="${180-y}"/>`;
+const dominos=(fallen)=>{let s='';for(let i=0;i<8;i++){const x=48+i*30;let rot=0;if(fallen){rot=[72,62,48,26,0,0,0,0][i]}s+=`<g transform="rotate(${rot} ${x+12} 150)"><rect class="f-ink" x="${x}" y="98" width="12" height="52" rx="2"/><circle class="f-card" cx="${x+6}" cy="112" r="2.4"/><circle class="f-card" cx="${x+6}" cy="136" r="2.4"/><line class="st-card" x1="${x+2}" y1="124" x2="${x+10}" y2="124" stroke-width="1.5"/></g>`}return s};
+const rocket=(strong)=>`<rect class="f-deep" width="320" height="180"/>${[[30,20],[290,30],[250,150],[60,140],[200,15],[110,35]].map(([x,y])=>`<circle class="f-glow" cx="${x}" cy="${y}" r="1.8"/>`).join('')}${em(160,92,64,'🚀','transform="rotate(-45 160 92)"')}${strong?ar(70,160,70,40,'ke',9)+ar(250,60,250,110,'cool',4):ar(70,160,70,125,'ke',4)+ar(250,30,250,150,'cool',9)}${tx(70,172,'push up','lbl-light')}${tx(250,165,'weight','lbl-light')}`;
+
+const globe=(cx,cy,r,eq='equator')=>`<circle class="f-water" cx="${cx}" cy="${cy}" r="${r}"/><ellipse class="f-grass" cx="${cx-r*.35}" cy="${cy-r*.3}" rx="${r*.3}" ry="${r*.22}"/><ellipse class="f-grass" cx="${cx+r*.3}" cy="${cy-r*.15}" rx="${r*.28}" ry="${r*.35}"/><ellipse class="f-grass" cx="${cx-r*.2}" cy="${cy+r*.45}" rx="${r*.18}" ry="${r*.25}"/><path class="f-snow" d="M${cx-r*.6},${cy-r*.8} A${r},${r} 0 0 1 ${cx+r*.6},${cy-r*.8} Z"/><path class="f-snow" d="M${cx-r*.6},${cy+r*.8} A${r},${r} 0 0 0 ${cx+r*.6},${cy+r*.8} Z"/><circle class="st-ink" cx="${cx}" cy="${cy}" r="${r}" stroke-width="2.5"/><line class="st-heat" x1="${cx-r-6}" y1="${cy}" x2="${cx+r+6}" y2="${cy}" stroke-width="3.5" stroke-dasharray="${eq==='rope'?'8 5':'none'}"/>${eq&&eq!=='rope'?tx(cx+r+10,cy,eq,'lbl-heat','start'):''}`;
+const USP="M28,52 L118,42 L196,46 L226,34 L246,52 L276,44 L298,58 L284,80 L276,104 L262,118 L262,150 L246,140 L222,128 L196,138 L170,160 L150,136 L120,130 L94,142 L70,122 L44,110 L30,84 Z";
+let clipN=0;
+const REG=[{k:'W',n:'West',c:'pe',r:[0,0,110,180],l:[66,78]},{k:'MW',n:'Midwest',c:'wheat',r:[110,0,112,118],l:[165,74]},{k:'NE',n:'Northeast',c:'cool',r:[222,0,98,90],l:[250,68]},{k:'SE',n:'Southeast',c:'green',r:[170,90,150,90],l:[226,122]},{k:'SW',n:'Southwest',c:'sand2',r:[70,100,100,80],l:[122,120]}];
+const usmap=(hi,labels=true)=>{const id='usc'+(clipN++);return `<defs><clipPath id="${id}"><path d="${USP}"/></clipPath></defs><g clip-path="url(#${id})">${REG.map(R=>`<rect class="f-${R.c}" x="${R.r[0]}" y="${R.r[1]}" width="${R.r[2]}" height="${R.r[3]}" opacity="${hi&&hi!==R.k?.22:1}"/>`).join('')}</g><path class="st-ink" d="${USP}" stroke-width="2.5"/>${labels?REG.map(R=>tx(R.l[0],R.l[1],R.n,'lbl')).join(''):''}${hi?tx(REG.find(R=>R.k===hi).l[0],REG.find(R=>R.k===hi).l[1],'?','lbl-big'):''}`};
+const mtn=(x,b,w,h,snow=true)=>`<polygon class="f-rock" points="${x-w/2},${b} ${x},${b-h} ${x+w/2},${b}"/>`+(snow?`<polygon class="f-snow" points="${x-w*.14},${b-h*.72} ${x},${b-h} ${x+w*.14},${b-h*.72} ${x+w*.05},${b-h*.78} ${x},${b-h*.7} ${x-w*.05},${b-h*.78}"/>`:'');
+const SEA=(y=130)=>`<rect class="f-water" y="${y}" width="320" height="${180-y}"/>`;
+
+const SC={
+regions:()=>SKY+usmap(null),
+rW:()=>SKY+usmap('W',false), rMW:()=>SKY+usmap('MW',false), rNE:()=>SKY+usmap('NE',false), rSE:()=>SKY+usmap('SE',false), rSW:()=>SKY+usmap('SW',false),
+landforms:()=>SKY+SEA(140)+`<rect class="f-grass" x="0" y="120" width="200" height="22"/>`+mtn(60,122,100,90)+`<ellipse class="f-grass" cx="150" cy="124" rx="44" ry="26"/><ellipse class="f-sand" cx="262" cy="150" rx="42" ry="10"/>${em(262,128,34,'🌴')}${tx(60,170,'mountain','lbl')}${tx(150,170,'hill','lbl')}${tx(262,172,'island','lbl')}`,
+mountain:()=>SKY+G(150)+mtn(160,150,200,130)+`<ellipse class="f-grass" cx="40" cy="150" rx="40" ry="16"/>${em(286,136,24,'🧗')}`,
+hills:()=>SKY+mtn(250,140,150,120)+`<ellipse class="f-grass" cx="70" cy="170" rx="100" ry="56"/><ellipse class="f-green" cx="180" cy="180" rx="90" ry="44" opacity=".85"/>${tx(80,96,'hill','lbl')}${tx(250,10,'mountain','lbl')}`,
+range:()=>SKY+G(150)+mtn(50,150,110,90)+mtn(120,150,120,120)+mtn(190,150,110,96)+mtn(255,150,120,112)+mtn(310,150,90,80),
+plains:()=>SKY+`<rect class="f-grass" y="100" width="320" height="80"/>${[30,80,140,200,260,300,50,120,180,240].map((x,i)=>em(x,i<6?120:150,20,'🌾')).join('')}${em(260,40,34,'☀️')}`,
+canyon:()=>SKY+`<polygon class="f-wood" points="0,60 120,60 140,180 0,180"/><polygon class="f-wood" points="320,60 196,60 176,180 320,180"/><polygon class="f-ke" opacity=".35" points="0,80 122,80 124,96 0,96"/><polygon class="f-ke" opacity=".35" points="320,100 192,100 190,116 320,116"/><rect class="f-water" x="136" y="164" width="44" height="16"/>${ar(158,64,158,150,'ink',3)}${tx(205,40,'deep and narrow','lbl')}`,
+plateau:()=>SKY+G(150)+`<polygon class="f-wood" points="40,150 84,64 236,64 280,150"/><line class="st-ink" x1="84" y1="64" x2="236" y2="64" stroke-width="3"/>${tx(160,44,'high and flat on top','lbl')}`,
+island:()=>SKY+SEA(100)+`<ellipse class="f-sand" cx="160" cy="118" rx="80" ry="18"/>${em(150,86,46,'🌴')}${em(190,94,30,'🌴')}`,
+northeast:()=>SKY+`<rect class="f-water" x="230" y="90" width="90" height="90"/><ellipse class="f-grass" cx="70" cy="150" rx="110" ry="50"/><ellipse class="f-green" cx="170" cy="160" rx="80" ry="38"/>${[60,110,150,190].map((x,i)=>`<ellipse class="f-rock" cx="${x}" cy="${150+i%2*10}" rx="10" ry="6"/>`).join('')}${tx(275,110,'Atlantic Ocean','lbl')}${tx(100,30,'rolling hills, rocky soil','lbl')}`,
+appalachian:()=>SKY+G(150)+mtn(70,150,140,70,false)+mtn(150,150,150,84,false)+mtn(240,150,150,74,false)+`<path class="f-green" opacity=".5" d="M0,150 L70,80 L120,120 L150,66 L200,110 L240,76 L320,150 Z"/>${tx(160,30,'Appalachian Mountains','lbl-big')}`,
+coastal:()=>SKY+`<rect class="f-water" x="200" y="90" width="120" height="90"/><polygon class="f-sand" points="0,110 220,110 200,180 0,180"/>${em(60,96,34,'🌴')}${em(150,124,30,'🏖️')}${ar(110,74,190,74,'ink',3)}${tx(150,58,'flat land next to the ocean','lbl')}`,
+rivers:()=>SKY+`<rect class="f-grass" y="40" width="320" height="140"/><path class="st-cool" d="M160,40 C140,80 190,110 160,140 S150,170 170,180" stroke-width="10" fill="none"/><path class="st-cool" d="M0,90 C50,100 110,80 154,100" stroke-width="7"/><path class="st-cool" d="M320,110 C270,120 220,104 168,122" stroke-width="7"/>${tx(160,22,'three big rivers','lbl-big')}${[40,100,240,290].map(x=>em(x,150,20,'🌾')).join('')}`,
+mississippi:()=>SKY+`<rect class="f-green" y="0" width="320" height="180" opacity=".55"/><path class="st-cool" d="M150,0 C110,40 200,70 160,110 S120,150 170,180" stroke-width="12"/>${tx(230,60,'a big river','lbl')}${em(60,120,34,'🌳')}${em(260,130,34,'🌳')}`,
+midwest:()=>SKY+`<rect class="f-wheat" y="90" width="320" height="90"/>${[...Array(14)].map((_,i)=>em(12+i*23,100+(i%3)*28,22,'🌾')).join('')}${em(270,40,34,'☀️')}${tx(120,40,'as far as the eye can see','lbl')}`,
+southwest:()=>SKY+`<rect class="f-sand" y="120" width="320" height="60"/><polygon class="f-wood" points="0,120 0,70 70,70 90,120"/><polygon class="f-wood" points="320,120 320,60 240,60 220,120"/>${em(150,110,46,'🌵')}${em(270,30,34,'☀️')}${tx(150,160,'dry land','lbl')}`,
+grandCanyon:()=>SKY+`<polygon class="f-wood" points="0,50 120,50 140,180 0,180"/><polygon class="f-wood" points="320,50 196,50 176,180 320,180"/>${[70,100,130].map(y=>`<line class="st-ink" x1="0" y1="${y}" x2="${120+(y-50)/6.5}" y2="${y}" stroke-width="1.5" opacity=".3"/><line class="st-ink" x1="${196-(y-50)/6.5}" y1="${y}" x2="320" y2="${y}" stroke-width="1.5" opacity=".3"/>`).join('')}<rect class="f-water" x="136" y="166" width="44" height="14"/>${tx(160,26,'a famous landmark','lbl-big')}`,
+westHL:()=>SKY+G(150)+mtn(90,150,150,136)+`<path class="f-sand" d="M190,150 Q240,178 300,150 Z"/>${tx(190,24,'highest ?','lbl','start')}${ar(184,24,104,20,'ink',2)}${tx(246,132,'lowest ?','lbl')}${ar(246,142,246,160,'ink',2)}`,
+borders:()=>`<rect class="f-card" width="320" height="180"/><rect class="f-cool" x="0" y="0" width="320" height="50" opacity=".35"/><rect class="f-ke" x="0" y="50" width="320" height="80" opacity=".35"/><rect class="f-green" x="0" y="130" width="320" height="50" opacity=".35"/><line class="st-ink" x1="0" y1="50" x2="320" y2="50" stroke-width="2.5" stroke-dasharray="8 6"/><line class="st-ink" x1="0" y1="130" x2="320" y2="130" stroke-width="2.5" stroke-dasharray="8 6"/>${tx(160,25,'? (north)','lbl-big')}${tx(160,90,'United States','lbl-big')}${tx(160,155,'? (south)','lbl-big')}`,
+boundary:()=>`<rect class="f-card" width="320" height="180"/><rect class="f-cool" x="0" y="0" width="160" height="180" opacity=".3"/><rect class="f-ke" x="160" y="0" width="160" height="180" opacity=".3"/><line class="st-ink" x1="160" y1="0" x2="160" y2="180" stroke-width="3" stroke-dasharray="8 6"/>${em(160,96,54,'🤝')}${tx(80,30,'Country A','lbl-big')}${tx(240,30,'Country B','lbl-big')}${tx(170,160,'border','lbl','start')}`,
+mood:()=>SKY+G(150)+`${em(60,50,40,'🌧️')}${em(60,116,50,'🧥')}${tx(60,166,'Monday','lbl')}${ar(110,90,200,90,'ink',3)}${em(260,50,40,'☀️')}${em(260,116,50,'🩳')}${tx(260,166,'Tuesday','lbl')}`,
+weather:()=>SKY+G(150)+`${['☀️','🌧️','❄️','⛈️','🌬️'].map((e,i)=>em(40+i*60,90,44,e)).join('')}${tx(160,26,'it changes from day to day','lbl')}`,
+climate:()=>SKY+`${em(110,92,90,'🌍')}${em(232,74,44,'📅')}${tx(232,120,'over a long time','lbl')}`,
+seasons:()=>`<rect class="f-card" width="320" height="180"/>${[['🌸','spring'],['☀️','summer'],['🍂','fall'],['❄️','winter']].map((s,i)=>{const x=(i%2)*160,y=Math.floor(i/2)*90;return `<rect class="f-sky" x="${x+6}" y="${y+6}" width="148" height="78" rx="10"/>${em(x+55,y+45,40,s[0])}${tx(x+115,y+45,s[1],'lbl')}`}).join('')}`,
+coldMtn:()=>SKY+G(150)+mtn(160,150,220,130)+`${em(60,40,28,'❄️')}${em(260,40,28,'❄️')}${em(272,120,34,'🥶')}${tx(160,170,'cold all year round','lbl')}`,
+factors:()=>`<rect class="f-card" width="320" height="180"/>${[['🌡️','temperature'],['🌧️','precipitation'],['💧','humidity'],['🌍','location']].map((s,i)=>`<rect class="f-sky" x="${8+i*78}" y="40" width="70" height="100" rx="10"/>${em(43+i*78,78,34,s[0])}${tx(43+i*78,122,s[1],'lbl').replace('class="lbl"','class="lbl" style="font-size:10px"')}`).join('')}${tx(160,20,'What decides the weather?','lbl-big')}`,
+thermo:()=>SKY+`<rect class="f-card" x="146" y="16" width="28" height="122" rx="14"/><rect class="st-ink" x="146" y="16" width="28" height="122" rx="14" stroke-width="2.5"/><rect class="f-heat" x="155" y="56" width="10" height="86" rx="5"/><circle class="f-heat" cx="160" cy="148" r="18"/><circle class="st-ink" cx="160" cy="148" r="18" stroke-width="2.5"/>${[36,56,76,96,116].map(y=>`<line class="st-ink" x1="178" y1="${y}" x2="190" y2="${y}" stroke-width="2"/>`).join('')}${em(70,60,38,'🥵')}${em(250,120,38,'🥶')}`,
+precip:()=>SKY+G(150)+`${em(100,70,64,'🌧️')}${em(220,70,64,'🌨️')}${[80,100,120].map(x=>`<line class="st-cool" x1="${x}" y1="110" x2="${x-6}" y2="134" stroke-width="3" stroke-linecap="round"/>`).join('')}${em(206,124,18,'❄️')}${em(232,134,18,'❄️')}`,
+humidity:()=>SKY+`<rect class="f-water" y="130" width="320" height="50"/>${[[60,110],[100,80],[150,100],[200,70],[250,96],[120,50],[220,40],[280,60],[40,60],[170,30]].map(([x,y])=>`<circle class="f-cool" cx="${x}" cy="${y}" r="3.5" opacity=".55"/>`).join('')}${[70,160,250].map(x=>ar(x,124,x,90,'cool',2)).join('')}${tx(160,160,'lake','lbl-light')}${tx(160,14,'invisible water in the air','lbl')}`,
+equator:()=>SKY+globe(130,90,70,'equator')+tx(130,10,'North Pole','lbl')+tx(130,172,'South Pole','lbl'),
+rope:()=>SKY+globe(130,90,70,'rope')+tx(130,10,'North Pole','lbl')+tx(130,172,'South Pole','lbl')+tx(268,90,'?','lbl-big'),
+sunlight:()=>SKY+globe(200,90,70,'')+em(36,90,52,'☀️')+[50,70,90,110,130].map(y=>ar(66,90+(y-90)*.3,124,y,'ke',2.5)).join('')+tx(200,10,'North Pole','lbl')+tx(200,172,'South Pole','lbl'),
+arctic:()=>SKY+`<rect class="f-snow" y="120" width="320" height="60"/>${em(130,104,70,'🐻‍❄️')}${em(200,90,36,'🍦')}${em(60,36,28,'❄️')}${em(270,36,28,'❄️')}${tx(260,150,'Alaska','lbl-big')}`,
+tropical:()=>SKY+`<rect class="f-water" y="120" width="320" height="60"/><polygon class="f-sand" points="0,118 200,118 160,180 0,180"/>${em(60,88,64,'🌴')}${em(140,110,40,'🩳')}${em(270,40,44,'☀️')}${tx(260,150,'South Florida','lbl-light')}`,
+temperate:()=>SKY+G(150)+`${em(70,100,64,'🌳')}${em(170,60,40,'☀️')}${em(240,110,40,'🍂')}${em(170,120,30,'🌦️')}${tx(160,20,'not too hot, not too cold','lbl-big')}`,
+};
+
+const TF=['✓ Right','✗ Wrong'];
+const MC=[
+{s:'landforms',q:'Landforms are…',o:["The different shapes of Earth's surface",'Different kinds of weather','Lines on a map'],x:"Landforms are the different shapes of Earth's surface, such as a hill, a mountain or an island."},
+{s:'landforms',q:'Which of these is a landform?',o:['An island','A cloud','A river boat'],x:'Hills, mountains and islands are landforms.'},
+{s:'mountain',q:'The highest landforms on Earth are…',o:['Mountains','Hills','Plains'],x:'Mountains are the highest landforms on Earth.'},
+{s:'hills',q:'Hills are ___ than mountains.',o:['smaller','taller','colder'],x:'Hills are smaller than mountains.'},
+{s:'range',q:'A group or chain of mountains that are close together is called a…',o:['Mountain range','Plateau','Coastal plain'],x:'Mountains join together in lines called ranges.'},
+{s:'plains',q:'Plains are large or small areas that are often covered with…',o:['Grasses','Snow','Rocks'],x:'Plains may be large or small and are often covered with grasses.'},
+{s:'canyon',q:'A deep, narrow valley with steep, rocky sides is called a…',o:['Canyon','Hill','Plain'],x:'A canyon is a deep, narrow valley with steep, rocky sides.'},
+{s:'plateau',q:'Which landform is high and flat on top?',o:['A plateau','A canyon','A valley'],x:'A plateau is a high, flat area of land. (Check the website paragraph "Landforms and Bodies of Water" too.)'},
+{s:'regions',q:'Geographers divide the United States into smaller areas called…',o:['Regions','Countries','Oceans'],x:'To study the United States, geographers divide it into smaller areas called regions.'},
+{s:'regions',q:'A region is…',o:['An area in which places share similar characteristics','The highest point of a mountain','A line around the Earth'],x:'A region is an area in which places share similar characteristics.'},
+{s:'regions',q:'How many regions are there in the United States?',o:['5','3','10'],k:1,c:0,x:'There are 5 regions: West, Southwest, Midwest, Northeast and Southeast.'},
+{s:'rNE',q:'Which region is shown?',o:['Northeast','Southeast','Midwest','West'],x:'The Northeast is in the top right, along the Atlantic Ocean.'},
+{s:'rSE',q:'Which region is shown?',o:['Southeast','Southwest','Northeast','Midwest'],x:'The Southeast is in the bottom right.'},
+{s:'rMW',q:'Which region is shown?',o:['Midwest','West','Northeast','Southwest'],x:'The Midwest is in the middle and north of the country.'},
+{s:'rSW',q:'Which region is shown?',o:['Southwest','Southeast','West','Midwest'],x:'The Southwest is in the bottom, between the West and the Southeast.'},
+{s:'rW',q:'Which region is shown?',o:['West','Southwest','Midwest','Northeast'],x:'The West is the biggest region, on the left side of the map.'},
+{s:'northeast',q:'Rolling hills and rocky soil along the Atlantic Ocean. Which region is this?',o:['Northeast','Southwest','Midwest'],x:"That's the Northeast!"},
+{s:'appalachian',q:'Which mountains run through the Northeast region?',o:['The Appalachian Mountains','Mount McKinley','The Grand Canyon'],x:'The soil is rocky, and the Appalachian Mountains run through the Northeast.'},
+{s:'appalachian',q:'The Southeast shares the Appalachian Mountains with the…',o:['Northeast','West','Southwest'],x:'The Southeast shares the Appalachian Mountains with the Northeast.'},
+{s:'coastal',q:'What special landform does the Southeast have?',o:['Coastal plains (beaches)','Death Valley','The Grand Canyon'],x:'The Southeast has coastal plains (beaches).'},
+{s:'coastal',q:'A coastal plain is…',o:['A flat area of land next to the ocean','A chain of mountains','A deep valley with rocky sides'],x:'A coastal plain is a flat area of land next to the ocean.'},
+{s:'mississippi',q:'Which river flows through the Southeast region?',o:['Mississippi River','Nile River','Amazon River'],x:'The Mississippi River flows through the Southeast.'},
+{s:'midwest',q:'Endless fields of grass stretching as far as the eye can see. Which region is this?',o:['Midwest','Northeast','Southwest'],x:"That's the Midwest!"},
+{s:'rivers',q:'The Missouri, Mississippi and Ohio rivers are all in the…',o:['Midwest','West','Southwest'],x:'The Missouri, Mississippi and Ohio rivers are all in the Midwest.'},
+{s:'southwest',q:'Dry lands and rocky canyons. Which region is this?',o:['Southwest','Northeast','Midwest'],x:'The Southwest is all about dry lands and rocky canyons.'},
+{s:'southwest',q:'Deserts are…',o:['Super dry lands','Very wet lands','Lands covered with ice'],x:'Deserts are like super dry lands.'},
+{s:'grandCanyon',q:"One of the Southwest's most famous landmarks is the…",o:['Grand Canyon','Mount McKinley','Mississippi River'],x:"The Grand Canyon is one of the Southwest's most famous landmarks."},
+{s:'regions',q:'Which is the biggest and most varied region?',o:['The West','The Northeast','The Southeast'],x:'The West is the biggest and most varied region of them all.'},
+{s:'westHL',q:'What is the highest peak in the United States?',o:['Mount McKinley (Denali)','Death Valley','The Grand Canyon'],x:'Mount McKinley (Denali) is the highest peak. It is in the West.'},
+{s:'westHL',q:'What is the lowest point in the United States?',o:['Death Valley','Mount McKinley','The Appalachian Mountains'],x:'Death Valley is the lowest point. It is in the West.'},
+{s:'borders',q:'The United States is bordered (lined) by the countries of…',o:['Canada and Mexico','Italy and Mexico','Canada and Egypt'],x:'Canada is to the north and Mexico is to the south.'},
+{s:'boundary',q:'Who sets and agrees on the borders between countries?',o:['The governments of each nation','The students in school','The animals that live there'],x:'Borders are set and agreed to by the governments of each nation involved.'},
+{s:'borders',q:'✓ or ✗? "The United States is bordered (lined) by the countries of Italy and Mexico."',o:TF,c:1,k:1,x:'Wrong ✗. The United States is bordered by CANADA and Mexico.'},
+{s:'canyon',q:'✓ or ✗? "A canyon is a deep, narrow valley with steep, rocky sides."',o:TF,c:0,k:1,x:'Right ✓.'},
+{s:'grandCanyon',q:'✓ or ✗? "One of the Southwest\'s most famous landmarks is the Mount McKinley."',o:TF,c:1,k:1,x:"Wrong ✗. It is the GRAND CANYON. Mount McKinley is the highest peak, in the West."},
+{s:'regions',q:'✓ or ✗? "A region is an area in which places share similar characteristics."',o:TF,c:0,k:1,x:'Right ✓.'},
+{s:'appalachian',q:'✓ or ✗? "The West shares the Appalachian Mountains with the Northeast."',o:TF,c:1,k:1,x:'Wrong ✗. The SOUTHEAST shares the Appalachian Mountains with the Northeast.'},
+{s:'mood',q:'Why do you need a raincoat one day and shorts the next day?',o:['Because the weather changes','Because the climate changes every day','Because the landforms move'],x:"It's all about weather! Weather changes all the time."},
+{s:'weather',q:'Weather is like the ___ of the air.',o:['mood','color','shape'],x:'Weather is like the mood of the air. It can be sunny, rainy or snowy.'},
+{s:'weather',q:'Weather changes…',o:['From day to day','Only once every 100 years','Never'],x:'Weather changes from day to day.'},
+{s:'climate',q:'Climate is…',o:['The weather in a place over a period of time','The weather right now','The amount of water in the air'],x:'Climate is the weather in a place over a period of time (the long-term weather pattern).'},
+{s:'seasons',q:'Seasons are part of…',o:['Climate','Landforms','Regions'],x:'Remember seasons? Those are part of climate too!'},
+{s:'coldMtn',q:'Mountains might have ___ weather all year round.',o:['colder','hotter','drier'],x:'Mountains might have colder weather all year round.'},
+{s:'factors',q:'Which one is NOT a factor that determines the weather?',o:['The color of the houses','Temperature','Humidity','Precipitation'],x:'The factors are temperature, precipitation, humidity and location.'},
+{s:'thermo',q:'Temperature tells us…',o:['How hot or cold a place is','How much rain falls','How high a mountain is'],x:'Temperature tells us how hot or cold a place is, like a giant thermometer!'},
+{s:'precip',q:'Precipitation is…',o:['The amount of rain or snow that falls in a place','The amount of water in the air','How hot a place is'],x:'Precipitation is the amount of rain or snow that falls in a place.'},
+{s:'humidity',q:'Humidity is…',o:['The amount of water in the air','The amount of snow on the ground','How hot or cold it is'],x:'Humidity is the amount of water in the air (invisible water).'},
+{s:'humidity',q:'Where does the invisible water in the air come from?',o:['Bodies of water such as rivers, lakes and oceans','Mountains and canyons','Cars and buildings'],x:'It comes from bodies of water such as rivers, lakes and oceans.'},
+{s:'rope',q:'The imaginary line that circles Earth halfway between the North Pole and the South Pole is the…',o:['Equator','Border','Mountain range'],x:'The equator is an imaginary line around the middle of Earth, like a big jump rope.'},
+{s:'sunlight',q:'Places near the equator receive…',o:['The most direct sunlight','The least sunlight','No sunlight'],x:'Places near the equator receive the most direct sunlight.'},
+{s:'sunlight',q:'As you move away from the equator, the climate gets…',o:['Cooler','Hotter','Wetter'],x:'As you move away from the equator, the climate gets cooler.'},
+{s:'arctic',q:'Which is the coldest climate?',o:['Arctic (polar) climate','Tropical climate','Temperate climate'],x:'The arctic or polar climate is the coldest! Places near the North Pole have it.'},
+{s:'arctic',q:'Where in the United States can you find an arctic climate?',o:['Alaska','South Florida','The Northeast'],x:'Up north in Alaska, where polar bears might eat your cone!'},
+{s:'tropical',q:'Tropical climates are…',o:['Warm or hot all year, near the equator','Very cold all year','Not too hot and not too cold'],x:'Tropical climates are warm or hot all year, near the equator.'},
+{s:'tropical',q:'Where in the United States can you find a tropical climate?',o:['South Florida','Alaska','The Midwest'],x:'In South Florida you can wear shorts even in winter!'},
+{s:'temperate',q:'Which climate is "just right": not too cold, not too hot, with warm summers and cool winters?',o:['Temperate climate','Arctic climate','Tropical climate'],x:'The temperate climate is just right.'},
+{s:'temperate',q:'Most parts of the USA, like the Northeast, have a ___ climate.',o:['temperate','arctic','tropical'],x:'You can find the temperate climate in most parts of the USA, like the Northeast.'},
+];
+const MT=[
+{t:'Match each landform to its meaning',p:[['🏔️','Mountain','The highest landform on Earth'],['⛰️','Hill','Smaller than a mountain'],['🌾','Plain','Land often covered with grasses'],['🏜️','Canyon','A deep, narrow valley with steep, rocky sides']]},
+{t:'Match each word to its meaning',p:[['🗺️','Region','An area where places share similar characteristics'],['🏔️','Mountain range','A chain of mountains close together'],['🏖️','Coastal plain','Flat land next to the ocean'],['🌍','Landforms',"The different shapes of Earth's surface"]]},
+{t:'Match each region to what it is known for',p:[['🌊','Northeast','Rolling hills and rocky soil along the Atlantic'],['🏖️','Southeast','Coastal plains (beaches)'],['🌾','Midwest','Endless fields of grass'],['🌵','Southwest','Dry lands and the Grand Canyon'],['⛰️','West','Mount McKinley and Death Valley']]},
+{t:'Match each word to its meaning',p:[['🌦️','Weather','The mood of the air; changes from day to day'],['📅','Climate','The weather in a place over a period of time'],['🌧️','Precipitation','The amount of rain or snow that falls'],['💧','Humidity','The amount of water in the air'],['🔴','Equator','An imaginary line that circles Earth in the middle']]},
+{t:'Match each climate to where you find it',p:[['🐻‍❄️','Arctic climate','Alaska, the coldest'],['🌴','Tropical climate','South Florida, hot all year'],['🍂','Temperate climate','The Northeast and most of the USA']]},
+{t:'Match each place to its fact',p:[['🏔️','Mount McKinley (Denali)','The highest peak in the United States'],['🏜️','Death Valley','The lowest point in the United States'],['🌄','Grand Canyon','Famous landmark of the Southwest'],['⛰️','Appalachian Mountains','Shared by the Northeast and Southeast']]},
+];
+
+/* ---------- game state ---------- */
+const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
+const LENS=[{n:10,mc:8,mt:2,l:'Quick · 10'},{n:20,mc:16,mt:4,l:'Normal · 20'},{n:0,mc:MC.length,mt:MT.length,l:'All · '+(MC.length+MT.length)}];
+let lenIdx=1;
+try{const v=localStorage.getItem('ux-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
+const S={list:[],i:0,score:0,max:0,miss:[]};
+const app=document.getElementById('app');
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KID=(()=>{try{const q=new URLSearchParams(location.search).get('name');if(q)return q.slice(0,30);return localStorage.getItem('st-name')||''}catch(e){return ''}})();
+const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+const scene=k=>`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${SC[k]()}</svg></div>`;
+
+function start(){
+  const L=LENS[lenIdx];
+  const mc=shuf(MC).slice(0,L.mc).map(q=>({type:'mc',...q}));
+  const mt=shuf(MT).slice(0,L.mt).map(q=>({type:'mt',...q}));
+  let list=shuf(mc.concat(mt));
+  // avoid two matching rounds in a row when possible
+  for(let i=1;i<list.length;i++){if(list[i].type==='mt'&&list[i-1].type==='mt'){const j=list.findIndex((q,k)=>k>i&&q.type==='mc');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
+  S.list=list;S.i=0;S.score=0;S.miss=[];
+  S.max=list.reduce((t,q)=>t+(q.type==='mc'?1:q.p.length),0);
+  render();
+}
+
+function hud(){
+  const pct=Math.round(S.i/S.list.length*100);
+  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+}
+
+function render(){
+  if(!S.list.length) return home();
+  if(S.i>=S.list.length) return end();
+  const q=S.list[S.i];
+  q.type==='mc'?renderMC(q):renderMT(q);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function home(){
+  app.innerHTML=`<section class="card pop">
+    <a class="back" href="../../../index.html">← All games</a>
+    <span class="eyebrow">Grade 4 Social Studies · Midterm practice</span>
+    <h1 class="hero-title"><span class="p">USA</span> <span class="k">Explorer</span></h1>
+    ${scene('regions')}
+    <p class="howto">Ready${KID?', '+esc(KID):''}? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
+    <div class="chips"><span class="chip pe">Landforms</span><span class="chip ke">5 regions of the USA</span><span class="chip">Weather &amp; climate</span><span class="chip ht">Climates of the USA</span></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${l.l}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
+  </section>`;
+  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;try{localStorage.setItem('ux-len',lenIdx)}catch(e){}home()});
+  document.getElementById('startBtn').onclick=start;
+}
+
+function renderMC(q){
+  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
+  if(!q.k) opts=shuf(opts);
+  const long=opts.some(o=>o.t.length>34);
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mc">Choose the answer</span>
+    ${scene(q.s)}
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="fbx"></div>
+  </section>`;
+  const btns=[...app.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.i];
+    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
+    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
+    document.getElementById('pts').textContent=S.score;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x)}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  });
+}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+function renderMT(q){
+  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
+  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
+  const pair={}; // leftIdx -> rightIdx
+  let sel=null, checked=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    <p class="qtext">${esc(q.t)}</p>
+    <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
+    <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
+  </section>`;
+  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
+  function color(li){const keys=Object.keys(pair).map(Number).sort((a,b)=>a-b);return PAIRC[left.findIndex(x=>x.i===li)%PAIRC.length]}
+  function draw(){
+    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
+      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
+    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
+      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
+    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
+    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
+      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
+      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    checked=true;let got=0;
+    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
+    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
+    const all=got===q.p.length;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right meaning under the word.'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  };
+}
+
+function star(on){return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 21l1.6-7L2 9.2l7.1-.6z" fill="${on?'var(--hl)':'var(--card)'}" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/></svg>`}
+
+function end(){
+  const pct=Math.round(S.score/S.max*100);
+  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const msg=pct===100?'Perfect score! You are ready for the midterm.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below and play again.';
+  app.innerHTML=`<section class="card pop">
+    <span class="eyebrow">Your score</span>
+    <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
+    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <h2>${pct}% · ${msg}</h2>
+    <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
+  </section>
+  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
+  document.getElementById('againBtn').onclick=start;
+  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+home();
+})();
+</script>
+</body></html>

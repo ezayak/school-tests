@@ -1,0 +1,413 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>Climate Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one worksheet card on graph paper; picture on top, answers below, energy meter as progress */
+:root{
+  --paper:#F2F6FC; --grid:#DCE6F3; --card:#FFFFFF; --ink:#1B2440; --muted:#56637F;
+  --ke:#E8661A; --pe:#14899A; --heat:#DD3B34; --cool:#3474CF; --good:#1C8F4E; --bad:#CF3E3E; --hl:#FFE14D;
+  --sky:#E4F0FB; --ground:#C6DBAE; --grass:#8DC46C; --wood:#C48955; --water:#5AB0E2; --rock:#9AA3AE;
+  --deep:#0E2A47; --metal:#B9C3CD; --road:#5B6170; --glow:#9BE7FF;
+  --red:#E0443A; --blue:#2F6FD0; --green:#2C9B4F; --sand:#F2D08A; --sand2:#E7B964; --snow:#F7FAFD; --wheat:#E9D58A;
+  --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#111827; --grid:#1B2540; --card:#19223A; --ink:#EAF0FF; --muted:#A1ADC9;
+  --ke:#FF8A3D; --pe:#39C2D3; --heat:#FF6A5F; --cool:#6FA2F0; --good:#3CCB7F; --bad:#FF6B6B; --hl:#FFD84D;
+  --sky:#1E2C47; --ground:#2C4231; --grass:#3E6E3B; --wood:#8E6440; --water:#2F7FB0; --rock:#6C7480;
+  --deep:#06162A; --metal:#6F7A86; --road:#383E4B; --glow:#7FDcff;
+  --red:#FF6A5F; --blue:#6FA2F0; --green:#3CCB7F; --sand:#B8924A; --sand2:#A07C38; --snow:#DCE4EE; --wheat:#8F7F3E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1B2540; --card:#19223A; --ink:#EAF0FF; --muted:#A1ADC9;
+  --ke:#FF8A3D; --pe:#39C2D3; --heat:#FF6A5F; --cool:#6FA2F0; --good:#3CCB7F; --bad:#FF6B6B; --hl:#FFD84D;
+  --sky:#1E2C47; --ground:#2C4231; --grass:#3E6E3B; --wood:#8E6440; --water:#2F7FB0; --rock:#6C7480;
+  --deep:#06162A; --metal:#6F7A86; --road:#383E4B; --glow:#7FDcff;
+  --red:#FF6A5F; --blue:#6FA2F0; --green:#3CCB7F; --sand:#B8924A; --sand2:#A07C38; --snow:#DCE4EE; --wheat:#8F7F3E; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.45;
+  padding-inline:16px; padding-block:20px 40px; min-height:100%;
+}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:20px;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.01em}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
+.btn{font-family:var(--display);font-size:1.25rem;border:2.5px solid var(--ink);border-radius:14px;padding:12px 26px;background:var(--hl);color:#1B2440;box-shadow:4px 4px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:4px 4px 0 var(--ink)}
+.btn.ghost{background:var(--card);color:var(--ink)}
+.btn.big{font-size:1.6rem;padding:14px 44px}
+
+/* start */
+.hero-title{font-size:clamp(2.6rem,9vw,4.2rem);line-height:.95}
+.hero-title .k{color:var(--ke)} .hero-title .p{color:var(--pe)}
+.eyebrow{font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:700;font-size:.9rem;background:var(--card)}
+.chip.pe{background:color-mix(in srgb,var(--pe) 22%,var(--card))}
+.chip.ke{background:color-mix(in srgb,var(--ke) 22%,var(--card))}
+.chip.ht{background:color-mix(in srgb,var(--heat) 18%,var(--card))}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{border:2px solid var(--ink);border-radius:12px;padding:8px 16px;background:var(--card);font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.back{align-self:flex-start;font-weight:700;color:var(--muted);text-decoration:none;font-size:.95rem}.back:hover{color:var(--ink);text-decoration:underline}
+.howto{color:var(--muted);margin:0;max-width:60ch}
+
+/* hud */
+.hud{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.qnum{font-family:var(--display);font-size:1.15rem}
+.meter{flex:1 1 160px;min-width:0;height:18px;border:2.5px solid var(--ink);border-radius:999px;background:var(--card);overflow:hidden;position:relative}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pe),var(--ke));transition:width .4s ease}
+.score{font-family:var(--display);font-size:1.15rem;border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px;background:var(--hl);color:#1B2440;display:flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.score svg{width:16px;height:16px}
+
+/* scene */
+.scene{width:100%;max-width:100%;aspect-ratio:16/9;border:2.5px solid var(--ink);border-radius:14px;overflow:hidden;display:block;background:var(--sky)}
+.scene svg{width:100%;height:100%;display:block}
+.qtype{display:inline-block;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;padding:2px 10px;border-radius:999px;border:2px solid var(--ink);align-self:flex-start}
+.qtype.mc{background:color-mix(in srgb,var(--pe) 22%,var(--card))}
+.qtype.mt{background:color-mix(in srgb,var(--ke) 22%,var(--card))}
+.qtext{font-size:1.3rem;font-weight:700;margin:0;text-wrap:pretty}
+
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts.long{grid-template-columns:1fr}
+@media (max-width:560px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;border:2.5px solid var(--ink);border-radius:14px;background:var(--card);padding:10px 14px;min-height:56px;font-weight:700;transition:transform .08s,background .15s}
+.opt:hover:not(:disabled){transform:translateY(-2px);background:color-mix(in srgb,var(--hl) 30%,var(--card))}
+.opt .L{flex:none;width:30px;height:30px;border-radius:9px;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-size:1rem}
+.opt span:last-child{min-width:0}
+.opt:disabled{cursor:default}
+.opt.right{background:color-mix(in srgb,var(--good) 22%,var(--card));border-color:var(--good)}
+.opt.right .L{background:var(--good);color:#fff;border-color:var(--good)}
+.opt.wrong{background:color-mix(in srgb,var(--bad) 18%,var(--card));border-color:var(--bad)}
+.opt.wrong .L{background:var(--bad);color:#fff;border-color:var(--bad)}
+.opt.dim{opacity:.55}
+
+.fb{border-radius:14px;padding:12px 16px;border:2.5px solid;display:flex;flex-direction:column;gap:4px}
+.fb.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--card))}
+.fb.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.fb b{font-family:var(--display);font-weight:400;font-size:1.25rem}
+.fb.ok b{color:var(--good)} .fb.no b{color:var(--bad)}
+.next{align-self:flex-end}
+
+/* matching */
+.match{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:10px 14px}
+.mcol{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mi{position:relative;display:flex;align-items:center;gap:10px;text-align:left;border:2.5px solid var(--ink);border-radius:14px;background:var(--card);padding:10px 12px;min-height:58px;font-weight:700;transition:transform .08s,background .15s}
+.mi:hover:not(:disabled){transform:translateY(-2px)}
+.mi .ic{font-family:var(--emoji);font-size:1.7rem;line-height:1;flex:none}
+.mi .tx{min-width:0;overflow-wrap:anywhere}
+.mi.sel{background:var(--hl);color:#1B2440;transform:translateY(-2px)}
+.mi .tag{position:absolute;top:-10px;right:-8px;width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-size:.95rem;color:#fff}
+.mi.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 16%,var(--card))}
+.mi.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--card))}
+.mi .fix{display:block;font-weight:400;font-size:.9rem;color:var(--muted);margin-top:2px}
+.mi:disabled{cursor:default}
+@media (max-width:480px){.match{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:8px}.mi{padding:8px;font-size:.92rem}.mi .ic{font-size:1.35rem}}
+.hint{color:var(--muted);margin:0}
+
+/* end */
+.big-score{font-family:var(--display);font-size:clamp(3rem,12vw,5rem);line-height:1;font-variant-numeric:tabular-nums}
+.big-score small{font-size:.4em;color:var(--muted)}
+.stars{display:flex;gap:6px}
+.stars svg{width:48px;height:48px}
+.review{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.review li{border:2px solid var(--grid);border-left:6px solid var(--bad);border-radius:10px;padding:10px 12px;background:var(--card)}
+.review .q{font-weight:700}
+.review .a{color:var(--muted);font-size:.95rem}
+.review .a em{font-style:normal;color:var(--good);font-weight:700}
+.review .a s{color:var(--bad)}
+
+/* svg scene classes */
+.f-sky{fill:var(--sky)} .f-ground{fill:var(--ground)} .f-grass{fill:var(--grass)} .f-wood{fill:var(--wood)} .f-water{fill:var(--water)}
+.f-rock{fill:var(--rock)} .f-deep{fill:var(--deep)} .f-metal{fill:var(--metal)} .f-road{fill:var(--road)} .f-ink{fill:var(--ink)} .f-card{fill:var(--card)}
+.f-ke{fill:var(--ke)} .f-pe{fill:var(--pe)} .f-heat{fill:var(--heat)} .f-cool{fill:var(--cool)} .f-glow{fill:var(--glow)}
+.f-hl{fill:var(--hl)} .f-sand{fill:var(--sand)} .f-sand2{fill:var(--sand2)} .f-snow{fill:var(--snow)} .f-wheat{fill:var(--wheat)} .st-hl{stroke:var(--hl);fill:none} .f-red{fill:var(--red)} .f-blue{fill:var(--blue)} .f-green{fill:var(--green)}
+.st-ink{stroke:var(--ink);fill:none} .st-ke{stroke:var(--ke);fill:none} .st-pe{stroke:var(--pe);fill:none} .st-heat{stroke:var(--heat);fill:none}
+.st-cool{stroke:var(--cool);fill:none} .st-wave{stroke:var(--cool);fill:none} .st-glow{stroke:var(--glow);fill:none} .st-card{stroke:var(--card);fill:none} .st-wood{stroke:var(--wood);fill:none}
+.lbl{font:700 13px var(--body);fill:var(--ink)} .lbl-big{font:400 18px var(--display);fill:var(--ink)}
+.lbl-ke{font:400 18px var(--display);fill:var(--ke)} .lbl-heat{font:700 13px var(--body);fill:var(--heat)} .lbl-light{font:700 13px var(--body);fill:#EAF6FF}
+.emo{font-family:var(--emoji)}
+.wob{transform-box:fill-box;transform-origin:center;animation:wob 1.6s ease-in-out infinite}
+@keyframes wob{50%{transform:translateY(-3px)}}
+.pop{animation:pop .35s ease}
+@keyframes pop{from{transform:scale(.96);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.wob,.pop{animation:none}.meter i{transition:none}}
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+</style>
+
+<svg class="defs" aria-hidden="true"><defs>
+  <marker id="ah-ink" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-ink"/></marker>
+  <marker id="ah-ke" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-ke"/></marker>
+  <marker id="ah-pe" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-pe"/></marker>
+  <marker id="ah-heat" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-heat"/></marker>
+  <marker id="ah-cool" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-cool"/></marker>
+  <marker id="ah-hl" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-hl"/></marker>
+</defs></svg>
+
+<main class="wrap" id="app"></main>
+
+<script>
+(function(){
+/* ---------- drawing helpers ---------- */
+const em=(x,y,s,c,ex='')=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
+const tx=(x,y,t,c='lbl',a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
+const ar=(x1,y1,x2,y2,c='ink',w=4)=>`<line class="st-${c}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${w}" stroke-linecap="round" marker-end="url(#ah-${c})"/>`;
+const ml=(x,y,d=1,c='ink')=>[0,1,2].map(i=>`<line class="st-${c}" x1="${x}" y1="${y-10+i*10}" x2="${x+d*(14+(i%2)*10)}" y2="${y-10+i*10}" stroke-width="3" stroke-linecap="round"/>`).join('');
+const wv=(x,y,len,amp,per,c='wave',w=3)=>{let d=`M${x},${y}`;for(let t=1;t<=len;t+=2){d+=` L${x+t},${(y+amp*Math.sin(t/per*2*Math.PI)).toFixed(1)}`}return `<path class="st-${c}" d="${d}" stroke-width="${w}" stroke-linecap="round"/>`};
+const arcs=(x,y,d=1,c='wave')=>[10,20,30].map(r=>`<path class="st-${c}" d="M${x+d*r},${y-r*.8} Q${x+d*(r+9)},${y} ${x+d*r},${y+r*.8}" stroke-width="3" stroke-linecap="round"/>`).join('');
+const heat=(x,y,c='heat')=>[-14,0,14].map(o=>`<path class="st-${c}" d="M${x+o},${y} q6,-8 0,-16 q-6,-8 0,-16" stroke-width="3" stroke-linecap="round"/>`).join('');
+const SKY='<rect class="f-sky" width="320" height="180"/>';
+const G=(y=150,c='ground')=>`<rect class="f-${c}" y="${y}" width="320" height="${180-y}"/>`;
+const dominos=(fallen)=>{let s='';for(let i=0;i<8;i++){const x=48+i*30;let rot=0;if(fallen){rot=[72,62,48,26,0,0,0,0][i]}s+=`<g transform="rotate(${rot} ${x+12} 150)"><rect class="f-ink" x="${x}" y="98" width="12" height="52" rx="2"/><circle class="f-card" cx="${x+6}" cy="112" r="2.4"/><circle class="f-card" cx="${x+6}" cy="136" r="2.4"/><line class="st-card" x1="${x+2}" y1="124" x2="${x+10}" y2="124" stroke-width="1.5"/></g>`}return s};
+const rocket=(strong)=>`<rect class="f-deep" width="320" height="180"/>${[[30,20],[290,30],[250,150],[60,140],[200,15],[110,35]].map(([x,y])=>`<circle class="f-glow" cx="${x}" cy="${y}" r="1.8"/>`).join('')}${em(160,92,64,'🚀','transform="rotate(-45 160 92)"')}${strong?ar(70,160,70,40,'ke',9)+ar(250,60,250,110,'cool',4):ar(70,160,70,125,'ke',4)+ar(250,30,250,150,'cool',9)}${tx(70,172,'push up','lbl-light')}${tx(250,165,'weight','lbl-light')}`;
+
+const globe=(cx,cy,r,eq='equator',top='',bot='')=>`<circle class="f-water" cx="${cx}" cy="${cy}" r="${r}"/><ellipse class="f-grass" cx="${cx-r*.35}" cy="${cy-r*.3}" rx="${r*.3}" ry="${r*.22}"/><ellipse class="f-grass" cx="${cx+r*.3}" cy="${cy-r*.15}" rx="${r*.28}" ry="${r*.35}"/><ellipse class="f-grass" cx="${cx-r*.2}" cy="${cy+r*.45}" rx="${r*.18}" ry="${r*.25}"/><path class="f-snow" d="M${cx-r*.6},${cy-r*.8} A${r},${r} 0 0 1 ${cx+r*.6},${cy-r*.8} Z"/><path class="f-snow" d="M${cx-r*.6},${cy+r*.8} A${r},${r} 0 0 0 ${cx+r*.6},${cy+r*.8} Z"/><circle class="st-ink" cx="${cx}" cy="${cy}" r="${r}" stroke-width="2.5"/><line class="st-heat" x1="${cx-r}" y1="${cy}" x2="${cx+r}" y2="${cy}" stroke-width="3.5"/>${eq?tx(cx+r+8,cy,eq,'lbl-heat','start'):''}${top?tx(cx+r+8,cy-r*.6,top,'lbl','start'):''}${bot?tx(cx+r+8,cy+r*.6,bot,'lbl','start'):''}`;
+const dog=(x,y)=>`<ellipse class="f-wood" cx="${x}" cy="${y}" rx="11" ry="18"/><circle class="f-wood" cx="${x}" cy="${y-22}" r="10"/><circle class="f-wood" cx="${x-7}" cy="${y-30}" r="3"/><circle class="f-wood" cx="${x+7}" cy="${y-30}" r="3"/><circle class="f-ink" cx="${x-4}" cy="${y-24}" r="1.8"/><circle class="f-ink" cx="${x+4}" cy="${y-24}" r="1.8"/><ellipse class="f-ink" cx="${x}" cy="${y-19}" rx="2.2" ry="1.5"/><ellipse class="f-ink" cx="${x}" cy="${y+18}" rx="14" ry="3" opacity=".25"/>`;
+const dunes=`<path class="f-sand" d="M0,120 Q60,90 120,118 T240,112 T320,110 L320,180 L0,180 Z"/><path class="f-sand2" d="M0,150 Q80,128 160,148 T320,142 L320,180 L0,180 Z"/>`;
+const SNOW=`<rect class="f-snow" y="120" width="320" height="60"/>`;
+const usa=`<path class="f-ke" opacity=".85" d="M28,52 L118,42 L196,46 L226,34 L246,52 L276,44 L298,58 L284,80 L276,104 L262,118 L262,150 L246,140 L222,128 L196,138 L170,160 L150,136 L120,130 L94,142 L70,122 L44,110 L30,84 Z"/><path class="st-ink" d="M28,52 L118,42 L196,46 L226,34 L246,52 L276,44 L298,58 L284,80 L276,104 L262,118 L262,150 L246,140 L222,128 L196,138 L170,160 L150,136 L120,130 L94,142 L70,122 L44,110 L30,84 Z" stroke-width="2.5"/><ellipse class="f-water" cx="222" cy="58" rx="10" ry="5"/><ellipse class="f-water" cx="240" cy="64" rx="8" ry="4"/><ellipse class="f-water" cx="256" cy="62" rx="7" ry="3"/>`;
+
+const SC={
+wvc:()=>SKY+`<line class="st-ink" x1="160" y1="16" x2="160" y2="164" stroke-width="2" stroke-dasharray="6 5"/>${tx(80,24,'Weather','lbl-big')}${tx(240,24,'Climate','lbl-big')}${em(48,80,40,'☀️')}${ar(72,80,94,80,'ink',3)}${em(120,80,40,'🌧️')}${em(80,132,30,'⏱️')}${em(240,88,64,'🌍')}${em(240,140,30,'📅')}`,
+weather:()=>SKY+G(150)+`${['☀️','🌧️','❄️','⛈️','🌬️'].map((e,i)=>em(40+i*60,90,44,e)).join('')}${tx(160,26,'Monday · Tuesday · Wednesday…','lbl')}`,
+climate:()=>SKY+`${em(110,92,90,'🌍')}${em(232,74,44,'📅')}${tx(232,120,'many, many years','lbl')}`,
+equator:()=>SKY+globe(130,90,70,'equator')+tx(130,10,'North Pole','lbl')+tx(130,172,'South Pole','lbl')+em(296,40,30,'🥶')+em(296,90,30,'🥵')+em(296,140,30,'🥶'),
+globeQ:()=>SKY+globe(130,90,70,'?')+tx(130,10,'North Pole','lbl')+tx(130,172,'South Pole','lbl'),
+globeN:()=>SKY+`<path class="f-hl" d="M45,90 A85,85 0 0 1 215,90 Z" opacity=".35"/>`+globe(130,90,70,'equator','? hemisphere'),
+globeLoc:()=>SKY+globe(110,90,70,'equator','','')+em(250,90,48,'📍')+tx(250,130,'location','lbl'),
+mountain:()=>SKY+`<rect class="f-water" y="120" width="320" height="60"/><polygon class="f-rock" points="60,150 160,30 260,150"/><polygon class="f-snow" points="137,58 160,30 183,58 172,52 160,62 148,52"/><line class="st-ink" x1="10" y1="120" x2="310" y2="120" stroke-width="2" stroke-dasharray="8 6"/>${tx(40,110,'sea level','lbl')}${ar(282,118,282,36,'ke',4)}${tx(282,26,'height','lbl')}${em(206,46,26,'❄️')}`,
+thermoRain:()=>SKY+`<rect class="f-card" x="64" y="20" width="26" height="120" rx="13"/><rect class="st-ink" x="64" y="20" width="26" height="120" rx="13" stroke-width="2.5"/><rect class="f-heat" x="72" y="60" width="10" height="84" rx="5"/><circle class="f-heat" cx="77" cy="148" r="16"/><circle class="st-ink" cx="77" cy="148" r="16" stroke-width="2.5"/>${[40,60,80,100,120].map(y=>`<line class="st-ink" x1="94" y1="${y}" x2="104" y2="${y}" stroke-width="2"/>`).join('')}${em(200,70,56,'🌧️')}${em(270,110,50,'🌨️')}`,
+rainSnow:()=>SKY+G(150)+`${em(100,74,64,'🌧️')}${em(220,74,64,'🌨️')}${[80,100,120].map(x=>`<line class="st-cool" x1="${x}" y1="112" x2="${x-6}" y2="134" stroke-width="3" stroke-linecap="round"/>`).join('')}${em(206,124,18,'❄️')}${em(232,134,18,'❄️')}`,
+tropical:()=>SKY+`<rect class="f-sand" y="128" width="320" height="52"/>${em(70,90,72,'🌴')}${em(180,100,56,'🌴')}${em(270,44,48,'☀️')}${em(266,118,40,'🥵')}`,
+temperate:()=>`<rect class="f-card" width="320" height="180"/>${[['🌸','spring'],['☀️','summer'],['🍂','fall'],['❄️','winter']].map((s,i)=>{const x=(i%2)*160,y=Math.floor(i/2)*90;return `<rect class="f-sky" x="${x+6}" y="${y+6}" width="148" height="78" rx="10"/>${em(x+55,y+45,40,s[0])}${tx(x+115,y+45,s[1],'lbl')}`}).join('')}`,
+arctic:()=>SKY+SNOW+`<polygon class="f-snow" points="20,120 60,70 100,120"/><polygon class="f-snow" points="230,120 270,80 310,120"/>${em(160,108,64,'🐻‍❄️')}${em(60,36,30,'❄️')}${em(260,36,30,'❄️')}${em(160,30,30,'🥶')}`,
+usa:()=>SKY+usa+tx(150,96,'United States','lbl-big')+tx(240,30,'Great Lakes','lbl'),
+usaForest:()=>SKY+usa+em(250,92,26,'🌲')+em(272,80,22,'🌲')+em(232,104,22,'🌳')+tx(120,96,'United States','lbl-big')+tx(240,24,'Great Lakes','lbl'),
+plants:()=>`<rect class="f-sky" width="160" height="180"/><rect class="f-sky" x="160" width="160" height="180"/><rect class="f-sand" y="130" width="160" height="50"/><rect class="f-grass" x="160" y="130" width="160" height="50"/>${em(80,96,64,'🌵')}${em(40,30,30,'☀️')}${em(240,96,64,'🌳')}${em(280,30,34,'🌧️')}${tx(80,160,'dry and hot','lbl')}${tx(240,160,'lots of rain','lbl')}<line class="st-ink" x1="160" y1="0" x2="160" y2="180" stroke-width="2"/>`,
+vegetation:()=>SKY+G(150)+`${em(60,128,30,'🌱')}${ar(84,124,112,116,'ink',3)}${em(150,112,50,'🌿')}${ar(184,108,212,100,'ink',3)}${em(260,90,80,'🌳')}`,
+vegTypes:()=>`<rect class="f-card" width="320" height="180"/><rect class="f-grass" x="6" y="6" width="150" height="80" rx="10"/><rect class="f-wheat" x="164" y="6" width="150" height="80" rx="10"/><rect class="f-snow" x="6" y="94" width="150" height="80" rx="10"/><rect class="f-sand" x="164" y="94" width="150" height="80" rx="10"/>${em(60,46,40,'🌲')}${em(100,46,40,'🌲')}${em(240,46,40,'🌾')}${em(80,134,40,'❄️')}${em(240,134,40,'🌵')}<rect class="st-ink" x="6" y="94" width="150" height="80" rx="10" stroke-width="1" opacity=".3"/>`,
+forest:()=>SKY+G(140,'grass')+`${em(40,84,64,'🌲')}${em(100,72,74,'🌳')}${em(280,80,70,'🌲')}${em(200,30,36,'🌧️')}${em(160,140,34,'🐻')}${em(210,142,30,'🦌')}${em(250,148,26,'🦝')}`,
+grassland:()=>SKY+G(110,'wheat')+`${[20,50,80,240,270,300].map(x=>em(x,112,18,'🌾')).join('')}${em(90,96,26,'🐎')}${em(122,98,22,'🐎')}${em(240,138,34,'🫐')}${dog(170,140)}${tx(160,24,'Western Great Plains','lbl')}`,
+prairieDog:()=>SKY+G(130,'wheat')+dog(160,120)+`${em(60,128,22,'🌾')}${em(260,128,22,'🌾')}${tx(160,26,'a prairie dog','lbl-big')}`,
+tundra:()=>SKY+SNOW+`<polygon class="f-snow" points="0,120 40,96 90,120"/><polygon class="f-snow" points="220,120 270,90 320,120"/>${em(170,104,70,'🦌')}${em(60,40,28,'❄️')}${em(270,40,28,'❄️')}`,
+desert:()=>SKY+dunes+em(70,104,64,'🌵')+em(250,138,40,'🌵')+em(270,40,44,'☀️'),
+desertRain:()=>SKY+dunes+em(70,104,64,'🌵')+em(250,40,40,'🌧️')+tx(250,82,'? inches a year','lbl'),
+saguaro:()=>SKY+dunes+em(160,90,100,'🌵')+tx(270,40,'Mexico','lbl-big'),
+ecosystem:()=>SKY+G(150,'grass')+`${em(240,80,110,'🌳')}${em(70,40,36,'🐦')}${em(140,134,40,'🐿️')}${em(176,146,20,'🌰')}${ar(60,140,40,142,'ink',2)}${em(26,140,24,'🌱')}`,
+volcano:()=>SKY+G(150)+`${em(160,92,110,'🌋')}${tx(270,40,'BOOM!','lbl-ke')}`,
+earthquake:()=>SKY+G(130)+`<g transform="rotate(-5 160 100)">${em(160,96,72,'🏠')}</g>${arcs(206,96,1,'ink')}${arcs(114,96,-1,'ink')}<path class="st-ink" d="M60,140 L90,150 L80,160 L120,170 L110,176" stroke-width="3"/>${tx(240,30,'shake!','lbl-ke')}`,
+disaster:()=>SKY+G(150)+`${em(100,96,90,'🌪️')}${em(230,112,70,'🏚️')}`,
+hazard:()=>SKY+G(150,'wheat')+`${em(160,92,90,'🌪️')}${tx(160,168,'an empty field, no people or houses','lbl')}`,
+disasters:()=>`<rect class="f-card" width="320" height="180"/>${['🌪️','🌋','🌊','🔥','🌀','🌨️'].map((e,i)=>`<rect class="f-sky" x="${8+(i%3)*104}" y="${8+Math.floor(i/3)*86}" width="96" height="78" rx="10"/>${em(56+(i%3)*104,47+Math.floor(i/3)*86,44,e)}`).join('')}`,
+};
+
+const TF=['✓ Right','✗ Wrong'];
+const MC=[
+{s:'climate',q:'___ is the weather of a place over a long period of time.',o:['Climate','Temperature','Precipitation'],x:'Climate is the weather of a place over a long period of time.'},
+{s:'weather',q:'Weather can change within…',o:['A few minutes or hours','Only after 100 years','Never'],x:'Weather changes daily, sometimes within a few minutes or hours.'},
+{s:'wvc',q:'Which one takes a very long time to change?',o:['Climate','Weather'],k:1,x:'Weather changes fast. Climate takes a very long time to change.'},
+{s:'weather',q:'Weather is…',o:['The condition of the air (atmosphere) at a place right now','The weather over many years','The height of a mountain'],x:'Weather is the temporary condition of the atmosphere at a place.'},
+{s:'weather',q:'We often describe the weather as…',o:['Hot, rainy, sunny, freezing, or snowy','Tall or short','North or south'],x:'Weather words: hot, rainy, sunny, freezing, snowy.'},
+{s:'climate',q:'Climate is the overall ___ weather at a place over a period of time.',o:['average','fastest','loudest'],x:'Climate is the overall average weather at a place over a period of time.'},
+{s:'equator',q:'Places near the equator will be…',o:['Hot','Cold','Cool'],k:1,x:'Places near the equator have a hotter climate.'},
+{s:'equator',q:'Places near the North and South Poles have a ___ climate.',o:['Colder','Hotter'],k:1,x:'Places near the poles have a colder climate.'},
+{s:'mountain',q:'Elevation means…',o:['The height','The rain','The wind'],x:'Elevation means the height (above sea level).'},
+{s:'mountain',q:'High places and mountains are ___ most of the time during the year.',o:['Cool','Hot','Dry'],x:'High places and mountains are cool most of the year.'},
+{s:'globeLoc',q:'The climate of a place depends on its…',o:['Location and elevation','Color and size','Name and shape'],x:'Climate depends on location (near the equator or poles) and elevation (height).'},
+{s:'globeQ',q:'What is the red line around the middle of the Earth called?',o:['The equator','The North Pole','Sea level'],x:'The equator is the line around the middle of the Earth.'},
+{s:'globeN',q:'The part of the Earth north of (above) the equator is the…',o:['Northern Hemisphere','Southern Hemisphere'],k:1,x:'North of the equator = Northern Hemisphere. South of it = Southern Hemisphere.'},
+{s:'thermoRain',q:"A region's climate consists of…",o:['Temperature and precipitation','Mountains and rivers','Plants and animals'],x:"A region's climate is made of temperature and precipitation."},
+{s:'thermoRain',q:'Temperature is…',o:['How hot or cold it is','The amount of rain that falls','How high a mountain is'],x:'Temperature tells how hot or cold it is.'},
+{s:'rainSnow',q:'Precipitation is…',o:['The amount of rain or snow that falls','How hot or cold it is','A kind of plant'],x:'Precipitation is the amount of rain or snow that falls.'},
+{s:'tropical',q:'Which climate is warm and hot, has no winter, and is near the equator?',o:['Tropical climate','Temperate climate','Arctic climate'],x:'Tropical climates: warm and hot, no winter, near the equator.'},
+{s:'temperate',q:'Which climate has warmer summers and colder winters?',o:['Temperate climate','Tropical climate','Arctic climate'],x:'Temperate climates are north of the equator, with warmer summers and colder winters.'},
+{s:'arctic',q:'Arctic climates are…',o:['Very cold','Warm and hot','Hot with no winter'],x:'Arctic climates are very cold.'},
+{s:'usa',q:'Most of the United States is in the…',o:['Temperate climate','Arctic climate','Tropical climate'],x:'Most of the United States is in the temperate climate region.'},
+{s:'tropical',q:'Which climate has NO winter?',o:['Tropical','Temperate','Arctic'],x:'Tropical climates have no winter.'},
+{s:'plants',q:'The climate of a place affects…',o:['The plants that grow there','The color of the sky','The names of the cities'],x:'The climate of a place affects the plants that grow there.'},
+{s:'plants',q:'Temperature and the amount of rainfall determine the types of…',o:['Vegetation','Mountains','Hemispheres'],x:'Temperature and rainfall decide what vegetation (plant life) grows.'},
+{s:'vegetation',q:'Vegetation means…',o:['Kinds of plant life that grow','Kinds of animals','Kinds of weather'],x:'Vegetation: kinds of plant life that grow.'},
+{s:'vegTypes',q:'What are the four types of vegetation in the United States?',o:['Forests, grasslands, deserts and tundra','Oceans, rivers, lakes and seas','Cities, towns, villages and farms'],x:'The four types are forests, tundra, grasslands and deserts.'},
+{s:'forest',q:'Forests have…',o:['Plenty of rainfall','Almost no rain','Ice all year'],x:'Forests get plenty of rainfall.'},
+{s:'usaForest',q:'Where are forests found in the United States?',o:['Near the Great Lakes and in the eastern United States','Only in the desert','Only in the Arctic'],x:'Forests are near the Great Lakes and in the eastern United States. They cover most of North America.'},
+{s:'forest',q:'Which animals live in forests?',o:['Bears, deer and raccoons','Camels and lizards','Penguins and seals'],x:'Forest animals include bears, deer and raccoons.'},
+{s:'prairieDog',q:'Prairie dogs live in…',o:['Grasslands','Forests','Tundra'],x:'Prairie dogs live in grasslands.'},
+{s:'grassland',q:'Grasslands are found in the dry climates of the…',o:['Western Great Plains','Arctic Circle','Great Lakes'],x:'Grasslands are in the dry climates of the Western Great Plains.'},
+{s:'grassland',q:'What grows in grasslands?',o:['Berry bushes and small trees','Huge rainforest trees','Nothing at all'],x:'Grasslands have berry bushes and small trees.'},
+{s:'tundra',q:'___ is the animal that lives in the tundra.',o:['Caribou','Bear','Raccoon'],x:'In the tundra live animals such as deer called caribou.'},
+{s:'tundra',q:'Most tundra is around the…',o:['Arctic Circle','Equator','Great Lakes'],x:'Most tundra is around the Arctic Circle.'},
+{s:'tundra',q:"Tundra covers almost ___ of the Earth's surface.",o:['20 percent','90 percent','1 percent'],x:"Tundra covers almost 20 percent of Earth's surface."},
+{s:'desert',q:'Deserts are the ___ places on Earth.',o:['Driest','Wettest','Coldest'],x:'Deserts are the driest places on Earth.'},
+{s:'desertRain',q:'Deserts get fewer than ___ inches of rain a year.',o:['10','50','100'],k:1,x:'Deserts get fewer than 10 inches (25 centimetres) of rain a year.'},
+{s:'saguaro',q:'Large cactuses called ___ grow in Mexico.',o:['Saguaros','Palms','Pines'],x:'Large cactuses called saguaros grow in Mexico.'},
+{s:'ecosystem',q:'An ecosystem is…',o:['A system where plants and animals interact and work together','A very big storm','A kind of mountain'],x:'An ecosystem is a system where plants and animals interact and work together.'},
+{s:'ecosystem',q:'In the ecosystem example, birds and squirrels depend on…',o:['Trees','Volcanoes','Snow'],x:'Birds and squirrels depend on trees. Some seeds drop into the soil and grow into new trees.'},
+{s:'hazard',q:'A natural hazard is…',o:['Any natural event that causes a change in the land or the environment','Something people build','A kind of plant'],x:'A natural hazard is any natural event that causes a change in the land or in the environment.'},
+{s:'volcano',q:'A ___ is a mountain that erupts in an explosion of molten rock, gases, and ash.',o:['Volcano','Earthquake','Ecosystem'],x:'A volcano erupts molten rock, gases and ash.'},
+{s:'earthquake',q:'An earthquake is…',o:['A violent shaking of the earth','A mountain that erupts','A very cold place'],x:'An earthquake is a violent shaking of the earth.'},
+{s:'disaster',q:'A natural disaster is…',o:['Something that causes damage to people and buildings or bridges','Any kind of nice weather','A plant that grows in the desert'],x:'A natural disaster causes damage to people and human-made structures such as buildings and bridges.'},
+{s:'disaster',q:'Natural hazards turn into natural disasters when…',o:['Damage takes place','The sun comes out','It is winter'],x:'Natural hazards turn into natural disasters when damage takes place.'},
+{s:'disasters',q:'Which of these is NOT a natural disaster?',o:['A rainbow','A tornado','A tsunami','A forest fire'],x:'Tornadoes, tsunamis and forest fires can cause damage. A rainbow does not.'},
+{s:'temperate',q:'✓ or ✗? "Temperate climate doesn\'t have winter."',o:TF,c:1,k:1,x:'Wrong ✗. Temperate climate has colder winters. It is the TROPICAL climate that has no winter.'},
+{s:'usaForest',q:'✓ or ✗? "Forests are near the Great Lakes in the eastern United States."',o:TF,c:0,k:1,x:'Right ✓. Forests are near the Great Lakes and in the eastern United States.'},
+{s:'vegetation',q:'✓ or ✗? "Vegetation is a kind of plant life that grows."',o:TF,c:0,k:1,x:'Right ✓. Vegetation means kinds of plant life that grow.'},
+{s:'disaster',q:'✓ or ✗? "A natural hazard is something that causes damage to people, buildings, and bridges."',o:TF,c:1,k:1,x:'Wrong ✗. That is a natural DISASTER. A natural hazard is a natural event that changes the land or environment.'},
+{s:'prairieDog',q:'✓ or ✗? "Prairie dogs live in forests."',o:TF,c:1,k:1,x:'Wrong ✗. Prairie dogs live in GRASSLANDS.'},
+{s:'weather',q:'✓ or ✗? "Weather changes daily."',o:TF,c:0,k:1,x:'Right ✓. Weather changes daily.'},
+];
+const MT=[
+{t:'Match each word to its meaning',p:[['🌦️','Weather','The condition of the air at a place right now'],['🌍','Climate','The weather of a place over a long period of time'],['⛰️','Elevation','The height'],['🌿','Vegetation','Kinds of plant life that grow']]},
+{t:'Match each word to its meaning',p:[['🌡️','Temperature','How hot or cold it is'],['🌧️','Precipitation','The amount of rain or snow that falls'],['🐿️','Ecosystem','Plants and animals interact and work together'],['🔴','Equator','The line around the middle of the Earth']]},
+{t:'Match each climate to what it is like',p:[['🌴','Tropical climate','Warm and hot, no winter, near the equator'],['🍂','Temperate climate','Warmer summers and colder winters'],['🐻‍❄️','Arctic climate','Very cold']]},
+{t:'Match each place to an animal or plant that lives there',p:[['🌲','Forests','Bears, deer and raccoons'],['🌾','Grasslands','Prairie dogs'],['❄️','Tundra','Caribou'],['🏜️','Deserts','Saguaro cactuses']]},
+{t:'Match each word to its meaning',p:[['🌪️','Natural hazard','A natural event that changes the land or environment'],['🏚️','Natural disaster','Causes damage to people, buildings and bridges'],['🌋','Volcano','A mountain that erupts molten rock, gases and ash'],['🏠','Earthquake','A violent shaking of the earth']]},
+{t:'Match each type of vegetation to where it is or what it is like',p:[['🌲','Forests','Plenty of rainfall'],['🏜️','Deserts','The driest places on Earth'],['❄️','Tundra','Mostly around the Arctic Circle'],['🌾','Grasslands','Dry climates of the Western Great Plains']]},
+];
+
+/* ---------- game state ---------- */
+const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
+const LENS=[{n:10,mc:8,mt:2,l:'Quick · 10'},{n:20,mc:16,mt:4,l:'Normal · 20'},{n:0,mc:MC.length,mt:MT.length,l:'All · '+(MC.length+MT.length)}];
+let lenIdx=1;
+try{const v=localStorage.getItem('cq-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
+const S={list:[],i:0,score:0,max:0,miss:[]};
+const app=document.getElementById('app');
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KID=(()=>{try{const q=new URLSearchParams(location.search).get('name');if(q)return q.slice(0,30);return localStorage.getItem('st-name')||''}catch(e){return ''}})();
+const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+const scene=k=>`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${SC[k]()}</svg></div>`;
+
+function start(){
+  const L=LENS[lenIdx];
+  const mc=shuf(MC).slice(0,L.mc).map(q=>({type:'mc',...q}));
+  const mt=shuf(MT).slice(0,L.mt).map(q=>({type:'mt',...q}));
+  let list=shuf(mc.concat(mt));
+  // avoid two matching rounds in a row when possible
+  for(let i=1;i<list.length;i++){if(list[i].type==='mt'&&list[i-1].type==='mt'){const j=list.findIndex((q,k)=>k>i&&q.type==='mc');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
+  S.list=list;S.i=0;S.score=0;S.miss=[];
+  S.max=list.reduce((t,q)=>t+(q.type==='mc'?1:q.p.length),0);
+  render();
+}
+
+function hud(){
+  const pct=Math.round(S.i/S.list.length*100);
+  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+}
+
+function render(){
+  if(!S.list.length) return home();
+  if(S.i>=S.list.length) return end();
+  const q=S.list[S.i];
+  q.type==='mc'?renderMC(q):renderMT(q);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function home(){
+  app.innerHTML=`<section class="card pop">
+    <a class="back" href="../../../index.html">← All games</a>
+    <span class="eyebrow">Grade 3 Social Studies · Midterm practice</span>
+    <h1 class="hero-title"><span class="p">Climate</span> <span class="k">Quest</span></h1>
+    ${scene('mountain')}
+    <p class="howto">Ready${KID?', '+esc(KID):''}? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
+    <div class="chips"><span class="chip pe">Weather &amp; climate</span><span class="chip ke">Types of climates</span><span class="chip">Vegetation &amp; ecosystems</span><span class="chip ht">Forces of nature</span></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${l.l}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
+  </section>`;
+  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;try{localStorage.setItem('cq-len',lenIdx)}catch(e){}home()});
+  document.getElementById('startBtn').onclick=start;
+}
+
+function renderMC(q){
+  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
+  if(!q.k) opts=shuf(opts);
+  const long=opts.some(o=>o.t.length>34);
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mc">Choose the answer</span>
+    ${scene(q.s)}
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="fbx"></div>
+  </section>`;
+  const btns=[...app.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.i];
+    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
+    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
+    document.getElementById('pts').textContent=S.score;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x)}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  });
+}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+function renderMT(q){
+  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
+  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
+  const pair={}; // leftIdx -> rightIdx
+  let sel=null, checked=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    <p class="qtext">${esc(q.t)}</p>
+    <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
+    <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
+  </section>`;
+  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
+  function color(li){const keys=Object.keys(pair).map(Number).sort((a,b)=>a-b);return PAIRC[left.findIndex(x=>x.i===li)%PAIRC.length]}
+  function draw(){
+    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
+      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
+    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
+      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
+    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
+    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
+      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
+      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    checked=true;let got=0;
+    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
+    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
+    const all=got===q.p.length;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right meaning under the word.'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  };
+}
+
+function star(on){return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 21l1.6-7L2 9.2l7.1-.6z" fill="${on?'var(--hl)':'var(--card)'}" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/></svg>`}
+
+function end(){
+  const pct=Math.round(S.score/S.max*100);
+  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const msg=pct===100?'Perfect score! You are ready for the midterm.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below and play again.';
+  app.innerHTML=`<section class="card pop">
+    <span class="eyebrow">Your score</span>
+    <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
+    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <h2>${pct}% · ${msg}</h2>
+    <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
+  </section>
+  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
+  document.getElementById('againBtn').onclick=start;
+  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+home();
+})();
+</script>
+</body></html>

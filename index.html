@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Study Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: graph-paper page, one section per grade, a row per term/period, subject cards inside */
+:root{
+  --paper:#F2F6FC; --grid:#DCE6F3; --card:#FFFFFF; --ink:#1B2440; --muted:#56637F; --hl:#FFE14D;
+  --sci:#F2B705; --ss:#D93A3A; --fr:#2E9E4F; --other:#8A5CC9;
+  --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--other:#B48CF0;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--other:#B48CF0;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;padding-inline:16px;padding-block:28px 48px}
+.wrap{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
+header{display:flex;flex-direction:column;gap:10px}
+h1{font-size:clamp(2.6rem,8vw,4rem);line-height:.95}
+h1 span{color:var(--fr)}
+.sub{color:var(--muted);margin:0;max-width:60ch}
+.tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.tools label{font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;color:var(--muted)}
+.tools input{font:inherit;color:var(--ink);background:var(--card);border:2.5px solid var(--ink);border-radius:12px;padding:8px 12px;width:min(220px,100%)}
+.tools input:focus-visible,a:focus-visible{outline:3px solid var(--fr);outline-offset:3px}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{font:inherit;font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+#list{display:flex;flex-direction:column;gap:44px}
+.grade{display:flex;flex-direction:column;gap:16px}
+.grade>h2{font-size:2rem;display:flex;align-items:baseline;gap:10px}
+.grade>h2 small{font-family:var(--body);font-size:.9rem;color:var(--muted);font-weight:700}
+.period{display:flex;flex-direction:column;gap:12px}
+.period h3{font-size:1.2rem;display:inline-flex;align-self:flex-start;padding:2px 12px;border:2px solid var(--ink);border-radius:999px;background:var(--hl);color:#1B2440}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.game{display:flex;flex-direction:column;gap:8px;min-width:0;background:var(--card);border:2.5px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);padding:16px;color:var(--ink);text-decoration:none;transition:transform .08s,box-shadow .08s;border-top:10px solid var(--c)}
+.game:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.game .subj{font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;color:color-mix(in srgb,var(--c) 65%,var(--ink))}
+.game .t{font-family:var(--display);font-size:1.5rem;line-height:1.05}
+.game .l{font-weight:700;font-size:.95rem}
+.game .tp{color:var(--muted);font-size:.92rem;margin:0}
+.game .meta{margin-top:auto;display:flex;justify-content:space-between;gap:8px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:6px}
+.game .go{font-family:var(--display);color:var(--ink);font-size:1rem}
+.empty{color:var(--muted)}
+footer{color:var(--muted);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){.game{transition:none}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <h1>Study <span>Games</span></h1>
+    <p class="sub">Picture quizzes, matching and sentence-building games for school tests. Pick a grade, then a game. Questions are shuffled every time you play.</p>
+    <div class="tools">
+      <label for="player">Player name</label>
+      <input id="player" type="text" maxlength="30" placeholder="optional" autocomplete="off">
+      <div class="filters" id="filters" role="group" aria-label="Show grade"></div>
+    </div>
+  </header>
+  <div id="list"></div>
+  <footer>To add a game, put its file in <code>grade-N/term-N/&lt;period&gt;/</code> and add one line to <code>games.js</code>.</footer>
+</main>
+<script src="games.js"></script>
+<script>
+(function(){
+  const PERIODS=["Mid-term 1","Final term 1","Term 1","Mid-term 2","Final term 2","Term 2","Mid-term 3","Final term 3","Term 3","Final exam"];
+  const SUBJ={"Science":"var(--sci)","Social Studies":"var(--ss)","French":"var(--fr)"};
+  const games=(window.GAMES||[]);
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+  const player=document.getElementById('player');
+  player.value=store.get('st-name')||'';
+  let grade=store.get('st-grade')||'all';
+  const grades=[...new Set(games.map(g=>g.grade))].sort((a,b)=>a-b);
+  if(grade!=='all'&&!grades.includes(+grade))grade='all';
+  const pIdx=p=>{const i=PERIODS.indexOf(p);return i<0?99:i};
+  function href(g){const n=player.value.trim();return g.path+(n?'?name='+encodeURIComponent(n):'')}
+  function draw(){
+    document.getElementById('filters').innerHTML=['all',...grades].map(v=>`<button type="button" id="f-${v}" data-g="${v}" aria-pressed="${String(v)===String(grade)}">${v==='all'?'All grades':'Grade '+v}</button>`).join('');
+    document.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{grade=b.dataset.g;store.set('st-grade',grade);draw()});
+    const show=grades.filter(g=>grade==='all'||String(g)===String(grade));
+    document.getElementById('list').innerHTML=show.length?show.map(gr=>{
+      const gs=games.filter(g=>g.grade===gr);
+      const keys=[...new Set(gs.map(g=>g.term+'|'+g.period))].sort((a,b)=>{const [ta,pa]=a.split('|'),[tb,pb]=b.split('|');return (+ta-+tb)||(pIdx(pa)-pIdx(pb))});
+      return `<section class="grade"><h2>Grade ${gr}<small>${gs.length} game${gs.length>1?'s':''}</small></h2>${keys.map(k=>{const [t,p]=k.split('|');const items=gs.filter(g=>g.term+'|'+g.period===k).sort((a,b)=>a.subject.localeCompare(b.subject));
+        return `<div class="period"><h3>Term ${esc(t)} · ${esc(p)}</h3><div class="cards">${items.map(g=>`<a class="game" style="--c:${SUBJ[g.subject]||'var(--other)'}" href="${esc(href(g))}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson||'')}</span><p class="tp">${esc(g.topics||'')}</p><span class="meta"><span>${g.questions?g.questions+' questions':''}${g.year?' · '+esc(g.year):''}</span><span class="go">Play →</span></span></a>`).join('')}</div></div>`}).join('')}</section>`}).join(''):'<p class="empty">No games yet.</p>';
+  }
+  player.addEventListener('input',()=>{store.set('st-name',player.value.trim());draw()});
+  draw();
+})();
+</script>
+</body>
+</html>
