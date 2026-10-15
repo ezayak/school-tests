@@ -21,13 +21,13 @@
 /* Layout: graph-paper page, one section per grade, a row per term/period, subject cards inside */
 :root{
   --paper:#F2F6FC; --grid:#DCE6F3; --card:#FFFFFF; --ink:#1B2440; --muted:#56637F; --hl:#FFE14D;
-  --sci:#F2B705; --ss:#D93A3A; --fr:#2E9E4F; --other:#8A5CC9;
+  --sci:#F2B705; --ss:#D93A3A; --fr:#2E9E4F; --en:#3474CF; --other:#8A5CC9;
   --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
   --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--other:#B48CF0;color-scheme:dark}}
-:root[data-theme="dark"]{--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--other:#B48CF0;color-scheme:dark}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--en:#6FA2F0;--other:#B48CF0;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--en:#6FA2F0;--other:#B48CF0;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;padding-inline:16px;padding-block:28px 48px}
@@ -84,8 +84,8 @@ footer{color:var(--muted);font-size:.9rem}
 <script src="games.js"></script>
 <script>
 (function(){
-  const PERIODS=["Mid-term 1","Final term 1","Term 1","Mid-term 2","Final term 2","Term 2","Mid-term 3","Final term 3","Term 3","Final exam"];
-  const SUBJ={"Science":"var(--sci)","Social Studies":"var(--ss)","French":"var(--fr)"};
+  const PERIODS=["Mid-term 1","Final term 1","Term 1","Spelling","Mid-term 2","Final term 2","Term 2","Mid-term 3","Final term 3","Term 3","Final exam"];
+  const SUBJ={"Science":"var(--sci)","Social Studies":"var(--ss)","French":"var(--fr)","English":"var(--en)"};
   const games=(window.GAMES||[]);
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
@@ -104,7 +104,7 @@ footer{color:var(--muted);font-size:.9rem}
       const gs=games.filter(g=>g.grade===gr);
       const keys=[...new Set(gs.map(g=>g.term+'|'+g.period))].sort((a,b)=>{const [ta,pa]=a.split('|'),[tb,pb]=b.split('|');return (+ta-+tb)||(pIdx(pa)-pIdx(pb))});
       return `<section class="grade"><h2>Grade ${gr}<small>${gs.length} game${gs.length>1?'s':''}</small></h2>${keys.map(k=>{const [t,p]=k.split('|');const items=gs.filter(g=>g.term+'|'+g.period===k).sort((a,b)=>a.subject.localeCompare(b.subject));
-        return `<div class="period"><h3>Term ${esc(t)} · ${esc(p)}</h3><div class="cards">${items.map(g=>`<a class="game" style="--c:${SUBJ[g.subject]||'var(--other)'}" href="${esc(href(g))}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson||'')}</span><p class="tp">${esc(g.topics||'')}</p><span class="meta"><span>${g.questions?g.questions+' questions':''}${g.year?' · '+esc(g.year):''}</span><span class="go">Play →</span></span></a>`).join('')}</div></div>`}).join('')}</section>`}).join(''):'<p class="empty">No games yet.</p>';
+        return `<div class="period"><h3>Term ${esc(t)} · ${esc(p)}</h3><div class="cards">${items.map(g=>`<a class="game" style="--c:${SUBJ[g.subject]||'var(--other)'}" href="${esc(href(g))}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson||'')}</span><p class="tp">${esc(g.topics||'')}</p><span class="meta"><span>${g.countLabel?esc(g.countLabel):g.questions?g.questions+' questions':''}${g.year?' · '+esc(g.year):''}</span><span class="go">Play →</span></span></a>`).join('')}</div></div>`}).join('')}</section>`}).join(''):'<p class="empty">No games yet.</p>';
   }
   // Install button (Android / Chrome / Edge). iPad: Share → Add to Home Screen.
   let deferred=null;const ib=document.getElementById('installBtn');

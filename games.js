@@ -29,4 +29,8 @@ window.GAMES = [
     lesson: "Leçon 1 · La rencontre",
     topics: "Le verbe s'appeler, Qui est-ce ?, le son « ou », mets en ordre, compréhension",
     path: "grade-4/term-1/mid-term-1/french-la-rencontre.html", questions: 71, year: "2026–2027" },
+  { grade: 3, term: 1, period: "Spelling", subject: "English", title: "Long O Words",
+    lesson: "Spelling list · oa, o_e, ow, old",
+    topics: "10 words + 5 dictation sentences · Learn, Match, Listen & spell, Build the word",
+    path: "grade-3/term-1/spelling/english-long-o.html", questions: 15, countLabel: "15 words & sentences", year: "2026–2027" },
 ];
