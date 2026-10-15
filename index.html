@@ -3,6 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1B2440">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Study Games">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
+
 <title>Study Games</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,6 +60,8 @@ h1 span{color:var(--fr)}
 .game .meta{margin-top:auto;display:flex;justify-content:space-between;gap:8px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:6px}
 .game .go{font-family:var(--display);color:var(--ink);font-size:1rem}
 .empty{color:var(--muted)}
+.install{font-family:var(--display);font-size:1.05rem;border:2.5px solid var(--ink);border-radius:12px;padding:8px 16px;background:var(--hl);color:#1B2440;box-shadow:3px 3px 0 var(--ink);cursor:pointer}
+.ios-tip{color:var(--muted);font-size:.92rem;margin:0}
 footer{color:var(--muted);font-size:.9rem}
 @media (prefers-reduced-motion:reduce){.game{transition:none}}
 </style>
@@ -63,6 +75,7 @@ footer{color:var(--muted);font-size:.9rem}
       <label for="player">Player name</label>
       <input id="player" type="text" maxlength="30" placeholder="optional" autocomplete="off">
       <div class="filters" id="filters" role="group" aria-label="Show grade"></div>
+      <button type="button" id="installBtn" class="install" hidden>⬇ Install app</button>
     </div>
   </header>
   <div id="list"></div>
@@ -93,6 +106,13 @@ footer{color:var(--muted);font-size:.9rem}
       return `<section class="grade"><h2>Grade ${gr}<small>${gs.length} game${gs.length>1?'s':''}</small></h2>${keys.map(k=>{const [t,p]=k.split('|');const items=gs.filter(g=>g.term+'|'+g.period===k).sort((a,b)=>a.subject.localeCompare(b.subject));
         return `<div class="period"><h3>Term ${esc(t)} · ${esc(p)}</h3><div class="cards">${items.map(g=>`<a class="game" style="--c:${SUBJ[g.subject]||'var(--other)'}" href="${esc(href(g))}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson||'')}</span><p class="tp">${esc(g.topics||'')}</p><span class="meta"><span>${g.questions?g.questions+' questions':''}${g.year?' · '+esc(g.year):''}</span><span class="go">Play →</span></span></a>`).join('')}</div></div>`}).join('')}</section>`}).join(''):'<p class="empty">No games yet.</p>';
   }
+  // Install button (Android / Chrome / Edge). iPad: Share → Add to Home Screen.
+  let deferred=null;const ib=document.getElementById('installBtn');
+  addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;ib.hidden=false});
+  ib.onclick=async()=>{if(!deferred)return;deferred.prompt();try{await deferred.userChoice}catch(e){}deferred=null;ib.hidden=true};
+  addEventListener('appinstalled',()=>{ib.hidden=true});
+  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  if(/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)){if(!standalone){const t=document.createElement('p');t.className='ios-tip';t.textContent='To install on iPad: tap Share, then “Add to Home Screen”.';document.querySelector('header').appendChild(t)}}
   player.addEventListener('input',()=>{store.set('st-name',player.value.trim());draw()});
   draw();
 })();

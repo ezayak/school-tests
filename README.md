@@ -58,3 +58,14 @@ After a minute the site is at `https://<your-user>.github.io/school-tests/`.
 - Matching rounds (tap a word, then its meaning)
 - “Mets en ordre” drag-the-words sentence building (French games)
 - Score, stars and a review of missed questions at the end; questions shuffle every play
+
+## Install as an app (tablet / phone)
+
+The site is a Progressive Web App: it can be installed and works **offline** after the first visit.
+
+- **Android tablet (Chrome):** open the site → tap **Install app** on the home page (or ⋮ menu → *Install app* / *Add to Home screen*).
+- **iPad (Safari):** open the site → **Share** → **Add to Home Screen**.
+- **Windows / Mac (Chrome or Edge):** install icon in the address bar.
+
+Offline: `sw.js` downloads every game listed in `games.js` when the app is installed or opened online, so new games appear after the next online visit.
+If an update doesn't show up, change `VERSION` in `sw.js` and push again.
