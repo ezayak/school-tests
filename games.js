@@ -33,4 +33,8 @@ window.GAMES = [
     lesson: "Spelling list · oa, o_e, ow, old",
     topics: "10 words + 5 dictation sentences · Learn, Match, Listen & spell, Build the word",
     path: "grade-3/term-1/spelling/english-long-o.html", questions: 15, countLabel: "15 words & sentences", year: "2026–2027" },
+  { grade: 3, term: 1, period: "Spelling", subject: "English", title: "Long A Words",
+    lesson: "Spelling list · ai, ay, a_e, eigh, ey",
+    topics: "10 words + 5 dictation sentences · Learn, Match, Listen & spell, Build the word",
+    path: "grade-3/term-1/spelling/english-long-a.html", questions: 15, countLabel: "15 words & sentences", year: "2026–2027" },
 ];

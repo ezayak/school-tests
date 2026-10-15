@@ -314,7 +314,7 @@ function marked(w){
   const e=esc(w);
   if(/\s/.test(w))return e;
   let m;
-  if((m=w.match(/oa|ow|ou|ai|ay|ee|ea|igh|oe|ue|ew/)))return esc(w.slice(0,m.index))+`<span class="m">${esc(m[0])}</span>`+esc(w.slice(m.index+m[0].length));
+  if((m=w.match(/eigh|oa|ow|ou|ai|ay|ey|ee|ea|igh|oe|ue|ew/)))return esc(w.slice(0,m.index))+`<span class="m">${esc(m[0])}</span>`+esc(w.slice(m.index+m[0].length));
   if(/^[a-z]*[aeiou][^aeiou]e$/i.test(w)){const i=w.length-3;return esc(w.slice(0,i))+`<span class="m">${esc(w[i])}</span>`+esc(w.slice(i+1,-1))+`<span class="m">e</span>`}
   if((m=w.match(/old|olt|ost|oll/)))return esc(w.slice(0,m.index))+`<span class="m">o</span>`+esc(w.slice(m.index+1));
   return e;
