@@ -411,6 +411,22 @@ function end(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+/* ---------- fit the picture on landscape tablets ---------- */
+function fitScene(){try{
+  const sc=app.querySelector('.card .scene');if(!sc)return;
+  const fbx=document.getElementById('fbx');const answered=!!(fbx&&fbx.querySelector('.fb'));
+  if(!answered){sc.style.maxWidth='';sc.style.marginInline=''}  // after Check the picture may only shrink
+  if(innerWidth<=innerHeight||innerWidth<700){sc.style.maxWidth='';sc.style.marginInline='';return} // portrait / phones
+  const cards=app.querySelectorAll('.card');const last=cards[cards.length-1];
+  const reserve=(fbx&&!fbx.querySelector('.fb'))?(fbx.querySelector(".btn")?110:200):0; // room for feedback + Next
+  const bottom=last.getBoundingClientRect().bottom+scrollY+reserve+14;
+  const over=bottom-innerHeight;if(over<=0)return;
+  const h=sc.getBoundingClientRect().height;const nh=Math.max(90,h-over);
+  sc.style.maxWidth=Math.round(nh*16/9)+'px';sc.style.marginInline='auto';
+}catch(e){}}
+function ensureNext(){const fbx=document.getElementById('fbx');if(!(fbx&&fbx.querySelector('.fb')))return;const nb=document.getElementById('nextBtn');if(nb){const r=nb.getBoundingClientRect();if(r.bottom>innerHeight-4)nb.scrollIntoView({block:'end',behavior:'smooth'})}}
+new MutationObserver(()=>requestAnimationFrame(()=>{fitScene();ensureNext()})).observe(app,{childList:true,subtree:true});
+addEventListener('resize',()=>requestAnimationFrame(fitScene));
 home();
 })();
 </script>
