@@ -37,4 +37,8 @@ window.GAMES = [
     lesson: "Spelling list · ai, ay, a_e, eigh, ey",
     topics: "10 words + 5 dictation sentences · Learn, Match, Listen & spell, Build the word",
     path: "grade-3/term-1/spelling/english-long-a.html", questions: 15, countLabel: "15 words & sentences", year: "2026–2027" },
+  { grade: 4, term: 1, period: "Spelling", subject: "English", title: "Dictation · Unit 1 Week 3",
+    lesson: "Long e: zebra, deed, concrete, belief, honey, breathe, family, receive",
+    topics: "8 words + 8 dictation sentences (28 Sep) · Learn, Match, Listen & spell, Build the word",
+    path: "grade-4/term-1/spelling/english-dictation-unit1-week3.html", questions: 16, countLabel: "8 words & 8 sentences", year: "2026–2027" },
 ];

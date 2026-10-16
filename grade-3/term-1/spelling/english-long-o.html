@@ -170,8 +170,12 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 .mode b{font-family:var(--display);font-weight:400;font-size:1.25rem}
 .mode small{color:var(--muted);font-size:.88rem}
 .opts-row{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.og-right{margin-left:auto}
+.og{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
 .opts-row .lab{font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--muted)}
 .thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.fc .scene.ls{max-width:clamp(170px,calc((100vh - 640px) * 1.78),340px)}
+.fc .scene.small{max-width:clamp(200px,calc((100vh - 560px) * 1.78),400px)}
 .thumbs .scene{border-width:2px;border-radius:10px}
 @media (max-width:520px){.thumbs{grid-template-columns:repeat(3,1fr)}.thumbs .scene:nth-child(n+7){display:none}}
 .fc{display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
@@ -297,7 +301,8 @@ const WORDS=LIST.items.filter(i=>i.type!=='sentence');
 const SENTS=LIST.items.filter(i=>i.type==='sentence');
 const bolt='<svg viewBox="0 0 16 16" aria-hidden="true" width="16" height="16"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
 let trLang=store.get('sp-tr','off'); if(trLang!=='off'&&!(LIST.langs||{})[trLang])trLang='off';
-let slow=store.get('sp-slow','1')==='1';
+let slow=store.get('sp-voice','normal')==='slow';
+
 const trHTML=it=>{if(trLang==='off'||!it.tr||!it.tr[trLang])return '';const rtl=['ar','he','fa','ur'].includes(trLang);return `<div class="tr" dir="${rtl?'rtl':'ltr'}" lang="${trLang}">${esc(it.tr[trLang])}</div>`};
 
 /* ---------- voice ---------- */
@@ -324,7 +329,7 @@ function marked(w){
 const MODES=[
  {k:'learn',ic:'📇',t:'Learn',d:'Flash cards: picture with word, or picture only'},
  {k:'match',ic:'🧩',t:'Match',d:'Match each picture to its word'},
- {k:'listen',ic:'🎧',t:'Listen & spell',d:'Hear the word or sentence, then type it'},
+ {k:'listen',ic:'🎧',t:'Listen & spell',d:'Hear words and/or sentences, then type them'},
  {k:'build',ic:'🔤',t:'Build the word',d:'Drag the letters into the right order'},
 ];
 function home(){
@@ -338,14 +343,14 @@ function home(){
     <p class="howto">Ready${KID?', '+esc(KID):''}? Pick a mode. ${LIST.pattern?`<span class="pat">${esc(LIST.pattern)}</span>`:''}</p>
     <div class="modes">${MODES.map(m=>`<button type="button" class="mode" id="mode-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small>${m.d}</small></button>`).join('')}</div>
     <div class="opts-row">
-      ${langs.length?`<span class="lab">Translation</span><div class="seg" role="group" aria-label="Translation">${[['off','Off'],...langs].map(([k,n])=>`<button type="button" id="tr-${k}" data-tr="${k}" aria-pressed="${trLang===k}">${esc(n)}</button>`).join('')}</div>`:''}
-      <span class="lab">Voice</span><div class="seg" role="group" aria-label="Voice speed"><button type="button" id="sp-slow" data-sp="1" aria-pressed="${slow}">🐢 Slow</button><button type="button" id="sp-norm" data-sp="0" aria-pressed="${!slow}">Normal</button></div>
+      ${langs.length?`<div class="og"><span class="lab">Translation</span><div class="seg" role="group" aria-label="Translation">${[['off','Off'],...langs].map(([k,n])=>`<button type="button" id="tr-${k}" data-tr="${k}" aria-pressed="${trLang===k}" title="${esc(n)}" aria-label="${esc(n)}">${k==='off'?'Off':esc(({uk:'UA'})[k]||k.toUpperCase())}</button>`).join('')}</div></div>`:''}
+      <div class="og og-right"><span class="lab">Voice</span><div class="seg" role="group" aria-label="Voice speed"><button type="button" id="sp-norm" data-sp="0" aria-pressed="${!slow}">Normal</button><button type="button" id="sp-slow" data-sp="1" aria-pressed="${slow}">🐢 Slow</button></div></div>
     </div>
     ${TTS?'':'<p class="note">This browser cannot speak words aloud, so “Listen & spell” shows the picture instead.</p>'}
   </section>`;
   app.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>startMode(b.dataset.m));
   app.querySelectorAll('[data-tr]').forEach(b=>b.onclick=()=>{trLang=b.dataset.tr;store.set('sp-tr',trLang);home()});
-  app.querySelectorAll('[data-sp]').forEach(b=>b.onclick=()=>{slow=b.dataset.sp==='1';store.set('sp-slow',slow?'1':'0');home()});
+  app.querySelectorAll('[data-sp]').forEach(b=>b.onclick=()=>{slow=b.dataset.sp==='1';store.set('sp-voice',slow?'slow':'normal');home()});
 }
 
 /* ---------- shared game state ---------- */
@@ -356,12 +361,23 @@ function hud(label){
   return `<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to modes">←</button><span class="qnum">${label}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div>${S.mode==='learn'?'':`<span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span>`}</div>`;
 }
 function bindHome(){const h=document.getElementById('homeBtn');if(h)h.onclick=home}
-function startMode(m){
+function startMode(m,opt){
   S.mode=m;S.i=0;S.score=0;S.miss=[];
   if(m==='learn'){S.list=LIST.items.slice();S.learnSet='all';S.showWord=store.get('sp-show','1')==='1';return learn()}
   if(m==='match'){const w=shuf(WORDS);S.list=[];for(let i=0;i<w.length;i+=5)S.list.push(w.slice(i,i+5));if(S.list.length>1&&S.list[S.list.length-1].length<3){const last=S.list.pop();S.list[S.list.length-1].push(...last)}S.max=WORDS.length;return match()}
-  if(m==='listen'){S.list=shuf(WORDS).concat(shuf(SENTS));S.max=S.list.length;return listen()}
+  if(m==='listen'){if(SENTS.length&&!opt)return chooseListen();const k=opt||'words';S.lsKind=k;S.list=k==='words'?shuf(WORDS):k==='sentences'?shuf(SENTS):shuf(WORDS).concat(shuf(SENTS));S.max=S.list.length;return listen()}
   if(m==='build'){S.list=shuf(WORDS);S.max=S.list.length;return build()}
+}
+function chooseListen(){
+  try{speechSynthesis&&speechSynthesis.cancel()}catch(e){}
+  const opts=[['words','🔤','Words',`${WORDS.length} words`],['sentences','📝','Sentences',`${SENTS.length} sentences`],['both','⭐','Both',`${WORDS.length+SENTS.length} in total`]];
+  app.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to modes">←</button><span class="qnum">Listen &amp; spell</span></div>
+  <section class="card pop">
+    <p class="qtext">What do you want to practise?</p>
+    <div class="modes">${opts.map(([k,ic,t,d])=>`<button type="button" class="mode" id="lsk-${k}" data-k="${k}"><span class="mi-ic">${ic}</span><b>${t}</b><small>${d}</small></button>`).join('')}</div>
+  </section>`;
+  bindHome();
+  app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>startMode('listen',b.dataset.k));
 }
 function next(){S.i++;if(S.i>=S.list.length)return end();({match,listen,build})[S.mode]()}
 function fb(ok,html){return `<div class="fb ${ok?'ok':'no'}"><b>${ok?pick(['Correct!','Great job!','You got it!','Super!']):'Not quite.'}</b><span>${html}</span></div><div class="row" style="justify-content:flex-end;margin-top:4px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`}
@@ -443,7 +459,7 @@ function listen(){
     <span class="qtype dr">Listen & spell</span>
     <p class="qtext">${sent?'Listen and write the sentence.':'Listen and spell the word.'}</p>
     <div class="audio"><button type="button" class="abtn big" id="say1"><span class="e">🔊</span> Play</button><button type="button" class="abtn" id="say2"><span class="e">🐢</span> Slowly</button></div>
-    <div id="hintBox" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:8px">${hint?drawPic(it)+trHTML(it):''}</div>
+    <div id="hintBox" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:8px">${hint?drawPic(it,'scene ls')+trHTML(it):''}</div>
     ${sent?'':`<div class="dots" aria-label="${it.w.length} letters">${'_ '.repeat(it.w.length).trim()}</div>`}
     <input class="spell-in" id="spell" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Type here…" aria-label="Your spelling">
     <div class="row" style="justify-content:center;gap:10px">${hint?'':'<button type="button" class="btn ghost" id="hintBtn">🖼️ Show picture</button>'}<button type="button" class="btn" id="checkBtn">Check</button></div>
@@ -452,20 +468,20 @@ function listen(){
   bindHome();
   document.getElementById('say1').onclick=()=>say(spoken(it));
   document.getElementById('say2').onclick=()=>say(spoken(it),true);
-  const hb=document.getElementById('hintBtn');if(hb)hb.onclick=()=>{document.getElementById('hintBox').innerHTML=drawPic(it)+trHTML(it);hb.remove()};
+  const hb=document.getElementById('hintBtn');if(hb)hb.onclick=()=>{document.getElementById('hintBox').innerHTML=drawPic(it,'scene ls')+trHTML(it);hb.remove()};
   const inp=document.getElementById('spell');inp.focus({preventScroll:true});
   setTimeout(()=>say(spoken(it)),350);
   let done=false;
   const check=()=>{
     if(done)return;const v=inp.value;if(!v.trim()){inp.focus();return}
-    done=true;inp.disabled=true;document.getElementById('checkBtn').disabled=true;
+    done=true;inp.disabled=true;{const cb=document.getElementById('checkBtn');if(cb&&cb.parentElement)cb.parentElement.remove();const d=document.querySelector('.fc .dots');if(d)d.remove();}
     const strict=norm(v)===norm(it.w), loose=normLoose(v)===normLoose(it.w);
     const ok=sent?loose:strict||normLoose(v)===normLoose(it.w);
     if(ok)S.score++;else S.miss.push({q:(sent?'Sentence':'Word')+' (listen)',your:v,right:it.w});
     document.getElementById('pts').textContent=S.score;
     let tip='';if(ok&&sent&&!strict)tip=' Remember the capital letter at the start and the full stop at the end.';
     document.getElementById('fbx').innerHTML=(ok?'':`<div class="diff">${diffHTML(norm(v),it.w)}</div>`)+fb(ok,ok?`${esc(it.w)}${tip}`:`The correct spelling is <strong>${esc(it.w)}</strong>. Letters in red are the ones to fix.`);
-    if(!ok||!hint)document.getElementById('hintBox').innerHTML=drawPic(it)+trHTML(it);
+    if(!ok||!hint)document.getElementById('hintBox').innerHTML=drawPic(it,'scene ls')+trHTML(it);
     const hb2=document.getElementById('hintBtn');if(hb2)hb2.remove();
     bindNext();
   };
@@ -480,7 +496,7 @@ function build(){
   let line=[];let done=false;
   app.innerHTML=`${hud(`Word ${S.i+1} of ${S.list.length}`)}<section class="card pop fc">
     <span class="qtype dr">Build the word</span>
-    ${drawPic(it)}${trHTML(it)}
+    ${drawPic(it,'scene small')}${trHTML(it)}
     <div class="audio"><button type="button" class="abtn" id="say1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="say2"><span class="e">🐢</span> Slowly</button></div>
     <div class="slots" id="line" aria-label="Your word"></div>
     <div class="letters" id="bank" aria-label="Letters"></div>
@@ -541,7 +557,7 @@ function end(){
     <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="modesBtn" type="button">Other modes</button></div>
   </section>
   ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You wrote: <s>${esc(m.your)}</s><br>Right spelling: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
-  document.getElementById('againBtn').onclick=()=>startMode(S.mode);
+  document.getElementById('againBtn').onclick=()=>startMode(S.mode,S.mode==='listen'?S.lsKind:undefined);
   document.getElementById('modesBtn').onclick=home;
   window.scrollTo({top:0,behavior:'smooth'});
 }
