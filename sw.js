@@ -4,6 +4,7 @@
 const VERSION = 'v9';
 const CACHE = 'study-games-' + VERSION;
 const CORE = ['./', './index.html', './games.js', './manifest.webmanifest',
+  './quiz-common.js',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png', './icons/favicon-32.png'];
 
