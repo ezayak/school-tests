@@ -198,7 +198,7 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 <style>
 /* shared with the religion revision games */
 .ftabs{grid-template-columns:repeat(2,minmax(0,1fr))}
-.pic{object-fit:cover;object-position:50% 25%;padding:0} /* keeps faces in tall pictures */
+.pic{object-fit:contain;padding:0} /* show the whole picture */
 .qhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
 .sec{font-size:1.2rem;color:var(--muted)}
 .ask{font-size:1.5rem;text-align:center;margin:0;color:var(--pe)}
@@ -219,7 +219,7 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 .words .mi{min-height:48px;padding:6px 14px}
 .words .mi .tx{font-size:1.35rem}
 #vline{min-height:68px;border:2.5px dashed var(--muted);border-radius:14px;padding:10px;align-items:center}
-.pic.fit{object-fit:contain;background:#fff} /* maps: show all of it */
+.pic.fit{background:#fff} /* maps: white margins */
 .opt.lng{min-height:56px}
 .opt.lng .ow .ar{font-size:1.15rem;line-height:1.6}
 .term{font-size:1.9rem;text-align:center;margin:0;color:var(--pe)}
