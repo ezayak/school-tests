@@ -40,6 +40,7 @@ h1 span{color:var(--fr)}
 .tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 a:focus-visible{outline:3px solid var(--fr);outline-offset:3px}
 .filters{display:flex;flex-wrap:wrap;gap:8px}
+.grade-row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .filters button{font:inherit;font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
 .filters button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
 #list{display:flex;flex-direction:column;gap:44px}
@@ -70,9 +71,11 @@ footer{color:var(--muted);font-size:.9rem}
     <h1>Study <span>Games</span></h1>
     <p class="sub">Picture quizzes, matching and sentence-building games for school tests. Pick a grade, then a game. Questions are shuffled every time you play.</p>
     <div class="tools">
-      <div class="filters" id="filters" role="group" aria-label="Show grade"></div>
+      <div class="grade-row">
+        <div class="filters" id="filters" role="group" aria-label="Show grade"></div>
+        <button type="button" id="installBtn" class="install" hidden>⬇ Install app</button>
+      </div>
       <div class="filters" id="subjects" role="group" aria-label="Show subject"></div>
-      <button type="button" id="installBtn" class="install" hidden>⬇ Install app</button>
     </div>
   </header>
   <div id="list"></div>
