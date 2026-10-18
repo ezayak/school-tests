@@ -1,4 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
 <link rel="manifest" href="../../../manifest.webmanifest">
 <meta name="theme-color" content="#1B2440">
 <link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
@@ -371,12 +372,25 @@ const pwScene=it=>{const n=it.many?3:1,x0=it.far?262:150,s=it.far?30:58,gap=it.f
   return box(`<rect class="f-grass" y="140" width="320" height="40"/>${em(40,104,70,'🧍')}${em(88,92,32,'👉')}<line class="st-ink" x1="108" y1="150" x2="${x0}" y2="150" stroke-width="2" stroke-dasharray="4 6"/><text class="lbl" x="${x0}" y="166" text-anchor="middle">${it.far?'far':'near'}</text>${o}`,it.x)};
 let topic=store.get('ar3-topic','mix'); if(topic!=='mix'&&!TOPICS.some(t=>t.k===topic))topic='mix';
 
-/* ---------- voice: only when the device has an Arabic voice ---------- */
+/* ---------- voice: the device's Arabic voice, else Google's online voice (needs internet) ---------- */
 const TTS='speechSynthesis' in window;
 let voice=null;
 function pickVoice(){if(!TTS)return;voice=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith('ar'))||null}
 if(TTS){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
-function say(text,slow){if(!voice)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=voice.lang;u.voice=voice;u.rate=slow?.55:.75;speechSynthesis.speak(u)}catch(e){}}
+const canSpeak=()=>!!voice||navigator.onLine;
+// Online voice: unofficial Google Translate endpoint; max ~200 chars per request and it refuses requests with a referrer (meta tag in <head>)
+const TTS_URL='https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=';
+const player=new Audio();let parts=[],reading=false; // reading: an online story is mid-way (so Resume may continue it)
+function chunks(t){const out=[];let s=t.replace(/\n/g,'. ').trim();
+  while(s.length>180){let k=Math.max(...['.','،','؛','؟','!',':'].map(c=>s.lastIndexOf(c,180)));if(k<40)k=s.lastIndexOf(' ',180);if(k<1)k=180;out.push(s.slice(0,k+1).trim());s=s.slice(k+1).trim()}
+  if(s)out.push(s);return out}
+function hush(){try{TTS&&speechSynthesis.cancel()}catch(e){}parts=[];reading=false;player.pause()}
+function pauseVoice(){try{TTS&&speechSynthesis.pause()}catch(e){}player.pause()}
+function resumeVoice(){try{TTS&&speechSynthesis.resume()}catch(e){}if(reading)player.play().catch(()=>{})}
+function sayOnline(text,slow){parts=chunks(text);reading=true;const rate=slow?.7:1;
+  const nextPart=()=>{const t=parts.shift();if(!t){reading=false;return}player.src=TTS_URL+encodeURIComponent(t);player.defaultPlaybackRate=player.playbackRate=rate;player.play().catch(()=>{})};
+  player.onended=nextPart;nextPart()}
+function say(text,slow){hush();if(voice){try{const u=new SpeechSynthesisUtterance(text);u.lang=voice.lang;u.voice=voice;u.rate=slow?.55:.75;speechSynthesis.speak(u)}catch(e){}}else if(navigator.onLine)sayOnline(text,slow)}
 
 /* ---------- home: pick a topic and a game ---------- */
 const MODES=[
@@ -397,7 +411,7 @@ const SMODES=[
 const MODE_NAME={match:'Word match',quiz:'Picture quiz',opp:'Opposites',plu:'One & many',qw:'Question words',pw:'Pointing words',read:'Read & answer',order:'Story order',poem:'Finish the poem'};
 const modeBtns=ms=>`<div class="modes">${ms.map(m=>`<button type="button" class="mode" id="mode-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small>${m.d}</small></button>`).join('')}</div>`;
 function home(){
-  try{speechSynthesis&&speechSynthesis.cancel()}catch(e){}
+  hush();
   const tps=[{k:'mix',ic:'🎲',t:`Mix · ${MIX} words`},...TOPICS.map(t=>({k:t.k,ic:t.ic,t:`${t.t} · ${t.w.length}`}))];
   app.innerHTML=`<section class="card pop">
     <a class="back" href="../../../index.html">← All games</a>
@@ -411,7 +425,7 @@ function home(){
     ${modeBtns(GMODES)}
     <span class="lab">Stories &amp; poem · القراءة والاستماع</span>
     ${modeBtns(SMODES)}
-    ${voice?'<p class="note">Tip: in matching games, tap an Arabic word to hear it.</p>':''}
+    ${canSpeak()?'<p class="note">Tip: in matching games, tap an Arabic word to hear it.</p>':''}
   </section>`;
   app.querySelectorAll('[data-tp]').forEach(b=>b.onclick=()=>{topic=b.dataset.tp;store.set('ar3-topic',topic);home()});
   app.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>startMode(b.dataset.m));
@@ -540,7 +554,7 @@ function gram(){
 /* ---------- READ & ANSWER: a story, then the sheet's questions ---------- */
 const psg=(st,open)=>`<details class="psg" ${open?'open':''}><summary>📖 The story</summary><p class="ar ptext" lang="ar" dir="rtl">${esc(st.text).replace(/\n/g,'<br>')}</p><details class="eng"><summary>Show in English</summary><p>${esc(st.en)}</p></details></details>`;
 function chooseStory(){
-  try{speechSynthesis&&speechSynthesis.cancel()}catch(e){}
+  hush();
   app.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">Read &amp; answer</span></div>
   <section class="card pop"><p class="qtext">Which story?</p>
     <div class="modes">${STORIES.map((s,i)=>`<button type="button" class="mode" id="st-${s.k}" data-st="${i}"><span class="mi-ic">${s.ic}</span><b>${esc(s.t)}</b><small>${s.listen?'Listening · ':''}${s.qs.length} questions</small></button>`).join('')}</div>
@@ -549,20 +563,25 @@ function chooseStory(){
   app.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>startMode('read',STORIES[+b.dataset.st]));
 }
 function storyIntro(){
-  const st=S.story,hide=st.listen&&voice; // listening story: hear it first, text on request
+  const st=S.story,sp=canSpeak();
   app.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">${st.ic} ${esc(st.t)}</span></div>
   <section class="card pop">
-    <span class="qtype mc">${st.listen?'Listen, then answer':'Read, then answer'}</span>
-    ${voice?`<div class="row"><button type="button" class="abtn" id="say1">🔊 Listen</button><button type="button" class="abtn" id="say2">🐢 Slowly</button></div>`:''}
-    ${hide?`<button type="button" class="btn ghost" id="showTxt">Show the text</button>`:''}
-    <div id="txt" ${hide?'hidden':''}>${psg(st,true)}</div>
-    ${st.listen&&!voice?'<p class="note">This is the listening story (نص الاستماع). Ask someone to read it to you, or read it yourself.</p>':''}
+    <span class="qtype mc">${st.listen&&sp?'Listen, then answer':'Read, then answer'}</span>
+    ${sp?`<div class="row"><button type="button" class="abtn" id="say1">🔊 Listen</button><button type="button" class="abtn" id="say2">🐢 Slowly</button><button type="button" class="abtn" id="pauseBtn">⏸ Pause</button><button type="button" class="abtn" id="stopBtn">⏹ Stop</button></div>`:''}
+    ${psg(st,true)}
+    ${st.listen&&!sp?'<p class="note">This is the listening story (نص الاستماع). Connect to the internet to hear it, or ask someone to read it to you.</p>':''}
     <div class="row" style="justify-content:flex-end"><button class="btn big" id="goBtn" type="button">Start questions</button></div>
   </section>`;
   bindHome();
-  if(voice){document.getElementById('say1').onclick=()=>say(st.text);document.getElementById('say2').onclick=()=>say(st.text,true)}
-  if(hide)document.getElementById('showTxt').onclick=e=>{document.getElementById('txt').hidden=false;e.target.remove()};
-  document.getElementById('goBtn').onclick=()=>next(true);
+  if(sp){
+    const pb=document.getElementById('pauseBtn');let paused=false;
+    const setPaused=v=>{paused=v;pb.textContent=v?'▶ Resume':'⏸ Pause'};
+    document.getElementById('say1').onclick=()=>{setPaused(false);say(st.text)};
+    document.getElementById('say2').onclick=()=>{setPaused(false);say(st.text,true)};
+    pb.onclick=()=>{if(paused)resumeVoice();else pauseVoice();setPaused(!paused)};
+    document.getElementById('stopBtn').onclick=()=>{hush();setPaused(false)};
+  }
+  document.getElementById('goBtn').onclick=()=>{hush();next(true)};
 }
 function readQ(){
   const st=S.story,q=S.list[S.i];
