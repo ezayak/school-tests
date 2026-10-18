@@ -361,7 +361,6 @@ const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ar=s=>`<span class="ar" lang="ar" dir="rtl">${esc(s)}</span>`;
 const pick=a=>a[Math.floor(Math.random()*a.length)];
-const KID=(()=>{try{const q=new URLSearchParams(location.search).get('name');if(q)return q.slice(0,30);return localStorage.getItem('st-name')||''}catch(e){return ''}})();
 const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const bolt='<svg viewBox="0 0 16 16" aria-hidden="true" width="16" height="16"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
 const em=(x,y,s,c)=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central">${c}</text>`;
@@ -418,7 +417,7 @@ function home(){
     <span class="eyebrow">Grade 3 Arabic · Mid-term revision</span>
     <h1 class="hero-title"><span class="p">Arabic</span> <span class="k">Revision</span></h1>
     <div class="hero-ar ar" lang="ar" dir="rtl">مراجعة لغة عربية</div>
-    <p class="howto">Ready${KID?', '+esc(KID):''}? Choose the words, then choose a game.</p>
+    <p class="howto">Ready? Choose the words, then choose a game.</p>
     <div class="row"><span class="lab">Words</span><div class="seg" role="group" aria-label="Words">${tps.map(t=>`<button type="button" id="tp-${t.k}" data-tp="${t.k}" aria-pressed="${topic===t.k}">${t.ic} ${esc(t.t)}</button>`).join('')}</div></div>
     ${modeBtns(MODES)}
     <span class="lab">Grammar · الأساليب والتراكيب</span>

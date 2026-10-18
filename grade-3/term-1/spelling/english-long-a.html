@@ -295,7 +295,6 @@ const drawPic=(it,cls='scene')=>{
 const app=document.getElementById('app');
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const KID=(()=>{try{const q=new URLSearchParams(location.search).get('name');if(q)return q.slice(0,30);return localStorage.getItem('st-name')||''}catch(e){return ''}})();
 const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const WORDS=LIST.items.filter(i=>i.type!=='sentence');
@@ -341,7 +340,7 @@ function home(){
     <span class="eyebrow">${esc(LIST.subtitle)}</span>
     <h1 class="hero-title"><span class="p">Spelling:</span> <span class="k">${esc(LIST.title)}</span></h1>
     <div class="thumbs">${WORDS.slice(0,10).map(it=>drawPic(it)).join('')}</div>
-    <p class="howto">Ready${KID?', '+esc(KID):''}? Pick a mode. ${LIST.pattern?`<span class="pat">${esc(LIST.pattern)}</span>`:''}</p>
+    <p class="howto">Ready? Pick a mode. ${LIST.pattern?`<span class="pat">${esc(LIST.pattern)}</span>`:''}</p>
     <div class="modes">${MODES.map(m=>`<button type="button" class="mode" id="mode-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small>${m.d}</small></button>`).join('')}</div>
     <div class="opts-row">
       ${langs.length?`<div class="og"><span class="lab">Translation</span><div class="seg" role="group" aria-label="Translation">${[['off','Off'],...langs].map(([k,n])=>`<button type="button" id="tr-${k}" data-tr="${k}" aria-pressed="${trLang===k}" title="${esc(n)}" aria-label="${esc(n)}">${k==='off'?'Off':esc(({uk:'UA'})[k]||k.toUpperCase())}</button>`).join('')}</div></div>`:''}

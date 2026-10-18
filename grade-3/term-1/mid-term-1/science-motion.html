@@ -290,7 +290,6 @@ const S={list:[],i:0,score:0,max:0,miss:[]};
 const app=document.getElementById('app');
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const KID=(()=>{try{const q=new URLSearchParams(location.search).get('name');if(q)return q.slice(0,30);return localStorage.getItem('st-name')||''}catch(e){return ''}})();
 const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
 const scene=k=>`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${SC[k]()}</svg></div>`;
 
@@ -325,7 +324,7 @@ function home(){
     <span class="eyebrow">Grade 3 Science · Midterm practice</span>
     <h1 class="hero-title"><span class="p">Motion</span> <span class="k">Quest</span></h1>
     ${scene('refpoint')}
-    <p class="howto">Ready${KID?', '+esc(KID):''}? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
+    <p class="howto">Ready? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
     <div class="chips"><span class="chip pe">Position &amp; direction</span><span class="chip ke">Distance &amp; speed</span><span class="chip">Reference point</span><span class="chip ht">Patterns in motion</span></div>
     <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${l.l}</button>`).join('')}</div></div>
     <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>

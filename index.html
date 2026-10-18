@@ -38,9 +38,7 @@ h1{font-size:clamp(2.6rem,8vw,4rem);line-height:.95}
 h1 span{color:var(--fr)}
 .sub{color:var(--muted);margin:0;max-width:60ch}
 .tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.tools label{font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;color:var(--muted)}
-.tools input{font:inherit;color:var(--ink);background:var(--card);border:2.5px solid var(--ink);border-radius:12px;padding:8px 12px;width:min(220px,100%)}
-.tools input:focus-visible,a:focus-visible{outline:3px solid var(--fr);outline-offset:3px}
+a:focus-visible{outline:3px solid var(--fr);outline-offset:3px}
 .filters{display:flex;flex-wrap:wrap;gap:8px}
 .filters button{font:inherit;font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
 .filters button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
@@ -72,9 +70,8 @@ footer{color:var(--muted);font-size:.9rem}
     <h1>Study <span>Games</span></h1>
     <p class="sub">Picture quizzes, matching and sentence-building games for school tests. Pick a grade, then a game. Questions are shuffled every time you play.</p>
     <div class="tools">
-      <label for="player">Player name</label>
-      <input id="player" type="text" maxlength="30" placeholder="optional" autocomplete="off">
       <div class="filters" id="filters" role="group" aria-label="Show grade"></div>
+      <div class="filters" id="subjects" role="group" aria-label="Show subject"></div>
       <button type="button" id="installBtn" class="install" hidden>⬇ Install app</button>
     </div>
   </header>
@@ -82,40 +79,6 @@ footer{color:var(--muted);font-size:.9rem}
   <footer>To add a game, put its file in <code>grade-N/term-N/&lt;period&gt;/</code> and add one line to <code>games.js</code>.</footer>
 </main>
 <script src="games.js"></script>
-<script>
-(function(){
-  const PERIODS=["Mid-term 1","Final term 1","Term 1","Spelling","Mid-term 2","Final term 2","Term 2","Mid-term 3","Final term 3","Term 3","Final exam"];
-  const SUBJ={"Science":"var(--sci)","Social Studies":"var(--ss)","French":"var(--fr)","English":"var(--en)"};
-  const games=(window.GAMES||[]);
-  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-  const player=document.getElementById('player');
-  player.value=store.get('st-name')||'';
-  let grade=store.get('st-grade')||'all';
-  const grades=[...new Set(games.map(g=>g.grade))].sort((a,b)=>a-b);
-  if(grade!=='all'&&!grades.includes(+grade))grade='all';
-  const pIdx=p=>{const i=PERIODS.indexOf(p);return i<0?99:i};
-  function href(g){const n=player.value.trim();return g.path+(n?'?name='+encodeURIComponent(n):'')}
-  function draw(){
-    document.getElementById('filters').innerHTML=['all',...grades].map(v=>`<button type="button" id="f-${v}" data-g="${v}" aria-pressed="${String(v)===String(grade)}">${v==='all'?'All grades':'Grade '+v}</button>`).join('');
-    document.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{grade=b.dataset.g;store.set('st-grade',grade);draw()});
-    const show=grades.filter(g=>grade==='all'||String(g)===String(grade));
-    document.getElementById('list').innerHTML=show.length?show.map(gr=>{
-      const gs=games.filter(g=>g.grade===gr);
-      const keys=[...new Set(gs.map(g=>g.term+'|'+g.period))].sort((a,b)=>{const [ta,pa]=a.split('|'),[tb,pb]=b.split('|');return (+ta-+tb)||(pIdx(pa)-pIdx(pb))});
-      return `<section class="grade"><h2>Grade ${gr}<small>${gs.length} game${gs.length>1?'s':''}</small></h2>${keys.map(k=>{const [t,p]=k.split('|');const items=gs.filter(g=>g.term+'|'+g.period===k).sort((a,b)=>a.subject.localeCompare(b.subject));
-        return `<div class="period"><h3>Term ${esc(t)} · ${esc(p)}</h3><div class="cards">${items.map(g=>`<a class="game" style="--c:${SUBJ[g.subject]||'var(--other)'}" href="${esc(href(g))}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson||'')}</span><p class="tp">${esc(g.topics||'')}</p><span class="meta"><span>${g.countLabel?esc(g.countLabel):g.questions?g.questions+' questions':''}${g.year?' · '+esc(g.year):''}</span><span class="go">Play →</span></span></a>`).join('')}</div></div>`}).join('')}</section>`}).join(''):'<p class="empty">No games yet.</p>';
-  }
-  // Install button (Android / Chrome / Edge). iPad: Share → Add to Home Screen.
-  let deferred=null;const ib=document.getElementById('installBtn');
-  addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;ib.hidden=false});
-  ib.onclick=async()=>{if(!deferred)return;deferred.prompt();try{await deferred.userChoice}catch(e){}deferred=null;ib.hidden=true};
-  addEventListener('appinstalled',()=>{ib.hidden=true});
-  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-  if(/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)){if(!standalone){const t=document.createElement('p');t.className='ios-tip';t.textContent='To install on iPad: tap Share, then “Add to Home Screen”.';document.querySelector('header').appendChild(t)}}
-  player.addEventListener('input',()=>{store.set('st-name',player.value.trim());draw()});
-  draw();
-})();
-</script>
+<script src="index.js"></script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 // Service worker: makes Study Games work offline once installed.
 // Every game listed in games.js is downloaded automatically, so adding a game
 // only needs games.js to change. Bump VERSION if you want to force a full refresh.
-const VERSION = 'v10';
+const VERSION = 'v11';
 const CACHE = 'study-games-' + VERSION;
-const CORE = ['./', './index.html', './games.js', './manifest.webmanifest',
+const CORE = ['./', './index.html', './index.js', './games.js', './manifest.webmanifest',
   './quiz-common.js',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png', './icons/favicon-32.png'];
