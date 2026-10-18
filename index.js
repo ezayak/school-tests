@@ -1,7 +1,7 @@
 // Main screen: grade + subject filters, game cards, install button.
 (function(){
   const PERIODS=["Mid-term 1","Final term 1","Term 1","Spelling","Mid-term 2","Final term 2","Term 2","Mid-term 3","Final term 3","Term 3","Final exam"];
-  const SUBJ={"Science":"var(--sci)","Social Studies":"var(--ss)","French":"var(--fr)","English":"var(--en)"};
+  const SUBJ={"Science":"var(--sci)","Social Studies":"var(--ss)","Social Studies (Arabic)":"var(--ssa)","French":"var(--fr)","English":"var(--en)"};
   const games=(window.GAMES||[]);
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};

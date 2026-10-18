@@ -21,13 +21,13 @@
 /* Layout: graph-paper page, one section per grade, a row per term/period, subject cards inside */
 :root{
   --paper:#F2F6FC; --grid:#DCE6F3; --card:#FFFFFF; --ink:#1B2440; --muted:#56637F; --hl:#FFE14D;
-  --sci:#F2B705; --ss:#D93A3A; --fr:#2E9E4F; --en:#3474CF; --other:#8A5CC9;
+  --sci:#F2B705; --ss:#D93A3A; --fr:#2E9E4F; --en:#3474CF; --ssa:#D63F96; --other:#8A5CC9;
   --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
   --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--en:#6FA2F0;--other:#B48CF0;color-scheme:dark}}
-:root[data-theme="dark"]{--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--en:#6FA2F0;--other:#B48CF0;color-scheme:dark}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--en:#6FA2F0;--ssa:#F27AC0;--other:#B48CF0;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--sci:#FFD23F;--ss:#FF6B6B;--fr:#4ED07A;--en:#6FA2F0;--ssa:#F27AC0;--other:#B48CF0;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;padding-inline:16px;padding-block:28px 48px}
