@@ -184,12 +184,15 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 .ftabs button[aria-pressed="true"]{background:var(--panel);color:var(--ink);border-bottom-color:var(--panel);padding-block:13px 9px}
 .panel{border:2.5px solid var(--ink);border-radius:0 0 16px 16px;background:var(--panel);padding:16px;display:flex;flex-direction:column;gap:14px}
 .tabbox{--panel:color-mix(in srgb,var(--hl) 12%,var(--card))}
-@media (max-width:480px){.ftabs button{font-size:.95rem;padding-inline:4px}.panel{padding:12px}}
+.ftabs .ts{display:none}
+@media (max-width:480px){.ftabs button{font-size:.95rem;padding-inline:4px}.panel{padding:12px}
+  .ftabs .ti,.ftabs .tl{display:none}.ftabs .ts{display:inline}} /* phones: no icons, short labels */
 .tab-sub{color:var(--muted);font-size:1.15rem;margin-bottom:-6px}
 .note{color:var(--muted);font-size:.9rem;margin:0}
 .sub{display:block;font-weight:400;font-size:.85rem;color:var(--muted);font-family:var(--body)}
 .mi.word .tx{text-align:center}
 .mi .tx>.ar{font-size:1.35rem}
+.match{grid-template-columns:repeat(2,minmax(0,1fr))} /* equal columns, also on phones */
 .sent{font-size:1.8rem;text-align:center;margin:0}
 .gap{display:inline-block;min-width:3.2em;border-bottom:3px dashed var(--muted);color:var(--good)}
 .psg{border:2px solid var(--grid);border-radius:12px;padding:8px 12px;background:color-mix(in srgb,var(--hl) 8%,var(--card))}
@@ -418,7 +421,7 @@ const SMODES=[
 const MODE_NAME={match:'Word match',quiz:'Picture quiz',opp:'Opposites',plu:'One & many',qw:'Question words',pw:'Pointing words',read:'Read & answer',order:'Story order',poem:'Finish the poem'};
 const modeBtns=ms=>`<div class="modes">${ms.map(m=>`<button type="button" class="mode" id="mode-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small>${m.d}</small></button>`).join('')}</div>`;
 // home tabs: one per kind of game
-const TABS=[{k:'words',t:'🔤 Words',ms:MODES},{k:'gram',t:'✏️ Grammar',sub:'الأساليب والتراكيب',ms:GMODES},{k:'stories',t:'📖 Stories & poem',sub:'القراءة والاستماع',ms:SMODES}];
+const TABS=[{k:'words',ic:'🔤',t:'Words',ms:MODES},{k:'gram',ic:'✏️',t:'Grammar',sub:'الأساليب والتراكيب',ms:GMODES},{k:'stories',ic:'📖',t:'Stories & poem',short:'Stories',sub:'القراءة والاستماع',ms:SMODES}];
 let tab=store.get('ar3-tab','words'); if(!TABS.some(t=>t.k===tab))tab='words';
 function home(still){ // still===true: switching tab/words, so no pop animation
   hush();
@@ -430,7 +433,7 @@ function home(still){ // still===true: switching tab/words, so no pop animation
     <h1 class="hero-title"><span class="p">Arabic</span> <span class="k">Revision</span></h1>
     <div class="hero-ar ar" lang="ar" dir="rtl">مراجعة لغة عربية</div>
     <p class="howto">Ready? Pick a tab, then choose a game.</p>
-    <div class="tabbox"><div class="ftabs" role="group" aria-label="Kind of game">${TABS.map(t=>`<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab===t.k}">${esc(t.t)}</button>`).join('')}</div>
+    <div class="tabbox"><div class="ftabs" role="group" aria-label="Kind of game">${TABS.map(t=>`<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab===t.k}"><span class="ti">${t.ic} </span>${t.short?`<span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short)}</span>`:esc(t.t)}</button>`).join('')}</div>
     <div class="panel">
     ${T.sub?`<div class="ar tab-sub" lang="ar" dir="rtl">${esc(T.sub)}</div>`:''}
     ${tab==='words'?`<div class="row"><span class="lab">Words</span><div class="seg" role="group" aria-label="Words">${tps.map(t=>`<button type="button" id="tp-${t.k}" data-tp="${t.k}" aria-pressed="${topic===t.k}">${t.ic} ${esc(t.t)}</button>`).join('')}</div></div>`:''}
