@@ -106,7 +106,7 @@ let tab=store.get(KEY+'tab','story'); if(!['story','words','opp'].includes(tab))
 let part=0,story=null; // story=null → show the list of texts
 function lessonView(){
   hush();closePop();
-  const TABS=[{k:'story',ic:'📖',t:'Story',ar:'القصة'},{k:'words',ic:'🗂',t:'Words',ar:'الكلمات'},{k:'opp',ic:'🔄',t:'Opposites & plurals',short:'Opp. & plural',ar:'مضاد وجمع'}];
+  const TABS=[{k:'story',ic:'📖',t:'Story',ar:'القصة'},{k:'words',ic:'🗂',t:'Words',ar:'الكلمات'},{k:'opp',ic:'🔄',t:'Opposites & plurals',short:'Pl / Op',ar:'مضاد وجمع'}];
   app.innerHTML=`<section class="card pop">
     <div class="toprow"><div class="links"><a class="back" href="index.html">← Arabic lessons</a><a class="back" href="../../../index.html">All games</a></div>${trSeg()}</div>
     <div class="les-head"><img src="${esc(L.cover)}" alt=""><div><span class="eyebrow">${esc(L.unit||'')}</span><h1 class="les-title ar" dir="rtl">${esc(L.title)}</h1><div class="les-sub">${esc(tr==='uk'?L.uk:L.en)}</div></div></div>
@@ -149,9 +149,9 @@ function storyPanel(P){
         <p class="hintline">Tap any word to see what it means.</p>
       </div>
     </div>
-    <div class="nav" dir="rtl"><button type="button" class="btn ghost" id="prevBtn" ${part===0?'disabled':''}>→ السابق <small>Back</small></button>
+    <div class="nav" dir="rtl"><button type="button" class="btn ghost" id="prevBtn" ${part===0?'disabled':''}><span class="na">→ السابق</span> <small>Back</small></button>
       <div class="dots" dir="rtl">${PS.map((_,i)=>`<button type="button" id="dot-${i}" data-dot="${i}" aria-label="Part ${i+1}" aria-current="${i===part}"></button>`).join('')}</div>
-      ${part<PS.length-1?`<button type="button" class="btn" id="nextPart">التالي ← <small>Next</small></button>`:story<STORIES.length-1?`<button type="button" class="btn" id="nextText">النص التالي ← <small>Next text</small></button>`:`<button type="button" class="btn" id="toWords">الكلمات ← <small>Words</small></button>`}</div>`;
+      ${part<PS.length-1?`<button type="button" class="btn" id="nextPart"><span class="na">التالي ←</span> <small>Next</small></button>`:story<STORIES.length-1?`<button type="button" class="btn" id="nextText"><span class="na">النص التالي ←</span> <small>Next text</small></button>`:`<button type="button" class="btn" id="toWords"><span class="na">الكلمات ←</span> <small>Words</small></button>`}</div>`;
   const txt=document.getElementById('storyText');const spans=[...txt.querySelectorAll('.w')];
   onWord=ci=>{spans.forEach(s=>s.classList.remove('say'));if(ci<0)return;const i=tk.findIndex(t=>ci>=t.start-1&&ci<t.end);if(i>=0)spans[i].classList.add('say')};
   const read=slow=>{say(p.ar,slow,ci=>onWord&&onWord(ci));setPause(false)};
@@ -226,7 +226,7 @@ function wordsGame(P){
       <div id="wbox">${show?`<div class="bigword ar" dir="rtl">${esc(w.ar)}</div>`:`<button type="button" class="hiddenw" id="reveal">Tap to see the word</button>`}</div>
       ${meaningHTML(w)}
       <div class="audio"><button type="button" class="abtn big" id="s1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="s2"><span class="e">🐢</span> Slowly</button></div></div>
-      <div class="nav" dir="rtl"><button type="button" class="btn ghost" id="pv">→ السابق <small>Back</small></button><button type="button" class="btn" id="nx">التالي ← <small>Next</small></button></div>`;
+      <div class="nav" dir="rtl"><button type="button" class="btn ghost" id="pv"><span class="na">→ السابق</span> <small>Back</small></button><button type="button" class="btn" id="nx"><span class="na">التالي ←</span> <small>Next</small></button></div>`;
     P.querySelectorAll('[data-sw]').forEach(b=>b.onclick=()=>{store.set('ar3-showw',b.dataset.sw);wordsGame(P)});
     const rv=P.querySelector('#reveal');if(rv)rv.onclick=()=>{P.querySelector('#wbox').innerHTML=`<div class="bigword ar" dir="rtl">${esc(w.ar)}</div>`;say(w.ar)};
     P.querySelector('#s1').onclick=()=>say(w.ar);P.querySelector('#s2').onclick=()=>say(w.ar,true);
@@ -422,7 +422,7 @@ function qaCards(){
     <p class="qar ar" dir="rtl" style="text-align:center">${esc(it.q)}</p>${trText(it)?`<p class="qhelp" style="text-align:center">${esc(trText(it))}</p>`:''}
     <div class="audio" style="justify-content:center"><button type="button" class="abtn" id="qSay"><span class="e">🔊</span> Question</button></div>
     <div id="aBox" style="display:flex;flex-direction:column;align-items:center;gap:10px"><button type="button" class="hiddenw" id="showA">Tap to see the answer</button></div>
-    <div class="nav" dir="rtl"><button type="button" class="btn ghost" id="pv">→ السابق <small>Back</small></button><button type="button" class="btn" id="nx">التالي ← <small>Next</small></button></div>
+    <div class="nav" dir="rtl"><button type="button" class="btn ghost" id="pv"><span class="na">→ السابق</span> <small>Back</small></button><button type="button" class="btn" id="nx"><span class="na">التالي ←</span> <small>Next</small></button></div>
   </section>`;
   document.getElementById('homeBtn').onclick=()=>{xs=null;exView()};
   document.getElementById('qSay').onclick=()=>say(it.q);

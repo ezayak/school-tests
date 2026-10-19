@@ -322,3 +322,11 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 
 /* space between the matching cards and the Check button / result box */
 .match + #fbx{margin-top:18px}
+
+/* phones: Back/Next in English only, story dots under the buttons */
+@media (max-width:480px){
+  .nav .na{display:none}
+  .nav .btn small{font-size:1rem;color:inherit;opacity:1}
+  .nav{flex-wrap:wrap}
+  .nav .dots{order:3;flex-basis:100%;flex-direction:row}
+}
