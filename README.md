@@ -90,3 +90,47 @@ Audio uses the device's built-in voices (Web Speech API), so it works offline on
 3. Pictures: use a built-in drawing name (`pic`), an `emoji: "🐸"`, or your own image file
    (`img: "images/toad.png"`, e.g. AI-generated). Put image files in an `images/` folder next to the game.
 4. Add an entry to `games.js` with `period: "Spelling"`, `subject: "English"`.
+
+## Arabic lessons (Grade 3)
+
+Folder: `grade-3/term-1/arabic/`. One card on the home page ("Arabic Lessons") opens `index.html`, which lists the lessons from `lessons.js`.
+
+Shared files (no need to touch them for a new lesson):
+- `arabic-lesson.js` — the engine. The page's `<body data-view="list|lesson|exercises">` picks the view.
+- `arabic-lesson.css` — styles.
+
+Each lesson has four files:
+- `lesson-N.js` — all the content (`window.LESSON = {...}`)
+- `lesson-N.html` — story, words, opposites & plurals (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`)
+- `lesson-N-exercises.html` — the book exercises (copy `lesson-1-exercises.html` the same way)
+- `img/lesson-N/` — pictures cropped from the book (about 700px wide)
+
+### `lesson-N.js` format
+
+```js
+window.LESSON = {
+  n: 2, title: "…Arabic title with tashkeel…", en: "…", uk: "…",
+  unit: "الوحدة … · الدرس …", cover: "img/lesson-2/cover.jpg",
+  stories: [                                 // the Story tab starts with a list of these texts
+    {title, en, uk, kind: "The lesson text · النَّصُّ", cover: "img/lesson-2/class.jpg",
+     intro: {ar, en, uk},                    // optional "About this text"
+     parts: [{para: "paragraph heading", img: "img/lesson-2/amira.jpg", ar, en, uk}, …]},  // short parts
+    …],                                      // (lesson 1 uses the older story: {parts} + intro, which still works)
+  gloss: {"كَلِمَةٌ": ["word", "слово"], …},  // tap-a-word translations; matched with tashkeel first, then without
+  words: [{ar, en, uk, ic: "🌼"}, …,        // vocabulary cards + games
+          {ar, en, uk, ic, set: "opp"}, {ar, en, uk, ic, set: "plural"}],  // words from the opposites / plurals games (filter buttons)
+  opposites: [[ar, ar2, "en a ↔ b", "uk a ↔ b"], …],
+  plurals:   [[singular, plural, "en", "uk"], …],
+  meanings:  [[word, meaning, "en = …", "uk = …"], …],
+  exercises: [{k, t: "Arabic section title", en, uk, ic: "📝", items: [ … ]}, …]   // one menu tile per section; add cards: true for Q&A flash cards
+                                             // a section can have rule: {img, ar, en, uk} (shown as "The rule"), or rule: "<k of another section>"
+};
+```
+
+Exercise item types (every item can have `en`/`uk` help text, `img`, `tag`, and `read: [textIndex, partIndex]` to show that paragraph; a plain number means a part of the first text):
+- `{type:"tf", q, a: true|false, x: "explanation"}`
+- `{type:"mc", q: "… ___ …", o: [correct, wrong, wrong]}` — the first option is the right one; they are shuffled on screen
+- `{type:"open", q, a: "model answer"}` — the child answers, sees the model answer and marks themselves
+- `{type:"match", q, pairs: [[left, right, "en"], …]}`
+
+After adding a lesson: add it to `lessons.js`, add its files to the `also: [...]` list of the "Arabic Lessons" entry in `games.js` (so it works offline), and bump `VERSION` in `sw.js`.

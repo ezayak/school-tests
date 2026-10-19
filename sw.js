@@ -1,7 +1,7 @@
 // Service worker: makes Study Games work offline once installed.
 // Every game listed in games.js is downloaded automatically, so adding a game
 // only needs games.js to change. Bump VERSION if you want to force a full refresh.
-const VERSION = 'v11';
+const VERSION = 'v12';
 const CACHE = 'study-games-' + VERSION;
 const CORE = ['./', './index.html', './index.js', './games.js', './manifest.webmanifest',
   './quiz-common.js',
@@ -12,7 +12,10 @@ async function gamePaths() {
   try {
     const res = await fetch('./games.js', { cache: 'no-store' });
     const txt = await res.text();
-    return [...txt.matchAll(/path:\s*"([^"]+)"/g)].map(m => './' + m[1]);
+    const paths = [...txt.matchAll(/path:\s*"([^"]+)"/g)].map(m => './' + m[1]);
+    // extra files a game needs offline (lesson pages, scripts, pictures): also: ["a", "b"]
+    for (const m of txt.matchAll(/also:\s*\[([^\]]*)\]/g)) for (const f of m[1].matchAll(/"([^"]+)"/g)) paths.push('./' + f[1]);
+    return paths;
   } catch (e) { return []; }
 }
 
