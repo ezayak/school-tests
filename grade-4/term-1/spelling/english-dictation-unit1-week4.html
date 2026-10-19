@@ -204,6 +204,14 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 .slots .ph{color:var(--muted);font-weight:700;align-self:center}
 .letters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;min-height:56px}
 .tile.let{min-width:52px;font-size:1.7rem;padding:6px 12px;text-align:center}
+.sent-row{display:flex;flex-wrap:wrap;gap:10px 12px;justify-content:center;align-items:flex-end}
+.wgrp{display:inline-flex;align-items:flex-end;gap:2px}
+.wbox{display:inline-flex;gap:4px;padding:6px 8px;border:2.5px solid var(--ink);border-radius:12px;background:var(--card)}
+.wbox span{min-width:.8em;min-height:1.25em;border-bottom:2.5px solid var(--muted);font-family:var(--display);font-size:1.35rem;line-height:1.25}
+.wbox.sel{background:color-mix(in srgb,var(--hl) 45%,var(--card));box-shadow:3px 3px 0 var(--ink)}
+.wbox.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--card))}
+.wbox.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.punct{font-family:var(--display);font-size:1.5rem}
 .mi .pic{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%}
 .mi .pic .scene{width:100%;max-width:150px;border-width:2px;border-radius:10px}
 .mi .pic .tr{font-size:.95rem}
@@ -344,7 +352,7 @@ const MODES=[
  {k:'learn',ic:'📇',t:'Learn',d:'Flash cards: picture with word, or picture only'},
  {k:'match',ic:'🧩',t:'Match',d:'Match each picture to its word'},
  {k:'listen',ic:'🎧',t:'Listen & spell',d:'Hear words and/or sentences, then type them'},
- {k:'build',ic:'🔤',t:'Build the word',d:'Drag the letters into the right order'},
+ {k:'build',ic:'🔤',t:'Build the word',d:'Put the letters in order: words or whole sentences'},
 ];
 function home(){
   try{speechSynthesis&&speechSynthesis.cancel()}catch(e){}
@@ -379,19 +387,19 @@ function startMode(m,opt){
   S.mode=m;S.i=0;S.score=0;S.miss=[];
   if(m==='learn'){S.list=LIST.items.slice();S.learnSet='all';S.showWord=store.get('sp-show','1')==='1';return learn()}
   if(m==='match'){const w=shuf(WORDS);S.list=[];for(let i=0;i<w.length;i+=5)S.list.push(w.slice(i,i+5));if(S.list.length>1&&S.list[S.list.length-1].length<3){const last=S.list.pop();S.list[S.list.length-1].push(...last)}S.max=WORDS.length;return match()}
-  if(m==='listen'){if(SENTS.length&&!opt)return chooseListen();const k=opt||'words';S.lsKind=k;S.list=k==='words'?shuf(WORDS):k==='sentences'?shuf(SENTS):shuf(WORDS).concat(shuf(SENTS));S.max=S.list.length;return listen()}
-  if(m==='build'){S.list=shuf(WORDS);S.max=S.list.length;return build()}
+  if(m==='listen'){if(SENTS.length&&!opt)return chooseKind('listen');const k=opt||'words';S.kind=k;S.list=k==='words'?shuf(WORDS):k==='sentences'?shuf(SENTS):shuf(WORDS).concat(shuf(SENTS));S.max=S.list.length;return listen()}
+  if(m==='build'){if(SENTS.length&&!opt)return chooseKind('build');const k=opt||'words';S.kind=k;S.list=k==='words'?shuf(WORDS):k==='sentences'?shuf(SENTS):shuf(WORDS).concat(shuf(SENTS));S.max=S.list.length;return build()}
 }
-function chooseListen(){
+function chooseKind(m){
   try{speechSynthesis&&speechSynthesis.cancel()}catch(e){}
   const opts=[['words','🔤','Words',`${WORDS.length} words`],['sentences','📝','Sentences',`${SENTS.length} sentences`],['both','⭐','Both',`${WORDS.length+SENTS.length} in total`]];
-  app.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to modes">←</button><span class="qnum">Listen &amp; spell</span></div>
+  app.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to modes">←</button><span class="qnum">${esc(MODE_NAME[m])}</span></div>
   <section class="card pop">
     <p class="qtext">What do you want to practise?</p>
     <div class="modes">${opts.map(([k,ic,t,d])=>`<button type="button" class="mode" id="lsk-${k}" data-k="${k}"><span class="mi-ic">${ic}</span><b>${t}</b><small>${d}</small></button>`).join('')}</div>
   </section>`;
   bindHome();
-  app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>startMode('listen',b.dataset.k));
+  app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>startMode(m,b.dataset.k));
 }
 function next(){S.i++;if(S.i>=S.list.length)return end();({match,listen,build})[S.mode]()}
 function fb(ok,html){return `<div class="fb ${ok?'ok':'no'}"><b>${ok?pick(['Correct!','Great job!','You got it!','Super!']):'Not quite.'}</b><span>${html}</span></div><div class="row" style="justify-content:flex-end;margin-top:4px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`}
@@ -505,28 +513,39 @@ function listen(){
 
 /* ---------- BUILD THE WORD (drag letters) ---------- */
 function build(){
-  const it=S.list[S.i];const target=it.w.split('');
-  let bank=shuf(target.map((t,i)=>({t,i})));for(let n=0;n<6&&bank.map(b=>b.t).join('')===it.w;n++)bank=shuf(bank);
-  let line=[];let done=false;
-  app.innerHTML=`${hud(`Word ${S.i+1} of ${S.list.length}`)}<section class="card pop fc">
-    <span class="qtype dr">Build the word</span>
+  const it=S.list[S.i];const sent=it.type==='sentence';
+  const mix=w=>{let b=shuf(w.split('').map((t,i)=>({t,i})));for(let n=0;n<6&&w.length>1&&b.map(x=>x.t).join('')===w;n++)b=shuf(b);return b};
+  // each word gets its own line and bank; trailing punctuation is fixed, not built
+  const W=(sent?it.w.split(' '):[it.w]).map(c=>{const [,w,p]=sent?c.match(/^(.*?)([.,!?;:]*)$/):[0,c,''];return {w,p,line:[],bank:mix(w)}});
+  let act=-1,line=[],bank=[];let done=false;
+  const sel=a=>{act=a;line=W[a].line;bank=W[a].bank};
+  if(!sent)sel(0);
+  app.innerHTML=`${hud(`${sent?'Sentence':'Word'} ${S.i+1} of ${S.list.length}`)}<section class="card pop fc">
+    <span class="qtype dr">Build the ${sent?'sentence':'word'}</span>
     ${drawPic(it,'scene small')}${trHTML(it)}
     <div class="audio"><button type="button" class="abtn" id="say1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="say2"><span class="e">🐢</span> Slowly</button></div>
+    ${sent?'<div class="sent-row" id="sent" aria-label="Sentence"></div>':''}
     <div class="slots" id="line" aria-label="Your word"></div>
     <div class="letters" id="bank" aria-label="Letters"></div>
-    <p class="hint">Drag the letters onto the line, or tap them.</p>
-    <div id="fbx" style="width:100%;display:flex;flex-direction:column;gap:10px"><div class="row" style="justify-content:center"><button class="btn" id="checkBtn" type="button" disabled>Check my word</button></div></div>
+    <p class="hint">${sent?'Tap a word in the sentence, then drag its letters onto the line, or tap them.':'Drag the letters onto the line, or tap them.'}</p>
+    <div id="fbx" style="width:100%;display:flex;flex-direction:column;gap:10px"><div class="row" style="justify-content:center"><button class="btn" id="checkBtn" type="button" disabled>Check my ${sent?'sentence':'word'}</button></div></div>
   </section>`;
   bindHome();
   document.getElementById('say1').onclick=()=>say(it.w,false);
   document.getElementById('say2').onclick=()=>say(it.w,true);
-  const L=document.getElementById('line'),B=document.getElementById('bank');
+  const L=document.getElementById('line'),B=document.getElementById('bank'),SR=document.getElementById('sent');
+  const built=x=>x.line.map(l=>l.t).join('');
   function draw(){
-    L.innerHTML=line.length?line.map((w,k)=>`<button type="button" class="tile let" id="tl-${k}" data-from="line" data-k="${k}">${esc(w.t)}</button>`).join(''):'<span class="ph">Drop the letters here</span>';
+    if(sent){
+      SR.innerHTML=W.map((x,k)=>`<span class="wgrp"><button type="button" class="wbox${k===act?' sel':''}${done?(built(x)===x.w?' ok':' no'):''}" id="wb-${k}" data-w="${k}" aria-label="Word ${k+1}, ${x.w.length} letters" aria-pressed="${k===act}" ${done?'disabled':''}>${x.w.split('').map((_,j)=>`<span>${x.line[j]?esc(x.line[j].t):''}</span>`).join('')}</button>${x.p?`<span class="punct">${esc(x.p)}</span>`:''}</span>`).join('');
+      SR.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{sel(+b.dataset.w);say(W[act].w,false);draw()});
+      L.style.display=B.style.display=done?'none':'';
+    }
+    L.innerHTML=line.length?line.map((w,k)=>`<button type="button" class="tile let" id="tl-${k}" data-from="line" data-k="${k}">${esc(w.t)}</button>`).join(''):`<span class="ph">${act<0?'Tap a word in the sentence':'Drop the letters here'}</span>`;
     B.innerHTML=bank.map((w,k)=>`<button type="button" class="tile let" id="tb-${k}" data-from="bank" data-k="${k}">${esc(w.t)}</button>`).join('');
     if(done){L.querySelectorAll('.tile').forEach(t=>t.disabled=true);return}
     document.querySelectorAll('#line .tile,#bank .tile').forEach(bindTile);
-    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=bank.length>0;
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=W.some(x=>x.bank.length);
   }
   function move(from,k,to,idx){const src=from==='line'?line:bank;const [w]=src.splice(k,1);const dst=to==='line'?line:bank;
     if(idx!=null&&from===to&&idx>k)idx--;if(idx==null||idx>dst.length)idx=dst.length;dst.splice(idx,0,w);draw()}
@@ -549,10 +568,10 @@ function build(){
   }
   draw();
   document.getElementById('checkBtn').onclick=()=>{
-    done=true;const mine=line.map(w=>w.t).join('');const ok=mine===it.w;
-    if(ok)S.score++;else S.miss.push({q:'Build the word',your:mine,right:it.w});
+    done=true;const mine=W.map(x=>built(x)+x.p).join(' ');const ok=mine===it.w;
+    if(ok)S.score++;else S.miss.push({q:sent?'Build the sentence':'Build the word',your:mine,right:it.w});
     document.getElementById('pts').textContent=S.score;L.classList.add(ok?'ok':'no');draw();
-    document.getElementById('fbx').innerHTML=fb(ok,ok?`<strong>${esc(it.w)}</strong>`:`The correct spelling is <strong>${esc(it.w)}</strong>.`);
+    document.getElementById('fbx').innerHTML=fb(ok,ok?`<strong>${esc(it.w)}</strong>`:`The correct spelling is <strong>${esc(it.w)}</strong>${sent?'':'.'}`);
     if(ok)say(it.w,false);
     bindNext();
   };
@@ -571,7 +590,7 @@ function end(){
     <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="modesBtn" type="button">Other modes</button></div>
   </section>
   ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You wrote: <s>${esc(m.your)}</s><br>Right spelling: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
-  document.getElementById('againBtn').onclick=()=>startMode(S.mode,S.mode==='listen'?S.lsKind:undefined);
+  document.getElementById('againBtn').onclick=()=>startMode(S.mode,S.kind);
   document.getElementById('modesBtn').onclick=home;
   window.scrollTo({top:0,behavior:'smooth'});
 }
