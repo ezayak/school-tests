@@ -52,6 +52,14 @@ git push -u origin main
 Then on GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch: `main` / `(root)` → Save**.
 After a minute the site is at `https://<your-user>.github.io/school-tests/`.
 
+## Landscape tablets
+
+Every game fits on one screen when a tablet is held sideways (no scrolling): the picture goes on the left,
+the question and answers on the right, and the answer + Next button sit side by side.
+This lives in one shared file, `landscape.css`. Pages that load `quiz-common.js` get it automatically;
+the English dictations link it just before `<main>`. Portrait tablets and phones are unchanged.
+The French lessons have the same layout built into `french-lesson.css`.
+
 ## Game types
 
 - Multiple choice with a picture for each question

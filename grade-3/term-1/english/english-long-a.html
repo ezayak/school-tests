@@ -50,7 +50,8 @@ body{
   color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.45;
   padding-inline:16px; padding-block:20px 40px; min-height:100%;
 }
-.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+html,body{margin:0}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 .card{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:20px;display:flex;flex-direction:column;gap:16px}
 h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.01em}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -228,6 +229,7 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
   <marker id="ah-cool" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-cool"/></marker>
   <marker id="ah-hl" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-hl"/></marker>
 </defs></svg>
+<link rel="stylesheet" href="../../../landscape.css" data-landscape="1">
 <main class="wrap" id="app"></main>
 
 <script>
@@ -357,8 +359,7 @@ function home(){
   try{speechSynthesis&&speechSynthesis.cancel()}catch(e){}
   const langs=Object.entries(LIST.langs||{});
   app.innerHTML=`<section class="card pop">
-    <div class="toplinks"><a class="back" href="index.html">← English</a><a class="back" href="../../../index.html">All games</a></div>
-    <span class="eyebrow">${esc(LIST.subtitle)}</span>
+    <div class="topbar"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="index.html">English</a></div><span class="eyebrow">${esc(LIST.subtitle)}</span></div>
     <h1 class="hero-title"><span class="p">Spelling:</span> <span class="k">${esc(LIST.title)}</span></h1>
     <div class="thumbs">${WORDS.slice(0,10).map(it=>drawPic(it)).join('')}</div>
     <p class="howto">Ready? Pick a mode. ${LIST.pattern?`<span class="pat">${esc(LIST.pattern)}</span>`:''}</p>

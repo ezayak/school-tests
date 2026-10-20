@@ -31,7 +31,8 @@
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;padding-inline:16px;padding-block:28px 48px}
-.wrap{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+@media (orientation:landscape) and (min-width:760px){.wrap{max-width:1200px}} /* same width as the French lessons */
 h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
 header{display:flex;flex-direction:column;gap:10px}
 h1{font-size:clamp(2.6rem,8vw,4rem);line-height:.95}

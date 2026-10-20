@@ -375,8 +375,7 @@ function home(still){ // still===true: switching tab, so no pop animation
   hush();
   const T=TABS.find(t=>t.k===tab);
   app.innerHTML=`<section class="card ${still===true?'':'pop'}">
-    <a class="back" href="../../../index.html">← All games</a>
-    <span class="eyebrow">Grade 3 Religion · Mid-term revision</span>
+    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 Religion · Mid-term revision</span></div>
     <h1 class="hero-title"><span class="p">Religion</span> <span class="k">Revision</span></h1>
     <div class="hero-ar ar" lang="ar" dir="rtl">مراجعة التربية الدينية المسيحية</div>
     <p class="howto">Ready? Pick a tab, then choose a game. On every question you can listen to the Arabic and see it in English.</p>

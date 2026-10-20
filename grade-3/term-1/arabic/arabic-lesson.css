@@ -191,7 +191,9 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 .opt.aro small{font-family:var(--body);font-weight:400;font-size:.85rem;color:var(--muted);margin-inline-start:4px}
 
 /* ===================== Arabic lesson additions ===================== */
-.wrap{max-width:980px}
+html,body{margin:0}
+.wrap{max-width:860px} /* same width as the French lessons */
+@media (orientation:landscape) and (min-width:760px){.wrap{max-width:1200px}}
 .ar{font-family:"Noto Naskh Arabic","Geeza Pro","Arabic Typesetting","Times New Roman",serif}
 .les-head{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
 .les-head img{width:120px;height:120px;object-fit:cover;border-radius:14px;border:2.5px solid var(--ink)}
@@ -337,3 +339,4 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 
 /* emoji picture for an exercise (it.ic) */
 .emopic{border:2.5px solid var(--ink);border-radius:14px;background:var(--sky);padding:14px 10px;text-align:center;white-space:nowrap;overflow:hidden;font-family:var(--emoji);font-size:clamp(1.8rem,8vw,3.2rem);line-height:1.3}
+.toprow > .eyebrow{margin-left:auto;text-align:right} /* grade line on the right, like the other start pages */

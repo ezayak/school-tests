@@ -351,3 +351,7 @@ details.book[open] .pic,details.book[open] .alltext{margin-top:10px}
   .split .pic.card,.split .pic.story{height:calc(100vh - 170px)}
   .hint{display:none}
 }
+
+/* top row on every start page: "← All games" on the left, grade / subject line on the right */
+.topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px}
+.topbar .eyebrow{margin-left:auto;text-align:right}

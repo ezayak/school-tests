@@ -1,0 +1,153 @@
+/* Landscape tablets (and computers): every game screen fits on one screen, no scrolling.
+   Shared by all games: quiz-common.js adds this file to every page that loads it, and the
+   English dictations link it directly. Portrait tablets and phones are not changed.
+   Rules start with "html" so they win over each page's own styles. */
+/* top row on every start page: "← All games" on the left, grade / subject line on the right */
+.topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px}
+.topbar .eyebrow{margin-left:auto;text-align:right}
+
+@media (orientation:landscape) and (min-width:760px){
+  html body{padding-block:10px 12px}
+  html .wrap{max-width:1200px;gap:10px}
+  html .card{padding:14px 18px;gap:10px;box-shadow:5px 5px 0 var(--ink)}
+  html .hud{gap:10px}
+  html .hud .abtn{min-height:40px}
+  html .hint{font-size:.85rem}
+
+  /* start screens: smaller title, menu tiles in more columns */
+  html .hero-title{font-size:clamp(2.2rem,5vw,3rem)}
+  html .modes{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+  html .mode{padding:10px 12px;gap:2px}
+  html .mode .mi-ic{font-size:1.5rem}
+  html .thumbs{grid-template-columns:repeat(10,1fr)}
+
+  /* a question with a picture: picture on the left, question and answers on the right */
+  html .card:has(> .scene){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:repeat(11,auto) 1fr;column-gap:24px;row-gap:0;align-items:start}
+  html .card:has(> .scene) > *{grid-column:2;min-width:0;margin-block:0 8px}
+  html .card:has(> .scene) > .scene{grid-column:1;grid-row:1 / -1;align-self:center;width:100%;max-width:100%!important;margin:0!important;max-height:calc(100vh - 170px)}
+  html .card:has(> .scene) > svg.scene,html .card:has(> .scene) > div.scene{height:auto}
+  html .card:has(> .scene) > img.scene{aspect-ratio:auto;object-fit:contain;height:min(calc(100vh - 170px),520px)}
+  html .card:has(> .scene) > #fbx:empty{display:none}
+  /* start screens: "← All games" stays at the top left, above the picture */
+  html .card:has(> .scene) > .back,html .card:has(> .scene) > .toplinks,html .card:has(> .scene) > .toprow{grid-column:1 / -1;grid-row:1;justify-self:start}
+  html .card:has(> .scene) > .topbar{grid-column:1 / -1;grid-row:1;justify-self:stretch}
+  html .card:has(> .scene):has(> .back) > .scene,html .card:has(> .scene):has(> .toplinks) > .scene,html .card:has(> .scene):has(> .toprow) > .scene,html .card:has(> .scene):has(> .topbar) > .scene{grid-row:2 / -1}
+  html .card:has(> .scene) > .scene.photo,html .card.answered:has(> .scene) > .scene.photo{height:min(calc(100vh - 205px),500px);aspect-ratio:auto}
+  html .card:has(> .scene) > .scene.photo img{width:100%;height:100%;object-fit:contain}
+  html .card:has(> .scene) .opts{gap:8px}
+  html .card:has(> .scene) .opt{min-height:50px;padding:8px 12px}
+  html .card:has(> .scene) .qtext{font-size:1.2rem;margin-bottom:10px}
+  /* long Arabic answers, sentences and verses: a little smaller so they fit next to the picture */
+  html .card:has(> .scene) .opt.aro{font-size:1.3rem;min-height:48px;padding:6px 10px}
+  html .card:has(> .scene) .sent{font-size:1.45rem;line-height:1.7}
+  html .card:has(> .scene) .sent.long{font-size:1.25rem}
+  html .card:has(> .scene) .verse{font-size:1.3rem;line-height:1.7}
+  html .card:has(> .scene) .ask{font-size:1.25rem}
+  html .card:has(> .scene) .words{gap:6px}
+  html .card:has(> .scene) .tools .abtn{min-height:36px;padding:4px 10px}
+  html .card:has(> .scene) > .hint{font-size:.8rem;line-height:1.3}
+  html .card:has(> .scene) .verse{font-size:1.2rem;line-height:1.65}
+  html .card:has(> .scene) .words .mi{min-height:40px;padding:4px 10px}
+  html .card:has(> .scene) .words .mi .tx{font-size:1.15rem}
+  html .card:has(> .scene) #fbx .fb .full{font-size:1.05rem;line-height:1.6}
+  html .card:has(> .scene) #fbx .fb .fen{font-size:.85rem}
+  html .card:has(> .scene) .opt.aro:has(.ow){font-size:1.15rem}
+  html .card:has(> .scene) .nav,html .card:has(> .scene) > .row{justify-content:space-between}
+
+  /* the same for questions whose picture is a big emoji (Arabic exercises) */
+  html .card:has(> .emopic):not(:has(> .scene)){display:grid;grid-template-columns:minmax(0,.6fr) minmax(0,1.4fr);grid-template-rows:repeat(11,auto) 1fr;column-gap:24px;row-gap:0;align-items:start}
+  html .card:has(> .emopic):not(:has(> .scene)) > *{grid-column:2;min-width:0;margin-block:0 8px}
+  html .card:has(> .emopic):not(:has(> .scene)) > .emopic{grid-column:1;grid-row:1 / -1;align-self:center;margin:0;height:auto;min-height:160px;display:grid;place-items:center;font-size:clamp(4rem,9vw,7rem)}
+  html .card:has(> .emopic):not(:has(> .scene)) > #fbx:empty{display:none}
+
+  /* answer + Next button side by side */
+  html #fbx:has(.fb){display:flex;align-items:center;gap:12px}
+  html #fbx:has(.fb) .fb{flex:1;padding:8px 12px;gap:2px}
+  html #fbx:has(.fb) .row{margin-top:0!important;flex:none}
+  html #fbx .fb b{font-size:1.15rem}
+  html #fbx .fb{max-height:26vh;overflow:auto}
+
+  /* matching rounds: compact rows */
+  html .match{gap:8px 12px}
+  html .mcol{gap:8px}
+  html .mi{min-height:46px;padding:6px 10px}
+  html .card:has(.match) .hint{display:none}
+  /* matching with pictures (English dictations): pictures in a grid */
+  html .match:has(.mi .scene){grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+  html .mcol:has(.mi .scene){display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-content:start}
+  html .mi .pic .scene{max-width:none}
+
+  /* Arabic lessons: inside a text, a game or the exercises, hide the big lesson header (the tabs stay) */
+  html .card:has(.panel .hud) > .toprow,html .card:has(.panel .sthead) > .toprow{display:none}
+  html .card:has(.panel .hud) > .les-head{gap:10px}
+  html .card:has(.panel .sthead):has(.panel .part) > .les-head{display:none} /* reading a text: its own title is shown */
+  html .card:has(.panel .hud) > .les-head img,html .card:has(.panel .hud) > .les-head .les-ic,
+  html .card:has(.panel .sthead) > .les-head img,html .card:has(.panel .sthead) > .les-head .les-ic{width:34px;height:34px;font-size:1.3rem;border-width:2px;border-radius:8px}
+  html .card:has(.panel .hud) > .les-head .eyebrow,html .card:has(.panel .hud) > .les-head .les-sub,
+  html .card:has(.panel .sthead) > .les-head .eyebrow,html .card:has(.panel .sthead) > .les-head .les-sub{display:none}
+  html .card:has(.panel .hud) > .les-head .les-title,html .card:has(.panel .sthead) > .les-head .les-title{font-size:1.25rem;line-height:1.3}
+  html .card:has(.panel .hud) .ftabs{display:none}
+  html .card:has(.panel .hud) .panel{border-radius:16px}
+  /* Arabic word games: picture card on the left, letters / answers on the right */
+  html .panel:has(> .wcard){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-rows:auto repeat(10,auto) 1fr;column-gap:24px;row-gap:0;align-items:start}
+  html .panel:has(> .wcard) > *{grid-column:2;min-width:0;margin-block:0 10px}
+  html .panel:has(> .wcard) > .hud{grid-column:1 / -1;grid-row:1}
+  html .panel:has(> .wcard) > .wcard{grid-column:1;grid-row:2 / -1;align-self:center}
+  html .panel:has(> .wcard) > #fbx:empty{display:none}
+  html .bigpic img{max-height:calc(100vh - 300px)}
+  html .les-head{gap:12px}
+  html .les-head img,html .les-head .les-ic{width:64px;height:64px}
+  html .les-title{font-size:clamp(1.5rem,3.4vw,2rem);line-height:1.25}
+  html .les-sub{font-size:1rem}
+  html .tab-sub{font-size:1rem;margin:0}
+  /* menus inside the lesson (texts, exercise sections): smaller tiles, more per row */
+  html .panel .modes{grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+  html .panel .mode{padding:6px 8px;gap:0;font-size:.9rem;box-shadow:3px 3px 0 var(--ink)}
+  html .panel .mode .mi-ic{font-size:1.2rem}
+  html .panel .mode .ar{font-size:1rem;line-height:1.5}
+  html .panel .mode b{font-size:.85rem!important;line-height:1.25}
+  html .panel .mode small{font-size:.72rem}
+  html .panel > .note{display:none}
+  html .texts{grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:8px}
+  html .text{padding:6px;gap:8px}
+  html .text img,html .text .ticon{width:50px;height:50px}
+  html .text .kind{font-size:.62rem}
+  html .text .ticon{font-size:1.8rem}
+  html .text .t{font-size:1.02rem;line-height:1.35}
+  html .text .e{font-size:.8rem;line-height:1.25}
+  html .text .parts{font-size:.72rem}
+  /* the rule box: scroll inside it instead of pushing the question down */
+  html details.rule[open]{max-height:34vh;overflow:auto}
+  /* matching inside the lessons: picture and word side by side, less padding */
+  html .panel .mi{min-height:42px;padding:4px 8px}
+  html .panel .mi .tx{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px}
+  html .panel .mi .pic{font-size:1.5rem}
+  html .panel .mi .fix{margin-top:0}
+  html .panel .match + #fbx{margin-top:6px!important}
+  html .panel #mhost > .hint{display:none}
+  /* Arabic exercises: compact question and sentence rows */
+  html .exq{gap:6px;padding-block:10px}
+  html .exq .qar{font-size:1.45rem;margin:0}
+  html .exq .qhelp{margin:0;font-size:.85rem}
+  html .exq > .audio .abtn{min-height:36px;padding:3px 12px}
+  html .exq #ans .mcol{gap:6px}
+  html .exq #ans .hint{display:none}
+  html .exq #ans .mi{min-height:40px;padding:3px 10px}
+  html .exq #ans .mi .ar{line-height:1.5!important}
+  html .exq #ans .mi .fix{font-size:.8rem}
+  html .exq:has(#fbx .fb) > .audio,html .exq:has(#fbx .fb) > details.rule{display:none}
+  html .exq #ans .mcol + .mcol{margin-top:4px!important}
+  html .panel{padding:10px 12px;gap:10px}
+  html .ftabs button{padding-block:5px 4px}
+  html .ftabs button[aria-pressed="true"]{padding-block:8px 5px}
+  html .part .pic,html .part .pic img{max-height:calc(100vh - 345px)}
+  html .panel:has(> details.readp) .part .pic,html .panel:has(> details.readp) .part .pic img{max-height:calc(100vh - 395px)}
+  html .panel details.readp > summary{padding-block:2px}
+  html .card:has(.panel .sthead) .panel .hint,html .panel .hintline{display:none}
+  html .story{font-size:clamp(1.15rem,2vw,1.45rem);line-height:1.7}
+  html .part .trans,html .part .tr{font-size:.84rem;line-height:1.35}
+  html .panel:has(> .part) > .nav .btn,html .panel:has(.part) .btn{min-height:44px;padding-block:6px}
+  html .sthead .abtn{min-height:36px;padding:3px 12px}
+  html .part{grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr)!important;gap:14px}
+  html .part.noimg{grid-template-columns:minmax(0,1fr)!important}
+}

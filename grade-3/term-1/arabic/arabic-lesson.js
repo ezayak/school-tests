@@ -90,8 +90,7 @@ function matchUI(host,left,right,onDone,opts={}){
 function listView(){
   const LS=window.LESSONS||[];
   app.innerHTML=`<section class="card pop">
-    <div class="toprow"><a class="back" href="../../../index.html">← All games</a></div>
-    <span class="eyebrow">Grade 3 · Term 1 · اللغة العربية</span>
+    <div class="toprow"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 · Term 1 · اللغة العربية</span></div>
     <h1 class="hero-title"><span class="p">Arabic</span> <span class="k">Lessons</span></h1>
     <p class="howto">Pick a lesson. Each lesson has the story to read and listen to, the new words, opposites and plurals, and the exercises from the book.</p>
   </section>
@@ -108,7 +107,7 @@ function lessonView(){
   hush();closePop();
   const TABS=[{k:'story',ic:'📖',t:'Story',ar:'القصة'},{k:'words',ic:'🗂',t:'Words',ar:'الكلمات'},{k:'opp',ic:'🔄',t:'Opposites & plurals',short:'Pl / Op',ar:'مضاد وجمع'},{k:'ex',ic:'✏️',t:'Exercises',short:'Tasks',ar:'التدريبات'}];
   app.innerHTML=`<section class="card pop">
-    <div class="toprow"><div class="links">${(L.links||[["index.html","← Arabic lessons"],["../../../index.html","All games"]]).map(([h,t])=>`<a class="back" href="${esc(h)}">${esc(t)}</a>`).join('')}</div>${trSeg()}</div>
+    <div class="toprow"><div class="links">${(L.links||[["../../../index.html","← All games"],["index.html","Arabic lessons"]]).map(([h,t])=>`<a class="back" href="${esc(h)}">${esc(t)}</a>`).join('')}</div>${trSeg()}</div>
     <div class="les-head">${L.cover?`<img src="${esc(L.cover)}" alt="">`:`<span class="les-ic" aria-hidden="true">${esc(L.ic||'📖')}</span>`}<div><span class="eyebrow">${esc(L.unit||'')}</span><h1 class="les-title ar" dir="rtl">${esc(L.title)}</h1><div class="les-sub">${esc(tr==='uk'?L.uk:L.en)}</div></div></div>
     <div class="tabbox"><div class="ftabs four" role="group" aria-label="Lesson part">${TABS.map(t=>`<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab===t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short||t.t)}</span><span class="sub ar">${t.ar}</span></button>`).join('')}</div>
     <div class="panel" id="panel"></div></div>
@@ -313,7 +312,7 @@ function oppGame(P){
     const it=ostate.list[ostate.i];const opts=shuf([it.a,...shuf([...new Set(it.pool)].filter(x=>x!==it.a)).slice(0,2)]);
     P.innerHTML=`${hud(`Question ${ostate.i+1} of ${n}`)}<p class="sent ar" dir="rtl">${esc(it.q)}</p>${tr==='off'?'':`<p class="qhelp" style="text-align:center">(${esc(it.h)})</p>`}
       <div class="audio" style="justify-content:center"><button type="button" class="abtn" id="s1"><span class="e">🔊</span> Listen</button></div>
-      <div class="opts">${opts.map((o,j)=>`<button type="button" class="opt aro" id="opt-${j}" data-j="${j}"><span class="L">${'ABC'[j]}</span><span class="ar">${esc(o)}</span></button>`).join('')}</div><div id="fbx"></div>`;
+      <div class="opts">${opts.map((o,j)=>`<button type="button" class="opt aro" id="opt-${j}" data-j="${j}"><span class="L">${'ABCDEF'[j]}</span><span class="ar">${esc(o)}</span></button>`).join('')}</div><div id="fbx"></div>`;
     P.querySelector('#oBack').onclick=back;P.querySelector('#s1').onclick=()=>say(it.q);
     P.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{const o=opts[+b.dataset.j],ok=o===it.a;
       P.querySelectorAll('[data-j]').forEach((x,j)=>{x.disabled=true;if(opts[j]===it.a)x.classList.add('right');else if(x!==b)x.classList.add('dim')});if(!ok)b.classList.add('wrong');
@@ -344,10 +343,10 @@ function exView(){
   if(xs)return xs.sec.cards?qaCards():exItem();
   const SEC=L.exercises||[];
   const H=exH();
-  H.innerHTML=`<p class="tab-sub">Exercises from the book · <span class="ar">تَدْرِيبَاتُ الْكِتَابِ</span></p>
+  H.innerHTML=`<p class="tab-sub">${esc((L.exSub||[])[0]||'Exercises from the book')} · <span class="ar">${esc((L.exSub||[])[1]||'تَدْرِيبَاتُ الْكِتَابِ')}</span></p>
     <div class="modes secs">${SEC.map((s,i)=>`<button type="button" class="mode" id="sec-${s.k}" data-s="${i}"><span class="mi-ic">${s.ic}</span><span class="ar" dir="rtl">${esc(s.t)}</span><b style="font-size:1.05rem">${esc(tr==='uk'?s.uk:s.en)}</b><small>${s.items.length} ${s.cards?'cards':'questions'}</small></button>`).join('')}</div>
     <p class="note">Questions marked “answer” have no single right wording: read the model answer, then tick whether you got it.</p>`;
-  H.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const sec=SEC[+b.dataset.s];xs={sec,list:sec.cards?sec.items:sec.items.slice(),i:0,score:0,max:0,miss:[]};
+  H.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const sec=SEC[+b.dataset.s];if(L.exPics&&L.exPics[sec.k])sec.items.forEach(it=>{if(!it.img&&!it.ic)it.img=L.exPics[sec.k]});xs={sec,list:sec.cards?sec.items:sec.items.slice(),i:0,score:0,max:0,miss:[]};
     xs.max=xs.list.reduce((t,it)=>t+(it.type==='match'?it.pairs.length:it.type==='order'?it.s.length:1),0);exView()});
 }
 const exTop=H=>{const t=exHost&&exHost.closest('.tabbox');if(t&&t.getBoundingClientRect().top<0)t.scrollIntoView({block:'start'})};
@@ -389,7 +388,7 @@ function exItem(){
       after(ok,`${it.a?'✓ صَحِيحٌ (true)':'✗ خَطَأٌ (false)'}${it.x?`<br><span class="ar" dir="rtl" style="font-size:1.3rem">${esc(it.x)}</span>`:''}`)});
   }else if(it.type==='mc'){
     const opts=shuf(it.o.map((t,j)=>({t,ok:j===0})));
-    A.innerHTML=`<div class="opts ${opts.some(o=>o.t.length>18)?'long':''}">${opts.map((o,j)=>`<button type="button" class="opt aro" id="opt-${j}" data-j="${j}"><span class="L">${'ABCD'[j]}</span><span class="ar">${esc(o.t)}</span></button>`).join('')}</div>`;
+    A.innerHTML=`<div class="opts ${opts.some(o=>o.t.length>18)?'long':''}">${opts.map((o,j)=>`<button type="button" class="opt aro" id="opt-${j}" data-j="${j}"><span class="L">${'ABCDEF'[j]}</span><span class="ar">${esc(o.t)}</span></button>`).join('')}</div>`;
     A.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{const o=opts[+b.dataset.j];
       A.querySelectorAll('[data-j]').forEach((x,j)=>{x.disabled=true;if(opts[j].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});if(!o.ok)b.classList.add('wrong');
       const right=it.o[0];if(o.ok)xs.score++;else xs.miss.push({q:it.q,your:o.t,right});

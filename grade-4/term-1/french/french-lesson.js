@@ -15,8 +15,7 @@ const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}ca
 if(view==='list'){
   const LS=window.FR_LESSONS||{grade:4,term:1,items:[]};
   app.innerHTML=`<section class="card">
-    <a class="back" href="../../../index.html">← All games</a>
-    <span class="eyebrow">Grade ${esc(LS.grade)} · Term ${esc(LS.term)} · French</span>
+    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · Term ${esc(LS.term)} · French</span></div>
     <h1 class="hero-title"><span class="p">Français</span> <span class="k">Leçons</span></h1>
     <p class="howto">Pick a lesson. Each lesson has the story with pictures and sound, the words, games (listen, match, build the word, build the sentence) and the school exercises.</p>
   </section>
@@ -134,7 +133,7 @@ function home(){
     :tab==='play'?PLAY.map(m=>tile(m,`data-m="${m.k}" id="m-${m.k}"`)).join('')
     :L.exercises.map((x,i)=>tile({t:x.t,en:x.en,img:x.img,emoji:x.emoji},`data-x="${i}" id="x-${x.k}"`)).join('');
   app.innerHTML=`<section class="card pop">
-    <div class="toprow"><div class="toplinks"><a class="back" href="index.html">← Français</a><a class="back" href="../../../index.html">All games</a></div>
+    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="index.html">Français</a></div>
       <div class="seg" role="group" aria-label="Translation">${[['off','Off'],['en','EN'],['uk','UA'],['ar','AR']].map(([k,n])=>`<button type="button" id="tr-${k}" data-tr="${k}" aria-pressed="${trLang===k}" title="Translation">${n}</button>`).join('')}</div></div>
     <div class="les-head"><button type="button" class="les-cov" id="coverBtn" aria-label="Open the story"><img src="${IMG(L.cover)}" alt=""></button>
       <div><span class="eyebrow">Grade ${esc(L.grade)} · Leçon ${esc(L.n)} · ${esc(L.book)}</span><h1 class="les-title">${esc(L.title)}</h1>${sub?`<div class="les-sub" ${trLang==='ar'?'dir="rtl"':''}>${esc(sub)}</div>`:''}</div></div>
