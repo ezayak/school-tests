@@ -1,6 +1,6 @@
 # Study Games
 
-Picture quiz games for school tests, grouped by **grade → term → period → subject**.
+Picture quiz games for school tests. Home page: **Grade → Term → Mid-term exam → subject cards**, and **Grade → Term → Subjects** (English, Arabic), where each subject card opens a list page (English → dictations, Arabic → lessons).
 Every game is a single self-contained HTML file (no build step), so the repo works as-is on GitHub Pages.
 
 ## Structure
@@ -70,9 +70,17 @@ The site is a Progressive Web App: it can be installed and works **offline** aft
 Offline: `sw.js` downloads every game listed in `games.js` when the app is installed or opened online, so new games appear after the next online visit.
 If an update doesn't show up, change `VERSION` in `sw.js` and push again.
 
-## Spelling games
+## English dictations
 
-`grade-3/term-1/spelling/english-long-o.html` is a reusable spelling game with four modes:
+Each grade has one **English** card on the home page (period `"Subjects"`, `hub: true`), which opens
+`grade-N/term-1/english/index.html`. That page lists the dictations from `english/dictations.js`
+(shared look: `english-hub.css` / `english-hub.js` in the root).
+
+New dictation: copy a dictation file in `grade-N/term-1/english/`, edit its `LIST`, add one line to
+`english/dictations.js`, add the file to the English entry's `also: [...]` in `games.js`, update its
+`countLabel`/`topics`, and bump `VERSION` in `sw.js`.
+
+`grade-3/term-1/english/english-long-o.html` is a reusable spelling game with four modes:
 
 - **Learn** – flash cards: picture + word, or picture only (tap to reveal), with 🔊 / 🐢 slow audio
 - **Match** – match pictures to words (words only)
@@ -84,12 +92,12 @@ Audio uses the device's built-in voices (Web Speech API), so it works offline on
 
 ### New spelling list
 
-1. Copy the file, e.g. to `grade-3/term-1/spelling/english-long-a.html`.
+1. Copy the file, e.g. to `grade-3/term-1/english/english-long-a.html`.
 2. Edit only the `LIST` block near the top: title, pattern, and `items`.
    Each item: `w` (word or sentence), `type: "sentence"` for sentences, a picture, and optional `tr` translations.
 3. Pictures: use a built-in drawing name (`pic`), an `emoji: "🐸"`, or your own image file
    (`img: "images/toad.png"`, e.g. AI-generated). Put image files in an `images/` folder next to the game.
-4. Add an entry to `games.js` with `period: "Spelling"`, `subject: "English"`.
+4. Add it to `english/dictations.js` and to the English entry's `also` list in `games.js` (see above).
 
 ## Arabic lessons (Grade 3)
 

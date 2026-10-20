@@ -75,6 +75,7 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 .seg button{border:2px solid var(--ink);border-radius:12px;padding:8px 16px;background:var(--card);font-weight:700}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.toplinks{display:flex;flex-wrap:wrap;gap:6px 16px}
 .back{align-self:flex-start;font-weight:700;color:var(--muted);text-decoration:none;font-size:.95rem}.back:hover{color:var(--ink);text-decoration:underline}
 .howto{color:var(--muted);margin:0;max-width:60ch}
 
@@ -358,7 +359,7 @@ function home(){
   try{speechSynthesis&&speechSynthesis.cancel()}catch(e){}
   const langs=Object.entries(LIST.langs||{});
   app.innerHTML=`<section class="card pop">
-    <a class="back" href="../../../index.html">← All games</a>
+    <div class="toplinks"><a class="back" href="index.html">← English</a><a class="back" href="../../../index.html">All games</a></div>
     <span class="eyebrow">${esc(LIST.subtitle)}</span>
     <h1 class="hero-title"><span class="p">${esc(LIST.heading||"Spelling:")}</span> <span class="k">${esc(LIST.title)}</span></h1>
     <div class="thumbs">${WORDS.slice(0,10).map(it=>drawPic(it)).join('')}</div>
