@@ -1,13 +1,16 @@
 # Study Games
 
 Picture quiz games for school tests. Home page: **Grade → Term → Mid-term exam → subject cards**, and **Grade → Term → Subjects** (English, Arabic), where each subject card opens a list page (English → dictations, Arabic → lessons).
-Every game is a single self-contained HTML file (no build step), so the repo works as-is on GitHub Pages.
+Every page is a plain HTML file (no build step), so the repo works as-is on GitHub Pages.
+All styling and the small JS helpers come from `shared/` — pages have no `<style>` blocks of their own.
 
 ## Structure
 
 ```
 index.html            ← home page, lists every game from games.js
+index.css             ← home page layout (loads after shared/theme.css)
 games.js              ← catalog: one entry per game
+shared/               ← the one place for styling and shared helpers (see "Styling")
 grade-3/
   term-1/
     mid-term-1/
@@ -24,9 +27,30 @@ grade-4/
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
 
+## Styling
+
+One look for every page. Colours, fonts, buttons, cards and subject colours (`--sci`, `--en`, `--fr`, …)
+live in `shared/theme.css`; change them there and every page follows.
+
+| File | What | Who loads it |
+|---|---|---|
+| `shared/theme.css` | colours (light/dark), fonts, page, cards, buttons, menu tiles | every page, first |
+| `shared/quiz.css` | quiz parts: score bar, picture, answers, matching, results, SVG drawing colours | quiz games, Arabic lessons |
+| `shared/arabic.css` | Arabic text, Arabic answers, folder tabs | Arabic lessons and Arabic revision quizzes |
+| `shared/arabic-revision.css` | verses, word tools, English toggle | religion / Arabic social-studies revisions |
+| `shared/spelling.css` | flash cards, letter tiles, typing | English dictations |
+| `shared/drag-words.css` | drag tiles from a bank onto a line | "Mets en ordre", "Build the word" |
+| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star` | quiz games |
+
+Rules for new pages:
+- Copy an existing page of the same kind and keep its `<link>`s. Never add a `<style>` block or new colour values.
+- A rule needed by more than one page goes into the matching `shared/` file, not into the page.
+- A new file in `shared/` must also be added to `CORE` in `sw.js` (then bump `VERSION`), or it won't work offline.
+
 ## Adding a new game
 
 1. Save the game HTML into the right folder, e.g. `grade-4/term-1/final-term-1/science-light.html`.
+   Start from a page of the same type (see "Styling") so it loads the right shared files.
 2. Add one entry to `games.js` (copy an existing line and change grade, term, period, subject, title, path).
 3. Commit and push. The home page picks it up automatically.
 
@@ -113,7 +137,7 @@ Folder: `grade-3/term-1/arabic/`. One card on the home page ("Arabic Lessons") o
 
 Shared files (no need to touch them for a new lesson):
 - `arabic-lesson.js` — the engine. The page's `<body data-view="list|lesson|exercises">` picks the view.
-- `arabic-lesson.css` — styles.
+- `arabic-lesson.css` — engine-only styles; the base comes from `shared/`.
 
 Each lesson has four files:
 - `lesson-N.js` — all the content (`window.LESSON = {...}`)
@@ -160,7 +184,7 @@ Made to be understood from pictures and sound: big pictures from the book, every
 
 Shared files (no need to touch them for a new lesson):
 - `french-lesson.js` — the engine (`<body data-view="list|lesson">`)
-- `french-lesson.css` — styles
+- `french-lesson.css` — engine-only styles; the base comes from `shared/`
 
 Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`), `lesson-N.js` (all the content), `img/lesson-N/` (pictures cropped from the book).
 

@@ -1,24 +1,9 @@
-/* English subject page (grade-N/term-N/english/index.html): list of dictations, same idea as the Arabic lessons list */
-:root{
-  --paper:#F2F6FC; --grid:#DCE6F3; --card:#FFFFFF; --ink:#1B2440; --muted:#56637F; --hl:#FFE14D; --en:#3474CF; --en2:#E8661A;
-  --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
-  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--en:#6FA2F0;--en2:#FF8A3D;color-scheme:dark}}
-:root[data-theme="dark"]{--paper:#111827;--grid:#1B2540;--card:#19223A;--ink:#EAF0FF;--muted:#A1ADC9;--hl:#FFD84D;--en:#6FA2F0;--en2:#FF8A3D;color-scheme:dark}
-*{box-sizing:border-box}
+/* English subject page (grade-N/term-N/english/index.html): list of dictations. Load after shared/theme.css. */
 html,body{margin:0}
-body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;padding-inline:16px;padding-block:20px 40px}
-.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.wrap{max-width:860px;gap:20px}
 @media (orientation:landscape) and (min-width:760px){.wrap{max-width:1200px}} /* same width as the French lessons */
-h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
-.card{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:20px;display:flex;flex-direction:column;gap:12px}
-.back{align-self:flex-start;font-weight:700;color:var(--muted);text-decoration:none;font-size:.95rem}.back:hover{color:var(--ink);text-decoration:underline}
-.eyebrow{font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--muted)}
-.hero-title{font-size:clamp(2.6rem,9vw,4.2rem);line-height:.95}
-.hero-title .p{color:var(--en)} .hero-title .k{color:var(--en2)}
-.howto{color:var(--muted);margin:0;max-width:60ch}
+.card{gap:12px}
+.hero-title .p{color:var(--en)} .hero-title .k{color:var(--ke)}
 .sec{font-size:1.2rem;display:inline-flex;align-self:flex-start;padding:2px 12px;border:2px solid var(--ink);border-radius:999px;background:var(--hl);color:#1B2440}
 .items{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
 .item{display:flex;flex-direction:column;min-width:0;text-decoration:none;color:var(--ink);background:var(--card);border:2.5px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);overflow:hidden;transition:transform .08s,box-shadow .08s}

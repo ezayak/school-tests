@@ -100,22 +100,7 @@
   html .les-title{font-size:clamp(1.5rem,3.4vw,2rem);line-height:1.25}
   html .les-sub{font-size:1rem}
   html .tab-sub{font-size:1rem;margin:0}
-  /* menus inside the lesson (texts, exercise sections): smaller tiles, more per row */
-  html .panel .modes{grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
-  html .panel .mode{padding:6px 8px;gap:0;font-size:.9rem;box-shadow:3px 3px 0 var(--ink)}
-  html .panel .mode .mi-ic{font-size:1.2rem}
-  html .panel .mode .ar{font-size:1rem;line-height:1.5}
-  html .panel .mode b{font-size:.85rem!important;line-height:1.25}
-  html .panel .mode small{font-size:.72rem}
   html .panel > .note{display:none}
-  html .texts{grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:8px}
-  html .text{padding:6px;gap:8px}
-  html .text img,html .text .ticon{width:50px;height:50px}
-  html .text .kind{font-size:.62rem}
-  html .text .ticon{font-size:1.8rem}
-  html .text .t{font-size:1.02rem;line-height:1.35}
-  html .text .e{font-size:.8rem;line-height:1.25}
-  html .text .parts{font-size:.72rem}
   /* the rule box: scroll inside it instead of pushing the question down */
   html details.rule[open]{max-height:34vh;overflow:auto}
   /* matching inside the lessons: picture and word side by side, less padding */

@@ -1,12 +1,18 @@
 // Service worker: makes Study Games work offline once installed.
 // Every game listed in games.js is downloaded automatically, so adding a game
-// only needs games.js to change. Bump VERSION if you want to force a full refresh.
-const VERSION = 'v28';
+// only needs games.js to change. Shared styles/scripts live in shared/ and are listed in CORE.
+// Bump VERSION if you want to force a full refresh.
+const VERSION = 'v31';
 const CACHE = 'study-games-' + VERSION;
-const CORE = ['./', './index.html', './index.js', './games.js', './manifest.webmanifest',
+const CORE = ['./', './index.html', './index.css', './index.js', './games.js', './manifest.webmanifest',
   './quiz-common.js', './landscape.css', './english-hub.css', './english-hub.js',
+  './shared/theme.css', './shared/quiz.css', './shared/common.js',
+  './shared/arabic.css', './shared/arabic-revision.css', './shared/spelling.css', './shared/drag-words.css',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png', './icons/favicon-32.png'];
+
+// Precache straight from the server, not the browser's HTTP cache, so one version never mixes old pages with new CSS.
+const fresh = p => new Request(p, { cache: 'reload' });
 
 async function gamePaths() {
   try {
@@ -22,9 +28,9 @@ async function gamePaths() {
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
-    await cache.addAll(CORE);
+    await cache.addAll(CORE.map(fresh));
     const games = await gamePaths();
-    await Promise.all(games.map(p => cache.add(p).catch(() => {})));
+    await Promise.all(games.map(p => cache.add(fresh(p)).catch(() => {})));
     self.skipWaiting();
   })());
 });
@@ -36,7 +42,7 @@ self.addEventListener('activate', event => {
     // pick up games added since install
     const cache = await caches.open(CACHE);
     const games = await gamePaths();
-    await Promise.all(games.map(async p => { if (!(await cache.match(p))) await cache.add(p).catch(() => {}); }));
+    await Promise.all(games.map(async p => { if (!(await cache.match(p))) await cache.add(fresh(p)).catch(() => {}); }));
     await self.clients.claim();
   })());
 });

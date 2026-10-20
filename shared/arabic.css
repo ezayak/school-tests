@@ -1,0 +1,37 @@
+/* Arabic text, Arabic answers and folder tabs. Load after quiz.css. */
+.ar{font-family:"Noto Naskh Arabic","Geeza Pro","Arabic Typesetting","Times New Roman",serif;font-weight:700;line-height:1.5}
+.hero-ar{font-size:1.6rem;color:var(--muted)}
+.mi.word{justify-content:center;font-size:1.6rem;font-weight:700}
+.mi .ic{font-size:2rem}
+.opt.aro{justify-content:center;font-size:1.7rem;min-height:64px}
+.opt.aro .L{font-family:var(--display);font-size:1rem}
+.en-word{font-family:var(--display);font-size:1.6rem;text-align:center;margin:0}
+.fb .ar{font-size:1.3rem}
+.review .ar{font-size:1.15rem}
+.mi .fix .ar{font-size:1.1rem}
+.lab{font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--muted)}
+/* folder tabs: the chosen tab joins the panel below (its bottom border hides the panel's top line) */
+.ftabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;align-items:end;margin-bottom:-2.5px;position:relative}
+.ftabs button{font-family:var(--display);font-size:1.15rem;line-height:1.15;border:2.5px solid var(--ink);border-radius:14px 14px 0 0;background:color-mix(in srgb,var(--ink) 7%,var(--card));color:var(--muted);padding:8px 8px 7px}
+.ftabs button[aria-pressed="true"]{background:var(--panel);color:var(--ink);border-bottom-color:var(--panel);padding-block:13px 9px}
+.panel{border:2.5px solid var(--ink);border-radius:0 0 16px 16px;background:var(--panel);padding:16px;display:flex;flex-direction:column;gap:14px}
+.tabbox{--panel:color-mix(in srgb,var(--hl) 12%,var(--card))}
+.ftabs .ts{display:none}
+@media (max-width:480px){.ftabs button{font-size:.95rem;padding-inline:4px}.panel{padding:12px}
+  .ftabs .ti,.ftabs .tl{display:none}.ftabs .ts{display:inline}} /* phones: no icons, short labels */
+.tab-sub{color:var(--muted);font-size:1.15rem;margin-bottom:-6px}
+.sub{display:block;font-weight:400;font-size:.85rem;color:var(--muted);font-family:var(--body)}
+.mi.word .tx{text-align:center}
+.mi .tx>.ar{font-size:1.35rem}
+.match{grid-template-columns:repeat(2,minmax(0,1fr))} /* equal columns, also on phones */
+.sent{font-size:1.8rem;text-align:center;margin:0}
+.gap{display:inline-block;min-width:3.2em;border-bottom:3px dashed var(--muted);color:var(--good)}
+.psg{border:2px solid var(--grid);border-radius:12px;padding:8px 12px;background:color-mix(in srgb,var(--hl) 8%,var(--card))}
+.psg summary,.eng summary{cursor:pointer;font-weight:700}
+.ptext{font-size:1.35rem;line-height:2;margin:8px 0}
+.eng p{margin:6px 0;color:var(--muted)}
+.seqs .tx{flex:1;text-align:right;font-size:1.25rem}
+.seqs .sub{text-align:left}
+.slot{border:2.5px dashed var(--muted);border-radius:14px;padding:14px;text-align:center}
+#bank{padding-top:12px;border-top:2px dashed var(--grid)}
+.opt.aro small{font-family:var(--body);font-weight:400;font-size:.85rem;color:var(--muted);margin-inline-start:4px}

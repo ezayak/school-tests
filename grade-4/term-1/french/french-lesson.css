@@ -1,49 +1,33 @@
-/* French lessons (Grade 4): big pictures, big buttons, every word can be heard. Green = French. */
-:root{
-  --paper:#F1F8F3; --grid:#D8EBDD; --card:#FFFFFF; --ink:#1B2440; --muted:#56637F; --hl:#FFE14D;
-  --fr:#2C9B4F; --fr2:#E8661A; --ou:#D6336C; --good:#1C8F4E; --bad:#CF3E3E; --cool:#3474CF; --pic:#FFFFFF;
-  --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
-  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#0F1A14;--grid:#17271D;--card:#18241D;--ink:#EAF5EE;--muted:#A3B8AA;--hl:#FFD84D;--fr:#4CC777;--fr2:#FF8A3D;--ou:#FF6B9A;--good:#3CCB7F;--bad:#FF6B6B;--cool:#6FA2F0;--pic:#F4F4F0;color-scheme:dark}}
-:root[data-theme="dark"]{--paper:#0F1A14;--grid:#17271D;--card:#18241D;--ink:#EAF5EE;--muted:#A3B8AA;--hl:#FFD84D;--fr:#4CC777;--fr2:#FF8A3D;--ou:#FF6B9A;--good:#3CCB7F;--bad:#FF6B6B;--cool:#6FA2F0;--pic:#F4F4F0;color-scheme:dark}
-*{box-sizing:border-box}
+/* French lessons engine (Grade 4). Load after shared/theme.css; colours, fonts and base come from there.
+   The rules below are deliberate French differences (bigger tiles, wider menus) and French-only parts. */
+:root{--fr2:var(--ke);--ou:#D6336C;--pic:#FFFFFF}  /* --fr comes from the theme's subject colours; --fr2 is the theme orange */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ou:#FF6B9A;--pic:#F4F4F0}}
+:root[data-theme="dark"]{--ou:#FF6B9A;--pic:#F4F4F0}
 html,body{margin:0}
-body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.45;padding-inline:16px;padding-block:20px 48px;min-height:100vh}
-.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
-h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
+body{padding-block:20px 48px;min-height:100vh}
+.wrap{max-width:860px;gap:18px}
+h1,h2,h3{letter-spacing:normal} /* keep French headings as they are */
 h3 small,.muted{font-family:var(--body);font-size:.85rem;color:var(--muted);font-weight:400}
-button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-button:focus-visible,a:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
-.card{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
-.back{align-self:flex-start;font-weight:700;color:var(--muted);text-decoration:none;font-size:.95rem}.back:hover{color:var(--ink);text-decoration:underline}
-.toplinks{display:flex;flex-wrap:wrap;gap:6px 16px}
-.eyebrow{font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--muted)}
+button{-webkit-tap-highlight-color:transparent}
+a:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
+.card{gap:14px;min-width:0}
 .hero-title{font-size:clamp(2.4rem,8.5vw,4rem);line-height:.98}
 .hero-title .p{color:var(--fr)} .hero-title .k{color:var(--fr2)}
-.howto,.hint,.note{color:var(--muted);margin:0}
+.howto{max-width:none} .note{font-size:inherit} /* keep French text widths and sizes */
 .hint{font-size:.95rem;text-align:center}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .row.center,.opts-row.center{justify-content:center}.row.end{justify-content:flex-end}
 .sec{font-size:1.5rem;display:flex;align-items:baseline;gap:10px}.sec small{font-family:var(--body);font-size:.85rem;color:var(--muted)}
 
 /* buttons */
-.btn{font-family:var(--display);font-size:1.3rem;border:2.5px solid var(--ink);border-radius:14px;padding:12px 26px;background:var(--hl);color:#1B2440;box-shadow:4px 4px 0 var(--ink);transition:transform .08s,box-shadow .08s;min-height:54px}
-.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
-.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:4px 4px 0 var(--ink)}
-.btn.ghost{background:var(--card);color:var(--ink)}
-.btn.big{font-size:1.6rem;padding:12px 40px}
-.abtn{font-family:var(--display);font-size:1.15rem;border:2.5px solid var(--ink);border-radius:14px;padding:8px 16px;background:var(--card);color:var(--ink);box-shadow:3px 3px 0 var(--ink);display:inline-flex;gap:8px;align-items:center;min-height:48px}
+.btn{min-height:54px}
+.btn.big{padding:12px 40px}
+.abtn{padding:8px 16px;min-height:48px}
 .abtn.big{font-size:1.35rem;padding:10px 24px;background:var(--hl);color:#1B2440}
 .abtn.sm{min-height:44px;padding:4px 10px;box-shadow:2px 2px 0 var(--ink)}
 .abtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .audio{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.audio.left{justify-content:flex-start}
-.seg{display:flex;flex-wrap:wrap;gap:6px}
-.seg button{border:2px solid var(--ink);border-radius:12px;padding:7px 14px;background:var(--card);font-weight:700;min-height:42px}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.seg{gap:6px}
+.seg button{padding:7px 14px;min-height:42px}
 .opts-row{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}
 .og{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
 .lab{font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--muted)}
@@ -69,14 +53,11 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--cool);outline-offse
 .cover .pic{box-shadow:4px 4px 0 var(--ink)}
 
 /* menu tiles */
-.modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.modes{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
 .modes.two{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.mode{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;border:2.5px solid var(--ink);border-radius:16px;background:var(--card);padding:10px 10px 12px;box-shadow:4px 4px 0 var(--ink);transition:transform .08s,box-shadow .08s;min-width:0}
-.mode:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
-.mode:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-.mode b{font-family:var(--display);font-weight:400;font-size:1.25rem;line-height:1.1}
+.mode{gap:6px;padding:10px 10px 12px}
+.mode b{line-height:1.1}
 .mode small{color:var(--muted);font-size:.85rem}
-.mode .mi-ic{font-family:var(--emoji);font-size:2.2rem;line-height:1}
 @media (max-width:420px){.modes{grid-template-columns:1fr 1fr;gap:10px}.mode b{font-size:1.05rem}}
 
 /* hud */
@@ -271,7 +252,7 @@ details.book[open] .pic,details.book[open] .alltext{margin-top:10px}
 
 /* ---------- landscape tablet / computer: everything fits on one screen ---------- */
 @media (orientation:landscape) and (min-width:760px){
-  body{padding-block:10px 14px;font-size:17px}
+  body{padding-block:10px 14px}
   .wrap{max-width:1200px;gap:10px}
   .card{padding:12px 18px;gap:10px;box-shadow:5px 5px 0 var(--ink)}
   .hud{gap:10px}
