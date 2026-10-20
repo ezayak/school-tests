@@ -123,6 +123,7 @@ window.LESSON = {
     {title, en, uk, kind: "The lesson text · النَّصُّ", cover: "img/lesson-2/class.jpg",
      intro: {ar, en, uk},                    // optional "About this text"
      parts: [{para: "paragraph heading", img: "img/lesson-2/amira.jpg", ar, en, uk}, …]},  // short parts
+                                             // img is optional: a text without pictures sets ic: "🧩" for its tile in the list
     …],                                      // (lesson 1 uses the older story: {parts} + intro, which still works)
   gloss: {"كَلِمَةٌ": ["word", "слово"], …},  // tap-a-word translations; matched with tashkeel first, then without
   words: [{ar, en, uk, ic: "🌼"}, …,        // vocabulary cards + games

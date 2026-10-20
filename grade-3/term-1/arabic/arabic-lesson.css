@@ -277,6 +277,7 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 .mi.long .tx{font-size:1.2rem;line-height:1.8}
 .secs .mode .ar{font-size:1.15rem;font-weight:700}
 .qacard .ar{text-align:center}
+.panel .exq{border:none;box-shadow:none;background:transparent;padding:0;border-radius:0} /* exercises inside the Exercises tab */
 /* lesson list */
 .lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
 .lesson{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink);background:var(--card);border:2.5px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);overflow:hidden;transition:transform .08s,box-shadow .08s}
@@ -300,6 +301,8 @@ button:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
 .text{display:flex;gap:12px;align-items:center;text-align:left;background:var(--card);border:2.5px solid var(--ink);border-radius:14px;padding:10px;box-shadow:3px 3px 0 var(--ink);cursor:pointer;font:inherit;color:var(--ink)}
 .text:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
 .text img{width:92px;height:92px;object-fit:cover;border-radius:10px;border:2px solid var(--ink);flex:none}
+.text .ticon{width:92px;height:92px;display:grid;place-items:center;font-family:var(--emoji);font-size:3rem;border-radius:10px;border:2px solid var(--ink);flex:none;background:color-mix(in srgb,var(--hl) 35%,var(--card))}
+.part.noimg{grid-template-columns:minmax(0,1fr)}
 .text .in{display:flex;flex-direction:column;gap:2px;min-width:0}
 .text .kind{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.7}
 .text .t{font-size:1.45rem;line-height:1.5}

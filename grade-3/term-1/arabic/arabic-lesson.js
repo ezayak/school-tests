@@ -102,21 +102,21 @@ function listView(){
 /* =====================================================================
    LESSON PAGE: tabs Story · Words · Opposites & plurals · Exercises
    ===================================================================== */
-let tab=store.get(KEY+'tab','story'); if(!['story','words','opp'].includes(tab))tab='story';
+let tab=store.get(KEY+'tab','story'); if(!['story','words','opp','ex'].includes(tab))tab='story';
 let part=0,story=null; // story=null → show the list of texts
 function lessonView(){
   hush();closePop();
-  const TABS=[{k:'story',ic:'📖',t:'Story',ar:'القصة'},{k:'words',ic:'🗂',t:'Words',ar:'الكلمات'},{k:'opp',ic:'🔄',t:'Opposites & plurals',short:'Pl / Op',ar:'مضاد وجمع'}];
+  const TABS=[{k:'story',ic:'📖',t:'Story',ar:'القصة'},{k:'words',ic:'🗂',t:'Words',ar:'الكلمات'},{k:'opp',ic:'🔄',t:'Opposites & plurals',short:'Pl / Op',ar:'مضاد وجمع'},{k:'ex',ic:'✏️',t:'Exercises',short:'Tasks',ar:'التدريبات'}];
   app.innerHTML=`<section class="card pop">
     <div class="toprow"><div class="links"><a class="back" href="index.html">← Arabic lessons</a><a class="back" href="../../../index.html">All games</a></div>${trSeg()}</div>
     <div class="les-head"><img src="${esc(L.cover)}" alt=""><div><span class="eyebrow">${esc(L.unit||'')}</span><h1 class="les-title ar" dir="rtl">${esc(L.title)}</h1><div class="les-sub">${esc(tr==='uk'?L.uk:L.en)}</div></div></div>
-    <div class="tabbox"><div class="ftabs four" role="group" aria-label="Lesson part">${TABS.map(t=>`<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab===t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short||t.t)}</span><span class="sub ar">${t.ar}</span></button>`).join('')}<a id="tab-ex" href="lesson-${L.n}-exercises.html"><span><span class="ti">✏️ </span>Exercises<span class="sub ar">التدريبات</span></span></a></div>
+    <div class="tabbox"><div class="ftabs four" role="group" aria-label="Lesson part">${TABS.map(t=>`<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab===t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short||t.t)}</span><span class="sub ar">${t.ar}</span></button>`).join('')}</div>
     <div class="panel" id="panel"></div></div>
   </section>`;
   bindTr(lessonView);
-  app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;store.set(KEY+'tab',tab);wstate=null;ostate=null;story=null;lessonView()});
+  app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;store.set(KEY+'tab',tab);wstate=null;ostate=null;story=null;xs=null;lessonView()});
   const P=document.getElementById('panel');
-  if(tab==='story')storyPanel(P);else if(tab==='words')wordsPanel(P);else oppPanel(P);
+  exHost=null;if(tab==='story')storyPanel(P);else if(tab==='words')wordsPanel(P);else if(tab==='ex'){exHost=P;exView()}else oppPanel(P);
 }
 
 /* ---------- story ---------- */
@@ -129,7 +129,7 @@ function gloss(core){const g=(L.gloss||{})[core]||(L.gloss||{})[bare(core)];if(g
   const b=bare(core);const k=Object.keys(L.gloss||{}).find(x=>bare(x)===b);return k?L.gloss[k]:null}
 function storyList(P){
   P.innerHTML=`<p class="tab-sub">Choose a text to read · <span class="ar">اخْتَرْ نَصًّا</span></p>
-    <div class="texts">${STORIES.map((t,i)=>{const at=+store.get(KEY+'part-'+i,0)||0;return `<button type="button" class="text" id="txt-${i}" data-t="${i}"><img src="${esc(t.cover||t.parts[0].img)}" alt=""><span class="in">${t.kind?`<span class="kind">${esc(t.kind)}</span>`:''}<span class="t ar" dir="rtl">${esc(t.title)}</span><span class="e">${esc(tr==='uk'?t.uk:t.en)}</span><span class="parts">${t.parts.length} parts${at>0?` · continue from part ${at+1}`:''}</span></span></button>`}).join('')}</div>`;
+    <div class="texts">${STORIES.map((t,i)=>{const at=+store.get(KEY+'part-'+i,0)||0;return `<button type="button" class="text" id="txt-${i}" data-t="${i}">${(t.cover||t.parts[0].img)?`<img src="${esc(t.cover||t.parts[0].img)}" alt="">`:`<span class="ticon" aria-hidden="true">${esc(t.ic||'📖')}</span>`}<span class="in">${t.kind?`<span class="kind">${esc(t.kind)}</span>`:''}<span class="t ar" dir="rtl">${esc(t.title)}</span><span class="e">${esc(tr==='uk'?t.uk:t.en)}</span><span class="parts">${t.parts.length} parts${at>0?` · continue from part ${at+1}`:''}</span></span></button>`}).join('')}</div>`;
   P.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{story=+b.dataset.t;part=+store.get(KEY+'part-'+story,0)||0;storyPanel(P)});
 }
 function storyPanel(P){
@@ -138,8 +138,8 @@ function storyPanel(P){
   const p=PS[part],tk=tokens(p.ar);
   P.innerHTML=`<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span></div>
     ${ST.intro&&part===0?`<details class="readp"><summary>About this text · تمهيد</summary><p class="ar" dir="rtl" style="font-size:1.25rem;line-height:1.9;margin:8px 0">${esc(ST.intro.ar)}</p>${trText(ST.intro)?`<p class="trans">${esc(trText(ST.intro))}</p>`:''}</details>`:''}
-    <div class="part">
-      <div class="pic"><img src="${esc(p.img)}" alt=""></div>
+    <div class="part${p.img?'':' noimg'}">
+      ${p.img?`<div class="pic"><img src="${esc(p.img)}" alt=""></div>`:''}
       <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
         <span class="pchip"><span class="ar" dir="rtl">${esc(p.para)}</span><span>· Part ${part+1} of ${PS.length}</span></span>
         <p class="story ar" dir="rtl" id="storyText">${tk.map((t,i)=>`${esc(t.pre)}<span class="w" data-i="${i}">${esc(t.core)}</span>${esc(t.post)}`).join(' ')}</p>
@@ -337,22 +337,20 @@ function oppGame(P){
 /* =====================================================================
    EXERCISES PAGE
    ===================================================================== */
-let xs=null;
+let xs=null,exHost=null; // exHost = the Exercises tab panel
+const exH=()=>exHost||app;
 function exView(){
   hush();
   if(xs)return xs.sec.cards?qaCards():exItem();
   const SEC=L.exercises||[];
-  app.innerHTML=`<section class="card pop">
-    <div class="toprow"><div class="links"><a class="back" href="lesson-${L.n}.html">← Back to the lesson</a><a class="back" href="index.html">Arabic lessons</a></div>${trSeg()}</div>
-    <span class="eyebrow">${esc(L.unit||'')} · التدريبات</span>
-    <h1 class="les-title ar" dir="rtl">${esc(L.title)}</h1><div class="les-sub">Exercises from the book · ${esc(tr==='uk'?L.uk:L.en)}</div>
+  const H=exH();
+  H.innerHTML=`<p class="tab-sub">Exercises from the book · <span class="ar">تَدْرِيبَاتُ الْكِتَابِ</span></p>
     <div class="modes secs">${SEC.map((s,i)=>`<button type="button" class="mode" id="sec-${s.k}" data-s="${i}"><span class="mi-ic">${s.ic}</span><span class="ar" dir="rtl">${esc(s.t)}</span><b style="font-size:1.05rem">${esc(tr==='uk'?s.uk:s.en)}</b><small>${s.items.length} ${s.cards?'cards':'questions'}</small></button>`).join('')}</div>
-    <p class="note">Questions marked “answer” have no single right wording: read the model answer, then tick whether you got it.</p>
-  </section>`;
-  bindTr(exView);
-  app.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const sec=SEC[+b.dataset.s];xs={sec,list:sec.cards?sec.items:sec.items.slice(),i:0,score:0,max:0,miss:[]};
+    <p class="note">Questions marked “answer” have no single right wording: read the model answer, then tick whether you got it.</p>`;
+  H.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const sec=SEC[+b.dataset.s];xs={sec,list:sec.cards?sec.items:sec.items.slice(),i:0,score:0,max:0,miss:[]};
     xs.max=xs.list.reduce((t,it)=>t+(it.type==='match'?it.pairs.length:1),0);exView()});
 }
+const exTop=H=>{const t=exHost&&exHost.closest('.tabbox');if(t&&t.getBoundingClientRect().top<0)t.scrollIntoView({block:'start'})};
 const ruleOf=sec=>{let r=sec.rule;if(typeof r==='string'){const o=(L.exercises||[]).find(x=>x.k===r);r=o&&o.rule}return r||null};
 const ruleHTML=r=>`<details class="readp rule"><summary>📘 The rule · الْقَاعِدَةُ</summary>${r.img?`<img src="${esc(r.img)}" alt="" class="ruleimg">`:''}<p class="ar" dir="rtl">${esc(r.ar)}</p><button type="button" class="abtn" id="ruleSay"><span class="e">🔊</span> Listen</button>${tr!=='off'?`<p class="trans">${esc(tr==='uk'?r.uk:r.en)}</p>`:''}</details>`;
 const qHTML=q=>esc(q).replace(/_{3,}/g,'<span class="gap"></span>');
@@ -361,8 +359,9 @@ function exItem(){
   const pct=Math.round(xs.i/n*100);
   const P=xs.sec.items.indexOf(it);
   const para=it.read==null?null:(Array.isArray(it.read)?(STORIES[it.read[0]]||{parts:[]}).parts[it.read[1]]:(STORIES[0]||{parts:[]}).parts[it.read])||null;
-  app.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to exercise list">←</button><span class="qnum">${esc(tr==='uk'?xs.sec.uk:xs.sec.en)} · ${xs.i+1} / ${n}</span><div class="meter"><i style="width:${pct}%"></i></div><span class="score">${bolt}<b id="pts">${xs.score}</b></span></div>
-  <section class="card pop">
+  const H=exH();exTop(H);
+  H.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to exercise list">←</button><span class="qnum">${esc(tr==='uk'?xs.sec.uk:xs.sec.en)} · ${xs.i+1} / ${n}</span><div class="meter"><i style="width:${pct}%"></i></div><span class="score">${bolt}<b id="pts">${xs.score}</b></span></div>
+  <section class="card pop exq">
     ${it.img?`<div class="scene photo"><img src="${esc(it.img)}" alt=""></div>`:''}
     ${ruleOf(xs.sec)?ruleHTML(ruleOf(xs.sec)):''}
     ${para?`<details class="readp"><summary>📖 Read / listen to the paragraph</summary><p class="ar" dir="rtl">${esc(para.ar)}</p><button type="button" class="abtn" id="paraSay"><span class="e">🔊</span> Listen</button></details>`:''}
@@ -378,9 +377,9 @@ function exItem(){
   document.getElementById('qSay').onclick=()=>say(speakable(it.q));
   const ps=document.getElementById('paraSay');if(ps)ps.onclick=()=>say(para.ar);
   const rs=document.getElementById('ruleSay');if(rs)rs.onclick=()=>say(ruleOf(xs.sec).ar);
-  const rd=app.querySelector('details.rule');if(rd){rd.open=xs.i===0&&!xs.ruleSeen;rd.ontoggle=()=>{if(!rd.open)xs.ruleSeen=true}}
+  const rd=H.querySelector('details.rule');if(rd){rd.open=xs.i===0&&!xs.ruleSeen;rd.ontoggle=()=>{if(!rd.open)xs.ruleSeen=true}}
   const A=document.getElementById('ans'),F=document.getElementById('fbx');
-  const after=(ok,html)=>{document.getElementById('pts').textContent=xs.score;const cd=app.querySelector('.card');cd.classList.add('answered');if(innerWidth>innerHeight)cd.querySelectorAll('details').forEach(d=>d.open=false);F.innerHTML=fbHTML(ok,html,last);setTimeout(()=>{const nb=document.getElementById('nextBtn');if(!nb)return;const over=nb.getBoundingClientRect().bottom-(innerHeight-14);if(over>0)scrollBy({top:over,behavior:'instant'})},60);document.getElementById('nextBtn').onclick=()=>{xs.i++;if(xs.i>=xs.list.length)return exEnd();exItem()}};
+  const after=(ok,html)=>{document.getElementById('pts').textContent=xs.score;const cd=H.querySelector('.exq');cd.classList.add('answered');if(innerWidth>innerHeight)cd.querySelectorAll('details').forEach(d=>d.open=false);F.innerHTML=fbHTML(ok,html,last);setTimeout(()=>{const nb=document.getElementById('nextBtn');if(!nb)return;const over=nb.getBoundingClientRect().bottom-(innerHeight-14);if(over>0)scrollBy({top:over,behavior:'instant'})},60);document.getElementById('nextBtn').onclick=()=>{xs.i++;if(xs.i>=xs.list.length)return exEnd();exItem()}};
   if(it.type==='tf'){
     A.innerHTML=`<div class="tfrow"><button type="button" class="tfbtn" id="tf-1" data-v="1">✓ <span class="ar">صَحِيحٌ</span></button><button type="button" class="tfbtn" id="tf-0" data-v="0">✗ <span class="ar">خَطَأٌ</span></button></div>`;
     A.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const v=b.dataset.v==='1',ok=v===it.a;
@@ -410,14 +409,15 @@ function exItem(){
   }
 }
 function exEnd(){
-  const sec=xs.sec;app.innerHTML=scoreCard(xs.score,xs.max,xs.miss,0,'Other exercises',(tr==='uk'?sec.uk:sec.en));
+  const sec=xs.sec;const H=exH();exTop(H);H.innerHTML=scoreCard(xs.score,xs.max,xs.miss,0,'Other exercises',(tr==='uk'?sec.uk:sec.en));
   document.getElementById('againBtn').onclick=()=>{xs={sec,list:sec.items.slice(),i:0,score:0,max:xs.max,miss:[]};exView()};
   document.getElementById('backBtn').onclick=()=>{xs=null;exView()};
 }
 function qaCards(){
   const n=xs.list.length;if(xs.i<0)xs.i=n-1;if(xs.i>=n)xs.i=0;const it=xs.list[xs.i];
-  app.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to exercise list">←</button><span class="qnum">Card ${xs.i+1} of ${n}</span><div class="meter"><i style="width:${Math.round((xs.i+1)/n*100)}%"></i></div></div>
-  <section class="card pop qacard">
+  const H=exH();exTop(H);
+  H.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to exercise list">←</button><span class="qnum">Card ${xs.i+1} of ${n}</span><div class="meter"><i style="width:${Math.round((xs.i+1)/n*100)}%"></i></div></div>
+  <section class="card pop exq qacard">
     <span class="qtype mc" style="align-self:center">سُؤَالٌ · Question</span>
     <p class="qar ar" dir="rtl" style="text-align:center">${esc(it.q)}</p>${trText(it)?`<p class="qhelp" style="text-align:center">${esc(trText(it))}</p>`:''}
     <div class="audio" style="justify-content:center"><button type="button" class="abtn" id="qSay"><span class="e">🔊</span> Question</button></div>
@@ -432,7 +432,7 @@ function qaCards(){
 
 /* ---------- start ---------- */
 if(VIEW==='list')listView();
-else if(VIEW==='exercises'){exView();if(window.Quiz)Quiz.watch(app)}
-else lessonView();
+else if(VIEW==='exercises'){store.set(KEY+'tab','ex');location.replace(`lesson-${L.n}.html`)}
+else{lessonView();if(window.Quiz)Quiz.watch(app)}
 addEventListener('pagehide',hush);
 })();
