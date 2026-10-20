@@ -143,3 +143,31 @@ Exercise item types (every item can have `en`/`uk` help text, `img`, `tag`, and 
 - `{type:"match", q, pairs: [[left, right, "en"], …]}`
 
 After adding a lesson: add it to `lessons.js`, add its files to the `also: [...]` list of the "Arabic Lessons" entry in `games.js` (so it works offline), and bump `VERSION` in `sw.js`.
+
+## French lessons (Grade 4)
+
+Folder: `grade-4/term-1/french/`. One card on the home page ("Français", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`.
+Made to be understood from pictures and sound: big pictures from the book, every French word can be tapped to hear it (device voice, French),
+🔊 / 🐢 slow / 👆 word-by-word reading, wrong answers can be tried again, 💡 help in the building games. Optional translation EN / UA / AR.
+
+Shared files (no need to touch them for a new lesson):
+- `french-lesson.js` — the engine (`<body data-view="list|lesson">`)
+- `french-lesson.css` — styles
+
+Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`), `lesson-N.js` (all the content), `img/lesson-N/` (pictures cropped from the book).
+
+A lesson page has three tabs, like the Arabic lessons (the last tab used is remembered):
+- **Apprends** – the story (picture by picture), the words (flash cards), a sound (« ou »), the verb
+- **Joue** – Écoute et touche (hear a sentence, tap the picture), Relie (pictures ↔ names), Construis le mot (letters), Construis la phrase (word cards or letters), Il ou Elle ?
+- **Exercices** – the school sheets: `exercises: [{k, t, en, img, from, items}]`
+
+Exercise item types (each can have `img: "name"` or `emoji: "👧"`):
+- `{type:"order", fr, q?}` – Mets en ordre (m’ / t’ / s’ become their own cards, like at school)
+- `{type:"letters", fr}` – build a word, or a sentence word by word
+- `{type:"fill", parts:["Je ", ["m’","t’","s’"], "appell", ["e","es"], " Bouli."], ans:["m’","e"]}`
+- `{type:"mc", q, opts:[right, wrong, …], icons?}` – the first option is the right one
+- `{type:"tap", say, opts:[img, img, img]}` – the first picture is the right one
+- `{type:"match", pairs:[{img, fr}, …]}`
+- `{type:"yn", fr, a:true|false}`
+
+After adding a lesson: add it to `lessons.js`, add its files to the `also: [...]` list of the French entry in `games.js`, and bump `VERSION` in `sw.js`.
