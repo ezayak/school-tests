@@ -1,13 +1,73 @@
 /* "Put the words in order" games: word tiles dragged from a bank onto a line. Load after quiz.css. */
-.qtype.dr{background:color-mix(in srgb,var(--hl) 45%,var(--card))}
-.line{min-height:66px;border:2.5px dashed var(--ink);border-radius:14px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:color-mix(in srgb,var(--hl) 10%,var(--card));transition:background .15s}
-.line.over{background:color-mix(in srgb,var(--hl) 40%,var(--card))}
-.line.ok{border-style:solid;border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--card))}
-.line.no{border-style:solid;border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
-.line .ph{color:var(--muted);font-weight:700}
-.bank{display:flex;flex-wrap:wrap;gap:10px;min-height:56px;align-items:center}
-.tile{font-family:var(--display);font-size:1.3rem;padding:8px 14px;border:2.5px solid var(--ink);border-radius:12px;background:var(--hl);color:#1B2440;box-shadow:3px 3px 0 var(--ink);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
-.line .tile{background:var(--card);color:var(--ink)}
-.tile.ghost{opacity:.25}
-.tile:disabled{cursor:default;opacity:1}
-.drag{position:fixed;pointer-events:none;z-index:50;transform:rotate(-3deg) scale(1.06);cursor:grabbing;margin:0}
+.qtype.dr {
+  background: color-mix(in srgb, var(--hl) 45%, var(--card));
+}
+.line {
+  min-height: 66px;
+  border: 2.5px dashed var(--ink);
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  background: color-mix(in srgb, var(--hl) 10%, var(--card));
+  transition: background 0.15s;
+}
+.line.over {
+  background: color-mix(in srgb, var(--hl) 40%, var(--card));
+}
+.line.ok {
+  border-style: solid;
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 14%, var(--card));
+}
+.line.no {
+  border-style: solid;
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 10%, var(--card));
+}
+.line .ph {
+  color: var(--muted);
+  font-weight: 700;
+}
+.bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 56px;
+  align-items: center;
+}
+.tile {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  padding: 8px 14px;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  background: var(--hl);
+  color: #1b2440;
+  box-shadow: 3px 3px 0 var(--ink);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+.line .tile {
+  background: var(--card);
+  color: var(--ink);
+}
+.tile.ghost {
+  opacity: 0.25;
+}
+.tile:disabled {
+  cursor: default;
+  opacity: 1;
+}
+.drag {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  transform: rotate(-3deg) scale(1.06);
+  cursor: grabbing;
+  margin: 0;
+}

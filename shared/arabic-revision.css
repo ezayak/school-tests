@@ -1,28 +1,134 @@
 /* Revision quizzes in Arabic (religion, social studies): verses, word tools, English toggle. Load after arabic.css. */
-.ftabs{grid-template-columns:repeat(2,minmax(0,1fr))}
-.pic{object-fit:contain;padding:0} /* show the whole picture */
-.qhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
-.sec{font-size:1.2rem;color:var(--muted)}
-.ask{font-size:1.5rem;text-align:center;margin:0;color:var(--pe)}
-.ask small{font-family:var(--body);font-size:.9rem;color:var(--muted);margin-inline-start:6px}
-.sent.long{font-size:1.45rem;line-height:1.8}
-.tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.tools .abtn{font-size:1rem;padding:7px 14px}
-.abtn[aria-pressed="true"]{background:var(--hl);color:#1B2440}
-.en{display:none;margin:0;text-align:center;color:var(--muted);font-style:italic}
-.show-en .en{display:block}
-.ow{display:flex;flex-direction:column;align-items:center;min-width:0}
-.opt .ow .en{font-family:var(--body);font-weight:400;font-size:.85rem;font-style:normal}
-.fb .full{display:block;font-size:1.3rem;margin-top:4px}
-.fb .fen{display:block;color:var(--muted)}
-.verse{font-size:1.6rem;line-height:1.9;text-align:center;margin:0}
-.ref{text-align:center;margin:0;color:var(--muted);font-weight:700}
-.words{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.words .mi{min-height:48px;padding:6px 14px}
-.words .mi .tx{font-size:1.35rem}
-#vline{min-height:68px;border:2.5px dashed var(--muted);border-radius:14px;padding:10px;align-items:center}
-.pic.fit{background:#fff} /* maps: white margins */
-.opt.lng{min-height:56px}
-.opt.lng .ow .ar{font-size:1.15rem;line-height:1.6}
-.term{font-size:1.9rem;text-align:center;margin:0;color:var(--pe)}
-.term small{display:block;font-family:var(--body);font-size:.95rem;color:var(--muted)}
+.ftabs {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.pic {
+  object-fit: contain;
+  padding: 0;
+} /* show the whole picture */
+.qhead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+.sec {
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+.ask {
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0;
+  color: var(--pe);
+}
+.ask small {
+  font-family: var(--body);
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-inline-start: 6px;
+}
+.sent.long {
+  font-size: 1.45rem;
+  line-height: 1.8;
+}
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.tools .abtn {
+  font-size: 1rem;
+  padding: 7px 14px;
+}
+.abtn[aria-pressed="true"] {
+  background: var(--hl);
+  color: #1b2440;
+}
+.en {
+  display: none;
+  margin: 0;
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+}
+.show-en .en {
+  display: block;
+}
+.ow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+.opt .ow .en {
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.85rem;
+  font-style: normal;
+}
+.fb .full {
+  display: block;
+  font-size: 1.3rem;
+  margin-top: 4px;
+}
+.fb .fen {
+  display: block;
+  color: var(--muted);
+}
+.verse {
+  font-size: 1.6rem;
+  line-height: 1.9;
+  text-align: center;
+  margin: 0;
+}
+.ref {
+  text-align: center;
+  margin: 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.words .mi {
+  min-height: 48px;
+  padding: 6px 14px;
+}
+.words .mi .tx {
+  font-size: 1.35rem;
+}
+#vline {
+  min-height: 68px;
+  border: 2.5px dashed var(--muted);
+  border-radius: 14px;
+  padding: 10px;
+  align-items: center;
+}
+.pic.fit {
+  background: #fff;
+} /* maps: white margins */
+.opt.lng {
+  min-height: 56px;
+}
+.opt.lng .ow .ar {
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+.term {
+  font-size: 1.9rem;
+  text-align: center;
+  margin: 0;
+  color: var(--pe);
+}
+.term small {
+  display: block;
+  font-family: var(--body);
+  font-size: 0.95rem;
+  color: var(--muted);
+}

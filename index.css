@@ -1,36 +1,199 @@
 /* Home page: graph-paper page, one section per grade, a row per term/period, subject cards inside. Load after shared/theme.css. */
-html,body{margin:0}
-body{padding-block:28px 48px}
-.wrap{max-width:860px;gap:28px}
-@media (orientation:landscape) and (min-width:760px){.wrap{max-width:1200px}} /* same width as the French lessons */
-header{display:flex;flex-direction:column;gap:10px}
-h1{font-size:clamp(2.6rem,8vw,4rem);line-height:.95}
-h1 span{color:var(--fr)}
-.sub{color:var(--muted);margin:0;max-width:60ch}
-.tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-a:focus-visible{outline:3px solid var(--fr);outline-offset:3px}
-.filters{display:flex;flex-wrap:wrap;gap:8px}
-.grade-row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
-.filters button{font:inherit;font-weight:700;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
-.filters button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
-#list{display:flex;flex-direction:column;gap:44px}
-.grade{display:flex;flex-direction:column;gap:16px}
-.grade>h2{font-size:2rem;display:flex;align-items:baseline;gap:10px}
-.grade>h2 small{font-family:var(--body);font-size:.9rem;color:var(--muted);font-weight:700}
-.period{display:flex;flex-direction:column;gap:12px}
-.period h3{font-size:1.2rem;display:inline-flex;align-self:flex-start;padding:2px 12px;border:2px solid var(--ink);border-radius:999px;background:var(--hl);color:#1B2440}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-.game{display:flex;flex-direction:column;gap:8px;min-width:0;background:var(--card);border:2.5px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);padding:16px;color:var(--ink);text-decoration:none;transition:transform .08s,box-shadow .08s;border-top:10px solid var(--c)}
-.game:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
-.game .subj{font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;color:color-mix(in srgb,var(--c) 65%,var(--ink))}
-.game.light-c .subj{color:var(--muted)}
-.game .t{font-family:var(--display);font-size:1.5rem;line-height:1.05}
-.game .l{font-weight:700;font-size:.95rem}
-.game .tp{color:var(--muted);font-size:.92rem;margin:0}
-.game .meta{margin-top:auto;display:flex;justify-content:space-between;gap:8px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:6px}
-.game .go{font-family:var(--display);color:var(--ink);font-size:1rem}
-.empty{color:var(--muted)}
-.install{font-family:var(--display);font-size:1.05rem;border:2.5px solid var(--ink);border-radius:12px;padding:8px 16px;background:var(--hl);color:#1B2440;box-shadow:3px 3px 0 var(--ink);cursor:pointer}
-.ios-tip{color:var(--muted);font-size:.92rem;margin:0}
-footer{color:var(--muted);font-size:.9rem}
-@media (prefers-reduced-motion:reduce){.game{transition:none}}
+html,
+body {
+  margin: 0;
+}
+body {
+  padding-block: 28px 48px;
+}
+.wrap {
+  max-width: 860px;
+  gap: 28px;
+}
+@media (orientation: landscape) and (min-width: 760px) {
+  .wrap {
+    max-width: 1200px;
+  }
+} /* same width as the French lessons */
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+h1 {
+  font-size: clamp(2.6rem, 8vw, 4rem);
+  line-height: 0.95;
+}
+h1 span {
+  color: var(--fr);
+}
+.sub {
+  color: var(--muted);
+  margin: 0;
+  max-width: 60ch;
+}
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+a:focus-visible {
+  outline: 3px solid var(--fr);
+  outline-offset: 3px;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.grade-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+}
+.filters button {
+  font: inherit;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+.filters button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--card);
+}
+#list {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+.grade {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.grade > h2 {
+  font-size: 2rem;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.grade > h2 small {
+  font-family: var(--body);
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+.period {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.period h3 {
+  font-size: 1.2rem;
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 2px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--hl);
+  color: #1b2440;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 16px;
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+  border-top: 10px solid var(--c);
+}
+.game:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--ink);
+}
+.game .subj {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--c) 65%, var(--ink));
+}
+.game.light-c .subj {
+  color: var(--muted);
+}
+.game .t {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  line-height: 1.05;
+}
+.game .l {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.game .tp {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin: 0;
+}
+.game .meta {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  padding-top: 6px;
+}
+.game .go {
+  font-family: var(--display);
+  color: var(--ink);
+  font-size: 1rem;
+}
+.empty {
+  color: var(--muted);
+}
+.install {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  padding: 8px 16px;
+  background: var(--hl);
+  color: #1b2440;
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+}
+.ios-tip {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin: 0;
+}
+footer {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .game {
+    transition: none;
+  }
+}
