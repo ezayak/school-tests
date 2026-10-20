@@ -108,8 +108,8 @@ function lessonView(){
   hush();closePop();
   const TABS=[{k:'story',ic:'📖',t:'Story',ar:'القصة'},{k:'words',ic:'🗂',t:'Words',ar:'الكلمات'},{k:'opp',ic:'🔄',t:'Opposites & plurals',short:'Pl / Op',ar:'مضاد وجمع'},{k:'ex',ic:'✏️',t:'Exercises',short:'Tasks',ar:'التدريبات'}];
   app.innerHTML=`<section class="card pop">
-    <div class="toprow"><div class="links"><a class="back" href="index.html">← Arabic lessons</a><a class="back" href="../../../index.html">All games</a></div>${trSeg()}</div>
-    <div class="les-head"><img src="${esc(L.cover)}" alt=""><div><span class="eyebrow">${esc(L.unit||'')}</span><h1 class="les-title ar" dir="rtl">${esc(L.title)}</h1><div class="les-sub">${esc(tr==='uk'?L.uk:L.en)}</div></div></div>
+    <div class="toprow"><div class="links">${(L.links||[["index.html","← Arabic lessons"],["../../../index.html","All games"]]).map(([h,t])=>`<a class="back" href="${esc(h)}">${esc(t)}</a>`).join('')}</div>${trSeg()}</div>
+    <div class="les-head">${L.cover?`<img src="${esc(L.cover)}" alt="">`:`<span class="les-ic" aria-hidden="true">${esc(L.ic||'📖')}</span>`}<div><span class="eyebrow">${esc(L.unit||'')}</span><h1 class="les-title ar" dir="rtl">${esc(L.title)}</h1><div class="les-sub">${esc(tr==='uk'?L.uk:L.en)}</div></div></div>
     <div class="tabbox"><div class="ftabs four" role="group" aria-label="Lesson part">${TABS.map(t=>`<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab===t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short||t.t)}</span><span class="sub ar">${t.ar}</span></button>`).join('')}</div>
     <div class="panel" id="panel"></div></div>
   </section>`;
@@ -348,7 +348,7 @@ function exView(){
     <div class="modes secs">${SEC.map((s,i)=>`<button type="button" class="mode" id="sec-${s.k}" data-s="${i}"><span class="mi-ic">${s.ic}</span><span class="ar" dir="rtl">${esc(s.t)}</span><b style="font-size:1.05rem">${esc(tr==='uk'?s.uk:s.en)}</b><small>${s.items.length} ${s.cards?'cards':'questions'}</small></button>`).join('')}</div>
     <p class="note">Questions marked “answer” have no single right wording: read the model answer, then tick whether you got it.</p>`;
   H.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const sec=SEC[+b.dataset.s];xs={sec,list:sec.cards?sec.items:sec.items.slice(),i:0,score:0,max:0,miss:[]};
-    xs.max=xs.list.reduce((t,it)=>t+(it.type==='match'?it.pairs.length:1),0);exView()});
+    xs.max=xs.list.reduce((t,it)=>t+(it.type==='match'?it.pairs.length:it.type==='order'?it.s.length:1),0);exView()});
 }
 const exTop=H=>{const t=exHost&&exHost.closest('.tabbox');if(t&&t.getBoundingClientRect().top<0)t.scrollIntoView({block:'start'})};
 const ruleOf=sec=>{let r=sec.rule;if(typeof r==='string'){const o=(L.exercises||[]).find(x=>x.k===r);r=o&&o.rule}return r||null};
@@ -363,6 +363,7 @@ function exItem(){
   H.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to exercise list">←</button><span class="qnum">${esc(tr==='uk'?xs.sec.uk:xs.sec.en)} · ${xs.i+1} / ${n}</span><div class="meter"><i style="width:${pct}%"></i></div><span class="score">${bolt}<b id="pts">${xs.score}</b></span></div>
   <section class="card pop exq">
     ${it.img?`<div class="scene photo"><img src="${esc(it.img)}" alt=""></div>`:''}
+    ${it.ic?`<div class="emopic" aria-hidden="true">${esc(it.ic)}</div>`:''}
     ${ruleOf(xs.sec)?ruleHTML(ruleOf(xs.sec)):''}
     ${para?`<details class="readp"><summary>📖 Read / listen to the paragraph</summary><p class="ar" dir="rtl">${esc(para.ar)}</p><button type="button" class="abtn" id="paraSay"><span class="e">🔊</span> Listen</button></details>`:''}
     ${it.tag?`<span class="tag ar" dir="rtl">${esc(it.tag)}</span>`:''}
@@ -401,6 +402,21 @@ function exItem(){
       document.getElementById('aSay').onclick=()=>say(it.a);
       A.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{const ok=b.dataset.g==='1';A.querySelectorAll('[data-g]').forEach(x=>x.disabled=true);b.classList.add(ok?'right':'wrong');
         if(ok)xs.score++;else xs.miss.push({q:it.q,right:it.a});after(ok,ok?'Great!':'Read the answer again and try to say it in your own words.')})};
+  }else if(it.type==='order'){
+    const n=it.s.length,bank=shuf(it.s.map((_,i)=>i));let line=[],checked=false;
+    A.innerHTML=`<p class="hint">Tap the sentences in order, from the beginning to the end. Tap a numbered sentence to take it back.</p><div class="mcol" id="oLine"></div><div class="mcol" id="oBank" style="margin-top:10px"></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" id="checkBtn" type="button" disabled>Check my order</button></div>`;
+    const tile=(i,k,cls)=>{const s=it.s[i],t=trText({en:s[1],uk:s[2]});return `<button type="button" class="mi ${cls}" id="os-${i}" data-o="${i}" ${checked?'disabled':''}>${s[3]?`<span class="ic">${esc(s[3])}</span>`:''}<span class="tx"><span class="ar" dir="rtl" style="display:block;font-size:1.2rem;line-height:1.8">${esc(s[0])}</span>${checked&&t?`<span class="fix">${esc(t)}</span>`:''}</span>${k>=0?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`};
+    const draw=()=>{
+      A.querySelector('#oLine').innerHTML=line.length?line.map((i,k)=>tile(i,k,checked?(i===k?'ok':'no'):'')).join(''):'<p class="hint">Your story starts here: tap the first sentence.</p>';
+      A.querySelector('#oBank').innerHTML=bank.map(i=>tile(i,-1,'')).join('');
+      A.querySelectorAll('#oLine [data-o]').forEach(b=>b.onclick=()=>{const i=+b.dataset.o;line=line.filter(x=>x!==i);bank.push(i);draw()});
+      A.querySelectorAll('#oBank [data-o]').forEach(b=>b.onclick=()=>{const i=+b.dataset.o;bank.splice(bank.indexOf(i),1);line.push(i);say(it.s[i][0]);draw()});
+      const cb=A.querySelector('#checkBtn');if(cb)cb.disabled=bank.length>0};
+    draw();
+    A.querySelector('#checkBtn').onclick=()=>{checked=true;let got=0;
+      line.forEach((i,k)=>{if(i===k)got++;else xs.miss.push({q:it.s[i][0],your:'رقم '+(k+1),right:'رقم '+(i+1)})});
+      xs.score+=got;draw();A.querySelector('#checkBtn').remove();
+      after(got===n,`${got} of ${n} in the right place.<br><span class="ar" dir="rtl">الْبِدَايَةُ: ${esc(it.s[0][0])}<br>النِّهَايَةُ: ${esc(it.s[n-1][0])}</span>`)};
   }else if(it.type==='match'){
     const left=shuf(it.pairs.map((p,i)=>({i,html:`<span class="ar" style="font-size:1.15rem;line-height:1.8">${esc(p[0])}</span>`})));
     const right=shuf(it.pairs.map((p,i)=>({i,html:`<span class="ar">${esc(p[1])}</span>${tr==='off'?'':`<span class="gl">${esc(p[2])}</span>`}`,plain:esc(p[1])})));
