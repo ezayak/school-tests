@@ -262,3 +262,92 @@ details.book[open] .pic,details.book[open] .alltext{margin-top:10px}
 .panel{border:2.5px solid var(--ink);border-radius:0 0 16px 16px;background:var(--panel);padding:16px;display:flex;flex-direction:column;gap:14px}
 @media (max-width:480px){.les-head{grid-template-columns:1fr}.les-cov img{width:100%;height:auto;aspect-ratio:16/9}
   .ftabs button{font-size:1.15rem;padding-inline:4px}.ftabs .ti,.ftabs .sub{display:none}.panel{padding:10px}}
+
+/* ---------- split screens: one column (phone, portrait tablet) ---------- */
+.split{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.split .side,.split .main{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;min-width:0}
+.split .main{text-align:center}
+.lines.tight{gap:6px}.lines.tight .line{padding:6px 12px}
+
+/* ---------- landscape tablet / computer: everything fits on one screen ---------- */
+@media (orientation:landscape) and (min-width:760px){
+  body{padding-block:10px 14px;font-size:17px}
+  .wrap{max-width:1200px;gap:10px}
+  .card{padding:12px 18px;gap:10px;box-shadow:5px 5px 0 var(--ink)}
+  .hud{gap:10px}
+  .hud .abtn{min-height:42px;padding:4px 14px}
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;gap:22px}
+  .split.wide{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+  .split .side{gap:8px}
+  .split .main{gap:10px}
+  /* pictures take the height that is left on the screen */
+  .split .pic.card,.split .pic.story{height:min(calc(100vh - 190px),560px);min-height:200px;max-width:100%;width:100%;aspect-ratio:auto}
+  .split .side:has(.q) .pic.card,.split .side:has(.audio) .pic.card{height:min(calc(100vh - 270px),520px)}
+  .split .side:has(.book) .pic.card{height:min(calc(100vh - 250px),520px)}
+  .qtype{font-size:.85rem;padding:3px 12px}
+  .fc-word{font-size:clamp(2.2rem,5vw,3.2rem)}
+  .say.big{font-size:clamp(1.4rem,2.6vw,1.9rem)}
+  .lines{gap:8px}.line{padding:6px 12px}
+  .opt{min-height:56px;font-size:1.3rem}.opt.big{min-height:70px}
+  .opts{gap:8px}
+  .btn{min-height:48px;padding:8px 22px;font-size:1.2rem}.btn.big{font-size:1.4rem;padding:8px 30px}
+  .abtn{min-height:44px;font-size:1.05rem}.abtn.big{font-size:1.2rem;padding:6px 18px}
+  .nav .btn{font-size:1.4rem}
+  .slots{min-height:66px;padding:8px}
+  .tile{min-height:50px;font-size:1.45rem;padding:4px 12px}.tile.let{min-width:46px;font-size:1.6rem}
+  .bank{gap:8px;min-height:52px}
+  .hint{font-size:.85rem}
+  /* answer + next button side by side */
+  .fbx:has(.fb){flex-direction:row;align-items:center}
+  .fbx .fb{flex:1;padding:8px 12px;gap:2px}
+  .fbx .fb b{font-size:1.2rem}
+  .fbx .row.end{flex:none}
+  .fill{font-size:clamp(1.5rem,3vw,2.1rem)}
+  .chip-o{min-height:58px;font-size:1.6rem}
+  /* listen & tap: three pictures in a row */
+  .choices{gap:16px;max-width:calc((100vh - 230px) * 3 + 40px);margin-inline:auto}
+  .choices .pic.sq{aspect-ratio:auto;height:min(calc(100vh - 250px),380px)}
+  /* story */
+  .dotsnav{gap:6px}.dot{width:16px;height:16px}
+  details.book[open]{max-height:40vh;overflow:auto}
+  /* words / yes-no */
+  .yn .opt{min-height:70px}
+  /* le son ou */
+  .ou-hero{flex-direction:row;justify-content:center}
+  .ou-hero .pic.strip{max-width:520px}
+  .ou-big{font-size:2rem;padding:4px 20px}
+  .ou-grid{grid-template-columns:repeat(8,1fr);gap:10px}
+  .ou-card{padding:6px}.ou-w{font-size:1.2rem}
+  /* verb */
+  .verb{gap:8px;width:100%}
+  .vrow{padding:6px 12px;grid-template-columns:64px 1fr auto}
+  .face2{width:64px;height:64px}
+  .vp,.vv{font-size:1.7rem}
+  /* match: pictures in a grid next to the words */
+  .match{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:start}
+  .mcol.pics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .match.n4 .mcol.pics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mi{min-height:56px;padding:4px}
+  .mi .mpic{height:min(calc((100vh - 300px) / 2),170px)}
+  .mi.word{font-size:1.25rem;padding:6px 8px}
+  .mcol{gap:8px}
+  /* lesson home */
+  .les-cov img{width:130px;height:90px}
+  .les-title{font-size:2.4rem}
+  .modes{grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px}
+  .thumb{aspect-ratio:16/10}
+  .mode{padding:8px 8px 10px;gap:4px}
+  .mode b{font-size:1.15rem}
+  .panel{padding:12px}
+  .ftabs button{padding:6px 8px 5px}.ftabs button[aria-pressed="true"]{padding-block:9px 6px}
+}
+@media (orientation:landscape) and (min-width:760px){
+  .split.story{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+  .split.story .pic.story{height:auto;aspect-ratio:16/10;max-height:calc(100vh - 170px)}
+  .lines.tight .say.big{font-size:clamp(1.3rem,2.3vw,1.7rem)}
+}
+/* short landscape screens (phones turned sideways, small tablets) */
+@media (orientation:landscape) and (min-width:760px) and (max-height:640px){
+  .split .pic.card,.split .pic.story{height:calc(100vh - 170px)}
+  .hint{display:none}
+}
