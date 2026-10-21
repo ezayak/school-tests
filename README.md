@@ -213,7 +213,10 @@ wrong answers can be tried again. The computer steps are practised on **Mini Win
 
 Shared files (no need to touch them for a new lesson):
 - `computer-lesson.js` — the engine (`<body data-view="list|lesson">`), loads after `winsim.js`
-- `winsim.js` / `winsim.css` — Mini Windows: desktop, taskbar, Search, File Explorer, right-click menus (also the old "Show more options" menu and Send to), Recycle Bin.
+- `winsim.js` / `winsim.css` — Mini Windows: desktop, taskbar (clock, Wi-Fi, speaker, battery), Search, Start menu (Pinned, All apps, power → Restart),
+  File Explorer (8 views, Details columns, zip / extract, rename + F2, cut / paste), right-click menus (also the old "Show more options" menu and Send to),
+  Recycle Bin, Settings (Date & time, time zone, Display resolution — the screen really gets bigger —, Personalization › Background, Volume mixer, Windows Update),
+  Get Help, Windows Security (quick / full scan, protection updates, a pretend virus to remove).
   Tablet: hold a finger = right-click, tap twice = double-click, drag works with a finger.
 - `computer-lesson.css` — computer-only styles; the lesson look comes from `shared/lesson.css`
 
@@ -229,7 +232,14 @@ A lesson page has three tabs:
 Mini Windows steps: `{act: "click" | "dbl" | "right" | "drag" | "type" | "hover" | "look", t: "<target>", say: "Click [Search]."}`
 (`type` needs `text`, `drag` needs `to: "desktop"` or `"exp-main"`). Targets: `task-search`, `task-explorer`, `search-input`, `result:<name>`,
 `exp-search`, `sres:<name>`, `file:<name>`, `desk:<name>`, `nav:Documents`, `menu:more`, `menu:sendto`, `menu:create-shortcut`, `send:desktop-shortcut`,
-`mi:delete`, `searchopt`, `sopt:date`, `filt:date:Today`, `tip-size`. A start screen: `start: {explorer: "Documents/Lessons/Reading", shortcuts: [{of, in}], files: [{name, in}], pre: [steps done before]}`.
+`mi:delete`, `mi:rename`, `menu:extract`, `menu:restore`, `menu:empty`, `dlg:yes`, `tool-view`, `view:Details`, `det-header`, `col:Date created`, `searchopt`, `sopt:date`, `filt:date:Today`, `tip-size`,
+`tray-clock`, `menu:adjust`, `set:autotime`, `set:change`, `dt:hour:+`, `dlg:dtchange`, `set:zone`, `zone:(UTC+00:00) London`, `bgmenu:display`, `set:res`, `res:1280 × 720`, `dlg:revert`,
+`bgmenu:personalize`, `set:background`, `bg:3`, `tray-speaker`, `menu:mixer`, `vol-range`, `task-start`, `start-all`, `start-search`, `app:Get Help`, `help-input`, `start-power`, `power:restart`,
+`app:Windows Security`, `sec:virus`, `sec:quick`, `sec:options`, `sec:radio:full`, `sec:scannow`, `sec:updates`, `sec:check`, `sec:remove`, `setnav:Windows Update`, `wu:check`, `tray-wifi`, `qs:wifi`, `tray-battery`, `bat:plug`, `view-close`.
+More step kinds: `{act: "key", t: "key:F2", key: "F2"}` (a key button appears for tablets), `{act: "slide", t: "vol-range", max: 30}` (drag a slider), `{act: "look", wait: 3000}` (wait for a scan).
+A start screen: `start: {explorer: "Documents/Lessons/Reading", view: "details", shortcuts: [{of, in}], files: [{name, in, kb}], zips: [{name, in, files}], bin: [{name, from, kb}],
+settings: "datetime" | "display" | "personalization" | "mixer" | "update", app: "Windows Security", secPage: "virus" | "updates", open: "Documents/My story.docx", frozen: true,
+wifi: false, battery: 8, virus: true, autotime: false, pre: [steps done before]}`.
 
 Item types for games and exercises: `mc` (first option is right; `oi` file-type icons, `oh` drawings), `tf` (`a: true|false`, `yes: ["Yes","No"]`), `match` (`pairs: [{icon, label}]`),
 `order` (`howto: "<k>"` – put the steps in order), `parts` (tap the name / dot / extension), `open` (model answer, the child marks it), `sim` (do it in Mini Windows).

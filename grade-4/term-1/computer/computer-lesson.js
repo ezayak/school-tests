@@ -112,7 +112,7 @@ const split=(side,main,cls='')=>`<div class="split ${cls}"><div class="side">${s
 const sayBtns=id=>`<div class="audio"><button type="button" class="abtn big" data-sayall="${id||''}">🔊 <span>Listen</span></button><button type="button" class="abtn" data-sayslow="${id||''}">🐢 <span>Slow</span></button></div>`;
 function bindSay(root,text){root.querySelectorAll('[data-sayall]').forEach(b=>b.onclick=()=>{hush();say(text,false)});root.querySelectorAll('[data-sayslow]').forEach(b=>b.onclick=()=>{hush();say(text,true)})}
 // what kind of mouse action a step is
-const ACT={click:{i:'👆',t:'Click'},dbl:{i:'👆👆',t:'Double-click'},right:{i:'🖱️',t:TOUCH?'Right-click · hold your finger':'Right-click'},drag:{i:'✋',t:'Drag'},type:{i:'⌨️',t:'Type'},hover:{i:'🖱️',t:TOUCH?'Point · tap':'Point'},look:{i:'👀',t:'Look'},key:{i:'⌨️',t:'Press a key'}};
+const ACT={click:{i:'👆',t:'Click'},dbl:{i:'👆👆',t:'Double-click'},right:{i:'🖱️',t:TOUCH?'Right-click · hold your finger':'Right-click'},drag:{i:'✋',t:'Drag'},type:{i:'⌨️',t:'Type'},hover:{i:'🖱️',t:TOUCH?'Point · tap':'Point'},look:{i:'👀',t:'Look'},key:{i:'⌨️',t:'Press a key'},slide:{i:'↔️',t:'Drag the slider'}};
 const keyName=k=>k==='Enter'?'↵ Enter':k;
 const actPill=a=>`<span class="act a-${a}"><span class="ai">${ACT[a].i}</span>${esc(ACT[a].t)}</span>`;
 let sim=null;
@@ -392,12 +392,12 @@ function tiles(Lel,Bel,st,onChange){
     el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const from=el.dataset.from,k=+el.dataset.k;from==='bank'?move('bank',k,'line',null):move('line',k,'bank',null)}};
   }
   function draw(){
-    Lel.innerHTML=st.line.length?st.line.map((w,k)=>`<button type="button" class="tile stp${st.done?(w.k===k?' ok':' no'):''}" data-from="line" data-k="${k}" ${st.done?'disabled':''}><span class="sn">${k+1}</span>${w.html}</button>`).join(''):`<span class="ph">Put the steps here: 1, 2, 3 …</span>`;
+    Lel.innerHTML=st.line.length?st.line.map((w,k)=>`<button type="button" class="tile stp${st.done?(st.same(w.k,k)?' ok':' no'):''}" data-from="line" data-k="${k}" ${st.done?'disabled':''}><span class="sn">${k+1}</span>${w.html}</button>`).join(''):`<span class="ph">Put the steps here: 1, 2, 3 …</span>`;
     Bel.innerHTML=st.bank.map((w,k)=>`<button type="button" class="tile stp" data-from="bank" data-k="${k}">${w.html}</button>`).join('');
     if(!st.done)[...Lel.querySelectorAll('.tile'),...Bel.querySelectorAll('.tile')].forEach(bindTile);
     onChange&&onChange();
   }
-  st.hint=()=>{let k=0;while(k<st.line.length&&st.line[k].k===k)k++;while(st.line.length>k)st.bank.push(st.line.pop());const j=st.bank.findIndex(w=>w.k===k);if(j>=0){const [w]=st.bank.splice(j,1);st.line.push(w);say(w.say)}draw()};
+  st.hint=()=>{let k=0;while(k<st.line.length&&st.same(st.line[k].k,k))k++;while(st.line.length>k)st.bank.push(st.line.pop());const j=st.bank.findIndex(w=>st.same(w.k,k));if(j>=0){const [w]=st.bank.splice(j,1);st.line.push(w);say(w.say)}draw()};
   st.draw=draw;draw();return st;
 }
 function itOrder(it){
@@ -413,14 +413,15 @@ function itOrder(it){
     <div id="fbx" class="fbx"><div class="row center"><button class="btn ghost" id="hintBtn" type="button">💡 Help</button><button class="btn" id="checkBtn" type="button" disabled>✔ Check</button></div></div></section>`;
   bindHome();
   document.getElementById('sq').onclick=()=>say('Put the steps in order. '+H.t);
-  const st={line:[],bank,done:false};
+  // two steps with the same words (e.g. "Click Change." twice) can swap places
+  const st={line:[],bank,done:false,same:(a,b)=>a===b||cards[a].say===cards[b].say};
   tiles(document.getElementById('line'),document.getElementById('bank'),st,()=>{const cb=document.getElementById('checkBtn');if(cb)cb.disabled=st.bank.length>0});
   document.getElementById('hintBtn').onclick=()=>{tries++;st.hint()};
   const check=()=>{
-    const ok=st.line.every((w,k)=>w.k===k);
+    const ok=st.line.every((w,k)=>st.same(w.k,k));
     if(!ok&&tries<1){tries++;st.done=true;st.draw();say('Try again!');
       document.getElementById('fbx').innerHTML=`<div class="fb no"><b>Almost! Try again.</b><span>The red steps are in the wrong place.</span></div><div class="row center"><button class="btn" id="againBtn" type="button">↺ Again</button></div>`;
-      document.getElementById('againBtn').onclick=()=>{let k=0;while(k<st.line.length&&st.line[k].k===k)k++;while(st.line.length>k)st.bank.push(st.line.pop());st.done=false;
+      document.getElementById('againBtn').onclick=()=>{let k=0;while(k<st.line.length&&st.same(st.line[k].k,k))k++;while(st.line.length>k)st.bank.push(st.line.pop());st.done=false;
         document.getElementById('fbx').innerHTML=`<div class="row center"><button class="btn ghost" id="hintBtn" type="button">💡 Help</button><button class="btn" id="checkBtn" type="button" disabled>✔ Check</button></div>`;
         document.getElementById('hintBtn').onclick=()=>{tries++;st.hint()};document.getElementById('checkBtn').onclick=check;st.draw()};
       return}

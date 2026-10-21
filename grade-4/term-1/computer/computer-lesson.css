@@ -55,6 +55,9 @@
 .act.a-look {
   background: var(--card);
 }
+.act.a-slide {
+  background: color-mix(in srgb, var(--good) 18%, var(--card));
+}
 .act.a-key {
   background: color-mix(in srgb, var(--ink) 14%, var(--card));
 }
