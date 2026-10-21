@@ -113,7 +113,7 @@ const sayBtns=id=>`<div class="audio"><button type="button" class="abtn big" dat
 function bindSay(root,text){root.querySelectorAll('[data-sayall]').forEach(b=>b.onclick=()=>{hush();say(text,false)});root.querySelectorAll('[data-sayslow]').forEach(b=>b.onclick=()=>{hush();say(text,true)})}
 // what kind of mouse action a step is
 const ACT={click:{i:'👆',t:'Click'},dbl:{i:'👆👆',t:'Double-click'},right:{i:'🖱️',t:TOUCH?'Right-click · hold your finger':'Right-click'},drag:{i:'✋',t:'Drag'},type:{i:'⌨️',t:'Type'},hover:{i:'🖱️',t:TOUCH?'Point · tap':'Point'},look:{i:'👀',t:'Look'},key:{i:'⌨️',t:'Press a key'},slide:{i:'↔️',t:'Drag the slider'}};
-const keyName=k=>k==='Enter'?'↵ Enter':k;
+const keyName=k=>k==='Enter'?'Enter ↩️':k;
 const actPill=a=>`<span class="act a-${a}"><span class="ai">${ACT[a].i}</span>${esc(ACT[a].t)}</span>`;
 let sim=null;
 function leave(){hush();closePop();if(sim){sim.destroy();sim=null}document.querySelectorAll('video').forEach(v=>{try{v.pause()}catch(e){}})}

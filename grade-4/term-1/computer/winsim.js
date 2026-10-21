@@ -45,6 +45,38 @@ const ICONS={
   speaker:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3z" fill="currentColor"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a8.5 8.5 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
   wifi:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="1.6" fill="currentColor"/></svg>`,
 };
+// small line icons (menus, toolbar, power): drawn, not font symbols, so no tablet shows an empty box
+const sv=(d,extra='')=>`<svg class="ws-g" viewBox="0 0 16 16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">${d}</g>${extra}</svg>`;
+const G={
+  power:sv('<path d="M8 2v6"/><path d="M4.6 4.4a5 5 0 1 0 6.8 0"/>'),
+  sleep:sv('<path d="M12.5 10.5A5.5 5.5 0 0 1 5.5 3.5a5.5 5.5 0 1 0 7 7z"/>'),
+  restart:sv('<path d="M13 8a5 5 0 1 1-1.6-3.7"/><path d="M13 2.5v3h-3"/>'),
+  refresh:sv('<path d="M13 8a5 5 0 1 1-1.6-3.7"/><path d="M13 2.5v3h-3"/>'),
+  undo:sv('<path d="M3.5 6.5h6a3.5 3.5 0 0 1 0 7H6"/><path d="M6 3.5l-3 3 3 3"/>'),
+  cut:sv('<circle cx="4.5" cy="12" r="2"/><circle cx="11.5" cy="12" r="2"/><path d="M6 10.5L12 2M10 10.5L4 2"/>'),
+  copy:sv('<rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M3 10.5V3.8A1.3 1.3 0 0 1 4.3 2.5H10.5"/>'),
+  paste:sv('<rect x="3" y="3" width="10" height="11" rx="1.5"/><path d="M6 3V2h4v1"/><path d="M5.5 7h5M5.5 9.5h5"/>'),
+  rename:sv('<rect x="1.5" y="3.5" width="13" height="9" rx="1.5"/><path d="M4.5 10.5l2-5 2 5M5.2 9h2.6"/><path d="M11 5.5v5"/>'),
+  share:sv('<path d="M8 10V2.5M5 5.5l3-3 3 3"/><path d="M3 8.5v4a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4"/>'),
+  trash:sv('<path d="M2.5 4h11M6 4V2.5h4V4"/><path d="M4 4l.8 9.5h6.4L12 4"/><path d="M6.8 6.5v4.5M9.2 6.5v4.5"/>'),
+  star:sv('<path d="M8 2l1.8 3.8 4.2.5-3.1 2.9.8 4.1L8 11.3 4.3 13.3l.8-4.1L2 6.3l4.2-.5z"/>'),
+  more:sv('<path d="M9.5 2.5h4v4M13.5 2.5L9 7M6.5 13.5h-4v-4M2.5 13.5L7 9"/>'),
+  openwith:sv('<rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M1.5 5.5h13"/>'),
+  newp:sv('<circle cx="8" cy="8" r="6"/><path d="M8 5v6M5 8h6"/>'),
+  sort:sv('<path d="M5 2.5v11M2.5 11L5 13.5 7.5 11M11 13.5v-11M8.5 5L11 2.5 13.5 5"/>'),
+  dots:sv('','<g fill="currentColor"><circle cx="3" cy="8" r="1.3"/><circle cx="8" cy="8" r="1.3"/><circle cx="13" cy="8" r="1.3"/></g>'),
+  terminal:sv('<rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M4.5 6l2 2-2 2M8 10.5h3.5"/>'),
+  pane:sv('<rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M10 2.5v11"/>'),
+  vxl:sv('<rect x="2" y="2" width="12" height="12" rx="1.5"/>'),
+  vlarge:sv('<rect x="2" y="3" width="12" height="9" rx="1.5"/><path d="M5 14h6"/>'),
+  vmedium:sv('<rect x="3.5" y="4" width="9" height="7" rx="1.2"/><path d="M6 13h4"/>'),
+  vsmall:sv('<rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/>'),
+  vlist:sv('<path d="M2 4h2M6 4h8M2 8h2M6 8h8M2 12h2M6 12h8"/>'),
+  vdetails:sv('<path d="M2 3.5h12M2 6.5h12M2 9.5h12M2 12.5h12"/>'),
+  vtiles:sv('<rect x="2" y="3" width="4" height="4" rx="1"/><path d="M8 4h6M8 6h4"/><rect x="2" y="9" width="4" height="4" rx="1"/><path d="M8 10h6M8 12h4"/>'),
+  vcontent:sv('<rect x="2" y="2.5" width="3.5" height="3.5" rx=".8"/><path d="M7.5 3.5h6.5M7.5 5.5h4"/><rect x="2" y="10" width="3.5" height="3.5" rx=".8"/><path d="M7.5 11h6.5M7.5 13h4"/>'),
+  enter:sv('<path d="M13 3v5a2 2 0 0 1-2 2H3"/><path d="M6 7l-3 3 3 3"/>'),
+};
 // little arrow in the corner: this icon is a shortcut
 const SC_ARROW=`<svg class="ws-sc" viewBox="0 0 16 16" aria-hidden="true"><rect x="0.8" y="0.8" width="14.4" height="14.4" rx="2" fill="#fff" stroke="#6b7280" stroke-width="1.2"/><path d="M4 12c0-4 2-6 6-6M7.5 3.5L10.5 6 7.5 8.5" fill="none" stroke="#2f7de1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const TYPE_NAME={folder:'File folder',zip:'Compressed (zipped) Folder',docx:'Microsoft Word Document',pdf:'PDF Document',pptx:'PowerPoint Presentation',xlsx:'Excel Worksheet',txt:'Text Document',mp3:'MP3 Audio File',mp4:'MP4 Video File',jpg:'JPG File',png:'PNG File',lnk:'Shortcut'};
@@ -246,14 +278,14 @@ function create(box,opts){
       :`<div class="ws-grid v-${w.view.replace(/ /g,'-')}">${items.length?items.map(n=>{const tg=st.rename&&st.rename.id===n.id?'div':'button';return `<${tg} ${tg==='button'?'type="button"':''} class="ws-file${w.sel===n.id?' sel':''}${cutCls(n)}" data-t="file:${esc(n.name)}" data-id="${n.id}" data-drag="1">${iconOf(n)}${nameHTML(n)}${w.view==='tiles'||w.view==='content'?`<span class="ws-meta"><small>${esc(TYPE_NAME[n.type]||'File')}</small><small>${n.type==='folder'?dateTxt(n):sizeTxt(n.kb)}</small></span>`:''}</${tg}>`}).join(''):`<p class="ws-empty">${bin?'The Recycle Bin is empty.':'This folder is empty.'}</p>`}</div>`;
     const onPlace=p=>!w.q&&w.dir&&!bin&&pathOf(w.dir)[0]===p&&pathOf(w.dir).length===1;
     return `<div class="ws-win ws-exp${i===st.wins.length-1?' top':''}" data-win="${i}">
-      <div class="ws-tabs"><span class="ws-tab">${bin?ICONS.bin:w.dir&&w.dir.type==='zip'?ICONS.zip:ICONS.folder}<span>${esc(title)}</span><button type="button" class="ws-x" data-t="exp-close" aria-label="Close tab">✕</button></span><span class="ws-plus">+</span>
-        <span class="ws-wbtns"><span>—</span><span>☐</span><button type="button" data-t="exp-close" aria-label="Close">✕</button></span></div>
-      <div class="ws-addr"><button type="button" class="ws-ab" data-t="exp-back" aria-label="Back">←</button><button type="button" class="ws-ab" data-t="exp-fwd" aria-label="Forward">→</button><button type="button" class="ws-ab" data-t="exp-up" aria-label="Up">↑</button><button type="button" class="ws-ab" data-t="exp-refresh" aria-label="Refresh">⟳</button>
+      <div class="ws-tabs"><span class="ws-tab">${bin?ICONS.bin:w.dir&&w.dir.type==='zip'?ICONS.zip:ICONS.folder}<span>${esc(title)}</span><button type="button" class="ws-x" data-t="exp-close" aria-label="Close tab"><i class=ws-xi></i></button></span><span class="ws-plus">+</span>
+        <span class="ws-wbtns"><span><i class=ws-mini></i></span><span><i class=ws-maxi></i></span><button type="button" data-t="exp-close" aria-label="Close"><i class=ws-xi></i></button></span></div>
+      <div class="ws-addr"><button type="button" class="ws-ab" data-t="exp-back" aria-label="Back">←</button><button type="button" class="ws-ab" data-t="exp-fwd" aria-label="Forward">→</button><button type="button" class="ws-ab" data-t="exp-up" aria-label="Up">↑</button><button type="button" class="ws-ab" data-t="exp-refresh" aria-label="Refresh">${G.refresh}</button>
         <div class="ws-crumbs">${crumbs.map(c=>`<span>›</span><span>${esc(c)}</span>`).join('')}</div>
         <label class="ws-sbox">${'<input type="text" data-t="exp-search" placeholder="Search '+esc(w.dir&&!bin?w.dir.name:bin?'Recycle Bin':'Home')+'" value="'+esc(w.q)+'" autocomplete="off" spellcheck="false" enterkeyhint="search">'}${ICONS.search}</label></div>
-      <div class="ws-tools"><span class="ws-new">⊕ New ▾</span><span class="ws-sep"></span>
-        <button type="button" class="ws-tool" data-t="tool-cut" aria-label="Cut">✂</button><button type="button" class="ws-tool" data-t="tool-copy" aria-label="Copy">⧉</button><button type="button" class="ws-tool" data-t="tool-paste" aria-label="Paste">📋</button><button type="button" class="ws-tool" data-t="tool-rename" aria-label="Rename">Ⓐ</button><button type="button" class="ws-tool" data-t="tool-share" aria-label="Share">⇪</button><button type="button" class="ws-tool" data-t="tool-delete" aria-label="Delete">🗑</button><span class="ws-sep"></span>
-        <button type="button" class="ws-tool wide" data-t="tool-sort">⇅ Sort ▾</button><button type="button" class="ws-tool wide" data-t="tool-view">☰ View ▾</button>${bin?'<button type="button" class="ws-tool wide" data-t="bin-empty">🗑 Empty Recycle Bin</button>':''}${w.q?'<button type="button" class="ws-tool wide" data-t="searchopt">🔍 Search options ▾</button>':''}<button type="button" class="ws-tool" data-t="tool-more" aria-label="More">⋯</button></div>
+      <div class="ws-tools"><span class="ws-new">${G.newp} New<i class=ws-chev></i></span><span class="ws-sep"></span>
+        <button type="button" class="ws-tool" data-t="tool-cut" aria-label="Cut">${G.cut}</button><button type="button" class="ws-tool" data-t="tool-copy" aria-label="Copy">${G.copy}</button><button type="button" class="ws-tool" data-t="tool-paste" aria-label="Paste">${G.paste}</button><button type="button" class="ws-tool" data-t="tool-rename" aria-label="Rename">${G.rename}</button><button type="button" class="ws-tool" data-t="tool-share" aria-label="Share">${G.share}</button><button type="button" class="ws-tool" data-t="tool-delete" aria-label="Delete">${G.trash}</button><span class="ws-sep"></span>
+        <button type="button" class="ws-tool wide" data-t="tool-sort">${G.sort} Sort<i class=ws-chev></i></button><button type="button" class="ws-tool wide" data-t="tool-view">${G.vdetails} View<i class=ws-chev></i></button>${bin?`<button type="button" class="ws-tool wide" data-t="bin-empty">${G.trash} Empty Recycle Bin</button>`:''}${w.q?'<button type="button" class="ws-tool wide" data-t="searchopt">🔍 Search options<i class=ws-chev></i></button>':''}<button type="button" class="ws-tool" data-t="tool-more" aria-label="More">${G.dots}</button></div>
       <div class="ws-body"><div class="ws-side">${navItem('nav:Home','home','Home',!w.q&&w.dir===null)}${navItem('nav:Gallery','gallery','Gallery',false)}<span class="ws-hr"></span>
         ${PLACES.map(p=>navItem('nav:'+p,p.toLowerCase(),p,onPlace(p))).join('')}</div>
         <div class="ws-main" data-t="exp-bg" data-drop="exp-main">${body}</div></div>
@@ -262,7 +294,7 @@ function create(box,opts){
   }
   function viewerHTML(w,i){
     const n=w.node;const pic=n.type==='jpg'||n.type==='png';if(!n.parent)return '';
-    return `<div class="ws-win ws-view${i===st.wins.length-1?' top':''}${w.frozen?' frozen':''}" data-win="${i}"><div class="ws-vbar">${iconOf(n)}<span>${esc(n.name)}${w.frozen?' (Not Responding)':''}</span><button type="button" class="ws-x" data-t="view-close" aria-label="Close">✕</button></div>
+    return `<div class="ws-win ws-view${i===st.wins.length-1?' top':''}${w.frozen?' frozen':''}" data-win="${i}"><div class="ws-vbar">${iconOf(n)}<span>${esc(n.name)}${w.frozen?' (Not Responding)':''}</span><button type="button" class="ws-x" data-t="view-close" aria-label="Close"><i class=ws-xi></i></button></div>
       <div class="ws-vbody">${pic?`<div class="ws-photo">${ICONS.jpg}</div>`:`<div class="ws-paper"><h4>${esc(n.name.replace(/\.[^.]+$/,''))}</h4>${'<i></i>'.repeat(7)}</div>`}<p class="ws-vnote">📂 ${esc(['This PC',...pathOf(n.parent)].join(' › '))}</p></div></div>`;
   }
   /* ---------- Settings ---------- */
@@ -277,26 +309,26 @@ function create(box,opts){
       case 'datetime':crumb=['Time & language','Date & time'];
         body=`<div class="ws-bigtime"><b>${fmtTime(d)}</b><small>${fmtDay(d)}</small><span class="ws-tzinfo">🌐 Time zone<br><small>${esc(st.zone)}</small></span></div>
           ${srow('🌐','Set time zone automatically','',tog('set:autozone',st.autozone))}
-          ${srow('','Time zone','',`<button type="button" class="ws-drop${st.autozone?' dis':''}" data-t="set:zone">${esc(st.zone)} ▾</button>`)}
+          ${srow('','Time zone','',`<button type="button" class="ws-drop${st.autozone?' dis':''}" data-t="set:zone">${esc(st.zone)}<i class=ws-chev></i></button>`)}
           ${srow('','Adjust for daylight saving time automatically','',tog('set:dst',st.dst))}
           ${srow('🕒','Set time automatically','',tog('set:autotime',st.autotime))}
           ${srow('','Set the date and time manually','',`<button type="button" class="ws-btn${st.autotime?' dis':''}" data-t="set:change">Change</button>`)}`;break;
       case 'display':crumb=['System','Display'];
         body=`<h6>Brightness &amp; color</h6>${srow('☀️','Night light','Use warmer colors to help block blue light',tog('set:night',st.night))}
-          <h6>Scale &amp; layout</h6>${srow('🔍','Scale','Change the size of text, apps, and other items','<span class="ws-drop">100% (Recommended) ▾</span>')}
-          ${srow('🖥️','Display resolution','Adjust the resolution to fit your connected display',`<button type="button" class="ws-drop" data-t="set:res">${esc(st.res)} ▾</button>`)}
-          ${srow('🔄','Display orientation','','<span class="ws-drop">Landscape ▾</span>')}`;break;
+          <h6>Scale &amp; layout</h6>${srow('🔍','Scale','Change the size of text, apps, and other items','<span class="ws-drop">100% (Recommended)<i class=ws-chev></i></span>')}
+          ${srow('🖥️','Display resolution','Adjust the resolution to fit your connected display',`<button type="button" class="ws-drop" data-t="set:res">${esc(st.res)}<i class=ws-chev></i></button>`)}
+          ${srow('🔄','Display orientation','','<span class="ws-drop">Landscape<i class=ws-chev></i></span>')}`;break;
       case 'personalization':crumb=['Personalization'];
         body=`<div class="ws-ptop"><div class="ws-prev wall-${st.wall}"><i></i></div><div><small>Select a theme to apply</small>${thumbs('theme',6,st.wall)}</div></div>
           ${srow('🖼️','Background','Background image, color, slideshow','›','set:background')}${srow('🎨','Colors','Accent color, transparency effects','›')}${srow('🖌️','Themes','Install, create, manage','›')}${srow('✨','Dynamic Lighting','Connected devices, effects','›')}`;break;
       case 'background':crumb=['Personalization','Background'];
         body=`<div class="ws-ptop"><div class="ws-prev wall-${st.wall}"><i></i></div></div>
-          ${srow('🖼️','Personalize your background','A picture background applies to your current desktop','<span class="ws-drop">Picture ▾</span>')}
+          ${srow('🖼️','Personalize your background','A picture background applies to your current desktop','<span class="ws-drop">Picture<i class=ws-chev></i></span>')}
           <div class="ws-recent"><small>Recent images</small>${thumbs('bg',5,st.wall)}</div>
-          ${srow('','Choose a photo','','<span class="ws-btn">Browse photos</span>')}${srow('','Choose a fit for your desktop image','','<span class="ws-drop">Fill ▾</span>')}`;break;
+          ${srow('','Choose a photo','','<span class="ws-btn">Browse photos</span>')}${srow('','Choose a fit for your desktop image','','<span class="ws-drop">Fill<i class=ws-chev></i></span>')}`;break;
       case 'mixer':crumb=['System','Sound','Volume mixer'];
         body=`<h6>System</h6><div class="ws-srow"><span class="ws-sic">${st.vol>0?ICONS.speaker:ICONS.mute}</span><span class="ws-stx"><b>Volume</b></span><span class="ws-sr ws-vol"><input type="range" min="0" max="100" value="${st.vol}" data-t="vol-range" aria-label="Volume"><b class="ws-volnum">${st.vol}</b></span></div>
-          ${srow('🔈','Output device','','<span class="ws-drop">Speakers ▾</span>')}${srow('🎤','Input device','','<span class="ws-drop">No input devices found ▾</span>')}
+          ${srow('🔈','Output device','','<span class="ws-drop">Speakers<i class=ws-chev></i></span>')}${srow('🎤','Input device','','<span class="ws-drop">No input devices found<i class=ws-chev></i></span>')}
           <h6>Apps</h6>${srow('🔔','System sounds','','<span class="ws-sr ws-vol"><input type="range" min="0" max="100" value="100" aria-label="System sounds" tabindex="-1"></span>')}`;break;
       case 'update':crumb=['Windows Update'];
         body=`<div class="ws-wu"><span class="ws-wuic${st.wu==='checking'?' spin':''}">🔄</span><span><b>${st.wu==='checking'?'Checking for updates…':'You’re up to date'}</b><small>${st.wu==='checking'?'Please wait':'Last checked: '+(st.wuTime?'Today, '+fmtTime(st.wuTime):'Today, 10:29 AM')}</small></span><button type="button" class="ws-btn pri" data-t="wu:check">Check for updates</button></div>`;break;
@@ -306,7 +338,7 @@ function create(box,opts){
         body=`<p class="ws-sp">Welcome! Choose a setting on the left.</p><div class="ws-hometiles">${[['🖥️','System','setnav:System'],['🖌️','Personalization','setnav:Personalization'],['🕒','Time & language','setnav:Time & language'],['🔄','Windows Update','setnav:Windows Update']].map(([e,n,t])=>`<button type="button" class="ws-htile" data-t="${t}"><span>${e}</span>${n}</button>`).join('')}</div>`;break;
       default:crumb=['Settings'];body='<p class="ws-sp">Nothing to change here in Mini Windows.</p>';
     }
-    return `<div class="ws-win ws-set${i===st.wins.length-1?' top':''}" data-win="${i}"><div class="ws-vbar"><span class="ws-app sm">⚙️</span><span>Settings</span><span class="ws-wbtns"><span>—</span><span>☐</span><button type="button" data-t="win-close:set" aria-label="Close">✕</button></span></div>
+    return `<div class="ws-win ws-set${i===st.wins.length-1?' top':''}" data-win="${i}"><div class="ws-vbar"><span class="ws-app sm">⚙️</span><span>Settings</span><span class="ws-wbtns"><span><i class=ws-mini></i></span><span><i class=ws-maxi></i></span><button type="button" data-t="win-close:set" aria-label="Close"><i class=ws-xi></i></button></span></div>
       <div class="ws-sbody"><div class="ws-side ws-snav"><div class="ws-user"><span>👤</span><b>Binary Academy</b></div><span class="ws-find">Find a setting 🔍</span>${nav}</div>
       <div class="ws-spage"><h3 class="ws-crumb">${crumb.map((c,j)=>j<crumb.length-1?`<span>${esc(c)}</span> › `:`<b>${esc(c)}</b>`).join('')}</h3>${body}</div></div></div>`;
   }
@@ -324,7 +356,7 @@ function create(box,opts){
     else inner=`<div class="ws-stitle"><b>Pinned</b><button type="button" class="ws-btn" data-t="start-all">All ›</button></div><div class="ws-pins">${PINNED.map(n=>`<button type="button" class="ws-pin" data-t="app:${n}">${appIc(n)}<span>${n}</span></button>`).join('')}</div>
       <div class="ws-stitle"><b>Recommended</b></div><div class="ws-recs"><span>${ICONS.docx}<b>My story.docx</b></span><span>${ICONS.jpg}<b>Boat.jpg</b></span></div>`;
     return `<div class="ws-startm"><label class="ws-sin">${ICONS.search}<input type="text" data-t="start-search" placeholder="Search for apps, settings, and documents" value="${esc(s.q||'')}" autocomplete="off" spellcheck="false" enterkeyhint="search"></label>
-      <div class="ws-sbody2">${inner}</div><div class="ws-sfoot"><span>👤 Binary Academy</span><button type="button" class="ws-pow" data-t="start-power" aria-label="Power">⏻</button></div></div>`;
+      <div class="ws-sbody2">${inner}</div><div class="ws-sfoot"><span>👤 Binary Academy</span><button type="button" class="ws-pow" data-t="start-power" aria-label="Power">${G.power}</button></div></div>`;
   }
   /* ---------- Get Help ---------- */
   const HELP=[{k:/print/,t:'Printer troubleshooter',steps:['Turn the printer off and on.','Check the cable or the Wi-Fi.','Check that there is paper.','Try to print again.'],ask:true},
@@ -334,10 +366,10 @@ function create(box,opts){
     {k:/.*/,t:'Help with Windows',steps:['Restart the computer.','Check for updates.','Ask a grown-up for help.']}];
   function helpHTML(w,i){
     const r=w.res;
-    return `<div class="ws-win ws-help${i===st.wins.length-1?' top':''}" data-win="${i}"><div class="ws-vbar"><span class="ws-app sm">❓</span><span>Get Help</span><span class="ws-wbtns"><span>—</span><span>☐</span><button type="button" data-t="win-close:help" aria-label="Close">✕</button></span></div>
+    return `<div class="ws-win ws-help${i===st.wins.length-1?' top':''}" data-win="${i}"><div class="ws-vbar"><span class="ws-app sm">❓</span><span>Get Help</span><span class="ws-wbtns"><span><i class=ws-mini></i></span><span><i class=ws-maxi></i></span><button type="button" data-t="win-close:help" aria-label="Close"><i class=ws-xi></i></button></span></div>
       <div class="ws-hbody">${r?`<div class="ws-hq"><label class="ws-sin">${ICONS.search}<input type="text" data-t="help-input" value="${esc(w.q)}" autocomplete="off" spellcheck="false"></label></div>
         <div class="ws-hres"><div class="ws-hcard"><h5>${esc(r.t)}</h5><p>We are sorry you have a problem. Try these steps:</p><ol>${r.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
-          ${r.ask?(w.fixed?'<p class="ws-ok">✔ Done! Is the problem fixed? Great.</p>':'<p>Do we have your consent to run the diagnostics?</p><div class="ws-hbtns"><button type="button" class="ws-btn pri" data-t="help-yes">Yes</button><button type="button" class="ws-btn" data-t="help-no">No</button></div>'):''}</div>
+          ${r.ask?(w.fixed?'<p class="ws-ok"><i class=ws-ck></i> Done! Is the problem fixed? Great.</p>':'<p>Do we have your consent to run the diagnostics?</p><div class="ws-hbtns"><button type="button" class="ws-btn pri" data-t="help-yes">Yes</button><button type="button" class="ws-btn" data-t="help-no">No</button></div>'):''}</div>
           <div class="ws-hmore"><b>More help</b>${[r.t.replace('troubleshooter','problems')+' in Windows','How to fix it step by step','Ask the community'].map(x=>`<span class="ws-link">${esc(x)}</span>`).join('')}</div></div>`
       :`<h4>We're here to help</h4><p>Tell us your problem so we can get you the right help and support.</p>
         <div class="ws-hq"><label class="ws-sin">${ICONS.search}<input type="text" data-t="help-input" placeholder="Example: Can't install Office" value="${esc(w.q)}" autocomplete="off" spellcheck="false"></label><button type="button" class="ws-btn" data-t="help-go">Get Help</button></div>
@@ -354,7 +386,7 @@ function create(box,opts){
     else if(w.page==='virus')body=`<h4>🛡️ Virus &amp; threat protection</h4><p class="ws-sp">Protection for your device against threats.</p>
       <h5>Current threats</h5>${st.scan?`<div class="ws-progbox"><span class="ws-progtx">${st.scan.kind} scan running… ${st.scan.p}%</span><span class="ws-prog"><i style="width:${st.scan.p}%"></i></span></div>`
         :threat?`<div class="ws-threat"><b>⚠️ 1 threat found</b><span>Trojan:Win32/FakeGame (a virus)</span><button type="button" class="ws-btn pri" data-t="sec:remove">Remove</button></div>`
-        :`<p class="ws-sp">${ls?`✔ No current threats.<br>Last scan: ${fmtTime(ls.when)} (${ls.kind.toLowerCase()} scan)<br>0 threats found.`:'No current threats.<br>Last scan: 10/9/2026 3:00 PM (quick scan)<br>0 threats found.'}</p>`}
+        :`<p class="ws-sp">${ls?`<i class=ws-ck></i> No current threats.<br>Last scan: ${fmtTime(ls.when)} (${ls.kind.toLowerCase()} scan)<br>0 threats found.`:'No current threats.<br>Last scan: 10/9/2026 3:00 PM (quick scan)<br>0 threats found.'}</p>`}
       <button type="button" class="ws-btn" data-t="sec:quick">Quick scan</button><span class="ws-link" data-t="sec:options" role="button">Scan options</span><span class="ws-link">Allowed threats</span><span class="ws-link">Protection history</span>
       <h5>🔄 Virus &amp; threat protection updates</h5><p class="ws-sp">Security intelligence is up to date.<br>Last update: ${updTxt}</p><span class="ws-link" data-t="sec:updates" role="button">Protection updates</span>`;
     else if(w.page==='options')body=`<span class="ws-link" data-t="sec:virus" role="button">‹ Back</span><h4>Scan options</h4><p class="ws-sp">Run a quick, full, custom, or Microsoft Defender Antivirus (offline) scan.</p>
@@ -363,11 +395,11 @@ function create(box,opts){
     else if(w.page==='updates')body=`<span class="ws-link" data-t="sec:virus" role="button">‹ Back</span><h4>🔄 Protection updates</h4><p class="ws-sp">View information about your security intelligence version, and check for updates.</p>
       <h5>Security intelligence</h5><p class="ws-sp">Microsoft Defender Antivirus uses security intelligence to detect threats. We try to automatically download the most recent intelligence to protect your device against the newest threats.</p>
       <p class="ws-sp">Security intelligence version: 1.419.${st.secUpd?'512':'487'}.0<br><b class="ws-lastupd">Last update: ${st.secChecking?'checking…':updTxt}</b></p><button type="button" class="ws-btn" data-t="sec:check">Check for updates</button>`;
-    else body=`<h4>${esc((SECNAV.find(x=>x[0]===w.page)||['','',''])[2])}</h4><p class="ws-sp">✔ No action needed.</p>`;
-    return `<div class="ws-win ws-sec${i===st.wins.length-1?' top':''}" data-win="${i}"><div class="ws-vbar"><span class="ws-app sm">🛡️</span><span>Windows Security</span><span class="ws-wbtns"><span>—</span><span>☐</span><button type="button" data-t="win-close:sec" aria-label="Close">✕</button></span></div>
+    else body=`<h4>${esc((SECNAV.find(x=>x[0]===w.page)||['','',''])[2])}</h4><p class="ws-sp"><i class=ws-ck></i> No action needed.</p>`;
+    return `<div class="ws-win ws-sec${i===st.wins.length-1?' top':''}" data-win="${i}"><div class="ws-vbar"><span class="ws-app sm">🛡️</span><span>Windows Security</span><span class="ws-wbtns"><span><i class=ws-mini></i></span><span><i class=ws-maxi></i></span><button type="button" data-t="win-close:sec" aria-label="Close"><i class=ws-xi></i></button></span></div>
       <div class="ws-sbody"><div class="ws-side ws-snav">${SECNAV.map(([k,e,n])=>`<button type="button" class="ws-nav${w.page===k||(k==='virus'&&(w.page==='options'||w.page==='updates'))?' on':''}" data-t="secnav:${k}"><span class="ws-nic">${e}</span><span>${n}</span></button>`).join('')}</div><div class="ws-spage">${body}</div></div></div>`;
   }
-  function appHTML(w,i){return `<div class="ws-win ws-appw${i===st.wins.length-1?' top':''}" data-win="${i}"><div class="ws-vbar">${appIc(w.name)}<span>${esc(w.name)}</span><span class="ws-wbtns"><button type="button" data-t="win-close:app" aria-label="Close">✕</button></span></div><div class="ws-vbody"><span class="ws-bigapp">${(APPS.find(a=>a[0]===w.name)||['','🪟'])[1]}</span><p class="ws-vnote">${esc(w.name)} is open.</p></div></div>`}
+  function appHTML(w,i){return `<div class="ws-win ws-appw${i===st.wins.length-1?' top':''}" data-win="${i}"><div class="ws-vbar">${appIc(w.name)}<span>${esc(w.name)}</span><span class="ws-wbtns"><button type="button" data-t="win-close:app" aria-label="Close"><i class=ws-xi></i></button></span></div><div class="ws-vbody"><span class="ws-bigapp">${(APPS.find(a=>a[0]===w.name)||['','🪟'])[1]}</span><p class="ws-vnote">${esc(w.name)} is open.</p></div></div>`}
   /* ---------- small windows from the taskbar: calendar, quick settings, battery ---------- */
   function flyHTML(){
     const d=simNow();
@@ -387,29 +419,29 @@ function create(box,opts){
       ${best?`<div class="ws-sright">${iconOf(best)}<b>${esc(best.name)}</b><small>${TYPE_NAME[best.type]||'File'}</small><span class="ws-open" >📂 Open</span></div>`:''}</div></div>`;
   }
   // Windows 11 menu, the old long menu ("Show more options") and its "Send to" list
-  const MENU_NEW=[['open','📂','Open'],['openwith','🗔','Open with','›'],['share','⇪','Share'],['fav','☆','Add to Favorites'],['compressto','🗜','Compress to...','›'],['path','⧉','Copy as path'],['props','🔧','Properties'],['notepad','📝','Edit in Notepad'],['more','⤢','Show more options']];
+  const MENU_NEW=[['open','📂','Open'],['openwith',G.openwith,'Open with','›'],['share',G.share,'Share'],['fav',G.star,'Add to Favorites'],['compressto','🗜️','Compress to...','›'],['path',G.copy,'Copy as path'],['props','🔧','Properties'],['notepad','📝','Edit in Notepad'],['more',G.more,'Show more options']];
   const MENU_OLD=[['open','','Open'],['edit','','Edit'],['new','','New'],['print','','Print'],['-'],['openwith','','Open with...'],['access','','Give access to','›'],['path','','Copy as path'],['share','','Share'],['restore','','Restore previous versions'],['-'],['sendto','','Send to','›'],['-'],['cut','','Cut'],['copy','','Copy'],['-'],['create-shortcut','','Create shortcut'],['delete','','Delete'],['rename','','Rename'],['-'],['props','','Properties']];
-  const SENDTO=[['bt','🔵','Bluetooth device'],['zip','🗜','Compressed (zipped) folder'],['desktop-shortcut','🖥','Desktop (create shortcut)'],['docs','📄','Documents'],['mail','✉','Mail recipient']];
-  const MENU_ZIP_NEW=[['open','📂','Open'],['extract','📤','Extract All...'],['openwith','🗔','Open with','›'],['share','⇪','Share'],['fav','☆','Add to Favorites'],['path','⧉','Copy as path'],['props','🔧','Properties'],['more','⤢','Show more options']];
-  const MENU_BIN_NEW=[['share','⇪','Share'],['restore','↩','Restore'],['compressto','🗜','Compress to...','›'],['props','🔧','Properties'],['more','⤢','Show more options']];
+  const SENDTO=[['bt','🔵','Bluetooth device'],['zip','🗜️','Compressed (zipped) folder'],['desktop-shortcut','🖥️','Desktop (create shortcut)'],['docs','📄','Documents'],['mail','✉️','Mail recipient']];
+  const MENU_ZIP_NEW=[['open','📂','Open'],['extract','📤','Extract All...'],['openwith',G.openwith,'Open with','›'],['share',G.share,'Share'],['fav',G.star,'Add to Favorites'],['path',G.copy,'Copy as path'],['props','🔧','Properties'],['more',G.more,'Show more options']];
+  const MENU_BIN_NEW=[['share',G.share,'Share'],['restore',G.undo,'Restore'],['compressto','🗜️','Compress to...','›'],['props','🔧','Properties'],['more',G.more,'Show more options']];
   const MENU_BIN_OLD=[['restore','','Restore'],['-'],['cut','','Cut'],['-'],['delete','','Delete'],['-'],['props','','Properties']];
-  const MENU_BINICON=[['open','📂','Open'],['empty','🗑','Empty Recycle Bin'],['pinqa','📌','Pin to Quick access'],['pinstart','📌','Pin to Start'],['props','🔧','Properties'],['more','⤢','Show more options']];
+  const MENU_BINICON=[['open','📂','Open'],['empty',G.trash,'Empty Recycle Bin'],['pinqa','📌','Pin to Quick access'],['pinstart','📌','Pin to Start'],['props','🔧','Properties'],['more',G.more,'Show more options']];
   const VIEWS=['Extra large icons','Large icons','Medium icons','Small icons','List','Details','Tiles','Content'];
   const VIEW_KEY={'Extra large icons':'xl','Large icons':'large','Medium icons':'medium','Small icons':'small','List':'list','Details':'details','Tiles':'tiles','Content':'content'};
-  const VIEW_IC={'Extra large icons':'🖵','Large icons':'🖵','Medium icons':'🖵','Small icons':'▦','List':'☰','Details':'☷','Tiles':'▤','Content':'☰'};
-  const MENU_CLOCK=[['adjust','⚙','Adjust date and time'],['notif','⚙','Notifications settings']];
-  const MENU_SPEAKER=[['sound-trouble','','Troubleshoot sound problems'],['mixer','⚙','Open volume mixer'],['soundset','⚙','Sound settings']];
-  const MENU_POWER=[['sleep','☾','Sleep'],['shutdown','⏻','Shut down'],['restart','↻','Restart']];
-  const MENU_BG=[['view','▦','View','›'],['sort','⇅','Sort by','›'],['refresh','⟳','Refresh'],['paste','📋','Paste'],['-'],['undo','↶','Undo'],['newitem','⊕','New','›'],['-'],['display','🖥','Display settings'],['personalize','🖌','Personalize'],['-'],['terminal','▣','Open in Terminal'],['bgmore','⤢','Show more options']];
+  const VIEW_IC={'Extra large icons':G.vxl,'Large icons':G.vlarge,'Medium icons':G.vmedium,'Small icons':G.vsmall,'List':G.vlist,'Details':G.vdetails,'Tiles':G.vtiles,'Content':G.vcontent};
+  const MENU_CLOCK=[['adjust','⚙️','Adjust date and time'],['notif','⚙️','Notifications settings']];
+  const MENU_SPEAKER=[['sound-trouble','','Troubleshoot sound problems'],['mixer','⚙️','Open volume mixer'],['soundset','⚙️','Sound settings']];
+  const MENU_POWER=[['sleep',G.sleep,'Sleep'],['shutdown',G.power,'Shut down'],['restart',G.restart,'Restart']];
+  const MENU_BG=[['view',G.vsmall,'View','›'],['sort',G.sort,'Sort by','›'],['refresh',G.refresh,'Refresh'],['paste',G.paste,'Paste'],['-'],['undo',G.undo,'Undo'],['newitem',G.newp,'New','›'],['-'],['display','🖥️','Display settings'],['personalize','🖌️','Personalize'],['-'],['terminal',G.terminal,'Open in Terminal'],['bgmore',G.more,'Show more options']];
   const FILTERS={date:['Today','Yesterday','This week','Last week','This month','Last month','This year','Last year'],size:['Empty (0 KB)','Tiny (0 - 16 KB)','Small (16 KB - 1 MB)','Medium (1 - 128 MB)','Large (128 MB - 1 GB)','Huge (1 - 4 GB)','Gigantic (>4 GB)']};
-  const MENU_SOPT=[['all','✔','All subfolders'],['cur','','Current folder'],['-'],['date','📅','Date modified','›'],['kind','🏷','Kind','›'],['size','📏','Size','›'],['-'],['sys','✔','System files'],['zipf','','Zipped (compressed) folders'],['contents','','File contents']];
+  const MENU_SOPT=[['all','<i class=ws-ck></i>','All subfolders'],['cur','','Current folder'],['-'],['date','📅','Date modified','›'],['kind','🏷','Kind','›'],['size','📏','Size','›'],['-'],['sys','<i class=ws-ck></i>','System files'],['zipf','','Zipped (compressed) folders'],['contents','','File contents']];
   function menuRows(list,pre){return list.map(r=>r[0]==='-'?'<span class="ws-msep"></span>':`<button type="button" class="ws-mi${st.menu.sub===r[0]?' on':''}" data-t="${pre}:${r[0]}">${r[1]!==undefined?`<span class="ws-mic">${r[1]}</span>`:''}<span>${esc(r[2])}</span>${r[3]?'<span class="ws-marr">›</span>':''}</button>`).join('')}
   function menuHTML(){
     const m=st.menu;let x=m.x,y=m.y;
     let inner;
     const tn=m.id&&m.id!=='bin'?nodes.get(m.id):null;const inBin=tn&&tn.deleted;
-    if(m.kind==='new')inner=inBin?`<div class="ws-micons"><button type="button" data-t="mi:cut" aria-label="Cut">✂</button><button type="button" data-t="mi:delete" aria-label="Delete">🗑</button></div>${menuRows(MENU_BIN_NEW,'menu')}`
-      :`<div class="ws-micons"><button type="button" data-t="mi:cut" aria-label="Cut">✂</button><button type="button" data-t="mi:copy" aria-label="Copy">⧉</button><button type="button" data-t="mi:rename" aria-label="Rename">Ⓐ</button><button type="button" data-t="mi:share" aria-label="Share">⇪</button><button type="button" data-t="mi:delete" aria-label="Delete">🗑</button></div>${menuRows(tn&&tn.type==='zip'?MENU_ZIP_NEW:MENU_NEW,'menu')}`;
+    if(m.kind==='new')inner=inBin?`<div class="ws-micons"><button type="button" data-t="mi:cut" aria-label="Cut">${G.cut}</button><button type="button" data-t="mi:delete" aria-label="Delete">${G.trash}</button></div>${menuRows(MENU_BIN_NEW,'menu')}`
+      :`<div class="ws-micons"><button type="button" data-t="mi:cut" aria-label="Cut">${G.cut}</button><button type="button" data-t="mi:copy" aria-label="Copy">${G.copy}</button><button type="button" data-t="mi:rename" aria-label="Rename">${G.rename}</button><button type="button" data-t="mi:share" aria-label="Share">${G.share}</button><button type="button" data-t="mi:delete" aria-label="Delete">${G.trash}</button></div>${menuRows(tn&&tn.type==='zip'?MENU_ZIP_NEW:MENU_NEW,'menu')}`;
     else if(m.kind==='old')inner=menuRows(inBin?MENU_BIN_OLD:MENU_OLD,'menu');
     else if(m.kind==='binicon')inner=menuRows(MENU_BINICON,'menu');
     else if(m.kind==='clock')inner=menuRows(MENU_CLOCK,'menu');
@@ -417,8 +449,8 @@ function create(box,opts){
     else if(m.kind==='power')inner=menuRows(MENU_POWER,'power');
     else if(m.kind==='zones')inner=ZONES.map(z=>`<button type="button" class="ws-mi${z[0]===st.zone?' on':''}" data-t="zone:${esc(z[0])}"><span>${esc(z[0])}</span></button>`).join('');
     else if(m.kind==='res')inner=RES.map(r=>`<button type="button" class="ws-mi${r[0]===st.res?' on':''}" data-t="res:${esc(r[0])}"><span>${esc(r[0])}</span></button>`).join('');
-    else if(m.kind==='view')inner=VIEWS.map(v=>`<button type="button" class="ws-mi" data-t="view:${v}"><span class="ws-mic">${VIEW_KEY[v]===m.cur?'•':VIEW_IC[v]}</span><span>${v}</span></button>`).join('')+'<span class="ws-msep"></span><button type="button" class="ws-mi" data-t="view:pane"><span class="ws-mic">▯</span><span>Details pane</span></button><button type="button" class="ws-mi" data-t="view:preview"><span class="ws-mic">▯</span><span>Preview pane</span></button>';
-    else if(m.kind==='cols')inner=`<button type="button" class="ws-mi" data-t="col:fit"><span class="ws-mic"></span><span>Size Column to Fit</span></button><button type="button" class="ws-mi" data-t="col:fitall"><span class="ws-mic"></span><span>Size All Columns to Fit</span></button><span class="ws-msep"></span><span class="ws-mi off"><span class="ws-mic">✔</span><span>Name</span></span>${Object.keys(COLS).map(c=>`<button type="button" class="ws-mi" data-t="col:${c}"><span class="ws-mic">${m.cols.includes(c)?'✔':''}</span><span>${c}</span></button>`).join('')}`;
+    else if(m.kind==='view')inner=VIEWS.map(v=>`<button type="button" class="ws-mi" data-t="view:${v}"><span class="ws-mic">${VIEW_KEY[v]===m.cur?'•':VIEW_IC[v]}</span><span>${v}</span></button>`).join('')+`<span class="ws-msep"></span><button type="button" class="ws-mi" data-t="view:pane"><span class="ws-mic">${G.pane}</span><span>Details pane</span></button><button type="button" class="ws-mi" data-t="view:preview"><span class="ws-mic">${G.pane}</span><span>Preview pane</span></button>`;
+    else if(m.kind==='cols')inner=`<button type="button" class="ws-mi" data-t="col:fit"><span class="ws-mic"></span><span>Size Column to Fit</span></button><button type="button" class="ws-mi" data-t="col:fitall"><span class="ws-mic"></span><span>Size All Columns to Fit</span></button><span class="ws-msep"></span><span class="ws-mi off"><span class="ws-mic"><i class=ws-ck></i></span><span>Name</span></span>${Object.keys(COLS).map(c=>`<button type="button" class="ws-mi" data-t="col:${c}"><span class="ws-mic">${m.cols.includes(c)?'<i class=ws-ck></i>':''}</span><span>${c}</span></button>`).join('')}`;
     else if(m.kind==='bg')inner=menuRows(MENU_BG,'bgmenu');
     else if(m.kind==='sopt')inner=menuRows(MENU_SOPT,'sopt');
     const wd=m.kind==='old'?230:m.kind==='zones'?330:m.kind==='speaker'?240:250;
@@ -433,24 +465,24 @@ function create(box,opts){
   function dlgHTML(){
     const d=st.dlg;
     if(d.kind==='extract'){const z=nodes.get(d.zip);const path='C:\\Users\\Binary\\'+[...pathOf(d.dest)].join('\\')+(d.picked?'':'\\'+z.name.replace(/\.zip$/i,''));
-      return `<div class="ws-dlg ws-ext"><div class="ws-dbar"><span>←</span>${ICONS.zip}<span>Extract Compressed (Zipped) Folders</span><button type="button" class="ws-x" data-t="dlg:cancel" aria-label="Close">✕</button></div>
+      return `<div class="ws-dlg ws-ext"><div class="ws-dbar"><span>←</span>${ICONS.zip}<span>Extract Compressed (Zipped) Folders</span><button type="button" class="ws-x" data-t="dlg:cancel" aria-label="Close"><i class=ws-xi></i></button></div>
         <div class="ws-dbody"><h5>Select a Destination and Extract Files</h5><p>Files will be extracted to this folder:</p>
         <div class="ws-drowp"><span class="ws-path">${esc(path)}</span><button type="button" class="ws-btn" data-t="dlg:browse">Browse...</button></div>
-        <p class="ws-chk">☑ Show extracted files when complete</p></div>
+        <p class="ws-chk"><span class="ws-cb"><i class=ws-ck></i></span> Show extracted files when complete</p></div>
         <div class="ws-dfoot"><button type="button" class="ws-btn pri" data-t="dlg:extract">Extract</button><button type="button" class="ws-btn" data-t="dlg:cancel">Cancel</button></div>
-        ${d.browse?`<div class="ws-dlg ws-dest"><div class="ws-dbar"><span>Select a destination</span><button type="button" class="ws-x" data-t="dlg:nobrowse" aria-label="Close">✕</button></div>
+        ${d.browse?`<div class="ws-dlg ws-dest"><div class="ws-dbar"><span>Select a destination</span><button type="button" class="ws-x" data-t="dlg:nobrowse" aria-label="Close"><i class=ws-xi></i></button></div>
           <div class="ws-dbody2"><div class="ws-side">${PLACES.map(p=>`<button type="button" class="ws-nav${d.pick===p?' on':''}" data-t="dest:${p}">${ICONS[p.toLowerCase()]}<span>${p}</span></button>`).join('')}</div>
           <div class="ws-dlist">${(byPath(d.pick||'Documents').kids||[]).filter(x=>x.type==='folder').map(x=>`<span>${ICONS.folder}${esc(x.name)}</span>`).join('')||'<small>(no folders)</small>'}</div></div>
           <div class="ws-dfoot"><span class="ws-fld">Folder: <b>${esc(d.pick||'Documents')}</b></span><button type="button" class="ws-btn pri" data-t="dlg:select">Select Folder</button><button type="button" class="ws-btn" data-t="dlg:nobrowse">Cancel</button></div></div>`:''}
       </div>`}
     if(d.kind==='dt'){const t=new Date(d.t);const M=t.toLocaleDateString('en-US',{month:'long'});const H=t.getHours()%12||12;const ap=t.getHours()<12?'AM':'PM';
-      const sp=(k,v,lab)=>`<span class="ws-spin2"><small>${lab}</small><button type="button" data-t="dt:${k}:+" aria-label="${lab} up">▲</button><b>${v}</b><button type="button" data-t="dt:${k}:-" aria-label="${lab} down">▼</button></span>`;
+      const sp=(k,v,lab)=>`<span class="ws-spin2"><small>${lab}</small><button type="button" data-t="dt:${k}:+" aria-label="${lab} up"><i class=ws-up></i></button><b>${v}</b><button type="button" data-t="dt:${k}:-" aria-label="${lab} down"><i class=ws-down></i></button></span>`;
       return `<div class="ws-dlg ws-dtd"><div class="ws-dbar"><span>Change date and time</span></div><div class="ws-dbody ws-blue"><h5>Change date and time</h5><p>Date</p><div class="ws-spins">${sp('month',M,'Month')}${sp('day',t.getDate(),'Day')}${sp('year',t.getFullYear(),'Year')}</div>
         <p>Time</p><div class="ws-spins">${sp('hour',H,'Hour')}${sp('min',String(t.getMinutes()).padStart(2,'0'),'Minute')}${sp('ampm',ap,'AM/PM')}</div></div>
         <div class="ws-dfoot"><button type="button" class="ws-btn pri" data-t="dlg:dtchange">Change</button><button type="button" class="ws-btn" data-t="dlg:cancel">Cancel</button></div></div>`}
     if(d.kind==='keep')return `<div class="ws-dlg ws-keep"><div class="ws-dbody"><h5>Keep these display settings?</h5><p>Reverting to previous display settings in <b class="ws-cd">${d.secs}</b> seconds.</p></div><div class="ws-dfoot"><button type="button" class="ws-btn" data-t="dlg:keep">Keep changes</button><button type="button" class="ws-btn pri" data-t="dlg:revert">Revert</button></div></div>`;
     if(d.kind==='confirm'){const many=d.count!==1;
-      return `<div class="ws-dlg ws-conf"><div class="ws-dbar"><span>${many?'Delete Multiple Items':'Delete File'}</span><button type="button" class="ws-x" data-t="dlg:no" aria-label="Close">✕</button></div>
+      return `<div class="ws-dlg ws-conf"><div class="ws-dbar"><span>${many?'Delete Multiple Items':'Delete File'}</span><button type="button" class="ws-x" data-t="dlg:no" aria-label="Close"><i class=ws-xi></i></button></div>
         <div class="ws-dbody ws-warn"><span class="ws-tri">⚠️</span><p>Are you sure you want to permanently delete ${many?`these ${d.count} items`:'this file'}?</p></div>
         <div class="ws-dfoot"><button type="button" class="ws-btn pri" data-t="dlg:yes">Yes</button><button type="button" class="ws-btn" data-t="dlg:no">No</button></div></div>`}
     return '';
@@ -772,7 +804,7 @@ function create(box,opts){
   async function demoDo(s){
     const m=mis;
     if(s.act==='look'){glow(true);await wait(Math.max(1200,s.wait||0));glow(false);return}
-    if(s.act==='key'){st.key=s.key==='Enter'?'↵ Enter':s.key;const kd=document.createElement('div');kd.className='ws-key';kd.textContent=st.key;scr.appendChild(kd);await wait(900);st.key=null;kd.remove();perform('key',s.t,{});return}
+    if(s.act==='key'){st.key=s.key==='Enter'?'Enter':s.key;const kd=document.createElement('div');kd.className='ws-key';kd.textContent=st.key;scr.appendChild(kd);await wait(900);st.key=null;kd.remove();perform('key',s.t,{});return}
     const el=find(s.t);if(!el)return;
     el.classList.add('ws-glow');const c=center(el);await moveTo(c.x,c.y);if(mis!==m)return;
     if(s.act==='slide'){const to=s.max!=null?Math.max(0,s.max-10):Math.min(100,s.min+10);let v=+el.value;const stp=v<to?3:-3;while((stp>0?v<to:v>to)){v+=stp;el.value=v;onType(el);await wait(40);if(mis!==m)return}return}
