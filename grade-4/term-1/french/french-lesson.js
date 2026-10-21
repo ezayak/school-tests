@@ -22,7 +22,7 @@ if(view==='list'){
   <div class="items">${LS.items.map(it=>`<a class="item" href="${esc(it.path)}">
     <span class="cov"><img src="${esc(it.cover)}" alt="" loading="lazy"></span>
     <span class="in"><span class="n">Leçon ${esc(it.n)}</span><span class="t">${esc(it.title)}</span><span class="w">${esc(it.en||'')}</span>
-    <span class="meta"><span>${esc(it.note||'')}</span><span class="go">Open →</span></span></span></a>`).join('')}</div>
+    <span class="meta"><span>${esc(it.note||'')}</span><span class="go play-arrow">Open →</span></span></span></a>`).join('')}</div>
   <div class="soon">New lessons will be added here.</div>`;
   document.title=`French · Grade ${LS.grade}`;
   return;
