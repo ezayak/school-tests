@@ -1207,11 +1207,6 @@ details.book[open] .alltext {
   color: var(--ink);
   font-size: 1rem;
 }
-.play-arrow{
-  white-space: nowrap;
-  display: flex;
-  align-items: flex-end;  
-}
 .soon {
   border: 2.5px dashed var(--muted);
   border-radius: 18px;

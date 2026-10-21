@@ -304,6 +304,12 @@ button:focus-visible {
   font-size: 0.9rem;
   margin: 0;
 }
+/* "Play →" / "Open →" stays on one line, level with the note's last line */
+.play-arrow {
+  white-space: nowrap;
+  display: flex;
+  align-items: flex-end;
+}
 
 /* menu tiles and small tool buttons */
 .modes {
