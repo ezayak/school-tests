@@ -1471,13 +1471,15 @@
       else if (m.kind === "bg") inner = menuRows(MENU_BG, "bgmenu");
       else if (m.kind === "sopt") inner = menuRows(MENU_SOPT, "sopt");
       const wd =
-        m.kind === "old"
-          ? 230
-          : m.kind === "zones"
-            ? 330
-            : m.kind === "speaker"
-              ? 240
-              : 250;
+        m.kind === "clock"
+          ? 205
+          : m.kind === "old"
+            ? 230
+            : m.kind === "zones"
+              ? 330
+              : m.kind === "speaker"
+                ? 240
+                : 250;
       x = Math.max(4, Math.min(x, LW() - wd - 6));
       y = Math.max(4, y);
       let sub = "";
@@ -1487,7 +1489,7 @@
         sub = `<div class="ws-menu ws-sub" style="left:${x + wd - 6}px;top:${y}px">${VIEWS.map((v) => `<button type="button" class="ws-mi" data-t="view:${v}"><span class="ws-mic">${VIEW_IC[v]}</span><span>${v}</span></button>`).join("")}</div>`;
       if (m.kind === "sopt" && (m.sub === "date" || m.sub === "size"))
         sub = `<div class="ws-menu ws-sub" style="left:${x + wd - 6}px;top:${y + (m.sub === "date" ? 70 : 120)}px">${FILTERS[m.sub].map((f) => `<button type="button" class="ws-mi" data-t="filt:${m.sub}:${esc(f)}"><span>${esc(f)}</span></button>`).join("")}</div>`;
-      return `<div class="ws-menu ws-${m.kind}" style="left:${x}px;top:${y}px;width:${wd}px">${inner}</div>${sub}`;
+      return `<div class="ws-menu ws-m-${m.kind}" style="left:${x}px;top:${y}px;width:${wd}px">${inner}</div>${sub}`;
     }
     // dialogs: Extract All (+ choose a folder), "are you sure?" before deleting for ever
     function dlgHTML() {
@@ -1735,7 +1737,7 @@
           st.fly = null;
           st.menu = {
             kind: "clock",
-            x: LW() - 240,
+            x: LW() - 215,
             y: LH() - TB - 90,
             sub: null,
           };
