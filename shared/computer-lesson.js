@@ -1,4 +1,4 @@
-// Computer lessons engine (Grade 4). <body data-view="list"> → list of lessons (lessons.js),
+// Computer lessons engine (Grade 3 and Grade 4). <body data-view="list"> → list of lessons (lessons.js),
 // <body data-view="lesson"> → one lesson (window.LESSON from lesson-N.js). Mini Windows comes from winsim.js.
 // Made for a child who learns best from pictures and sound: short sentences, key words in colour,
 // every question can be heard (🔊), wrong answers can be tried again, and the computer steps are shown

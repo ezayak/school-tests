@@ -340,8 +340,6 @@ window.GAMES = [
     year: "2026–2027",
     // the school videos (computer/video/) are online only, so they are not listed here
     also: [
-      "grade-4/term-1/computer/computer-lesson.css",
-      "grade-4/term-1/computer/computer-lesson.js",
       "grade-4/term-1/computer/winsim.css",
       "grade-4/term-1/computer/winsim.js",
       "grade-4/term-1/computer/lessons.js",

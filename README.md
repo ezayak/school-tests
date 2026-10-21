@@ -212,13 +212,13 @@ Made to be understood from pictures and sound: short sentences, key words in col
 wrong answers can be tried again. The computer steps are practised on **Mini Windows**, a pretend Windows 11 screen.
 
 Shared files (no need to touch them for a new lesson):
-- `computer-lesson.js` — the engine (`<body data-view="list|lesson">`), loads after `winsim.js`
+- `shared/computer-lesson.js` — the engine (`<body data-view="list|lesson">`), loads after `winsim.js`
 - `winsim.js` / `winsim.css` — Mini Windows: desktop, taskbar (clock, Wi-Fi, speaker, battery), Search, Start menu (Pinned, All apps, power → Restart),
   File Explorer (8 views, Details columns, zip / extract, rename + F2, cut / paste), right-click menus (also the old "Show more options" menu and Send to),
   Recycle Bin, Settings (Date & time, time zone, Display resolution — the screen really gets bigger —, Personalization › Background, Volume mixer, Windows Update),
   Get Help, Windows Security (quick / full scan, protection updates, a pretend virus to remove).
   Tablet: hold a finger = right-click, tap twice = double-click, drag works with a finger.
-- `computer-lesson.css` — computer-only styles; the lesson look comes from `shared/lesson.css`
+- `shared/computer-lesson.css` — computer-only styles; the lesson look comes from `shared/lesson.css`
 
 Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`), `lesson-N.js` (all the content), `img/lesson-N/` (pictures cropped from the book),
 `video/` (the school videos, made smaller: `ffmpeg -i in.mp4 -vf scale=-2:720 -c:v libx264 -crf 28 -c:a aac -b:a 64k -ac 1 -movflags +faststart out.mp4`).

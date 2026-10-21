@@ -1,4 +1,4 @@
-/* Computer lessons (Grade 4). Loads after shared/theme.css and shared/lesson.css (the same lesson look as French).
+/* Computer lessons (Grade 3 and Grade 4). Loads after shared/theme.css and shared/lesson.css (the same lesson look as French).
    Only the computer parts are here: key words, mouse-action labels, the Mini Windows frame, drawings, step cards. */
 :root {
   --accent: var(--comp);
