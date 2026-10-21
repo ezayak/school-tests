@@ -19,10 +19,7 @@ if(view==='list'){
     <h1 class="hero-title"><span class="p">Français</span> <span class="k">Leçons</span></h1>
     <p class="howto">Pick a lesson. Each lesson has the story with pictures and sound, the words, games (listen, match, build the word, build the sentence) and the school exercises.</p>
   </section>
-  <div class="items">${LS.items.map(it=>`<a class="item" href="${esc(it.path)}">
-    <span class="cov"><img src="${esc(it.cover)}" alt="" loading="lazy"></span>
-    <span class="in"><span class="n">Leçon ${esc(it.n)}</span><span class="t">${esc(it.title)}</span><span class="w">${esc(it.en||'')}</span>
-    <span class="meta"><span>${esc(it.note||'')}</span><span class="go play-arrow">Open →</span></span></span></a>`).join('')}</div>
+  <div class="items">${LS.items.map(it=>Kit.lessonCard(it,'Leçon')).join('')}</div>
   <div class="soon">New lessons will be added here.</div>`;
   document.title=`French · Grade ${LS.grade}`;
   return;
