@@ -2,12 +2,12 @@
 // Every game listed in games.js is downloaded automatically, so adding a game
 // only needs games.js to change. Shared styles/scripts live in shared/ and are listed in CORE.
 // Bump VERSION if you want to force a full refresh.
-const VERSION = 'v31';
+const VERSION = 'v33';
 const CACHE = 'study-games-' + VERSION;
 const CORE = ['./', './index.html', './index.css', './index.js', './games.js', './manifest.webmanifest',
   './quiz-common.js', './landscape.css', './english-hub.css', './english-hub.js',
   './shared/theme.css', './shared/quiz.css', './shared/common.js',
-  './shared/arabic.css', './shared/arabic-revision.css', './shared/spelling.css', './shared/drag-words.css',
+  './shared/lesson.css', './shared/arabic.css', './shared/arabic-revision.css', './shared/spelling.css', './shared/drag-words.css',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png', './icons/favicon-32.png'];
 
@@ -61,6 +61,8 @@ self.addEventListener('fetch', event => {
     return;
   }
   if (url.origin !== location.origin) return;
+  // School videos are online only: never saved, so the app stays small (the lesson shows a message when offline)
+  if (url.pathname.includes('/video/')) return;
   // Own files: network first (so updates show up), cache as offline fallback
   event.respondWith((async () => {
     const c = await caches.open(CACHE);

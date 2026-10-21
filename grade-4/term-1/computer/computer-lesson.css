@@ -1,0 +1,858 @@
+/* Computer lessons (Grade 4). Loads after shared/theme.css and shared/lesson.css (the same lesson look as French).
+   Only the computer parts are here: key words, mouse-action labels, the Mini Windows frame, drawings, step cards. */
+:root {
+  --accent: var(--comp);
+  --accent2: var(--ke);
+}
+
+/* key words in sentences */
+.kw {
+  color: var(--accent);
+  font-weight: 700;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 6px;
+  padding: 0 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* what the mouse does: one colour per action */
+.act {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 2px 12px 2px 8px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  background: var(--card);
+}
+.act .ai {
+  font-family: var(--emoji);
+  font-size: 1.15em;
+}
+.act.a-click {
+  background: color-mix(in srgb, var(--cool) 22%, var(--card));
+}
+.act.a-dbl {
+  background: color-mix(in srgb, var(--comp) 24%, var(--card));
+}
+.act.a-right {
+  background: color-mix(in srgb, var(--ke) 30%, var(--card));
+}
+.act.a-drag {
+  background: color-mix(in srgb, var(--good) 26%, var(--card));
+}
+.act.a-type {
+  background: color-mix(in srgb, var(--pe) 26%, var(--card));
+}
+.act.a-hover {
+  background: color-mix(in srgb, var(--hl) 40%, var(--card));
+}
+.act.a-look {
+  background: var(--card);
+}
+.act.a-key {
+  background: color-mix(in srgb, var(--ink) 14%, var(--card));
+}
+.keybtn {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 8px 22px;
+  border-bottom-width: 6px;
+}
+/* drawing of a File Explorer view (Large icons, List, Details …) */
+.vis-view {
+  background: #fff;
+  border: 1px solid #b9c5d4;
+  border-radius: 8px;
+  padding: 10px;
+  width: min(100%, 460px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: #1b1b1b;
+}
+.vis-view .vf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 22%;
+  text-align: center;
+}
+.vis-view.v-small .vf,
+.vis-view.v-list .vf,
+.vis-view.v-content .vf {
+  flex-direction: row;
+  width: 47%;
+  gap: 6px;
+  text-align: left;
+}
+.vis-view.v-list,
+.vis-view.v-content {
+  flex-direction: column;
+}
+.vis-view.v-content .vf {
+  width: 100%;
+  border-bottom: 1px solid #e3e8ef;
+  padding: 3px 0;
+}
+.vis-view.v-tiles .vf {
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 47%;
+  text-align: left;
+  gap: 2px 6px;
+}
+.vis-view.v-tiles small {
+  width: 100%;
+  padding-left: 40px;
+  color: #666;
+}
+.vis-view.v-details {
+  flex-direction: column;
+  gap: 2px;
+}
+.vis-view .vh,
+.vis-view .vr {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 0.6fr;
+  gap: 6px;
+  align-items: center;
+}
+.vis-view .vh {
+  padding-left: 22px;
+}
+.vis-view .vr {
+  grid-template-columns: 16px 1.4fr 1fr 1fr 0.6fr;
+}
+.vis-view .vh {
+  color: #666;
+  border-bottom: 1px solid #e3e8ef;
+}
+.vis-view .vr span,
+.vis-view .vf span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* the caption above Mini Windows: step number, action, sentence */
+.cap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 58px;
+}
+.capt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--card));
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  padding: 8px 12px;
+}
+.capt .sno {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+.capt .sbig {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 3.2vw, 1.7rem);
+  line-height: 1.2;
+  flex: 1 1 220px;
+}
+.capt .sbig .kw {
+  font-family: var(--display);
+  font-weight: 400;
+}
+.capt .hint {
+  text-align: left;
+  flex-basis: 100%;
+}
+.typebtn {
+  font-size: 1.2rem;
+  padding: 8px 18px;
+}
+
+/* Mini Windows frame: as wide as possible, but it always fits on the screen */
+.simwrap {
+  width: 100%;
+  max-width: calc((100vh - 230px) * 16 / 9);
+  min-width: min(100%, 520px);
+  margin: 0 auto;
+}
+.simbtns .btn {
+  padding: 10px 22px;
+}
+
+/* step list under the screen */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.steps li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 2px solid color-mix(in srgb, var(--ink) 25%, transparent);
+  border-radius: 12px;
+  padding: 6px 10px;
+  background: var(--card);
+}
+.steps li.now {
+  border-color: var(--ink);
+  background: color-mix(in srgb, var(--hl) 30%, var(--card));
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.steps li.ok {
+  opacity: 0.75;
+}
+.steps .sn {
+  font-family: var(--display);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--card);
+  flex: none;
+}
+.steps li.ok .sn {
+  background: var(--good);
+}
+.steps .st {
+  flex: 1 1 200px;
+  font-size: 1.05rem;
+}
+.steps.mini {
+  margin-top: 6px;
+  counter-reset: s;
+}
+.steps.mini li {
+  padding: 3px 8px;
+}
+.extras .btn {
+  font-size: 1.1rem;
+  padding: 9px 18px;
+}
+
+/* popup for the school video and the book picture: the picture or video fits the screen */
+body.popopen {
+  overflow: hidden;
+}
+.popup {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(10, 16, 32, 0.78);
+  display: grid;
+  place-items: center;
+  padding: max(10px, env(safe-area-inset-top)) 10px 10px;
+  animation: pop 0.2s ease;
+}
+.pop-in {
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 var(--ink);
+  width: min(100%, 1400px);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.pop-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 16px;
+  border-bottom: 2px solid color-mix(in srgb, var(--ink) 20%, transparent);
+}
+.pop-bar b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.25rem;
+  flex: 1;
+  min-width: 0;
+}
+.pop-body {
+  padding: 10px;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  background: #fff;
+}
+.pop-img,
+.pop-body video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: calc(100vh - 100px);
+  max-height: calc(100dvh - 100px);
+  object-fit: contain;
+}
+.pop-body video {
+  width: 100%;
+  background: #000;
+  border-radius: 10px;
+}
+.pop-body .vbox {
+  width: 100%;
+}
+.pop-body .voff {
+  margin: 20px;
+}
+.voff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  padding: 22px 14px;
+  border: 2.5px dashed var(--muted);
+  border-radius: 12px;
+  font-size: 1.05rem;
+}
+.voff:first-line {
+  font-size: 2.4rem;
+}
+.voff span {
+  color: var(--muted);
+}
+
+/* big ideas */
+.idea-t {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  color: var(--accent);
+  line-height: 1.05;
+}
+.idea-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.iline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  padding: 10px 12px;
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  line-height: 1.3;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.iline .num {
+  font-family: var(--display);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: #fff;
+  flex: none;
+  font-size: 1.1rem;
+}
+.iline .spk {
+  margin-left: auto;
+  font-family: var(--emoji);
+  opacity: 0.6;
+}
+.iline.on {
+  background: color-mix(in srgb, var(--hl) 45%, var(--card));
+}
+.bigq {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 4.5vw, 2.3rem);
+  line-height: 1.15;
+}
+.tipb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--accent2) 10%, var(--card));
+}
+.tipb .pic.face {
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: 50%;
+}
+
+/* drawings (vis) inside a picture box */
+.pic.vis {
+  padding: 14px;
+  min-height: 220px;
+}
+.pic.vis > * {
+  max-width: 100%;
+}
+.vis-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px 18px;
+}
+.vi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  max-width: 130px;
+  text-align: center;
+  font-weight: 700;
+  color: #1b2440;
+  line-height: 1.15;
+}
+.vi em {
+  font-style: normal;
+  font-size: 0.85rem;
+  border: 2px solid #1b2440;
+  border-radius: 999px;
+  padding: 0 8px;
+  background: #fff;
+}
+.vi.m-link em {
+  background: #ffe14d;
+}
+.vis-cmp {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.vis-cmp > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border-radius: 12px;
+  padding: 8px;
+}
+.vis-cmp > div > b {
+  font-family: var(--display);
+  font-size: 2rem;
+  width: 40px;
+}
+.vis-cmp .bad {
+  background: #fde3e1;
+}
+.vis-cmp .bad > b {
+  color: #cf3e3e;
+}
+.vis-cmp .bad .vi span {
+  text-decoration: line-through;
+  color: #8a3030;
+}
+.vis-cmp .good {
+  background: #def3e3;
+}
+.vis-cmp .good > b {
+  color: #1c8f4e;
+}
+.vis-ne {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.ne {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+.ne > span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.ne b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  line-height: 1;
+  border-radius: 10px;
+  padding: 4px 8px;
+  border: 2.5px solid #1b2440;
+}
+.ne small {
+  font-weight: 700;
+  color: #1b2440;
+}
+.ne .n b,
+.p-name {
+  background: #cfe0ff;
+  color: #173f8f;
+}
+.ne .d b,
+.p-dot {
+  background: #ffe14d;
+  color: #1b2440;
+}
+.ne .e b,
+.p-ext {
+  background: #ffd6ec;
+  color: #9b1c5c;
+}
+.vis-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #1b2440;
+}
+.vis-lines div {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 4.4vw, 2.3rem);
+  background: #fff6c7;
+  border: 2.5px solid #1b2440;
+  border-radius: 12px;
+  padding: 6px 16px;
+}
+.vis-lines small {
+  font-weight: 700;
+  color: #56637f;
+}
+.vis-sizes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  color: #1b2440;
+}
+.sz {
+  display: grid;
+  grid-template-columns: auto minmax(70px, 0.9fr) 1.4fr auto;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+.sz .nm {
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sz .bar {
+  height: 18px;
+  border: 2px solid #1b2440;
+  border-radius: 9px;
+  background: #fff;
+  overflow: hidden;
+}
+.sz .bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #9a6cff, #6527c4);
+}
+.vis-wild {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #1b2440;
+}
+.vis-wild .pat {
+  font-family: var(--display);
+  font-size: 2rem;
+  background: #fff;
+  border: 2.5px solid #1b2440;
+  border-radius: 999px;
+  padding: 4px 20px;
+}
+.vis-wild .arr {
+  font-size: 2rem;
+  line-height: 1;
+}
+.vis-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #1b2440;
+}
+.vis-flow .fr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.vis-flow .from {
+  min-width: 90px;
+  text-align: right;
+  font-size: 1.2rem;
+}
+.vis-flow .to {
+  font-size: 1.6rem;
+}
+.vis-flow .fr.x .fi {
+  opacity: 0.45;
+}
+.vis-flow .fr.x .lb {
+  text-decoration: line-through;
+}
+.vis-emo {
+  font-family: var(--emoji);
+  font-size: clamp(4rem, 14vw, 7rem);
+}
+.vis-sbox,
+.vis-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #444;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+.vis-sbox {
+  background: #fff;
+  border: 1px solid #b9c5d4;
+  border-radius: 18px;
+  padding: 6px 16px;
+}
+.vis-sbox svg {
+  width: 18px;
+  height: 18px;
+}
+.vis-ribbon {
+  background: #2b579a;
+  color: #fff;
+  padding: 0;
+}
+.vis-ribbon span {
+  padding: 6px 10px;
+}
+.vis-ribbon span:first-child {
+  background: #fff;
+  color: #2b579a;
+}
+.vis-frow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #9aa9bd;
+  padding: 8px 14px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 1.15rem;
+  color: #1b1b1b;
+  width: min(100%, 460px);
+}
+.vis-frow b {
+  margin-left: auto;
+  font-weight: 400;
+}
+
+/* answers with pictures */
+.opts.pics .popt {
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-height: 130px;
+}
+.popt .vis-sbox,
+.popt .vis-ribbon {
+  font-size: 1rem;
+}
+.oic {
+  font-family: var(--emoji);
+}
+
+/* name . extension game */
+.parts-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+}
+.parts {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+}
+.part {
+  font-family: var(--display);
+  font-size: clamp(2rem, 8vw, 3.4rem);
+  line-height: 1;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: var(--card);
+  box-shadow: 3px 3px 0 var(--ink);
+  min-width: 44px;
+}
+.parts.shown .p-name,
+.parts.shown .p-dot,
+.parts.shown .p-ext {
+  box-shadow: none;
+}
+.part.wrong {
+  animation: shake 0.3s;
+  border-color: var(--bad);
+}
+.part.right {
+  outline: 4px solid var(--good);
+  outline-offset: 3px;
+}
+.ne-ans b {
+  border-radius: 6px;
+  padding: 0 6px;
+  border: 2px solid var(--ink);
+}
+@keyframes shake {
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* step cards for "Steps in order" */
+.steps-line,
+.steps-bank {
+  flex-direction: column;
+  align-items: stretch;
+}
+.tile.stp {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  text-align: left;
+  font-family: var(--body);
+  font-size: 1.05rem;
+  padding: 8px 12px;
+  width: 100%;
+}
+.tile.stp .sn {
+  font-family: var(--display);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--card);
+  flex: none;
+}
+
+/* tiles with a done tick, Mini Windows missions */
+.mode {
+  position: relative;
+}
+.mode .tick,
+.mission b {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--good);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+}
+.missions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.mission {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  padding: 10px 40px 10px 12px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 700;
+}
+.mission .mi-ic {
+  font-family: var(--emoji);
+  font-size: 1.6rem;
+}
+.mission.done {
+  background: color-mix(in srgb, var(--good) 12%, var(--card));
+}
+.mission b {
+  top: 50%;
+  margin-top: -13px;
+}
+
+/* match game icons, review list */
+.mpic.vis {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 84px;
+}
+.pic.rv.vis {
+  min-height: 0;
+  padding: 4px;
+}
+.pic.rv.vis .vis-icons,
+.pic.rv.vis .vis-flow {
+  transform: scale(0.5);
+}
+
+@media (orientation: landscape) and (min-width: 760px) {
+  .simwrap {
+    max-width: calc((100vh - 300px) * 16 / 9);
+  }
+  .split .pic.vis {
+    height: auto;
+    min-height: min(calc(100vh - 260px), 420px);
+  }
+}
+/* on a phone held upright the pretend screen is small */
+.turn {
+  display: none;
+}
+@media (max-width: 560px) and (orientation: portrait) {
+  .turn {
+    display: block;
+    text-align: center;
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 560px) {
+  .simwrap {
+    min-width: 100%;
+  }
+  .capt {
+    padding: 6px 8px;
+  }
+}

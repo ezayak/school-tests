@@ -1,10 +1,12 @@
-/* French lessons engine (Grade 4). Load after shared/theme.css; colours, fonts and base come from there.
-   The rules below are deliberate French differences (bigger tiles, wider menus) and French-only parts. */
+/* Lesson pages with pictures and sound (French and Computer lessons, Grade 4).
+   Load after shared/theme.css; colours, fonts and base come from there.
+   --accent / --accent2 are the subject colours: French by default, a page can set its own (computer-lesson.css). */
 :root {
-  --fr2: var(--ke);
+  --accent: var(--fr);
+  --accent2: var(--ke);
   --ou: #d6336c;
   --pic: #ffffff;
-} /* --fr comes from the theme's subject colours; --fr2 is the theme orange */
+} /* --accent defaults to the theme's French colour, --accent2 to the theme orange */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --ou: #ff6b9a;
@@ -55,10 +57,10 @@ a:focus-visible {
   line-height: 0.98;
 }
 .hero-title .p {
-  color: var(--fr);
+  color: var(--accent);
 }
 .hero-title .k {
-  color: var(--fr2);
+  color: var(--accent2);
 }
 .howto {
   max-width: none;
@@ -321,7 +323,7 @@ a:focus-visible {
   display: block;
   height: 100%;
   width: 0;
-  background: linear-gradient(90deg, var(--fr), var(--fr2));
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
   transition: width 0.4s ease;
 }
 .score {
@@ -345,7 +347,7 @@ a:focus-visible {
   padding: 4px 14px;
   border-radius: 999px;
   border: 2px solid var(--ink);
-  background: color-mix(in srgb, var(--fr) 20%, var(--card));
+  background: color-mix(in srgb, var(--accent) 20%, var(--card));
   align-self: center;
   text-align: center;
 }
@@ -363,7 +365,7 @@ a:focus-visible {
   border-radius: 6px;
   font: inherit;
   color: inherit;
-  border-bottom: 2px dotted color-mix(in srgb, var(--fr) 60%, transparent);
+  border-bottom: 2px dotted color-mix(in srgb, var(--accent) 60%, transparent);
   cursor: pointer;
 }
 .w:hover {
@@ -429,7 +431,7 @@ a:focus-visible {
   align-items: center;
   gap: 12px;
   text-align: left;
-  background: color-mix(in srgb, var(--fr) 8%, var(--card));
+  background: color-mix(in srgb, var(--accent) 8%, var(--card));
   border: 2px solid var(--grid);
   border-radius: 16px;
   padding: 10px 14px;
@@ -475,14 +477,14 @@ a:focus-visible {
   padding: 0;
 }
 .dot.on {
-  background: var(--fr);
+  background: var(--accent);
 }
 .alltext p {
   margin: 0.2em 0;
   font-size: 1.25rem;
 }
 .alltext .nm {
-  color: var(--fr2);
+  color: var(--accent2);
   font-family: var(--display);
   font-weight: 400;
 }
@@ -591,7 +593,7 @@ details.book[open] .alltext {
   min-width: 2.8em;
   font-family: var(--display);
   font-size: 1.9rem;
-  color: var(--fr);
+  color: var(--accent);
 }
 .vv {
   font-family: var(--display);
@@ -601,7 +603,7 @@ details.book[open] .alltext {
   color: var(--cool);
 }
 .vv .end {
-  color: var(--fr2);
+  color: var(--accent2);
 }
 .vn {
   font-size: 1.4rem;
@@ -881,7 +883,7 @@ details.book[open] .alltext {
   text-align: center;
 }
 .tile.wd {
-  background: color-mix(in srgb, var(--fr) 12%, var(--card));
+  background: color-mix(in srgb, var(--accent) 12%, var(--card));
 }
 .tile.ok {
   border-color: var(--good);
@@ -1098,7 +1100,7 @@ details.book[open] .alltext {
   align-items: center;
   gap: 12px;
   border: 2px solid var(--grid);
-  border-left: 6px solid var(--fr2);
+  border-left: 6px solid var(--accent2);
   border-radius: 12px;
   padding: 8px 12px;
   font-size: 1.25rem;
@@ -1182,7 +1184,7 @@ details.book[open] .alltext {
   font-family: var(--display);
   font-size: 1.6rem;
   line-height: 1.05;
-  color: var(--fr);
+  color: var(--accent);
 }
 .item .w {
   color: var(--muted);
@@ -1254,15 +1256,15 @@ details.book[open] .alltext {
 .les-title {
   font-size: clamp(2.2rem, 7vw, 3.2rem);
   line-height: 1.05;
-  color: var(--fr);
+  color: var(--accent);
 }
 .les-sub {
   font-family: var(--display);
   font-size: 1.25rem;
-  color: var(--fr2);
+  color: var(--accent2);
 }
 .tabbox {
-  --panel: color-mix(in srgb, var(--fr) 9%, var(--card));
+  --panel: color-mix(in srgb, var(--accent) 9%, var(--card));
   margin-top: 4px;
 }
 .ftabs {

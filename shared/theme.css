@@ -35,6 +35,7 @@
   --en: #3474cf;
   --ssa: #d63f96;
   --rel: #e6dfcf;
+  --comp: #6527c4;
   --other: #8a5cc9; /* subject colours */
   --display: "Lilita One", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
   --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI",
@@ -71,6 +72,7 @@
     --en: #6fa2f0;
     --ssa: #f27ac0;
     --rel: #f3eee2;
+    --comp: #9a6cff;
     --other: #b48cf0;
     --red: #ff6a5f;
     --blue: #6fa2f0;
@@ -111,6 +113,7 @@
   --en: #6fa2f0;
   --ssa: #f27ac0;
   --rel: #f3eee2;
+  --comp: #9a6cff;
   --other: #b48cf0;
   --red: #ff6a5f;
   --blue: #6fa2f0;

@@ -40,6 +40,7 @@ live in `shared/theme.css`; change them there and every page follows.
 | `shared/arabic-revision.css` | verses, word tools, English toggle | religion / Arabic social-studies revisions |
 | `shared/spelling.css` | flash cards, letter tiles, typing | English dictations |
 | `shared/drag-words.css` | drag tiles from a bank onto a line | "Mets en ordre", "Build the word" |
+| `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons |
 | `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star` | quiz games |
 
 Rules for new pages:
@@ -82,7 +83,7 @@ Every game fits on one screen when a tablet is held sideways (no scrolling): the
 the question and answers on the right, and the answer + Next button sit side by side.
 This lives in one shared file, `landscape.css`. Pages that load `quiz-common.js` get it automatically;
 the English dictations link it just before `<main>`. Portrait tablets and phones are unchanged.
-The French lessons have the same layout built into `french-lesson.css`.
+The French and Computer lessons have the same layout built into `shared/lesson.css`.
 
 ## Game types
 
@@ -184,7 +185,7 @@ Made to be understood from pictures and sound: big pictures from the book, every
 
 Shared files (no need to touch them for a new lesson):
 - `french-lesson.js` — the engine (`<body data-view="list|lesson">`)
-- `french-lesson.css` — engine-only styles; the base comes from `shared/`
+- `shared/lesson.css` — the lesson look (shared with the Computer lessons); the base comes from `shared/theme.css`
 
 Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`), `lesson-N.js` (all the content), `img/lesson-N/` (pictures cropped from the book).
 
@@ -203,3 +204,38 @@ Exercise item types (each can have `img: "name"` or `emoji: "👧"`):
 - `{type:"yn", fr, a:true|false}`
 
 After adding a lesson: add it to `lessons.js`, add its files to the `also: [...]` list of the French entry in `games.js`, and bump `VERSION` in `sw.js`.
+
+## Computer lessons (Grade 4)
+
+Folder: `grade-4/term-1/computer/`. One card on the home page ("Computer", under Subjects, colour `--comp`) opens `index.html`, which lists the lessons from `lessons.js`.
+Made to be understood from pictures and sound: short sentences, key words in colour (`[word]` in the text), 🔊 / 🐢 on everything,
+wrong answers can be tried again. The computer steps are practised on **Mini Windows**, a pretend Windows 11 screen.
+
+Shared files (no need to touch them for a new lesson):
+- `computer-lesson.js` — the engine (`<body data-view="list|lesson">`), loads after `winsim.js`
+- `winsim.js` / `winsim.css` — Mini Windows: desktop, taskbar, Search, File Explorer, right-click menus (also the old "Show more options" menu and Send to), Recycle Bin.
+  Tablet: hold a finger = right-click, tap twice = double-click, drag works with a finger.
+- `computer-lesson.css` — computer-only styles; the lesson look comes from `shared/lesson.css`
+
+Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`), `lesson-N.js` (all the content), `img/lesson-N/` (pictures cropped from the book),
+`video/` (the school videos, made smaller: `ffmpeg -i in.mp4 -vf scale=-2:720 -c:v libx264 -crf 28 -c:a aac -b:a 64k -ac 1 -movflags +faststart out.mp4`).
+
+A lesson page has three tabs:
+- **Learn** – the big question, **Big ideas** (`ideas`: picture cards with 1–3 short lines), and one **How to …** per book box (`howto`):
+  Mini Windows with ▶ Show me (a pretend mouse does it) and ✋ Your turn (the right place glows after a wrong click), the school video, the book picture
+- **Play** – Mini Windows free play + missions, and the `games`
+- **Exercises** – the book's Hands on!, class work and homework (`exercises`)
+
+Mini Windows steps: `{act: "click" | "dbl" | "right" | "drag" | "type" | "hover" | "look", t: "<target>", say: "Click [Search]."}`
+(`type` needs `text`, `drag` needs `to: "desktop"` or `"exp-main"`). Targets: `task-search`, `task-explorer`, `search-input`, `result:<name>`,
+`exp-search`, `sres:<name>`, `file:<name>`, `desk:<name>`, `nav:Documents`, `menu:more`, `menu:sendto`, `menu:create-shortcut`, `send:desktop-shortcut`,
+`mi:delete`, `searchopt`, `sopt:date`, `filt:date:Today`, `tip-size`. A start screen: `start: {explorer: "Documents/Lessons/Reading", shortcuts: [{of, in}], files: [{name, in}], pre: [steps done before]}`.
+
+Item types for games and exercises: `mc` (first option is right; `oi` file-type icons, `oh` drawings), `tf` (`a: true|false`, `yes: ["Yes","No"]`), `match` (`pairs: [{icon, label}]`),
+`order` (`howto: "<k>"` – put the steps in order), `parts` (tap the name / dot / extension), `open` (model answer, the child marks it), `sim` (do it in Mini Windows).
+Pictures: `img: "name"` (a file in `img/lesson-N/`) or `vis: {kind: "icons" | "nameext" | "sizes" | "lines" | "compare" | "wild" | "flow" | "filerow" | "emoji", …}`.
+
+**Videos are online only**: `sw.js` never saves anything in a `video/` folder, and offline the lesson shows "You need the internet to watch the video".
+Don't add videos to `also` in `games.js`.
+
+After adding a lesson: add it to `lessons.js`, add its files (not the videos) to the `also: [...]` list of the Computer entry in `games.js`, and bump `VERSION` in `sw.js`.
