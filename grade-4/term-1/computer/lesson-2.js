@@ -1,204 +1,1029 @@
 // Computer · Grade 4 · Unit 1 · Lesson 2 « Files and folders » (book pages 20–30, CW2, HW1).
 // All the content of the lesson. The engine is computer-lesson.js, Mini Windows is winsim.js. Same format as lesson-1.js.
-(function(){
-// the starting computers used by many steps
-const DOCS={explorer:"Documents"};
-const ZIP=name=>({explorer:"Documents",zips:[{name,in:"Documents",files:[{name:"Grammar.docx",kb:501},{name:"Lesson 1.docx",kb:13}]}]});
-const BIN={bin:[{name:"Example.docx",from:"Documents",kb:13},{name:"test.docx",from:"Documents",kb:11}]};
+(function () {
+  // the starting computers used by many steps
+  const DOCS = { explorer: "Documents" };
+  const ZIP = (name) => ({
+    explorer: "Documents",
+    zips: [
+      {
+        name,
+        in: "Documents",
+        files: [
+          { name: "Grammar.docx", kb: 501 },
+          { name: "Lesson 1.docx", kb: 13 },
+        ],
+      },
+    ],
+  });
+  const BIN = {
+    bin: [
+      { name: "Example.docx", from: "Documents", kb: 13 },
+      { name: "test.docx", from: "Documents", kb: 11 },
+    ],
+  };
 
-window.LESSON={
-  n:2, grade:4, title:"Files and folders", unit:"Unit 1 · Lesson 2", book:"Book pages 20–30",
-  cover:"compress-sendto",
-  question:{q:"Can a big folder get [smaller]?", a:"Yes! [Compress] it into a [zip] folder.", img:"compress-sendto"},
+  window.LESSON = {
+    n: 2,
+    grade: 4,
+    title: "Files and folders",
+    unit: "Unit 1 · Lesson 2",
+    book: "Book pages 20–30",
+    cover: "compress-sendto",
+    question: {
+      q: "Can a big folder get [smaller]?",
+      a: "Yes! [Compress] it into a [zip] folder.",
+      img: "compress-sendto",
+    },
 
-  ideas:[
-    {t:"Compressed folders", lines:["Some files and folders are [too big].","[Compress] = make it smaller."],
-     vis:{kind:"flow",rows:[{from:"📁 Lessons",type:"zip",label:"Lessons.zip"}]}, howto:"compress"},
-    {t:"Why compress?", lines:["It takes [less space].","It is easy to [send] by email or copy."],
-     vis:{kind:"sizes",items:[{type:"folder",name:"Lessons (folder)",kb:520},{type:"zip",name:"Lessons.zip",kb:320}]}},
-    {t:"Zipped = compressed", lines:["In Windows a compressed folder is also called a [zipped] folder.","Look for the [zipper] on the icon."],
-     vis:{kind:"icons",size:96,items:[{type:"folder",label:"Folder"},{type:"zip",label:"Zipped folder",mark:"link"}]}},
-    {t:"Use a zip like a folder", lines:["You can [open] a zip folder.","You can [add] or [delete] files in it.","You can [copy] and [move] it."],
-     img:"compress-sendto"},
-    {t:"Rename", lines:["[Rename] = give a new name.","Right-click → [Rename] icon."],
-     img:"rename", howto:"rename"},
-    {t:"The F2 key", lines:["Click the file.","Press [F2] on the keyboard.","Type the new name."],
-     vis:{kind:"lines",rows:["F2 = Rename"]}, howto:"rename-f2"},
-    {t:"Extract", lines:["[Extract] = take files [out] of the zip.","[Extract All] takes out all the files."],
-     vis:{kind:"flow",rows:[{from:"🗜️ My courses.zip",type:"folder",label:"My courses"}]}, howto:"extract-all"},
-    {t:"Not all files get smaller", lines:["[Text] files get much smaller.","[Pictures] (JPG) almost do not change."],
-     vis:{kind:"lines",rows:["📝 100 KB → 62 KB","🖼️ 2,000 KB → 1,960 KB"],note:"before → after zip"}},
-    {t:"Move a file", lines:["[Cut] ✂ and [Paste] 📋.","Or [drag and drop] with the mouse."],
-     img:"boy-cut", howto:"extract"},
-    {t:"Ways to show files", lines:["The [View] button changes how files look.","Icons, List, Details, Tiles…"],
-     vis:{kind:"view",v:"large"}, howto:"view"},
-    {t:"Pictures: big icons", lines:["For pictures choose [Extra large] or [Large icons].","Then you can see each picture."],
-     vis:{kind:"view",v:"xl"}},
-    {t:"Details", lines:["[Details] shows the [size], the [type] and the [date].","Good for finding a file from last week."],
-     vis:{kind:"view",v:"details"}, howto:"details"},
-    {t:"Recycle Bin", lines:["Deleted files go to the [Recycle Bin].","They are [not gone] yet!"],
-     vis:{kind:"icons",size:110,items:[{type:"binfull",label:"Recycle Bin"}]}, howto:"bin"},
-    {t:"Restore", lines:["[Restore] = put the file [back] where it was."],
-     img:"restore", howto:"restore"},
-    {t:"Empty the Recycle Bin", lines:["[Empty Recycle Bin] = delete [for ever].","Check the bin [before] you empty it!"],
-     img:"empty-bin", howto:"empty"},
-    {t:"Fun fact: ZIP", lines:["Phil Katz and Robert Mahoney made ZIP.","Zip means: [move quickly]."],
-     vis:{kind:"emoji",e:"🗜️⚡"}},
-  ],
+    ideas: [
+      {
+        t: "Compressed folders",
+        lines: [
+          "Some files and folders are [too big].",
+          "[Compress] = make it smaller.",
+        ],
+        vis: {
+          kind: "flow",
+          rows: [{ from: "📁 Lessons", type: "zip", label: "Lessons.zip" }],
+        },
+        howto: "compress",
+      },
+      {
+        t: "Why compress?",
+        lines: [
+          "It takes [less space].",
+          "It is easy to [send] by email or copy.",
+        ],
+        vis: {
+          kind: "sizes",
+          items: [
+            { type: "folder", name: "Lessons (folder)", kb: 520 },
+            { type: "zip", name: "Lessons.zip", kb: 320 },
+          ],
+        },
+      },
+      {
+        t: "Zipped = compressed",
+        lines: [
+          "In Windows a compressed folder is also called a [zipped] folder.",
+          "Look for the [zipper] on the icon.",
+        ],
+        vis: {
+          kind: "icons",
+          size: 96,
+          items: [
+            { type: "folder", label: "Folder" },
+            { type: "zip", label: "Zipped folder", mark: "link" },
+          ],
+        },
+      },
+      {
+        t: "Use a zip like a folder",
+        lines: [
+          "You can [open] a zip folder.",
+          "You can [add] or [delete] files in it.",
+          "You can [copy] and [move] it.",
+        ],
+        img: "compress-sendto",
+      },
+      {
+        t: "Rename",
+        lines: ["[Rename] = give a new name.", "Right-click → [Rename] icon."],
+        img: "rename",
+        howto: "rename",
+      },
+      {
+        t: "The F2 key",
+        lines: [
+          "Click the file.",
+          "Press [F2] on the keyboard.",
+          "Type the new name.",
+        ],
+        vis: { kind: "lines", rows: ["F2 = Rename"] },
+        howto: "rename-f2",
+      },
+      {
+        t: "Extract",
+        lines: [
+          "[Extract] = take files [out] of the zip.",
+          "[Extract All] takes out all the files.",
+        ],
+        vis: {
+          kind: "flow",
+          rows: [
+            { from: "🗜️ My courses.zip", type: "folder", label: "My courses" },
+          ],
+        },
+        howto: "extract-all",
+      },
+      {
+        t: "Not all files get smaller",
+        lines: [
+          "[Text] files get much smaller.",
+          "[Pictures] (JPG) almost do not change.",
+        ],
+        vis: {
+          kind: "lines",
+          rows: ["📝 100 KB → 62 KB", "🖼️ 2,000 KB → 1,960 KB"],
+          note: "before → after zip",
+        },
+      },
+      {
+        t: "Move a file",
+        lines: [
+          "[Cut] ✂ and [Paste] 📋.",
+          "Or [drag and drop] with the mouse.",
+        ],
+        img: "boy-cut",
+        howto: "extract",
+      },
+      {
+        t: "Ways to show files",
+        lines: [
+          "The [View] button changes how files look.",
+          "Icons, List, Details, Tiles…",
+        ],
+        vis: { kind: "view", v: "large" },
+        howto: "view",
+      },
+      {
+        t: "Pictures: big icons",
+        lines: [
+          "For pictures choose [Extra large] or [Large icons].",
+          "Then you can see each picture.",
+        ],
+        vis: { kind: "view", v: "xl" },
+      },
+      {
+        t: "Details",
+        lines: [
+          "[Details] shows the [size], the [type] and the [date].",
+          "Good for finding a file from last week.",
+        ],
+        vis: { kind: "view", v: "details" },
+        howto: "details",
+      },
+      {
+        t: "Recycle Bin",
+        lines: [
+          "Deleted files go to the [Recycle Bin].",
+          "They are [not gone] yet!",
+        ],
+        vis: {
+          kind: "icons",
+          size: 110,
+          items: [{ type: "binfull", label: "Recycle Bin" }],
+        },
+        howto: "bin",
+      },
+      {
+        t: "Restore",
+        lines: ["[Restore] = put the file [back] where it was."],
+        img: "restore",
+        howto: "restore",
+      },
+      {
+        t: "Empty the Recycle Bin",
+        lines: [
+          "[Empty Recycle Bin] = delete [for ever].",
+          "Check the bin [before] you empty it!",
+        ],
+        img: "empty-bin",
+        howto: "empty",
+      },
+      {
+        t: "Fun fact: ZIP",
+        lines: [
+          "Phil Katz and Robert Mahoney made ZIP.",
+          "Zip means: [move quickly].",
+        ],
+        vis: { kind: "emoji", e: "🗜️⚡" },
+      },
+    ],
 
-  howto:[
-    {k:"compress", code:"1.2.1", t:"Compress a folder", ic:"🗜️", img:"compress-sendto", start:DOCS,
-     steps:[{act:"right",t:"file:Lessons",say:"Right-click the [Lessons] folder."},
-            {act:"click",t:"menu:more",say:"Click [Show more options]."},
-            {act:"click",t:"menu:sendto",say:"Point to [Send to]."},
-            {act:"click",t:"send:zip",say:"Click [Compressed (zipped) folder]."},
-            {act:"look",t:"file:Lessons.zip",say:"A new [zip] folder: Lessons.zip!"}]},
-    {k:"rename", code:"1.2.2", t:"Rename a file", ic:"✏️", img:"rename", start:ZIP("Lessons.zip"),
-     steps:[{act:"right",t:"file:Lessons.zip",say:"Right-click [Lessons.zip]."},
-            {act:"click",t:"mi:rename",say:"Click the [Rename] icon."},
-            {act:"type",t:"rename-input",text:"My courses",say:"Type [My courses]."},
-            {act:"key",t:"key:Enter",key:"Enter",say:"Press [Enter]."},
-            {act:"look",t:"file:My courses.zip",say:"The new name: [My courses]!"}]},
-    {k:"rename-f2", code:"Tip", t:"Rename with F2", ic:"⌨️", img:"rename", start:ZIP("Lessons.zip"),
-     steps:[{act:"click",t:"file:Lessons.zip",say:"Click [Lessons.zip]."},
-            {act:"key",t:"key:F2",key:"F2",say:"Press [F2] on the keyboard."},
-            {act:"type",t:"rename-input",text:"My courses",say:"Type [My courses]."},
-            {act:"key",t:"key:Enter",key:"Enter",say:"Press [Enter]."},
-            {act:"look",t:"file:My courses.zip",say:"Done! F2 is fast."}]},
-    {k:"extract", code:"1.2.3", t:"Take one file out of a zip", ic:"✂️", img:"extract-cut", start:ZIP("My courses.zip"),
-     steps:[{act:"dbl",t:"file:My courses.zip",say:"Double-click [My courses.zip] to open it."},
-            {act:"right",t:"file:Grammar.docx",say:"Right-click [Grammar.docx]."},
-            {act:"click",t:"mi:cut",say:"Click [Cut] ✂."},
-            {act:"click",t:"nav:Documents",say:"Go to [Documents]."},
-            {act:"click",t:"tool-paste",say:"Click [Paste] 📋."},
-            {act:"look",t:"file:Grammar.docx",say:"Grammar.docx is [out] of the zip!"}]},
-    {k:"extract-all", code:"1.2.4", t:"Extract all the files", ic:"📤", img:"extract-all", start:ZIP("My courses.zip"),
-     steps:[{act:"right",t:"file:My courses.zip",say:"Right-click [My courses.zip]."},
-            {act:"click",t:"menu:extract",say:"Click [Extract All...]."},
-            {act:"click",t:"dlg:browse",say:"Click [Browse...]."},
-            {act:"click",t:"dest:Documents",say:"Choose [Documents]."},
-            {act:"click",t:"dlg:select",say:"Click [Select Folder]."},
-            {act:"click",t:"dlg:extract",say:"Click [Extract]."},
-            {act:"look",t:null,say:"The files are [out] of the zip!"}]},
-    {k:"view", code:"1.2.5", t:"Change how files look", ic:"🖼️", img:"view-menu", start:{},
-     steps:[{act:"click",t:"task-explorer",say:"Open [File Explorer]."},
-            {act:"click",t:"nav:Documents",say:"Click [Documents]."},
-            {act:"click",t:"tool-view",say:"Click [View]."},
-            {act:"click",t:"view:Extra large icons",say:"Click [Extra large icons]."},
-            {act:"look",t:null,say:"Now the icons are [big]!"}]},
-    {k:"details", code:"1.2.6", t:"See more about your files", ic:"📋", img:"details", start:DOCS,
-     steps:[{act:"click",t:"tool-view",say:"Click [View]."},
-            {act:"click",t:"view:Details",say:"Click [Details]."},
-            {act:"right",t:"det-header",say:"Right-click the [top row] (Name, Type, Size)."},
-            {act:"click",t:"col:Date created",say:"Click [Date created]."},
-            {act:"look",t:null,say:"Now you see the [size] and the [dates]."}]},
-    {k:"bin", code:"1.2.7", t:"Look in the Recycle Bin", ic:"🗑️", img:"recycle-bin", start:BIN,
-     steps:[{act:"dbl",t:"desk:Recycle Bin",say:"Double-click the [Recycle Bin]."},
-            {act:"look",t:null,say:"Here are the files you [deleted]."}]},
-    {k:"restore", code:"1.2.8", t:"Get a file back (Restore)", ic:"↩️", img:"restore", start:{...BIN,explorer:"bin"},
-     steps:[{act:"right",t:"file:test.docx",say:"Right-click [test.docx]."},
-            {act:"click",t:"menu:more",say:"Click [Show more options]."},
-            {act:"click",t:"menu:restore",say:"Click [Restore]."},
-            {act:"click",t:"nav:Documents",say:"Open [Documents] to check."},
-            {act:"look",t:"file:test.docx",say:"test.docx is [back]!"}]},
-    {k:"empty", code:"1.2.9", t:"Empty the Recycle Bin", ic:"🧹", img:"empty-bin", start:BIN,
-     steps:[{act:"right",t:"desk:Recycle Bin",say:"Right-click the [Recycle Bin]."},
-            {act:"click",t:"menu:empty",say:"Click [Empty Recycle Bin]."},
-            {act:"look",t:"dlg:yes",say:"The computer asks: [are you sure]?"},
-            {act:"click",t:"dlg:yes",say:"Click [Yes]."},
-            {act:"look",t:"desk:Recycle Bin",say:"The Recycle Bin is [empty]. The files are gone for ever."}]},
-  ],
+    howto: [
+      {
+        k: "compress",
+        code: "1.2.1",
+        t: "Compress a folder",
+        ic: "🗜️",
+        img: "compress-sendto",
+        start: DOCS,
+        steps: [
+          {
+            act: "right",
+            t: "file:Lessons",
+            say: "Right-click the [Lessons] folder.",
+          },
+          { act: "click", t: "menu:more", say: "Click [Show more options]." },
+          { act: "click", t: "menu:sendto", say: "Point to [Send to]." },
+          {
+            act: "click",
+            t: "send:zip",
+            say: "Click [Compressed (zipped) folder].",
+          },
+          {
+            act: "look",
+            t: "file:Lessons.zip",
+            say: "A new [zip] folder: Lessons.zip!",
+          },
+        ],
+      },
+      {
+        k: "rename",
+        code: "1.2.2",
+        t: "Rename a file",
+        ic: "✏️",
+        img: "rename",
+        start: ZIP("Lessons.zip"),
+        steps: [
+          {
+            act: "right",
+            t: "file:Lessons.zip",
+            say: "Right-click [Lessons.zip].",
+          },
+          { act: "click", t: "mi:rename", say: "Click the [Rename] icon." },
+          {
+            act: "type",
+            t: "rename-input",
+            text: "My courses",
+            say: "Type [My courses].",
+          },
+          { act: "key", t: "key:Enter", key: "Enter", say: "Press [Enter]." },
+          {
+            act: "look",
+            t: "file:My courses.zip",
+            say: "The new name: [My courses]!",
+          },
+        ],
+      },
+      {
+        k: "rename-f2",
+        code: "Tip",
+        t: "Rename with F2",
+        ic: "⌨️",
+        img: "rename",
+        start: ZIP("Lessons.zip"),
+        steps: [
+          { act: "click", t: "file:Lessons.zip", say: "Click [Lessons.zip]." },
+          {
+            act: "key",
+            t: "key:F2",
+            key: "F2",
+            say: "Press [F2] on the keyboard.",
+          },
+          {
+            act: "type",
+            t: "rename-input",
+            text: "My courses",
+            say: "Type [My courses].",
+          },
+          { act: "key", t: "key:Enter", key: "Enter", say: "Press [Enter]." },
+          { act: "look", t: "file:My courses.zip", say: "Done! F2 is fast." },
+        ],
+      },
+      {
+        k: "extract",
+        code: "1.2.3",
+        t: "Take one file out of a zip",
+        ic: "✂️",
+        img: "extract-cut",
+        start: ZIP("My courses.zip"),
+        steps: [
+          {
+            act: "dbl",
+            t: "file:My courses.zip",
+            say: "Double-click [My courses.zip] to open it.",
+          },
+          {
+            act: "right",
+            t: "file:Grammar.docx",
+            say: "Right-click [Grammar.docx].",
+          },
+          { act: "click", t: "mi:cut", say: "Click [Cut] ✂." },
+          { act: "click", t: "nav:Documents", say: "Go to [Documents]." },
+          { act: "click", t: "tool-paste", say: "Click [Paste] 📋." },
+          {
+            act: "look",
+            t: "file:Grammar.docx",
+            say: "Grammar.docx is [out] of the zip!",
+          },
+        ],
+      },
+      {
+        k: "extract-all",
+        code: "1.2.4",
+        t: "Extract all the files",
+        ic: "📤",
+        img: "extract-all",
+        start: ZIP("My courses.zip"),
+        steps: [
+          {
+            act: "right",
+            t: "file:My courses.zip",
+            say: "Right-click [My courses.zip].",
+          },
+          { act: "click", t: "menu:extract", say: "Click [Extract All...]." },
+          { act: "click", t: "dlg:browse", say: "Click [Browse...]." },
+          { act: "click", t: "dest:Documents", say: "Choose [Documents]." },
+          { act: "click", t: "dlg:select", say: "Click [Select Folder]." },
+          { act: "click", t: "dlg:extract", say: "Click [Extract]." },
+          { act: "look", t: null, say: "The files are [out] of the zip!" },
+        ],
+      },
+      {
+        k: "view",
+        code: "1.2.5",
+        t: "Change how files look",
+        ic: "🖼️",
+        img: "view-menu",
+        start: {},
+        steps: [
+          { act: "click", t: "task-explorer", say: "Open [File Explorer]." },
+          { act: "click", t: "nav:Documents", say: "Click [Documents]." },
+          { act: "click", t: "tool-view", say: "Click [View]." },
+          {
+            act: "click",
+            t: "view:Extra large icons",
+            say: "Click [Extra large icons].",
+          },
+          { act: "look", t: null, say: "Now the icons are [big]!" },
+        ],
+      },
+      {
+        k: "details",
+        code: "1.2.6",
+        t: "See more about your files",
+        ic: "📋",
+        img: "details",
+        start: DOCS,
+        steps: [
+          { act: "click", t: "tool-view", say: "Click [View]." },
+          { act: "click", t: "view:Details", say: "Click [Details]." },
+          {
+            act: "right",
+            t: "det-header",
+            say: "Right-click the [top row] (Name, Type, Size).",
+          },
+          { act: "click", t: "col:Date created", say: "Click [Date created]." },
+          {
+            act: "look",
+            t: null,
+            say: "Now you see the [size] and the [dates].",
+          },
+        ],
+      },
+      {
+        k: "bin",
+        code: "1.2.7",
+        t: "Look in the Recycle Bin",
+        ic: "🗑️",
+        img: "recycle-bin",
+        start: BIN,
+        steps: [
+          {
+            act: "dbl",
+            t: "desk:Recycle Bin",
+            say: "Double-click the [Recycle Bin].",
+          },
+          { act: "look", t: null, say: "Here are the files you [deleted]." },
+        ],
+      },
+      {
+        k: "restore",
+        code: "1.2.8",
+        t: "Get a file back (Restore)",
+        ic: "↩️",
+        img: "restore",
+        start: { ...BIN, explorer: "bin" },
+        steps: [
+          {
+            act: "right",
+            t: "file:test.docx",
+            say: "Right-click [test.docx].",
+          },
+          { act: "click", t: "menu:more", say: "Click [Show more options]." },
+          { act: "click", t: "menu:restore", say: "Click [Restore]." },
+          {
+            act: "click",
+            t: "nav:Documents",
+            say: "Open [Documents] to check.",
+          },
+          { act: "look", t: "file:test.docx", say: "test.docx is [back]!" },
+        ],
+      },
+      {
+        k: "empty",
+        code: "1.2.9",
+        t: "Empty the Recycle Bin",
+        ic: "🧹",
+        img: "empty-bin",
+        start: BIN,
+        steps: [
+          {
+            act: "right",
+            t: "desk:Recycle Bin",
+            say: "Right-click the [Recycle Bin].",
+          },
+          { act: "click", t: "menu:empty", say: "Click [Empty Recycle Bin]." },
+          {
+            act: "look",
+            t: "dlg:yes",
+            say: "The computer asks: [are you sure]?",
+          },
+          { act: "click", t: "dlg:yes", say: "Click [Yes]." },
+          {
+            act: "look",
+            t: "desk:Recycle Bin",
+            say: "The Recycle Bin is [empty]. The files are gone for ever.",
+          },
+        ],
+      },
+    ],
 
-  games:[
-    {k:"where", t:"Where do I click?", en:"Find the right place on the screen", ic:"🎯", items:[
-      {type:"sim",start:DOCS,steps:[{act:"right",t:"file:Lessons",say:"Right-click the [Lessons] folder."}]},
-      {type:"sim",start:{...DOCS,pre:[{act:"right",t:"file:Lessons"},{act:"click",t:"menu:more"},{act:"click",t:"menu:sendto"}]},steps:[{act:"click",t:"send:zip",say:"Click [Compressed (zipped) folder]."}]},
-      {type:"sim",start:{...ZIP("Lessons.zip"),pre:[{act:"right",t:"file:Lessons.zip"}]},steps:[{act:"click",t:"mi:rename",say:"Click the [Rename] icon."}]},
-      {type:"sim",start:{...ZIP("My courses.zip"),pre:[{act:"right",t:"file:My courses.zip"}]},steps:[{act:"click",t:"menu:extract",say:"Click [Extract All...]."}]},
-      {type:"sim",start:ZIP("My courses.zip"),steps:[{act:"dbl",t:"file:My courses.zip",say:"Open [My courses.zip]."}]},
-      {type:"sim",start:DOCS,steps:[{act:"click",t:"tool-view",say:"Click [View]."}]},
-      {type:"sim",start:{...DOCS,pre:[{act:"click",t:"tool-view"}]},steps:[{act:"click",t:"view:Details",say:"Click [Details]."}]},
-      {type:"sim",start:{...DOCS,pre:[{act:"click",t:"tool-view"}]},steps:[{act:"click",t:"view:Large icons",say:"Click [Large icons]."}]},
-      {type:"sim",start:BIN,steps:[{act:"dbl",t:"desk:Recycle Bin",say:"Open the [Recycle Bin]."}]},
-      {type:"sim",start:{...BIN,explorer:"bin",pre:[{act:"right",t:"file:test.docx"},{act:"click",t:"menu:more"}]},steps:[{act:"click",t:"menu:restore",say:"Click [Restore]."}]},
-      {type:"sim",start:{...BIN,pre:[{act:"right",t:"desk:Recycle Bin"}]},steps:[{act:"click",t:"menu:empty",say:"Click [Empty Recycle Bin]."}]},
-      {type:"sim",start:{...BIN,pre:[{act:"right",t:"desk:Recycle Bin"},{act:"click",t:"menu:empty"}]},steps:[{act:"click",t:"dlg:yes",say:"Click [Yes] to delete for ever."}]},
-    ]},
-    {k:"order", t:"Steps in order", en:"Put the steps in the right order", ic:"🔢", items:[
-      {type:"order",howto:"compress"},{type:"order",howto:"rename"},{type:"order",howto:"extract-all"},{type:"order",howto:"view"},{type:"order",howto:"restore"},{type:"order",howto:"empty"}]},
-    {k:"views", t:"Which view?", en:"Look at the files: which view is it?", ic:"🖼️", items:[
-      {type:"mc",q:"Which [view] is this?",vis:{kind:"view",v:"xl"},opts:["Extra large icons","Details","List"]},
-      {type:"mc",q:"Which [view] is this?",vis:{kind:"view",v:"details"},opts:["Details","Tiles","Large icons"]},
-      {type:"mc",q:"Which [view] is this?",vis:{kind:"view",v:"list"},opts:["List","Extra large icons","Details"]},
-      {type:"mc",q:"Which [view] is this?",vis:{kind:"view",v:"tiles"},opts:["Tiles","Details","List"]},
-      {type:"mc",q:"Which view shows the [size] and the [date]?",opts:["Details","Large icons","Small icons"]},
-      {type:"mc",q:"Which view is best to see [pictures]?",opts:["Extra large icons","List","Details"]}]},
-    {k:"zip", t:"Zip or not?", en:"Find the zipped folder", ic:"🗜️", items:[
-      {type:"mc",q:"Which one is [zipped] (compressed)?",opts:["Activities.zip","Activities"],oi:["zip","folder"],two:true},
-      {type:"mc",q:"Which one is [zipped] (compressed)?",opts:["Homework.zip","Homework.docx"],oi:["zip","docx"],two:true},
-      {type:"mc",q:"Which is [smaller]?",opts:["Lessons.zip · 320 KB","Lessons folder · 520 KB"],oi:["zip","folder"],two:true},
-      {type:"mc",q:"Which file gets [much smaller] in a zip?",opts:["Story.docx (text)","Boat.jpg (picture)"],oi:["docx","jpg"],two:true},
-      {type:"mc",q:"Take files [out] of a zip:",opts:["Extract All","Compress","Rename"]},
-      {type:"mc",q:"Make a folder [smaller]:",opts:["Compress","Extract","Restore"]}]},
-    {k:"bin", t:"Recycle Bin", en:"True or false?", ic:"🗑️", items:[
-      {type:"tf",q:"Deleted files go to the Recycle Bin.",a:true,vis:{kind:"icons",size:90,items:[{type:"binfull"}]}},
-      {type:"tf",q:"Restore puts the file back in its folder.",a:true,img:"restore"},
-      {type:"tf",q:"Empty Recycle Bin deletes the files for ever.",a:true,img:"empty-bin"},
-      {type:"tf",q:"A deleted file can never come back.",a:false,x:"Look in the Recycle Bin and click Restore."},
-      {type:"tf",q:"Press F2 to rename a file.",a:true,vis:{kind:"lines",rows:["F2"]}}]},
-  ],
+    games: [
+      {
+        k: "where",
+        t: "Where do I click?",
+        en: "Find the right place on the screen",
+        ic: "🎯",
+        items: [
+          {
+            type: "sim",
+            start: DOCS,
+            steps: [
+              {
+                act: "right",
+                t: "file:Lessons",
+                say: "Right-click the [Lessons] folder.",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: {
+              ...DOCS,
+              pre: [
+                { act: "right", t: "file:Lessons" },
+                { act: "click", t: "menu:more" },
+                { act: "click", t: "menu:sendto" },
+              ],
+            },
+            steps: [
+              {
+                act: "click",
+                t: "send:zip",
+                say: "Click [Compressed (zipped) folder].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: {
+              ...ZIP("Lessons.zip"),
+              pre: [{ act: "right", t: "file:Lessons.zip" }],
+            },
+            steps: [
+              { act: "click", t: "mi:rename", say: "Click the [Rename] icon." },
+            ],
+          },
+          {
+            type: "sim",
+            start: {
+              ...ZIP("My courses.zip"),
+              pre: [{ act: "right", t: "file:My courses.zip" }],
+            },
+            steps: [
+              {
+                act: "click",
+                t: "menu:extract",
+                say: "Click [Extract All...].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: ZIP("My courses.zip"),
+            steps: [
+              {
+                act: "dbl",
+                t: "file:My courses.zip",
+                say: "Open [My courses.zip].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: DOCS,
+            steps: [{ act: "click", t: "tool-view", say: "Click [View]." }],
+          },
+          {
+            type: "sim",
+            start: { ...DOCS, pre: [{ act: "click", t: "tool-view" }] },
+            steps: [
+              { act: "click", t: "view:Details", say: "Click [Details]." },
+            ],
+          },
+          {
+            type: "sim",
+            start: { ...DOCS, pre: [{ act: "click", t: "tool-view" }] },
+            steps: [
+              {
+                act: "click",
+                t: "view:Large icons",
+                say: "Click [Large icons].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: BIN,
+            steps: [
+              {
+                act: "dbl",
+                t: "desk:Recycle Bin",
+                say: "Open the [Recycle Bin].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: {
+              ...BIN,
+              explorer: "bin",
+              pre: [
+                { act: "right", t: "file:test.docx" },
+                { act: "click", t: "menu:more" },
+              ],
+            },
+            steps: [
+              { act: "click", t: "menu:restore", say: "Click [Restore]." },
+            ],
+          },
+          {
+            type: "sim",
+            start: { ...BIN, pre: [{ act: "right", t: "desk:Recycle Bin" }] },
+            steps: [
+              {
+                act: "click",
+                t: "menu:empty",
+                say: "Click [Empty Recycle Bin].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: {
+              ...BIN,
+              pre: [
+                { act: "right", t: "desk:Recycle Bin" },
+                { act: "click", t: "menu:empty" },
+              ],
+            },
+            steps: [
+              {
+                act: "click",
+                t: "dlg:yes",
+                say: "Click [Yes] to delete for ever.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        k: "order",
+        t: "Steps in order",
+        en: "Put the steps in the right order",
+        ic: "🔢",
+        items: [
+          { type: "order", howto: "compress" },
+          { type: "order", howto: "rename" },
+          { type: "order", howto: "extract-all" },
+          { type: "order", howto: "view" },
+          { type: "order", howto: "restore" },
+          { type: "order", howto: "empty" },
+        ],
+      },
+      {
+        k: "views",
+        t: "Which view?",
+        en: "Look at the files: which view is it?",
+        ic: "🖼️",
+        items: [
+          {
+            type: "mc",
+            q: "Which [view] is this?",
+            vis: { kind: "view", v: "xl" },
+            opts: ["Extra large icons", "Details", "List"],
+          },
+          {
+            type: "mc",
+            q: "Which [view] is this?",
+            vis: { kind: "view", v: "details" },
+            opts: ["Details", "Tiles", "Large icons"],
+          },
+          {
+            type: "mc",
+            q: "Which [view] is this?",
+            vis: { kind: "view", v: "list" },
+            opts: ["List", "Extra large icons", "Details"],
+          },
+          {
+            type: "mc",
+            q: "Which [view] is this?",
+            vis: { kind: "view", v: "tiles" },
+            opts: ["Tiles", "Details", "List"],
+          },
+          {
+            type: "mc",
+            q: "Which view shows the [size] and the [date]?",
+            opts: ["Details", "Large icons", "Small icons"],
+          },
+          {
+            type: "mc",
+            q: "Which view is best to see [pictures]?",
+            opts: ["Extra large icons", "List", "Details"],
+          },
+        ],
+      },
+      {
+        k: "zip",
+        t: "Zip or not?",
+        en: "Find the zipped folder",
+        ic: "🗜️",
+        items: [
+          {
+            type: "mc",
+            q: "Which one is [zipped] (compressed)?",
+            opts: ["Activities.zip", "Activities"],
+            oi: ["zip", "folder"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "Which one is [zipped] (compressed)?",
+            opts: ["Homework.zip", "Homework.docx"],
+            oi: ["zip", "docx"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "Which is [smaller]?",
+            opts: ["Lessons.zip · 320 KB", "Lessons folder · 520 KB"],
+            oi: ["zip", "folder"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "Which file gets [much smaller] in a zip?",
+            opts: ["Story.docx (text)", "Boat.jpg (picture)"],
+            oi: ["docx", "jpg"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "Take files [out] of a zip:",
+            opts: ["Extract All", "Compress", "Rename"],
+          },
+          {
+            type: "mc",
+            q: "Make a folder [smaller]:",
+            opts: ["Compress", "Extract", "Restore"],
+          },
+        ],
+      },
+      {
+        k: "bin",
+        t: "Recycle Bin",
+        en: "True or false?",
+        ic: "🗑️",
+        items: [
+          {
+            type: "tf",
+            q: "Deleted files go to the Recycle Bin.",
+            a: true,
+            vis: { kind: "icons", size: 90, items: [{ type: "binfull" }] },
+          },
+          {
+            type: "tf",
+            q: "Restore puts the file back in its folder.",
+            a: true,
+            img: "restore",
+          },
+          {
+            type: "tf",
+            q: "Empty Recycle Bin deletes the files for ever.",
+            a: true,
+            img: "empty-bin",
+          },
+          {
+            type: "tf",
+            q: "A deleted file can never come back.",
+            a: false,
+            x: "Look in the Recycle Bin and click Restore.",
+          },
+          {
+            type: "tf",
+            q: "Press F2 to rename a file.",
+            a: true,
+            vis: { kind: "lines", rows: ["F2"] },
+          },
+        ],
+      },
+    ],
 
-  exercises:[
-    {k:"words", t:"Choose the word", en:"Book · Hands on 1.1–1.5", ic:"🔤", from:"Book · Hands on! 1.1–1.5", items:[
-      {type:"mc",q:"To save space on your computer, you can ___ a folder into a zipped file.",opts:["compress","rename","delete"],vis:{kind:"flow",rows:[{from:"📁",type:"zip",label:"zipped file"}]}},
-      {type:"mc",q:"If you want to open the files inside a compressed folder, you need to ___ them first.",opts:["extract","rename","print"]},
-      {type:"mc",q:"To change the name of a file, ___ on it and select the Rename option.",opts:["right-click","double-click","type"],img:"rename"},
-      {type:"mc",q:"You can open ___ to view, move, or delete files on your computer.",opts:["File Explorer","Task Manager","Control Panel"],vis:{kind:"icons",size:80,items:[{type:"explorer",label:"File Explorer"}]}},
-      {type:"mc",q:"To find more information about your files, such as their size or type, use the ___ view.",opts:["Details","Large icons","List"],vis:{kind:"view",v:"details"}}]},
-    {k:"choose", t:"Choose the answer", en:"Book · Hands on 2.1–2.4", ic:"✅", from:"Book · Hands on! 2.1–2.4", items:[
-      {type:"mc",q:"What is the purpose of compressing a file or folder?",opts:["To reduce its size and make it easier to share","To rename it","To delete it for ever"]},
-      {type:"mc",q:"Which option should you select if you want to change the name of a file?",opts:["Rename","Compress","Extract"]},
-      {type:"mc",q:"Where do you go to manage and view all your files and folders?",opts:["File Explorer","Control Panel","Task Manager"]},
-      {type:"mc",q:"How can you unzip (extract) a compressed folder?",opts:["Right-click the folder and select Extract All","Rename the folder","Delete the folder"]}]},
-    {k:"think", t:"Think and answer", en:"Book · Hands on 3 · notebook", ic:"💭", from:"Book · Hands on! 3 · Notebook questions", items:[
-      {type:"open",q:"Why is it important to organize your files into folders?",a:"You find your files [fast]. A big project stays [tidy].",vis:{kind:"icons",items:[{type:"folder",label:"Pictures"},{type:"folder",label:"Documents"},{type:"folder",label:"Project"}]}},
-      {type:"open",q:"How can the Details view help you find a file you made last week?",a:"Details shows the [date]. Look for last week's date.",vis:{kind:"view",v:"details"}},
-      {type:"open",q:"Why should you check the Recycle Bin before you empty it?",a:"A file you [need] may be there. After emptying, it is gone [for ever].",img:"empty-bin"}]},
-    {k:"handson", t:"Do it on the computer", en:"Book · Hands on 4 and 5", ic:"🖥️", from:"Book · Hands on! 4 and 5", items:[
-      {type:"sim",q:"Hands on 4: your Word file Gondolas.docx is in Documents. See its size, then compress it.",start:{files:[{name:"Gondolas.docx",in:"Documents",kb:18}]},steps:[
-        {act:"click",t:"task-explorer",say:"Open [File Explorer]."},
-        {act:"click",t:"nav:Documents",say:"Open [Documents]."},
-        {act:"click",t:"tool-view",say:"Click [View]."},
-        {act:"click",t:"view:Details",say:"Click [Details]."},
-        {act:"look",t:"file:Gondolas.docx",say:"Gondolas.docx is [18 KB]."},
-        {act:"right",t:"file:Gondolas.docx",say:"Right-click [Gondolas.docx]."},
-        {act:"click",t:"menu:more",say:"Click [Show more options]."},
-        {act:"click",t:"menu:sendto",say:"Point to [Send to]."},
-        {act:"click",t:"send:zip",say:"Click [Compressed (zipped) folder]."},
-        {act:"look",t:"file:Gondolas.zip",say:"The zip is only [11 KB]. Smaller!"}]},
-      {type:"sim",q:"Hands on 5: your drawing Gondola.jpg is in Pictures. Compress it, then delete the files for ever.",start:{files:[{name:"Gondola.jpg",in:"Pictures",kb:950}],explorer:"Pictures",view:"details"},steps:[
-        {act:"look",t:"file:Gondola.jpg",say:"Gondola.jpg is [950 KB]."},
-        {act:"right",t:"file:Gondola.jpg",say:"Right-click [Gondola.jpg]."},
-        {act:"click",t:"menu:more",say:"Click [Show more options]."},
-        {act:"click",t:"menu:sendto",say:"Point to [Send to]."},
-        {act:"click",t:"send:zip",say:"Click [Compressed (zipped) folder]."},
-        {act:"look",t:"file:Gondola.zip",say:"931 KB: almost the [same]! Pictures do not get much smaller."},
-        {act:"right",t:"file:Gondola.zip",say:"Right-click [Gondola.zip]."},
-        {act:"click",t:"mi:delete",say:"Click [Delete] 🗑."},
-        {act:"right",t:"file:Gondola.jpg",say:"Right-click [Gondola.jpg]."},
-        {act:"click",t:"mi:delete",say:"Click [Delete] 🗑."},
-        {act:"right",t:"desk:Recycle Bin",say:"Right-click the [Recycle Bin]."},
-        {act:"click",t:"menu:empty",say:"Click [Empty Recycle Bin]."},
-        {act:"click",t:"dlg:yes",say:"Click [Yes]. Deleted for ever!"}]}]},
-    {k:"cw2", t:"Class work 2", en:"CW2 · Lesson 2 part", ic:"📝", from:"CW2 for Term 1 · U1 L2 & 3", items:[
-      {type:"mc",q:"To change the name of a file, select the ___ option.",opts:["rename","compress","extract"]},
-      {type:"mc",q:"If you need to open the files inside a compressed folder, you need to ___ them first.",opts:["extract","compress","rename"]},
-      {type:"mc",q:"To reduce the size of a file, select ___.",opts:["compress","extract","rename"]},
-      {type:"mc",q:"What should you do if you accidentally delete a file?",opts:["Check the Recycle Bin to restore it","Create a shortcut"],img:"restore"},
-      {type:"mc",q:"Which option helps you see the [date] and [size] of the folder?",opts:["Details","Large icons","Small icons","List"],img:"view-menu"}]},
-    {k:"hw1", t:"Homework 1", en:"HW1 · Lesson 2 part", ic:"🏠", from:"HW1 for Term 1 · U1 L1 & 2", items:[
-      {type:"mc",q:"You should press ___ to rename a file.",opts:["F2","F10"],two:true},
-      {type:"mc",q:"Which one of these is a zipped (compressed) file?",opts:["Activities (zipped)","Activities (Word)"],oi:["zip","docx"],two:true}]},
-  ],
-};
+    exercises: [
+      {
+        k: "words",
+        t: "Choose the word",
+        en: "Book · Hands on 1.1–1.5",
+        ic: "🔤",
+        from: "Book · Hands on! 1.1–1.5",
+        items: [
+          {
+            type: "mc",
+            q: "To save space on your computer, you can ___ a folder into a zipped file.",
+            opts: ["compress", "rename", "delete"],
+            vis: {
+              kind: "flow",
+              rows: [{ from: "📁", type: "zip", label: "zipped file" }],
+            },
+          },
+          {
+            type: "mc",
+            q: "If you want to open the files inside a compressed folder, you need to ___ them first.",
+            opts: ["extract", "rename", "print"],
+          },
+          {
+            type: "mc",
+            q: "To change the name of a file, ___ on it and select the Rename option.",
+            opts: ["right-click", "double-click", "type"],
+            img: "rename",
+          },
+          {
+            type: "mc",
+            q: "You can open ___ to view, move, or delete files on your computer.",
+            opts: ["File Explorer", "Task Manager", "Control Panel"],
+            vis: {
+              kind: "icons",
+              size: 80,
+              items: [{ type: "explorer", label: "File Explorer" }],
+            },
+          },
+          {
+            type: "mc",
+            q: "To find more information about your files, such as their size or type, use the ___ view.",
+            opts: ["Details", "Large icons", "List"],
+            vis: { kind: "view", v: "details" },
+          },
+        ],
+      },
+      {
+        k: "choose",
+        t: "Choose the answer",
+        en: "Book · Hands on 2.1–2.4",
+        ic: "✅",
+        from: "Book · Hands on! 2.1–2.4",
+        items: [
+          {
+            type: "mc",
+            q: "What is the purpose of compressing a file or folder?",
+            opts: [
+              "To reduce its size and make it easier to share",
+              "To rename it",
+              "To delete it for ever",
+            ],
+          },
+          {
+            type: "mc",
+            q: "Which option should you select if you want to change the name of a file?",
+            opts: ["Rename", "Compress", "Extract"],
+          },
+          {
+            type: "mc",
+            q: "Where do you go to manage and view all your files and folders?",
+            opts: ["File Explorer", "Control Panel", "Task Manager"],
+          },
+          {
+            type: "mc",
+            q: "How can you unzip (extract) a compressed folder?",
+            opts: [
+              "Right-click the folder and select Extract All",
+              "Rename the folder",
+              "Delete the folder",
+            ],
+          },
+        ],
+      },
+      {
+        k: "think",
+        t: "Think and answer",
+        en: "Book · Hands on 3 · notebook",
+        ic: "💭",
+        from: "Book · Hands on! 3 · Notebook questions",
+        items: [
+          {
+            type: "open",
+            q: "Why is it important to organize your files into folders?",
+            a: "You find your files [fast]. A big project stays [tidy].",
+            vis: {
+              kind: "icons",
+              items: [
+                { type: "folder", label: "Pictures" },
+                { type: "folder", label: "Documents" },
+                { type: "folder", label: "Project" },
+              ],
+            },
+          },
+          {
+            type: "open",
+            q: "How can the Details view help you find a file you made last week?",
+            a: "Details shows the [date]. Look for last week's date.",
+            vis: { kind: "view", v: "details" },
+          },
+          {
+            type: "open",
+            q: "Why should you check the Recycle Bin before you empty it?",
+            a: "A file you [need] may be there. After emptying, it is gone [for ever].",
+            img: "empty-bin",
+          },
+        ],
+      },
+      {
+        k: "handson",
+        t: "Do it on the computer",
+        en: "Book · Hands on 4 and 5",
+        ic: "🖥️",
+        from: "Book · Hands on! 4 and 5",
+        items: [
+          {
+            type: "sim",
+            q: "Hands on 4: your Word file Gondolas.docx is in Documents. See its size, then compress it.",
+            start: {
+              files: [{ name: "Gondolas.docx", in: "Documents", kb: 18 }],
+            },
+            steps: [
+              {
+                act: "click",
+                t: "task-explorer",
+                say: "Open [File Explorer].",
+              },
+              { act: "click", t: "nav:Documents", say: "Open [Documents]." },
+              { act: "click", t: "tool-view", say: "Click [View]." },
+              { act: "click", t: "view:Details", say: "Click [Details]." },
+              {
+                act: "look",
+                t: "file:Gondolas.docx",
+                say: "Gondolas.docx is [18 KB].",
+              },
+              {
+                act: "right",
+                t: "file:Gondolas.docx",
+                say: "Right-click [Gondolas.docx].",
+              },
+              {
+                act: "click",
+                t: "menu:more",
+                say: "Click [Show more options].",
+              },
+              { act: "click", t: "menu:sendto", say: "Point to [Send to]." },
+              {
+                act: "click",
+                t: "send:zip",
+                say: "Click [Compressed (zipped) folder].",
+              },
+              {
+                act: "look",
+                t: "file:Gondolas.zip",
+                say: "The zip is only [11 KB]. Smaller!",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            q: "Hands on 5: your drawing Gondola.jpg is in Pictures. Compress it, then delete the files for ever.",
+            start: {
+              files: [{ name: "Gondola.jpg", in: "Pictures", kb: 950 }],
+              explorer: "Pictures",
+              view: "details",
+            },
+            steps: [
+              {
+                act: "look",
+                t: "file:Gondola.jpg",
+                say: "Gondola.jpg is [950 KB].",
+              },
+              {
+                act: "right",
+                t: "file:Gondola.jpg",
+                say: "Right-click [Gondola.jpg].",
+              },
+              {
+                act: "click",
+                t: "menu:more",
+                say: "Click [Show more options].",
+              },
+              { act: "click", t: "menu:sendto", say: "Point to [Send to]." },
+              {
+                act: "click",
+                t: "send:zip",
+                say: "Click [Compressed (zipped) folder].",
+              },
+              {
+                act: "look",
+                t: "file:Gondola.zip",
+                say: "931 KB: almost the [same]! Pictures do not get much smaller.",
+              },
+              {
+                act: "right",
+                t: "file:Gondola.zip",
+                say: "Right-click [Gondola.zip].",
+              },
+              { act: "click", t: "mi:delete", say: "Click [Delete] 🗑." },
+              {
+                act: "right",
+                t: "file:Gondola.jpg",
+                say: "Right-click [Gondola.jpg].",
+              },
+              { act: "click", t: "mi:delete", say: "Click [Delete] 🗑." },
+              {
+                act: "right",
+                t: "desk:Recycle Bin",
+                say: "Right-click the [Recycle Bin].",
+              },
+              {
+                act: "click",
+                t: "menu:empty",
+                say: "Click [Empty Recycle Bin].",
+              },
+              {
+                act: "click",
+                t: "dlg:yes",
+                say: "Click [Yes]. Deleted for ever!",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        k: "cw2",
+        t: "Class work 2",
+        en: "CW2 · Lesson 2 part",
+        ic: "📝",
+        from: "CW2 for Term 1 · U1 L2 & 3",
+        items: [
+          {
+            type: "mc",
+            q: "To change the name of a file, select the ___ option.",
+            opts: ["rename", "compress", "extract"],
+          },
+          {
+            type: "mc",
+            q: "If you need to open the files inside a compressed folder, you need to ___ them first.",
+            opts: ["extract", "compress", "rename"],
+          },
+          {
+            type: "mc",
+            q: "To reduce the size of a file, select ___.",
+            opts: ["compress", "extract", "rename"],
+          },
+          {
+            type: "mc",
+            q: "What should you do if you accidentally delete a file?",
+            opts: ["Check the Recycle Bin to restore it", "Create a shortcut"],
+            img: "restore",
+          },
+          {
+            type: "mc",
+            q: "Which option helps you see the [date] and [size] of the folder?",
+            opts: ["Details", "Large icons", "Small icons", "List"],
+            img: "view-menu",
+          },
+        ],
+      },
+      {
+        k: "hw1",
+        t: "Homework 1",
+        en: "HW1 · Lesson 2 part",
+        ic: "🏠",
+        from: "HW1 for Term 1 · U1 L1 & 2",
+        items: [
+          {
+            type: "mc",
+            q: "You should press ___ to rename a file.",
+            opts: ["F2", "F10"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "Which one of these is a zipped (compressed) file?",
+            opts: ["Activities (zipped)", "Activities (Word)"],
+            oi: ["zip", "docx"],
+            two: true,
+          },
+        ],
+      },
+    ],
+  };
 })();

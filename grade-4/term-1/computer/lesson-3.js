@@ -1,161 +1,836 @@
 // Computer · Grade 4 · Unit 1 · Lesson 3 « Computer settings » (book pages 31–39, CW2).
 // All the content of the lesson. The engine is computer-lesson.js, Mini Windows is winsim.js. Same format as lesson-1.js.
-(function(){
-const DT={settings:"datetime"};
+(function () {
+  const DT = { settings: "datetime" };
 
-window.LESSON={
-  n:3, grade:4, title:"Computer settings", unit:"Unit 1 · Lesson 3", book:"Book pages 31–39",
-  cover:"display",
-  question:{q:"Why do you think it is important to keep your computer's [date and time] correct?", a:"Files, emails and reminders get the [right date and time].", img:"clock-menu"},
+  window.LESSON = {
+    n: 3,
+    grade: 4,
+    title: "Computer settings",
+    unit: "Unit 1 · Lesson 3",
+    book: "Book pages 31–39",
+    cover: "display",
+    question: {
+      q: "Why do you think it is important to keep your computer's [date and time] correct?",
+      a: "Files, emails and reminders get the [right date and time].",
+      img: "clock-menu",
+    },
 
-  ideas:[
-    {t:"Hardware", lines:["A computer has two parts: [hardware] and [software].","[Hardware] = the parts you can [see] and [touch]."],
-     vis:{kind:"emoji",e:"🖥️⌨️🖱️"}},
-    {t:"Hardware inside", lines:["Some hardware is [inside] the computer.","This [RAM memory card] is hardware."],
-     img:"ram"},
-    {t:"Software", lines:["[Software] = instructions.","It tells the hardware [what to do].","Word, games and Windows are software."],
-     img:"software"},
-    {t:"Settings", lines:["When you change a [setting], you use software.","The hardware then changes what you see."],
-     vis:{kind:"emoji",e:"⚙️ ➜ 🖥️"}},
-    {t:"Date and time", lines:["The [clock] is on the taskbar, at the right.","Click it: you see a [calendar].","[Right-click] it to change the time."],
-     img:"clock-menu", howto:"date-time"},
-    {t:"Time zone", lines:["A [time zone] = the time in your country.","In London it is 3 hours [earlier] than in Riyadh."],
-     vis:{kind:"lines",rows:["Riyadh 3:00 PM","London 12:00 PM","Tokyo 9:00 PM","New York 7:00 AM"]}, howto:"time-zone"},
-    {t:"Pixels", lines:["The screen is made of tiny dots: [pixels].","HD, Full HD, 4K: more and more pixels."],
-     img:"monitor"},
-    {t:"Screen resolution", lines:["[Higher] resolution: more detail, things look [smaller].","[Lower] resolution: things look [bigger], less detail."],
-     vis:{kind:"lines",rows:["1920 × 1080 → small, sharp","800 × 600 → big, less detail"]}, howto:"resolution"},
-    {t:"The best resolution", lines:["Every monitor has a [Recommended] resolution.","Higher is not always better!"],
-     img:"display"},
-    {t:"Personalize", lines:["Make the desktop [your own].","Choose a [picture] you like."],
-     img:"personalize", howto:"background"},
-    {t:"Volume", lines:["Make the sound [louder] or [quieter].","Right-click the speaker → [Open volume mixer]."],
-     img:"volume", howto:"volume"},
-    {t:"The mouse wheel", lines:["Mouse with a [wheel]?","Roll the wheel on the slider to change the volume."],
-     img:"girl-wheel"},
-  ],
+    ideas: [
+      {
+        t: "Hardware",
+        lines: [
+          "A computer has two parts: [hardware] and [software].",
+          "[Hardware] = the parts you can [see] and [touch].",
+        ],
+        vis: { kind: "emoji", e: "🖥️⌨️🖱️" },
+      },
+      {
+        t: "Hardware inside",
+        lines: [
+          "Some hardware is [inside] the computer.",
+          "This [RAM memory card] is hardware.",
+        ],
+        img: "ram",
+      },
+      {
+        t: "Software",
+        lines: [
+          "[Software] = instructions.",
+          "It tells the hardware [what to do].",
+          "Word, games and Windows are software.",
+        ],
+        img: "software",
+      },
+      {
+        t: "Settings",
+        lines: [
+          "When you change a [setting], you use software.",
+          "The hardware then changes what you see.",
+        ],
+        vis: { kind: "emoji", e: "⚙️ ➜ 🖥️" },
+      },
+      {
+        t: "Date and time",
+        lines: [
+          "The [clock] is on the taskbar, at the right.",
+          "Click it: you see a [calendar].",
+          "[Right-click] it to change the time.",
+        ],
+        img: "clock-menu",
+        howto: "date-time",
+      },
+      {
+        t: "Time zone",
+        lines: [
+          "A [time zone] = the time in your country.",
+          "In London it is 3 hours [earlier] than in Riyadh.",
+        ],
+        vis: {
+          kind: "lines",
+          rows: [
+            "Riyadh 3:00 PM",
+            "London 12:00 PM",
+            "Tokyo 9:00 PM",
+            "New York 7:00 AM",
+          ],
+        },
+        howto: "time-zone",
+      },
+      {
+        t: "Pixels",
+        lines: [
+          "The screen is made of tiny dots: [pixels].",
+          "HD, Full HD, 4K: more and more pixels.",
+        ],
+        img: "monitor",
+      },
+      {
+        t: "Screen resolution",
+        lines: [
+          "[Higher] resolution: more detail, things look [smaller].",
+          "[Lower] resolution: things look [bigger], less detail.",
+        ],
+        vis: {
+          kind: "lines",
+          rows: ["1920 × 1080 → small, sharp", "800 × 600 → big, less detail"],
+        },
+        howto: "resolution",
+      },
+      {
+        t: "The best resolution",
+        lines: [
+          "Every monitor has a [Recommended] resolution.",
+          "Higher is not always better!",
+        ],
+        img: "display",
+      },
+      {
+        t: "Personalize",
+        lines: ["Make the desktop [your own].", "Choose a [picture] you like."],
+        img: "personalize",
+        howto: "background",
+      },
+      {
+        t: "Volume",
+        lines: [
+          "Make the sound [louder] or [quieter].",
+          "Right-click the speaker → [Open volume mixer].",
+        ],
+        img: "volume",
+        howto: "volume",
+      },
+      {
+        t: "The mouse wheel",
+        lines: [
+          "Mouse with a [wheel]?",
+          "Roll the wheel on the slider to change the volume.",
+        ],
+        img: "girl-wheel",
+      },
+    ],
 
-  howto:[
-    {k:"calendar", code:"Tip", t:"See the calendar", ic:"📅", img:"clock-menu", start:{},
-     steps:[{act:"click",t:"tray-clock",say:"Click the [clock] on the taskbar."},
-            {act:"look",t:null,say:"A [calendar] and the clock appear."}]},
-    {k:"date-time", code:"1.3.3", t:"Change the date and time", ic:"🕒", img:"datetime", video:"l3-date-time", start:{},
-     steps:[{act:"right",t:"tray-clock",say:"Right-click the [clock] on the taskbar."},
-            {act:"click",t:"menu:adjust",say:"Click [Adjust date and time]."},
-            {act:"click",t:"set:autotime",say:"Turn [Set time automatically] Off."},
-            {act:"click",t:"set:change",say:"Click [Change]."},
-            {act:"click",t:"dt:hour:+",say:"Click ▲ to make the [hour] one more."},
-            {act:"click",t:"dlg:dtchange",say:"Click [Change]."},
-            {act:"look",t:"tray-clock",say:"Look at the [clock]: the time changed!"}]},
-    {k:"time-zone", code:"1.3.4", t:"Set the time zone", ic:"🌍", img:"timezone", video:"l3-time-zone", start:DT,
-     steps:[{act:"click",t:"set:zone",say:"Click the [Time zone] box."},
-            {act:"click",t:"zone:(UTC+00:00) London",say:"Choose [London]."},
-            {act:"look",t:"tray-clock",say:"London time is [3 hours earlier]."},
-            {act:"click",t:"set:autozone",say:"You can turn on [Set time zone automatically] too."}]},
-    {k:"resolution", code:"1.3.5", t:"Change the screen resolution", ic:"🖥️", img:"display", video:"l3-resolution", start:{},
-     steps:[{act:"right",t:"desktop",say:"Right-click an [empty place] on the desktop."},
-            {act:"click",t:"bgmenu:display",say:"Click [Display settings]."},
-            {act:"click",t:"set:res",say:"Click the [Display resolution] box."},
-            {act:"click",t:"res:1280 × 720",say:"Choose [1280 × 720]."},
-            {act:"look",t:null,say:"Everything looks [bigger]!"},
-            {act:"click",t:"dlg:revert",say:"Click [Revert] to go back. (Keep changes keeps it.)"}]},
-    {k:"background", code:"1.3.6", t:"Change the desktop picture", ic:"🖼️", img:"personalize", video:"l3-background", start:{},
-     steps:[{act:"right",t:"desktop",say:"Right-click an [empty place] on the desktop."},
-            {act:"click",t:"bgmenu:personalize",say:"Click [Personalize]."},
-            {act:"click",t:"set:background",say:"Click [Background]."},
-            {act:"click",t:"bg:3",say:"Click a [picture] you like."},
-            {act:"look",t:null,say:"Your desktop has a [new picture]!"}]},
-    {k:"volume", code:"1.3.7", t:"Change the volume", ic:"🔊", img:"volume", video:"l3-volume", start:{},
-     steps:[{act:"right",t:"tray-speaker",say:"Right-click the [speaker] icon."},
-            {act:"click",t:"menu:mixer",say:"Click [Open volume mixer]."},
-            {act:"slide",t:"vol-range",max:30,say:"Drag the slider to the [left]. Make it quieter."},
-            {act:"look",t:null,say:"The sound is [quieter] now."}]},
-  ],
+    howto: [
+      {
+        k: "calendar",
+        code: "Tip",
+        t: "See the calendar",
+        ic: "📅",
+        img: "clock-menu",
+        start: {},
+        steps: [
+          {
+            act: "click",
+            t: "tray-clock",
+            say: "Click the [clock] on the taskbar.",
+          },
+          { act: "look", t: null, say: "A [calendar] and the clock appear." },
+        ],
+      },
+      {
+        k: "date-time",
+        code: "1.3.3",
+        t: "Change the date and time",
+        ic: "🕒",
+        img: "datetime",
+        video: "l3-date-time",
+        start: {},
+        steps: [
+          {
+            act: "right",
+            t: "tray-clock",
+            say: "Right-click the [clock] on the taskbar.",
+          },
+          {
+            act: "click",
+            t: "menu:adjust",
+            say: "Click [Adjust date and time].",
+          },
+          {
+            act: "click",
+            t: "set:autotime",
+            say: "Turn [Set time automatically] Off.",
+          },
+          { act: "click", t: "set:change", say: "Click [Change]." },
+          {
+            act: "click",
+            t: "dt:hour:+",
+            say: "Click ▲ to make the [hour] one more.",
+          },
+          { act: "click", t: "dlg:dtchange", say: "Click [Change]." },
+          {
+            act: "look",
+            t: "tray-clock",
+            say: "Look at the [clock]: the time changed!",
+          },
+        ],
+      },
+      {
+        k: "time-zone",
+        code: "1.3.4",
+        t: "Set the time zone",
+        ic: "🌍",
+        img: "timezone",
+        video: "l3-time-zone",
+        start: DT,
+        steps: [
+          { act: "click", t: "set:zone", say: "Click the [Time zone] box." },
+          {
+            act: "click",
+            t: "zone:(UTC+00:00) London",
+            say: "Choose [London].",
+          },
+          {
+            act: "look",
+            t: "tray-clock",
+            say: "London time is [3 hours earlier].",
+          },
+          {
+            act: "click",
+            t: "set:autozone",
+            say: "You can turn on [Set time zone automatically] too.",
+          },
+        ],
+      },
+      {
+        k: "resolution",
+        code: "1.3.5",
+        t: "Change the screen resolution",
+        ic: "🖥️",
+        img: "display",
+        video: "l3-resolution",
+        start: {},
+        steps: [
+          {
+            act: "right",
+            t: "desktop",
+            say: "Right-click an [empty place] on the desktop.",
+          },
+          {
+            act: "click",
+            t: "bgmenu:display",
+            say: "Click [Display settings].",
+          },
+          {
+            act: "click",
+            t: "set:res",
+            say: "Click the [Display resolution] box.",
+          },
+          { act: "click", t: "res:1280 × 720", say: "Choose [1280 × 720]." },
+          { act: "look", t: null, say: "Everything looks [bigger]!" },
+          {
+            act: "click",
+            t: "dlg:revert",
+            say: "Click [Revert] to go back. (Keep changes keeps it.)",
+          },
+        ],
+      },
+      {
+        k: "background",
+        code: "1.3.6",
+        t: "Change the desktop picture",
+        ic: "🖼️",
+        img: "personalize",
+        video: "l3-background",
+        start: {},
+        steps: [
+          {
+            act: "right",
+            t: "desktop",
+            say: "Right-click an [empty place] on the desktop.",
+          },
+          {
+            act: "click",
+            t: "bgmenu:personalize",
+            say: "Click [Personalize].",
+          },
+          { act: "click", t: "set:background", say: "Click [Background]." },
+          { act: "click", t: "bg:3", say: "Click a [picture] you like." },
+          { act: "look", t: null, say: "Your desktop has a [new picture]!" },
+        ],
+      },
+      {
+        k: "volume",
+        code: "1.3.7",
+        t: "Change the volume",
+        ic: "🔊",
+        img: "volume",
+        video: "l3-volume",
+        start: {},
+        steps: [
+          {
+            act: "right",
+            t: "tray-speaker",
+            say: "Right-click the [speaker] icon.",
+          },
+          { act: "click", t: "menu:mixer", say: "Click [Open volume mixer]." },
+          {
+            act: "slide",
+            t: "vol-range",
+            max: 30,
+            say: "Drag the slider to the [left]. Make it quieter.",
+          },
+          { act: "look", t: null, say: "The sound is [quieter] now." },
+        ],
+      },
+    ],
 
-  games:[
-    {k:"where", t:"Where do I click?", en:"Find the right place on the screen", ic:"🎯", items:[
-      {type:"sim",start:{},steps:[{act:"right",t:"tray-clock",say:"Right-click the [clock]."}]},
-      {type:"sim",start:{pre:[{act:"right",t:"tray-clock"}]},steps:[{act:"click",t:"menu:adjust",say:"Click [Adjust date and time]."}]},
-      {type:"sim",start:DT,steps:[{act:"click",t:"set:zone",say:"Click the [Time zone] box."}]},
-      {type:"sim",start:{...DT,autotime:false},steps:[{act:"click",t:"set:change",say:"Click [Change] to set the time."}]},
-      {type:"sim",start:{pre:[{act:"right",t:"desktop"}]},steps:[{act:"click",t:"bgmenu:display",say:"Click [Display settings]."}]},
-      {type:"sim",start:{pre:[{act:"right",t:"desktop"}]},steps:[{act:"click",t:"bgmenu:personalize",say:"Click [Personalize]."}]},
-      {type:"sim",start:{settings:"display"},steps:[{act:"click",t:"set:res",say:"Click the [Display resolution] box."}]},
-      {type:"sim",start:{settings:"personalization"},steps:[{act:"click",t:"set:background",say:"Click [Background]."}]},
-      {type:"sim",start:{},steps:[{act:"right",t:"tray-speaker",say:"Right-click the [speaker] icon."}]},
-      {type:"sim",start:{pre:[{act:"right",t:"tray-speaker"}]},steps:[{act:"click",t:"menu:mixer",say:"Click [Open volume mixer]."}]},
-      {type:"sim",start:{settings:"mixer"},steps:[{act:"slide",t:"vol-range",min:90,say:"Make the sound [louder]: drag to the right."}]},
-    ]},
-    {k:"hwsw", t:"Hardware or software?", en:"Can you touch it?", ic:"🧩", items:[
-      {type:"mc",q:"[Keyboard]: hardware or software?",emoji:"⌨️",opts:["Hardware","Software"],two:true},
-      {type:"mc",q:"[Mouse]: hardware or software?",emoji:"🖱️",opts:["Hardware","Software"],two:true},
-      {type:"mc",q:"[Monitor]: hardware or software?",emoji:"🖥️",opts:["Hardware","Software"],two:true},
-      {type:"mc",q:"[Printer]: hardware or software?",emoji:"🖨️",opts:["Hardware","Software"],two:true},
-      {type:"mc",q:"[RAM memory card]: hardware or software?",img:"ram",opts:["Hardware","Software"],two:true},
-      {type:"mc",q:"[Microsoft Word]: hardware or software?",vis:{kind:"icons",size:90,items:[{type:"docx",label:"Word"}]},opts:["Software","Hardware"],two:true},
-      {type:"mc",q:"[A game]: hardware or software?",emoji:"🎮",opts:["Software","Hardware"],two:true,x:"The game program is software. (The game controller is hardware.)"},
-      {type:"mc",q:"[Scratch]: hardware or software?",emoji:"🐱",opts:["Software","Hardware"],two:true},
-      {type:"mc",q:"[Windows]: hardware or software?",img:"software",opts:["Software","Hardware"],two:true},
-      {type:"mc",q:"[Paint]: hardware or software?",emoji:"🎨",opts:["Software","Hardware"],two:true}]},
-    {k:"which", t:"Which setting?", en:"Where do you change it?", ic:"⚙️", items:[
-      {type:"mc",q:"Change the [desktop picture]:",opts:["Personalize","Display settings","Volume mixer"]},
-      {type:"mc",q:"Change the [time]:",opts:["Adjust date and time","Personalize","Display settings"]},
-      {type:"mc",q:"Make the sound [quieter]:",opts:["Open volume mixer","Display settings","Adjust date and time"]},
-      {type:"mc",q:"Change the [screen resolution]:",opts:["Display settings","Volume mixer","Personalize"]},
-      {type:"mc",q:"The time for [another country]:",opts:["Time zone","Background","Volume"]}]},
-    {k:"res", t:"Big or sharp?", en:"Screen resolution", ic:"🔍", items:[
-      {type:"mc",q:"Which shows things [bigger]?",opts:["800 × 600","1920 × 1080"],two:true},
-      {type:"mc",q:"Which shows [more detail]?",opts:["1920 × 1080","800 × 600"],two:true},
-      {type:"tf",q:"A lower resolution shows text and pictures larger but with less detail.",a:true,yes:["Yes","No"]},
-      {type:"tf",q:"A higher resolution is always better.",a:false,x:"Use the Recommended resolution for your monitor."},
-      {type:"mc",q:"The tiny dots on the screen are called…",opts:["pixels","bytes","icons"]}]},
-    {k:"order", t:"Steps in order", en:"Put the steps in the right order", ic:"🔢", items:[
-      {type:"order",howto:"date-time"},{type:"order",howto:"resolution"},{type:"order",howto:"background"},{type:"order",howto:"volume"}]},
-  ],
+    games: [
+      {
+        k: "where",
+        t: "Where do I click?",
+        en: "Find the right place on the screen",
+        ic: "🎯",
+        items: [
+          {
+            type: "sim",
+            start: {},
+            steps: [
+              {
+                act: "right",
+                t: "tray-clock",
+                say: "Right-click the [clock].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: { pre: [{ act: "right", t: "tray-clock" }] },
+            steps: [
+              {
+                act: "click",
+                t: "menu:adjust",
+                say: "Click [Adjust date and time].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: DT,
+            steps: [
+              {
+                act: "click",
+                t: "set:zone",
+                say: "Click the [Time zone] box.",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: { ...DT, autotime: false },
+            steps: [
+              {
+                act: "click",
+                t: "set:change",
+                say: "Click [Change] to set the time.",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: { pre: [{ act: "right", t: "desktop" }] },
+            steps: [
+              {
+                act: "click",
+                t: "bgmenu:display",
+                say: "Click [Display settings].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: { pre: [{ act: "right", t: "desktop" }] },
+            steps: [
+              {
+                act: "click",
+                t: "bgmenu:personalize",
+                say: "Click [Personalize].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: { settings: "display" },
+            steps: [
+              {
+                act: "click",
+                t: "set:res",
+                say: "Click the [Display resolution] box.",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: { settings: "personalization" },
+            steps: [
+              { act: "click", t: "set:background", say: "Click [Background]." },
+            ],
+          },
+          {
+            type: "sim",
+            start: {},
+            steps: [
+              {
+                act: "right",
+                t: "tray-speaker",
+                say: "Right-click the [speaker] icon.",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: { pre: [{ act: "right", t: "tray-speaker" }] },
+            steps: [
+              {
+                act: "click",
+                t: "menu:mixer",
+                say: "Click [Open volume mixer].",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            start: { settings: "mixer" },
+            steps: [
+              {
+                act: "slide",
+                t: "vol-range",
+                min: 90,
+                say: "Make the sound [louder]: drag to the right.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        k: "hwsw",
+        t: "Hardware or software?",
+        en: "Can you touch it?",
+        ic: "🧩",
+        items: [
+          {
+            type: "mc",
+            q: "[Keyboard]: hardware or software?",
+            emoji: "⌨️",
+            opts: ["Hardware", "Software"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "[Mouse]: hardware or software?",
+            emoji: "🖱️",
+            opts: ["Hardware", "Software"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "[Monitor]: hardware or software?",
+            emoji: "🖥️",
+            opts: ["Hardware", "Software"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "[Printer]: hardware or software?",
+            emoji: "🖨️",
+            opts: ["Hardware", "Software"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "[RAM memory card]: hardware or software?",
+            img: "ram",
+            opts: ["Hardware", "Software"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "[Microsoft Word]: hardware or software?",
+            vis: {
+              kind: "icons",
+              size: 90,
+              items: [{ type: "docx", label: "Word" }],
+            },
+            opts: ["Software", "Hardware"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "[A game]: hardware or software?",
+            emoji: "🎮",
+            opts: ["Software", "Hardware"],
+            two: true,
+            x: "The game program is software. (The game controller is hardware.)",
+          },
+          {
+            type: "mc",
+            q: "[Scratch]: hardware or software?",
+            emoji: "🐱",
+            opts: ["Software", "Hardware"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "[Windows]: hardware or software?",
+            img: "software",
+            opts: ["Software", "Hardware"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "[Paint]: hardware or software?",
+            emoji: "🎨",
+            opts: ["Software", "Hardware"],
+            two: true,
+          },
+        ],
+      },
+      {
+        k: "which",
+        t: "Which setting?",
+        en: "Where do you change it?",
+        ic: "⚙️",
+        items: [
+          {
+            type: "mc",
+            q: "Change the [desktop picture]:",
+            opts: ["Personalize", "Display settings", "Volume mixer"],
+          },
+          {
+            type: "mc",
+            q: "Change the [time]:",
+            opts: ["Adjust date and time", "Personalize", "Display settings"],
+          },
+          {
+            type: "mc",
+            q: "Make the sound [quieter]:",
+            opts: [
+              "Open volume mixer",
+              "Display settings",
+              "Adjust date and time",
+            ],
+          },
+          {
+            type: "mc",
+            q: "Change the [screen resolution]:",
+            opts: ["Display settings", "Volume mixer", "Personalize"],
+          },
+          {
+            type: "mc",
+            q: "The time for [another country]:",
+            opts: ["Time zone", "Background", "Volume"],
+          },
+        ],
+      },
+      {
+        k: "res",
+        t: "Big or sharp?",
+        en: "Screen resolution",
+        ic: "🔍",
+        items: [
+          {
+            type: "mc",
+            q: "Which shows things [bigger]?",
+            opts: ["800 × 600", "1920 × 1080"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "Which shows [more detail]?",
+            opts: ["1920 × 1080", "800 × 600"],
+            two: true,
+          },
+          {
+            type: "tf",
+            q: "A lower resolution shows text and pictures larger but with less detail.",
+            a: true,
+            yes: ["Yes", "No"],
+          },
+          {
+            type: "tf",
+            q: "A higher resolution is always better.",
+            a: false,
+            x: "Use the Recommended resolution for your monitor.",
+          },
+          {
+            type: "mc",
+            q: "The tiny dots on the screen are called…",
+            opts: ["pixels", "bytes", "icons"],
+          },
+        ],
+      },
+      {
+        k: "order",
+        t: "Steps in order",
+        en: "Put the steps in the right order",
+        ic: "🔢",
+        items: [
+          { type: "order", howto: "date-time" },
+          { type: "order", howto: "resolution" },
+          { type: "order", howto: "background" },
+          { type: "order", howto: "volume" },
+        ],
+      },
+    ],
 
-  exercises:[
-    {k:"words", t:"Choose the word", en:"Book · Hands on 1.1–1.8", ic:"🔤", from:"Book · Hands on! 1.1–1.8", items:[
-      {type:"mc",q:"To change the date and time on your computer, right-click the ___ in the Taskbar and select Adjust date and time.",opts:["clock","speaker","Start button"],img:"clock-menu"},
-      {type:"mc",q:"In the Date & time settings, you can change your ___ to display the correct time for your location.",opts:["time zone","background","volume"]},
-      {type:"mc",q:"If the screen resolution is too high or too low, you can adjust it by going to the ___ settings.",opts:["Display","Sound","Personalize"]},
-      {type:"mc",q:"To change the sound volume, you can right-click the ___ icon on the Taskbar and select Open volume mixer.",opts:["speaker","clock","Wi-Fi"]},
-      {type:"mc",q:"The ___ section allows you to change your desktop background and color scheme.",opts:["Personalization","Display","Time & language"]},
-      {type:"mc",q:"If you want your computer to automatically adjust for daylight saving time, make sure this option is on in the ___ settings.",opts:["Date & time","Display","Sound"]},
-      {type:"mc",q:"The physical parts of a computer, such as the monitor, keyboard, and hard drive, are called ___.",opts:["hardware","software"],two:true},
-      {type:"mc",q:"Programs like Microsoft Word, games, and the operating system are examples of ___ that tell the hardware what to do.",opts:["software","hardware"],two:true}]},
-    {k:"choose", t:"Choose the answer", en:"Book · Hands on 2.1–2.4", ic:"✅", from:"Book · Hands on! 2.1–2.4", items:[
-      {type:"mc",q:"Which option allows you to adjust the screen resolution?",opts:["Display settings","Hardware and Sound","System and Security"]},
-      {type:"mc",q:"What are the two main parts of a computer?",opts:["Hardware and software","Software and applications","Applications and tools"]},
-      {type:"mc",q:"How can you change the screen resolution on your computer?",opts:["Click Display settings and select Display resolution","Turn off your computer and restart it","Click the speaker icon and drag the slider"]},
-      {type:"mc",q:"Which option should you select to change your computer's desktop background and theme?",opts:["Appearance and Personalization","Device Manager","Internet Options"]}]},
-    {k:"think", t:"Think and answer", en:"Book · Hands on 3", ic:"💭", from:"Book · Hands on! 3", items:[
-      {type:"open",q:"Why is it important for your computer to have the correct time and date? What could happen if the time is wrong?",a:"Files and emails get the [right date]. Reminders and lessons come at the [right time]. If it is wrong, you can be [late].",img:"clock-menu"}]},
-    {k:"handson", t:"Do it on the computer", en:"Book · Hands on 4.1–4.3", ic:"🖥️", from:"Book · Hands on! 4.1–4.3", items:[
-      {type:"sim",q:"4.1 Check your screen resolution. Change it to 800 × 600. Then change it back.",start:{},steps:[
-        {act:"right",t:"desktop",say:"Right-click the [desktop]."},
-        {act:"click",t:"bgmenu:display",say:"Click [Display settings]."},
-        {act:"look",t:"set:res",say:"Your resolution is [1920 × 1080]."},
-        {act:"click",t:"set:res",say:"Click the [Display resolution] box."},
-        {act:"click",t:"res:800 × 600",say:"Choose [800 × 600]."},
-        {act:"look",t:null,say:"The icons are [very big]!"},
-        {act:"click",t:"dlg:revert",say:"Click [Revert]: back to the [recommended] setting."}]},
-      {type:"sim",q:"4.2 Make your desktop awesome: choose a picture you really like.",start:{},steps:[
-        {act:"right",t:"desktop",say:"Right-click the [desktop]."},
-        {act:"click",t:"bgmenu:personalize",say:"Click [Personalize]."},
-        {act:"click",t:"set:background",say:"Click [Background]."},
-        {act:"click",t:"bg:4",say:"Click the [sunset] picture."}]},
-      {type:"sim",q:"4.3 Your friend lives in Tokyo. Set the clock to show the time in Tokyo.",start:{},steps:[
-        {act:"right",t:"tray-clock",say:"Right-click the [clock]."},
-        {act:"click",t:"menu:adjust",say:"Click [Adjust date and time]."},
-        {act:"click",t:"set:zone",say:"Click the [Time zone] box."},
-        {act:"click",t:"zone:(UTC+09:00) Tokyo",say:"Choose [Tokyo]."},
-        {act:"look",t:"tray-clock",say:"Now the clock shows [Tokyo] time: 6 hours later!"}]}]},
-    {k:"cw2", t:"Class work 2", en:"CW2 · Lesson 3 part", ic:"📝", from:"CW2 for Term 1 · U1 L2 & 3", items:[
-      {type:"mc",q:"To get this box (Adjust date and time), you should press ___.",opts:["Right click","Click"],img:"clock-menu",two:true},
-      {type:"mc",q:"You can adjust the screen resolution by clicking on ___ settings.",opts:["Display","Volume","Date"]},
-      {type:"mc",q:"Scratch is an example of ___.",opts:["Software","Hardware"],emoji:"🐱",two:true},
-      {type:"mc",q:"Which option allows you to change the background?",opts:["Personalize","Security","Sound"]},
-      {type:"tf",q:"A lower resolution shows text and pictures larger but with less detail.",a:true,yes:["Yes","No"]}]},
-  ],
-};
+    exercises: [
+      {
+        k: "words",
+        t: "Choose the word",
+        en: "Book · Hands on 1.1–1.8",
+        ic: "🔤",
+        from: "Book · Hands on! 1.1–1.8",
+        items: [
+          {
+            type: "mc",
+            q: "To change the date and time on your computer, right-click the ___ in the Taskbar and select Adjust date and time.",
+            opts: ["clock", "speaker", "Start button"],
+            img: "clock-menu",
+          },
+          {
+            type: "mc",
+            q: "In the Date & time settings, you can change your ___ to display the correct time for your location.",
+            opts: ["time zone", "background", "volume"],
+          },
+          {
+            type: "mc",
+            q: "If the screen resolution is too high or too low, you can adjust it by going to the ___ settings.",
+            opts: ["Display", "Sound", "Personalize"],
+          },
+          {
+            type: "mc",
+            q: "To change the sound volume, you can right-click the ___ icon on the Taskbar and select Open volume mixer.",
+            opts: ["speaker", "clock", "Wi-Fi"],
+          },
+          {
+            type: "mc",
+            q: "The ___ section allows you to change your desktop background and color scheme.",
+            opts: ["Personalization", "Display", "Time & language"],
+          },
+          {
+            type: "mc",
+            q: "If you want your computer to automatically adjust for daylight saving time, make sure this option is on in the ___ settings.",
+            opts: ["Date & time", "Display", "Sound"],
+          },
+          {
+            type: "mc",
+            q: "The physical parts of a computer, such as the monitor, keyboard, and hard drive, are called ___.",
+            opts: ["hardware", "software"],
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "Programs like Microsoft Word, games, and the operating system are examples of ___ that tell the hardware what to do.",
+            opts: ["software", "hardware"],
+            two: true,
+          },
+        ],
+      },
+      {
+        k: "choose",
+        t: "Choose the answer",
+        en: "Book · Hands on 2.1–2.4",
+        ic: "✅",
+        from: "Book · Hands on! 2.1–2.4",
+        items: [
+          {
+            type: "mc",
+            q: "Which option allows you to adjust the screen resolution?",
+            opts: [
+              "Display settings",
+              "Hardware and Sound",
+              "System and Security",
+            ],
+          },
+          {
+            type: "mc",
+            q: "What are the two main parts of a computer?",
+            opts: [
+              "Hardware and software",
+              "Software and applications",
+              "Applications and tools",
+            ],
+          },
+          {
+            type: "mc",
+            q: "How can you change the screen resolution on your computer?",
+            opts: [
+              "Click Display settings and select Display resolution",
+              "Turn off your computer and restart it",
+              "Click the speaker icon and drag the slider",
+            ],
+          },
+          {
+            type: "mc",
+            q: "Which option should you select to change your computer's desktop background and theme?",
+            opts: [
+              "Appearance and Personalization",
+              "Device Manager",
+              "Internet Options",
+            ],
+          },
+        ],
+      },
+      {
+        k: "think",
+        t: "Think and answer",
+        en: "Book · Hands on 3",
+        ic: "💭",
+        from: "Book · Hands on! 3",
+        items: [
+          {
+            type: "open",
+            q: "Why is it important for your computer to have the correct time and date? What could happen if the time is wrong?",
+            a: "Files and emails get the [right date]. Reminders and lessons come at the [right time]. If it is wrong, you can be [late].",
+            img: "clock-menu",
+          },
+        ],
+      },
+      {
+        k: "handson",
+        t: "Do it on the computer",
+        en: "Book · Hands on 4.1–4.3",
+        ic: "🖥️",
+        from: "Book · Hands on! 4.1–4.3",
+        items: [
+          {
+            type: "sim",
+            q: "4.1 Check your screen resolution. Change it to 800 × 600. Then change it back.",
+            start: {},
+            steps: [
+              { act: "right", t: "desktop", say: "Right-click the [desktop]." },
+              {
+                act: "click",
+                t: "bgmenu:display",
+                say: "Click [Display settings].",
+              },
+              {
+                act: "look",
+                t: "set:res",
+                say: "Your resolution is [1920 × 1080].",
+              },
+              {
+                act: "click",
+                t: "set:res",
+                say: "Click the [Display resolution] box.",
+              },
+              { act: "click", t: "res:800 × 600", say: "Choose [800 × 600]." },
+              { act: "look", t: null, say: "The icons are [very big]!" },
+              {
+                act: "click",
+                t: "dlg:revert",
+                say: "Click [Revert]: back to the [recommended] setting.",
+              },
+            ],
+          },
+          {
+            type: "sim",
+            q: "4.2 Make your desktop awesome: choose a picture you really like.",
+            start: {},
+            steps: [
+              { act: "right", t: "desktop", say: "Right-click the [desktop]." },
+              {
+                act: "click",
+                t: "bgmenu:personalize",
+                say: "Click [Personalize].",
+              },
+              { act: "click", t: "set:background", say: "Click [Background]." },
+              { act: "click", t: "bg:4", say: "Click the [sunset] picture." },
+            ],
+          },
+          {
+            type: "sim",
+            q: "4.3 Your friend lives in Tokyo. Set the clock to show the time in Tokyo.",
+            start: {},
+            steps: [
+              {
+                act: "right",
+                t: "tray-clock",
+                say: "Right-click the [clock].",
+              },
+              {
+                act: "click",
+                t: "menu:adjust",
+                say: "Click [Adjust date and time].",
+              },
+              {
+                act: "click",
+                t: "set:zone",
+                say: "Click the [Time zone] box.",
+              },
+              {
+                act: "click",
+                t: "zone:(UTC+09:00) Tokyo",
+                say: "Choose [Tokyo].",
+              },
+              {
+                act: "look",
+                t: "tray-clock",
+                say: "Now the clock shows [Tokyo] time: 6 hours later!",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        k: "cw2",
+        t: "Class work 2",
+        en: "CW2 · Lesson 3 part",
+        ic: "📝",
+        from: "CW2 for Term 1 · U1 L2 & 3",
+        items: [
+          {
+            type: "mc",
+            q: "To get this box (Adjust date and time), you should press ___.",
+            opts: ["Right click", "Click"],
+            img: "clock-menu",
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "You can adjust the screen resolution by clicking on ___ settings.",
+            opts: ["Display", "Volume", "Date"],
+          },
+          {
+            type: "mc",
+            q: "Scratch is an example of ___.",
+            opts: ["Software", "Hardware"],
+            emoji: "🐱",
+            two: true,
+          },
+          {
+            type: "mc",
+            q: "Which option allows you to change the background?",
+            opts: ["Personalize", "Security", "Sound"],
+          },
+          {
+            type: "tf",
+            q: "A lower resolution shows text and pictures larger but with less detail.",
+            a: true,
+            yes: ["Yes", "No"],
+          },
+        ],
+      },
+    ],
+  };
 })();
