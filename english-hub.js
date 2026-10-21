@@ -3,7 +3,7 @@
 (function(){
   const E=window.ENGLISH||{items:[]};
   const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const card=it=>`<a class="item" href="${esc(it.path)}"><span class="band"><span class="snd">${esc(it.sound||'')}</span>${it.date?`<span class="date">${esc(it.date)}</span>`:''}</span><span class="in"><span class="n">${esc(it.kind||'Dictation')}</span><span class="t">${esc(it.title)}</span><span class="w">${esc(it.words||'')}</span><span class="meta"><span>${esc(it.note||'')}</span><span class="go">Play →</span></span></span></a>`;
+  const card=it=>`<a class="item" href="${esc(it.path)}"><span class="band"><span class="snd">${esc(it.sound||'')}</span>${it.date?`<span class="date">${esc(it.date)}</span>`:''}</span><span class="in"><span class="n">${esc(it.kind||'Dictation')}</span><span class="t">${esc(it.title)}</span><span class="w">${esc(it.words||'')}</span><span class="meta"><span>${esc(it.note||'')}</span><span class="go play-arrow">Play →</span></span></span></a>`;
   const kinds=[...new Set(E.items.map(i=>i.kind||'Dictation'))];
   document.getElementById('app').innerHTML=`<section class="card">
     <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade ${esc(E.grade)} · Term ${esc(E.term)} · English</span></div>

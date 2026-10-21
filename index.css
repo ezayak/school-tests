@@ -169,6 +169,11 @@ a:focus-visible {
   color: var(--ink);
   font-size: 1rem;
 }
+.play-arrow{
+  white-space: nowrap;
+  display: flex;
+  align-items: flex-end;  
+}
 .empty {
   color: var(--muted);
 }
