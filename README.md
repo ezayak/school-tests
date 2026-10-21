@@ -41,7 +41,7 @@ live in `shared/theme.css`; change them there and every page follows.
 | `shared/spelling.css` | flash cards, letter tiles, typing | English dictations |
 | `shared/drag-words.css` | drag tiles from a bank onto a line | "Mets en ordre", "Build the word" |
 | `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons |
-| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star` | quiz games |
+| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards) | quiz games, French and Computer lesson lists |
 
 Rules for new pages:
 - Copy an existing page of the same kind and keep its `<link>`s. Never add a `<style>` block or new colour values.
