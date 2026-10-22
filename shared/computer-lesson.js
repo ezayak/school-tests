@@ -49,7 +49,7 @@
     app.innerHTML = `<section class="card">
     <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · Term ${esc(LS.term)} · Computer</span></div>
     <h1 class="hero-title"><span class="p">Computer</span> <span class="k">Lessons</span></h1>
-    <p class="howto">Pick a lesson. Each lesson has big pictures, a pretend Windows computer to practise on, games, and the school exercises. Everything can be read aloud.</p>
+    <p class="howto">${esc(LS.intro || "Pick a lesson. Each lesson has big pictures, a pretend Windows computer to practise on, games, and the school exercises. Everything can be read aloud.")}</p>
   </section>
   <div class="items">${LS.items.map((it) => Kit.lessonCard(it, "Lesson")).join("")}</div>
   <div class="soon">New lessons will be added here.</div>`;
@@ -61,6 +61,7 @@
   const L = window.LESSON;
   const IMG = (n) => `img/lesson-${L.n}/${n}.jpg`;
   const W = window.WinSim;
+  const HOW = L.howto || []; // the Mini Windows how-to's (Grade 3 has none)
   let slow = store.get("cs-slow", "0") === "1";
   let auto = store.get("cs-auto", "1") === "1";
   const TOUCH = matchMedia("(hover: none)").matches;
@@ -203,6 +204,27 @@
           return `<div class="vis-view v-details"><div class="vh"><span>Name</span><span>Date modified</span><span>Type</span><span>Size</span></div>${files.map(([t, nm], k) => `<div class="vr">${ic(t, sz)}<span>${nm}</span><span>10/3/2026</span><span>${{ folder: "File folder", docx: "Word Document", zip: "Compressed", jpg: "JPG File" }[t]}</span><span>${t === "folder" ? "" : [13, 11, 2100][k - 1] + " KB"}</span></div>`).join("")}</div>`;
         return `<div class="vis-view v-${v.v}">${files.map(([t, nm]) => `<div class="vf">${ic(t, sz)}<span>${nm}</span>${v.v === "tiles" ? "<small>File · 13 KB</small>" : ""}</div>`).join("")}</div>`;
       }
+      case "bars": {
+        // "which holds more": a bar for each thing
+        const mx = Math.max(...v.items.map((i) => i.v));
+        return `<div class="vis-bars">${v.items.map((it) => `<div class="bb">${it.img ? `<img src="${IMG(it.img)}" alt="">` : `<span class="be">${esc(it.e || "")}</span>`}<span class="nm">${esc(it.label)}</span><span class="bar"><i style="width:${Math.max(4, Math.round((it.v / mx) * 100))}%"></i></span>${it.note ? `<small>${esc(it.note)}</small>` : ""}</div>`).join("")}</div>`;
+      }
+      case "ink":
+        // the 4 inks of an inkjet printer
+        return `<div class="vis-ink">${[
+          ["c", "Cyan", "blue"],
+          ["m", "Magenta", "pink"],
+          ["y", "Yellow", ""],
+          ["k", "Black", ""],
+        ]
+          .map(
+            ([k, n, s]) =>
+              `<div class="drop d-${k}"><i></i><b>${n}</b>${s ? `<small>(${s})</small>` : ""}</div>`,
+          )
+          .join("")}</div>`;
+      case "strip":
+        // a row of book pictures with their names
+        return `<div class="vis-strip">${v.items.map((it) => `<div class="vs">${it.img ? `<img src="${IMG(it.img)}" alt="">` : `<span class="be">${esc(it.e || "")}</span>`}<span>${esc(it.label)}</span></div>`).join("")}</div>`;
       case "filerow":
         return `<div class="vis-frow">${ic(v.type, 34)}<span>${esc(v.name)}</span><b>${esc(v.size)}</b></div>`;
     }
@@ -350,14 +372,31 @@
     });
   }
 
+  function playVideo(v) {
+    const p = openPop("🎬 " + v.t, videoHTML(v.video));
+    bindVideos(p);
+    const el = p.querySelector("video");
+    if (el) el.play().catch(() => {});
+  }
+
   /* ================= HOME ================= */
   const done = (k) => store.get(`cs-done-${L.n}-${k}`, "") === "1";
   const setDone = (k) => store.set(`cs-done-${L.n}-${k}`, "1");
   let tab = store.get("cs-tab-" + L.n, "learn");
   if (!["learn", "play", "ex"].includes(tab)) tab = "learn";
   const TABS = [
-    { k: "learn", ic: "📖", t: "Learn", en: "Pictures & how to" },
-    { k: "play", ic: "🎲", t: "Play", en: "Games & Mini Windows" },
+    {
+      k: "learn",
+      ic: "📖",
+      t: "Learn",
+      en: HOW.length ? "Pictures & how to" : "Pictures & videos",
+    },
+    {
+      k: "play",
+      ic: "🎲",
+      t: "Play",
+      en: W && HOW.length ? "Games & Mini Windows" : "Games",
+    },
     { k: "ex", ic: "✏️", t: "Exercises", en: "School exercises" },
   ];
   const tileHTML = (m, data) =>
@@ -371,25 +410,49 @@
           { t: "Big ideas", en: `${L.ideas.length} picture cards`, ic: "💡" },
           'data-m="ideas" id="m-ideas"',
         ) +
-        L.howto
-          .map((h, i) =>
+        HOW.map((h, i) =>
+          tileHTML(
+            {
+              t: h.t,
+              en: `How to · ${h.code}${h.video ? " · 🎬" : ""}`,
+              ic: h.ic,
+              done: done("h-" + h.k),
+            },
+            `data-h="${i}" id="h-${h.k}"`,
+          ),
+        ).join("") +
+        // no how-to's (Grade 3): one tile per picture card, so a card can be found by its picture
+        (HOW.length
+          ? ""
+          : L.ideas
+              .map((c, i) =>
+                tileHTML(
+                  {
+                    t: c.t,
+                    en: "Picture card",
+                    img: c.img,
+                    ic: c.vis && c.vis.kind === "emoji" ? c.vis.e : "💡",
+                  },
+                  `data-i="${i}" id="i-${i}"`,
+                ),
+              )
+              .join("")) +
+        (L.videos || [])
+          .map((v, i) =>
             tileHTML(
-              {
-                t: h.t,
-                en: `How to · ${h.code}${h.video ? " · 🎬" : ""}`,
-                ic: h.ic,
-                done: done("h-" + h.k),
-              },
-              `data-h="${i}" id="h-${h.k}"`,
+              { t: v.t, en: "🎬 Video from school", img: v.img },
+              `data-v="${i}" id="v-${v.k}"`,
             ),
           )
           .join("");
     } else if (tab === "play") {
       tiles =
-        tileHTML(
-          { t: "Mini Windows", en: "Play on a pretend computer", ic: "🪟" },
-          'data-m="mini" id="m-mini"',
-        ) +
+        (W && HOW.length
+          ? tileHTML(
+              { t: "Mini Windows", en: "Play on a pretend computer", ic: "🪟" },
+              'data-m="mini" id="m-mini"',
+            )
+          : "") +
         L.games
           .map((g, i) =>
             tileHTML(
@@ -458,6 +521,12 @@
         (b) => (b.onclick = () => howto(+b.dataset.h, null, openTab("learn"))),
       );
     app
+      .querySelectorAll("[data-i]")
+      .forEach((b) => (b.onclick = () => ideas(+b.dataset.i)));
+    app
+      .querySelectorAll("[data-v]")
+      .forEach((b) => (b.onclick = () => playVideo(L.videos[+b.dataset.v])));
+    app
       .querySelectorAll("[data-g]")
       .forEach((b) => (b.onclick = () => startGame(+b.dataset.g)));
     app
@@ -499,7 +568,7 @@
     i = (i + n) % n;
     const c = L.ideas[i];
     const text = c.t + ". " + c.lines.map(plain).join(" ");
-    const hi = c.howto ? L.howto.findIndex((h) => h.k === c.howto) : -1;
+    const hi = c.howto ? HOW.findIndex((h) => h.k === c.howto) : -1;
     app.innerHTML = `${titleBar("Big ideas", `<span class="count">${i + 1} / ${n}</span>`)}<section class="card pop fc">
     ${split(
       `${pic(c)}
@@ -508,7 +577,8 @@
     <div class="idea-lines">${c.lines.map((l, k) => `<button type="button" class="iline" data-l="${k}"><span class="num">${k + 1}</span><span>${kw(l)}</span><span class="spk">🔊</span></button>`).join("")}</div>
     ${c.tip ? `<div class="tipb">${pic({ img: c.tip.img }, "pic face")}<span>${kw(c.tip.say)}</span></div>` : ""}
     ${sayBtns()}
-    ${hi >= 0 ? `<div class="row center"><button type="button" class="btn ghost" id="tryIt">🪟 Try it: ${esc(L.howto[hi].t)}</button></div>` : ""}
+    ${hi >= 0 ? `<div class="row center"><button type="button" class="btn ghost" id="tryIt">🪟 Try it: ${esc(HOW[hi].t)}</button></div>` : ""}
+    ${c.video ? `<div class="row center"><button type="button" class="btn ghost" id="vidIt">🎬 Video from school</button></div>` : ""}
     <div class="nav"><button type="button" class="btn ghost" id="prevBtn" aria-label="Back">←</button><button type="button" class="btn" id="nextBtn" aria-label="Next">${i + 1 < n ? "→" : "↺"}</button></div>`,
       "wide",
     )}
@@ -533,6 +603,8 @@
     document.getElementById("nextBtn").onclick = () => ideas(i + 1);
     const tb = document.getElementById("tryIt");
     if (tb) tb.onclick = () => howto(hi, null, () => ideas(i));
+    const vb = document.getElementById("vidIt");
+    if (vb) vb.onclick = () => playVideo({ t: c.t, video: c.video });
     autoSay(text);
     top0();
   }
@@ -544,7 +616,7 @@
   function howto(hIdx, startMode, back) {
     leave();
     backTo = back || openTab("learn");
-    const H = L.howto[hIdx];
+    const H = HOW[hIdx];
     let cur = 0;
     let mode = "idle";
     app.innerHTML = `${titleBar(H.t, `<span class="count">${esc(H.code)}</span>`)}<section class="card pop">
@@ -641,7 +713,7 @@
           } else {
             setDone("h-" + H.k);
             const perfect = !m2.wrongs;
-            cap.innerHTML = `<div class="fb ok"><b>🎉 ${perfect ? "Perfect!" : "Well done!"}</b><span>${esc(H.t)} ✓</span></div><div class="row center">${hIdx + 1 < L.howto.length ? `<button type="button" class="btn" id="nextH">Next: ${esc(L.howto[hIdx + 1].t)} →</button>` : ""}</div>`;
+            cap.innerHTML = `<div class="fb ok"><b>🎉 ${perfect ? "Perfect!" : "Well done!"}</b><span>${esc(H.t)} ✓</span></div><div class="row center">${hIdx + 1 < HOW.length ? `<button type="button" class="btn" id="nextH">Next: ${esc(HOW[hIdx + 1].t)} →</button>` : ""}</div>`;
             say(perfect ? "Perfect!" : "Well done!");
             const nb = document.getElementById("nextH");
             if (nb) nb.onclick = () => howto(hIdx + 1, null, backTo);
@@ -680,7 +752,7 @@
     <p class="turn">📱↻ Turn your phone sideways for a bigger screen.</p>
     <div class="row center"><button type="button" class="abtn" id="resetBtn">↺ Start again</button></div>
     <h3>🏅 Missions <small class="muted">Do the book's steps by yourself</small></h3>
-    <div class="missions">${L.howto.map((h, i) => `<button type="button" class="mission${done("h-" + h.k) ? " done" : ""}" data-h="${i}"><span class="mi-ic">${h.ic}</span><span>${esc(h.t)}</span>${done("h-" + h.k) ? "<b>✓</b>" : ""}</button>`).join("")}</div>
+    <div class="missions">${HOW.map((h, i) => `<button type="button" class="mission${done("h-" + h.k) ? " done" : ""}" data-h="${i}"><span class="mi-ic">${h.ic}</span><span>${esc(h.t)}</span>${done("h-" + h.k) ? "<b>✓</b>" : ""}</button>`).join("")}</div>
   </section>`;
     bindHome();
     sim = W.create(document.getElementById("simbox"), { start: {} });
@@ -741,7 +813,13 @@
     S.from = from || "";
     S.key = key || "";
     S.max = items.reduce(
-      (a, it) => a + (it.type === "match" ? it.pairs.length : 1),
+      (a, it) =>
+        a +
+        (it.type === "match"
+          ? it.pairs.length
+          : it.type === "wsearch"
+            ? it.words.length
+            : 1),
       0,
     );
     show();
@@ -755,6 +833,7 @@
     backTo = S.back;
     top0();
     const it = S.items[S.i];
+
     ({
       mc: itMC,
       match: itMatch,
@@ -762,6 +841,10 @@
       open: itOpen,
       parts: itParts,
       sim: itSim,
+      place: itPlace,
+      multi: itMulti,
+      touch: itTouch,
+      wsearch: itWsearch,
     })[it.type](it);
   }
   function next() {
@@ -811,6 +894,7 @@
         oi: it.oi && it.oi[k],
         oh: it.oh && it.oh[k],
         sy: it.say && it.say[k],
+        pi: it.pics && it.pics[k],
       })),
     );
     if (it.tf)
@@ -819,10 +903,10 @@
           (it.yes ? it.yes : ["True", "False"]).indexOf(a.t) -
           (it.yes ? it.yes : ["True", "False"]).indexOf(b.t),
       );
-    const big = it.oi || it.oh;
+    const big = it.oi || it.oh || it.pics;
     const side = `${fromTag()}${hasPic(it) ? pic(it) : ""}`;
     const main = `${qHTML(it.q)}
-    <div class="opts ${it.two ? "two" : ""} ${big ? "pics" : ""}">${order.map((o, j) => `<div class="optrow"><button type="button" class="opt${big ? " popt" : ""}" data-j="${j}">${o.ic ? `<span class="oic">${o.ic}</span>` : ""}${o.oi ? ic(o.oi, big ? 72 : 40) : ""}${o.oh ? visHTML(o.oh) : ""}<span>${kw(o.t)}</span></button><button type="button" class="abtn sm" data-h="${j}" aria-label="Listen">🔊</button></div>`).join("")}</div>
+    <div class="opts ${it.two ? "two" : ""} ${big ? "pics" : ""}">${order.map((o, j) => `<div class="optrow"><button type="button" class="opt${big ? " popt" : ""}" data-j="${j}">${o.ic ? `<span class="oic">${o.ic}</span>` : ""}${o.oi ? ic(o.oi, big ? 72 : 40) : ""}${o.oh ? visHTML(o.oh) : ""}${o.pi ? `<img class="oimg" src="${IMG(o.pi)}" alt="">` : ""}<span>${kw(o.t)}</span></button><button type="button" class="abtn sm" data-h="${j}" aria-label="Listen">🔊</button></div>`).join("")}</div>
     <div id="fbx" class="fbx"></div>`;
     app.innerHTML = `${hud()}<section class="card pop fc">${hasPic(it) ? split(side, main) : `<div class="row center">${fromTag()}</div>${main}`}</section>`;
     bindHome();
@@ -1102,27 +1186,30 @@
     draw();
     return st;
   }
+  // one step card: the mouse action (Mini Windows steps) or a book picture, then the words
+  const stepHTML = (s) =>
+    `${s.act ? actPill(s.act) : ""}${s.img ? `<img class="simg" src="${IMG(s.img)}" alt="">` : ""}${s.e ? `<span class="se">${esc(s.e)}</span>` : ""}<span>${kw(s.say)}</span>`;
   function itOrder(it) {
-    const H = it.howto ? L.howto.find((h) => h.k === it.howto) : it;
+    const H = it.howto ? HOW.find((h) => h.k === it.howto) : it;
     const steps = H.steps.filter((s) => s.act !== "look");
     let tries = 0;
     const cards = steps.map((s, k) => ({
       k,
       say: s.say,
-      html: `${actPill(s.act)}<span>${kw(s.say)}</span>`,
+      html: stepHTML(s),
     }));
     let bank = shuf(cards);
     for (let n = 0; n < 8 && bank.every((c, k) => c.k === k); n++)
       bank = shuf(cards);
     app.innerHTML = `${hud()}<section class="card pop">
     <div class="q"><span class="say big">🔢 ${kw(H.t)}</span><button type="button" class="abtn" id="sq" aria-label="Listen">🔊</button></div>
-    <p class="hint">Tap the steps in order, or drag them.</p>
+    <p class="hint">${esc(H.hint || "Tap the steps in order, or drag them.")}</p>
     <div class="slots steps-line" id="line"></div>
     <div class="bank steps-bank" id="bank"></div>
     <div id="fbx" class="fbx"><div class="row center"><button class="btn ghost" id="hintBtn" type="button">💡 Help</button><button class="btn" id="checkBtn" type="button" disabled>✔ Check</button></div></div></section>`;
     bindHome();
-    document.getElementById("sq").onclick = () =>
-      say("Put the steps in order. " + H.t);
+    const ask = H.ask || "Put the steps in order. " + plain(H.t);
+    document.getElementById("sq").onclick = () => say(ask);
     // two steps with the same words (e.g. "Click Change." twice) can swap places
     const st = {
       line: [],
@@ -1181,12 +1268,12 @@
         });
       feedback(
         ok,
-        `<ol class="steps mini">${steps.map((s) => `<li>${actPill(s.act)}<span>${kw(s.say)}</span></li>`).join("")}</ol>`,
+        `<ol class="steps mini">${steps.map((s) => `<li>${stepHTML(s)}</li>`).join("")}</ol>`,
       );
       say(ok ? "Great!" : "Look at the right order.");
     };
     document.getElementById("checkBtn").onclick = check;
-    autoSay("Put the steps in order. " + H.t);
+    autoSay(ask);
   }
 
   /* --- name . extension: tap the right part --- */
@@ -1350,6 +1437,563 @@
         );
       },
     });
+  }
+
+  /* --- put the thing in the right place: drag it there, or tap the place --- */
+  function itPlace(it) {
+    let tries = 0,
+      busy = false;
+    const T = it.thing || {};
+    const spots = shuf(it.spots.map((s, k) => ({ ...s, k })));
+    app.innerHTML = `${hud()}<section class="card pop fc">
+    <div class="row center">${fromTag()}</div>
+    ${qHTML(it.q)}
+    <div class="place">
+      <button type="button" class="thing" id="thing" aria-label="${esc(plain(T.label || "Drag me"))}">${pic(T, "pic tpic")}${T.label ? `<span>${kw(T.label)}</span>` : ""}</button>
+      <p class="hint">✋ Drag it to the right place, or tap the place.</p>
+      <div class="spots n${spots.length}">${spots.map((s, j) => `<button type="button" class="spot" data-j="${j}">${hasPic(s) ? pic(s, "pic spic") : ""}<b>${kw(s.t)}</b></button>`).join("")}</div>
+    </div>
+    <div id="fbx" class="fbx"></div></section>`;
+    bindHome();
+    document.getElementById("sq").onclick = () => say(plain(it.q));
+    const th = document.getElementById("thing");
+    const choose = (j) => {
+      if (busy) return;
+      const s = spots[j];
+      const b = app.querySelector(`.spot[data-j="${j}"]`);
+      if (s.k !== 0) {
+        tries++;
+        b.classList.remove("wrong");
+        void b.offsetWidth;
+        b.classList.add("wrong");
+        say(plain(s.t)).then(() => say(s.no || "Try again!"));
+        return;
+      }
+      busy = true;
+      b.classList.remove("wrong");
+      b.classList.add("right");
+      b.insertAdjacentHTML(
+        "beforeend",
+        `<span class="in-spot">${pic(T, "pic ipic")}</span>`,
+      );
+      th.classList.add("placed");
+      app.querySelectorAll(".spot").forEach((x) => {
+        x.disabled = true;
+        if (x !== b) x.classList.add("dim");
+      });
+      const ans = (T.label ? T.label + " → " : "") + "[" + plain(s.t) + "]";
+      if (!tries) addPts(1);
+      else S.miss.push({ img: T.img, emoji: T.emoji, right: ans });
+      say(plain(ans) + ". " + plain(it.x || ""));
+      feedback(true, kw(ans) + (it.x ? `<br>${kw(it.x)}` : ""));
+    };
+    app
+      .querySelectorAll(".spot")
+      .forEach((b) => (b.onclick = () => choose(+b.dataset.j)));
+    th.onpointerdown = (e) => {
+      if (busy) return;
+      e.preventDefault();
+      const r = th.getBoundingClientRect();
+      const sx = e.clientX,
+        sy = e.clientY;
+      let ghost = null;
+      try {
+        th.setPointerCapture(e.pointerId);
+      } catch (_) {}
+      const over = (ev) =>
+        [...app.querySelectorAll(".spot")].find((b) => {
+          const q = b.getBoundingClientRect();
+          return (
+            ev.clientX >= q.left &&
+            ev.clientX <= q.right &&
+            ev.clientY >= q.top &&
+            ev.clientY <= q.bottom
+          );
+        });
+      const mv = (ev) => {
+        if (!ghost && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 6) {
+          ghost = th.cloneNode(true);
+          ghost.removeAttribute("id");
+          ghost.classList.add("drag");
+          ghost.style.width = r.width + "px";
+          document.body.appendChild(ghost);
+          th.classList.add("ghost");
+        }
+        if (ghost) {
+          ghost.style.left = ev.clientX - r.width / 2 + "px";
+          ghost.style.top = ev.clientY - r.height / 2 + "px";
+          const o = over(ev);
+          app
+            .querySelectorAll(".spot")
+            .forEach((b) => b.classList.toggle("over", b === o));
+        }
+      };
+      const up = (ev) => {
+        th.removeEventListener("pointermove", mv);
+        th.removeEventListener("pointerup", up);
+        th.removeEventListener("pointercancel", up);
+        app
+          .querySelectorAll(".spot")
+          .forEach((b) => b.classList.remove("over"));
+        if (!ghost) {
+          say(plain(T.label || it.q));
+          return;
+        }
+        ghost.remove();
+        th.classList.remove("ghost");
+        const o = over(ev);
+        if (o) choose(+o.dataset.j);
+      };
+      th.addEventListener("pointermove", mv);
+      th.addEventListener("pointerup", up);
+      th.addEventListener("pointercancel", up);
+    };
+    autoSay(plain(it.q));
+  }
+
+  /* --- choose all the right ones --- */
+  function itMulti(it) {
+    let tries = 0;
+    const sel = new Set();
+    const opts = shuf(it.opts.map((o, k) => ({ ...o, k })));
+    const pics = opts.some(hasPic);
+    app.innerHTML = `${hud()}<section class="card pop fc">
+    <div class="row center">${fromTag()}</div>
+    ${qHTML(it.q)}
+    <p class="hint">Tap <b>all</b> the right ones. Then press ✔ Check.</p>
+    <div class="multi${pics ? " pics" : ""}">${opts.map((o, j) => `<button type="button" class="mopt" data-j="${j}" aria-pressed="false">${hasPic(o) ? pic(o, "pic mpc") : ""}<span>${kw(o.t)}</span><i class="mk" aria-hidden="true"></i></button>`).join("")}</div>
+    <div id="fbx" class="fbx"><div id="tryMsg"></div><div class="row center"><button class="btn" id="checkBtn" type="button" disabled>✔ Check</button></div></div></section>`;
+    bindHome();
+    document.getElementById("sq").onclick = () => say(plain(it.q));
+    const btns = [...app.querySelectorAll(".mopt")];
+    btns.forEach(
+      (b) =>
+        (b.onclick = () => {
+          const j = +b.dataset.j;
+          if (sel.has(j)) sel.delete(j);
+          else {
+            sel.add(j);
+            say(plain(opts[j].t));
+          }
+          b.setAttribute("aria-pressed", sel.has(j));
+          b.classList.remove("no");
+          document.getElementById("checkBtn").disabled = !sel.size;
+        }),
+    );
+    const right = opts.filter((o) => o.ok).map((o) => plain(o.t));
+    document.getElementById("checkBtn").onclick = () => {
+      const ok = opts.every((o, j) => !!o.ok === sel.has(j));
+      if (!ok && tries < 1) {
+        tries++;
+        let bad = 0;
+        btns.forEach((b, j) => {
+          if (sel.has(j) && !opts[j].ok) {
+            b.classList.add("no");
+            bad++;
+          }
+        });
+        const msg = bad
+          ? "Almost! The red ones are not right."
+          : "Almost! Find one more.";
+        document.getElementById("tryMsg").innerHTML =
+          `<div class="fb no"><b>${msg}</b></div>`;
+        say(msg + " Try again!");
+        return;
+      }
+      btns.forEach((b, j) => {
+        b.disabled = true;
+        b.classList.remove("no");
+        if (opts[j].ok) b.classList.add("ok");
+        else if (sel.has(j)) b.classList.add("no");
+        else b.classList.add("dim");
+      });
+      if (ok && !tries) addPts(1);
+      else
+        S.miss.push({
+          emoji: "✅",
+          right: plain(it.q) + " → " + right.join(", "),
+        });
+      say(ok ? "" : "The right ones are: " + right.join(", "));
+      feedback(
+        ok,
+        (ok ? "" : esc(right.join(" · "))) + (it.x ? `<br>${kw(it.x)}` : ""),
+      );
+    };
+    autoSay(plain(it.q));
+  }
+
+  /* --- touch practice on a pretend tablet: tap, swipe, pinch, draw with a stylus --- */
+  function itTouch(it) {
+    const g = it.g;
+    let fin = false;
+    const HINT = {
+      tap: "Tap the star with one finger.",
+      swipe: "Put your finger on the picture and slide it to the left.",
+      pinch: TOUCH
+        ? "Put two fingers on the picture and move them apart."
+        : "Put two fingers on the touchpad and move them apart, or press ＋.",
+      draw: "Follow the dotted line with your finger, like a stylus.",
+    }[g];
+    app.innerHTML = `${hud()}<section class="card pop fc">
+    ${qHTML(it.q)}
+    <div class="tablet t-${g}"><div class="tscreen" id="ts"></div></div>
+    <p class="hint" id="thint">👆 ${esc(HINT)}</p>
+    <div class="tdots" id="tdots"></div>
+    <div id="fbx" class="fbx"></div></section>`;
+    bindHome();
+    document.getElementById("sq").onclick = () => say(plain(it.q));
+    const ts = document.getElementById("ts");
+    const dots = (n, k) =>
+      (document.getElementById("tdots").innerHTML = Array.from(
+        { length: n },
+        (_, i) => `<i class="${i < k ? "on" : ""}"></i>`,
+      ).join(""));
+    const finish = () => {
+      if (fin) return;
+      fin = true;
+      addPts(1);
+      say("Great! " + plain(it.x || ""));
+      feedback(true, kw(it.x || "You did it!"));
+    };
+    if (g === "tap") {
+      let n = 0;
+      const put = () => {
+        ts.innerHTML = `<button type="button" class="tstar" id="tstar" aria-label="Star" style="left:${10 + Math.random() * 70}%;top:${12 + Math.random() * 60}%">⭐</button>`;
+        document.getElementById("tstar").onclick = () => {
+          n++;
+          dots(3, n);
+          if (n >= 3) {
+            ts.innerHTML = '<div class="tbig">🎉</div>';
+            finish();
+          } else {
+            say(["One!", "Two!"][n - 1]);
+            put();
+          }
+        };
+      };
+      dots(3, 0);
+      put();
+    } else if (g === "swipe") {
+      const P = it.pics;
+      let k = 0;
+      ts.innerHTML = `<div class="tstrip" id="tstrip">${P.map((p) => `<div class="tpg"><img src="${IMG(p)}" alt="" draggable="false"></div>`).join("")}</div>`;
+      const strip = document.getElementById("tstrip");
+      const go = (d) => {
+        k = Math.max(0, Math.min(P.length - 1, k + d));
+        strip.style.transform = `translateX(${-k * 100}%)`;
+        dots(P.length, k + 1);
+        if (k === P.length - 1) finish();
+      };
+      dots(P.length, 1);
+      let x0 = null;
+      ts.onpointerdown = (e) => {
+        x0 = e.clientX;
+        try {
+          ts.setPointerCapture(e.pointerId);
+        } catch (_) {}
+      };
+      ts.onpointerup = (e) => {
+        if (x0 === null) return;
+        const dx = e.clientX - x0;
+        x0 = null;
+        if (dx < -40) go(1);
+        else if (dx > 40) go(-1);
+      };
+      ts.onpointercancel = () => (x0 = null);
+    } else if (g === "pinch") {
+      let sc = 1;
+      ts.innerHTML = `<img class="tzoom" id="tz" src="${IMG(it.img)}" alt="" draggable="false">${TOUCH ? "" : `<div class="tzb"><button type="button" class="abtn" id="zOut" aria-label="Zoom out">－</button><button type="button" class="abtn" id="zIn" aria-label="Zoom in">＋</button></div>`}`;
+      const img = document.getElementById("tz");
+      const setSc = (v) => {
+        sc = Math.max(1, Math.min(3, v));
+        img.style.transform = `scale(${sc})`;
+        dots(1, sc >= 1.8 ? 1 : 0);
+        if (sc >= 1.8) finish();
+      };
+      dots(1, 0);
+      const pts = new Map();
+      let d0 = 0,
+        s0 = 1;
+      const dist = () => {
+        const [a, b] = [...pts.values()];
+        return Math.hypot(a.x - b.x, a.y - b.y);
+      };
+      ts.onpointerdown = (e) => {
+        if (e.target.closest("button")) return; // the ＋ / － buttons
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        try {
+          ts.setPointerCapture(e.pointerId);
+        } catch (_) {}
+        if (pts.size === 2) {
+          d0 = dist();
+          s0 = sc;
+        }
+      };
+      ts.onpointermove = (e) => {
+        if (!pts.has(e.pointerId)) return;
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (pts.size === 2 && d0 > 0) setSc((s0 * dist()) / d0);
+      };
+      const lift = (e) => {
+        pts.delete(e.pointerId);
+        d0 = 0;
+      };
+      ts.onpointerup = lift;
+      ts.onpointercancel = lift;
+      // a laptop touchpad pinch arrives as ctrl + wheel
+      ts.addEventListener(
+        "wheel",
+        (e) => {
+          if (!e.ctrlKey) return;
+          e.preventDefault();
+          setSc(sc * (e.deltaY < 0 ? 1.08 : 0.93));
+        },
+        { passive: false },
+      );
+      const zi = document.getElementById("zIn");
+      if (zi) {
+        zi.onclick = () => setSc(sc + 0.4);
+        document.getElementById("zOut").onclick = () => setSc(sc - 0.4);
+      }
+    } else if (g === "draw") {
+      // a wavy line with 9 check points; draw over all of them
+      const CP = Array.from({ length: 9 }, (_, i) => ({
+        x: 40 + i * 40,
+        y: 110 + Math.sin(i * 0.9) * 55,
+      }));
+      const path = "M" + CP.map((p) => `${p.x} ${p.y}`).join(" L");
+      ts.innerHTML = `<svg viewBox="0 0 400 220" class="tdraw" id="tsvg"><path d="${path}" class="guide"/>${CP.map((p, i) => `<circle cx="${p.x}" cy="${p.y}" r="9" class="cp" data-i="${i}"/>`).join("")}<polyline class="ink" id="tink" points=""/></svg>`;
+      const svg = document.getElementById("tsvg");
+      const ink = document.getElementById("tink");
+      const hit = new Set();
+      let pts = [],
+        down = false;
+      dots(CP.length, 0);
+      const at = (e) => {
+        const r = svg.getBoundingClientRect();
+        return {
+          x: ((e.clientX - r.left) / r.width) * 400,
+          y: ((e.clientY - r.top) / r.height) * 220,
+        };
+      };
+      const add = (e) => {
+        const p = at(e);
+        pts.push(Math.round(p.x) + "," + Math.round(p.y));
+        ink.setAttribute("points", pts.join(" "));
+        CP.forEach((c, i) => {
+          if (!hit.has(i) && Math.hypot(c.x - p.x, c.y - p.y) < 22) {
+            hit.add(i);
+            svg.querySelector(`[data-i="${i}"]`).classList.add("on");
+          }
+        });
+        dots(CP.length, hit.size);
+        if (hit.size === CP.length) finish();
+      };
+      svg.onpointerdown = (e) => {
+        down = true;
+        try {
+          svg.setPointerCapture(e.pointerId);
+        } catch (_) {}
+        add(e);
+      };
+      svg.onpointermove = (e) => {
+        if (down) add(e);
+      };
+      svg.onpointerup = () => (down = false);
+      svg.onpointercancel = () => (down = false);
+    }
+    autoSay(plain(it.q) + " " + HINT);
+  }
+
+  /* --- word search: tap the first letter, then the last letter (or drag) --- */
+  function wsGrid(words, n) {
+    const dirs = [
+      [0, 1],
+      [1, 0],
+      [1, 1],
+    ];
+    for (let t0 = 0; t0 < 200; t0++) {
+      const g = Array.from({ length: n }, () => Array(n).fill(""));
+      let ok = true;
+      for (const w of words.slice().sort((a, b) => b.length - a.length)) {
+        let put = false;
+        for (let t = 0; t < 300 && !put; t++) {
+          const [dr, dc] = pick(dirs);
+          const r0 = Math.floor(Math.random() * (n - dr * (w.length - 1)));
+          const c0 = Math.floor(Math.random() * (n - dc * (w.length - 1)));
+          let fits = true;
+          for (let i = 0; i < w.length && fits; i++) {
+            const ch = g[r0 + dr * i][c0 + dc * i];
+            if (ch && ch !== w[i]) fits = false;
+          }
+          if (!fits) continue;
+          for (let i = 0; i < w.length; i++) g[r0 + dr * i][c0 + dc * i] = w[i];
+          put = true;
+        }
+        if (!put) {
+          ok = false;
+          break;
+        }
+      }
+      if (!ok) continue;
+      const AB = "ABCDEFGHIJKLMNOPRSTUVWY";
+      return g.map((row) => row.map((ch) => ch || pick(AB.split(""))));
+    }
+  }
+  function itWsearch(it) {
+    const n = it.size || 10;
+    const W8 = it.words.map((t) => ({
+      t,
+      w: t.toUpperCase().replace(/[^A-Z0-9]/g, ""),
+      found: false,
+      help: false,
+    }));
+    const g = wsGrid(
+      W8.map((x) => x.w),
+      n,
+    );
+    let start = null,
+      fin = false;
+    app.innerHTML = `${hud()}<section class="card pop fc">
+    <div class="row center">${fromTag()}</div>
+    ${qHTML(it.q)}
+    <p class="hint">Tap the <b>first</b> letter, then the <b>last</b> letter. Words go → across, ↓ down or ↘ on a slant.</p>
+    <div class="ws-wrap"><div class="ws" id="ws" style="--n:${n}">${g.map((row, r) => row.map((ch, c) => `<span class="wc" data-r="${r}" data-c="${c}">${ch}</span>`).join("")).join("")}</div>
+    <ul class="ws-list" id="wsl"></ul></div>
+    <div id="fbx" class="fbx"><div class="row center"><button class="btn ghost" id="helpBtn" type="button">💡 Help</button></div></div></section>`;
+    bindHome();
+    document.getElementById("sq").onclick = () => say(plain(it.q));
+    const grid = document.getElementById("ws");
+    const cell = (r, c) => grid.querySelector(`[data-r="${r}"][data-c="${c}"]`);
+    const list = () =>
+      (document.getElementById("wsl").innerHTML = W8.map(
+        (x) =>
+          `<li class="${x.found ? "ok" : ""}">${x.found ? "✓ " : ""}${esc(x.t)}</li>`,
+      ).join(""));
+    list();
+    const line = (a, b) => {
+      const dr = Math.sign(b.r - a.r),
+        dc = Math.sign(b.c - a.c);
+      const len = Math.max(Math.abs(b.r - a.r), Math.abs(b.c - a.c)) + 1;
+      if (
+        (b.r - a.r &&
+          b.c - a.c &&
+          Math.abs(b.r - a.r) !== Math.abs(b.c - a.c)) ||
+        len < 2
+      )
+        return null;
+      return Array.from({ length: len }, (_, i) => ({
+        r: a.r + dr * i,
+        c: a.c + dc * i,
+      }));
+    };
+    const clearSel = () =>
+      grid.querySelectorAll(".sel").forEach((x) => x.classList.remove("sel"));
+    const tryLine = (a, b) => {
+      clearSel();
+      const cs = line(a, b);
+      if (!cs) {
+        say("Try again!");
+        return;
+      }
+      const s = cs.map((p) => g[p.r][p.c]).join("");
+      const x = W8.find(
+        (x) => !x.found && (x.w === s || x.w === [...s].reverse().join("")),
+      );
+      if (!x) {
+        cs.forEach((p) => {
+          const el = cell(p.r, p.c);
+          el.classList.add("bad");
+          setTimeout(() => el.classList.remove("bad"), 450);
+        });
+        say("Not a word. Try again!");
+        return;
+      }
+      x.found = true;
+      cs.forEach((p) => cell(p.r, p.c).classList.add("found"));
+      if (!x.help) addPts(1);
+      else S.miss.push({ emoji: "🔎", right: x.t });
+      list();
+      say(x.t);
+      if (W8.every((y) => y.found) && !fin) {
+        fin = true;
+        feedback(true, `All ${W8.length} words found!`);
+      }
+    };
+    const at = (e) => {
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      return el && el.classList.contains("wc") && grid.contains(el)
+        ? { r: +el.dataset.r, c: +el.dataset.c }
+        : null;
+    };
+    let downAt = null;
+    grid.onpointerdown = (e) => {
+      if (fin) return;
+      e.preventDefault();
+      const p = at(e);
+      if (!p) return;
+      try {
+        grid.releasePointerCapture(e.pointerId);
+      } catch (_) {}
+      if (start && (start.r !== p.r || start.c !== p.c)) {
+        const s = start;
+        start = null;
+        downAt = null;
+        tryLine(s, p);
+        return;
+      }
+      start = p;
+      downAt = p;
+      clearSel();
+      cell(p.r, p.c).classList.add("sel");
+    };
+    grid.onpointermove = (e) => {
+      if (!downAt || !start) return;
+      const p = at(e);
+      if (!p) return;
+      const cs = line(start, p);
+      clearSel();
+      (cs || [start]).forEach((q) => cell(q.r, q.c).classList.add("sel"));
+    };
+    grid.onpointerup = (e) => {
+      if (!downAt) return;
+      const p = at(e);
+      downAt = null;
+      if (p && start && (p.r !== start.r || p.c !== start.c)) {
+        const s = start;
+        start = null;
+        tryLine(s, p);
+      }
+    };
+    document.getElementById("helpBtn").onclick = () => {
+      const x = W8.find((y) => !y.found);
+      if (!x) return;
+      x.help = true;
+      for (let r = 0; r < n; r++)
+        for (let c = 0; c < n; c++)
+          for (const [dr, dc] of [
+            [0, 1],
+            [1, 0],
+            [1, 1],
+          ]) {
+            const cs = line(
+              { r, c },
+              { r: r + dr * (x.w.length - 1), c: c + dc * (x.w.length - 1) },
+            );
+            if (
+              cs &&
+              cs.every((p) => p.r < n && p.c < n) &&
+              cs.map((p) => g[p.r][p.c]).join("") === x.w
+            ) {
+              const el = cell(r, c);
+              el.classList.add("hint");
+              setTimeout(() => el.classList.remove("hint"), 2500);
+              say("Look for " + x.t + ". It starts here.");
+              return;
+            }
+          }
+    };
+    autoSay(plain(it.q));
   }
 
   /* ================= END ================= */
