@@ -1480,8 +1480,8 @@ details.book[open] .alltext {
   .hint {
     font-size: 0.85rem;
   }
-  /* answer + next button side by side */
-  .fbx:has(.fb) {
+  /* answer + next button side by side (only the plain answer box, not Think and answer or "Try again") */
+  .fbx:has(> .row.end) {
     flex-direction: row;
     align-items: center;
   }
