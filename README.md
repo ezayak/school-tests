@@ -266,3 +266,26 @@ Extra things a lesson can have (both grades can use them):
 - `order` can have its own steps instead of a how-to: `{type: "order", t, ask, hint, steps: [{say: "CD", e: "💿"}, {say: "Blu-ray", img: "blu-ray"}]}`.
 - More drawings: `vis: {kind: "bars", items: [{e | img, label, v, note}]}` (which holds more), `{kind: "ink"}` (the 4 inkjet colours), `{kind: "strip", items: [{img | e, label}]}`.
 - A small book icon whose name ends in `-ic` (`mic-ic.jpg`) is shown at its real size, not blown up.
+
+## Computer lessons (Grade 3, term 2) and Mini Word
+
+Folder: `grade-3/term-2/computer/` (Unit 2 « My first article »): the same engine and page format, but the pages load **Mini Word**
+(`wordsim.js` / `wordsim.css`) instead of Mini Windows. The engine uses whichever one the page loads, and takes its name, icon and
+help line for the free-play tile from it (`WordSim.label`, `ic`, `hint`, `about`).
+
+Mini Word is a pretend Microsoft Word: title bar with the Quick Access Toolbar (Save, Undo, Redo), the tabs, the Home ribbon (Font list,
+Font Size, Bold / Italic / Underline, Text Highlight Color + colours + Stop Highlighting, Font Color, Bullets + Bullet Library, Numbering,
+the 4 alignments, Find), Insert › Symbol, Review › Spelling and Grammar (the Editor pane: suggestions, Ignore once / all), View, the
+status bar with the zoom slider, File (Save, Save As › Browse › the Save As window with Documents and the file name, Print).
+The text can really be selected (drag over it, double-click a word, three clicks for a paragraph), typed (Enter = new paragraph,
+Shift + Enter = new line, Backspace) and formatted; Undo works; the shortcuts work (Ctrl + B / I / U / Z / Y / F / S / A / L / E / R / J, F7).
+
+Steps for Mini Word (the list of targets is at the top of `wordsim.js`):
+`{act: "select", t: "w:0:0", to: "w:0:5"}` (or `t: "all"`, `"para:1"`) — select from word to word, `w:<paragraph>:<word>` counted from 0;
+`{act: "click", t: "fmt:bold"}`; `{act: "click", t: "w:3:10"}` puts the text cursor after that word; `{act: "type", t: "doc", text: "ATMs"}` types in the text
+(`t: "nav-search"` / `"dlg:filename"` type in those boxes); `{act: "key", t: "key:Ctrl+B", key: "Ctrl+B"}` (also `"Enter"`, `"Shift+Enter"`, `"F7"`; a button
+under the screen does it on a tablet; the button that does the same is also accepted); `{act: "slide", t: "zoom-range", min: 150}`.
+A start: `{doc: "robots" | "robotsList" | "robotsMiss" | "oneParagraph" | "global" | "volcano" | "olympic", sel: "all" | [p0, w0, p1, w1],
+caret: [p, w], tab: "Insert", fmt: [{r: [p0, w0, p1, w1], b: true}], file: "saveas" | "print", nav: true, editor: true, saved: "Robots around us", zoom: 100}`.
+The texts are the book's; "robotsMiss" and "olympic" have the book's spelling mistakes for the Editor.
+Pictures of Word buttons and keys for games: `oi: ["bold", "highlight", "key:Ctrl+B"]` in `mc`, `icon: "key:F7"` in `match`, `vis: {kind: "icons", items: [{type: "align-left"}]}`.

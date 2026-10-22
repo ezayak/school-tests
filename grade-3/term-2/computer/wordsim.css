@@ -1,0 +1,1054 @@
+/* Mini Word (wordsim.js). The screen is drawn at 960 × 540 and scaled to fit its box.
+   Word keeps its own light look in both themes, like a real computer screen. */
+.wd-box {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: #f3f2f1;
+  box-shadow: 4px 4px 0 var(--ink);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.wd-screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 960px;
+  height: 540px;
+  transform-origin: 0 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    Roboto,
+    sans-serif;
+  font-size: 12px;
+  line-height: 1.25;
+  color: #1b1b1b;
+  background: #f3f2f1;
+  outline: none;
+  --wb: #185abd; /* Word blue */
+}
+.wd-screen button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+.wd-i,
+.wd-ic {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+.wd-i svg,
+.wd-ic svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.wd-chev {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-right: 1.4px solid currentColor;
+  border-bottom: 1.4px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -1px);
+  margin-left: 4px;
+}
+
+/* title bar with the Quick Access Toolbar */
+.wd-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  background: #f3f2f1;
+  flex: none;
+}
+.wd-title > .wd-i {
+  width: 20px;
+  height: 20px;
+}
+.wd-title .as {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  margin: 0 4px;
+}
+.wd-title .tg {
+  width: 26px;
+  height: 13px;
+  border: 1.3px solid #555;
+  border-radius: 8px;
+  position: relative;
+}
+.wd-title .tg::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 1.5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #555;
+}
+.wd-b.q {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+}
+.wd-b.q.dim {
+  opacity: 0.45;
+}
+.wd-title .nm {
+  margin-left: 14px;
+  font-size: 12.5px;
+}
+.wd-title .srch {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 210px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 5px;
+  background: #fff;
+  border: 1px solid #d1d1d1;
+  color: #666;
+}
+.wd-title .srch .wd-i {
+  width: 13px;
+  height: 13px;
+}
+.wd-title .me {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #c43e1c;
+  color: #fff;
+  font-size: 10px;
+  display: grid;
+  place-items: center;
+  margin-left: 12px;
+}
+.wd-title .wc {
+  margin-left: 14px;
+  letter-spacing: 12px;
+  color: #444;
+}
+
+/* tabs and ribbon */
+.wd-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 26px;
+  padding: 0 8px;
+  background: #f3f2f1;
+  flex: none;
+}
+.wd-b.tab {
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 4px 4px 0 0;
+  font-size: 12.5px;
+}
+.wd-b.tab.on {
+  color: var(--wb);
+  font-weight: 600;
+  box-shadow: inset 0 -3px 0 var(--wb);
+}
+.wd-tabs .cmt {
+  margin-left: auto;
+  align-self: center;
+  border: 1px solid #c8c8c8;
+  border-radius: 4px;
+  padding: 2px 8px;
+  background: #fff;
+}
+.wd-ribbon {
+  display: flex;
+  align-items: stretch;
+  height: 86px;
+  margin: 0 8px;
+  padding: 4px 4px 0;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  flex: none;
+  overflow: hidden;
+}
+.wd-grp {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px;
+  border-right: 1px solid #e1e1e1;
+}
+.wd-gin {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+.wd-gl {
+  text-align: center;
+  font-size: 10.5px;
+  color: #555;
+  padding: 2px 0 4px;
+}
+.wd-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.wd-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.wd-grp .wd-gin:has(> .wd-row + .wd-row) {
+  flex-direction: column;
+  gap: 5px;
+}
+.wd-b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.wd-b:not(.deco):hover {
+  background: #e8f0fb;
+}
+.wd-b.on {
+  background: #d4e3f7 !important;
+}
+.wd-b.sq {
+  width: 26px;
+  height: 26px;
+}
+.wd-b.arr {
+  width: 12px;
+  height: 26px;
+  margin-left: -3px;
+}
+.wd-b.sm {
+  min-width: 22px;
+  height: 24px;
+  font-size: 12px;
+  color: #444;
+}
+.wd-b.box {
+  height: 24px;
+  justify-content: space-between;
+  border: 1px solid #c8c8c8;
+  border-radius: 3px;
+  padding: 0 6px;
+  background: #fff;
+}
+.wd-b.fontbox {
+  width: 126px;
+}
+.wd-b.fontbox .nm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wd-b.sizebox {
+  width: 46px;
+}
+.wd-b.big {
+  flex-direction: column;
+  min-width: 46px;
+  height: 64px;
+  padding: 2px 4px;
+  font-size: 11px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.1;
+}
+.wd-b.big > .wd-i {
+  width: 30px;
+  height: 30px;
+}
+.wd-b.big b {
+  font-size: 18px;
+}
+.wd-b.line {
+  justify-content: flex-start;
+  height: 22px;
+  padding: 0 6px;
+}
+.wd-col.edit .wd-b.line {
+  height: 20px;
+}
+.wd-sep {
+  width: 1px;
+  height: 20px;
+  background: #e1e1e1;
+  margin: 0 3px;
+}
+.wd-styles {
+  display: flex;
+  gap: 4px;
+}
+.wd-styles span {
+  width: 64px;
+  height: 46px;
+  border: 1px solid #ddd;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+}
+.wd-styles .on {
+  border: 2px solid #8aa8d8;
+}
+.wd-styles .h {
+  color: #2b579a;
+  font-size: 14px;
+}
+
+/* lists that open under a button */
+.wd-menu {
+  position: absolute;
+  z-index: 40;
+  min-width: 70px;
+  padding: 4px;
+  background: #fff;
+  border: 1px solid #c8c8c8;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+}
+.wd-menu .mh {
+  font-weight: 600;
+  padding: 4px 6px;
+  color: #444;
+}
+.wd-menu .wd-b.mi,
+.wd-menu .mi {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 24px;
+  padding: 2px 8px;
+  font-size: 13px;
+}
+.wd-menu .mi.dim {
+  color: #999;
+}
+.m-font {
+  width: 200px;
+}
+.m-font .mi span {
+  font-size: 15px;
+}
+.m-size {
+  width: 58px;
+}
+.wd-sw {
+  display: grid;
+  grid-template-columns: repeat(5, 24px);
+  gap: 4px;
+  padding: 4px;
+}
+.wd-b.sw {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #888;
+  border-radius: 2px;
+}
+.m-bul .wd-sw,
+.m-sym .wd-sw {
+  grid-template-columns: repeat(4, 34px);
+}
+.m-sym .wd-sw {
+  grid-template-columns: repeat(6, 30px);
+}
+.wd-b.bl,
+.wd-b.sy {
+  height: 32px;
+  border: 1px solid #ddd;
+  font-size: 18px;
+}
+.wd-b.bl:first-child {
+  font-size: 11px;
+}
+
+/* the document */
+.wd-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  margin-top: 6px;
+}
+.wd-area {
+  flex: 1;
+  overflow: auto;
+  background: #e6e6e6;
+  display: flex;
+  justify-content: center;
+  padding: 14px 0 30px;
+  touch-action: none;
+  cursor: text;
+}
+.wd-area.pen {
+  cursor: crosshair;
+}
+.wd-page {
+  width: 560px;
+  min-height: 330px;
+  height: max-content;
+  padding: 34px 50px 40px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  font-family: Aptos, "Segoe UI", system-ui, sans-serif;
+  color: #111;
+  line-height: 1.35;
+}
+.wd-p {
+  position: relative;
+  margin: 0 0 0.6em;
+  min-height: 1.35em;
+}
+.wd-p.tight {
+  margin-top: -0.6em;
+}
+.wd-p.li {
+  padding-left: 2.2em;
+  margin-bottom: 0.15em;
+}
+.wd-lead {
+  position: absolute;
+  left: 0.7em;
+}
+.wd-p.a-left {
+  text-align: left;
+}
+.wd-p.a-center {
+  text-align: center;
+}
+.wd-p.a-right {
+  text-align: right;
+}
+.wd-p.a-justify {
+  text-align: justify;
+  text-align-last: left;
+}
+.wd-w {
+  position: relative;
+}
+.wd-w.b {
+  font-weight: 700;
+}
+.wd-w.i {
+  font-style: italic;
+}
+.wd-w.u {
+  text-decoration: underline;
+}
+.wd-w.miss:not(.u) {
+  text-decoration: underline wavy #e02020;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+.wd-w.sel,
+.wd-sp.sel {
+  background-color: #b4cdf2 !important;
+}
+.wd-w.found {
+  background: #fff280;
+  box-shadow: 0 0 0 1px #e8c600;
+}
+.wd-w.cur {
+  outline: 2px solid #e02020;
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+.wd-caret {
+  display: inline-block;
+  width: 1.5px;
+  height: 1.15em;
+  margin: 0 0 -0.2em 1px;
+  background: #111;
+  animation: wdblink 1s steps(1) infinite;
+}
+@keyframes wdblink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* side panes: Navigation (Find) and Editor (spelling) */
+.wd-nav,
+.wd-ed {
+  width: 220px;
+  flex: none;
+  background: #fff;
+  border-right: 1px solid #d1d1d1;
+  padding: 8px 10px;
+  overflow: auto;
+}
+.wd-ed {
+  border-right: 0;
+  border-left: 1px solid #d1d1d1;
+  width: 240px;
+}
+.wd-ph {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.wd-b.x {
+  width: 22px;
+  height: 22px;
+}
+.wd-search {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #8a8a8a;
+  border-radius: 3px;
+  padding: 2px 6px;
+}
+.wd-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  font: inherit;
+  font-size: 13px;
+  padding: 3px 0;
+  background: none;
+  color: #111;
+}
+.wd-res .cnt {
+  margin: 8px 0 4px;
+  font-weight: 600;
+}
+.wd-res .muted {
+  color: #777;
+  font-weight: 400;
+}
+.wd-rt {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+  color: #555;
+}
+.wd-rt .on {
+  color: var(--wb);
+  font-weight: 600;
+  border-bottom: 2px solid var(--wb);
+}
+.wd-res .hit {
+  padding: 5px 4px;
+  border-bottom: 1px solid #eee;
+  font-size: 11px;
+  line-height: 1.3;
+}
+.wd-res .hit b {
+  background: #fff280;
+}
+.wd-left {
+  color: #555;
+  margin-bottom: 8px;
+}
+.wd-kind {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+}
+.wd-kind span {
+  color: #666;
+  font-size: 11px;
+}
+.wd-ctx {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.wd-ctx .bad {
+  color: #d02020;
+  text-decoration: underline wavy #e02020;
+}
+.wd-cons {
+  font-size: 11px;
+  color: #555;
+  margin-bottom: 4px;
+}
+.wd-sugs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.wd-b.sug {
+  justify-content: flex-start;
+  min-height: 26px;
+  padding: 3px 8px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+}
+.wd-b.sug.first {
+  font-weight: 700;
+}
+.wd-ign {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.wd-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  padding-top: 30px;
+  font-size: 13px;
+}
+
+/* status bar with the zoom slider */
+.wd-status {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 24px;
+  padding: 0 10px;
+  background: #f3f2f1;
+  font-size: 11px;
+  color: #444;
+  flex: none;
+}
+.wd-status .views {
+  margin-left: auto;
+  letter-spacing: 4px;
+}
+.wd-b.z {
+  width: 18px;
+  height: 18px;
+  font-size: 15px;
+}
+.wd-status input[type="range"] {
+  width: 120px;
+  height: 18px;
+  margin: 0 -8px;
+  accent-color: #555;
+  touch-action: none;
+}
+.wd-status .pct {
+  width: 34px;
+}
+
+/* File (backstage), Save As dialog, Print */
+.wd-file {
+  position: absolute;
+  inset: 32px 0 0;
+  z-index: 30;
+  display: flex;
+  background: #fff;
+}
+.wd-file .fnav {
+  width: 150px;
+  background: #f3f2f1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  gap: 1px;
+}
+.wd-file .fnav .wd-b,
+.wd-file .fnav .fi2 {
+  justify-content: flex-start;
+  height: 28px;
+  padding: 0 18px;
+  border-radius: 0;
+  font-size: 13px;
+}
+.wd-file .fnav .fi2 {
+  display: flex;
+  align-items: center;
+  color: #555;
+}
+.wd-file .fnav .back {
+  font-size: 18px;
+}
+.wd-file .fnav .on {
+  background: #e1e1e1 !important;
+  box-shadow: inset 3px 0 0 var(--wb);
+}
+.wd-file .fnav .sep {
+  height: 1px;
+  background: #d1d1d1;
+  margin: 6px 14px;
+}
+.wd-file .fmain {
+  flex: 1;
+  padding: 18px 30px;
+  overflow: hidden;
+}
+.wd-file h2 {
+  font-size: 26px;
+  font-weight: 400;
+  margin: 0 0 16px;
+}
+.wd-file .lh {
+  display: block;
+  font-weight: 600;
+  margin: 10px 0 4px;
+  color: #444;
+}
+.wd-file .fake {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #c8c8c8;
+  padding: 5px 8px;
+  margin-bottom: 6px;
+  width: 260px;
+  color: #444;
+}
+.wd-sa {
+  display: flex;
+  gap: 30px;
+}
+.wd-sa .locs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 220px;
+}
+.wd-b.loc {
+  justify-content: flex-start;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+.wd-b.loc.browse {
+  border: 1px solid #c8c8c8;
+}
+.wd-b.loc .wd-i {
+  width: 22px;
+  height: 22px;
+}
+.wd-sa .path {
+  margin-bottom: 8px;
+}
+.wd-pr {
+  display: flex;
+  gap: 30px;
+}
+.wd-pr .row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.wd-b.printbtn {
+  flex-direction: column;
+  width: 74px;
+  height: 74px;
+  border: 1px solid #c8c8c8;
+  font-size: 13px;
+}
+.wd-b.printbtn .wd-i {
+  width: 34px;
+  height: 34px;
+}
+.wd-pr .prev {
+  flex: 1;
+  background: #e6e6e6;
+  padding: 14px;
+  display: flex;
+  justify-content: center;
+}
+.wd-pr .sheet {
+  width: 210px;
+  height: 290px;
+  background: #fff;
+  padding: 18px 16px;
+  font-size: 5.5px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.wd-pr .sheet p {
+  margin: 0 0 4px;
+}
+.wd-pr .sheet .a-center {
+  text-align: center;
+}
+.wd-pr .sheet .a-right {
+  text-align: right;
+}
+.wd-new .tpl {
+  flex-direction: column;
+  gap: 4px;
+}
+.wd-new .blank {
+  width: 90px;
+  height: 116px;
+  border: 1px solid #c8c8c8;
+  background: #fff;
+}
+.wd-dlg {
+  position: absolute;
+  z-index: 50;
+  left: 150px;
+  top: 70px;
+  width: 640px;
+  height: 400px;
+  background: #fff;
+  border: 1px solid #8a8a8a;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+}
+.wd-dlg .bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 4px 0 10px;
+}
+.wd-dlg .bar .x {
+  margin-left: auto;
+  width: 40px;
+  height: 30px;
+}
+.wd-dlg .crumb {
+  margin: 0 10px 6px;
+  padding: 5px 8px;
+  border: 1px solid #d1d1d1;
+  color: #444;
+}
+.wd-dlg .body {
+  flex: 1;
+  display: flex;
+  border-top: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+  min-height: 0;
+}
+.wd-dlg .side {
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+  border-right: 1px solid #e1e1e1;
+}
+.wd-b.fl {
+  justify-content: flex-start;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 0;
+  font-size: 13px;
+}
+.wd-b.fl.on {
+  background: #cce4f7 !important;
+}
+.wd-dlg .files {
+  flex: 1;
+  display: grid;
+  place-items: center;
+}
+.wd-dlg .muted {
+  color: #777;
+}
+.wd-dlg .fields {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  gap: 6px 8px;
+  padding: 10px 14px 4px;
+}
+.wd-dlg .fields label {
+  text-align: right;
+}
+.wd-dlg input {
+  font: inherit;
+  font-size: 13px;
+  padding: 4px 6px;
+  border: 1px solid #7a7a7a;
+  color: #111;
+  background: #fff;
+}
+.wd-dlg .fake {
+  border: 1px solid #c8c8c8;
+  padding: 4px 6px;
+  color: #444;
+}
+.wd-dlg .btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 14px 12px;
+}
+.wd-dlg .btns .wd-b {
+  width: 84px;
+  height: 28px;
+  border: 1px solid #b0b0b0;
+}
+.wd-dlg .btns .pri {
+  background: #0067c0;
+  color: #fff;
+  border-color: #0067c0;
+}
+
+/* toast, pretend mouse, rings, glow, key */
+.wd-toast {
+  position: absolute;
+  z-index: 60;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  background: #1b2440;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.wd-cursor {
+  position: absolute;
+  z-index: 90;
+  width: 30px;
+  height: 30px;
+  margin: -3px 0 0 -4px;
+  pointer-events: none;
+  display: none;
+  filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.5));
+}
+.wd-cursor.show {
+  display: block;
+}
+.wd-ring {
+  position: absolute;
+  z-index: 85;
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  border-radius: 50%;
+  border: 4px solid #ffd23f;
+  pointer-events: none;
+  animation: wdring 0.6s ease-out forwards;
+}
+.wd-ring.no {
+  border-color: #e0443a;
+}
+@keyframes wdring {
+  from {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+.wd-glow {
+  outline: 4px solid #ffd23f !important;
+  outline-offset: 2px;
+  border-radius: 4px;
+  animation: wdglow 1s ease-in-out infinite alternate;
+  position: relative;
+  z-index: 3;
+}
+.wd-w.wd-glow {
+  outline-width: 3px;
+  outline-offset: 0;
+}
+@keyframes wdglow {
+  from {
+    outline-color: #ffd23f;
+    box-shadow: 0 0 0 0 rgba(255, 210, 63, 0.7);
+  }
+  to {
+    outline-color: #ff9d00;
+    box-shadow: 0 0 14px 4px rgba(255, 210, 63, 0.7);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wd-glow,
+  .wd-ring,
+  .wd-caret {
+    animation: none;
+  }
+}
+.wd-key {
+  position: absolute;
+  z-index: 95;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  background: #1b2440;
+  color: #fff;
+  font-size: 34px;
+  font-weight: 700;
+  padding: 12px 26px;
+  border-radius: 12px;
+  border-bottom: 6px solid #000;
+  pointer-events: none;
+}
+
+/* Word buttons and keys on the lesson pages (pictures in games) */
+.fi {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.fi .wd-ic {
+  width: var(--fis, 64px);
+  height: var(--fis, 64px);
+  padding: 8%;
+  background: #fff;
+  border: 1.5px solid #c8c8c8;
+  border-radius: 10px;
+  color: #222;
+}
+.wd-keys {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+.wd-keys kbd {
+  min-width: 1.8em;
+  padding: 0.15em 0.45em;
+  border: 1.5px solid #555;
+  border-bottom-width: 4px;
+  border-radius: 7px;
+  background: #fff;
+  color: #111;
+  font-family: inherit;
+  font-weight: 700;
+  text-align: center;
+}
+.wd-keys b {
+  color: var(--ink);
+}
+.fi .wd-keys {
+  font-size: calc(var(--fis, 64px) * 0.32);
+}
+.wd-p.li + .wd-p:not(.li) {
+  margin-top: 0.6em;
+}
