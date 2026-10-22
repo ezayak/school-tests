@@ -249,3 +249,20 @@ Pictures: `img: "name"` (a file in `img/lesson-N/`) or `vis: {kind: "icons" | "n
 Don't add videos to `also` in `games.js`.
 
 After adding a lesson: add it to `lessons.js`, add its files (not the videos) to the `also: [...]` list of the Computer entry in `games.js`, and bump `VERSION` in `sw.js`.
+
+## Computer lessons (Grade 3)
+
+Folder: `grade-3/term-1/computer/`, the same engine and the same page format as Grade 4, but **no Mini Windows**: the pages don't load `winsim.js`,
+the lessons have no `howto`, so the Play tab has only the games. Instead, the Learn tab shows a tile for every picture card and every school video.
+`lessons.js` can set its own `intro` sentence for the lessons page.
+
+Extra things a lesson can have (both grades can use them):
+- `videos: [{k, t, video: "l2-thermal", img: "thermal"}]` – school videos as tiles on the Learn tab; a big idea card can also have `video: "l2-thermal"`.
+- Item `place`: drag a thing to the right place, or tap the place. `{type: "place", q, thing: {img | emoji, label}, spots: [{t, img | emoji}, …], x}` – the first spot is right.
+- Item `multi`: choose all the right ones. `{type: "multi", q, opts: [{t, img | emoji, ok: true}, …]}`.
+- Item `touch`: practise on a pretend tablet. `g: "tap"` (tap a star 3 times), `"swipe"` (`pics: [...]`), `"pinch"` (`img`; zoom with two fingers, ctrl + wheel, or ＋), `"draw"` (follow a line like a stylus).
+- Item `wsearch`: a word search. `{type: "wsearch", q, words: ["3D PRINTER", "INKJET", …], size: 10}`; a new grid every time; one point per word.
+- `mc` can show book pictures as answers: `pics: ["inkjet", "laser", null]`.
+- `order` can have its own steps instead of a how-to: `{type: "order", t, ask, hint, steps: [{say: "CD", e: "💿"}, {say: "Blu-ray", img: "blu-ray"}]}`.
+- More drawings: `vis: {kind: "bars", items: [{e | img, label, v, note}]}` (which holds more), `{kind: "ink"}` (the 4 inkjet colours), `{kind: "strip", items: [{img | e, label}]}`.
+- A small book icon whose name ends in `-ic` (`mic-ic.jpg`) is shown at its real size, not blown up.
