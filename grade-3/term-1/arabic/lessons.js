@@ -27,4 +27,13 @@ window.LESSONS = [
     cover: "img/lesson-3/cover.jpg",
     note: "9 texts · 72 words · 194 exercises · lam & lan, tanween",
   },
+  {
+    n: 4,
+    nAr: "الرَّابِعُ",
+    title: "أَخْلَاقُنَا",
+    en: "Our Manners",
+    path: "lesson-4.html",
+    cover: "img/lesson-4/cover.jpg",
+    note: "10 texts · 58 words · 184 exercises · November review",
+  },
 ];
