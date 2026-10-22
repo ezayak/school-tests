@@ -57,7 +57,10 @@
     document.getElementById("filters").innerHTML = ["all", ...grades]
       .map(
         (v) =>
-          `<button type="button" id="f-${v}" data-g="${v}" aria-pressed="${String(v) === String(grade)}">${v === "all" ? "All grades" : "Grade " + v}</button>`,
+          {
+          const n = v === "all" ? games.length : games.filter((g) => g.grade === v).length;
+          return `<button type="button" id="f-${v}" data-g="${v}" aria-pressed="${String(v) === String(grade)}"><b>${v === "all" ? "All grades" : "Grade " + v}</b><small>${n} game${n === 1 ? "" : "s"}</small></button>`;
+        },
       )
       .join("");
     document.querySelectorAll("[data-g]").forEach(
@@ -71,7 +74,7 @@
     document.getElementById("subjects").innerHTML = ["all", ...subjects]
       .map(
         (v, i) =>
-          `<button type="button" id="s-${i}" data-s="${esc(v)}" aria-pressed="${v === subject}">${v === "all" ? "All subjects" : esc(v)}</button>`,
+          `<button type="button" id="s-${i}" data-s="${esc(v)}" aria-pressed="${v === subject}"${v === "all" ? "" : ` style="--c:${SUBJ[v] || "var(--other)"}"`}>${v === "all" ? "All subjects" : esc(v)}</button>`,
       )
       .join("");
     document.querySelectorAll("[data-s]").forEach(

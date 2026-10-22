@@ -23,14 +23,13 @@
 <body>
 <main class="wrap">
   <header>
-    <h1>Study <span>Games</span></h1>
-    <p class="sub">Picture quizzes, matching and sentence-building games for school tests. Pick a grade, then a game. Questions are shuffled every time you play.</p>
+    <div class="hero">
+      <h1>Study <span>Games</span></h1>
+      <button type="button" id="installBtn" class="install" hidden>⬇ Install app</button>
+    </div>
     <div class="tools">
-      <div class="grade-row">
-        <div class="filters" id="filters" role="group" aria-label="Show grade"></div>
-        <button type="button" id="installBtn" class="install" hidden>⬇ Install app</button>
-      </div>
-      <div class="filters" id="subjects" role="group" aria-label="Show subject"></div>
+      <div class="filters grades" id="filters" role="group" aria-label="Show grade"></div>
+      <div class="filters subjects" id="subjects" role="group" aria-label="Show subject"></div>
     </div>
   </header>
   <div id="list"></div>
