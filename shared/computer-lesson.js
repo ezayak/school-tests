@@ -1,5 +1,6 @@
 // Computer lessons engine (Grade 3 and Grade 4). <body data-view="list"> → list of lessons (lessons.js),
-// <body data-view="lesson"> → one lesson (window.LESSON from lesson-N.js). Mini Windows comes from winsim.js.
+// <body data-view="lesson"> → one lesson (window.LESSON from lesson-N.js). Mini Windows comes from winsim.js,
+// Mini Word (Grade 3 term 2) from wordsim.js: the page loads one of them and the lesson uses whichever is there.
 // Made for a child who learns best from pictures and sound: short sentences, key words in colour,
 // every question can be heard (🔊), wrong answers can be tried again, and the computer steps are shown
 // on a pretend Windows screen (▶ Show me) before the child does them (✋ Your turn).
@@ -60,7 +61,13 @@
   /* ================= lesson ================= */
   const L = window.LESSON;
   const IMG = (n) => `img/lesson-${L.n}/${n}.jpg`;
-  const W = window.WinSim;
+  const W = window.WinSim || window.WordSim;
+  // the pretend program's name for the free-play tile: Mini Windows unless the program says otherwise
+  const SIM = {
+    name: (W && W.label) || "Mini Windows",
+    ic: (W && W.ic) || "🪟",
+    about: (W && W.about) || "Play on a pretend computer",
+  };
   const HOW = L.howto || []; // the Mini Windows how-to's (Grade 3 has none)
   let slow = store.get("cs-slow", "0") === "1";
   let auto = store.get("cs-auto", "1") === "1";
@@ -298,6 +305,10 @@
     look: { i: "👀", t: "Look" },
     key: { i: "⌨️", t: "Press a key" },
     slide: { i: "↔️", t: "Drag the slider" },
+    select: {
+      i: "🖍️",
+      t: TOUCH ? "Select · slide your finger over it" : "Select · drag over it",
+    },
   };
   const keyName = (k) => (k === "Enter" ? "Enter ↩️" : k);
   const actPill = (a) =>
@@ -395,7 +406,7 @@
       k: "play",
       ic: "🎲",
       t: "Play",
-      en: W && HOW.length ? "Games & Mini Windows" : "Games",
+      en: W && HOW.length ? "Games & " + SIM.name : "Games",
     },
     { k: "ex", ic: "✏️", t: "Exercises", en: "School exercises" },
   ];
@@ -449,7 +460,7 @@
       tiles =
         (W && HOW.length
           ? tileHTML(
-              { t: "Mini Windows", en: "Play on a pretend computer", ic: "🪟" },
+              { t: SIM.name, en: SIM.about, ic: SIM.ic },
               'data-m="mini" id="m-mini"',
             )
           : "") +
@@ -577,7 +588,7 @@
     <div class="idea-lines">${c.lines.map((l, k) => `<button type="button" class="iline" data-l="${k}"><span class="num">${k + 1}</span><span>${kw(l)}</span><span class="spk">🔊</span></button>`).join("")}</div>
     ${c.tip ? `<div class="tipb">${pic({ img: c.tip.img }, "pic face")}<span>${kw(c.tip.say)}</span></div>` : ""}
     ${sayBtns()}
-    ${hi >= 0 ? `<div class="row center"><button type="button" class="btn ghost" id="tryIt">🪟 Try it: ${esc(HOW[hi].t)}</button></div>` : ""}
+    ${hi >= 0 ? `<div class="row center"><button type="button" class="btn ghost" id="tryIt">${SIM.ic} Try it: ${esc(HOW[hi].t)}</button></div>` : ""}
     ${c.video ? `<div class="row center"><button type="button" class="btn ghost" id="vidIt">🎬 Video from school</button></div>` : ""}
     <div class="nav"><button type="button" class="btn ghost" id="prevBtn" aria-label="Back">←</button><button type="button" class="btn" id="nextBtn" aria-label="Next">${i + 1 < n ? "→" : "↺"}</button></div>`,
       "wide",
@@ -746,8 +757,8 @@
   function miniWindows() {
     leave();
     backTo = openTab("play");
-    app.innerHTML = `${titleBar("Mini Windows")}<section class="card pop">
-    <p class="hint">A pretend computer. Click, double-click, right-click${TOUCH ? " (hold your finger)" : ""} and drag. Nothing can break!</p>
+    app.innerHTML = `${titleBar(SIM.name)}<section class="card pop">
+    <p class="hint">${W.hint ? esc(W.hint) : `A pretend computer. Click, double-click, right-click${TOUCH ? " (hold your finger)" : ""} and drag. Nothing can break!`}</p>
     <div class="simwrap"><div id="simbox"></div></div>
     <p class="turn">📱↻ Turn your phone sideways for a bigger screen.</p>
     <div class="row center"><button type="button" class="abtn" id="resetBtn">↺ Start again</button></div>
@@ -762,7 +773,11 @@
       .forEach(
         (b) => (b.onclick = () => howto(+b.dataset.h, "try", miniWindows)),
       );
-    autoSay("Mini Windows. Play on the pretend computer.");
+    autoSay(
+      W.hint
+        ? SIM.name + ". " + SIM.about + "."
+        : "Mini Windows. Play on the pretend computer.",
+    );
   }
 
   /* ================= runner (games and exercises) ================= */
@@ -1422,7 +1437,7 @@
         if (!m.wrongs) addPts(1);
         else
           S.miss.push({
-            emoji: "🪟",
+            emoji: SIM.ic,
             right: it.steps
               .filter((s) => s.act !== "look")
               .map((s) => plain(s.say))
