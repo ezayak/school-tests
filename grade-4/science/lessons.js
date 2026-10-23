@@ -164,6 +164,37 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 5,
+      dir: "topic-5",
+      title: "Earth's Natural Hazards",
+      items: [
+        {
+          n: 1,
+          title: "Tectonic Hazards",
+          en: "Earthquakes, faults, tsunamis, volcanoes and their dangers",
+          path: "lesson-1.html",
+          cover: "img/lesson-1/volcano.jpg",
+          note: "9 picture cards · 3 games · book questions",
+        },
+        {
+          n: 2,
+          title: "Weather Hazards",
+          en: "Floods, droughts, blizzards, tornadoes, hurricanes, avalanches, landslides",
+          path: "lesson-2.html",
+          cover: "img/lesson-2/tornado.jpg",
+          note: "9 picture cards · 3 games · book questions",
+        },
+        {
+          n: 3,
+          title: "Impacts of Natural Hazards",
+          en: "Short- and long-term effects, wildfires, predicting hazards, safer buildings, shelters",
+          path: "lesson-3.html",
+          cover: "img/lesson-3/st-helens-after.jpg",
+          note: "7 picture cards · 3 games · book questions",
+        },
+      ],
+    },
+    {
       n: 6,
       dir: "topic-6",
       title: "The History of Planet Earth",
