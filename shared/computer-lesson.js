@@ -66,6 +66,7 @@
   /* ================= lesson ================= */
   const L = window.LESSON;
   const IMG = (n) => `img/lesson-${L.n}/${n}.jpg`;
+  const LK = L.key || L.n; // saved ticks and tab; Science lessons set a key so topics don't share lesson numbers
   const W = window.WinSim || window.WordSim;
   // the pretend program's name for the free-play tile: Mini Windows unless the program says otherwise
   const SIM = {
@@ -272,7 +273,7 @@
   }
   const openTab = (t) => () => {
     tab = t;
-    store.set("cs-tab-" + L.n, t);
+    store.set("cs-tab-" + LK, t);
     home();
   };
   const top0 = () => window.scrollTo({ top: 0 });
@@ -396,9 +397,9 @@
   }
 
   /* ================= HOME ================= */
-  const done = (k) => store.get(`cs-done-${L.n}-${k}`, "") === "1";
-  const setDone = (k) => store.set(`cs-done-${L.n}-${k}`, "1");
-  let tab = store.get("cs-tab-" + L.n, "learn");
+  const done = (k) => store.get(`cs-done-${LK}-${k}`, "") === "1";
+  const setDone = (k) => store.set(`cs-done-${LK}-${k}`, "1");
+  let tab = store.get("cs-tab-" + LK, "learn");
   if (!["learn", "play", "ex"].includes(tab)) tab = "learn";
   const TABS = [
     {
@@ -514,7 +515,7 @@
       (b) =>
         (b.onclick = () => {
           tab = b.dataset.tab;
-          store.set("cs-tab-" + L.n, tab);
+          store.set("cs-tab-" + LK, tab);
           home();
         }),
     );

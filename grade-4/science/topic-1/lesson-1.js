@@ -3,6 +3,7 @@
 // Learn: the book and the teacher's slides. Exercises: booklet practice sheet + Lesson Quiz, Graded Homework 1, Graded classwork 1, fill-in diagram.
 window.LESSON = {
   n: 1,
+  key: "sci4-t1-l1",
   grade: 4,
   title: "Energy, Speed and Moving Objects",
   unit: "Topic 1 · Lesson 1",

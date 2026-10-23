@@ -3,6 +3,7 @@
 // Not in the school booklet: the exercises are the book's own questions, with model answers written from the book text.
 window.LESSON = {
   n: 2,
+  key: "sci4-t1-l2",
   grade: 4,
   title: "Collisions",
   unit: "Topic 1 · Lesson 2",

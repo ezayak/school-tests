@@ -4,6 +4,7 @@
 // Graded classwork 2, the Extra practice sheet (a review of Lessons 1 and 3), the book's Lesson 3 Check.
 window.LESSON = {
   n: 3,
+  key: "sci4-t1-l3",
   grade: 4,
   title: "Energy Transfer",
   unit: "Topic 1 · Lesson 3",

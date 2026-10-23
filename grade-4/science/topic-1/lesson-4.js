@@ -3,6 +3,7 @@
 // Exercises: booklet practice sheet + Lesson Quiz (no model answer yet: answers follow the book), the book's Lesson 4 Check.
 window.LESSON = {
   n: 4,
+  key: "sci4-t1-l4",
   grade: 4,
   title: "Electric Circuits",
   unit: "Topic 1 · Lesson 4",
