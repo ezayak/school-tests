@@ -55,13 +55,13 @@
   };
   function draw() {
     document.getElementById("filters").innerHTML = ["all", ...grades]
-      .map(
-        (v) =>
-          {
-          const n = v === "all" ? games.length : games.filter((g) => g.grade === v).length;
-          return `<button type="button" id="f-${v}" data-g="${v}" aria-pressed="${String(v) === String(grade)}"><b>${v === "all" ? "All grades" : "Grade " + v}</b><small>${n} game${n === 1 ? "" : "s"}</small></button>`;
-        },
-      )
+      .map((v) => {
+        const n =
+          v === "all"
+            ? games.length
+            : games.filter((g) => g.grade === v).length;
+        return `<button type="button" id="f-${v}" data-g="${v}" aria-pressed="${String(v) === String(grade)}"><b>${v === "all" ? "All grades" : "Grade " + v}</b><small>${n} game${n === 1 ? "" : "s"}</small></button>`;
+      })
       .join("");
     document.querySelectorAll("[data-g]").forEach(
       (b) =>
