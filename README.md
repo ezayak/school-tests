@@ -36,7 +36,7 @@ grade-4/
     chapter-1/             ← Unit 1 lessons + Mini Windows (winsim.js/.css)
   science/                 ← Science: one subject for all terms, Computer lesson engine
     index.html, lessons.js ← list of lessons, by book topic
-    topic-1/               ← Topic 1 lessons (lesson-N.html/.js, img/, video/)
+    topic-1/ … topic-8/    ← one folder per book topic (lesson-N.html/.js, img/, video/)
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -319,6 +319,9 @@ A lesson has the same three tabs and the same `lesson-N.js` format as a Grade 3 
   (each word with its short meaning, read aloud) instead of "Big ideas".
 - A word instead of a picture in a `match` (word ↔ meaning): `{vis: {kind: "lines", rows: ["Kinetic energy"]}, label: "Is the energy of motion."}`.
 - Two-way choices (potential / kinetic, conductor / insulator) are `mc` with `two: true` and `icons`, not `tf` (`tf` always puts ✅ on the first label).
+
+Every question (games and exercises) has a picture: a book picture, an emoji scene, or pictures / icons on the answers.
+Lessons save their ticks under their own `key` (`sci4-t<topic>-l<lesson>`), because lesson numbers repeat in every topic.
 
 Exercises come from the term booklet and the school sheets (`from:` names the sheet). When a lesson has no school sheet,
 its "Book questions" set uses the book's Lesson Check with model answers written from the book.
