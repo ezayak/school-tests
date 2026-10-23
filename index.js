@@ -97,25 +97,43 @@
       ? show
           .map((gr) => {
             const gs = pool.filter((g) => g.grade === gr);
-            const keys = [
-              ...new Set(gs.map((g) => g.term + "|" + g.period)),
-            ].sort((a, b) => {
-              const [ta, pa] = a.split("|"),
-                [tb, pb] = b.split("|");
-              return +ta - +tb || pIdx(pa) - pIdx(pb);
-            });
-            return `<section class="grade"><h2>Grade ${gr}<small>${gs.length} game${gs.length > 1 ? "s" : ""}</small></h2>${keys
-              .map((k) => {
-                const [t, p] = k.split("|");
-                const items = gs
-                  .filter((g) => g.term + "|" + g.period === k)
-                  .sort((a, b) => a.subject.localeCompare(b.subject));
-                return `<div class="period"><h3>Term ${esc(t)} · ${esc(p)}</h3><div class="cards">${items.map((g) => `<a class="game${g.subject === "Religion" ? " light-c" : ""}" style="--c:${SUBJ[g.subject] || "var(--other)"}" href="${esc(g.path)}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson || "")}</span><p class="tp">${esc(g.topics || "")}</p><span class="meta"><span>${g.countLabel ? esc(g.countLabel) : g.questions ? g.questions + " questions" : ""}${g.year ? " · " + esc(g.year) : ""}</span><span class="go play-arrow">${g.hub ? "Open →" : "Play →"}</span></span></a>`).join("")}</div></div>`;
-              })
-              .join("")}</section>`;
+            return `<section class="grade"><h2>Grade ${gr}<small>${gs.length} game${gs.length > 1 ? "s" : ""}</small></h2>${subjectCards(gs)}${revisions(gs)}</section>`;
           })
           .join("")
       : '<p class="empty">No games for this choice yet.</p>';
+  }
+  const bySubject = (a, b) => a.subject.localeCompare(b.subject);
+  const card = (g) =>
+    `<a class="game${g.subject === "Religion" ? " light-c" : ""}" style="--c:${SUBJ[g.subject] || "var(--other)"}" href="${esc(g.path)}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson || "")}</span><p class="tp">${esc(g.topics || "")}</p><span class="meta"><span>${g.countLabel ? esc(g.countLabel) : g.questions ? g.questions + " questions" : ""}${g.year ? " · " + esc(g.year) : ""}</span><span class="go play-arrow">${g.hub ? "Open →" : "Play →"}</span></span></a>`;
+  // Revisions → Term N → Mid-term / Final → subject cards (every term with a revision shows both exams)
+  function revisions(gs) {
+    const rev = gs.filter((g) => g.period !== "Subjects");
+    if (!rev.length) return "";
+    const terms = [...new Set(rev.map((g) => g.term))].sort((a, b) => a - b);
+    return `<div class="part"><h3>Revisions</h3>${terms
+      .map((t) => {
+        const inTerm = rev.filter((g) => g.term === t);
+        const periods = [
+          ...new Set([
+            "Mid-term exam",
+            "Final exam",
+            ...inTerm.map((g) => g.period),
+          ]),
+        ].sort((a, b) => pIdx(a) - pIdx(b));
+        return `<div class="term"><h4>Term ${esc(t)}</h4>${periods
+          .map((p) => {
+            const items = inTerm.filter((g) => g.period === p).sort(bySubject);
+            return `<div class="period"><h5>${esc(p.replace(/ exam$/, ""))}</h5>${items.length ? `<div class="cards">${items.map(card).join("")}</div>` : '<p class="empty">No revisions yet.</p>'}</div>`;
+          })
+          .join("")}</div>`;
+      })
+      .join("")}</div>`;
+  }
+  // Subjects → one card per subject, its hub holds the lessons of every term
+  function subjectCards(gs) {
+    const items = gs.filter((g) => g.period === "Subjects").sort(bySubject);
+    if (!items.length) return "";
+    return `<div class="part"><h3>Subjects</h3><div class="cards">${items.map(card).join("")}</div></div>`;
   }
   // Install button (Android / Chrome / Edge). iPad: Share → Add to Home Screen.
   let deferred = null;

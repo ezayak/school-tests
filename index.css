@@ -1,4 +1,4 @@
-/* Home page: graph-paper page, one section per grade, a row per term/period, subject cards inside. Load after shared/theme.css. */
+/* Home page: graph-paper page, one section per grade with Revisions (term → mid-term / final → subject cards) and Subjects (one card per subject). Load after shared/theme.css. */
 html,
 body {
   margin: 0;
@@ -166,12 +166,36 @@ a:focus-visible {
   color: var(--muted);
   font-weight: 700;
 }
+.part,
+.term {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.part > h3 {
+  font-size: 1.5rem;
+  padding-bottom: 4px;
+  border-bottom: 2.5px solid var(--ink);
+}
+.term > h4 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.25rem;
+  margin: 0;
+}
+.term {
+  padding-left: 14px;
+  border-left: 4px solid var(--hl);
+}
 .period {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-.period h3 {
+.period h5 {
+  font-family: var(--display);
+  font-weight: 400;
+  margin: 0;
   font-size: 1.2rem;
   display: inline-flex;
   align-self: flex-start;
