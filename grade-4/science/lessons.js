@@ -124,5 +124,20 @@ window.CS_LESSONS = {
         },
       ],
     },
+    {
+      n: 6,
+      dir: "topic-6",
+      title: "The History of Planet Earth",
+      items: [
+        {
+          n: 1,
+          title: "Patterns in Fossils and Rock Formations",
+          en: "Fossils, rock layers (strata), core samples, faults, the geologic time scale",
+          path: "lesson-1.html",
+          cover: "img/lesson-1/peru.jpg",
+          note: "10 picture cards · 4 games · book questions",
+        },
+      ],
+    },
   ],
 };
