@@ -343,10 +343,9 @@ window.GAMES = [
     subject: "Computer",
     title: "Computer",
     hub: true,
-    lesson:
-      "Lessons · big pictures, a pretend Windows computer, games & school exercises",
+    lesson: "Lessons · pictures, a pretend Windows, games & exercises",
     topics:
-      "L1 My desktop: files, extensions, size, search, shortcuts · L2 Files and folders: zip, rename, extract, views, Recycle Bin · L3 Computer settings: date & time, resolution, background, volume · L4 Protect my computer: troubleshooting, antivirus, updates",
+      "Ch. 1 · My desktop, Files and folders, Computer settings, Protect my computer",
     path: "grade-4/computer/index.html",
     countLabel: "4 lessons",
     year: "2026–2027",
@@ -419,10 +418,9 @@ window.GAMES = [
     subject: "Computer",
     title: "Computer",
     hub: true,
-    lesson:
-      "Lessons · big pictures from the book, a pretend Word, games & school exercises",
+    lesson: "Lessons · pictures, a pretend Word, games & exercises",
     topics:
-      "Chapter 1 · L1 Storage: hard disk, USB, memory card, CD / DVD, Blu-ray · L2 Print: inkjet, laser, thermal, 3D, plotter, scanner · L3 Capture: microphone, webcam, cameras · L4 Interacting: touchscreen, stylus, game controllers, VR, assistive technology · Chapter 2 My first article · L1 Robots in our daily lives · L2 Working with text: font, bold, highlight, Find, Undo · L3 Paragraph formatting: alignment, bullets, symbols · L4 Checking and saving: spelling, Save As",
+      "Ch. 1 · Storage, Print, Capture, Interacting · Ch. 2 · Robots, Working with text, Paragraphs, Checking & saving",
     path: "grade-3/computer/index.html",
     countLabel: "8 lessons · 2 chapters",
     year: "2026–2027",
