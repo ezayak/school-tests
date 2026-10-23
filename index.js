@@ -45,6 +45,7 @@
   };
   let grade = store.get("st-grade") || "all";
   let subject = store.get("st-subject") || "all";
+  let term = +store.get("st-term") || 0; // chosen term for Revisions; 0 = the latest term with a revision
   const grades = [...new Set(games.map((g) => g.grade))].sort((a, b) => a - b);
   const subjects = [...new Set(games.map((g) => g.subject))].sort();
   if (grade !== "all" && !grades.includes(+grade)) grade = "all";
@@ -101,31 +102,59 @@
           })
           .join("")
       : '<p class="empty">No games for this choice yet.</p>';
+    document.querySelectorAll("[data-t]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          term = +b.dataset.t;
+          store.set("st-term", term);
+          draw();
+        }),
+    );
+    // Mid-term / Final fold: remember open or closed for each grade, term and exam
+    document
+      .querySelectorAll("details[data-k]")
+      .forEach(
+        (d) =>
+          (d.ontoggle = () =>
+            store.set("st-fold-" + d.dataset.k, d.open ? "1" : "0")),
+      );
   }
   const bySubject = (a, b) => a.subject.localeCompare(b.subject);
   const card = (g) =>
     `<a class="game${g.subject === "Religion" ? " light-c" : ""}" style="--c:${SUBJ[g.subject] || "var(--other)"}" href="${esc(g.path)}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson || "")}</span><p class="tp">${esc(g.topics || "")}</p><span class="meta"><span>${g.countLabel ? esc(g.countLabel) : g.questions ? g.questions + " questions" : ""}${g.year ? " · " + esc(g.year) : ""}</span><span class="go play-arrow">${g.hub ? "Open →" : "Play →"}</span></span></a>`;
-  // Revisions → Term N → Mid-term / Final → subject cards (every term with a revision shows both exams)
+  // Revisions → term buttons (one term at a time) → Mid-term / Final, each a section that folds → subject cards
   function revisions(gs) {
     const rev = gs.filter((g) => g.period !== "Subjects");
     if (!rev.length) return "";
-    const terms = [...new Set(rev.map((g) => g.term))].sort((a, b) => a - b);
-    return `<div class="part"><h3>Revisions</h3>${terms
-      .map((t) => {
-        const inTerm = rev.filter((g) => g.term === t);
-        const periods = [
-          ...new Set([
-            "Mid-term exam",
-            "Final exam",
-            ...inTerm.map((g) => g.period),
-          ]),
-        ].sort((a, b) => pIdx(a) - pIdx(b));
-        return `<div class="term"><h4>Term ${esc(t)}</h4>${periods
-          .map((p) => {
-            const items = inTerm.filter((g) => g.period === p).sort(bySubject);
-            return `<div class="period"><h5>${esc(p.replace(/ exam$/, ""))}</h5>${items.length ? `<div class="cards">${items.map(card).join("")}</div>` : '<p class="empty">No revisions yet.</p>'}</div>`;
-          })
-          .join("")}</div>`;
+    const gr = rev[0].grade;
+    const terms = [
+      ...new Set(
+        games
+          .filter((g) => g.grade === gr && g.period !== "Subjects")
+          .map((g) => g.term),
+      ),
+    ].sort((a, b) => a - b);
+    const t = terms.includes(term) ? term : terms[terms.length - 1];
+    const inTerm = rev.filter((g) => g.term === t);
+    const periods = [
+      ...new Set([
+        "Mid-term exam",
+        "Final exam",
+        ...inTerm.map((g) => g.period),
+      ]),
+    ].sort((a, b) => pIdx(a) - pIdx(b));
+    return `<div class="part"><div class="part-head"><h3>Revisions</h3><div class="filters terms" role="group" aria-label="Show term">${terms
+      .map(
+        (v) =>
+          `<button type="button" id="t-${gr}-${v}" data-t="${v}" aria-pressed="${v === t}">Term ${esc(v)}</button>`,
+      )
+      .join("")}</div></div>${periods
+      .map((p) => {
+        const items = inTerm.filter((g) => g.period === p).sort(bySubject);
+        const k = `${gr}-${t}-${p}`;
+        const saved = store.get("st-fold-" + k);
+        const open = saved === null ? items.length > 0 : saved === "1";
+        return `<details class="period" data-k="${esc(k)}"${open ? " open" : ""}><summary>${esc(p.replace(/ exam$/, ""))}<small>${items.length || "No"} revision${items.length === 1 ? "" : "s"}</small></summary>${items.length ? `<div class="cards">${items.map(card).join("")}</div>` : '<p class="empty">No revisions yet.</p>'}</details>`;
       })
       .join("")}</div>`;
   }

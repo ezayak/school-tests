@@ -1,4 +1,4 @@
-/* Home page: graph-paper page, one section per grade with Revisions (term → mid-term / final → subject cards) and Subjects (one card per subject). Load after shared/theme.css. */
+/* Home page: graph-paper page, one section per grade with Subjects (one card per subject) and Revisions (term buttons → Mid-term / Final folding sections → subject cards). Load after shared/theme.css. */
 html,
 body {
   margin: 0;
@@ -166,44 +166,63 @@ a:focus-visible {
   color: var(--muted);
   font-weight: 700;
 }
-.part,
-.term {
+.part {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-.part > h3 {
-  font-size: 1.5rem;
-  padding-bottom: 4px;
+.part > h3,
+.part-head {
+  padding-bottom: 6px;
   border-bottom: 2.5px solid var(--ink);
 }
-.term > h4 {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: 1.25rem;
-  margin: 0;
+.part h3 {
+  font-size: 1.5rem;
 }
-.term {
-  padding-left: 14px;
-  border-left: 4px solid var(--hl);
-}
-.period {
+.part-head {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
 }
-.period h5 {
+/* Mid-term / Final: a yellow pill that folds its cards */
+.period summary {
   font-family: var(--display);
-  font-weight: 400;
-  margin: 0;
   font-size: 1.2rem;
   display: inline-flex;
-  align-self: flex-start;
+  align-items: baseline;
+  gap: 8px;
   padding: 2px 12px;
   border: 2px solid var(--ink);
   border-radius: 999px;
   background: var(--hl);
   color: #1b2440;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.period summary::-webkit-details-marker {
+  display: none;
+}
+.period summary::before {
+  content: "▸";
+  transition: transform 0.15s;
+}
+.period[open] summary::before {
+  transform: rotate(90deg);
+}
+.period summary small {
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+.period summary:focus-visible {
+  outline: 3px solid var(--fr);
+  outline-offset: 3px;
+}
+.period[open] summary {
+  margin-bottom: 12px;
 }
 .cards {
   display: grid;
@@ -255,6 +274,23 @@ a:focus-visible {
   font-size: 0.92rem;
   margin: 0;
 }
+/* every card the same size: lesson line max 2 lines, topics max 4 */
+.game .l,
+.game .tp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.game .l {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  min-height: calc(2 * 1.45em);
+}
+.game .tp {
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  min-height: calc(4 * 1.45em);
+}
 .game .meta {
   margin-top: auto;
   display: flex;
@@ -264,6 +300,10 @@ a:focus-visible {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
   padding-top: 6px;
+}
+/* the count line may wrap: keep room for 2 lines on every card */
+.game .meta > span:first-child {
+  min-height: calc(2 * 1.45em);
 }
 .game .go {
   font-family: var(--display);
@@ -294,7 +334,8 @@ footer {
   font-size: 0.9rem;
 }
 @media (prefers-reduced-motion: reduce) {
-  .game {
+  .game,
+  .period summary::before {
     transition: none;
   }
 }

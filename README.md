@@ -1,7 +1,8 @@
 # Study Games
 
 Picture quiz games for school tests. Home page, per grade: **Subjects** first (one card per subject, opening a list page with the lessons or dictations of every term),
-then **Revisions → Term → Mid-term / Final → subject cards**. A term with a revision always shows both Mid-term and Final ("No revisions yet." until one is added).
+then **Revisions**: term buttons (one term at a time, the latest by default) and two folding sections, **Mid-term** and **Final**, with the subject cards.
+The chosen term and each section's open / closed state are remembered on the device. Every card has the same height: the lesson line is cut after 2 lines and the topics after 4.
 Every page is a plain HTML file (no build step), so the repo works as-is on GitHub Pages.
 All styling and the small JS helpers come from `shared/` — pages have no `<style>` blocks of their own.
 
