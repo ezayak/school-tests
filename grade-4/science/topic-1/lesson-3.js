@@ -1,0 +1,992 @@
+// Science · Grade 4 · Topic 1 · Lesson 3 « Energy Transfer » (book pages 24–31).
+// All the content of the lesson. The engine is shared/computer-lesson.js (no Mini Windows).
+// Learn: the book and the teacher's slides (heat: conduction, convection, radiation). Exercises: booklet practice sheet + Lesson Quiz,
+// Graded classwork 2, the Extra practice sheet (a review of Lessons 1 and 3), the book's Lesson 3 Check.
+window.LESSON = {
+  n: 3,
+  grade: 4,
+  title: "Energy Transfer",
+  unit: "Topic 1 · Lesson 3",
+  book: "Book pages 24–31",
+  cover: "kitchen",
+  question: {
+    q: "How is energy [transferred] from place to place?",
+    a: "By [heat], [light], [sound] and [electricity]. Heat always moves from [hot] to [cold].",
+    img: "kitchen",
+  },
+  // the book's vocabulary (page 24) + the slides' words for heat
+  words: [
+    { w: "Heat", m: "the transfer of thermal energy, from hot to cold" },
+    { w: "Thermal energy", m: "the energy of moving particles" },
+    { w: "Radiation", m: "energy that travels as a wave" },
+    { w: "Conduction", m: "heat moves by touching" },
+    { w: "Convection", m: "moving air or water carries the heat" },
+    { w: "Light", m: "a form of energy that we can see" },
+    {
+      w: "Sound",
+      m: "energy in particles that vibrate as they pass through matter",
+    },
+    { w: "Vibrate", m: "to move back and forth very fast" },
+    { w: "Wave", m: "a transfer of energy" },
+    { w: "Generate", m: "to make or produce" },
+  ],
+
+  ideas: [
+    {
+      t: "Energy moves from place to place",
+      lines: [
+        "Energy can be [transferred] from place to place.",
+        "It moves by [heat], [sound], [light] and [electricity].",
+      ],
+      img: "kitchen",
+    },
+    {
+      t: "Heat: from hot to cold",
+      lines: [
+        "[Heat] is the transfer of [thermal energy].",
+        "Heat always moves from a [hot] object to a [cold] object.",
+      ],
+      img: "hot-cup",
+    },
+    {
+      t: "A hot cup",
+      lines: [
+        "Touch a hot cup: your fingers feel [warmer].",
+        "Heat moves from the [cup] to your [hand].",
+        "Leave the cup on the table: it gets [colder]. Heat goes into the air.",
+      ],
+      img: "tea-cup",
+    },
+    {
+      t: "Chocolate melts",
+      lines: [
+        "Hold chocolate in your hand: it [melts].",
+        "Heat moves from your [warm hand] to the [cool] chocolate.",
+      ],
+      img: "chocolate",
+    },
+    {
+      t: "Three ways heat moves",
+      lines: [
+        "[Conduction]: by touching. A spoon in hot soup gets hot.",
+        "[Convection]: moving air or water carries heat. Boiling water.",
+        "[Radiation]: heat travels as a [wave]. The sun, a campfire.",
+      ],
+      img: "convection",
+    },
+    {
+      t: "Radiation",
+      lines: [
+        "[Radiation] is energy that travels as a [wave].",
+        "The hot coils of the toaster heat the toast by radiation.",
+        "The sun's radiation warms your skin: you feel [hotter].",
+      ],
+      img: "toaster-coils",
+    },
+    {
+      t: "The campfire",
+      lines: [
+        "Burning wood gives off heat.",
+        "The heat reaches your face by [radiation]. You feel [warm].",
+      ],
+      img: "campfire",
+    },
+    {
+      t: "Particles and temperature",
+      lines: [
+        "All matter is made of tiny moving [particles].",
+        "Moving particles have [kinetic energy].",
+        "[Hot]: the particles move [faster]. [Cold]: they move [slower].",
+      ],
+      img: "particles",
+    },
+    {
+      t: "Temperature goes up and down",
+      lines: [
+        "A thermometer measures [temperature].",
+        "Heat goes in: particles move faster, the temperature goes [up].",
+        "Heat goes out: particles [slow down], the temperature goes [down].",
+      ],
+      vis: { kind: "emoji", e: "🌡️ ⬆️ ⬇️" },
+    },
+    {
+      t: "Light energy",
+      lines: [
+        "[Light] is a form of energy that we can [see].",
+        "The [sun] and other stars give light.",
+        "Light travels from place to place.",
+      ],
+      img: "sun",
+    },
+    {
+      t: "Sources of light",
+      lines: [
+        "Nature: the sun, stars, lightning, fire.",
+        "[Jellyfish] [generate] (make) their own light, deep in the ocean.",
+        "Made by people: [light bulbs], [flashlights], lasers.",
+      ],
+      img: "jellyfish",
+    },
+    {
+      t: "Sound energy",
+      lines: [
+        "Ring a bell: the [kinetic] energy of your hand goes to the bell.",
+        "The bell [vibrates]: it moves back and forth fast.",
+        "[Sound] is made when objects vibrate.",
+      ],
+      img: "bell",
+    },
+    {
+      t: "The drums",
+      lines: [
+        "Hit the drum: it [vibrates] and makes sound.",
+        "Sound travels through matter to our [ears].",
+      ],
+      img: "drums",
+    },
+    {
+      t: "Sound waves",
+      lines: [
+        "Sound travels as a [wave] from the source, like a phone.",
+        "It moves in [all directions].",
+        "The air does [not] travel with the wave.",
+      ],
+      img: "sound-wave",
+    },
+    {
+      t: "Sound travels through matter",
+      lines: [
+        "Sound travels through [solids], [liquids] and [gases].",
+        "Far away the sound is [weaker]: its energy decreases.",
+      ],
+      vis: { kind: "emoji", e: "🧱 💧 💨" },
+    },
+    {
+      t: "High and low sounds",
+      lines: [
+        "[Pitch]: how fast the particles vibrate.",
+        "[High] pitch = fast vibration: a pig squeals.",
+        "[Low] pitch: a frog croaks. The pig's squeal has [more energy].",
+      ],
+      img: "pigs",
+    },
+    {
+      t: "A thermal camera",
+      lines: [
+        "A [thermal camera] sees [warmth], not light.",
+        "Red = warm. Blue = cool.",
+        "Scientists use it to see animals at night.",
+      ],
+      img: "thermal-camera",
+    },
+  ],
+
+  videos: [
+    {
+      k: "song",
+      t: "Energy transfer song",
+      video: "l3-song",
+      img: "particles",
+    },
+  ],
+
+  games: [
+    {
+      k: "hotcold",
+      t: "Hot to cold",
+      en: "Where does the heat go?",
+      ic: "🔥",
+      items: [
+        {
+          type: "mc",
+          q: "Heat moves from ___",
+          opts: ["hot to cold", "cold to hot"],
+          two: true,
+          emoji: "🔥 ➡️ 🧊",
+        },
+        {
+          type: "mc",
+          q: "You hold a hot cup. Where does the heat go?",
+          opts: ["From the cup to your hand", "From your hand to the cup"],
+          two: true,
+          img: "tea-cup",
+        },
+        {
+          type: "mc",
+          q: "You hold chocolate. Why does it melt?",
+          opts: [
+            "Heat moves from your warm hand to the chocolate",
+            "The chocolate is cold inside",
+          ],
+          img: "chocolate",
+        },
+        {
+          type: "mc",
+          q: "A hot pot is on a cool table. Heat moves ___",
+          opts: ["from the pot to the table", "from the table to the pot"],
+          emoji: "🍲",
+          x: "Heat always moves from [warmer] to [cooler].",
+        },
+        {
+          type: "mc",
+          q: "Which one is [warmer]?",
+          opts: ["A hot cup of tea", "Ice", "Cold water"],
+          icons: ["☕", "🧊", "🥛"],
+        },
+        {
+          type: "mc",
+          q: "A metal spoon in hot soup becomes ___",
+          opts: ["hot", "colder", "blue"],
+          emoji: "🥄 🍲",
+        },
+      ],
+    },
+    {
+      k: "ways",
+      t: "How does heat move?",
+      en: "Conduction, convection, radiation",
+      ic: "〰️",
+      items: [
+        {
+          type: "mc",
+          q: "A spoon in hot tea gets hot.",
+          opts: ["Conduction", "Convection", "Radiation"],
+          icons: ["✋", "🌀", "〰️"],
+          emoji: "🥄 ☕",
+          x: "The spoon [touches] the hot tea.",
+        },
+        {
+          type: "mc",
+          q: "The sun warms the Earth.",
+          opts: ["Radiation", "Conduction", "Convection"],
+          icons: ["〰️", "✋", "🌀"],
+          img: "sun",
+          x: "The heat travels as a [wave].",
+        },
+        {
+          type: "mc",
+          q: "A campfire warms your face.",
+          opts: ["Radiation", "Conduction", "Convection"],
+          icons: ["〰️", "✋", "🌀"],
+          img: "campfire",
+        },
+        {
+          type: "mc",
+          q: "Water boils in a pot: the hot water moves up.",
+          opts: ["Convection", "Conduction", "Radiation"],
+          icons: ["🌀", "✋", "〰️"],
+          emoji: "♨️",
+          x: "The moving [water] carries the heat.",
+        },
+        {
+          type: "mc",
+          q: "The hot coils of the toaster heat the toast.",
+          opts: ["Radiation", "Conduction", "Convection"],
+          icons: ["〰️", "✋", "🌀"],
+          img: "toaster-coils",
+        },
+        {
+          type: "mc",
+          q: "You touch a hot cup of tea.",
+          opts: ["Conduction", "Convection", "Radiation"],
+          icons: ["✋", "🌀", "〰️"],
+          img: "tea-cup",
+        },
+        {
+          type: "mc",
+          q: "A fire warms the air in the whole room.",
+          opts: ["Convection", "Conduction", "Radiation"],
+          icons: ["🌀", "✋", "〰️"],
+          img: "convection",
+          x: "The moving [air] carries the heat.",
+        },
+      ],
+    },
+    {
+      k: "particles",
+      t: "Fast or slow particles?",
+      en: "Temperature",
+      ic: "🌡️",
+      items: [
+        {
+          type: "mc",
+          q: "Hot water: the particles move ___",
+          opts: ["faster", "slower"],
+          two: true,
+          img: "particles",
+        },
+        {
+          type: "mc",
+          q: "Ice: the particles move ___",
+          opts: ["slower", "faster"],
+          two: true,
+          emoji: "🧊",
+        },
+        {
+          type: "mc",
+          q: "The temperature goes down. The particles ___",
+          opts: ["slow down", "speed up"],
+          two: true,
+          emoji: "🌡️ ⬇️",
+        },
+        {
+          type: "mc",
+          q: "The sun warms your skin. The particles of your skin ___",
+          opts: ["move faster", "stop moving"],
+          two: true,
+          emoji: "☀️",
+        },
+        {
+          type: "mc",
+          q: "Hot tea or cold water: which particles move faster?",
+          opts: ["The hot tea", "The cold water"],
+          icons: ["☕", "🥛"],
+          two: true,
+        },
+      ],
+    },
+    {
+      k: "lightsound",
+      t: "Light and sound",
+      en: "Sources, vibrations, waves",
+      ic: "💡",
+      items: [
+        {
+          type: "multi",
+          q: "Which ones give [light]? (choose all)",
+          opts: [
+            { t: "The sun", img: "sun", ok: true },
+            { t: "A light bulb", img: "bulb", ok: true },
+            { t: "A flashlight", img: "flashlight", ok: true },
+            { t: "A jellyfish", img: "jellyfish", ok: true },
+            { t: "Headphones", emoji: "🎧" },
+            { t: "A drum", img: "drums" },
+          ],
+        },
+        {
+          type: "multi",
+          q: "Which ones make [sound]? (choose all)",
+          opts: [
+            { t: "A bell", img: "bell", ok: true },
+            { t: "Drums", img: "drums", ok: true },
+            { t: "A flute", img: "flute", ok: true },
+            { t: "A candle", img: "candle" },
+            { t: "The sun", img: "sun" },
+          ],
+        },
+        {
+          type: "mc",
+          q: "How is sound made?",
+          opts: ["Objects vibrate", "Objects get hot", "Objects glow"],
+          img: "drums",
+        },
+        {
+          type: "mc",
+          q: "A sound wave moves ___",
+          opts: ["in all directions", "in only one direction"],
+          two: true,
+          img: "sound-wave",
+        },
+        {
+          type: "mc",
+          q: "Which sound has [more] energy?",
+          opts: ["The squeal of a pig", "The croak of a frog"],
+          pics: ["pigs", "frog"],
+          x: "The pig's squeal is higher and louder.",
+        },
+        {
+          type: "mc",
+          q: "Sound travels through ___",
+          opts: ["solids, liquids and gases", "only air", "nothing"],
+        },
+      ],
+    },
+    {
+      k: "forms",
+      t: "Which energy?",
+      en: "Match the picture and the energy",
+      ic: "🔗",
+      items: [
+        {
+          type: "match",
+          pairs: [
+            { img: "heater", label: "Heat energy" },
+            { img: "speaker", label: "Sound energy" },
+            { img: "bulb", label: "Light energy" },
+            { img: "football", label: "Kinetic energy" },
+          ],
+        },
+      ],
+    },
+  ],
+
+  exercises: [
+    {
+      k: "ps-choose",
+      t: "Choose",
+      en: "Booklet · Practice sheet",
+      ic: "📝",
+      from: "Booklet · Practice sheet",
+      items: [
+        {
+          type: "mc",
+          q: "___ is the energy that travels as a wave.",
+          opts: ["Radiation", "Potential energy", "Sound energy"],
+        },
+        {
+          type: "mc",
+          q: "To ___ is to make or produce.",
+          opts: ["generate", "transfer", "transform"],
+        },
+        {
+          type: "mc",
+          q: "___ is the transfer of thermal energy.",
+          opts: ["Heat", "Sound", "Light"],
+        },
+        {
+          type: "mc",
+          q: "The particles of an object move faster at ___ temperature.",
+          opts: ["higher", "lower", "moderate"],
+        },
+        {
+          type: "mc",
+          q: "___ is another source of light energy.",
+          opts: ["A flashlight", "Headphones", "A telephone"],
+          img: "flashlight",
+        },
+        {
+          type: "mc",
+          q: "When gasoline burns in the engine of a car, its chemical energy transforms to ___",
+          opts: [
+            "kinetic energy and heat energy",
+            "electric energy and light energy",
+            "potential and electric energy",
+          ],
+          emoji: "⛽ 🚗",
+        },
+      ],
+    },
+    {
+      k: "ps-complete",
+      t: "Match and complete",
+      en: "Booklet · Practice sheet",
+      ic: "✍️",
+      from: "Booklet · Practice sheet",
+      items: [
+        {
+          type: "match",
+          pairs: [
+            {
+              vis: { kind: "lines", rows: ["Thermal energy"] },
+              label: "Energy of moving particles.",
+            },
+            {
+              vis: { kind: "lines", rows: ["Sound energy"] },
+              label: "Energy that vibrates as it passes through matter.",
+            },
+            {
+              vis: { kind: "lines", rows: ["Light energy"] },
+              label: "A form of energy that we can see.",
+            },
+          ],
+        },
+        {
+          type: "mc",
+          q: "Heat is the transfer of thermal energy from a ___ to a cold object.",
+          opts: ["hot object", "cold object", "jellyfish"],
+        },
+        {
+          type: "mc",
+          q: "Heat is the transfer of thermal energy from a hot object to a ___",
+          opts: ["cold object", "hot object", "wave"],
+        },
+        {
+          type: "mc",
+          q: "The amount of ___ depends on the speed of the moving object.",
+          opts: ["kinetic energy", "wave", "hot object"],
+        },
+        {
+          type: "mc",
+          q: "___ produce their own light as a natural source of light energy.",
+          opts: ["Jellyfish", "Hot objects", "Waves"],
+          img: "jellyfish",
+        },
+        {
+          type: "mc",
+          q: "A ___ is a form of energy transfer.",
+          opts: ["wave", "jellyfish", "cold object"],
+        },
+      ],
+    },
+    {
+      k: "ps-tf",
+      t: "True or false, energy forms",
+      en: "Booklet · Practice sheet",
+      ic: "✅",
+      from: "Booklet · Practice sheet",
+      items: [
+        {
+          type: "tf",
+          q: "The cold object has more energy than the hot object.",
+          a: false,
+          emoji: "🧊 ☕",
+          x: "The [hot] object has more energy. Its particles move faster.",
+        },
+        {
+          type: "tf",
+          q: "When radiation carries energy from the sun to your skin, you feel cooler.",
+          a: false,
+          img: "sun",
+          x: "You feel [hotter].",
+        },
+        {
+          type: "tf",
+          q: "When the temperature decreases, the particles of the object slow down.",
+          a: true,
+          emoji: "🌡️ ⬇️",
+        },
+        {
+          type: "tf",
+          q: "Sound is made when objects vibrate.",
+          a: true,
+          img: "drums",
+        },
+        {
+          type: "tf",
+          q: "A sound wave moves only in one direction from the source of the sound.",
+          a: false,
+          img: "sound-wave",
+          x: "It moves in [all directions].",
+        },
+        {
+          type: "multi",
+          q: "The heater 🔌: choose two energy forms it could have.",
+          opts: [
+            { t: "Electrical energy", img: "heater", ok: true },
+            { t: "Heat energy", emoji: "🔥", ok: true },
+            { t: "Sound energy", emoji: "🔊" },
+            { t: "Chemical energy", emoji: "⛽" },
+          ],
+        },
+        {
+          type: "multi",
+          q: "The speaker 🔊: choose two energy forms it could have.",
+          opts: [
+            { t: "Electrical energy", img: "speaker", ok: true },
+            { t: "Sound energy", emoji: "🔊", ok: true },
+            { t: "Chemical energy", emoji: "⛽" },
+            { t: "Light energy", emoji: "💡" },
+          ],
+        },
+        {
+          type: "multi",
+          q: "The flying football ⚽: choose the energy forms it could have.",
+          opts: [
+            { t: "Kinetic energy", img: "football", ok: true },
+            { t: "Potential energy", emoji: "🔋", ok: true },
+            { t: "Sound energy", emoji: "🔊", ok: true },
+            { t: "Electrical energy", emoji: "🔌" },
+          ],
+        },
+      ],
+    },
+    {
+      k: "quiz",
+      t: "Lesson Quiz",
+      en: "Booklet · Lesson Quiz",
+      ic: "⭐",
+      from: "Booklet · Lesson Quiz",
+      items: [
+        {
+          type: "multi",
+          q: "The candle 🕯️ is burning. Which [two] types of energy does it produce?",
+          opts: [
+            { t: "Thermal", emoji: "🔥", ok: true },
+            { t: "Light", emoji: "💡", ok: true },
+            { t: "Sound", emoji: "🔊" },
+            { t: "Wave", emoji: "〰️" },
+          ],
+        },
+        {
+          type: "mc",
+          q: "Jackson heats water on a hot plate. Which observation shows that energy can be transferred by heat?",
+          opts: [
+            "The temperature of the water on the hot plate increased over time.",
+            "The water temperature was 21°C at the beginning.",
+            "The hot plate was set at medium heat.",
+            "The air temperature of the room was 21°C at the beginning.",
+          ],
+          img: "jackson-table",
+        },
+        {
+          type: "mc",
+          q: "The temperature change of the water is evidence for ___ energy transfer to the water particles.",
+          opts: ["kinetic", "sound", "wave", "light"],
+          img: "jackson-table",
+          x: "The water particles move [faster]: more kinetic energy.",
+        },
+        {
+          type: "mc",
+          q: "The energy moves ___ the water particles.",
+          opts: ["to", "from"],
+          two: true,
+          img: "jackson-table",
+          x: "The hot plate gives energy [to] the water.",
+        },
+        {
+          type: "mc",
+          q: "Which is most likely the missing measurement at 6 minutes?",
+          opts: ["35°C", "21°C", "40°C", "58°C"],
+          img: "jackson-table",
+          x: "It must be between [29°C] (3 minutes) and [40°C] (9 minutes).",
+        },
+        {
+          type: "mc",
+          q: "As energy is produced from the instrument, ___ moves through matter.",
+          opts: ["a sound wave", "radiation", "light"],
+          img: "flute",
+        },
+        {
+          type: "mc",
+          q: "The sound wave moves through matter and lets the crowd ___ hear the music.",
+          opts: ["in all directions", "in only one direction"],
+          img: "flute",
+        },
+        {
+          type: "mc",
+          q: "What evidence in the picture shows that light energy can transfer from place to place?",
+          opts: [
+            "The boy can see the map.",
+            "The flashlight is on.",
+            "It is nighttime.",
+            "There is no electricity in the woods.",
+          ],
+          img: "tent",
+          x: "The light travels from the flashlight [to the map], so he can see it.",
+        },
+      ],
+    },
+    {
+      k: "cw2",
+      t: "Graded classwork 2",
+      en: "Heat",
+      ic: "🏫",
+      from: "Graded classwork (2)",
+      items: [
+        {
+          type: "mc",
+          q: "Heat moves from a ___ object to a colder object.",
+          opts: ["hot", "cold", "dark"],
+        },
+        {
+          type: "mc",
+          q: "Which object is warmer?",
+          opts: ["A hot cup of tea", "Ice", "Cold water"],
+          icons: ["☕", "🧊", "🥛"],
+        },
+        {
+          type: "mc",
+          q: "A metal spoon in hot soup can become ___",
+          opts: ["hot", "colder", "blue"],
+        },
+        {
+          type: "mc",
+          q: "___ is the transfer of thermal energy from one object to another.",
+          opts: ["Heat", "Potential energy", "Speed"],
+        },
+        {
+          type: "mc",
+          q: "The heat transfers to the spoon in a hot cup of tea by ___",
+          opts: ["conduction", "convection", "radiation"],
+        },
+      ],
+    },
+    {
+      k: "extra-tf",
+      t: "Extra practice 1",
+      en: "Review · True or false",
+      ic: "🔁",
+      from: "Extra practice sheet",
+      items: [
+        {
+          type: "tf",
+          q: "Energy can be created from nothing.",
+          a: false,
+          x: "Energy cannot be [made] or [destroyed].",
+        },
+        {
+          type: "tf",
+          q: "Heat always transfers from a cold object to a hot object.",
+          a: false,
+          x: "From [hot] to [cold].",
+        },
+        {
+          type: "tf",
+          q: "Any object that is moving has kinetic energy.",
+          a: true,
+        },
+        {
+          type: "tf",
+          q: "A rock rolling down a hill can change potential energy into kinetic energy.",
+          a: true,
+        },
+        {
+          type: "tf",
+          q: "Boiling water gets the heat energy by convection.",
+          a: true,
+        },
+        {
+          type: "tf",
+          q: "The particles in a hot drink move slower than the particles in a cold drink.",
+          a: false,
+          x: "Hot = [faster].",
+        },
+        {
+          type: "tf",
+          q: "The heat from a campfire reaches your face by radiation.",
+          a: true,
+          img: "campfire",
+        },
+        {
+          type: "tf",
+          q: "When the speed increases, kinetic energy decreases.",
+          a: false,
+          x: "Faster = [more] kinetic energy.",
+        },
+        {
+          type: "tf",
+          q: "Some of the bowling ball's kinetic energy is transformed to sound energy.",
+          a: true,
+        },
+        {
+          type: "tf",
+          q: "If the upward force of a rocket is greater than its downward force, the rocket will go upward.",
+          a: true,
+        },
+      ],
+    },
+    {
+      k: "extra-choose",
+      t: "Extra practice 2",
+      en: "Review · Choose",
+      ic: "🔁",
+      from: "Extra practice sheet",
+      items: [
+        {
+          type: "mc",
+          q: "Mina holds a cup of hot tea and a cup of cold water. Which particles move faster?",
+          opts: ["The hot tea", "The cold water"],
+          icons: ["☕", "🥛"],
+          two: true,
+        },
+        {
+          type: "mc",
+          q: "In a loudspeaker, electrical energy is transformed into ___",
+          opts: ["sound energy", "potential energy", "heat only"],
+          img: "speaker",
+        },
+        {
+          type: "mc",
+          q: "The amount of potential energy depends on the shape and ___ of the object.",
+          opts: ["position", "speed", "sound"],
+        },
+        {
+          type: "mc",
+          q: "Potential energy is ___ energy.",
+          opts: ["stored", "moving", "sound"],
+        },
+        {
+          type: "mc",
+          q: "In a toaster, electrical energy is transformed into ___",
+          opts: ["thermal (heat) energy", "potential energy", "sound energy"],
+          img: "toaster-coils",
+        },
+        {
+          type: "mc",
+          q: "Which object has the most kinetic energy?",
+          opts: [
+            "A fast-moving truck",
+            "A parked truck",
+            "A slowly moving bicycle",
+          ],
+        },
+        {
+          type: "mc",
+          q: "Energy is the ability to ___",
+          opts: ["do work or cause change", "measure mass", "measure speed"],
+        },
+        {
+          type: "mc",
+          q: "In the torch (flashlight), electrical energy transforms into ___",
+          opts: ["light energy", "sound energy", "potential energy"],
+          img: "flashlight",
+        },
+        {
+          type: "mc",
+          q: "When you ring the bell, kinetic energy is transformed into ___",
+          opts: ["sound energy", "light energy", "thermal energy"],
+          img: "bell",
+        },
+        {
+          type: "mc",
+          q: "When you touch a hot cup of tea, the heat moves from the cup to your hands by ___",
+          opts: ["conduction", "convection", "radiation"],
+          img: "tea-cup",
+        },
+        {
+          type: "mc",
+          q: "Energy cannot be made or ___",
+          opts: ["destroyed", "transferred", "transformed"],
+        },
+        {
+          type: "mc",
+          q: "Kinetic energy is the energy of ___",
+          opts: ["motion", "storage", "shape"],
+        },
+        {
+          type: "mc",
+          q: "A football player kicks a resting ball. The ball gains ___",
+          opts: ["kinetic energy", "potential energy", "light energy"],
+          img: "football",
+        },
+        {
+          type: "mc",
+          q: "Speed is the distance an object moves in a certain amount of ___",
+          opts: ["time", "mass", "heat"],
+        },
+        {
+          type: "mc",
+          q: "A moving car has ___ than a moving person.",
+          opts: [
+            "more kinetic energy",
+            "more potential energy",
+            "less kinetic energy",
+          ],
+        },
+        {
+          type: "mc",
+          q: "A book is on a high shelf. So it has ___",
+          opts: ["potential energy", "kinetic energy", "sound energy"],
+        },
+        {
+          type: "mc",
+          q: "When you rub your hands together, kinetic energy is transformed into ___",
+          opts: ["thermal (heat) energy", "light energy", "electrical energy"],
+        },
+        {
+          type: "mc",
+          q: "A stretched rubber band has ___",
+          opts: ["potential energy", "no energy", "sound energy"],
+        },
+        {
+          type: "mc",
+          q: "When energy is changed from one type to another, this is called ___",
+          opts: [
+            "energy transformation",
+            "energy transferring",
+            "formation of energy",
+          ],
+        },
+        {
+          type: "mc",
+          q: "When energy moves from one object to another without changing form, this is called ___",
+          opts: [
+            "energy transferring",
+            "energy transformation",
+            "formation of energy",
+          ],
+        },
+        {
+          type: "mc",
+          q: "A way of heat transfer from the sun to the Earth: ___",
+          opts: ["radiation", "conduction", "convection"],
+          img: "sun",
+        },
+      ],
+    },
+    {
+      k: "extra-fill",
+      t: "Extra practice 3",
+      en: "Review · Fill in the blank",
+      ic: "🔁",
+      from: "Extra practice sheet · word bank",
+      items: [
+        {
+          type: "mc",
+          q: "Heat that moves through a solid by direct touch is called ___",
+          opts: ["conduction", "direction", "thermal"],
+        },
+        {
+          type: "mc",
+          q: "A solar-powered heater transforms light energy into ___ energy.",
+          opts: ["thermal", "kinetic", "more"],
+        },
+        {
+          type: "mc",
+          q: "___ is affected by speed and mass.",
+          opts: ["Kinetic energy", "Conduction", "Direction"],
+        },
+        {
+          type: "mc",
+          q: "A fast-moving object has ___ kinetic energy than a slow-moving object.",
+          opts: ["more", "speed", "thermal"],
+        },
+        {
+          type: "mc",
+          q: "The two characteristics used to describe motion are ___ and direction.",
+          opts: ["speed", "more", "conduction"],
+        },
+        {
+          type: "mc",
+          q: "The two characteristics used to describe motion are speed and ___",
+          opts: ["direction", "conduction", "thermal"],
+        },
+      ],
+    },
+    {
+      k: "check",
+      t: "Book questions",
+      en: "Lesson 3 Check and more",
+      ic: "📕",
+      from: "Book · Lesson 3",
+      items: [
+        {
+          type: "open",
+          q: "What happens to the particles of matter as they are heated?",
+          a: "The particles move [faster].",
+          img: "particles",
+        },
+        {
+          type: "open",
+          q: "A hot pot is placed on a cool table. Which way will heat flow between the pot and the table? Why?",
+          a: "From the [pot] to the [table], because heat always flows from a warmer object to a cooler object.",
+          emoji: "🍲",
+        },
+        {
+          type: "open",
+          q: "What happens to the particles of the object that gives its heat to another object? How does this change its temperature?",
+          a: "Its particles [slow down], so its temperature [decreases].",
+          img: "hot-cup",
+        },
+        {
+          type: "open",
+          q: "Which sound has more energy: the croak of a frog or the squeal of a pig?",
+          a: "The squeal of a [pig].",
+          img: "pigs",
+        },
+        {
+          type: "open",
+          q: "Sound moves through the air. What happens to its energy?",
+          a: "The energy of the sound wave [decreases].",
+          img: "sound-wave",
+        },
+        {
+          type: "open",
+          q: "What other forms of light do you know? How do you use light every day?",
+          a: "Car headlights, candlelight, fire, a firefly. I turn on the light in my room, use the flashlight on a phone, read a digital clock.",
+          img: "flashlight",
+        },
+      ],
+    },
+  ],
+};
