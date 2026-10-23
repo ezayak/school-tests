@@ -34,6 +34,9 @@ grade-4/
   computer/
     index.html, lessons.js
     chapter-1/             ← Unit 1 lessons + Mini Windows (winsim.js/.css)
+  science/                 ← Science: one subject for all terms, Computer lesson engine
+    index.html, lessons.js ← list of lessons, by book topic
+    topic-1/               ← Topic 1 lessons (lesson-N.html/.js, img/, video/)
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -303,3 +306,22 @@ A start: `{doc: "robots" | "robotsList" | "robotsMiss" | "oneParagraph" | "globa
 caret: [p, w], tab: "Insert", fmt: [{r: [p0, w0, p1, w1], b: true}], file: "saveas" | "print", nav: true, editor: true, saved: "Robots around us", zoom: 100}`.
 The texts are the book's; "robotsMiss" and "olympic" have the book's spelling mistakes for the Editor.
 Pictures of Word buttons and keys for games: `oi: ["bold", "highlight", "key:Ctrl+B"]` in `mc`, `icon: "key:F7"` in `match`, `vis: {kind: "icons", items: [{type: "align-left"}]}`.
+
+## Science lessons (Grade 4)
+
+Folder: `grade-4/science/`. One card on the home page ("Science", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`,
+one heading per book topic (`part: "Topic"`, `chapters: [{n, dir: "topic-1", title, items}]`, the same format as the Computer lessons).
+Book: Elevate Science, Grade 4. The lessons use the **Computer lesson engine** (`shared/computer-lesson.js`, no Mini Windows):
+the pages set `<body data-subject="Science">`, which changes the subject name and the colour (`--sci-ink`, a darker gold that reads well on white).
+
+A lesson has the same three tabs and the same `lesson-N.js` format as a Grade 3 Computer lesson, plus:
+- `words: [{w: "Kinetic energy", m: "the energy of motion"}, …]` – the book's vocabulary; the first Learn tile becomes **Key words**
+  (each word with its short meaning, read aloud) instead of "Big ideas".
+- A word instead of a picture in a `match` (word ↔ meaning): `{vis: {kind: "lines", rows: ["Kinetic energy"]}, label: "Is the energy of motion."}`.
+- Two-way choices (potential / kinetic, conductor / insulator) are `mc` with `two: true` and `icons`, not `tf` (`tf` always puts ✅ on the first label).
+
+Exercises come from the term booklet and the school sheets (`from:` names the sheet). When a lesson has no school sheet,
+its "Book questions" set uses the book's Lesson Check with model answers written from the book.
+
+After adding a lesson: add it to its topic in `lessons.js` (a new topic: a new `topic-N/` folder and a new entry in `chapters`),
+add its files (not the videos) to the `also: [...]` list of the Science entry in `games.js`, and bump `VERSION` in `sw.js`.
