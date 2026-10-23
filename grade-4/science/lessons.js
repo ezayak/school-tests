@@ -85,5 +85,20 @@ window.CS_LESSONS = {
         },
       ],
     },
+    {
+      n: 3,
+      dir: "topic-3",
+      title: "Waves and Information",
+      items: [
+        {
+          n: 1,
+          title: "Properties of Waves",
+          en: "Crest, trough, amplitude, wavelength, frequency; transverse and longitudinal waves",
+          path: "lesson-1.html",
+          cover: "img/lesson-1/surfer.jpg",
+          note: "12 picture cards · 4 games · book questions",
+        },
+      ],
+    },
   ],
 };
