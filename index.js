@@ -119,10 +119,7 @@
             store.set("st-fold-" + d.dataset.k, d.open ? "1" : "0")),
       );
   }
-  // Science first, then the other subjects A–Z (Subjects row and Revisions)
-  const bySubject = (a, b) =>
-    (b.subject === "Science") - (a.subject === "Science") ||
-    a.subject.localeCompare(b.subject);
+  const bySubject = (a, b) => a.subject.localeCompare(b.subject);
   const card = (g) =>
     `<a class="game${g.subject === "Religion" ? " light-c" : ""}" style="--c:${SUBJ[g.subject] || "var(--other)"}" href="${esc(g.path)}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson || "")}</span><p class="tp">${esc(g.topics || "")}</p><span class="meta"><span>${g.countLabel ? esc(g.countLabel) : g.questions ? g.questions + " questions" : ""}${g.year ? " · " + esc(g.year) : ""}</span><span class="go play-arrow">${g.hub ? "Open →" : "Play →"}</span></span></a>`;
   // Revisions → term buttons (one term at a time) → Mid-term / Final, each a section that folds → subject cards
