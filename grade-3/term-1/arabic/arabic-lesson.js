@@ -301,7 +301,7 @@
   function listView() {
     const LS = window.LESSONS || [];
     app.innerHTML = `<section class="card pop">
-    <div class="toprow"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 · Term 1 · اللغة العربية</span></div>
+    <div class="toprow"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 · اللغة العربية</span></div>
     <h1 class="hero-title"><span class="p">Arabic</span> <span class="k">Lessons</span></h1>
     <p class="howto">Pick a lesson. Each lesson has the story to read and listen to, the new words, opposites and plurals, and the exercises from the book.</p>
   </section>

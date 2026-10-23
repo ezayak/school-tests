@@ -40,7 +40,7 @@
   if (view === "list") {
     const LS = window.FR_LESSONS || { grade: 4, term: 1, items: [] };
     app.innerHTML = `<section class="card">
-    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · Term ${esc(LS.term)} · French</span></div>
+    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · French</span></div>
     <h1 class="hero-title"><span class="p">Français</span> <span class="k">Leçons</span></h1>
     <p class="howto">Pick a lesson. Each lesson has the story with pictures and sound, the words, games (listen, match, build the word, build the sentence) and the school exercises.</p>
   </section>
