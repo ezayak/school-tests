@@ -147,5 +147,20 @@ window.CS_LESSONS = {
         },
       ],
     },
+    {
+      n: 7,
+      dir: "topic-7",
+      title: "Structures and Functions",
+      items: [
+        {
+          n: 1,
+          title: "Internal Structures and Functions of Plants",
+          en: "Ovary and seeds, photosynthesis, chloroplasts, stomata, xylem and phloem",
+          path: "lesson-1.html",
+          cover: "img/lesson-1/leaf-diagram.jpg",
+          note: "10 picture cards · 4 games · book questions",
+        },
+      ],
+    },
   ],
 };
