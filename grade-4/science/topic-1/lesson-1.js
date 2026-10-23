@@ -487,36 +487,44 @@ window.LESSON = {
         {
           type: "mc",
           q: "___ is the energy of motion.",
+          img: "kick",
+          pics: ["kick", "shelf", "bell"],
           opts: ["Kinetic energy", "Potential energy", "Sound energy"],
         },
         {
           type: "mc",
           q: "___ is to change from one type of energy to another.",
+          img: "bulb",
           opts: ["Energy transform", "Energy transfer", "Forms of energy"],
         },
         {
           type: "mc",
           q: "___ is the distance an object moves in a specific time.",
+          emoji: "🏃 📏 ⏱️",
           opts: ["Speed", "Position", "Distance"],
         },
         {
           type: "mc",
           q: "___ is to move from one object to another.",
+          img: "wrecking-ball",
           opts: ["Energy transfer", "Forms of energy", "Energy transform"],
         },
         {
           type: "mc",
           q: "The faster the car is moving, ___ kinetic energy it has.",
+          emoji: "🏎️ 💨",
           opts: ["the more", "the less", "the same"],
         },
         {
           type: "mc",
           q: "___ cars have less kinetic energy than fast cars.",
+          emoji: "🐢 🚗",
           opts: ["Slow", "Big", "Small"],
         },
         {
           type: "mc",
           q: "What causes a ball that is not moving to gain kinetic energy?",
+          img: "kick",
           opts: ["Force", "Speed", "Direction"],
           x: "A force (a push or a pull) makes it start to move.",
         },
@@ -570,21 +578,29 @@ window.LESSON = {
         {
           type: "mc",
           q: "The amount of ___ in an object depends on its shape and position.",
+          img: "shelf",
+          pics: ["shelf", "kick", "bell"],
           opts: ["potential energy", "kinetic energy", "sound energy"],
         },
         {
           type: "mc",
           q: "The amount of ___ depends on the speed of the moving object.",
+          img: "coaster",
+          pics: ["kick", "shelf", "chemical"],
           opts: ["kinetic energy", "potential energy", "chemical energy"],
         },
         {
           type: "mc",
           q: "___ is one form of kinetic energy that can be heard.",
+          img: "bell",
+          pics: ["bell", "electrical", "shelf"],
           opts: ["Sound energy", "Electrical energy", "Potential energy"],
         },
         {
           type: "mc",
           q: "___ is the energy used by a cellphone charger.",
+          emoji: "📱 🔌",
+          pics: ["electrical", "bell", "chemical"],
           opts: ["Electrical energy", "Sound energy", "Chemical energy"],
         },
         {
@@ -596,6 +612,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "Falling dominoes have ___ energy.",
+          img: "dominoes",
           opts: ["kinetic", "potential", "electrical"],
         },
         {
@@ -607,21 +624,25 @@ window.LESSON = {
         {
           type: "mc",
           q: "Some kinetic energy is ___ from one domino to the next as they fall.",
+          img: "dominoes",
           opts: ["transferred", "transformed", "destroyed"],
         },
         {
           type: "mc",
           q: "The kinetic energy of the falling dominoes is ___ into sound energy. That is why you hear them click.",
+          img: "dominoes",
           opts: ["transformed", "transferred", "stored"],
         },
         {
           type: "mc",
           q: "___ is the ability to do work or cause change.",
+          img: "coaster",
           opts: ["Energy", "Speed", "Motion"],
         },
         {
           type: "mc",
           q: "When a ball slowly starts rolling downhill, the ___ transforms to kinetic energy.",
+          emoji: "⛰️ ⚽",
           opts: ["potential energy", "sound energy", "electrical energy"],
         },
       ],
@@ -745,6 +766,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "A stretched rubber band.",
+          img: "bow",
           opts: ["Potential energy", "Kinetic energy"],
           icons: ["🔋", "🏃"],
           two: true,
@@ -795,16 +817,19 @@ window.LESSON = {
         {
           type: "mc",
           q: "The energy of motion is called ___",
+          img: "kick",
           opts: ["kinetic energy", "potential energy", "gravity", "mass"],
         },
         {
           type: "mc",
           q: "A roller coaster changing potential energy into kinetic energy as it rolls downhill is an example of energy ___",
+          img: "coaster",
           opts: ["transformation", "transfer", "disappearing", "storage"],
         },
         {
           type: "mc",
           q: "Which of these increases an object's potential energy the most?",
+          img: "shelf",
           opts: ["Its height", "Its color", "Its temperature", "Its smell"],
         },
         {
@@ -826,6 +851,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "Which is an example of potential energy?",
+          icons: ["📚", "⚽", "🐕", "🌀"],
           opts: [
             "A book resting on a shelf",
             "A rolling ball",
@@ -842,6 +868,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "Which is an example of kinetic energy?",
+          icons: ["🐦", "🪢", "🚗", "⛰️"],
           opts: [
             "A bird flying through the air",
             "A stretched rubber band",
@@ -852,11 +879,13 @@ window.LESSON = {
         {
           type: "mc",
           q: "When energy moves from one object to another WITHOUT changing form, it is called energy ___",
+          img: "wrecking-ball",
           opts: ["transfer", "potential energy", "gravity", "transform"],
         },
         {
           type: "mc",
           q: "An object has the MOST potential energy when it is ___",
+          img: "coaster",
           opts: [
             "at its highest point",
             "moving at top speed",
@@ -876,31 +905,37 @@ window.LESSON = {
         {
           type: "mc",
           q: "Potential energy is stored energy an object has because of its ___ or shape.",
+          img: "shelf",
           opts: ["height", "speed", "color"],
         },
         {
           type: "mc",
           q: "The higher the object is, the more ___ energy!",
+          img: "shelf",
           opts: ["potential", "kinetic", "sound"],
         },
         {
           type: "mc",
           q: "Kinetic energy is the energy of ___",
+          img: "kick",
           opts: ["motion", "height", "shape"],
         },
         {
           type: "mc",
           q: "The ___ an object moves, the more kinetic energy it has!",
+          emoji: "🏃 💨",
           opts: ["faster", "slower", "higher"],
         },
         {
           type: "mc",
           q: "Kinetic energy is affected by speed and ___",
+          emoji: "🚚 🚗",
           opts: ["mass", "color", "shape"],
         },
         {
           type: "mc",
           q: "Energy transfer happens when energy ___ from one object to another. It does NOT change form.",
+          emoji: "🟠 ➡️ 🔵",
           opts: ["moves", "stops", "disappears"],
         },
         {

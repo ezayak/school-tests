@@ -51,7 +51,7 @@ window.LESSON = {
         "A charge is [positive] (+) or [negative] (−).",
         "Matter has [both] + and − particles.",
       ],
-      vis: { kind: "emoji", e: "➕ ➖" },
+      img: "charge-pm",
     },
     {
       t: "Attract or repel",
@@ -212,6 +212,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "+ and −",
+          img: "charge-pm",
           opts: ["Attract", "Repel"],
           icons: ["🧲", "↔️"],
           two: true,
@@ -220,6 +221,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "+ and +",
+          img: "charge-pp",
           opts: ["Repel", "Attract"],
           icons: ["↔️", "🧲"],
           two: true,
@@ -228,6 +230,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "− and −",
+          img: "charge-mm",
           opts: ["Repel", "Attract"],
           icons: ["↔️", "🧲"],
           two: true,
@@ -236,6 +239,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "− and +",
+          img: "charge-mp",
           opts: ["Attract", "Repel"],
           icons: ["🧲", "↔️"],
           two: true,
@@ -342,16 +346,20 @@ window.LESSON = {
         {
           type: "mc",
           q: "___ is a property that causes matter to have a force.",
+          img: "balloon",
           opts: ["Electric charge", "Insulators", "Resistor"],
         },
         {
           type: "mc",
           q: "___ is the flow of charged particles.",
+          img: "circuit",
           opts: ["Electric current", "Electric force", "Repel"],
         },
         {
           type: "mc",
           q: "Matter with opposite charged particles will ___",
+          img: "charge-pm",
+          icons: ["🧲", "↔️", "⚡"],
           opts: ["attract", "repel", "be charged"],
         },
         {
@@ -363,16 +371,22 @@ window.LESSON = {
         {
           type: "mc",
           q: "Matter with similar charged particles will ___",
+          img: "charge-pp",
+          icons: ["↔️", "🧲", "⚡"],
           opts: ["repel", "attract", "be charged"],
         },
         {
           type: "mc",
           q: "A ___ is a device used to control the flow of the electric current.",
+          img: "resistor",
+          pics: ["resistor", "copper-wire", "plastic-coating"],
           opts: ["resistor", "conductor", "insulator"],
         },
         {
           type: "mc",
           q: "The wire that carries the current to and from the light bulb is made of a ___",
+          img: "circuit",
+          pics: ["copper-wire", "resistor", "plastic-coating"],
           opts: ["conductor", "resistor", "insulator"],
         },
         {
@@ -399,6 +413,8 @@ window.LESSON = {
         {
           type: "mc",
           q: "The ___ turns the electric current on or off.",
+          img: "circuit",
+          icons: ["🔘", "🔋", "🔩"],
           opts: ["switch", "battery", "metal"],
         },
         {
@@ -410,11 +426,13 @@ window.LESSON = {
         {
           type: "mc",
           q: "___ are materials that do not allow electricity to pass through them.",
+          img: "plastic-coating",
           opts: ["Insulators", "Metals", "Batteries"],
         },
         {
           type: "mc",
           q: "___ are good conductors of electricity.",
+          img: "copper-wire",
           opts: ["Metals", "Insulators", "Switches"],
         },
       ],
@@ -451,18 +469,21 @@ window.LESSON = {
         {
           type: "tf",
           q: "All matter is made up of positive charged particles only.",
+          img: "charge-ppp",
           a: false,
           x: "Matter has [positive] and [negative] particles.",
         },
         {
           type: "tf",
           q: "In electric current, charged particles flow in different directions.",
+          emoji: "⬅️ ⚡ ➡️",
           a: false,
           x: "They flow in the [same] direction.",
         },
         {
           type: "tf",
           q: "Particles with electric charge can move from place to place.",
+          emoji: "⚡ ➡️",
           a: true,
         },
         {
@@ -474,6 +495,7 @@ window.LESSON = {
         {
           type: "tf",
           q: "The electric current must flow in an open electric circuit.",
+          img: "circuit-c",
           a: false,
           x: "It must flow in a [complete] (closed) circuit.",
         },
@@ -492,10 +514,16 @@ window.LESSON = {
         ["Negative − Negative", false],
       ].map(([pair, a]) => ({
         type: "mc",
-        q: `${pair}: attract or repel?`,
+        q: `${pair.replace(" − ", " and ")}: attract or repel?`,
         opts: a ? ["Attract", "Repel"] : ["Repel", "Attract"],
         icons: a ? ["🧲", "↔️"] : ["↔️", "🧲"],
         two: true,
+        img: {
+          "Negative − Positive": "charge-mp",
+          "Positive − Positive": "charge-pp",
+          "Positive − Negative": "charge-pm",
+          "Negative − Negative": "charge-mm",
+        }[pair],
       })),
     },
     {
@@ -515,6 +543,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "Which list names different forms of energy?",
+          emoji: "🔊 💡 🔥",
           opts: [
             "sound, light, heat",
             "magnetic, resistor, conductor",

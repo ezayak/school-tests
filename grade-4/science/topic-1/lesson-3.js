@@ -432,21 +432,25 @@ window.LESSON = {
         {
           type: "mc",
           q: "___ is the energy that travels as a wave.",
+          img: "sun",
           opts: ["Radiation", "Potential energy", "Sound energy"],
         },
         {
           type: "mc",
           q: "To ___ is to make or produce.",
+          img: "jellyfish",
           opts: ["generate", "transfer", "transform"],
         },
         {
           type: "mc",
           q: "___ is the transfer of thermal energy.",
+          img: "hot-cup",
           opts: ["Heat", "Sound", "Light"],
         },
         {
           type: "mc",
           q: "The particles of an object move faster at ___ temperature.",
+          img: "particles",
           opts: ["higher", "lower", "moderate"],
         },
         {
@@ -494,16 +498,19 @@ window.LESSON = {
         {
           type: "mc",
           q: "Heat is the transfer of thermal energy from a ___ to a cold object.",
+          emoji: "☕ ➡️ 🧊",
           opts: ["hot object", "cold object", "jellyfish"],
         },
         {
           type: "mc",
           q: "Heat is the transfer of thermal energy from a hot object to a ___",
+          emoji: "☕ ➡️ 🧊",
           opts: ["cold object", "hot object", "wave"],
         },
         {
           type: "mc",
           q: "The amount of ___ depends on the speed of the moving object.",
+          img: "football",
           opts: ["kinetic energy", "wave", "hot object"],
         },
         {
@@ -515,6 +522,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "A ___ is a form of energy transfer.",
+          img: "sound-wave",
           opts: ["wave", "jellyfish", "cold object"],
         },
       ],
@@ -677,6 +685,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "Heat moves from a ___ object to a colder object.",
+          emoji: "🔥 ➡️ 🧊",
           opts: ["hot", "cold", "dark"],
         },
         {
@@ -688,16 +697,20 @@ window.LESSON = {
         {
           type: "mc",
           q: "A metal spoon in hot soup can become ___",
+          emoji: "🥄 🍲",
           opts: ["hot", "colder", "blue"],
         },
         {
           type: "mc",
           q: "___ is the transfer of thermal energy from one object to another.",
+          img: "hot-cup",
           opts: ["Heat", "Potential energy", "Speed"],
         },
         {
           type: "mc",
           q: "The heat transfers to the spoon in a hot cup of tea by ___",
+          emoji: "🥄 ☕",
+          icons: ["✋", "🌀", "〰️"],
           opts: ["conduction", "convection", "radiation"],
         },
       ],
@@ -712,33 +725,39 @@ window.LESSON = {
         {
           type: "tf",
           q: "Energy can be created from nothing.",
+          emoji: "❓ ➡️ ⚡",
           a: false,
           x: "Energy cannot be [made] or [destroyed].",
         },
         {
           type: "tf",
           q: "Heat always transfers from a cold object to a hot object.",
+          emoji: "🧊 ➡️ 🔥",
           a: false,
           x: "From [hot] to [cold].",
         },
         {
           type: "tf",
           q: "Any object that is moving has kinetic energy.",
+          img: "football",
           a: true,
         },
         {
           type: "tf",
           q: "A rock rolling down a hill can change potential energy into kinetic energy.",
+          emoji: "⛰️ 🪨",
           a: true,
         },
         {
           type: "tf",
           q: "Boiling water gets the heat energy by convection.",
+          emoji: "♨️ 🍲",
           a: true,
         },
         {
           type: "tf",
           q: "The particles in a hot drink move slower than the particles in a cold drink.",
+          img: "particles",
           a: false,
           x: "Hot = [faster].",
         },
@@ -751,17 +770,20 @@ window.LESSON = {
         {
           type: "tf",
           q: "When the speed increases, kinetic energy decreases.",
+          emoji: "🏎️ 💨",
           a: false,
           x: "Faster = [more] kinetic energy.",
         },
         {
           type: "tf",
           q: "Some of the bowling ball's kinetic energy is transformed to sound energy.",
+          emoji: "🎳 🔊",
           a: true,
         },
         {
           type: "tf",
           q: "If the upward force of a rocket is greater than its downward force, the rocket will go upward.",
+          img: "rocket",
           a: true,
         },
       ],
@@ -789,11 +811,13 @@ window.LESSON = {
         {
           type: "mc",
           q: "The amount of potential energy depends on the shape and ___ of the object.",
+          img: "shelf",
           opts: ["position", "speed", "sound"],
         },
         {
           type: "mc",
           q: "Potential energy is ___ energy.",
+          img: "shelf",
           opts: ["stored", "moving", "sound"],
         },
         {
@@ -805,6 +829,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "Which object has the most kinetic energy?",
+          icons: ["🚚💨", "🚚", "🚲"],
           opts: [
             "A fast-moving truck",
             "A parked truck",
@@ -814,6 +839,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "Energy is the ability to ___",
+          emoji: "⚡ 💪",
           opts: ["do work or cause change", "measure mass", "measure speed"],
         },
         {
@@ -837,11 +863,13 @@ window.LESSON = {
         {
           type: "mc",
           q: "Energy cannot be made or ___",
+          emoji: "⚡ ♻️",
           opts: ["destroyed", "transferred", "transformed"],
         },
         {
           type: "mc",
           q: "Kinetic energy is the energy of ___",
+          img: "football",
           opts: ["motion", "storage", "shape"],
         },
         {
@@ -853,11 +881,13 @@ window.LESSON = {
         {
           type: "mc",
           q: "Speed is the distance an object moves in a certain amount of ___",
+          emoji: "📏 ⏱️",
           opts: ["time", "mass", "heat"],
         },
         {
           type: "mc",
           q: "A moving car has ___ than a moving person.",
+          emoji: "🚗 🚶",
           opts: [
             "more kinetic energy",
             "more potential energy",
@@ -867,21 +897,25 @@ window.LESSON = {
         {
           type: "mc",
           q: "A book is on a high shelf. So it has ___",
+          img: "shelf",
           opts: ["potential energy", "kinetic energy", "sound energy"],
         },
         {
           type: "mc",
           q: "When you rub your hands together, kinetic energy is transformed into ___",
+          emoji: "🙌 🔥",
           opts: ["thermal (heat) energy", "light energy", "electrical energy"],
         },
         {
           type: "mc",
           q: "A stretched rubber band has ___",
+          img: "bow",
           opts: ["potential energy", "no energy", "sound energy"],
         },
         {
           type: "mc",
           q: "When energy is changed from one type to another, this is called ___",
+          img: "bulb",
           opts: [
             "energy transformation",
             "energy transferring",
@@ -891,6 +925,7 @@ window.LESSON = {
         {
           type: "mc",
           q: "When energy moves from one object to another without changing form, this is called ___",
+          img: "wrecking-ball",
           opts: [
             "energy transferring",
             "energy transformation",
@@ -915,31 +950,37 @@ window.LESSON = {
         {
           type: "mc",
           q: "Heat that moves through a solid by direct touch is called ___",
+          emoji: "✋ 🥄 🍲",
           opts: ["conduction", "direction", "thermal"],
         },
         {
           type: "mc",
           q: "A solar-powered heater transforms light energy into ___ energy.",
+          emoji: "☀️ ➡️ 🔥",
           opts: ["thermal", "kinetic", "more"],
         },
         {
           type: "mc",
           q: "___ is affected by speed and mass.",
+          img: "football",
           opts: ["Kinetic energy", "Conduction", "Direction"],
         },
         {
           type: "mc",
           q: "A fast-moving object has ___ kinetic energy than a slow-moving object.",
+          emoji: "🏎️ 💨 🐢",
           opts: ["more", "speed", "thermal"],
         },
         {
           type: "mc",
           q: "The two characteristics used to describe motion are ___ and direction.",
+          emoji: "⏱️ 🧭",
           opts: ["speed", "more", "conduction"],
         },
         {
           type: "mc",
           q: "The two characteristics used to describe motion are speed and ___",
+          emoji: "⏱️ 🧭",
           opts: ["direction", "conduction", "thermal"],
         },
       ],
