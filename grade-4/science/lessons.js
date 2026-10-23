@@ -46,5 +46,20 @@ window.CS_LESSONS = {
         },
       ],
     },
+    {
+      n: 2,
+      dir: "topic-2",
+      title: "Human Uses of Energy",
+      items: [
+        {
+          n: 1,
+          title: "Energy Conversions",
+          en: "Fuels, combustion, the power plant (boiler, turbine, generator), batteries",
+          path: "lesson-1.html",
+          cover: "img/lesson-1/power-plant.jpg",
+          note: "13 picture cards · 3 games · book questions",
+        },
+      ],
+    },
   ],
 };
