@@ -1,0 +1,50 @@
+// Science lessons for Grade 4 (Elevate Science), all terms. One entry per book topic (a folder topic-N/ with its lessons);
+// add one entry per lesson (and its files to "also" in games.js for offline use).
+// path and cover are relative to the topic folder.
+window.CS_LESSONS = {
+  grade: 4,
+  part: "Topic",
+  intro:
+    "Pick a lesson. Each lesson has big pictures from the book, games, and the school exercises. Everything can be read aloud.",
+  chapters: [
+    {
+      n: 1,
+      dir: "topic-1",
+      title: "Energy and Motion",
+      items: [
+        {
+          n: 1,
+          title: "Energy, Speed and Moving Objects",
+          en: "Potential and kinetic energy, transfer and transform, forms of energy, speed, direction, forces",
+          path: "lesson-1.html",
+          cover: "img/lesson-1/coaster.jpg",
+          note: "15 picture cards · 5 games · 7 exercises",
+        },
+        {
+          n: 2,
+          title: "Collisions",
+          en: "Objects bump into each other: energy moves, sound and heat, Newton's cradle, fast crashes",
+          path: "lesson-2.html",
+          cover: "img/lesson-2/pins.jpg",
+          note: "9 picture cards · 4 games · book questions",
+        },
+        {
+          n: 3,
+          title: "Energy Transfer",
+          en: "Heat from hot to cold, conduction, convection, radiation, light, sound and waves",
+          path: "lesson-3.html",
+          cover: "img/lesson-3/kitchen.jpg",
+          note: "17 picture cards · 1 video · 5 games · 9 exercises",
+        },
+        {
+          n: 4,
+          title: "Electric Circuits",
+          en: "Electric charge, attract and repel, current, conductors and insulators, circuits, resistors",
+          path: "lesson-4.html",
+          cover: "img/lesson-4/circuit.jpg",
+          note: "11 picture cards · 4 games · 7 exercises",
+        },
+      ],
+    },
+  ],
+};
