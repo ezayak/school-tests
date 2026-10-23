@@ -1,6 +1,7 @@
 # Study Games
 
-Picture quiz games for school tests. Home page: **Grade → Term → Mid-term exam → subject cards**, and **Grade → Term → Subjects** (English, Arabic), where each subject card opens a list page (English → dictations, Arabic → lessons).
+Picture quiz games for school tests. Home page, per grade: **Subjects** first (one card per subject, opening a list page with the lessons or dictations of every term),
+then **Revisions → Term → Mid-term / Final → subject cards**. A term with a revision always shows both Mid-term and Final ("No revisions yet." until one is added).
 Every page is a plain HTML file (no build step), so the repo works as-is on GitHub Pages.
 All styling and the small JS helpers come from `shared/` — pages have no `<style>` blocks of their own.
 
@@ -13,16 +14,25 @@ games.js              ← catalog: one entry per game
 shared/               ← the one place for styling and shared helpers (see "Styling")
 grade-3/
   term-1/
-    mid-term-1/
+    mid-term-1/            ← revisions
       science-motion.html
       social-studies-weather-climate.html
       french-la-presentation.html
+    arabic/ english/       ← subject pages (lessons, dictations)
+  computer/                ← Computer: one subject for all terms
+    index.html, lessons.js ← list of lessons, by chapter
+    chapter-1/             ← Unit 1 lessons (lesson-N.html/.js, img/, video/)
+    chapter-2/             ← Unit 2 lessons + Mini Word (wordsim.js/.css)
 grade-4/
   term-1/
     mid-term-1/
       science-energy.html
       social-studies-land-regions-climate.html
       french-la-rencontre.html
+    english/ french/
+  computer/
+    index.html, lessons.js
+    chapter-1/             ← Unit 1 lessons + Mini Windows (winsim.js/.css)
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -55,7 +65,8 @@ Rules for new pages:
 2. Add one entry to `games.js` (copy an existing line and change grade, term, period, subject, title, path).
 3. Commit and push. The home page picks it up automatically.
 
-Games link back to `../../../index.html`, so keep them exactly three folders deep.
+Games link back to `../../../index.html`, so keep them exactly three folders deep (Computer lessons too: `grade-N/computer/chapter-N/`).
+The Computer lesson lists (`grade-N/computer/index.html`) are two folders deep and use `../../`.
 
 ## Player name
 
@@ -207,7 +218,9 @@ After adding a lesson: add it to `lessons.js`, add its files to the `also: [...]
 
 ## Computer lessons (Grade 4)
 
-Folder: `grade-4/term-1/computer/`. One card on the home page ("Computer", under Subjects, colour `--comp`) opens `index.html`, which lists the lessons from `lessons.js`.
+Folder: `grade-4/computer/`. One card on the home page ("Computer", under Subjects, colour `--comp`) opens `index.html`, which lists the lessons from `lessons.js`,
+one heading per chapter: `chapters: [{n, dir: "chapter-1", title?, items: [{n, title, en, path, cover, note}]}]` (`path` and `cover` relative to the chapter folder).
+The lessons live in `chapter-N/` (a chapter is a book unit, not a term); a lesson's "Computer" link goes to `../index.html`.
 Made to be understood from pictures and sound: short sentences, key words in colour (`[word]` in the text), 🔊 / 🐢 on everything,
 wrong answers can be tried again. The computer steps are practised on **Mini Windows**, a pretend Windows 11 screen.
 
@@ -220,7 +233,7 @@ Shared files (no need to touch them for a new lesson):
   Tablet: hold a finger = right-click, tap twice = double-click, drag works with a finger.
 - `shared/computer-lesson.css` — computer-only styles; the lesson look comes from `shared/lesson.css`
 
-Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`), `lesson-N.js` (all the content), `img/lesson-N/` (pictures cropped from the book),
+Each lesson, in its `chapter-N/` folder: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`), `lesson-N.js` (all the content), `img/lesson-N/` (pictures cropped from the book),
 `video/` (the school videos, made smaller: `ffmpeg -i in.mp4 -vf scale=-2:720 -c:v libx264 -crf 28 -c:a aac -b:a 64k -ac 1 -movflags +faststart out.mp4`).
 
 A lesson page has three tabs:
@@ -248,11 +261,11 @@ Pictures: `img: "name"` (a file in `img/lesson-N/`) or `vis: {kind: "icons" | "n
 **Videos are online only**: `sw.js` never saves anything in a `video/` folder, and offline the lesson shows "You need the internet to watch the video".
 Don't add videos to `also` in `games.js`.
 
-After adding a lesson: add it to `lessons.js`, add its files (not the videos) to the `also: [...]` list of the Computer entry in `games.js`, and bump `VERSION` in `sw.js`.
+After adding a lesson: add it to its chapter in `lessons.js` (a new chapter: a new `chapter-N/` folder and a new entry in `chapters`), add its files (not the videos) to the `also: [...]` list of the Computer entry in `games.js`, and bump `VERSION` in `sw.js`.
 
 ## Computer lessons (Grade 3)
 
-Folder: `grade-3/term-1/computer/`, the same engine and the same page format as Grade 4, but **no Mini Windows**: the pages don't load `winsim.js`,
+Folder: `grade-3/computer/chapter-1/`, the same engine and the same page format as Grade 4, but **no Mini Windows**: the pages don't load `winsim.js`,
 the lessons have no `howto`, so the Play tab has only the games. Instead, the Learn tab shows a tile for every picture card and every school video.
 `lessons.js` can set its own `intro` sentence for the lessons page.
 
@@ -267,9 +280,9 @@ Extra things a lesson can have (both grades can use them):
 - More drawings: `vis: {kind: "bars", items: [{e | img, label, v, note}]}` (which holds more), `{kind: "ink"}` (the 4 inkjet colours), `{kind: "strip", items: [{img | e, label}]}`.
 - A small book icon whose name ends in `-ic` (`mic-ic.jpg`) is shown at its real size, not blown up.
 
-## Computer lessons (Grade 3, term 2) and Mini Word
+## Computer lessons (Grade 3, chapter 2) and Mini Word
 
-Folder: `grade-3/term-2/computer/` (Unit 2 « My first article »): the same engine and page format, but the pages load **Mini Word**
+Folder: `grade-3/computer/chapter-2/` (Unit 2 « My first article »): the same engine and page format, but the pages load **Mini Word**
 (`wordsim.js` / `wordsim.css`) instead of Mini Windows. The engine uses whichever one the page loads, and takes its name, icon and
 help line for the free-play tile from it (`WordSim.label`, `ic`, `hint`, `about`).
 

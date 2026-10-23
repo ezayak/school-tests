@@ -4,6 +4,13 @@
   --accent: var(--comp);
   --accent2: var(--ke);
 }
+/* lessons page (grade-N/computer/index.html): one heading per chapter above its lesson cards */
+.chapter {
+  font-size: 1.5rem;
+  padding-bottom: 4px;
+  border-bottom: 2.5px solid var(--ink);
+  margin-top: 6px;
+}
 
 /* key words in sentences */
 .kw {

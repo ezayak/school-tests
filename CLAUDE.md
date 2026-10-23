@@ -23,7 +23,7 @@ Read README.md first. It has the structure, the lesson/dictation formats and the
 
 ## Checking changes
 - Local server: `python3 -m http.server 8765 --bind 127.0.0.1` from the repo root; open the hubs:
-  `index.html`, `grade-4/term-1/{french,computer,english}/index.html`, `grade-3/term-1/english/index.html`.
+  `index.html`, `grade-4/term-1/{french,english}/index.html`, `grade-{3,4}/computer/index.html`, `grade-3/term-1/english/index.html`.
 - The service worker caches aggressively. For old-vs-new comparisons, use a fresh port or unregister the SW first.
 - For a refactor of generated markup, compare old and new HTML output in node (the two versions should produce the same string).
 - JS syntax check: `node --check <file>`.

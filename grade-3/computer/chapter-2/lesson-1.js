@@ -1,5 +1,5 @@
-// Computer · Grade 3 · Term 2 · Unit 2 · Lesson 1 « Robots in our daily lives » (book pages 38–43).
-// All the content of the lesson. Same format as the term 1 lessons. No Mini Word here: the robots are learnt from pictures.
+// Computer · Grade 3 · Chapter 2 · Unit 2 · Lesson 1 « Robots in our daily lives » (book pages 38–43).
+// All the content of the lesson. Same format as the chapter 1 lessons. No Mini Word here: the robots are learnt from pictures.
 window.LESSON = {
   n: 1,
   grade: 3,

@@ -1,6 +1,6 @@
-// Computer lessons engine (Grade 3 and Grade 4). <body data-view="list"> → list of lessons (lessons.js),
-// <body data-view="lesson"> → one lesson (window.LESSON from lesson-N.js). Mini Windows comes from winsim.js,
-// Mini Word (Grade 3 term 2) from wordsim.js: the page loads one of them and the lesson uses whichever is there.
+// Computer lessons engine (Grade 3 and Grade 4). <body data-view="list"> → grade-N/computer/index.html, lessons by chapter (lessons.js),
+// <body data-view="lesson"> → one lesson in grade-N/computer/chapter-N/ (window.LESSON from lesson-N.js). Mini Windows comes from winsim.js,
+// Mini Word (Grade 3 chapter 2) from wordsim.js: the page loads one of them and the lesson uses whichever is there.
 // Made for a child who learns best from pictures and sound: short sentences, key words in colour,
 // every question can be heard (🔊), wrong answers can be tried again, and the computer steps are shown
 // on a pretend Windows screen (▶ Show me) before the child does them (✋ Your turn).
@@ -46,13 +46,17 @@
 
   /* ================= list of lessons ================= */
   if (view === "list") {
-    const LS = window.CS_LESSONS || { grade: 4, term: 1, items: [] };
+    const LS = window.CS_LESSONS || { grade: 4, chapters: [] };
+    // one block per chapter; a lesson's path and cover are relative to its chapter folder
+    const chapter = (ch) =>
+      `<h2 class="chapter">Chapter ${esc(ch.n)}${ch.title ? ` · ${esc(ch.title)}` : ""}</h2>
+  <div class="items">${ch.items.map((it) => Kit.lessonCard({ ...it, path: `${ch.dir}/${it.path}`, cover: `${ch.dir}/${it.cover}` }, "Lesson")).join("")}</div>`;
     app.innerHTML = `<section class="card">
-    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · Term ${esc(LS.term)} · Computer</span></div>
+    <div class="topbar"><a class="back" href="../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · Computer</span></div>
     <h1 class="hero-title"><span class="p">Computer</span> <span class="k">Lessons</span></h1>
     <p class="howto">${esc(LS.intro || "Pick a lesson. Each lesson has big pictures, a pretend Windows computer to practise on, games, and the school exercises. Everything can be read aloud.")}</p>
   </section>
-  <div class="items">${LS.items.map((it) => Kit.lessonCard(it, "Lesson")).join("")}</div>
+  ${LS.chapters.map(chapter).join("")}
   <div class="soon">New lessons will be added here.</div>`;
     document.title = `Computer · Grade ${LS.grade}`;
     return;
@@ -483,7 +487,7 @@
         .join("");
     }
     app.innerHTML = `<section class="card pop">
-    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="index.html">Computer</a></div></div>
+    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="../index.html">Computer</a></div></div>
     <div class="les-head"><button type="button" class="les-cov" id="coverBtn" aria-label="The lesson question"><img src="${IMG(L.cover)}" alt=""></button>
       <div><span class="eyebrow">Grade ${esc(L.grade)} · ${esc(L.unit)} · ${esc(L.book)}</span><h1 class="les-title">${esc(L.title)}</h1><div class="les-sub">${kw(L.question.q)}</div></div></div>
     <div class="opts-row">

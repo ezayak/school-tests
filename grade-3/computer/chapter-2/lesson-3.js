@@ -1,4 +1,4 @@
-// Computer · Grade 3 · Term 2 · Unit 2 · Lesson 3 « Paragraph formatting » (book pages 52–60).
+// Computer · Grade 3 · Chapter 2 · Unit 2 · Lesson 3 « Paragraph formatting » (book pages 52–60).
 // All the content of the lesson. The how-to's are done in Mini Word (wordsim.js). Same format as lesson-2.js.
 (function () {
   const R = { doc: "robots" };

@@ -1,5 +1,5 @@
-// Mini Word: a pretend Microsoft Word for the Grade 3 Computer lessons (term 2), made the same way as
-// Mini Windows (grade-4/term-1/computer/winsim.js) so the lesson engine (shared/computer-lesson.js) can use it.
+// Mini Word: a pretend Microsoft Word for the Grade 3 Computer lessons (chapter 2), made the same way as
+// Mini Windows (grade-4/computer/chapter-1/winsim.js) so the lesson engine (shared/computer-lesson.js) can use it.
 // WordSim.create(box, {start}) draws it inside box. Everything the child can press has data-t="<target>":
 //   tabs "tab:Home" "tab:Insert" "tab:Review" "tab:View" "tab:File", Font group "font-name" → "font:Arial",
 //   "font-size" → "size:14", "fmt:bold" "fmt:italic" "fmt:underline", "fmt:hl" / "hl-arrow" → "hl:yellow" "hl:none" "hl:stop",

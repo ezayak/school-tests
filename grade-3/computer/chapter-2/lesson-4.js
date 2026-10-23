@@ -1,4 +1,4 @@
-// Computer · Grade 3 · Term 2 · Unit 2 · Lesson 4 « Checking and saving » (book pages 61–69).
+// Computer · Grade 3 · Chapter 2 · Unit 2 · Lesson 4 « Checking and saving » (book pages 61–69).
 // All the content of the lesson. The how-to's are done in Mini Word (wordsim.js). Same format as lesson-2.js.
 // Start doc "robotsMiss" has the book's mistake "arround" (word w:1:3); "olympic" has "bigest" and "arond".
 (function () {

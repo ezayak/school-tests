@@ -1,4 +1,4 @@
-// Computer · Grade 3 · Term 2 · Unit 2 · Lesson 2 « Working with text » (book pages 36–37 and 44–51).
+// Computer · Grade 3 · Chapter 2 · Unit 2 · Lesson 2 « Working with text » (book pages 36–37 and 44–51).
 // All the content of the lesson. The how-to's are done in Mini Word (wordsim.js); words are "w:<paragraph>:<word>"
 // in the book's text (start doc "robots": 0 Robots! · 1 Robots are all around us … · 2 There are robots … · 3 When I go …).
 (function () {
