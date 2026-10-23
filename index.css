@@ -174,7 +174,6 @@ a:focus-visible {
 .part > h3,
 .part-head {
   padding-bottom: 6px;
-  padding-top: 18px;
   border-bottom: 2.5px solid var(--ink);
 }
 .part h3 {
@@ -185,6 +184,7 @@ a:focus-visible {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 16px;
+  padding-top: 18px;
 }
 /* Mid-term / Final: a yellow pill that folds its cards */
 .period summary {
