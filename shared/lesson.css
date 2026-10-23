@@ -656,6 +656,7 @@ details.book[open] .alltext {
 }
 .opts.two {
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .opts.two .optrow {
   flex: 1;
