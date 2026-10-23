@@ -30,6 +30,7 @@
   --snow: #f7fafd;
   --wheat: #e9d58a;
   --sci: #f2b705;
+  --sci-ink: #8a5d00; /* Science text colour: --sci is too light on white */
   --ss: #d93a3a;
   --fr: #2e9e4f;
   --en: #3474cf;
@@ -67,6 +68,7 @@
     --road: #383e4b;
     --glow: #7fdcff;
     --sci: #ffd23f;
+    --sci-ink: #ffd23f;
     --ss: #ff6b6b;
     --fr: #4ed07a;
     --en: #6fa2f0;
@@ -108,6 +110,7 @@
   --road: #383e4b;
   --glow: #7fdcff;
   --sci: #ffd23f;
+  --sci-ink: #ffd23f;
   --ss: #ff6b6b;
   --fr: #4ed07a;
   --en: #6fa2f0;

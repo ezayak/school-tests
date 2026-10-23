@@ -4,6 +4,9 @@
   --accent: var(--comp);
   --accent2: var(--ke);
 }
+[data-subject="Science"] {
+  --accent: var(--sci-ink);
+}
 /* lessons page (grade-N/computer/index.html): one heading per chapter above its lesson cards */
 .chapter {
   font-size: 1.5rem;
@@ -826,6 +829,13 @@ body.popopen {
   place-items: center;
   width: 100%;
   min-height: 84px;
+}
+/* a word instead of a picture (Science: word ↔ meaning) */
+.mpic.vis .vis-lines div {
+  font-size: clamp(0.95rem, 2.2vw, 1.3rem);
+  padding: 4px 8px;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 .pic.rv.vis {
   min-height: 0;

@@ -8,6 +8,7 @@
   "use strict";
   const app = document.getElementById("app");
   const view = document.body.dataset.view || "lesson";
+  const SUBJ = document.body.dataset.subject || "Computer"; // Science pages reuse this engine
   const esc = (s) =>
     String(s ?? "").replace(
       /[&<>"]/g,
@@ -49,16 +50,16 @@
     const LS = window.CS_LESSONS || { grade: 4, chapters: [] };
     // one block per chapter; a lesson's path and cover are relative to its chapter folder
     const chapter = (ch) =>
-      `<h2 class="chapter">Chapter ${esc(ch.n)}${ch.title ? ` · ${esc(ch.title)}` : ""}</h2>
+      `<h2 class="chapter">${esc(LS.part || "Chapter")} ${esc(ch.n)}${ch.title ? ` · ${esc(ch.title)}` : ""}</h2>
   <div class="items">${ch.items.map((it) => Kit.lessonCard({ ...it, path: `${ch.dir}/${it.path}`, cover: `${ch.dir}/${it.cover}` }, "Lesson")).join("")}</div>`;
     app.innerHTML = `<section class="card">
-    <div class="topbar"><a class="back" href="../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · Computer</span></div>
-    <h1 class="hero-title"><span class="p">Computer</span> <span class="k">Lessons</span></h1>
+    <div class="topbar"><a class="back" href="../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · ${esc(SUBJ)}</span></div>
+    <h1 class="hero-title"><span class="p">${esc(SUBJ)}</span> <span class="k">Lessons</span></h1>
     <p class="howto">${esc(LS.intro || "Pick a lesson. Each lesson has big pictures, a pretend Windows computer to practise on, games, and the school exercises. Everything can be read aloud.")}</p>
   </section>
   ${LS.chapters.map(chapter).join("")}
   <div class="soon">New lessons will be added here.</div>`;
-    document.title = `Computer · Grade ${LS.grade}`;
+    document.title = `${SUBJ} · Grade ${LS.grade}`;
     return;
   }
 
@@ -421,10 +422,20 @@
     let tiles = "";
     if (tab === "learn") {
       tiles =
-        tileHTML(
-          { t: "Big ideas", en: `${L.ideas.length} picture cards`, ic: "💡" },
-          'data-m="ideas" id="m-ideas"',
-        ) +
+        // with a key-word list (Science) the first tile is the list, not a copy of the first card
+        (L.words
+          ? tileHTML(
+              { t: "Key words", en: `${L.words.length} words`, ic: "🔤" },
+              'data-m="words" id="m-words"',
+            )
+          : tileHTML(
+              {
+                t: "Big ideas",
+                en: `${L.ideas.length} picture cards`,
+                ic: "💡",
+              },
+              'data-m="ideas" id="m-ideas"',
+            )) +
         HOW.map((h, i) =>
           tileHTML(
             {
@@ -487,7 +498,7 @@
         .join("");
     }
     app.innerHTML = `<section class="card pop">
-    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="../index.html">Computer</a></div></div>
+    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="../index.html">${esc(SUBJ)}</a></div></div>
     <div class="les-head"><button type="button" class="les-cov" id="coverBtn" aria-label="The lesson question"><img src="${IMG(L.cover)}" alt=""></button>
       <div><span class="eyebrow">Grade ${esc(L.grade)} · ${esc(L.unit)} · ${esc(L.book)}</span><h1 class="les-title">${esc(L.title)}</h1><div class="les-sub">${kw(L.question.q)}</div></div></div>
     <div class="opts-row">
@@ -528,7 +539,9 @@
       .forEach(
         (b) =>
           (b.onclick = () =>
-            ({ ideas: () => ideas(0), mini: miniWindows })[b.dataset.m]()),
+            ({ ideas: () => ideas(0), words: keyWords, mini: miniWindows })[
+              b.dataset.m
+            ]()),
       );
     app
       .querySelectorAll("[data-h]")
@@ -547,7 +560,7 @@
     app
       .querySelectorAll("[data-x]")
       .forEach((b) => (b.onclick = () => startExercise(+b.dataset.x)));
-    document.title = `${L.title} · Computer Lesson ${L.n}`;
+    document.title = `${L.title} · ${SUBJ} Lesson ${L.n}`;
   }
 
   /* ================= LEARN: the lesson question ================= */
@@ -573,6 +586,34 @@
     };
     document.getElementById("goIdeas").onclick = () => ideas(0);
     autoSay(Q.q);
+  }
+
+  /* ================= LEARN: key words (word = short meaning, each can be heard) ================= */
+  function keyWords() {
+    leave();
+    backTo = openTab("learn");
+    const text = L.words.map((w) => w.w + ". " + plain(w.m)).join(" ");
+    app.innerHTML = `${titleBar("Key words", `<span class="count">${L.words.length}</span>`)}<section class="card pop fc">
+    <div class="idea-lines">${L.words.map((w, k) => `<button type="button" class="iline" data-l="${k}"><span class="num">${k + 1}</span><span>${kw("[" + w.w + "] = " + w.m)}</span><span class="spk">🔊</span></button>`).join("")}</div>
+    ${sayBtns()}
+    <div class="row center"><button type="button" class="btn ghost" id="goIdeas">📖 Picture cards →</button></div>
+  </section>`;
+    bindHome();
+    bindSay(app, text);
+    app.querySelectorAll("[data-l]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          hush();
+          app
+            .querySelectorAll(".iline")
+            .forEach((x) => x.classList.remove("on"));
+          b.classList.add("on");
+          const w = L.words[+b.dataset.l];
+          say(w.w + ". " + w.m).then(() => b.classList.remove("on"));
+        }),
+    );
+    document.getElementById("goIdeas").onclick = () => ideas(0);
+    top0();
   }
 
   /* ================= LEARN: big ideas (picture cards) ================= */
