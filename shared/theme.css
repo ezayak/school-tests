@@ -32,6 +32,7 @@
   --sci: #f2b705;
   --sci-ink: #8a5d00; /* Science text colour: --sci is too light on white */
   --ss: #d93a3a;
+  --ss-ink: #b42828; /* Social Studies text colour: --ss is just at the 4.5:1 limit on white */
   --fr: #2e9e4f;
   --en: #3474cf;
   --ssa: #d63f96;
@@ -70,6 +71,7 @@
     --sci: #ffd23f;
     --sci-ink: #ffd23f;
     --ss: #ff6b6b;
+    --ss-ink: #ff6b6b;
     --fr: #4ed07a;
     --en: #6fa2f0;
     --ssa: #f27ac0;
@@ -112,6 +114,7 @@
   --sci: #ffd23f;
   --sci-ink: #ffd23f;
   --ss: #ff6b6b;
+  --ss-ink: #ff6b6b;
   --fr: #4ed07a;
   --en: #6fa2f0;
   --ssa: #f27ac0;
