@@ -1,7 +1,10 @@
-// English · Grade 4 · Term 1. Add one entry per dictation (newest last), and its file to "also" in games.js for offline use.
+// English · Grade 4 · Term 1. Add one entry per dictation or story (newest last), and its files to "also" in games.js for offline use.
 window.ENGLISH = {
   grade: 4,
   term: 1,
+  heading: "Dictations & stories",
+  intro:
+    "Pick a dictation or a story. Dictations have Learn cards, Match, Listen & spell and Build the word. Stories read themselves, then have a summary and questions.",
   items: [
     {
       kind: "Dictation",
@@ -21,6 +24,15 @@ window.ENGLISH = {
         "climb, pies, die, fright, slight, drive, shy, minding, pride, sly",
       note: "10 words & 10 sentences",
       path: "english-dictation-unit1-week4.html",
+    },
+    {
+      kind: "Story",
+      title: "The Dream Team",
+      sound: "Realistic fiction",
+      words:
+        "Read along, summary, questions · Paired read: Making a Difference",
+      note: "15 pages · 27 questions",
+      path: "story-dream-team.html",
     },
   ],
 };

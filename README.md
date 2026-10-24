@@ -58,8 +58,9 @@ live in `shared/theme.css`; change them there and every page follows.
 | `shared/arabic-revision.css` | verses, word tools, English toggle | religion / Arabic social-studies revisions |
 | `shared/spelling.css` | flash cards, letter tiles, typing | English dictations |
 | `shared/drag-words.css` | drag tiles from a bank onto a line | "Mets en ordre", "Build the word" |
-| `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons |
-| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards) | quiz games, French and Computer lesson lists |
+| `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons, English stories |
+| `shared/story.css` | English stories: page text, the sentence being read, easy sentence, word meanings | English stories |
+| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards) | quiz games, French and Computer lesson lists, English stories |
 
 Rules for new pages:
 - Copy an existing page of the same kind and keep its `<link>`s. Never add a `<style>` block or new colour values.
@@ -150,6 +151,38 @@ Audio uses the device's built-in voices (Web Speech API), so it works offline on
 3. Pictures: use a built-in drawing name (`pic`), an `emoji: "🐸"`, or your own image file
    (`img: "images/toad.png"`, e.g. AI-generated). Put image files in an `images/` folder next to the game.
 4. Add it to `english/dictations.js` and to the English entry's `also` list in `games.js` (see above).
+
+### English stories (Grade 4)
+
+The class reading books (Wonders) are on the same English page, under **Stories**. Made for a child who needs help to understand:
+the story reads itself and the word being read lights up, every page has one easy sentence, and the vocabulary words show their meaning when tapped.
+
+Shared files (no need to touch them for a new story): `shared/story.js` (the engine) and `shared/story.css` (story-only styles; the lesson look comes from `shared/lesson.css`).
+The page loads `shared/common.js`, its `story-*.js`, then `shared/story.js`.
+
+A story page has three tabs:
+- **Read** – one book page at a time: the picture, the book text, "In easy words"; 🔊 Read (sentence by sentence), 🐢 Slow (word by word), ⏹ Stop;
+  switches to turn the pages by itself and to read the easy words too
+- **Summary** – the book's story map as picture cards (Characters, Setting, Problem, Events, Solution, Message), read aloud
+- **Questions** – one at a time with a picture; wrong answers can be tried again; open questions show a model answer and the child marks it
+
+### `story-*.js` format
+
+```js
+window.STORY = {
+  key: "en4-dream-team",                     // saves the tab, page and switches on the device
+  title, by, kind: "Realistic fiction", cover: "img/dream-team/cover.jpg", question: "the book's Essential Question",
+  gloss: {desperately: "very, very much", …}, // tap-a-word meanings (lowercase word); these words are shown in colour
+  pages: [{ch: "Chapter 1 · …", img | emoji, text: ["paragraph", …, {box: "Side box title", p: "…"}], easy: "one easy sentence"}, …],
+                                             // text exactly as in the book; *word* = italic
+  summary: [{t: "Characters", img | emoji, text}, …],
+  questions: [{tag: "Stop and check", img | emoji, q, o: [right, wrong, wrong], x: "why (optional)"},   // first option is right; shuffled on screen
+              {type: "open", tag, img | emoji, q, a: "model answer"}, …],
+};
+```
+
+New story: copy `story-dream-team.html` and change `story-dream-team.js` to the new file; pictures cut from the book go in `img/<story>/`.
+Add it to `english/dictations.js` (`kind: "Story"`), add the page, its `.js` and every picture to the English entry's `also` in `games.js`, update `countLabel`/`topics`, and bump `VERSION` in `sw.js`.
 
 ## Arabic lessons (Grade 3)
 

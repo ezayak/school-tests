@@ -1,5 +1,5 @@
 // English subject page: renders window.ENGLISH (from the grade's english/dictations.js).
-// Each item: {kind:"Dictation", title, sound, words, date, note, path}
+// Each item: {kind:"Dictation" | "Story", title, sound, words, date, note, path}
 (function () {
   const E = window.ENGLISH || { items: [] };
   const esc = (s) =>
@@ -8,7 +8,7 @@
       (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
     );
   const card = (it) =>
-    `<a class="item" href="${esc(it.path)}"><span class="band"><span class="snd">${esc(it.sound || "")}</span>${it.date ? `<span class="date">${esc(it.date)}</span>` : ""}</span><span class="in"><span class="n">${esc(it.kind || "Dictation")}</span><span class="t">${esc(it.title)}</span><span class="w">${esc(it.words || "")}</span><span class="meta"><span>${esc(it.note || "")}</span><span class="go play-arrow">Play →</span></span></span></a>`;
+    `<a class="item" href="${esc(it.path)}"><span class="band"><span class="snd">${esc(it.sound || "")}</span>${it.date ? `<span class="date">${esc(it.date)}</span>` : ""}</span><span class="in"><span class="n">${esc(it.kind || "Dictation")}</span><span class="t">${esc(it.title)}</span><span class="w">${esc(it.words || "")}</span><span class="meta"><span>${esc(it.note || "")}</span><span class="go play-arrow">${it.kind === "Story" ? "Read →" : "Play →"}</span></span></span></a>`;
   const kinds = [...new Set(E.items.map((i) => i.kind || "Dictation"))];
   document.getElementById("app").innerHTML = `<section class="card">
     <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade ${esc(E.grade)} · English</span></div>
@@ -18,7 +18,7 @@
   ${kinds
     .map(
       (k) =>
-        `${kinds.length > 1 ? `<h2 class="sec">${esc(k)}s</h2>` : ""}<div class="items">${E.items
+        `${kinds.length > 1 ? `<h2 class="sec">${esc(k.replace(/y$/, "ie"))}s</h2>` : ""}<div class="items">${E.items
           .filter((i) => (i.kind || "Dictation") === k)
           .map(card)
           .join("")}</div>`,
