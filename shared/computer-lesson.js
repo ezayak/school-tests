@@ -461,7 +461,12 @@
                   {
                     t: c.t,
                     en: "Picture card",
-                    img: c.img,
+                    // a picture strip shows its first picture on the tile
+                    img:
+                      c.img ||
+                      (c.vis &&
+                        c.vis.kind === "strip" &&
+                        (c.vis.items.find((x) => x.img) || {}).img),
                     ic: c.vis && c.vis.kind === "emoji" ? c.vis.e : "💡",
                   },
                   `data-i="${i}" id="i-${i}"`,
