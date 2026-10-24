@@ -34,6 +34,7 @@ grade-4/
   computer/
     index.html, lessons.js
     chapter-1/             ← Unit 1 lessons + Mini Windows (winsim.js/.css)
+    chapter-2/             ← Unit 2 lessons (Mini Word: shared/wordsim.js/.css)
   science/                 ← Science: one subject for all terms, Computer lesson engine
     index.html, lessons.js ← list of lessons, by book topic
     topic-1/ … topic-8/    ← one folder per book topic (lesson-N.html/.js, img/, video/)
@@ -306,6 +307,30 @@ A start: `{doc: "robots" | "robotsList" | "robotsMiss" | "oneParagraph" | "globa
 caret: [p, w], tab: "Insert", fmt: [{r: [p0, w0, p1, w1], b: true}], file: "saveas" | "print", nav: true, editor: true, saved: "Robots around us", zoom: 100}`.
 The texts are the book's; "robotsMiss" and "olympic" have the book's spelling mistakes for the Editor.
 Pictures of Word buttons and keys for games: `oi: ["bold", "highlight", "key:Ctrl+B"]` in `mc`, `icon: "key:F7"` in `match`, `vis: {kind: "icons", items: [{type: "align-left"}]}`.
+
+## Computer lessons (Grade 4, chapter 2) and Mini Word for Grade 4
+
+Folder: `grade-4/computer/chapter-2/` (book Unit 2 « Working with text », pages 55–95): 4 lessons, the same page format as Grade 3 chapter 2,
+with **Mini Word** from `shared/`. A lesson with `words` and how-to's shows both the **Key words** and the **Big ideas** tiles.
+Book Hands on 4.1 of Lesson 4 is left out (it did not load in the book).
+
+Mini Word can also do the Grade 4 skills (the targets are listed at the top of `shared/wordsim.js`):
+- Home › Paragraph: Decrease / Increase Indent, Tab at the start of a paragraph (`pstart:<p>` then key `Tab`), Line and Paragraph Spacing
+  (1.0–3.0, Add Space Before, Remove Space After), Shading (colours), Borders (bottom, top, left, right, outside, all, inside, none), Show/Hide ¶;
+  the Font window's Advanced tab (Spacing Expanded / Condensed, By 3 pt); Replace (Ctrl + H: Find what, Replace with, Replace, Replace All, Find Next).
+- Insert › Pictures › This Device (4 drawn pictures: elephant, parrot, dolphin, ping-pong), Shapes (drag on the page), SmartArt (Basic Pyramid,
+  Text Cycle, Basic Cycle, with the text pane and Delete for a box). Clicking a picture or diagram selects it and shows its tab:
+  **Picture Format** (Remove Background, Color, Artistic Effects, Picture Styles, Border, Effects, Position, Wrap Text, Crop),
+  **SmartArt Design** (Change Colors, styles, Text Pane), **Shape Format** (styles).
+- Review › Spelling and Grammar: a document with grammar mistakes (`gram`) opens the Editor on Corrections › Spelling / Grammar,
+  with Read context and Stop checking for this; grammar mistakes have a double blue line.
+- View: Read Mode (View › Edit Document to go back), Print Layout, Web Layout, Ruler. File › Print (or Ctrl + P, then Enter): Copies, the Printer list
+  (local / network), Print All Pages / Selection / Current Page / Custom Print with a Pages box, Portrait / Landscape, page arrows and zoom.
+- Starts: `doc: "animals" | "animalsPic" | "dolphin" | "tiny" | "parrot" | "sports" | "school" | "schoolPyr" | "water" | "waterCycle" | "facts" |
+  "grammar" | "marco" | "marcoFixed" | "report"` (the book's texts), `obj: <paragraph>` (a selected picture or diagram), `replace: true`,
+  `view: "read"`, `marks: true`, `ruler: true`.
+- Pictures of the buttons for games: `oi` / `icon` with `indent-inc`, `linespacing`, `shading`, `borders:outside`, `marks`, `removebg`, `crop`,
+  `wraptext`, `piceffects`, `picborder`, `smartart`, `shapes`, `readmode`, `printlayout`, `weblayout`, `portrait`, `landscape`, …
 
 ## Science lessons (Grade 4)
 
