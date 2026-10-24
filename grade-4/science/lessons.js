@@ -34,7 +34,7 @@ window.CS_LESSONS = {
           en: "Heat from hot to cold, conduction, convection, radiation, light, sound and waves",
           path: "lesson-3.html",
           cover: "img/lesson-3/kitchen.jpg",
-          note: "17 picture cards · 1 video · 5 games · 10 exercises",
+          note: "18 picture cards · 1 video · 5 games · 10 exercises",
         },
         {
           n: 4,

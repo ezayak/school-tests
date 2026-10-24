@@ -76,6 +76,15 @@ window.LESSON = {
       img: "heat-ways",
     },
     {
+      t: "Heat moves: examples",
+      lines: [
+        "[Conduction]: you hold a hot cup. Your hand gets warm.",
+        "[Convection]: the fire warms the air. The warm air moves around the room.",
+        "[Radiation]: the campfire warms your face. You don't touch it.",
+      ],
+      img: "heat-examples",
+    },
+    {
       t: "Radiation",
       lines: [
         "[Radiation] is energy that travels as a [wave].",
