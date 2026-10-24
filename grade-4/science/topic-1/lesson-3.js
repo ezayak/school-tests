@@ -69,11 +69,11 @@ window.LESSON = {
     {
       t: "Three ways heat moves",
       lines: [
-        "[Conduction]: by touching. A spoon in hot soup gets hot.",
-        "[Convection]: moving air or water carries heat. Boiling water.",
-        "[Radiation]: heat travels as a [wave]. The sun, a campfire.",
+        "[Conduction]: by touching. The hot pot handle warms your hand.",
+        "[Convection]: moving water or air carries heat. Hot water goes up in the pot.",
+        "[Radiation]: heat travels as a [wave]. Your hand near the fire gets warm.",
       ],
-      img: "convection",
+      img: "heat-ways",
     },
     {
       t: "Radiation",
