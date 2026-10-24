@@ -23,7 +23,7 @@ grade-3/
   computer/                ← Computer: one subject for all terms
     index.html, lessons.js ← list of lessons, by chapter
     chapter-1/             ← Unit 1 lessons (lesson-N.html/.js, img/, video/)
-    chapter-2/             ← Unit 2 lessons + Mini Word (wordsim.js/.css)
+    chapter-2/             ← Unit 2 lessons (Mini Word: shared/wordsim.js/.css)
 grade-4/
   term-1/
     mid-term-1/
@@ -287,7 +287,7 @@ Extra things a lesson can have (both grades can use them):
 ## Computer lessons (Grade 3, chapter 2) and Mini Word
 
 Folder: `grade-3/computer/chapter-2/` (Unit 2 « My first article »): the same engine and page format, but the pages load **Mini Word**
-(`wordsim.js` / `wordsim.css`) instead of Mini Windows. The engine uses whichever one the page loads, and takes its name, icon and
+(`shared/wordsim.js` / `shared/wordsim.css`, also used by Grade 4 chapter 2) instead of Mini Windows. The engine uses whichever one the page loads, and takes its name, icon and
 help line for the free-play tile from it (`WordSim.label`, `ic`, `hint`, `about`).
 
 Mini Word is a pretend Microsoft Word: title bar with the Quick Access Toolbar (Save, Undo, Redo), the tabs, the Home ribbon (Font list,
@@ -297,7 +297,7 @@ status bar with the zoom slider, File (Save, Save As › Browse › the Save As 
 The text can really be selected (drag over it, double-click a word, three clicks for a paragraph), typed (Enter = new paragraph,
 Shift + Enter = new line, Backspace) and formatted; Undo works; the shortcuts work (Ctrl + B / I / U / Z / Y / F / S / A / L / E / R / J, F7).
 
-Steps for Mini Word (the list of targets is at the top of `wordsim.js`):
+Steps for Mini Word (the list of targets is at the top of `shared/wordsim.js`):
 `{act: "select", t: "w:0:0", to: "w:0:5"}` (or `t: "all"`, `"para:1"`) — select from word to word, `w:<paragraph>:<word>` counted from 0;
 `{act: "click", t: "fmt:bold"}`; `{act: "click", t: "w:3:10"}` puts the text cursor after that word; `{act: "type", t: "doc", text: "ATMs"}` types in the text
 (`t: "nav-search"` / `"dlg:filename"` type in those boxes); `{act: "key", t: "key:Ctrl+B", key: "Ctrl+B"}` (also `"Enter"`, `"Shift+Enter"`, `"F7"`; a button

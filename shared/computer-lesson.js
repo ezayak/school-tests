@@ -1,6 +1,6 @@
 // Computer lessons engine (Grade 3 and Grade 4). <body data-view="list"> → grade-N/computer/index.html, lessons by chapter (lessons.js),
 // <body data-view="lesson"> → one lesson in grade-N/computer/chapter-N/ (window.LESSON from lesson-N.js). Mini Windows comes from winsim.js,
-// Mini Word (Grade 3 chapter 2) from wordsim.js: the page loads one of them and the lesson uses whichever is there.
+// Mini Word (chapter 2 of Grade 3 and 4) from shared/wordsim.js: the page loads one of them and the lesson uses whichever is there.
 // Made for a child who learns best from pictures and sound: short sentences, key words in colour,
 // every question can be heard (🔊), wrong answers can be tried again, and the computer steps are shown
 // on a pretend Windows screen (▶ Show me) before the child does them (✋ Your turn).

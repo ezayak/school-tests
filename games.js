@@ -857,8 +857,6 @@ window.GAMES = [
       "grade-3/computer/chapter-1/img/lesson-4/vr-glove.jpg",
       "grade-3/computer/chapter-1/img/lesson-4/vr-headset.jpg",
       "grade-3/computer/chapter-1/img/lesson-4/wheel.jpg",
-      "grade-3/computer/chapter-2/wordsim.css",
-      "grade-3/computer/chapter-2/wordsim.js",
       "grade-3/computer/chapter-2/lesson-1.html",
       "grade-3/computer/chapter-2/lesson-1.js",
       "grade-3/computer/chapter-2/img/lesson-1/advdis.jpg",
