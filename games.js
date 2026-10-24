@@ -532,6 +532,7 @@ window.GAMES = [
       "grade-4/science/topic-1/img/lesson-3/flute.jpg",
       "grade-4/science/topic-1/img/lesson-3/football.jpg",
       "grade-4/science/topic-1/img/lesson-3/frog.jpg",
+      "grade-4/science/topic-1/img/lesson-3/heat-ways.jpg",
       "grade-4/science/topic-1/img/lesson-3/heater.jpg",
       "grade-4/science/topic-1/img/lesson-3/hot-cup.jpg",
       "grade-4/science/topic-1/img/lesson-3/jackson-table.jpg",
