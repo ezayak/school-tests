@@ -34,7 +34,7 @@ window.CS_LESSONS = {
           en: "Heat from hot to cold, conduction, convection, radiation, light, sound and waves",
           path: "lesson-3.html",
           cover: "img/lesson-3/kitchen.jpg",
-          note: "17 picture cards · 1 video · 5 games · 9 exercises",
+          note: "17 picture cards · 1 video · 5 games · 10 exercises",
         },
         {
           n: 4,
@@ -42,7 +42,7 @@ window.CS_LESSONS = {
           en: "Electric charge, attract and repel, current, conductors and insulators, circuits, resistors",
           path: "lesson-4.html",
           cover: "img/lesson-4/circuit.jpg",
-          note: "11 picture cards · 4 games · 7 exercises",
+          note: "12 picture cards · 4 games · 8 exercises",
         },
       ],
     },
