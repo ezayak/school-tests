@@ -67,9 +67,9 @@ window.LESSON = {
     {
       t: "The balloon and the towel",
       lines: [
-        "Rub a balloon on a towel.",
-        "Now they have [opposite] charges.",
-        "They [attract]: the balloon sticks to the towel.",
+        "Look: the balloon and the towel stay [apart].",
+        "They do [not] pull toward each other.",
+        "So they do [not] have opposite charges.",
       ],
       img: "balloon",
     },
@@ -78,8 +78,9 @@ window.LESSON = {
       lines: [
         "Charged particles can [move] from place to place.",
         "[Electric current]: charged particles flow in the [same direction].",
+        "[Many] charges flowing = a [large] current. [Few] charges = a [small] current.",
       ],
-      vis: { kind: "emoji", e: "⚡ ➡️" },
+      img: "current-sizes",
     },
     {
       t: "Conductors",
@@ -91,13 +92,30 @@ window.LESSON = {
       img: "wires",
     },
     {
+      t: "Metals conduct heat too",
+      lines: [
+        "Heat one end of a metal rod.",
+        "The [heat] moves along the rod: metals let heat flow easily.",
+        "Gold, silver and copper are metals.",
+      ],
+      img: "heat-rod",
+    },
+    {
       t: "Insulators",
       lines: [
         "An [insulator] does [not] let current flow.",
         "[Plastic], [rubber], [wood] and [glass] are insulators.",
         "Plastic covers the copper wire to keep us [safe].",
       ],
-      img: "plastic-coating",
+      vis: {
+        kind: "strip",
+        items: [
+          { img: "plastic-wires", label: "Plastic" },
+          { img: "wood", label: "Wood" },
+          { img: "glass", label: "Glass" },
+          { img: "rubber", label: "Rubber" },
+        ],
+      },
     },
     {
       t: "An electric circuit",
@@ -245,13 +263,6 @@ window.LESSON = {
           two: true,
           x: "[Opposite] charges attract.",
         },
-        {
-          type: "mc",
-          q: "The balloon and the towel have opposite charges. They ___",
-          opts: ["attract", "repel"],
-          two: true,
-          img: "balloon",
-        },
       ],
     },
     {
@@ -336,6 +347,91 @@ window.LESSON = {
   ],
 
   exercises: [
+    {
+      k: "slides",
+      t: "Teacher's slides",
+      en: "Fill in the blanks",
+      ic: "🖥️",
+      from: "Teacher's slides · Electric circuits",
+      items: [
+        {
+          type: "mc",
+          q: "When you turn on the light, ___ energy moves.",
+          opts: ["electric", "sound", "chemical"],
+          img: "closed-circuit",
+        },
+        {
+          type: "mc",
+          q: "The flow of electric energy happens because the particles that make up matter ___",
+          opts: ["move", "stop", "melt"],
+          img: "closed-circuit",
+        },
+        {
+          type: "mc",
+          q: "Electric charge is a ___ that causes matter to have a force, called electric force.",
+          opts: ["property", "battery", "switch"],
+          img: "charge-pm",
+        },
+        {
+          type: "mc",
+          q: "Electric charges can be ___",
+          opts: ["positive (+) or negative (−)", "hot or cold", "big or small"],
+          img: "charge-pm",
+        },
+        {
+          type: "mc",
+          q: "Two particles with the [same] charge will ___",
+          opts: ["repel (push)", "attract (pull)"],
+          icons: ["↔️", "🧲"],
+          two: true,
+          img: "charge-pp",
+        },
+        {
+          type: "mc",
+          q: "Two particles with [opposite] charges will ___",
+          opts: ["attract (pull)", "repel (push)"],
+          icons: ["🧲", "↔️"],
+          two: true,
+          img: "charge-pm",
+        },
+        {
+          type: "mc",
+          q: "Electric forces are the ___ or ___ of charged objects on each other.",
+          opts: ["push … pull", "heat … light", "sound … color"],
+          img: "charge-mp",
+        },
+        {
+          type: "mc",
+          q: "Electric current is the flow of charged particles in the ___ direction.",
+          opts: ["same", "opposite", "every"],
+          img: "current-sizes",
+        },
+        {
+          type: "mc",
+          q: "Conductors are materials that allow ___ to easily flow through them.",
+          opts: ["electric current", "air", "water"],
+          img: "wires",
+        },
+        {
+          type: "mc",
+          q: "Metals are good conductors. For that reason, copper is used to ___",
+          opts: ["make electric wires", "make glass", "make wood"],
+          pics: ["wires", "glass", "wood"],
+        },
+        {
+          type: "multi",
+          q: "Which ones are [insulators]? (choose all)",
+          opts: [
+            { t: "Plastic", img: "plastic-wires", ok: true },
+            { t: "Wood", img: "wood", ok: true },
+            { t: "Glass", img: "glass", ok: true },
+            { t: "Rubber", img: "rubber", ok: true },
+            { t: "Gold", img: "gold" },
+            { t: "Silver", img: "silver" },
+          ],
+        },
+      ],
+    },
     {
       k: "ps-choose",
       t: "Choose",
@@ -596,8 +692,14 @@ window.LESSON = {
         {
           type: "open",
           q: "Why is the inside of an electric wire made of a different material than the outside?",
-          a: "Inside is [copper], a conductor: the current flows. Outside is [plastic], an insulator: it keeps us safe.",
+          a: "The wire must let electric current [flow], but only [in the wire]. The outside covering keeps the current in the wire.",
           img: "wires",
+        },
+        {
+          type: "open",
+          q: "How can you use conductors and insulators to make your vehicle safer?",
+          a: "Design a [warning alarm] that rings when two [conductors] touch and electric current flows to the alarm.",
+          emoji: "🚗 🔔",
         },
         {
           type: "open",
@@ -608,7 +710,7 @@ window.LESSON = {
         {
           type: "open",
           q: "Do you think the balloon and the towel have opposite charges? Why?",
-          a: "[Yes]. They pull together (attract), and opposite charges attract.",
+          a: "[No], they do not have opposite charges, because they are [not attracted] to each other.",
           img: "balloon",
         },
         {
