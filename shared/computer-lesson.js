@@ -423,20 +423,24 @@
     let tiles = "";
     if (tab === "learn") {
       tiles =
-        // with a key-word list (Science) the first tile is the list, not a copy of the first card
+        // with a key-word list (Science) the first tile is the list, not a copy of the first card;
+        // a lesson with how-to's keeps "Big ideas" too, its cards have no tiles of their own
         (L.words
           ? tileHTML(
               { t: "Key words", en: `${L.words.length} words`, ic: "🔤" },
               'data-m="words" id="m-words"',
             )
-          : tileHTML(
+          : "") +
+        (!L.words || HOW.length
+          ? tileHTML(
               {
                 t: "Big ideas",
                 en: `${L.ideas.length} picture cards`,
                 ic: "💡",
               },
               'data-m="ideas" id="m-ideas"',
-            )) +
+            )
+          : "") +
         HOW.map((h, i) =>
           tileHTML(
             {
