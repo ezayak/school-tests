@@ -38,6 +38,9 @@ grade-4/
   science/                 ← Science: one subject for all terms, Computer lesson engine
     index.html, lessons.js ← list of lessons, by book topic
     topic-1/ … topic-8/    ← one folder per book topic (lesson-N.html/.js, img/, video/)
+  social-studies/          ← Social Studies (English): all terms, Computer lesson engine
+    index.html, lessons.js ← list of lessons, by chapter
+    chapter-1/             ← Chapter 1 lessons (lesson-N.html/.js, img/)
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -353,3 +356,19 @@ its "Book questions" set uses the book's Lesson Check with model answers written
 
 After adding a lesson: add it to its topic in `lessons.js` (a new topic: a new `topic-N/` folder and a new entry in `chapters`),
 add its files (not the videos) to the `also: [...]` list of the Science entry in `games.js`, and bump `VERSION` in `sw.js`.
+
+## Social Studies lessons (Grade 4)
+
+Folder: `grade-4/social-studies/`. One card on the home page ("Social Studies", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`,
+one heading per chapter (`chapters: [{n, dir: "chapter-1", title, items}]`, the same format as the Computer lessons).
+There is no textbook: the lessons come from the teacher's slides, the term booklet and the graded homework.
+Like Science, the lessons use the **Computer lesson engine** (`shared/computer-lesson.js`, no Mini Windows) with `<body data-subject="Social Studies">`,
+which changes the subject name and the colour (`--ss-ink`, a darker red for text on white).
+
+A lesson has the same format as a Science lesson: `words` (the slides' "Important Definitions") for the **Key words** tile, `ideas` (picture cards),
+`games` and `exercises` (`from:` names the booklet sheet or the homework). Every question has a picture.
+Lessons save their ticks under their own `key` (`ss4-c<chapter>-l<lesson>`).
+A picture card can show a row of pictures with `vis: {kind: "strip", items: [{img | e, label}]}`; its tile then uses the first picture.
+
+After adding a lesson: add it to its chapter in `lessons.js`, add its files to the `also: [...]` list of the Social Studies entry in `games.js`,
+and bump `VERSION` in `sw.js`.
