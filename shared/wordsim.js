@@ -777,7 +777,7 @@
           setAll("hl", st.pen);
         }
       } else if (kind === "key") doKey(t.slice(4));
-      else if (/^(w:|para:|page$)/.test(t)) {
+      else if (/^(w:|para:\d|page$)/.test(t)) {
         const pos = info && info.pos;
         st.menu = null;
         if (kind === "dbl" && pos && pos.w >= 0) {
