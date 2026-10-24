@@ -10,7 +10,16 @@ window.CS_LESSONS = {
       n: 1,
       dir: "chapter-1",
       title: "Geography and the United States",
-      items: [],
+      items: [
+        {
+          n: 1,
+          title: "Land and Regions in the United States",
+          en: "Landforms, the 5 regions of the USA and their features, borders",
+          path: "lesson-1.html",
+          cover: "img/lesson-1/regions-kids.jpg",
+          note: "14 picture cards · 4 games · 5 exercises",
+        },
+      ],
     },
   ],
 };
