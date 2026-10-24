@@ -1,0 +1,153 @@
+/* English stories (shared/story.js). Loads after shared/theme.css and shared/lesson.css (the same lesson look as French).
+   Only the story parts are here: the page text, the sentence being read, the easy sentence, word meanings. */
+:root {
+  --accent: var(--en);
+  --accent2: var(--ke);
+}
+/* long pages: the picture stays at the top while the text scrolls */
+.panel .split {
+  align-items: start;
+}
+.panel .split .side {
+  position: sticky;
+  top: 10px;
+}
+.eq {
+  margin: 6px 0 0;
+  font-size: 1.1rem;
+}
+.pg-ch {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+.story-text {
+  text-align: left;
+  font-size: 1.3rem;
+  width: 100%;
+}
+.story-text p,
+.easy p,
+.sbox p {
+  margin: 0 0 0.5em;
+  line-height: 1.7;
+}
+/* the sentence being read */
+.s {
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.s.on {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+/* vocabulary words: tap for the meaning */
+.w.vw {
+  color: var(--accent);
+  font-weight: 700;
+  border-bottom-style: solid;
+}
+.w.vw.on {
+  color: #1b2440;
+}
+.easy,
+.sbox,
+.gloss,
+.model {
+  width: 100%;
+  text-align: left;
+  border-radius: 14px;
+  padding: 8px 14px;
+  font-size: 1.2rem;
+}
+.easy {
+  border: 2.5px dashed var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 10%, var(--card));
+}
+.sbox {
+  border: 2px solid var(--grid);
+  background: var(--card);
+}
+.easy > b,
+.sbox > b,
+.model > b {
+  font-family: var(--display);
+  font-weight: 400;
+  color: var(--accent2);
+}
+.gloss {
+  border: 2.5px solid var(--ink);
+  background: color-mix(in srgb, var(--hl) 30%, var(--card));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.gloss[hidden],
+.model[hidden] {
+  display: none;
+}
+.model {
+  border: 2.5px solid var(--good);
+  background: color-mix(in srgb, var(--good) 10%, var(--card));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.chks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.chk input {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+.qtext {
+  font-size: 1.35rem;
+}
+/* summary cards */
+.lines.sum {
+  max-width: none;
+}
+.sum .line {
+  align-items: flex-start;
+}
+.sum .thumb {
+  width: 120px;
+  flex: none;
+}
+.sum-t {
+  font-family: var(--display);
+  font-weight: 400;
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+.sum .said {
+  font-size: 1.2rem;
+}
+.line.on {
+  border-color: var(--accent);
+}
+.review li b {
+  color: var(--good);
+}
+@media (max-width: 480px) {
+  .sum .thumb {
+    width: 76px;
+  }
+  .story-text {
+    font-size: 1.2rem;
+  }
+}
+/* questions: the score at the end */
+.end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
