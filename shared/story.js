@@ -231,6 +231,9 @@
   function pic(it, cls = "pic") {
     if (it && it.img)
       return `<div class="${cls}"><img src="${esc(it.img)}" alt="" draggable="false"></div>`;
+    // an animated emoji picture (Kit.scene) when the book has no picture for this page
+    if (it && it.vis)
+      return `<div class="${cls} vis">${it.vis.kind === "idiom" ? Kit.idiom(it.vis) : Kit.scene(it.vis)}</div>`;
     return `<div class="${cls} emo"><span>${esc((it && it.emoji) || "📖")}</span></div>`;
   }
   const opt = {
@@ -267,7 +270,7 @@
   let pg = Math.min(+store.get(KEY + "-page", "0") || 0, S.pages.length - 1);
 
   app.innerHTML = `<section class="card">
-    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="index.html">English</a></div></div>
+    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="index.html">English</a>${S.lesson ? `<a class="back" href="${esc(S.lesson.path)}">${esc(S.lesson.label)}</a>` : ""}</div></div>
     <div class="les-head"><span class="les-cov"><img src="${esc(S.cover)}" alt=""></span>
       <div><h1 class="les-title">${esc(S.title)}</h1><div class="les-sub">${esc(S.kind || "Story")}${S.by ? ` · by ${esc(S.by)}` : ""}</div>
       ${S.question ? `<p class="eq">❓ <b>Big question:</b> ${esc(S.question)}</p>` : ""}</div></div>
