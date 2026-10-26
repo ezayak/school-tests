@@ -1,0 +1,330 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<meta name="theme-color" content="#1B2440">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Study Games">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
+</head><body>
+<title>Device Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<link rel="stylesheet" href="../../../shared/theme.css">
+<link rel="stylesheet" href="../../../shared/quiz.css">
+
+<main class="wrap" id="app"></main>
+
+<script src="../../../shared/common.js"></script>
+<script src="../../../quiz-common.js"></script>
+<script>
+(function(){
+/* =====================================================================
+   Grade 3 Computer · Final revision, Term 1 · Unit 1
+   L1 Storage, L2 Print, L4 Interacting (a) and (b) (the school calls part (b) "Lesson 5"; it is still Lesson 4 in the book)
+   From the lessons (book pages 8–17, 23–29), the booklet (Practical Assessments 1–4),
+   Graded Homework 1 and 2 and Graded Classwork 2.
+   Question: {l: 1 Storage, 2 Print, 3 Interacting (a), 4 Interacting (b), s: drawn picture (SC) or p: a picture from the lesson,
+              q, o: [answers], c: right answer (default 0), k: keep the order, x: why}
+   Pictures: grade-3/computer/chapter-1/img/lesson-N/ (the same pictures as the lessons, so they are already offline).
+   ===================================================================== */
+
+/* ---------- drawing helpers ---------- */
+const em=(x,y,s,c,ex='')=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
+const tx=(x,y,t,c='lbl',a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
+const SKY='<rect class="f-sky" width="320" height="180"/>';
+const WHITE='<rect fill="#fff" width="320" height="180"/>';
+const IMG='../../computer/chapter-1/img/';
+const DIR={'blu-ray':1,'cd-dvd':1,hdd:1,'memory-card':1,usb:1,'3d-printer':2,cartridge:2,'desk-printer':2,'dot-matrix':2,'girl-envelope':2,inkjet:2,laser:2,plotter:2,scanner:2,thermal:2};
+// a picture from the lessons inside the drawing (lesson 4 when not listed above)
+const im=(n,x,y,w,h)=>`<image href="${IMG}lesson-${DIR[n]||4}/${n}.jpg" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
+// two pictures side by side, A and B
+const ab=(a,b,top)=>WHITE+im(a,14,top?30:12,140,120)+im(b,166,top?30:12,140,120)+`<text x="84" y="166" text-anchor="middle" font-size="20" font-weight="700" fill="#1B2440">A</text><text x="236" y="166" text-anchor="middle" font-size="20" font-weight="700" fill="#1B2440">B</text>`+(top?`<text x="160" y="16" text-anchor="middle" font-size="14" fill="#1B2440">${top}</text>`:'');
+const four=(ns)=>WHITE+ns.map((n,i)=>im(n,8+(i%2)*156,6+Math.floor(i/2)*86,148,80)).join('');
+const big=(x,y,t,ex='')=>`<text class="lbl-big" x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" style="font-size:30px" ${ex}>${t}</text>`;
+const word=(x,y,t,s=24)=>`<text class="lbl-big" x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" style="font-size:${s}px">${t}</text>`;
+
+const abbr=t=>()=>SKY+big(160,80,t)+tx(160,134,'= ?','lbl-big');
+const SC={
+desk:()=>WHITE+im('desk-printer',4,8,150,120)+im('usb',170,10,140,56)+im('gamepad',176,70,130,70)+im('vr-headset',30,120,90,58)+im('memory-card',130,128,60,50)+im('stylus',212,132,90,46),
+storage:()=>four(['hdd','usb','memory-card','cd-dvd']),
+discs:()=>WHITE+im('cd-dvd',10,20,140,110)+im('blu-ray',170,20,140,110)+`<text x="80" y="156" text-anchor="middle" font-size="16" fill="#1B2440">CD · DVD</text><text x="240" y="156" text-anchor="middle" font-size="16" fill="#1B2440">Blu-ray</text>`,
+cdrive:()=>SKY+`<rect class="f-card" x="40" y="40" width="240" height="90" rx="10"/><rect class="st-ink" x="40" y="40" width="240" height="90" rx="10" fill="none" stroke-width="3"/>${em(90,85,50,'💽')}${tx(130,72,'Local Disk (C:)','lbl-big','start')}<rect x="130" y="94" width="130" height="14" rx="7" fill="#d9dde3"/><rect x="130" y="94" width="90" height="14" rx="7" fill="#2b62c9"/>${tx(160,156,'inside the computer?','lbl')}`,
+keychain:()=>SKY+`${em(110,90,80,'🔑')}${em(200,96,60,'❓')}${tx(160,160,'Carry it on a key chain','lbl-big')}`,
+phone:()=>SKY+`${em(100,86,80,'📱')}${em(150,60,40,'📸')}${em(230,86,60,'❓')}${tx(160,156,'more space for photos','lbl-big')}`,
+order:()=>SKY+`${em(60,80,54,'💿')}${em(160,80,54,'📀')}${em(260,80,54,'💿')}${tx(60,130,'CD','lbl-big')}${tx(160,130,'Blu-ray','lbl-big')}${tx(260,130,'DVD','lbl-big')}${tx(160,26,'Largest → smallest?','lbl-big')}`,
+floppy:()=>SKY+`${em(160,80,80,'💾')}${tx(160,148,'the floppy disk (long ago)','lbl-big')}`,
+scratch:()=>WHITE+im('cd-dvd',60,20,200,120)+em(210,60,46,'⚡')+`<text x="160" y="162" text-anchor="middle" font-size="16" fill="#1B2440">a scratched disc</text>`,
+notStorage:()=>four(['joystick','memory-card','usb','hdd']),
+movies:()=>SKY+`${em(160,76,80,'🎬')}${tx(160,140,'high-definition movies','lbl-big')}`,
+inks:()=>SKY+[['#00aeef','cyan'],['#ec008c','magenta'],['#fff200','yellow'],['#222','black']].map(([c,n],i)=>`<circle cx="${50+i*74}" cy="76" r="28" fill="${c}" stroke="#1B2440" stroke-width="2"/>${tx(50+i*74,128,n)}`).join('')+tx(160,24,'ink of an inkjet printer','lbl'),
+inksQ:()=>SKY+`${[0,1,2,3].map(i=>`<circle cx="${50+i*74}" cy="80" r="28" fill="#d9dde3" stroke="#1B2440" stroke-width="2"/>${tx(50+i*74,80,'?','lbl-big')}`).join('')}${tx(160,24,'ink of an inkjet printer','lbl')}`,
+connect:()=>SKY+`${em(60,90,64,'💻')}${em(160,70,40,'🔌')}${em(160,118,40,'📶')}${em(262,90,64,'🖨️')}`,
+banner:()=>ab('plotter','laser','Large advertising banners'),
+banner2:()=>ab('thermal','plotter','Building plans and big banners'),
+receipt:()=>SKY+`<rect fill="#fff" stroke="#9aa0a8" stroke-width="2" x="128" y="10" width="64" height="160"/>${[0,1,2,3,4,5,6].map(i=>`<rect x="138" y="${24+i*16}" width="${i%3?44:30}" height="5" fill="#333"/>`).join('')}${em(70,90,56,'🛒')}${em(252,90,56,'🍔')}`,
+three:()=>SKY+`${em(160,86,80,'🧸')}${tx(160,150,'layer by layer','lbl-big')}`,
+mats:()=>SKY+`${word(70,60,'Metal')}${word(240,60,'Plastic')}${word(70,124,'Resin')}${word(240,124,'Paper')}`,
+photoP:()=>SKY+`${em(110,84,80,'🖼️')}${em(220,84,60,'❓')}${tx(160,150,'clear colour photos','lbl-big')}`,
+fast:()=>SKY+`${em(100,84,70,'📄')}${em(150,70,40,'💨')}${em(230,84,60,'❓')}${tx(160,150,'200 pages, fast and clear','lbl-big')}`,
+interact:()=>SKY+`${word(80,40,'Touchscreen',20)}${word(240,40,'Trackball',20)}${word(80,90,'Stylus',20)}${word(240,90,'Book',20)}${word(80,140,'Digitizer',20)}${word(240,140,'Game pad',20)}`,
+mouseSwap:()=>WHITE+`${em(70,80,60,'🖱️')}<text x="160" y="84" text-anchor="middle" font-size="40" fill="#1B2440">→</text>${em(250,80,60,'❓')}<text x="160" y="150" text-anchor="middle" font-size="16" fill="#1B2440">on a laptop, instead of a mouse</text>`,
+finger:()=>SKY+`${em(90,84,70,'👆')}${em(160,84,30,'↔️')}${em(230,84,70,'❓')}${tx(160,150,'instead of your finger','lbl-big')}`,
+designer:()=>SKY+`${em(100,84,70,'👩‍🎨')}${em(220,84,60,'❓')}${tx(160,150,'graphic designers love me','lbl-big')}`,
+flight:()=>SKY+`${em(100,84,70,'✈️')}${em(220,84,60,'❓')}${tx(160,150,'flight simulator games','lbl-big')}`,
+vr:()=>SKY+`${big(160,70,'VR = ?')}${em(160,130,44,'🥽')}`,
+signs:()=>SKY+[['♿',50,56],['👂',160,56],['👓',270,56],['🎮',50,128],['🍴',160,128],['🚫',270,128]].map(([e,x,y])=>`<circle cx="${x}" cy="${y}" r="30" fill="#29abe2"/>${em(x,y,34,e)}`).join(''),
+seeing:()=>SKY+`${em(110,84,70,'👀')}${em(150,64,30,'❓')}${em(230,84,60,'⌨️')}${tx(160,150,'trouble seeing','lbl-big')}`,
+voice:()=>SKY+`${em(90,84,70,'🗣️')}${em(160,84,40,'➡️')}${em(240,84,70,'💻')}${tx(160,150,'"Open Paint!"','lbl-big')}`,
+noHands:()=>SKY+`${em(100,84,70,'🙅')}${em(150,60,36,'✋')}${em(230,84,60,'❓')}${tx(160,150,'cannot use their hands','lbl-big')}`,
+everyone:()=>SKY+`${em(60,84,54,'👧')}${em(130,84,54,'👴')}${em(200,84,54,'🧑‍🦽')}${em(270,84,54,'👦')}${tx(160,150,'Who can use assistive technology?','lbl')}`,
+};
+
+/* ---------- questions (c: right answer index, default 0; k: keep the order) ---------- */
+const YN=['Yes','No'],TF=['True','False'];
+const MC=[
+/* ===== Lesson 1 · Storage (PA 1, GH 1) ===== */
+{l:1,s:'storage',q:'Who am I? I have the largest storage space of all storage devices.',o:['Hard disk','CD'],x:'The hard disk drive has the most space. It can store a thousand movies or a million songs.'},
+{l:1,s:'storage',q:'Who am I? I can easily move data from one computer to another device.',o:['Flash memory (USB flash drive)','Local Disk (E:)'],x:'Save your data on a USB flash drive and take it to another computer.'},
+{l:1,s:'storage',q:'Who am I? I am thin and very small.',o:['Memory card','Hard disk'],x:'A memory card is very thin and small.'},
+{l:1,s:'phone',q:'Who am I? You use me with smartphones to store more photos.',o:['Memory card','Recycle Bin'],x:'Memory cards are used in smartphones, cameras, tablets and game consoles.'},
+{l:1,s:'cdrive',q:'I am Local Disk "C:". I am the ___ hard drive.',o:['internal','external'],k:1,x:'The computer saves data on the internal hard disk drive: the C: drive.'},
+{l:1,s:'discs',q:'Which of these stores high-definition movies?',o:['Blu-ray','DVD','CD'],x:'Blu-ray holds much more than a DVD: high-definition movies.'},
+{l:1,p:'blu-ray',q:'What is special about a Blu-ray disc?',o:['It stores high-definition movies','It stores pictures only'],x:'Blu-ray stores high-definition movies and thousands of songs.'},
+{l:1,s:'storage',q:'Which device has the largest storage space?',o:['Hard disk drive','Flash memory'],x:'The hard disk drive has the largest space of all.'},
+{l:1,p:'hdd',q:'What is the purpose of a hard disk drive in a computer?',o:['To store a thousand movies or a million songs','To store a little data'],x:'A hard disk drive stores a lot of data.'},
+{l:1,s:'keychain',q:'Which device can be attached to a key chain for easy transport?',o:['USB flash drive','Memory card'],x:'A USB flash drive is light and hard to break. Put it on your key chain!'},
+{l:1,s:'order',q:'Put the discs in order, from the largest storage to the smallest.',o:['Blu-ray → DVD → CD','CD → DVD → Blu-ray','DVD → CD → Blu-ray'],x:'Blu-ray holds the most, then DVD, then CD.'},
+{l:1,s:'discs',q:'Which disc holds the least?',o:['CD','DVD','Blu-ray'],k:1,x:'From small to big: CD → DVD → Blu-ray → hard disk drive.'},
+{l:1,s:abbr('DVD'),q:'Write the full name: DVD = …',o:['Digital Versatile Disc','Digital Video Drive','Data Very Deep'],x:'DVD = Digital Versatile Disc.'},
+{l:1,s:abbr('CD'),q:'Write the full name: CD = …',o:['Compact Disc','Computer Drive','Colour Disc'],x:'CD = Compact Disc.'},
+{l:1,s:abbr('HDD'),q:'Write the full name: HDD = …',o:['Hard Disk Drive','High Data Disc','Hard Drive Door'],x:'HDD = Hard Disk Drive.'},
+{l:1,p:'cd-dvd',q:'A CD can hold movies.',o:TF,c:1,k:1,x:'False. A CD holds music and documents, but no movies: it does not have enough space. A DVD holds movies.'},
+{l:1,s:'scratch',q:'If you scratch a CD or DVD, your data can be lost.',o:TF,k:1,x:'True. Keep discs safe from scratches.'},
+{l:1,s:'cdrive',q:'You have too much data for your computer. What can you use?',o:['An external storage device','A printer','A joystick'],x:'Too much data? Use an external storage device, like a USB flash drive or an external hard disk.'},
+{l:1,p:'memory-card',q:'Where do we use memory cards?',o:['In smartphones and cameras','In printers','In keyboards'],x:'Smartphones, cameras, tablets and game consoles use memory cards.'},
+{l:1,p:'usb',q:'What is this?',o:['USB flash drive','Memory card','Hard disk drive'],x:'A USB flash drive: cheap, light and hard to break.'},
+{l:1,p:'memory-card',q:'What is this small card next to the phone?',o:['Memory card','USB flash drive','CD'],x:'A memory card is thin and very small.'},
+{l:1,s:'notStorage',q:'Which one is NOT a storage device?',o:['Joystick','Memory card','USB flash drive','Hard disk drive'],x:'A joystick is for playing games. It does not store data.'},
+{l:1,s:'floppy',q:'The floppy disk had very little space. Now it is old.',o:TF,k:1,x:'True. In the 70s and 80s we saved data on floppy disks.'},
+/* ===== Lesson 2 · Print (PA 2, GC 2, assignments) ===== */
+{l:2,s:'inks',q:'The inkjet printer uses four colours of ink.',o:TF,k:1,x:'True: cyan (blue), magenta (pink), yellow and black.'},
+{l:2,s:'inksQ',q:'Which colours of ink does an inkjet printer use?',o:['Cyan, magenta, yellow and black','Black, white and red','Only black'],x:'With these 4 colours it can print almost anything.'},
+{l:2,p:'inkjet',q:'An inkjet printer uses black, white and red ink.',o:TF,c:1,k:1,x:'False. It uses cyan, magenta, yellow and black.'},
+{l:2,p:'laser',q:'The laser printer is more expensive than the inkjet printer.',o:TF,k:1,x:'True. Inkjet printers are cheaper.'},
+{l:2,p:'thermal',q:'The thermal printer usually prints in black.',o:TF,k:1,x:'True.'},
+{l:2,s:'connect',q:"The printer doesn't connect with a USB cable or Wi-Fi.",o:TF,c:1,k:1,x:'False. The printer connects with a USB cable or Wi-Fi.'},
+{l:2,s:'connect',q:'The printer is usually connected to the computer with a USB cable or via Wi-Fi.',o:TF,k:1,x:'True. Turn the printer on before you print.'},
+{l:2,s:'receipt',q:'What is the thermal printer used for?',o:['Print a receipt','Print a T-shirt'],x:'Shops, supermarkets and restaurants print receipts on thermal printers.'},
+{l:2,s:'receipt',q:'What kind of paper does a thermal printer use?',o:['Long and narrow','Short and wide'],k:1,x:'Receipt paper is long and narrow.'},
+{l:2,s:'mats',q:'Which one is NOT a material a 3D printer uses?',o:['Paper','Metal','Plastic','Resin'],x:'A 3D printer uses plastic, resin or metal.'},
+{l:2,s:'mats',q:'Which materials can a 3D printer use to print?',o:['Metal, plastic and resin','Paper only','Water and sand'],x:'It builds the object with plastic, resin or metal.'},
+{l:2,p:'3d-printer',q:'What does a 3D printer make?',o:['Three-dimensional objects','A flat picture'],k:1,x:'A 3D printer makes 3D objects, layer by layer.'},
+{l:2,s:'banner',q:'Which printer is used for large advertising banners?',o:['A','B'],k:1,x:'A is a plotter, the biggest printer. B is a laser printer.'},
+{l:2,s:'banner2',q:'Which printer prints building plans and big banners?',o:['A','B'],c:1,k:1,x:'B is a plotter. A is a thermal printer for receipts.'},
+{l:2,s:'connect',q:'The ___ printer is more expensive than an inkjet printer.',o:['laser','3D','thermal','plotter'],x:'Laser printers are fast and very good, but more expensive.'},
+{l:2,s:'receipt',q:'The ___ printer is used in supermarkets and restaurants.',o:['thermal','laser','3D','plotter'],x:'Thermal printers print receipts.'},
+{l:2,s:'three',q:'The ___ printer builds objects layer by layer using plastic or metal.',o:['3D','laser','thermal','plotter'],x:'A 3D printer builds the object layer by layer.'},
+{l:2,s:'photoP',q:'Which printer is best for printing colourful photos?',o:['Inkjet','Thermal','Dot matrix'],x:'Inkjet printers print clear photos on photo paper.'},
+{l:2,s:'fast',q:'Which printer is very fast with very good quality for documents?',o:['Laser','Thermal','Dot matrix'],x:'Laser printers are fast and print in very good quality.'},
+{l:2,p:'girl-envelope',q:'You can print on paper, stickers or…',o:['envelopes','water','wood'],x:'You can print on paper of different sizes, stickers and envelopes.'},
+{l:2,p:'scanner',q:'Which device takes a picture of a page and sends it to the computer?',o:['Scanner','Mouse','Printer'],x:'A scanner takes a picture of a page and sends it into the computer.'},
+{l:2,p:'cartridge',q:'The ink cartridge is empty. What is a smart way to save money?',o:['Refill the cartridge','Buy a new printer','Throw it away'],x:'Refill it: you save money and protect the environment.'},
+{l:2,p:'dot-matrix',q:'This is the oldest printer. It prints many copies at the same time, but the quality is low. What is it?',o:['Dot matrix printer','Laser printer','3D printer'],x:'The dot matrix printer is hardly used now.'},
+{l:2,p:'plotter',q:'What is this printer?',o:['Plotter','Inkjet printer','Thermal printer'],x:'The plotter is the biggest printer.'},
+{l:2,p:'thermal',q:'What is this printer?',o:['Thermal printer','Plotter','3D printer'],x:'A thermal printer prints receipts on long, narrow paper.'},
+{l:2,p:'inkjet',q:'An inkjet printer prints by…',o:['spraying tiny drops of ink','using laser rays','building layers of plastic'],x:'It sprays tiny drops of ink on the paper. It is the most common printer.'},
+{l:2,p:'inkjet',q:'Inkjet printers are more expensive than other printers.',o:TF,c:1,k:1,x:'False. Inkjet printers are cheaper than other printers.'},
+{l:2,p:'plotter',q:'If you were printing a building design plan, you would use a plotter.',o:TF,k:1,x:'True. Plotters print building plans and banners.'},
+/* ===== Lesson 4 · Interacting (a) (PA 3) ===== */
+{l:3,s:'mouseSwap',q:'You use the ___ instead of the mouse with the laptop.',o:['touchpad','touch keyboard'],x:'Laptops have a touchpad. Move your finger: the cursor moves.'},
+{l:3,p:'touchpad',q:'It can replace the mouse:',o:['touchpad','computer case'],x:'The touchpad can replace the mouse.'},
+{l:3,s:'finger',q:'You can use me instead of your finger on the touchscreen.',o:['stylus','red pen'],x:'A stylus looks like a pen. Select things or draw on the touchscreen.'},
+{l:3,s:'designer',q:'The ___ is popular among graphic designers.',o:['graphic tablet','graphic organizer'],x:'Draw by hand on a graphic tablet, like with a pencil and paper.'},
+{l:3,p:'trackball',q:'The ___ looks like an upside-down mouse.',o:['trackball','stylus'],x:'Roll the ball of the trackball with your fingers or palm.'},
+{l:3,p:'wheel',q:'A ___ comes in different forms, like this driving wheel.',o:['game pad','touchscreen'],x:'Game pads come in different forms: driving wheels, joysticks…'},
+{l:3,p:'trackball',q:'A trackball is an input device.',o:TF,k:1,x:'True. You use it to give the computer information.'},
+{l:3,p:'graphic-tablet',q:'Graphic tablets (digitizers) are input devices.',o:TF,k:1,x:'True.'},
+{l:3,p:'stylus',q:'You use a stylus without a touchscreen.',o:TF,c:1,k:1,x:'False. A stylus works on a touchscreen.'},
+{l:3,s:'interact',q:'Which one can you NOT interact with when you work on the computer?',o:['Book','Touchscreen','Trackball','Stylus'],x:'A book is not a computer device. Touchscreen, trackball, stylus, digitizer and game pad are.'},
+{l:3,s:'flight',q:'Which device is often used in flight simulators and action games?',o:['Joystick','Stylus','Touchscreen'],x:'A joystick has a big place to grip with your hand, and buttons.'},
+{l:3,p:'protector',q:'A ___ lets you give commands by touching the screen with your fingers.',o:['touchscreen','trackball','VR glove'],x:'Tablets, smartphones and game consoles have touchscreens.'},
+{l:3,p:'protector',q:'What keeps a touchscreen safe from scratches?',o:['A screen protector','A memory card','A trackball'],x:'A transparent plastic screen protector.'},
+{l:3,p:'graphic-tablet',q:'A graphic tablet is also called a…',o:['digitizer','joystick','scanner'],x:'Graphic tablet = digitizer.'},
+{l:3,p:'gamepad',q:'Which device has buttons and thumbsticks for playing games?',o:['Game pad','Trackball','Stylus'],x:'A game pad (joypad, control pad) has buttons and thumbsticks.'},
+{l:3,p:'joystick',q:'What is this?',o:['Joystick','Game pad','Trackball'],x:'A joystick: grip it with your hand. Good for flight games.'},
+{l:3,p:'touchpad',q:'Some touchpads can ___ with two fingers.',o:['zoom','print','save'],x:'Pinch with two fingers to zoom.'},
+{l:3,p:'stylus',q:'A stylus has a precise tip at one end. What is at the other end?',o:['A digital eraser','A ball','A USB plug'],x:'One end has a precise tip, the other end a digital eraser.'},
+/* ===== Lesson 4 · Interacting (b) (PA 4, GH 2) ===== */
+{l:4,s:'vr',q:'"VR" stands for Virtual Reality.',o:TF,k:1,x:'True. Virtual reality is a place made by a computer.'},
+{l:4,p:'vr-glove',q:'A VR glove looks like a simple glove.',o:TF,k:1,x:'True. See your hand move in VR and feel you are touching things.'},
+{l:4,s:'everyone',q:'Assistive technology is designed for people who have trouble seeing, hearing, moving or learning.',o:TF,k:1,x:'True. And everyone can use it!'},
+{l:4,p:'speech',q:'Speech recognition is useful for people who have difficulty using a keyboard or a mouse.',o:TF,k:1,x:'True. They control the computer with their voice.'},
+{l:4,s:'seeing',q:'People who have trouble seeing use a…',o:['Braille keyboard','Joystick','Game pad'],x:'A Braille keyboard has raised dots on the keys.'},
+{l:4,s:'signs',q:'Which sign is NOT for people who have trouble seeing, hearing or moving?',o:['🎮 Game zone','♿ Wheelchair','👂 Ear','👓 Glasses'],x:'The wheelchair, ear and glasses signs are for people who need help. Game zone, restaurant and no food are not.'},
+{l:4,p:'braille',q:'Which device has raised dots?',o:['Braille keyboard','Speech recognition','Head mouse'],x:'People who are blind feel the dots with their fingers.'},
+{l:4,s:'voice',q:'With which one can the user open apps using their voice?',o:['Speech recognition','Braille keyboard','Head mouse'],x:'Speech recognition: open apps, write and search the Internet by speaking.'},
+{l:4,p:'head-mouse',q:'With which device can the user move the cursor and select items by moving their head?',o:['Head mouse','Braille keyboard','Speech recognition'],x:'A head mouse is for people who cannot use their hands.'},
+{l:4,p:'vr-headset',q:'Which device makes you feel as if you are in a different place?',o:['VR headset','Touchscreen'],x:'Wear the VR headset over your eyes and you feel like you are there.'},
+{l:4,p:'vr-glove',q:'Which device looks like a glove and lets you feel objects in virtual reality?',o:['VR glove','Stylus'],x:'The VR glove.'},
+{l:4,s:'voice',q:'Which technology lets users control devices by speaking instead of typing?',o:['Speech recognition','Braille'],x:'Speech recognition uses your voice.'},
+{l:4,s:'everyone',q:'___ are special tools that let people interact with technology in different ways.',o:['Assistive technologies','Touchscreens'],x:'Assistive technologies help people who have trouble seeing, hearing, moving or learning.'},
+{l:4,s:'seeing',q:'Which keyboard is designed for people who are blind?',o:['Braille keyboard','USB keyboard'],x:'The keys of a Braille keyboard have raised dots.'},
+{l:4,s:'noHands',q:'Which device helps people who cannot use their hands?',o:['Head mouse','VR headset'],x:'Move your head and the cursor moves.'},
+{l:4,p:'vr-glove',q:'Which device is used in virtual reality and robotics?',o:['VR glove','Head mouse'],x:'The VR glove is used in virtual reality and robotics.'},
+{l:4,s:'everyone',q:'Assistive technologies are only useful for people who have physical disabilities.',o:TF,c:1,k:1,x:'False. Everyone can benefit from them.'},
+{l:4,p:'vr-glove',q:'The VR headset and VR glove are used only for games.',o:TF,c:1,k:1,x:'False. The VR glove is also used in robotics.'},
+{l:4,p:'braille',q:'A Braille keyboard is made for anyone.',o:TF,c:1,k:1,x:'False. It is made for people who are blind or cannot see well.'},
+{l:4,p:'vr-headset',q:'Where do you wear a VR headset?',o:['Over your eyes','On your hands','On your feet'],x:'Wear it over your eyes.'},
+];
+
+const MT=[
+{l:1,t:'Match each device to what it does',p:[['💽','Hard disk drive','The largest storage space'],['🔑','USB flash drive','Carry data to another computer'],['📱','Memory card','Thin and small, used in phones'],['📀','Blu-ray','High-definition movies']]},
+{l:1,t:'Match each short name to its full name',p:[['💿','CD','Compact Disc'],['📀','DVD','Digital Versatile Disc'],['💽','HDD','Hard Disk Drive']]},
+{l:2,t:'Match each printer to what it does',p:[['🧾','Thermal printer','Prints receipts'],['🧸','3D printer','Builds objects layer by layer'],['🗺️','Plotter','Prints big banners and plans'],['⚡','Laser printer','Very fast, very good quality'],['🖼️','Inkjet printer','Sprays tiny drops of ink']]},
+{l:2,t:'Match each device to its job',p:[['🖨️','Printer','From screen to paper'],['📠','Scanner','Takes a picture of a page'],['🔁','Refill','Fill the empty cartridge again'],['📜','Dot matrix','The oldest printer']]},
+{l:3,t:'Match each device to what it does',p:[['💻','Touchpad','Replaces the mouse on a laptop'],['🖊️','Stylus','A pen for the touchscreen'],['🎨','Graphic tablet','Draw by hand, like on paper'],['🔴','Trackball','An upside-down mouse'],['✈️','Joystick','Flight simulator games']]},
+{l:4,t:'Match each tool to who it helps',p:[['⠿','Braille keyboard','People who cannot see well'],['🗣️','Speech recognition','Open apps with your voice'],['🙂','Head mouse','Move the cursor with your head']]},
+{l:4,t:'Match each word to its meaning',p:[['🥽','VR headset','Feel you are in another place'],['🧤','VR glove','Feel objects in virtual reality'],['🌐','Virtual reality','A place made by a computer'],['♿','Assistive technology','Tools for people who need help']]},
+];
+
+const LESSONS=[{n:0,l:'All lessons'},{n:1,l:'L1 · Storage'},{n:2,l:'L2 · Print'},{n:3,l:'L4 · Interacting (a)'},{n:4,l:'L4 · Interacting (b)'}];
+const PHOTO={1:'lesson-1',2:'lesson-2',3:'lesson-4',4:'lesson-4'};
+const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
+const pool=()=>({mc:MC.filter(q=>!lesIdx||q.l===lesIdx),mt:MT.filter(q=>!lesIdx||q.l===lesIdx)});
+const LENS=[{mc:8,mt:2,l:'Quick · 10'},{mc:16,mt:4,l:'Normal · 20'},{mc:0,mt:0,l:'All'}];
+const store=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let lenIdx=1,lesIdx=0;
+try{const v=localStorage.getItem('dq-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
+try{const v=localStorage.getItem('dq-lesson');if(v!==null&&LESSONS[+v])lesIdx=+v}catch(e){}
+
+const S={list:[],i:0,score:0,max:0,miss:[]};
+const app=document.getElementById('app');
+const {esc,shuf,pick,star}=Kit;
+const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+const scene=(k,q)=>q&&q.p?`<img class="scene pic fit" src="${IMG}${PHOTO[q.l]}/${q.p}.jpg" alt="Picture for the question">`:`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${(typeof k==='function'?k:SC[k])()}</svg></div>`;
+
+function start(){
+  const L=LENS[lenIdx],P=pool();
+  const mc=shuf(P.mc).slice(0,L.mc||P.mc.length).map(q=>({type:'mc',...q}));
+  const mt=shuf(P.mt).slice(0,L.mt||P.mt.length).map(q=>({type:'mt',...q}));
+  let list=shuf(mc.concat(mt));
+  // avoid two matching rounds in a row when possible
+  for(let i=1;i<list.length;i++){if(list[i].type==='mt'&&list[i-1].type==='mt'){const j=list.findIndex((q,k)=>k>i&&q.type==='mc');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
+  S.list=list;S.i=0;S.score=0;S.miss=[];
+  S.max=list.reduce((t,q)=>t+(q.type==='mc'?1:q.p.length),0);
+  render();
+}
+
+function hud(){
+  const pct=Math.round(S.i/S.list.length*100);
+  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+}
+
+function render(){
+  if(!S.list.length) return home();
+  if(S.i>=S.list.length) return end();
+  const q=S.list[S.i];
+  q.type==='mc'?renderMC(q):renderMT(q);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function home(){
+  const P=pool(),n=P.mc.length+P.mt.length;
+  app.innerHTML=`<section class="card pop">
+    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 Computer · Final revision</span></div>
+    <h1 class="hero-title"><span class="p">Device</span> <span class="k">Quest</span></h1>
+    ${scene('desk')}
+    <p class="howto">Ready? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
+    <div class="chips"><span class="chip pe">Storage</span><span class="chip ke">Print</span><span class="chip">Interacting (a)</span><span class="chip ht">Interacting (b)</span></div>
+    <div class="row"><span class="eyebrow">Which lessons?</span><div class="seg" role="group" aria-label="Lessons">${LESSONS.map((l,i)=>`<button type="button" id="les-${i}" data-les="${i}" aria-pressed="${i===lesIdx}">${l.l}</button>`).join('')}</div></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${i===LENS.length-1?'All · '+n:l.l}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
+  </section>`;
+  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;store('dq-len',lenIdx);home()});
+  app.querySelectorAll('[data-les]').forEach(b=>b.onclick=()=>{lesIdx=+b.dataset.les;store('dq-lesson',lesIdx);home()});
+  document.getElementById('startBtn').onclick=start;
+}
+
+function renderMC(q){
+  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
+  if(!q.k) opts=shuf(opts);
+  const long=opts.some(o=>o.t.length>34);
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mc">${q.o===TF||q.o===YN?'True or false':'Choose the answer'}</span>
+    ${scene(q.s,q)}
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="fbx"></div>
+  </section>`;
+  const btns=[...app.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.i];
+    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
+    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
+    document.getElementById('pts').textContent=S.score;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x)}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  });
+}
+
+function renderMT(q){
+  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
+  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
+  const pair={}; // leftIdx -> rightIdx
+  let sel=null, checked=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    <p class="qtext">${esc(q.t)}</p>
+    <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
+    <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
+  </section>`;
+  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
+  function draw(){
+    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
+      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
+    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
+      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
+    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
+    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
+      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
+      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    checked=true;let got=0;
+    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
+    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
+    const all=got===q.p.length;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right meaning under the word.'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  };
+}
+
+function end(){
+  const pct=Math.round(S.score/S.max*100);
+  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const msg=pct===100?'Perfect score! You are ready for the exam.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below and play again.';
+  app.innerHTML=`<section class="card pop">
+    <span class="eyebrow">Your score</span>
+    <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
+    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <h2>${pct}% · ${msg}</h2>
+    <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
+  </section>
+  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
+  document.getElementById('againBtn').onclick=start;
+  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+Quiz.watch(app);
+home();
+})();
+</script>
+</body></html>

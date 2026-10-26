@@ -80,6 +80,20 @@ window.GAMES = [
     year: "2026–2027",
   },
   {
+    grade: 3,
+    term: 1,
+    period: "Final exam",
+    subject: "Computer",
+    title: "Device Quest",
+    lesson: "Unit 1 · L1 Storage, L2 Print, L4 Interacting (a) & (b)",
+    topics:
+      "Hard disk, USB flash drive, memory card, CD / DVD / Blu-ray, printers, touchpad, stylus, game pads, VR, assistive technology",
+    path: "grade-3/term-1/final-term-1/computer-revision.html",
+    questions: 96,
+    year: "2026–2027",
+    // the pictures come from the Computer lessons (listed in the Computer entry's "also")
+  },
+  {
     grade: 4,
     term: 1,
     period: "Mid-term exam",
