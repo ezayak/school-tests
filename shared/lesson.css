@@ -1664,3 +1664,455 @@ details.book[open] .alltext {
   margin-left: auto;
   text-align: right;
 }
+
+/* animated pictures made of emoji (Kit.scene): English words and idioms, story pictures. They are pictures, so they keep their colours in dark mode. */
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  aspect-ratio: 4/3;
+  container-type: size;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff8e8;
+  cursor: pointer;
+  user-select: none;
+}
+.pic.vis:has(> .scene) {
+  padding: 0;
+}
+.pic.vis > .scene,
+.thumb > .scene {
+  justify-self: stretch;
+  align-self: stretch;
+  border-radius: 0;
+}
+.thumb > .scene {
+  min-height: 0;
+}
+.sc-sky {
+  background: linear-gradient(#bfe3ff, #eef8ff);
+}
+.sc-rain {
+  background: linear-gradient(#8fa3b8, #d7e0ea);
+}
+.sc-night {
+  background: linear-gradient(#1d2b5c, #3b4f8f);
+}
+.sc-room {
+  background: linear-gradient(#fdf1dc 0 72%, #d9b48a 72%);
+}
+.sc-grass {
+  background: linear-gradient(#c7e8ff 0 66%, #8fd16a 66%);
+}
+.sc-stage {
+  background: linear-gradient(
+      90deg,
+      #b3202a 0 10%,
+      transparent 10% 90%,
+      #b3202a 90%
+    ),
+    linear-gradient(#ffe7a8 0 78%, #a8692e 78%);
+}
+.sc-school {
+  background: linear-gradient(
+    #e9f4e4 0 22%,
+    #2f6b4f 22% 52%,
+    #e9f4e4 52% 80%,
+    #c9a27a 80%
+  );
+}
+.sc-plain {
+  background: #fff8e8;
+}
+.sc-it {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: calc(var(--s) * var(--k, 1) * 1cqmin);
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.sc-e,
+.sc-t {
+  display: inline-block;
+  transform: rotate(var(--r)) scaleX(var(--f));
+}
+.sc-e {
+  font-family: var(--emoji);
+}
+.sc-t {
+  font-family: var(--display);
+  font-size: max(1em, 0.8rem);
+  color: #1b2440;
+  background: #fff;
+  border: 0.12em solid #1b2440;
+  border-radius: 0.6em;
+  padding: 0.12em 0.45em;
+}
+.sc-t.good {
+  background: #d8f5d0;
+  color: #1d6b2f;
+}
+.sc-t.bad {
+  background: #ffe0dc;
+  color: #b42828;
+}
+.sc-t.plain {
+  background: none;
+  border: 0;
+  padding: 0;
+}
+.sc-t.light {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: #fff;
+}
+.sc-cap {
+  position: absolute;
+  left: 50%;
+  bottom: 3%;
+  transform: translateX(-50%);
+  max-width: 94%;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 5cqmin, 1.1rem);
+  color: #1b2440;
+  background: rgb(255 255 255 / 0.85);
+  border-radius: 999px;
+  padding: 2px 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.thumb .sc-cap,
+.thumb .sc-re {
+  display: none;
+}
+.sc-re {
+  position: absolute;
+  right: 6px;
+  top: 4px;
+  font-size: 1rem;
+  color: #1b2440;
+  opacity: 0.45;
+}
+@keyframes sc-pop {
+  from {
+    scale: 0;
+    opacity: 0;
+  }
+  70% {
+    scale: 1.15;
+    opacity: 1;
+  }
+  to {
+    scale: 1;
+  }
+}
+@keyframes sc-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes sc-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes sc-move {
+  to {
+    translate: calc(var(--dx) * 1cqw) calc(var(--dy) * 1cqh);
+  }
+}
+@keyframes sc-grow {
+  from {
+    scale: 0.3;
+  }
+}
+@keyframes sc-fall {
+  from {
+    translate: 0 0;
+    opacity: 0;
+  }
+  10%,
+  85% {
+    opacity: 1;
+  }
+  to {
+    translate: calc(var(--dx) * 1cqw) calc(var(--dy) * 1cqh);
+    opacity: 0;
+  }
+}
+@keyframes sc-float {
+  50% {
+    translate: 0 -4cqh;
+  }
+}
+@keyframes sc-shake {
+  25% {
+    translate: -1.5cqw 0;
+  }
+  75% {
+    translate: 1.5cqw 0;
+  }
+}
+@keyframes sc-pulse {
+  50% {
+    scale: 1.18;
+  }
+}
+@keyframes sc-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes sc-puff {
+  from {
+    translate: 0 0;
+    scale: 0.4;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  to {
+    translate: calc(var(--dx) * 1cqw) -28cqh;
+    scale: 1.7;
+    opacity: 0;
+  }
+}
+@keyframes sc-nod {
+  0%,
+  100% {
+    rotate: -9deg;
+  }
+  50% {
+    rotate: 9deg;
+  }
+}
+@keyframes sc-jump {
+  40% {
+    translate: 0 -9cqh;
+  }
+}
+@keyframes sc-swing {
+  0%,
+  100% {
+    rotate: -45deg;
+  }
+  30% {
+    rotate: 30deg;
+  }
+}
+@keyframes sc-wander {
+  25% {
+    translate: 5cqw -5cqh;
+  }
+  50% {
+    translate: -4cqw -9cqh;
+  }
+  75% {
+    translate: -6cqw -2cqh;
+  }
+}
+@keyframes sc-squeeze {
+  50% {
+    scale: 0.78 1.04;
+  }
+}
+@keyframes sc-blink {
+  50% {
+    opacity: 0.15;
+  }
+}
+@keyframes sc-wave {
+  50% {
+    rotate: 22deg;
+  }
+}
+/* a 3-second story that starts again: things go, fly off, show up or go away half-way */
+@keyframes sc-go {
+  0%,
+  12% {
+    translate: 0 0;
+  }
+  50%,
+  92% {
+    translate: calc(var(--dx) * 1cqw) calc(var(--dy) * 1cqh);
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+@keyframes sc-shoot {
+  0%,
+  30% {
+    translate: 0 0;
+    opacity: 0;
+  }
+  34% {
+    opacity: 1;
+  }
+  80%,
+  100% {
+    translate: calc(var(--dx) * 1cqw) calc(var(--dy) * 1cqh);
+    opacity: 0;
+  }
+}
+@keyframes sc-show {
+  0%,
+  42% {
+    opacity: 0;
+    scale: 0.5;
+  }
+  52%,
+  94% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes sc-hide {
+  0%,
+  42% {
+    opacity: 1;
+  }
+  52%,
+  94% {
+    opacity: 0;
+  }
+}
+/* an idiom: the words (top) and what it really means (bottom) */
+.vis-idiom {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+}
+.pic.vis:has(> .vis-idiom) {
+  padding: 0;
+}
+.pic.vis > .vis-idiom {
+  justify-self: stretch;
+  align-self: stretch;
+  max-width: none;
+}
+.idp {
+  position: relative;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #1b2440;
+}
+.idp > b {
+  font-size: 0.9rem;
+  padding: 2px 10px;
+  color: #fff;
+  background: #6b5bd2;
+}
+.idp.real > b {
+  background: #2c9b4f;
+}
+.idp .scene {
+  --k: 1.25; /* the two pictures are wide and short: things a little bigger */
+  flex: 1;
+  min-height: 0;
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+.thumb .vis-idiom {
+  padding: 0;
+  gap: 0;
+}
+.thumb .idp > b {
+  display: none;
+}
+/* sentence parts as coloured blocks (Kit.blocks) */
+.vis-blk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  color: #1b2440;
+}
+.blk-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.2rem, 2.6vw, 1.7rem);
+}
+.blk-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+.blk {
+  display: inline-block;
+  border: 2px solid #1b2440;
+  border-radius: 10px;
+  padding: 4px 12px;
+  font-weight: 700;
+  font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+  line-height: 1.25;
+  background: #fff;
+  animation: sc-pop 0.5s ease-out both;
+}
+.blk.lg {
+  font-size: 0.9rem;
+  padding: 1px 8px;
+  animation: none;
+}
+.b-i {
+  background: #d8f5d0;
+}
+.b-d {
+  background: #ffe2c2;
+}
+.b-c {
+  background: #e4dcff;
+  color: #4a2fb0;
+}
+.b-p {
+  background: #ffe14d;
+  font-size: 1.4rem;
+  padding: 0 10px;
+}
+.b-f {
+  background: #eef0f4;
+  border-style: dashed;
+}
+.b-l {
+  border: 0;
+  background: none;
+  padding: 4px 2px;
+}
+.b-x {
+  background: #ffe0dc;
+  color: #b42828;
+  text-decoration: line-through;
+}
+.blk-join {
+  font-family: var(--emoji);
+  font-size: 1.6rem;
+}
+.blk-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+.vis-blk small {
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  color: #1b2440;
+  text-align: center;
+}
