@@ -238,7 +238,6 @@
   }
   const opt = {
     turn: store.get(KEY + "-turn", "1") === "1", // go on to the next page by itself
-    easy: store.get(KEY + "-easy", "1") === "1", // read the easy sentence after the page
     auto: store.get(KEY + "-auto", "1") === "1", // read each question when it shows
   };
   const chk = (k, label) =>
@@ -308,10 +307,10 @@
       <div class="main">
         ${P.ch ? `<div class="pg-ch">${esc(P.ch)}</div>` : ""}
         <div class="story-text">${paras}</div>
-        ${P.easy ? `<div class="easy"><b>💡 In easy words</b><p>${textHTML(P.easy)}</p></div>` : ""}
+        ${P.easy ? `<div class="easy"><div class="easy-h"><b>💡 In easy words</b><span class="easy-btns"><button type="button" class="abtn sm" data-easy="0" aria-label="Read the easy words">🔊 <span>Read</span></button><button type="button" class="abtn sm" data-easy="1" aria-label="Read the easy words slowly">🐢</button></span></div><p>${textHTML(P.easy)}</p></div>` : ""}
         <div class="gloss" hidden></div>
         ${audioBtns}
-        <div class="chks">${chk("turn", "Turn the pages by itself")}${chk("easy", "Read the easy words too")}</div>
+        <div class="chks">${chk("turn", "Turn the pages by itself")}</div>
       </div></div>
     <div class="nav"><button type="button" class="btn" data-prev${pg ? "" : " disabled"} aria-label="Previous page">◀</button>
       <div class="dotsnav">${S.pages.map((_, i) => `<button type="button" class="dot${i === pg ? " on" : ""}" data-pg="${i}" aria-label="Page ${i + 1}"></button>`).join("")}</div>
@@ -328,11 +327,7 @@
       panel.scrollIntoView({ block: "start", behavior: "smooth" });
     };
     const start = (slow) => {
-      const sents = [
-        ...panel.querySelectorAll(
-          opt.easy ? ".story-text .s, .easy .s" : ".story-text .s",
-        ),
-      ];
+      const sents = [...panel.querySelectorAll(".story-text .s")];
       read(sents, slow, () => {
         if (opt.turn && !last)
           setTimeout(() => goTo(pg + 1, slow ? "slow" : "read"), 900);
@@ -341,6 +336,17 @@
     panel
       .querySelectorAll("[data-read]")
       .forEach((b) => (b.onclick = () => start(b.dataset.read === "1")));
+    // the easy words have their own buttons; they are not read with the page
+    panel
+      .querySelectorAll("[data-easy]")
+      .forEach(
+        (b) =>
+          (b.onclick = () =>
+            read(
+              [...panel.querySelectorAll(".easy .s")],
+              b.dataset.easy === "1",
+            )),
+      );
     panel.querySelector("[data-stop]").onclick = hush;
     panel.querySelector("[data-prev]").onclick = () => goTo(pg - 1);
     panel.querySelector("[data-next]").onclick = () => goTo(pg + 1);

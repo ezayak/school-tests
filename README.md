@@ -161,8 +161,8 @@ Shared files (no need to touch them for a new story): `shared/story.js` (the eng
 The page loads `shared/common.js`, its `story-*.js`, then `shared/story.js`.
 
 A story page has three tabs:
-- **Read** – one book page at a time: the picture, the book text, "In easy words"; 🔊 Read (sentence by sentence), 🐢 Slow (word by word), ⏹ Stop;
-  switches to turn the pages by itself and to read the easy words too
+- **Read** – one book page at a time: the picture, the book text, "In easy words"; 🔊 Read (sentence by sentence), 🐢 Slow (word by word), ⏹ Stop
+  read the book text only; the easy words have their own 🔊 / 🐢 buttons in their box; a switch turns the pages by itself
 - **Summary** – the book's story map as picture cards (Characters, Setting, Problem, Events, Solution, Message), read aloud
 - **Questions** – one at a time with a picture; wrong answers can be tried again; open questions show a model answer and the child marks it
 
