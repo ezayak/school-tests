@@ -60,7 +60,7 @@ live in `shared/theme.css`; change them there and every page follows.
 | `shared/drag-words.css` | drag tiles from a bank onto a line | "Mets en ordre", "Build the word" |
 | `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons, English stories |
 | `shared/story.css` | English stories: page text, the sentence being read, easy sentence, word meanings | English stories |
-| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards) | quiz games, French and Computer lesson lists, English stories |
+| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards), `Kit.scene` / `Kit.idiom` / `Kit.blocks` (animated pictures, sentence blocks) | quiz games, French and Computer lesson lists, English stories and lessons |
 
 Rules for new pages:
 - Copy an existing page of the same kind and keep its `<link>`s. Never add a `<style>` block or new colour values.
@@ -126,7 +126,7 @@ If an update doesn't show up, change `VERSION` in `sw.js` and push again.
 ## English dictations
 
 Each grade has one **English** card on the home page (period `"Subjects"`, `hub: true`), which opens
-`grade-N/term-1/english/index.html`. That page lists the dictations from `english/dictations.js`
+`grade-N/term-1/english/index.html`. That page lists the lessons, dictations and stories from `english/dictations.js`
 (shared look: `english-hub.css` / `english-hub.js` in the root).
 
 New dictation: copy a dictation file in `grade-N/term-1/english/`, edit its `LIST`, add one line to
@@ -172,17 +172,53 @@ A story page has three tabs:
 window.STORY = {
   key: "en4-dream-team",                     // saves the tab, page and switches on the device
   title, by, kind: "Realistic fiction", cover: "img/dream-team/cover.jpg", question: "the book's Essential Question",
+  lesson: {path: "unit1-week3.html", label: "Unit 1 · Week 3"},  // optional: a link back to the English lesson of the story
   gloss: {desperately: "very, very much", …}, // tap-a-word meanings (lowercase word); these words are shown in colour
-  pages: [{ch: "Chapter 1 · …", img | emoji, text: ["paragraph", …, {box: "Side box title", p: "…"}], easy: "one easy sentence"}, …],
+  pages: [{ch: "Chapter 1 · …", img | emoji | vis, text: ["paragraph", …, {box: "Side box title", p: "…"}], easy: "one easy sentence"}, …],
                                              // text exactly as in the book; *word* = italic
-  summary: [{t: "Characters", img | emoji, text}, …],
-  questions: [{tag: "Stop and check", img | emoji, q, o: [right, wrong, wrong], x: "why (optional)"},   // first option is right; shuffled on screen
+  summary: [{t: "Characters", img | emoji | vis, text}, …],      // vis: an animated emoji picture (see English lessons)
+  questions: [{tag: "Stop and check", img | emoji | vis, q, o: [right, wrong, wrong], x: "why (optional)"},   // first option is right; shuffled on screen
               {type: "open", tag, img | emoji, q, a: "model answer"}, …],
 };
 ```
 
 New story: copy `story-dream-team.html` and change `story-dream-team.js` to the new file; pictures cut from the book go in `img/<story>/`.
 Add it to `english/dictations.js` (`kind: "Story"`), add the page, its `.js` and every picture to the English entry's `also` in `games.js`, update `countLabel`/`topics`, and bump `VERSION` in `sw.js`.
+
+### English lessons (Grade 4)
+
+The weeks of the term booklets (Classwork and Homework Booklet, Term 1) are lessons on the same English page, under **Lessons**:
+`grade-4/term-1/english/unit1-week3.html` (compound sentences), `unit1-week4.html` (complex sentences, idioms), `unit1-week5.html` (run-on sentences, suffixes).
+Made for a child who is learning to read again: every question, answer and card is read aloud and **the word being read lights up**
+(like the stories); tapping a word of a question says it slowly.
+
+They use the **Computer lesson engine** (`shared/computer-lesson.js`) with `<body data-subject="English">`, which turns on the read-along and the English colour.
+The page loads `shared/common.js` first (animated pictures), then its `unitN-weekN.js`, then the engine. Same three tabs as the other subjects:
+- **Learn** – the stories of the week (tiles that open the story pages, `stories`), then card decks (`decks`): vocabulary, grammar, phonics, idioms, suffixes
+- **Play** – the `games`
+- **Exercises** – the booklet pages, grouped by topic (Grammar · …, Phonics · …, Vocabulary · …): a heading above each group
+
+Booklet texts are **story pages** (`story-*.html/.js`, the story engine) with `lesson: {path, label}` (a link back to the lesson); questions use the school's model answers when there are some.
+
+`unitN-weekN.js` is a normal lesson file (see Computer lessons) plus:
+- `hub: "index.html"` (the English page), `imgDir: "img/unit1-week3"` (the pictures folder)
+- `stories: [{t, en, path, cover: {src}, g}]`, `decks: [{k, g, t, en, ic, cover: {vis | src}, cards: [{t, lines, vis | img | src}]}]`, `ideas: []`
+- `g` on stories, decks, games and exercises: the group heading for the tiles
+- a picture can be `src: "img/talent-show/girls.jpg"` (any picture of the folder), `emoji: "🐱🐶"`, or a drawing:
+  - `vis: {kind: "scene", bg, items, cap}` – an **animated picture made of emoji** (`Kit.scene` in `shared/common.js`, styles in `shared/lesson.css`; tap it to start again).
+    `bg`: sky, night, room, grass, stage, school, rain, plain. Items: `{e: "🐱"}` or a word bubble `{t: "Yes!", c: "good" | "bad" | "plain" | "light"}`,
+    `x`, `y` (middle, in %), `s` (size, in % of the smaller side), `r` (turn), `f: 1` (mirror), `dx`, `dy` (how far it moves, in %),
+    `a`: animations with an optional delay and length (`"pop:0.5 float:1"`): pop, fade, out, move, grow (once); fall, float, shake, pulse, spin, puff, nod, jump, swing, wander, squeeze, blink, wave (again and again);
+    go, shoot, show, hide (a 3-second before → after story that starts again).
+  - `vis: {kind: "idiom", words: <scene>, means: <scene>}` – an idiom: what the words say (top) and what it really means (bottom)
+  - `vis: {kind: "blocks", rows: [[text, kind], …], title, note, join, legend}` – a sentence as coloured blocks:
+    `i` independent clause, `d` dependent clause, `c` conjunction, `p` punctuation, `f` fragment, `x` a mistake, `l` a plain label
+- more item types: `{type: "tapw", q, s: "text", ans: {word: "label"}, fix: true}` (tap the words: long e words, conjunctions, or spelling mistakes with `fix`),
+  `{type: "sort", q, cols: [{k, t, ex, e}], words: [{w, k, e}]}` (tap a word, then its box; `k` can be a list), `mc` with `keep: [...]` (answers always in this order),
+  `order` with a picture (build a sentence from cards)
+
+New week: copy a week's `.html` (change the `.js`), write its `.js`, add it to `english/dictations.js` (`kind: "Lesson"`),
+add its files and pictures to the English entry's `also` in `games.js`, and bump `VERSION` in `sw.js`.
 
 ## Arabic lessons (Grade 3)
 
