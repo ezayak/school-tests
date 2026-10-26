@@ -1,0 +1,387 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<meta name="theme-color" content="#1B2440">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Study Games">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
+</head><body>
+<title>Computer Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<link rel="stylesheet" href="../../../shared/theme.css">
+<link rel="stylesheet" href="../../../shared/quiz.css">
+
+<svg class="defs" aria-hidden="true"><defs>
+  <marker id="ah-ink" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-ink"/></marker>
+  <marker id="ah-ke" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-ke"/></marker>
+</defs></svg>
+
+<main class="wrap" id="app"></main>
+
+<script src="../../../shared/common.js"></script>
+<script src="../../../quiz-common.js"></script>
+<!-- the file icons of Mini Windows and the button icons of Mini Word, so the pictures look like the lessons -->
+<script src="../../computer/chapter-1/winsim.js"></script>
+<script src="../../../shared/wordsim.js"></script>
+<script>
+(function(){
+/* =====================================================================
+   Grade 4 Computer · Final revision, Term 1
+   Unit 1: L1 My desktop, L2 Files and folders, L3 Computer settings, L4 Protect my computer
+   Unit 2: L1 Format a paragraph
+   From the lessons (book pages 9–67) and the school sheets CW1, CW2, HW1, HW2.
+   Question: {l: lesson 1–5 (5 = Unit 2 L1), s: drawn picture (SC) or p: photo from that lesson's img folder,
+              q, o: [answers], c: right answer (default 0), k: keep the order, x: why}
+   ===================================================================== */
+
+/* ---------- drawing helpers ---------- */
+const em=(x,y,s,c,ex='')=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
+const tx=(x,y,t,c='lbl',a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
+const ar=(x1,y1,x2,y2,c='ink',w=4)=>`<line class="st-${c}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${w}" stroke-linecap="round" marker-end="url(#ah-${c})"/>`;
+const SKY='<rect class="f-sky" width="320" height="180"/>';
+const CARD='<rect class="f-card" width="320" height="180"/>';
+// put an icon (an <svg> string) inside the picture
+const nest=(svg,x,y,s,style='')=>String(svg).replace('<svg ',`<svg x="${x}" y="${y}" width="${s}" height="${s}" ${style?`style="${style}"`:''} `);
+const SCA=(WinSim.icon('docx',true).match(/<svg[\s\S]*?<\/svg>/g)||[])[1]||'';
+// a file icon of Mini Windows centred on x,y; sc = with the shortcut arrow
+const fi=(t,x,y,s=56,sc)=>nest(WinSim.ICONS[t],x-s/2,y-s/2,s)+(sc?nest(SCA,x-s/2,y+s*.12,s*.38):'');
+// a button of Mini Word: icon, optional ▾
+const wic=n=>WordSim.icon(n).replace(/^<span[^>]*>/,'').replace(/<\/span>$/,'');
+const chev=(x,y)=>`<path d="M${x-5},${y-3} L${x},${y+3} L${x+5},${y-3}" fill="none" stroke="#444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+const wb=(n,x,y,dd)=>{const w=dd?96:66;return `<rect x="${x-w/2}" y="${y-30}" width="${w}" height="60" rx="14" fill="#fff" stroke="#9aa0a8" stroke-width="2.5"/>`+nest(wic(n),dd?x-38:x-21,y-21,42,'color:#222')+(dd?chev(x+28,y):'')};
+// a paragraph drawn as grey lines
+const para=(x,y,w,n,gap=12,first=0,cls='f-ink')=>{let s='';for(let i=0;i<n;i++){const ind=i===0?first:0;const ww=i===n-1?w*.6:w;s+=`<rect class="${cls}" x="${x+ind}" y="${y+i*gap}" width="${ww-ind}" height="5" rx="2.5" opacity=".55"/>`}return s};
+const key=(x,y,t,w=56,hi)=>`<rect class="${hi?'f-ke':'f-card'}" x="${x-w/2}" y="${y-22}" width="${w}" height="44" rx="8"/><rect class="st-ink" x="${x-w/2}" y="${y-22}" width="${w}" height="44" rx="8" fill="none" stroke-width="2.5"/>${tx(x,y,t,'lbl-big')}`;
+const win=(x,y,w,h,title)=>`<rect class="f-card" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/><rect class="st-ink" x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="none" stroke-width="2.5"/>${title?`<line class="st-ink" x1="${x}" y1="${y+24}" x2="${x+w}" y2="${y+24}" stroke-width="2"/>`+tx(x+10,y+12,title,'lbl','start'):''}`;
+const big=(x,y,t,ex='')=>`<text class="lbl-big" x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" style="font-size:30px" ${ex}>${t}</text>`;
+
+const SC={
+desk:()=>`<rect fill="#2f6fb5" width="320" height="180"/><rect fill="#1d4f8a" y="152" width="320" height="28"/>${fi('folder',44,40,46)}<text x="44" y="72" text-anchor="middle" font-size="11" fill="#fff">Lessons</text>${fi('docx',44,104,46,1)}<text x="44" y="136" text-anchor="middle" font-size="11" fill="#fff">Shortcut</text>${fi('zip',112,40,46)}<text x="112" y="72" text-anchor="middle" font-size="11" fill="#fff">Lessons.zip</text>${fi('bin',112,104,46)}<text x="112" y="136" text-anchor="middle" font-size="11" fill="#fff">Recycle Bin</text>${fi('start',120,166,22)}${fi('search',148,166,22)}${fi('explorer',176,166,22)}${fi('shield',204,166,22)}<text x="300" y="166" text-anchor="end" font-size="11" fill="#fff">3:26 AM</text>${nest(WinSim.ICONS.speaker,240,157,18)}${em(240,80,58,'🧑‍💻')}`,
+icons:()=>SKY+['jpg','mp3','docx','pdf','pptx'].map((t,i)=>fi(t,40+i*60,80,52)+tx(40+i*60,124,['Boat','Song','Story','Test','Lesson'][i])).join('')+tx(160,30,'Do all the files look the same?','lbl-big'),
+searchVs:()=>CARD+`<rect x="40" y="34" width="240" height="40" rx="20" fill="#eef3fb" stroke="#9aa0a8" stroke-width="2"/>${nest(WinSim.ICONS.search,56,42,24)}<text x="92" y="55" font-size="17" fill="#555" dominant-baseline="central">Search</text><rect x="40" y="108" width="240" height="40" fill="#2b579a"/><rect x="48" y="114" width="64" height="34" fill="#f3f3f3"/><text x="80" y="132" text-anchor="middle" font-size="15" fill="#2b579a" dominant-baseline="central">Home</text><text x="150" y="129" text-anchor="middle" font-size="15" fill="#fff" dominant-baseline="central">Insert</text><text x="222" y="129" text-anchor="middle" font-size="15" fill="#fff" dominant-baseline="central">Design</text>`,
+story:()=>SKY+`${em(90,96,70,'🧒')}${em(150,118,40,'✍️')}${ar(186,96,226,96)}${fi('docx',262,92,72)}${tx(160,26,'writing a story','lbl-big')}`,
+nameext:()=>SKY+`${fi('docx',160,62,64)}${big(160,118,'Grammar.docx')}${ar(110,152,96,140)}${tx(70,160,'?','lbl-big')}${ar(214,152,228,140)}${tx(250,160,'?','lbl-big')}`,
+nodot:()=>SKY+`${fi('docx',160,52,56)}<text class="lbl-big" x="160" y="122" text-anchor="middle" dominant-baseline="central" style="font-size:34px">Grammar <tspan class="lbl-ke" style="font-size:40px">?</tspan> docx</text>`,
+filerow:()=>SKY+`<rect class="f-card" x="20" y="64" width="280" height="52" rx="4"/><rect class="st-ink" x="20" y="64" width="280" height="52" rx="4" fill="none" stroke-width="3"/>${fi('pptx',46,90,34)}${tx(70,90,'Lesson 1-My desktop','lbl','start')}${tx(290,90,'9,610 KB','lbl','end')}${tx(160,34,'Look at the picture','lbl-big')}`,
+kb:()=>SKY+big(160,74,'1 KB = ? bytes')+tx(160,130,'KB = kilobyte'),
+scAB:()=>SKY+fi('app',100,84,72,1)+fi('app',220,84,72)+tx(100,148,'A','lbl-big')+tx(220,148,'B','lbl-big')+tx(160,22,'Which one is a shortcut?','lbl'),
+scBA:()=>SKY+fi('jpg',100,84,72)+fi('jpg',220,84,72,1)+tx(100,148,'A','lbl-big')+tx(220,148,'B','lbl-big')+tx(160,22,'Which one is a shortcut?','lbl'),
+drag:()=>SKY+`${fi('docx',70,84,64)}${em(96,112,34,'👆')}<path class="st-ink" d="M110,70 C160,30 200,40 228,70" fill="none" stroke-width="4" stroke-dasharray="8 8" marker-end="url(#ah-ink)"/>${em(260,98,72,'🖥️')}${tx(70,140,'Grammar.docx')}${tx(260,152,'desktop')}`,
+ways:()=>SKY+`${fi('search',70,80,64)}${fi('explorer',160,80,64)}${em(250,80,56,'🔎')}${tx(70,130,'Search button')}${tx(160,130,'File Explorer')}${tx(250,130,'filters')}${tx(160,26,'Find a lost file','lbl-big')}`,
+sizes:()=>SKY+`${fi('mp4',90,76,72)}${fi('txt',230,76,72)}${tx(90,132,'School trip.mp4','lbl')}${tx(90,154,'48 MB','lbl-big')}${tx(230,132,'Codes.txt','lbl')}${tx(230,154,'2 KB','lbl-big')}`,
+star:()=>SKY+`<rect class="f-card" x="80" y="20" width="160" height="40" rx="20"/><rect class="st-ink" x="80" y="20" width="160" height="40" rx="20" fill="none" stroke-width="2.5"/>${tx(160,40,'? ? ?','lbl-big')}${em(80,110,46,'⚾')}${em(160,110,46,'🏀')}${em(240,110,46,'🏈')}${tx(80,152,'baseball')}${tx(160,152,'basketball')}${tx(240,152,'football')}`,
+delSc:()=>SKY+`${fi('docx',90,80,72,1)}${em(90,80,70,'❌')}${fi('docx',230,80,72)}${tx(90,140,'Shortcut deleted','lbl')}${tx(230,140,'Grammar.docx','lbl')}${tx(230,162,'?','lbl-big')}`,
+transfer:()=>SKY+`${em(70,94,70,'📱')}${ar(112,94,186,94,'ke',5)}${em(250,94,80,'💻')}${em(150,64,34,'🖼️')}`,
+zipAB:()=>SKY+fi('zip',100,80,76)+fi('docx',220,80,76)+tx(100,128,'Activities')+tx(220,128,'Activities')+tx(100,156,'A','lbl-big')+tx(220,156,'B','lbl-big'),
+zipBA:()=>SKY+fi('docx',100,80,76)+fi('zip',220,80,76)+tx(100,128,'Project')+tx(220,128,'Project')+tx(100,156,'A','lbl-big')+tx(220,156,'B','lbl-big'),
+compress:()=>SKY+`${fi('folder',70,80,80)}${tx(70,132,'Lessons · 50 MB')}${ar(128,80,190,80,'ke',5)}${fi('zip',250,80,64)}${tx(250,132,'Lessons.zip · 10 MB')}`,
+extract:()=>SKY+`${fi('zip',80,90,80)}${ar(128,90,176,60,'ke',4)}${ar(128,90,176,120,'ke',4)}${fi('docx',210,54,44)}${fi('jpg',260,54,44)}${fi('pptx',210,124,44)}${fi('mp3',260,124,44)}${tx(80,146,'My courses.zip')}`,
+rename:()=>SKY+`${fi('docx',90,80,76)}${tx(90,134,'New Document')}${ar(146,80,190,80,'ke',5)}${fi('docx',240,80,76)}<rect class="f-card" x="186" y="120" width="108" height="26" rx="4"/><rect class="st-ke" x="186" y="120" width="108" height="26" rx="4" fill="none" stroke-width="2.5"/>${tx(240,133,'My story|','lbl')}`,
+keys:()=>SKY+`${key(60,120,'F1')}${key(124,120,'F2')}${key(188,120,'F5')}${key(260,120,'F10',64)}${fi('docx',160,46,52)}${tx(200,46,'→ new name?','lbl','start')}`,
+bin:()=>SKY+`${fi('binfull',160,78,96)}${tx(160,148,'Recycle Bin','lbl-big')}`,
+binOops:()=>SKY+`${em(70,90,64,'😱')}${tx(70,146,'Oops! I deleted my file.')}${ar(140,90,196,90)}${fi('binfull',250,84,84)}`,
+cutpaste:()=>SKY+`${fi('docx',50,90,56)}${em(124,90,46,'✂️')}${ar(152,90,190,90)}${em(226,90,46,'❓')}${fi('folder',284,90,56)}${tx(124,140,'Cut')}${tx(226,140,'?')}`,
+views:()=>CARD+`${tx(80,20,'A','lbl-big')}${fi('folder',50,64,44)}${fi('docx',110,64,44)}${fi('jpg',50,124,44)}${fi('zip',110,124,44)}<line class="st-ink" x1="160" y1="10" x2="160" y2="170" stroke-width="2"/>${tx(240,20,'B','lbl-big')}${['Name  Date  Size','Lessons  3/10  —','Grammar  4/10  12 KB','Boat  5/10  2 MB'].map((t,i)=>`${i?fi(['folder','docx','jpg'][i-1],178,46+i*30,20):''}<text class="lbl" x="${i?192:172}" y="${46+i*30}" dominant-baseline="central" style="font-size:12px${i?'':';font-weight:700'}">${t}</text>`).join('')}`,
+pics:()=>CARD+[0,1,2].map(i=>`<rect x="${20+i*100}" y="40" width="80" height="80" rx="6" fill="#7cc7f2"/>${em(60+i*100,80,40,['🐶','🌴','🚲'][i])}`).join('')+tx(160,150,'Holiday photos: see each picture'),
+hw:()=>SKY+`${em(60,80,54,'🖥️')}${em(140,80,54,'⌨️')}${em(220,80,54,'🖱️')}${em(286,80,44,'🖨️')}${tx(160,140,'parts you can see and touch','lbl-big')}`,
+scratch:()=>SKY+`${fi('app',160,76,84)}${tx(160,142,'Scratch','lbl-big')}`,
+clock:()=>`<rect class="f-sky" width="320" height="180"/><rect fill="#e9edf3" y="120" width="320" height="60"/>${nest(WinSim.ICONS.wifi,150,138,22)}${nest(WinSim.ICONS.speaker,180,138,22)}<text x="268" y="140" text-anchor="middle" font-size="16" fill="#222">3:26 AM</text><text x="268" y="160" text-anchor="middle" font-size="14" fill="#222">10/4/2026</text><rect x="226" y="126" width="84" height="44" rx="6" fill="none" stroke="#e8a91c" stroke-width="3"/>${em(150,60,56,'🖱️')}${tx(214,52,'?','lbl-big')}`,
+tz:()=>SKY+`${em(90,78,64,'🕙')}${tx(90,132,'Riyadh 10:00','lbl-big')}${em(230,78,64,'🕖')}${tx(230,132,'London 7:00','lbl-big')}`,
+taskbar:()=>`<rect class="f-sky" width="320" height="180"/><rect fill="#e9edf3" y="110" width="320" height="70"/>${nest(WinSim.ICONS.wifi,70,124,40)}${nest(WinSim.ICONS.speaker,140,124,40)}${nest(WinSim.ICONS.battery,210,124,40)}<text x="282" y="146" text-anchor="middle" font-size="16" fill="#222">3:26</text>${tx(90,190-130,'louder or quieter?','lbl-big','start')}${em(46,58,44,'🔊')}`,
+res:()=>CARD+`<rect x="22" y="30" width="126" height="84" rx="6" fill="#1d4f8a"/><text x="85" y="72" text-anchor="middle" dominant-baseline="central" font-size="36" fill="#fff">Hi!</text><rect x="172" y="30" width="126" height="84" rx="6" fill="#1d4f8a"/><text x="235" y="72" text-anchor="middle" dominant-baseline="central" font-size="13" fill="#fff">Hi! Hello! Welcome!</text>${tx(85,138,'1280 × 720','lbl-big')}${tx(235,138,'1920 × 1080','lbl-big')}${tx(85,162,'lower')}${tx(235,162,'higher')}`,
+bg:()=>`<rect fill="#2f6fb5" width="320" height="180"/>${em(160,80,80,'🏞️')}<rect fill="#1d4f8a" y="152" width="320" height="28"/>${tx(160,26,'a new desktop picture','lbl-light')}`,
+problem:()=>SKY+`${em(110,92,90,'💻')}${em(150,62,40,'❓')}${em(240,92,60,'🕵️')}${tx(160,160,'Find the problem and fix it','lbl-big')}`,
+strange:()=>SKY+`${em(110,90,90,'💻')}${em(150,58,40,'😵‍💫')}${tx(240,90,'acting','lbl-big')}${tx(240,116,'strangely','lbl-big')}`,
+wifi:()=>SKY+`${nest(WinSim.ICONS.wifioff,110,40,90)}${em(240,84,56,'🌐')}${em(262,108,30,'❌')}${tx(160,156,'No Internet!','lbl-big')}`,
+battery:()=>SKY+`${nest(WinSim.ICONS.battery,110,34,100)}${tx(160,150,'Battery: 5% — low!','lbl-big')}`,
+frozen:()=>SKY+`${win(50,30,220,110,'Paint (Not responding)')}${em(160,94,48,'⏳')}<text x="258" y="42" text-anchor="middle" dominant-baseline="central" font-size="16" class="lbl">✕</text>`,
+virus:()=>SKY+`${em(120,96,90,'💻')}${em(120,80,40,'🦠')}${em(230,96,70,'🛡️')}${tx(160,26,'malware & antivirus','lbl-big')}`,
+shield:()=>SKY+`${nest(WinSim.ICONS.shield,110,24,100)}${tx(160,148,'Windows Security','lbl-big')}`,
+scans:()=>CARD+`<rect x="30" y="40" width="120" height="44" rx="8" fill="#2b62c9"/><text x="90" y="62" text-anchor="middle" dominant-baseline="central" font-size="17" fill="#fff">Quick scan</text><rect x="170" y="40" width="120" height="44" rx="8" fill="#2b62c9"/><text x="230" y="62" text-anchor="middle" dominant-baseline="central" font-size="17" fill="#fff">Full scan</text>${em(90,124,36,'⚡')}${em(230,124,36,'🐢')}${tx(90,156,'fast')}${tx(230,156,'slow')}`,
+email:()=>SKY+`${win(40,26,240,128,'From: ??? (unknown)')}${tx(56,70,'You won a prize!!!','lbl','start')}${tx(56,98,'Open the file ⬇','lbl','start')}${em(96,128,30,'📎')}${tx(118,128,'prize.exe','lbl','start')}`,
+download:()=>SKY+`${em(90,88,70,'⬇️')}${tx(90,146,'free game?')}${em(230,88,70,'🤔')}${tx(160,24,'Download from the Internet','lbl-big')}`,
+update:()=>SKY+`${em(160,84,80,'🔄')}${tx(160,150,'new viruses every day','lbl-big')}`,
+help:()=>SKY+`${em(90,90,70,'🖨️')}${em(122,62,34,'❓')}${ar(150,90,196,90)}${em(240,90,60,'💁')}${tx(240,146,'Get Help')}${tx(90,146,'cannot print')}`,
+phone:()=>SKY+`${em(110,90,80,'📱')}${em(140,64,36,'🦠')}${tx(230,90,'phones too?','lbl-big')}`,
+/* Word */
+bLS:()=>CARD+wb('linespacing',160,80,1)+tx(160,140,'Home tab › Paragraph group'),
+bIn:()=>CARD+wb('indent-dec',122,80)+wb('indent-inc',198,80)+tx(160,140,'Home tab › Paragraph group'),
+bSh:()=>CARD+wb('shading',160,80,1)+tx(160,140,'Home tab › Paragraph group'),
+bBo:()=>CARD+wb('borders',160,80,1)+tx(160,140,'Home tab › Paragraph group'),
+bMk:()=>CARD+wb('marks',160,80)+tx(160,140,'Home tab › Paragraph group'),
+bAll:()=>CARD+wb('linespacing',64,62,1)+wb('shading',176,62,1)+wb('borders',272,62,1)+wb('indent-inc',100,140)+wb('marks',220,140),
+lsWords:()=>CARD+`<text class="lbl" x="20" y="44" style="font-size:18px">Dolphins are smart animals.</text><text class="lbl" x="20" y="72" style="font-size:18px">They live in the sea.</text>${ar(150,88,150,124,'ke',3)}${ar(150,124,150,88,'ke',3)}<text class="lbl" x="20" y="146" style="font-size:18px">Line spacing = ?</text>`,
+border1:()=>CARD+para(40,20,240,2,12)+`<rect class="st-ke" x="28" y="62" width="264" height="56" rx="2" fill="none" stroke-width="3"/>`+para(40,72,240,3,14)+para(40,140,240,2,12),
+borderAll:()=>CARD+`<rect class="st-ke" x="70" y="40" width="180" height="90" fill="none" stroke-width="4"/>`+para(86,58,148,4,16)+tx(160,156,'top · bottom · left · right'),
+shade:()=>CARD+para(40,20,240,2,12)+`<rect x="30" y="58" width="260" height="62" fill="#cfe0f5"/>`+para(40,68,240,3,16)+para(40,140,240,2,12),
+indent:()=>CARD+`<line class="st-ink" x1="40" y1="16" x2="40" y2="170" stroke-width="2" stroke-dasharray="5 5"/>${para(40,26,240,3,14)}${para(90,84,190,3,14)}${ar(46,98,84,98,'ke',3)}${tx(40,170,'margin','lbl','start')}`,
+firstLine:()=>CARD+`<line class="st-ink" x1="40" y1="20" x2="40" y2="130" stroke-width="2" stroke-dasharray="5 5"/>${para(40,40,240,4,16,50)}${ar(44,42,84,42,'ke',3)}${key(160,150,'?',120)}`,
+marks:()=>CARD+`<text class="lbl" x="160" y="64" text-anchor="middle" style="font-size:24px">Hello·my·friend¶</text><text class="lbl" x="160" y="112" text-anchor="middle" style="font-size:24px">→I·like·computers.¶</text>${tx(160,156,'Show/Hide ¶ is on')}`,
+marksPrint:()=>CARD+`<text class="lbl" x="110" y="80" text-anchor="middle" style="font-size:20px">Hello·friend¶</text>${ar(196,74,236,74)}${em(272,76,56,'🖨️')}${tx(160,140,'Are the marks printed?','lbl-big')}`,
+chars:()=>CARD+`${big(160,58,'Tiny')}${ar(160,84,160,112,'ke',3)}<text class="lbl-big" x="160" y="140" text-anchor="middle" dominant-baseline="central" style="font-size:30px;letter-spacing:12px">Tiny</text>`,
+condensed:()=>CARD+`<text class="lbl-big" x="160" y="58" text-anchor="middle" dominant-baseline="central" style="font-size:30px;letter-spacing:10px">Leo</text>${ar(160,84,160,112,'ke',3)}<text class="lbl-big" x="160" y="140" text-anchor="middle" dominant-baseline="central" style="font-size:30px;letter-spacing:-2px">Leo</text>`,
+paraSp:()=>CARD+para(40,24,240,3,13)+`<rect x="30" y="64" width="260" height="34" fill="#ffe08a" opacity=".7"/>`+para(40,106,240,3,13)+ar(296,68,296,96,'ke',3)+ar(296,96,296,68,'ke',3),
+ruler:()=>CARD+`<rect x="20" y="60" width="280" height="40" rx="4" fill="#fff" stroke="#9aa0a8" stroke-width="2"/>${[...Array(15)].map((_,i)=>`<line x1="${30+i*19}" y1="60" x2="${30+i*19}" y2="${i%2?72:80}" stroke="#444" stroke-width="1.5"/>`).join('')}${[1,2,3,4,5,6,7].map(i=>`<text x="${30+i*38}" y="92" text-anchor="middle" font-size="12" fill="#444">${i}</text>`).join('')}${tx(160,134,'the Ruler','lbl-big')}`,
+heading:()=>CARD+`<text class="lbl-big" x="40" y="48" style="font-size:24px">Amazing animals</text><line class="st-ke" x1="36" y1="64" x2="284" y2="64" stroke-width="4"/>${para(40,84,240,4,16)}`,
+};
+
+/* ---------- questions (c: right answer index, default 0; k: keep the order) ---------- */
+const YN=['Yes','No'],TF=['True','False'];
+const MC=[
+/* ===== Unit 1 · Lesson 1 · My desktop (CW1, HW1) ===== */
+{l:1,p:'size-tip',q:"A file's size is measured in…",o:['bytes','CM','KM'],x:'File size is measured in bytes (KB, MB). CM and KM measure length.'},
+{l:1,s:'icons',q:'All the files have the same icon.',o:YN,c:1,k:1,x:'No. Each type of file has its own icon: pictures, sounds, Word files…'},
+{l:1,s:'searchVs',q:'To look for a file, you should use the ___ box.',o:['Search','Home · Insert · Design'],x:'The Search box finds files and folders.'},
+{l:1,s:'story',q:'Which type of file is created when you write a story?',o:['Word file','Sound file'],x:'You write a story in Word, so it is a Word file (.docx).'},
+{l:1,s:'nameext',q:'A file extension tells the…',o:["file's type","file's icon"],x:'The extension (like .docx) tells the computer what type of file it is.'},
+{l:1,s:'kb',q:'One kilobyte (KB) equals ___ bytes.',o:['1,024','101'],k:1,x:'1 KB = 1,024 bytes.'},
+{l:1,s:'nodot',q:'There is always a ___ between the name and the extension.',o:['dot','slash','dash'],k:1,x:'Grammar.docx: there is a dot between the name and the extension.'},
+{l:1,s:'filerow',q:'Look at the picture. What is the file name?',o:['Lesson 1-My desktop','.ppt','9,610 KB'],x:'The name is the words next to the icon: Lesson 1-My desktop.'},
+{l:1,s:'filerow',q:'Look at the picture. What is the file extension?',o:['.ppt','.docx','.mp3'],x:'The orange icon is PowerPoint, so the extension is .ppt.'},
+{l:1,s:'filerow',q:'Look at the picture. What is the file size?',o:['9,610 KB','Lesson 1','.ppt'],x:'The number with KB is the size: 9,610 KB.'},
+{l:1,s:'story',q:'The file extension of a saved document is…',o:['.docx','.xlsx','.pdf'],k:1,x:'A Word document is saved as .docx.'},
+{l:1,s:'ways',q:'You have ___ ways to search for a file.',o:['many','one'],k:1,x:'You can use the Search button, File Explorer and search filters.'},
+{l:1,s:'drag',q:'You can create a shortcut by ___ the file to the desktop.',o:['dragging','copying','clicking'],x:'Drag the file to the desktop to make a shortcut.'},
+{l:1,s:'scAB',q:'Which one of these is a shortcut?',o:['A','B'],k:1,x:'A shortcut has a small arrow at the bottom-left corner of the icon.'},
+{l:1,s:'scBA',q:'Which one of these is a shortcut?',o:['A','B'],c:1,k:1,x:'Look for the small arrow at the bottom-left corner: picture B.'},
+{l:1,s:'transfer',q:'You cannot transfer a picture from your phone to the computer.',o:YN,c:1,k:1,x:'No. Connect the phone to the computer and you can transfer (move) pictures.'},
+{l:1,s:'ways',q:'To search for a file, click the ___ button on the Taskbar.',o:['Search','shortcut','Show more options'],x:'The Search button is on the Taskbar.'},
+{l:1,s:'desk',q:'A ___ is a link that lets you open a file quickly.',o:['shortcut','Search','Show more options'],x:'A shortcut is a link. It opens the file fast.'},
+{l:1,p:'create-shortcut',q:'Right-click the file. You should select ___ to create a shortcut.',o:['Show more options','Search','Rename'],x:'Right-click → Show more options → Create shortcut.'},
+{l:1,s:'delSc',q:'When you delete a shortcut, the original file is deleted too.',o:TF,c:1,k:1,x:'False. Only the link goes. The real file stays in its folder.'},
+{l:1,s:'sizes',q:'Which file is bigger?',o:['School trip.mp4','Codes.txt'],x:'Videos are big files. Text files are small.'},
+{l:1,s:'star',q:'You want to find baseball, basketball and football. What do you type?',o:['*ball','ball','b*'],x:'The star * means "any letters", so *ball finds every word that ends in ball.'},
+/* ===== Unit 1 · Lesson 2 · Files and folders (CW2, HW1) ===== */
+{l:2,s:'rename',q:'To change the name of a file, select the ___ option.',o:['rename','compress','extract'],x:'Rename = give a new name.'},
+{l:2,s:'extract',q:'If you need to open the files inside a compressed folder, you need to ___ them first.',o:['extract','compress','rename'],x:'Extract = take the files out of the zip folder.'},
+{l:2,s:'compress',q:'To reduce the size of a file, select…',o:['compress','extract','rename'],x:'Compress = make it smaller.'},
+{l:2,s:'binOops',q:'What should you do if you accidentally delete a file?',o:['Check the Recycle Bin to restore it','Create a shortcut'],x:'Deleted files go to the Recycle Bin. Restore puts them back.'},
+{l:2,p:'view-menu',q:'Which option helps you see the date and size of the folder?',o:['Details','Large icons','Small icons','List'],x:'The Details view shows the date, type and size.'},
+{l:2,s:'keys',q:'You should press ___ to rename a file.',o:['F2','F10'],k:1,x:'Click the file, press F2, type the new name, press Enter.'},
+{l:2,s:'zipAB',q:'Which one of these is a zipped (compressed) file?',o:['A','B'],k:1,x:'A zipped folder has a zipper on the icon.'},
+{l:2,s:'zipBA',q:'Which one of these is a zipped (compressed) file?',o:['A','B'],c:1,k:1,x:'Look for the zipper on the folder: picture B.'},
+{l:2,s:'compress',q:'In Windows, a compressed folder is also called a ___ folder.',o:['zipped','shortcut','hidden'],x:'Compressed = zipped. Look for the zipper on the icon.'},
+{l:2,s:'compress',q:'Why do we compress files?',o:['They take less space and are easy to send','To change their name','To delete them for ever'],x:'A compressed file is smaller, so it is easy to send by email or copy.'},
+{l:2,p:'extract-all',q:'To take ALL the files out of a zip folder, click…',o:['Extract All','Compress','Rename'],x:'Right-click the zip folder → Extract All.'},
+{l:2,s:'bin',q:'Where do deleted files go?',o:['To the Recycle Bin','To the desktop','To the Documents folder'],x:'They go to the Recycle Bin. They are not gone yet!'},
+{l:2,p:'restore',q:'"Restore" in the Recycle Bin means…',o:['Put the file back where it was','Delete the file for ever','Make a shortcut'],x:'Restore = put the file back in its old place.'},
+{l:2,p:'empty-bin',q:'After you click "Empty Recycle Bin", the files are…',o:['deleted for ever','back in their folders','in a zip folder'],x:'Empty Recycle Bin deletes the files for ever. Check the bin before you empty it!'},
+{l:2,s:'cutpaste',q:'To move a file: Cut ✂, then…',o:['Paste','Copy','Delete'],x:'Cut and Paste moves a file. You can also drag and drop it.'},
+{l:2,s:'pics',q:'Which view is best for a folder of photos?',o:['Extra large icons','Details','List'],x:'Big icons let you see each picture.'},
+{l:2,s:'views',q:'Which picture shows the Details view?',o:['B','A'],x:'Details shows the name, date and size in rows: picture B.'},
+{l:2,s:'compress',q:'Which files get much smaller when you compress them?',o:['Text files','JPG pictures'],x:'Text files get much smaller. JPG pictures almost do not change.'},
+/* ===== Unit 1 · Lesson 3 · Computer settings (CW2) ===== */
+{l:3,p:'clock-menu',q:'To get this box, you should press…',o:['Right click','Click'],x:'Right-click the clock to see "Adjust date and time".'},
+{l:3,p:'display',q:'You can adjust the screen resolution by clicking on ___ settings.',o:['Display','Volume','Date'],x:'Right-click the desktop → Display settings → Display resolution.'},
+{l:3,s:'scratch',q:'Scratch is an example of…',o:['Software','Hardware'],k:1,x:'Scratch is a program, so it is software.'},
+{l:3,s:'bg',q:'Which option allows you to change the background?',o:['Personalize','Security','Sound'],x:'Right-click the desktop → Personalize → Background.'},
+{l:3,s:'res',q:'A lower resolution shows text and pictures larger but with less detail.',o:YN,k:1,x:'Yes. Lower resolution: bigger things, less detail.'},
+{l:3,s:'res',q:'With a higher screen resolution, things on the screen look…',o:['smaller, with more detail','bigger, with less detail','the same'],x:'Higher resolution = more pixels, so things look smaller and sharper.'},
+{l:3,s:'hw',q:'The parts of a computer you can see and touch are called…',o:['hardware','software'],k:1,x:'Monitor, keyboard, mouse and printer are hardware.'},
+{l:3,p:'ram',q:'This RAM memory card is…',o:['hardware','software'],k:1,x:'It is a part inside the computer you can touch, so it is hardware.'},
+{l:3,p:'software',q:'Word, games and Windows are examples of ___. They tell the hardware what to do.',o:['software','hardware'],k:1,x:'Software = programs (instructions) for the hardware.'},
+{l:3,s:'taskbar',q:'To change the sound volume, right-click the ___ icon on the Taskbar.',o:['speaker','clock','Wi-Fi'],x:'Right-click the speaker → Open volume mixer.'},
+{l:3,s:'tz',q:'Riyadh is 10:00 and London is 7:00. London is 3 hours ___ than Riyadh.',o:['earlier','later'],k:1,x:'London time is 3 hours earlier. This is the time zone.'},
+{l:3,s:'tz',q:'In Date & time settings, the ___ shows the correct time for your country.',o:['time zone','background','volume'],x:'Set the time zone to your city, or turn on "Set time zone automatically".'},
+{l:3,p:'monitor',q:'The screen is made of tiny dots called…',o:['pixels','bytes','icons'],x:'HD, Full HD, 4K: more and more pixels.'},
+{l:3,p:'keep-revert',q:'You changed the resolution. To go back to the old one, click…',o:['Revert','Keep changes'],k:1,x:'Revert goes back. Keep changes keeps the new resolution.'},
+{l:3,s:'clock',q:'Click the clock on the Taskbar. What appears?',o:['A calendar','The volume mixer','The Recycle Bin'],x:'Click the clock: you see a calendar. Right-click it to change the time.'},
+/* ===== Unit 1 · Lesson 4 · Protect my computer ===== */
+{l:4,s:'problem',q:'"Troubleshoot" means…',o:['Find the problem and fix it','Delete all the files','Change the background'],x:'Troubleshoot = find a problem and fix it.'},
+{l:4,s:'strange',q:'The computer is acting strangely. A simple first step is to…',o:['restart it','rename it','delete it'],x:'Restarting fixes many problems.'},
+{l:4,s:'wifi',q:'There is no Internet. What should you check?',o:['That the Wi-Fi is on','The screen resolution','The desktop picture'],x:'No Internet? Check that the Wi-Fi is on.'},
+{l:4,s:'battery',q:'The battery is low. What should you do?',o:['Plug in the charger','Make the sound louder','Run a scan'],x:'Keep it plugged in until it is fully charged.'},
+{l:4,s:'frozen',q:'A program is not working (not responding). What can you do?',o:['Close it and open it again','Empty the Recycle Bin','Change the time zone'],x:'Close the program and open it again.'},
+{l:4,s:'help',q:'You have a question about a problem. Which app finds the answers?',o:['Get Help','Paint','Recycle Bin'],x:'Start → Get Help → type your problem.'},
+{l:4,s:'virus',q:'An ___ program finds and removes malware.',o:['antivirus','email','Paint'],x:'An antivirus finds and removes malware.'},
+{l:4,s:'virus',q:'Which of these is an example of malware?',o:['A computer virus','A file manager','A spreadsheet program'],x:'A virus is a bad program: malware.'},
+{l:4,s:'update',q:'Update your antivirus regularly to protect the computer from the latest…',o:['viruses','pictures','shortcuts'],x:'New viruses come every day. Updates teach the antivirus about them.'},
+{l:4,p:'scan-options',q:'Running a ___ checks your computer for harmful files or programs.',o:['scan','restart','shortcut'],x:'Windows Security → Virus & threat protection → Quick scan.'},
+{l:4,s:'scans',q:'Which scan checks EVERYTHING on the computer?',o:['Full scan','Quick scan'],k:1,x:'A full scan checks everything, so it is slow. A quick scan checks the important places.'},
+{l:4,s:'shield',q:'Windows Security is…',o:['an antivirus','a game','a Word document'],x:'Windows Security is a free antivirus in Windows.'},
+{l:4,s:'email',q:'Should you open an email and its attachment from someone you do not know?',o:['No, attachments can have viruses','Yes, always'],x:"Don't open emails from people you don't know."},
+{l:4,s:'download',q:'Only download files from ___ places.',o:['trusted','any','unknown'],x:'Download only from trusted places, and ask a grown-up first.'},
+{l:4,s:'phone',q:'Malware can harm phones too.',o:TF,k:1,x:'True. Viruses can harm computers and phones.'},
+{l:4,s:'shield',q:'What is the main purpose of antivirus software?',o:['To find and remove malware','To organize files and folders','To make the computer faster'],x:'An antivirus protects the computer from malware.'},
+/* ===== Unit 2 · Lesson 1 · Format a paragraph (HW2) ===== */
+{l:5,s:'lsWords',q:'Line spacing adjusts the space between words within a sentence.',o:TF,c:1,k:1,x:'False. Line spacing is the space between the lines.'},
+{l:5,s:'border1',q:'Borders can only go around the whole document.',o:TF,c:1,k:1,x:'False. A border can go around one paragraph or a few words too.'},
+{l:5,s:'bIn',q:'You should click the "Home" tab to indent the paragraph.',o:TF,k:1,x:'True. Home tab › Paragraph group › Increase Indent.'},
+{l:5,s:'borderAll',q:'You can add borders to all sides of the text.',o:TF,k:1,x:'True. Top, bottom, left, right, or Outside Borders all around.'},
+{l:5,s:'shade',q:'You can add shading to the whole paragraph.',o:TF,k:1,x:'True. Select the paragraph and choose a Shading colour.'},
+{l:5,s:'indent',q:'Indentation is the space before the text starts.',o:TF,k:1,x:'True. It is the space between the margin and the text.'},
+{l:5,s:'bLS',q:'What does this button do in MS Word?',o:['Adds space between lines','Adds borders to the text','Shades the text','Indents the text'],x:'This is Line and Paragraph Spacing.'},
+{l:5,s:'bIn',q:'What do these buttons do in MS Word?',o:['Indent the text','Add space between lines','Shade the text','Add borders to the text'],x:'Decrease Indent and Increase Indent move the text closer to or farther from the margin.'},
+{l:5,s:'bSh',q:'What does this button do in MS Word?',o:['Shades the text','Adds borders to the text','Adds space between lines','Indents the text'],x:'Shading puts a colour behind the text.'},
+{l:5,s:'bBo',q:'What does this button do in MS Word?',o:['Adds borders to the text','Shades the text','Adds space between lines','Indents the text'],x:'Borders puts lines around the text.'},
+{l:5,s:'bMk',q:'What does this button do in MS Word?',o:['Shows hidden marks like spaces and Enter','Adds borders to the text','Shades the text','Indents the text'],x:'Show/Hide ¶ shows where you pressed Space, Enter and Tab.'},
+{l:5,s:'indent',q:'"Increase Indent" moves the text…',o:['farther from the left margin','closer to the left margin','to the right side of the page'],x:'Increase Indent: farther from the margin. Decrease Indent: closer.'},
+{l:5,s:'indent',q:'Using the "Increase Indent" button, you can align text to the right.',o:TF,c:1,k:1,x:'False. Increase Indent moves the text away from the left margin. Align Right is another button.'},
+{l:5,s:'firstLine',q:'To indent only the first line, click at the beginning of the paragraph and press…',o:['Tab','Enter','Spacebar'],x:'Tab moves only the first line in.'},
+{l:5,s:'marks',q:'When Show/Hide ¶ is on, the mark ¶ means you pressed…',o:['Enter','Spacebar','Tab'],x:'¶ = Enter, · = Space, → = Tab.'},
+{l:5,s:'marks',q:'When Show/Hide ¶ is on, the dot · means you pressed…',o:['Spacebar','Enter','Tab'],x:'· = Space. Two dots side by side = an extra space.'},
+{l:5,s:'marksPrint',q:'The hidden marks (· ¶ →) are printed on paper.',o:TF,c:1,k:1,x:'False. They only help you see extra spaces and empty lines. They are not printed.'},
+{l:5,s:'chars',q:'Character spacing is the space between the…',o:['letters of a word','lines','paragraphs'],x:'Character spacing = space between the letters.'},
+{l:5,s:'condensed',q:'Which character spacing brings the letters closer together?',o:['Condensed','Expanded'],x:'Expanded = letters farther apart. Condensed = letters closer.'},
+{l:5,p:'char-spacing',q:'Where do you find character spacing?',o:['Font group › expand button › Advanced','View tab › Ruler','Insert tab › Pictures'],x:'Font group › expand button › Advanced › Spacing: Expanded or Condensed.'},
+{l:5,s:'paraSp',q:'Paragraph spacing is the space…',o:['above or below a paragraph','between the letters','between two words'],x:'Add Space Before Paragraph / Remove Space After Paragraph.'},
+{l:5,s:'ruler',q:'To show the ruler, click the ___ tab, then Ruler.',o:['View','Home','Insert'],x:'View tab › Show group › Ruler.'},
+{l:5,s:'shade',q:'Shading is…',o:['a colour behind the text','lines around the text','space between the lines'],x:'Shading = a colour behind a word, a sentence or a paragraph.'},
+{l:5,s:'heading',q:'Which border makes a heading stand out?',o:['Bottom border','No border','Left border'],x:'A bottom border under a heading makes it stand out.'},
+{l:5,s:'lsWords',q:'More space between the lines makes the text…',o:['easier to read','harder to read','smaller'],x:'Line spacing 1.5 makes text easier to read.'},
+];
+
+const MT=[
+{l:1,t:'Match each word to its meaning',p:[['📄','File','Keeps your work'],['🖼️','Icon','A picture that shows the kind of file'],['🔤','Extension','Tells the type of the file (.docx)'],['↗️','Shortcut','A link that opens a file fast']]},
+{l:1,t:'Match each file to its type',p:[['📝','Story.docx','Word document'],['🎵','Song.mp3','Sound file'],['🖼️','Boat.jpg','Picture'],['🎬','Trip.mp4','Video'],['📊','Lesson.pptx','Presentation']]},
+{l:2,t:'Match each word to its meaning',p:[['🗜️','Compress','Make a file smaller'],['📤','Extract','Take files out of a zip folder'],['✏️','Rename','Give a file a new name'],['♻️','Restore','Put a deleted file back']]},
+{l:3,t:'Match each setting to what it changes',p:[['🖥️','Display settings','Screen resolution'],['🎨','Personalize','Desktop background'],['🕒','Date & time','Clock and time zone'],['🔊','Volume mixer','Louder or quieter sound']]},
+{l:3,t:'Match each word to its meaning',p:[['🖱️','Hardware','Parts you can see and touch'],['💿','Software','Programs that tell the hardware what to do'],['🔵','Pixels','Tiny dots that make the screen'],['🌍','Time zone','The time in your country']]},
+{l:4,t:'Match each problem to its fix',p:[['😵‍💫','The computer acts strangely','Restart it'],['📶','No Internet','Check the Wi-Fi'],['🪫','The battery is low','Plug in the charger'],['⏳','A program is not responding','Close it and open it again']]},
+{l:4,t:'Match each word to its meaning',p:[['🦠','Malware','A bad program, like a virus'],['🛡️','Antivirus','Finds and removes malware'],['⚡','Quick scan','Checks the important places, fast'],['🐢','Full scan','Checks everything, slow']]},
+{l:5,t:'Show/Hide ¶: match each mark to its key',p:[['·','Dot','Spacebar'],['¶','Pilcrow','Enter'],['→','Arrow','Tab'],['↵','Bent arrow','Shift + Enter']]},
+{l:5,t:'Match each word to its meaning',p:[['↔️','Indentation','Space between the margin and the text'],['↕️','Line spacing','Space between the lines'],['🔠','Character spacing','Space between the letters'],['🎨','Shading','A colour behind the text'],['🔲','Borders','Lines around the text']]},
+];
+
+const LESSONS=[{n:0,l:'All lessons'},{n:1,l:'L1 · My desktop'},{n:2,l:'L2 · Files & folders'},{n:3,l:'L3 · Settings'},{n:4,l:'L4 · Protect'},{n:5,l:'Unit 2 · Paragraph'}];
+const PHOTO={1:'chapter-1/img/lesson-1',2:'chapter-1/img/lesson-2',3:'chapter-1/img/lesson-3',4:'chapter-1/img/lesson-4',5:'chapter-2/img/lesson-1'};
+const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
+const pool=()=>({mc:MC.filter(q=>!lesIdx||q.l===lesIdx),mt:MT.filter(q=>!lesIdx||q.l===lesIdx)});
+const LENS=[{mc:8,mt:2,l:'Quick · 10'},{mc:16,mt:4,l:'Normal · 20'},{mc:0,mt:0,l:'All'}];
+const store=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let lenIdx=1,lesIdx=0;
+try{const v=localStorage.getItem('cq-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
+try{const v=localStorage.getItem('cq-lesson');if(v!==null&&LESSONS[+v])lesIdx=+v}catch(e){}
+
+const S={list:[],i:0,score:0,max:0,miss:[]};
+const app=document.getElementById('app');
+const {esc,shuf,pick,star}=Kit;
+const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+const scene=(k,q)=>q&&q.p?`<img class="scene pic fit" src="../../computer/${PHOTO[q.l]}/${q.p}.jpg" alt="Picture for the question">`:`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${SC[k]()}</svg></div>`;
+
+function start(){
+  const L=LENS[lenIdx],P=pool();
+  const mc=shuf(P.mc).slice(0,L.mc||P.mc.length).map(q=>({type:'mc',...q}));
+  const mt=shuf(P.mt).slice(0,L.mt||P.mt.length).map(q=>({type:'mt',...q}));
+  let list=shuf(mc.concat(mt));
+  // avoid two matching rounds in a row when possible
+  for(let i=1;i<list.length;i++){if(list[i].type==='mt'&&list[i-1].type==='mt'){const j=list.findIndex((q,k)=>k>i&&q.type==='mc');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
+  S.list=list;S.i=0;S.score=0;S.miss=[];
+  S.max=list.reduce((t,q)=>t+(q.type==='mc'?1:q.p.length),0);
+  render();
+}
+
+function hud(){
+  const pct=Math.round(S.i/S.list.length*100);
+  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+}
+
+function render(){
+  if(!S.list.length) return home();
+  if(S.i>=S.list.length) return end();
+  const q=S.list[S.i];
+  q.type==='mc'?renderMC(q):renderMT(q);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function home(){
+  const P=pool(),n=P.mc.length+P.mt.length;
+  app.innerHTML=`<section class="card pop">
+    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 4 Computer · Final revision</span></div>
+    <h1 class="hero-title"><span class="p">Computer</span> <span class="k">Quest</span></h1>
+    ${scene('desk')}
+    <p class="howto">Ready? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
+    <div class="chips"><span class="chip pe">My desktop</span><span class="chip ke">Files &amp; folders</span><span class="chip">Computer settings</span><span class="chip ht">Protect my computer</span><span class="chip pe">Format a paragraph</span></div>
+    <div class="row"><span class="eyebrow">Which lessons?</span><div class="seg" role="group" aria-label="Lessons">${LESSONS.map((l,i)=>`<button type="button" id="les-${i}" data-les="${i}" aria-pressed="${i===lesIdx}">${l.l}</button>`).join('')}</div></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${i===LENS.length-1?'All · '+n:l.l}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
+  </section>`;
+  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;store('cq-len',lenIdx);home()});
+  app.querySelectorAll('[data-les]').forEach(b=>b.onclick=()=>{lesIdx=+b.dataset.les;store('cq-lesson',lesIdx);home()});
+  document.getElementById('startBtn').onclick=start;
+}
+
+function renderMC(q){
+  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
+  if(!q.k) opts=shuf(opts);
+  const long=opts.some(o=>o.t.length>34);
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mc">${q.o===TF||q.o===YN?'True or false':'Choose the answer'}</span>
+    ${scene(q.s,q)}
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="fbx"></div>
+  </section>`;
+  const btns=[...app.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.i];
+    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
+    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
+    document.getElementById('pts').textContent=S.score;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x)}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  });
+}
+
+function renderMT(q){
+  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
+  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
+  const pair={}; // leftIdx -> rightIdx
+  let sel=null, checked=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    <p class="qtext">${esc(q.t)}</p>
+    <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
+    <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
+  </section>`;
+  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
+  function draw(){
+    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
+      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
+    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
+      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
+    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
+    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
+      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
+      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    checked=true;let got=0;
+    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
+    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
+    const all=got===q.p.length;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right meaning under the word.'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  };
+}
+
+function end(){
+  const pct=Math.round(S.score/S.max*100);
+  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const msg=pct===100?'Perfect score! You are ready for the exam.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below and play again.';
+  app.innerHTML=`<section class="card pop">
+    <span class="eyebrow">Your score</span>
+    <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
+    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <h2>${pct}% · ${msg}</h2>
+    <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
+  </section>
+  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
+  document.getElementById('againBtn').onclick=start;
+  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+Quiz.watch(app);
+home();
+})();
+</script>
+</body></html>

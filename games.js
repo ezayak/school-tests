@@ -147,6 +147,20 @@ window.GAMES = [
     year: "2026–2027",
   },
   {
+    grade: 4,
+    term: 1,
+    period: "Final exam",
+    subject: "Computer",
+    title: "Computer Quest",
+    lesson: "Unit 1 · L1–L4 · Unit 2 · L1 Format a paragraph",
+    topics:
+      "Files, extensions & shortcuts, zip, rename, Recycle Bin, settings, hardware & software, antivirus, paragraph formatting",
+    path: "grade-4/term-1/final-term-1/computer-revision.html",
+    questions: 105,
+    year: "2026–2027",
+    // pictures and icons come from the Computer lessons (listed in the Computer entry's "also")
+  },
+  {
     grade: 3,
     period: "Subjects",
     subject: "English",
