@@ -1409,18 +1409,6 @@ body.popopen {
 [data-subject="English"] .q .say.big {
   line-height: 1.45;
 }
-/* a heading above a group of tiles (Grammar, Phonics, Vocabulary …) */
-.tgroup {
-  grid-column: 1 / -1;
-  margin: 8px 0 -4px;
-  font-size: 1.25rem;
-  color: var(--accent);
-  border-bottom: 2px dashed color-mix(in srgb, var(--accent) 45%, transparent);
-  padding-bottom: 2px;
-}
-.tgroup:first-child {
-  margin-top: 0;
-}
 /* tap the right words in a sentence */
 .tapbox {
   width: 100%;
@@ -1590,4 +1578,63 @@ body.popopen {
   font-size: clamp(1rem, 1.8vw, 1.15rem);
   min-height: 52px;
   padding: 6px 12px;
+}
+/* English: section buttons above the tiles (one section at a time) */
+.secs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.sec {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  padding: 6px 8px 6px 14px;
+  font-family: var(--display);
+  font-size: 1.1rem;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.sec .n {
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--accent) 15%, var(--card));
+  color: var(--accent);
+}
+.sec[aria-pressed="true"] {
+  background: var(--accent);
+  color: #fff;
+}
+.sec[aria-pressed="true"] .n {
+  background: #fff;
+  color: var(--accent);
+}
+.sec.done .n {
+  background: var(--good);
+  color: #fff;
+}
+/* sentence blocks on a small tile: smaller, so they fit */
+.thumb .vis-blk {
+  gap: 4px;
+  padding: 4px;
+}
+.thumb .blk {
+  font-size: 0.7rem;
+  padding: 1px 5px;
+  border-width: 1.5px;
+  border-radius: 6px;
+}
+.thumb .blk-title,
+.thumb .blk-legend,
+.thumb .vis-blk small {
+  display: none;
 }

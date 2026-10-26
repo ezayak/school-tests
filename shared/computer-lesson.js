@@ -511,24 +511,41 @@
   ];
   const tileHTML = (m, data) =>
     `<button type="button" class="mode${m.done ? " done" : ""}" ${data}>${m.pic ? pic(m.pic, "thumb" + (m.pic.vis ? " vis" : "")) : m.img ? pic({ img: m.img }, "thumb") : `<span class="mi-ic">${m.ic || "💻"}</span>`}<b>${esc(m.t)}</b><small>${esc(m.en || "")}</small>${m.done ? '<span class="tick" aria-label="done">✓</span>' : ""}</button>`;
-  // tiles with a group name (g) get a heading where a new group starts (English: Grammar, Phonics, Vocabulary …)
-  const grouped = (list, one) => {
-    let g = null;
-    return list
-      .map((x, i) => {
-        const h = x.g && x.g !== g ? `<h3 class="tgroup">${esc(x.g)}</h3>` : "";
-        g = x.g || g;
-        return h + one(x, i);
-      })
-      .join("");
-  };
+  // tiles with a group name (g): {g, done, html}; a tile without g is shown in every section
+  const grouped = (list, one, isDone) =>
+    list.map((x, i) => ({
+      g: x.g,
+      done: isDone ? isDone(x) : undefined,
+      html: one(x, i),
+    }));
+  // English: a row of section buttons (Stories, Vocabulary, Grammar …) and only the tiles of the chosen section.
+  // The chosen section is remembered for each tab; a section gets a ✓ when all its tiles are done.
+  function sections(items) {
+    const gs = [...new Set(items.map((x) => x.g).filter(Boolean))];
+    if (!gs.length)
+      return `<div class="modes">${items.map((x) => x.html).join("")}</div>`;
+    let cur = store.get(`cs-sec-${LK}-${tab}`, gs[0]);
+    if (!gs.includes(cur)) cur = gs[0];
+    const chip = (g, k) => {
+      const of = items.filter((x) => x.g === g);
+      const tracked = of.filter((x) => x.done !== undefined);
+      const all = tracked.length && tracked.every((x) => x.done);
+      return `<button type="button" class="sec${all ? " done" : ""}" data-sec="${k}" aria-pressed="${g === cur}">${esc(g)}<span class="n">${all ? "✓" : of.length}</span></button>`;
+    };
+    return `<div class="secs" role="group" aria-label="Lesson section">${gs.map(chip).join("")}</div>
+      <div class="modes">${items
+        .filter((x) => !x.g || x.g === cur)
+        .map((x) => x.html)
+        .join("")}</div>`;
+  }
   function home() {
     leave();
-    let tiles = "";
+    let tiles = "",
+      items = null; // grouped tiles (English)
     if (tab === "learn" && L.decks) {
       // English: the stories (their own pages), then card decks (words, grammar, phonics, idioms …)
-      tiles =
-        grouped(L.stories || [], (st, i) =>
+      items = [
+        ...grouped(L.stories || [], (st, i) =>
           tileHTML(
             {
               t: st.t,
@@ -538,19 +555,23 @@
             },
             `data-st="${i}" id="st-${i}"`,
           ),
-        ) +
-        grouped(L.decks, (d, i) =>
-          tileHTML(
-            {
-              t: d.t,
-              en: d.en || `${d.cards.length} cards`,
-              pic: d.cover,
-              ic: d.ic,
-              done: done("d-" + d.k),
-            },
-            `data-d="${i}" id="d-${d.k}"`,
-          ),
-        );
+        ),
+        ...grouped(
+          L.decks,
+          (d, i) =>
+            tileHTML(
+              {
+                t: d.t,
+                en: d.en || `${d.cards.length} cards`,
+                pic: d.cover,
+                ic: d.ic,
+                done: done("d-" + d.k),
+              },
+              `data-d="${i}" id="d-${d.k}"`,
+            ),
+          (d) => done("d-" + d.k),
+        ),
+      ];
     } else if (tab === "learn") {
       tiles =
         // with a key-word list (Science) the first tile is the list, not a copy of the first card;
@@ -612,31 +633,39 @@
           )
           .join("");
     } else if (tab === "play") {
-      tiles =
-        (W && HOW.length
-          ? tileHTML(
-              { t: SIM.name, en: SIM.about, ic: SIM.ic },
-              'data-m="mini" id="m-mini"',
-            )
-          : "") +
-        grouped(L.games, (g, i) =>
+      items = [
+        ...(W && HOW.length
+          ? [
+              {
+                html: tileHTML(
+                  { t: SIM.name, en: SIM.about, ic: SIM.ic },
+                  'data-m="mini" id="m-mini"',
+                ),
+              },
+            ]
+          : []),
+        ...grouped(L.games, (g, i) =>
           tileHTML(
             { t: g.t, en: g.en, ic: g.ic, pic: g.cover },
             `data-g="${i}" id="g-${g.k}"`,
           ),
-        );
-    } else {
-      tiles = grouped(L.exercises, (x, i) =>
-        tileHTML(
-          {
-            t: x.t,
-            en: x.en,
-            ic: x.ic,
-            pic: x.cover,
-            done: done("x-" + x.k),
-          },
-          `data-x="${i}" id="x-${x.k}"`,
         ),
+      ];
+    } else {
+      items = grouped(
+        L.exercises,
+        (x, i) =>
+          tileHTML(
+            {
+              t: x.t,
+              en: x.en,
+              ic: x.ic,
+              pic: x.cover,
+              done: done("x-" + x.k),
+            },
+            `data-x="${i}" id="x-${x.k}"`,
+          ),
+        (x) => done("x-" + x.k),
       );
     }
     app.innerHTML = `<section class="card pop">
@@ -649,9 +678,17 @@
     </div>
     ${TTS ? "" : '<p class="note">This browser cannot speak. Open the lesson in Chrome or Safari to hear the words.</p>'}
     <div class="tabbox"><div class="ftabs" role="group" aria-label="Lesson part">${TABS.map((t) => `<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span>${esc(t.t)}<span class="sub">${esc(t.en)}</span></button>`).join("")}</div>
-      <div class="panel" id="panel"><div class="modes">${tiles}</div></div></div>
+      <div class="panel" id="panel">${items ? sections(items) : `<div class="modes">${tiles}</div>`}</div></div>
   </section>`;
     document.getElementById("coverBtn").onclick = () => questionView();
+    app.querySelectorAll("[data-sec]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          const gs = [...new Set(items.map((x) => x.g).filter(Boolean))];
+          store.set(`cs-sec-${LK}-${tab}`, gs[+b.dataset.sec]);
+          home();
+        }),
+    );
     app.querySelectorAll("[data-tab]").forEach(
       (b) =>
         (b.onclick = () => {

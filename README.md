@@ -196,14 +196,16 @@ They use the **Computer lesson engine** (`shared/computer-lesson.js`) with `<bod
 The page loads `shared/common.js` first (animated pictures), then its `unitN-weekN.js`, then the engine. Same three tabs as the other subjects:
 - **Learn** – the stories of the week (tiles that open the story pages, `stories`), then card decks (`decks`): vocabulary, grammar, phonics, idioms, suffixes
 - **Play** – the `games`
-- **Exercises** – the booklet pages, grouped by topic (Grammar · …, Phonics · …, Vocabulary · …): a heading above each group
+- **Exercises** – the booklet pages, grouped by topic (Grammar · …, Phonics · …, Vocabulary · …)
+
+Each tab shows a row of **section buttons** (one per group, with the number of tiles, ✓ when all are done) and only the tiles of the chosen section; the choice is remembered per tab.
 
 Booklet texts are **story pages** (`story-*.html/.js`, the story engine) with `lesson: {path, label}` (a link back to the lesson); questions use the school's model answers when there are some.
 
 `unitN-weekN.js` is a normal lesson file (see Computer lessons) plus:
 - `hub: "index.html"` (the English page), `imgDir: "img/unit1-week3"` (the pictures folder)
 - `stories: [{t, en, path, cover: {src}, g}]`, `decks: [{k, g, t, en, ic, cover: {vis | src}, cards: [{t, lines, vis | img | src}]}]`, `ideas: []`
-- `g` on stories, decks, games and exercises: the group heading for the tiles
+- `g` on stories, decks, games and exercises: the section the tile belongs to (its section button)
 - a picture can be `src: "img/talent-show/girls.jpg"` (any picture of the folder), `emoji: "🐱🐶"`, or a drawing:
   - `vis: {kind: "scene", bg, items, cap}` – an **animated picture made of emoji** (`Kit.scene` in `shared/common.js`, styles in `shared/lesson.css`; tap it to start again).
     `bg`: sky, night, room, grass, stage, school, rain, plain. Items: `{e: "🐱"}` or a word bubble `{t: "Yes!", c: "good" | "bad" | "plain" | "light"}`,
