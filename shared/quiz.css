@@ -59,6 +59,13 @@
   height: 100%;
   display: block;
 }
+.scene.pic {
+  object-fit: contain;
+  padding: 0;
+} /* a photo as the picture: show the whole picture */
+.scene.pic.fit {
+  background: #fff;
+} /* white margins (maps, screenshots) */
 .qtype {
   display: inline-block;
   font-weight: 700;
