@@ -4,11 +4,14 @@
 // Made for a child who learns best from pictures and sound: short sentences, key words in colour,
 // every question can be heard (🔊), wrong answers can be tried again, and the computer steps are shown
 // on a pretend Windows screen (▶ Show me) before the child does them (✋ Your turn).
+// English lessons (<body data-subject="English">) also light up each word as it is read, like the stories (shared/story.js);
+// their pages load shared/common.js for the animated pictures (Kit.scene, Kit.idiom, Kit.blocks).
 (function () {
   "use strict";
   const app = document.getElementById("app");
   const view = document.body.dataset.view || "lesson";
   const SUBJ = document.body.dataset.subject || "Computer"; // Science pages reuse this engine
+  const RA = SUBJ === "English"; // read along: the word being read lights up
   const esc = (s) =>
     String(s ?? "").replace(
       /[&<>"]/g,
@@ -65,7 +68,7 @@
 
   /* ================= lesson ================= */
   const L = window.LESSON;
-  const IMG = (n) => `img/lesson-${L.n}/${n}.jpg`;
+  const IMG = (n) => `${L.imgDir || "img/lesson-" + L.n}/${n}.jpg`; // English lessons name their picture folder
   const LK = L.key || L.n; // saved ticks and tab; Science lessons set a key so topics don't share lesson numbers
   const W = window.WinSim || window.WordSim;
   // the pretend program's name for the free-play tile: Mini Windows unless the program says otherwise
@@ -107,18 +110,21 @@
       .replace(/\s+/g, " ")
       .trim();
   let sayToken = 0,
-    sayTimer = 0;
+    sayTimer = 0,
+    readRun = 0; // a new read-along (or hush) makes the old one give up
   const keep = [];
   function hush() {
     sayToken++;
+    readRun++;
     clearTimeout(sayTimer);
+    unmark();
     if (TTS)
       try {
         speechSynthesis.cancel();
       } catch (e) {}
   }
   // returns a promise that ends when the sentence has been said (or could not be said)
-  function say(text, forceSlow) {
+  function say(text, forceSlow, onWord) {
     return new Promise((res) => {
       if (!TTS || !text) {
         res();
@@ -147,6 +153,11 @@
             };
             u.onend = f;
             u.onerror = f;
+            if (onWord)
+              u.onboundary = (e) => {
+                if (my === sayToken && (!e.name || e.name === "word"))
+                  onWord(e.charIndex);
+              };
             setTimeout(f, 1500 + speakable(text).length * 110); // some browsers never say "end"
             keep.push(u);
             if (keep.length > 6) keep.shift();
@@ -166,6 +177,78 @@
   function autoSay(text) {
     if (auto && text) setTimeout(() => say(text), 350);
   }
+
+  /* ---------- read along (English): every word is a span, the one being said lights up ---------- */
+  // "[key] words" → word spans (key words keep their colour); other subjects keep kw()
+  const rwHTML = (t) =>
+    String(t ?? "")
+      .split(/(\[[^\]]+\])/)
+      .map((seg) => {
+        const k = /^\[.*\]$/.test(seg);
+        return (k ? seg.slice(1, -1) : seg)
+          .split(/(\s+)/)
+          .map((w) =>
+            !w
+              ? ""
+              : /^\s+$/.test(w)
+                ? " "
+                : `<span class="rw${k ? " kw" : ""}">${esc(w)}</span>`,
+          )
+          .join("");
+      })
+      .join("");
+  const tx = (t) => (RA ? rwHTML(t) : kw(t));
+  function unmark() {
+    document
+      .querySelectorAll(".rw.on, .reading")
+      .forEach((e) => e.classList.remove("on", "reading"));
+  }
+  // reads the words of el (or of several elements, one after the other); falls back to the text
+  async function readEl(el, text, slowNow) {
+    const els = (Array.isArray(el) ? el : [el]).filter(Boolean);
+    if (!RA || !els.length) return say(text, slowNow);
+    hush();
+    const my = readRun;
+    for (const e of els) {
+      if (my !== readRun) return;
+      const ws = [...e.querySelectorAll(".rw")];
+      if (!ws.length) {
+        await say(e.textContent, slowNow);
+        continue;
+      }
+      let all = "";
+      const at = ws.map((w) => {
+        const i = all.length;
+        all += speakable(w.textContent) + " ";
+        return i;
+      });
+      e.classList.add("reading");
+      e.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      await say(all, slowNow, (ci) => {
+        let k = 0;
+        while (k + 1 < at.length && at[k + 1] <= ci) k++;
+        ws.forEach((w, j) => w.classList.toggle("on", j === k));
+      });
+      if (my !== readRun) return;
+      ws.forEach((w) => w.classList.remove("on"));
+      e.classList.remove("reading");
+    }
+  }
+  const qEl = () => document.getElementById("qt");
+  // the question: read along in English, else just said
+  const sayQ = (t) => (RA && qEl() ? readEl(qEl()) : say(t));
+  function autoSayQ(t) {
+    if (auto && t) setTimeout(() => sayQ(t), 350);
+  }
+  // English: tap a word of a question or a sentence to hear it slowly
+  if (RA)
+    document.addEventListener("click", (e) => {
+      const w = e.target.closest && e.target.closest(".rw");
+      if (!w || w.closest("button")) return;
+      hush();
+      w.classList.add("on");
+      say(w.textContent, true).then(() => w.classList.remove("on"));
+    });
 
   /* ---------- pictures: book images and drawings ---------- */
   const ic = (type, size) =>
@@ -240,11 +323,20 @@
         return `<div class="vis-strip">${v.items.map((it) => `<div class="vs">${it.img ? `<img src="${IMG(it.img)}" alt="">` : `<span class="be">${esc(it.e || "")}</span>`}<span>${esc(it.label)}</span></div>`).join("")}</div>`;
       case "filerow":
         return `<div class="vis-frow">${ic(v.type, 34)}<span>${esc(v.name)}</span><b>${esc(v.size)}</b></div>`;
+      // English: animated emoji pictures and sentence blocks (shared/common.js)
+      case "scene":
+        return window.Kit ? Kit.scene(v) : "";
+      case "idiom":
+        return window.Kit ? Kit.idiom(v) : "";
+      case "blocks":
+        return window.Kit ? Kit.blocks(v) : "";
     }
     return "";
   }
   // a picture box: book image, drawing, or emoji
   function pic(it, cls = "pic card") {
+    if (it && it.src)
+      return `<div class="${cls}"><img src="${esc(it.src)}" alt="" draggable="false"></div>`;
     if (it && it.img)
       return `<div class="${cls}"><img src="${IMG(it.img)}" alt="" draggable="false"></div>`;
     if (it && it.vis) return `<div class="${cls} vis">${visHTML(it.vis)}</div>`;
@@ -252,7 +344,8 @@
       return `<div class="${cls} vis">${ic(it.icon, 96)}</div>`;
     return `<div class="${cls} emo"><span>${esc((it && it.emoji) || "💻")}</span></div>`;
   }
-  const hasPic = (it) => it && (it.img || it.vis || it.icon || it.emoji);
+  const hasPic = (it) =>
+    it && (it.src || it.img || it.vis || it.icon || it.emoji);
 
   /* ---------- shared bits ---------- */
   const bolt =
@@ -417,11 +510,48 @@
     { k: "ex", ic: "✏️", t: "Exercises", en: "School exercises" },
   ];
   const tileHTML = (m, data) =>
-    `<button type="button" class="mode${m.done ? " done" : ""}" ${data}>${m.img ? pic({ img: m.img }, "thumb") : `<span class="mi-ic">${m.ic || "💻"}</span>`}<b>${esc(m.t)}</b><small>${esc(m.en || "")}</small>${m.done ? '<span class="tick" aria-label="done">✓</span>' : ""}</button>`;
+    `<button type="button" class="mode${m.done ? " done" : ""}" ${data}>${m.pic ? pic(m.pic, "thumb" + (m.pic.vis ? " vis" : "")) : m.img ? pic({ img: m.img }, "thumb") : `<span class="mi-ic">${m.ic || "💻"}</span>`}<b>${esc(m.t)}</b><small>${esc(m.en || "")}</small>${m.done ? '<span class="tick" aria-label="done">✓</span>' : ""}</button>`;
+  // tiles with a group name (g) get a heading where a new group starts (English: Grammar, Phonics, Vocabulary …)
+  const grouped = (list, one) => {
+    let g = null;
+    return list
+      .map((x, i) => {
+        const h = x.g && x.g !== g ? `<h3 class="tgroup">${esc(x.g)}</h3>` : "";
+        g = x.g || g;
+        return h + one(x, i);
+      })
+      .join("");
+  };
   function home() {
     leave();
     let tiles = "";
-    if (tab === "learn") {
+    if (tab === "learn" && L.decks) {
+      // English: the stories (their own pages), then card decks (words, grammar, phonics, idioms …)
+      tiles =
+        grouped(L.stories || [], (st, i) =>
+          tileHTML(
+            {
+              t: st.t,
+              en: st.en || "Story · read along",
+              pic: st.cover,
+              ic: "📖",
+            },
+            `data-st="${i}" id="st-${i}"`,
+          ),
+        ) +
+        grouped(L.decks, (d, i) =>
+          tileHTML(
+            {
+              t: d.t,
+              en: d.en || `${d.cards.length} cards`,
+              pic: d.cover,
+              ic: d.ic,
+              done: done("d-" + d.k),
+            },
+            `data-d="${i}" id="d-${d.k}"`,
+          ),
+        );
+    } else if (tab === "learn") {
       tiles =
         // with a key-word list (Science) the first tile is the list, not a copy of the first card;
         // a lesson with how-to's keeps "Big ideas" too, its cards have no tiles of their own
@@ -489,26 +619,28 @@
               'data-m="mini" id="m-mini"',
             )
           : "") +
-        L.games
-          .map((g, i) =>
-            tileHTML(
-              { t: g.t, en: g.en, ic: g.ic },
-              `data-g="${i}" id="g-${g.k}"`,
-            ),
-          )
-          .join("");
-    } else {
-      tiles = L.exercises
-        .map((x, i) =>
+        grouped(L.games, (g, i) =>
           tileHTML(
-            { t: x.t, en: x.en, ic: x.ic, done: done("x-" + x.k) },
-            `data-x="${i}" id="x-${x.k}"`,
+            { t: g.t, en: g.en, ic: g.ic, pic: g.cover },
+            `data-g="${i}" id="g-${g.k}"`,
           ),
-        )
-        .join("");
+        );
+    } else {
+      tiles = grouped(L.exercises, (x, i) =>
+        tileHTML(
+          {
+            t: x.t,
+            en: x.en,
+            ic: x.ic,
+            pic: x.cover,
+            done: done("x-" + x.k),
+          },
+          `data-x="${i}" id="x-${x.k}"`,
+        ),
+      );
     }
     app.innerHTML = `<section class="card pop">
-    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="../index.html">${esc(SUBJ)}</a></div></div>
+    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="${esc(L.hub || "../index.html")}">${esc(SUBJ)}</a></div></div>
     <div class="les-head"><button type="button" class="les-cov" id="coverBtn" aria-label="The lesson question"><img src="${IMG(L.cover)}" alt=""></button>
       <div><span class="eyebrow">Grade ${esc(L.grade)} · ${esc(L.unit)} · ${esc(L.book)}</span><h1 class="les-title">${esc(L.title)}</h1><div class="les-sub">${kw(L.question.q)}</div></div></div>
     <div class="opts-row">
@@ -562,6 +694,16 @@
       .querySelectorAll("[data-i]")
       .forEach((b) => (b.onclick = () => ideas(+b.dataset.i)));
     app
+      .querySelectorAll("[data-d]")
+      .forEach((b) => (b.onclick = () => ideas(0, +b.dataset.d)));
+    app.querySelectorAll("[data-st]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          leave();
+          location.href = L.stories[+b.dataset.st].path;
+        }),
+    );
+    app
       .querySelectorAll("[data-v]")
       .forEach((b) => (b.onclick = () => playVideo(L.videos[+b.dataset.v])));
     app
@@ -570,7 +712,9 @@
     app
       .querySelectorAll("[data-x]")
       .forEach((b) => (b.onclick = () => startExercise(+b.dataset.x)));
-    document.title = `${L.title} · ${SUBJ} Lesson ${L.n}`;
+    document.title = RA
+      ? `${L.title} · ${L.unit}`
+      : `${L.title} · ${SUBJ} Lesson ${L.n}`;
   }
 
   /* ================= LEARN: the lesson question ================= */
@@ -594,7 +738,8 @@
         `<div class="fb ok"><b>${kw(Q.a)}</b></div>`;
       say(Q.a);
     };
-    document.getElementById("goIdeas").onclick = () => ideas(0);
+    document.getElementById("goIdeas").onclick = () =>
+      ideas(0, L.decks ? 0 : undefined);
     autoSay(Q.q);
   }
 
@@ -626,21 +771,24 @@
     top0();
   }
 
-  /* ================= LEARN: big ideas (picture cards) ================= */
-  function ideas(i) {
+  /* ================= LEARN: big ideas (picture cards); English: a deck of cards (dk) ================= */
+  function ideas(i, dk) {
     leave();
     backTo = openTab("learn");
-    const n = L.ideas.length;
+    const D = dk != null ? L.decks[dk] : null;
+    const cards = D ? D.cards : L.ideas;
+    const n = cards.length;
     i = (i + n) % n;
-    const c = L.ideas[i];
+    const c = cards[i];
+    if (D && i === n - 1) setDone("d-" + D.k); // the whole deck has been seen
     const text = c.t + ". " + c.lines.map(plain).join(" ");
     const hi = c.howto ? HOW.findIndex((h) => h.k === c.howto) : -1;
-    app.innerHTML = `${titleBar("Big ideas", `<span class="count">${i + 1} / ${n}</span>`)}<section class="card pop fc">
+    app.innerHTML = `${titleBar(D ? D.t : "Big ideas", `<span class="count">${i + 1} / ${n}</span>`)}<section class="card pop fc">
     ${split(
       `${pic(c)}
-    <div class="dotsnav">${L.ideas.map((_, k) => `<button type="button" class="dot${k === i ? " on" : ""}" data-go="${k}" aria-label="Card ${k + 1}"></button>`).join("")}</div>`,
-      `<h2 class="idea-t">${esc(c.t)}</h2>
-    <div class="idea-lines">${c.lines.map((l, k) => `<button type="button" class="iline" data-l="${k}"><span class="num">${k + 1}</span><span>${kw(l)}</span><span class="spk">🔊</span></button>`).join("")}</div>
+    <div class="dotsnav">${cards.map((_, k) => `<button type="button" class="dot${k === i ? " on" : ""}" data-go="${k}" aria-label="Card ${k + 1}"></button>`).join("")}</div>`,
+      `<h2 class="idea-t" id="it">${RA ? rwHTML(c.t) : esc(c.t)}</h2>
+    <div class="idea-lines">${c.lines.map((l, k) => `<button type="button" class="iline" data-l="${k}"><span class="num">${k + 1}</span><span class="lt">${tx(l)}</span><span class="spk">🔊</span></button>`).join("")}</div>
     ${c.tip ? `<div class="tipb">${pic({ img: c.tip.img }, "pic face")}<span>${kw(c.tip.say)}</span></div>` : ""}
     ${sayBtns()}
     ${hi >= 0 ? `<div class="row center"><button type="button" class="btn ghost" id="tryIt">${SIM.ic} Try it: ${esc(HOW[hi].t)}</button></div>` : ""}
@@ -650,7 +798,20 @@
     )}
   </section>`;
     bindHome();
-    bindSay(app, text);
+    // English: the title and the lines are read one after the other, word by word
+    const parts = () => [
+      document.getElementById("it"),
+      ...app.querySelectorAll(".iline .lt"),
+    ];
+    if (RA)
+      app
+        .querySelectorAll("[data-sayall], [data-sayslow]")
+        .forEach(
+          (b) =>
+            (b.onclick = () =>
+              readEl(parts(), text, b.hasAttribute("data-sayslow"))),
+        );
+    else bindSay(app, text);
     app.querySelectorAll("[data-l]").forEach(
       (b) =>
         (b.onclick = () => {
@@ -659,19 +820,24 @@
             .querySelectorAll(".iline")
             .forEach((x) => x.classList.remove("on"));
           b.classList.add("on");
-          say(c.lines[+b.dataset.l]).then(() => b.classList.remove("on"));
+          (RA
+            ? readEl(b.querySelector(".lt"))
+            : say(c.lines[+b.dataset.l])
+          ).then(() => b.classList.remove("on"));
         }),
     );
     app
       .querySelectorAll("[data-go]")
-      .forEach((b) => (b.onclick = () => ideas(+b.dataset.go)));
-    document.getElementById("prevBtn").onclick = () => ideas(i - 1);
-    document.getElementById("nextBtn").onclick = () => ideas(i + 1);
+      .forEach((b) => (b.onclick = () => ideas(+b.dataset.go, dk)));
+    document.getElementById("prevBtn").onclick = () => ideas(i - 1, dk);
+    document.getElementById("nextBtn").onclick = () => ideas(i + 1, dk);
     const tb = document.getElementById("tryIt");
-    if (tb) tb.onclick = () => howto(hi, null, () => ideas(i));
+    if (tb) tb.onclick = () => howto(hi, null, () => ideas(i, dk));
     const vb = document.getElementById("vidIt");
     if (vb) vb.onclick = () => playVideo({ t: c.t, video: c.video });
-    autoSay(text);
+    if (RA) {
+      if (auto) setTimeout(() => readEl(parts(), text), 350);
+    } else autoSay(text);
     top0();
   }
 
@@ -887,9 +1053,11 @@
         a +
         (it.type === "match"
           ? it.pairs.length
-          : it.type === "wsearch"
+          : it.type === "wsearch" || it.type === "sort"
             ? it.words.length
-            : 1),
+            : it.type === "tapw"
+              ? Object.keys(it.ans).length
+              : 1),
       0,
     );
     show();
@@ -915,6 +1083,8 @@
       multi: itMulti,
       touch: itTouch,
       wsearch: itWsearch,
+      tapw: itTap,
+      sort: itSort,
     })[it.type](it);
   }
   function next() {
@@ -948,7 +1118,7 @@
     });
   }
   const qHTML = (q) =>
-    `<div class="q"><span class="say big">${kw(q)}</span><button type="button" class="abtn" id="sq" aria-label="Listen">🔊</button></div>`;
+    `<div class="q"><span class="say big" id="qt">${tx(q)}</span><button type="button" class="abtn" id="sq" aria-label="Listen">🔊</button></div>`;
   const fromTag = () =>
     S.from ? `<span class="qtype">${esc(S.from)}</span>` : "";
 
@@ -967,7 +1137,10 @@
         pi: it.pics && it.pics[k],
       })),
     );
-    if (it.tf)
+    // keep: the answers always in this order (two-way choices like simple / compound)
+    if (it.keep)
+      order.sort((a, b) => it.keep.indexOf(a.t) - it.keep.indexOf(b.t));
+    else if (it.tf)
       order.sort(
         (a, b) =>
           (it.yes ? it.yes : ["True", "False"]).indexOf(a.t) -
@@ -976,17 +1149,19 @@
     const big = it.oi || it.oh || it.pics;
     const side = `${fromTag()}${hasPic(it) ? pic(it) : ""}`;
     const main = `${qHTML(it.q)}
-    <div class="opts ${it.two ? "two" : ""} ${big ? "pics" : ""}">${order.map((o, j) => `<div class="optrow"><button type="button" class="opt${big ? " popt" : ""}" data-j="${j}">${o.ic ? `<span class="oic">${o.ic}</span>` : ""}${o.oi ? ic(o.oi, big ? 72 : 40) : ""}${o.oh ? visHTML(o.oh) : ""}${o.pi ? `<img class="oimg" src="${IMG(o.pi)}" alt="">` : ""}<span>${kw(o.t)}</span></button><button type="button" class="abtn sm" data-h="${j}" aria-label="Listen">🔊</button></div>`).join("")}</div>
+    <div class="opts ${it.two ? "two" : ""} ${big ? "pics" : ""}${it.opts.some((o) => o.length > 70) ? " long" : ""}">${order.map((o, j) => `<div class="optrow"><button type="button" class="opt${big ? " popt" : ""}" data-j="${j}">${o.ic ? `<span class="oic">${o.ic}</span>` : ""}${o.oi ? ic(o.oi, big ? 72 : 40) : ""}${o.oh ? visHTML(o.oh) : ""}${o.pi ? `<img class="oimg" src="${IMG(o.pi)}" alt="">` : ""}<span class="ot">${tx(o.t)}</span></button><button type="button" class="abtn sm" data-h="${j}" aria-label="Listen">🔊</button></div>`).join("")}</div>
     <div id="fbx" class="fbx"></div>`;
     app.innerHTML = `${hud()}<section class="card pop fc">${hasPic(it) ? split(side, main) : `<div class="row center">${fromTag()}</div>${main}`}</section>`;
     bindHome();
     const qs = plain(it.q);
-    document.getElementById("sq").onclick = () => say(qs);
+    document.getElementById("sq").onclick = () => sayQ(qs);
     app.querySelectorAll("[data-h]").forEach(
       (b) =>
         (b.onclick = () => {
           const o = order[+b.dataset.h];
-          say(o.sy || o.t);
+          if (RA && !o.sy)
+            readEl(app.querySelector(`.opt[data-j="${b.dataset.h}"] .ot`));
+          else say(o.sy || o.t);
         }),
     );
     app.querySelectorAll(".opt").forEach(
@@ -997,7 +1172,10 @@
             tries++;
             b.classList.add("wrong");
             b.disabled = true;
-            say(o.sy || o.t).then(() => say("Try again!"));
+            (RA && !o.sy
+              ? readEl(b.querySelector(".ot"))
+              : say(o.sy || o.t)
+            ).then(() => say("Try again!"));
             return;
           }
           b.classList.add("right");
@@ -1005,11 +1183,14 @@
             x.disabled = true;
             if (x !== b) x.classList.add("dim");
           });
+          // English: a whole sentence as the answer is said alone, not after the question again
           const full = it.q.includes("___")
             ? it.q.replace("___", "[" + right.trim() + "]")
             : it.tf
               ? it.q
-              : it.q + " → [" + right.trim() + "]";
+              : RA && right.length > 40
+                ? right
+                : it.q + " → [" + right.trim() + "]";
           const x = it.x ? `<br>${kw(it.x)}` : "";
           if (!tries) addPts(1);
           else
@@ -1018,15 +1199,28 @@
               vis: it.vis,
               right: it.tf ? `${right}: ${it.q}` : full,
             });
-          say(
-            it.tf
-              ? right + ". " + (it.x || "")
-              : plain(full) + ". " + (it.x || ""),
-          );
-          feedback(true, it.tf ? `<b>${esc(right)}</b>${x}` : kw(full) + x);
+          if (RA) {
+            // the whole sentence with the answer, then the explanation, read along
+            feedback(
+              true,
+              it.tf
+                ? `<b>${esc(right)}</b>${it.x ? `<br><span class="fx">${tx(it.x)}</span>` : ""}`
+                : `<span class="fx">${tx(full)}</span>${it.x ? `<br><span class="fx">${tx(it.x)}</span>` : ""}`,
+            );
+            const fx = [...app.querySelectorAll("#fbx .fx")];
+            if (it.tf) say(right).then(() => fx.length && readEl(fx));
+            else readEl(fx);
+          } else {
+            say(
+              it.tf
+                ? right + ". " + (it.x || "")
+                : plain(full) + ". " + (it.x || ""),
+            );
+            feedback(true, it.tf ? `<b>${esc(right)}</b>${x}` : kw(full) + x);
+          }
         }),
     );
-    autoSay(qs);
+    autoSayQ(qs);
   }
 
   /* --- match icons and words --- */
@@ -1271,15 +1465,17 @@
     let bank = shuf(cards);
     for (let n = 0; n < 8 && bank.every((c, k) => c.k === k); n++)
       bank = shuf(cards);
-    app.innerHTML = `${hud()}<section class="card pop">
-    <div class="q"><span class="say big">🔢 ${kw(H.t)}</span><button type="button" class="abtn" id="sq" aria-label="Listen">🔊</button></div>
+    const body = `<div class="q"><span class="say big">🔢 ${kw(H.t)}</span><button type="button" class="abtn" id="sq" aria-label="Listen">🔊</button></div>
     <p class="hint">${esc(H.hint || "Tap the steps in order, or drag them.")}</p>
     <div class="slots steps-line" id="line"></div>
-    <div class="bank steps-bank" id="bank"></div>
+    <div class="bank steps-bank" id="bank"></div>`;
+    // a picture next to the cards when the item has one (English sentence building)
+    app.innerHTML = `${hud()}<section class="card pop">
+    ${hasPic(it) ? split(`${fromTag()}${pic(it)}`, body) : body}
     <div id="fbx" class="fbx"><div class="row center"><button class="btn ghost" id="hintBtn" type="button">💡 Help</button><button class="btn" id="checkBtn" type="button" disabled>✔ Check</button></div></div></section>`;
     bindHome();
     const ask = H.ask || "Put the steps in order. " + plain(H.t);
-    document.getElementById("sq").onclick = () => say(ask);
+    document.getElementById("sq").onclick = () => sayQ(ask);
     // two steps with the same words (e.g. "Click Change." twice) can swap places
     const st = {
       line: [],
@@ -1365,7 +1561,7 @@
     <div class="parts-file">${ic(it.icon, 110)}<div class="parts">${parts.map((p, k) => `<button type="button" class="part p-${p.k}" data-p="${k}">${esc(p.t)}</button>`).join("")}</div></div>
     <div id="fbx" class="fbx"></div></section>`;
     bindHome();
-    document.getElementById("sq").onclick = () => say("Tap " + plain(ask));
+    document.getElementById("sq").onclick = () => sayQ("Tap " + plain(ask));
     app.querySelectorAll("[data-p]").forEach(
       (b) =>
         (b.onclick = () => {
@@ -1415,11 +1611,11 @@
     <div id="fbx" class="fbx"><div class="row center"><button class="btn" id="showBtn" type="button">💡 Show the answer</button></div></div>`,
     )}</section>`;
     bindHome();
-    document.getElementById("sq").onclick = () => say(it.q);
+    document.getElementById("sq").onclick = () => sayQ(it.q);
     document.getElementById("showBtn").onclick = () => {
       document.getElementById("fbx").innerHTML =
-        `<div class="fb ok"><b>💡 A good answer</b><span>${kw(it.a)}</span></div><p class="hint">Was your answer like this?</p><div class="yn"><button type="button" class="opt big" id="yes">👍 Yes</button><button type="button" class="opt big" id="no">🤔 Not yet</button></div>`;
-      say(it.a);
+        `<div class="fb ok"><b>💡 A good answer</b><span class="fx">${tx(it.a)}</span></div><p class="hint">Was your answer like this?</p><div class="yn"><button type="button" class="opt big" id="yes">👍 Yes</button><button type="button" class="opt big" id="no">🤔 Not yet</button></div>`;
+      readEl(app.querySelector("#fbx .fx"), it.a);
       document.getElementById("yes").onclick = () => {
         addPts(1);
         next();
@@ -1429,7 +1625,7 @@
         next();
       };
     };
-    autoSay(it.q);
+    autoSayQ(it.q);
   }
 
   /* --- do it in Mini Windows --- */
@@ -1525,7 +1721,7 @@
     </div>
     <div id="fbx" class="fbx"></div></section>`;
     bindHome();
-    document.getElementById("sq").onclick = () => say(plain(it.q));
+    document.getElementById("sq").onclick = () => sayQ(plain(it.q));
     const th = document.getElementById("thing");
     const choose = (j) => {
       if (busy) return;
@@ -1618,7 +1814,7 @@
       th.addEventListener("pointerup", up);
       th.addEventListener("pointercancel", up);
     };
-    autoSay(plain(it.q));
+    autoSayQ(plain(it.q));
   }
 
   /* --- choose all the right ones --- */
@@ -1634,7 +1830,7 @@
     <div class="multi${pics ? " pics" : ""}">${opts.map((o, j) => `<button type="button" class="mopt" data-j="${j}" aria-pressed="false">${hasPic(o) ? pic(o, "pic mpc") : ""}<span>${kw(o.t)}</span><i class="mk" aria-hidden="true"></i></button>`).join("")}</div>
     <div id="fbx" class="fbx"><div id="tryMsg"></div><div class="row center"><button class="btn" id="checkBtn" type="button" disabled>✔ Check</button></div></div></section>`;
     bindHome();
-    document.getElementById("sq").onclick = () => say(plain(it.q));
+    document.getElementById("sq").onclick = () => sayQ(plain(it.q));
     const btns = [...app.querySelectorAll(".mopt")];
     btns.forEach(
       (b) =>
@@ -1689,7 +1885,7 @@
         (ok ? "" : esc(right.join(" · "))) + (it.x ? `<br>${kw(it.x)}` : ""),
       );
     };
-    autoSay(plain(it.q));
+    autoSayQ(plain(it.q));
   }
 
   /* --- touch practice on a pretend tablet: tap, swipe, pinch, draw with a stylus --- */
@@ -1711,7 +1907,7 @@
     <div class="tdots" id="tdots"></div>
     <div id="fbx" class="fbx"></div></section>`;
     bindHome();
-    document.getElementById("sq").onclick = () => say(plain(it.q));
+    document.getElementById("sq").onclick = () => sayQ(plain(it.q));
     const ts = document.getElementById("ts");
     const dots = (n, k) =>
       (document.getElementById("tdots").innerHTML = Array.from(
@@ -1932,7 +2128,7 @@
     <ul class="ws-list" id="wsl"></ul></div>
     <div id="fbx" class="fbx"><div class="row center"><button class="btn ghost" id="helpBtn" type="button">💡 Help</button></div></div></section>`;
     bindHome();
-    document.getElementById("sq").onclick = () => say(plain(it.q));
+    document.getElementById("sq").onclick = () => sayQ(plain(it.q));
     const grid = document.getElementById("ws");
     const cell = (r, c) => grid.querySelector(`[data-r="${r}"][data-c="${c}"]`);
     const list = () =>
@@ -2063,7 +2259,218 @@
             }
           }
     };
-    autoSay(plain(it.q));
+    autoSayQ(plain(it.q));
+  }
+
+  /* --- tap the right words in a sentence or a paragraph (English) ---
+     {type: "tapw", q, s: "the text", ans: {word: "label shown under it"}};  fix: true → the words are spelling mistakes,
+     the label is the right spelling. A word counts once even if it is in the text twice. */
+  function itTap(it) {
+    const key = (w) =>
+      w
+        .replace(/^[“"‘'(]+|[”"’'),.!?:;]+$/g, "")
+        .replace(/[’]/g, "'")
+        .toLowerCase();
+    const ans = {};
+    Object.keys(it.ans).forEach((k) => (ans[key(k)] = it.ans[k]));
+    const need = Object.keys(ans).length;
+    const found = new Set();
+    let wrong = 0,
+      helped = 0,
+      fin = false;
+    const paras = String(it.s).split(/\n/);
+    const words = paras
+      .map(
+        (p) =>
+          `<p>${p
+            .split(/\s+/)
+            .filter(Boolean)
+            .map(
+              (w) =>
+                `<button type="button" class="tw" data-k="${esc(key(w))}">${esc(w)}</button>`,
+            )
+            .join(" ")}</p>`,
+      )
+      .join("");
+    // a long paragraph takes the whole width; its picture goes small above it
+    const long = String(it.s).length > 180;
+    const side = `${fromTag()}${hasPic(it) ? pic(it) : ""}`;
+    const main = `${qHTML(it.q)}
+    <div class="tapbox${it.fix ? " fix" : ""}${long ? " long" : ""}">${words}</div>
+    <p class="hint" id="tcount">Found <b>0</b> / ${need}</p>
+    <div id="fbx" class="fbx"><div class="row center"><button class="btn ghost" id="helpBtn" type="button">💡 Help</button></div></div>`;
+    app.innerHTML = `${hud()}<section class="card pop fc">${hasPic(it) && !long ? split(side, main) : `<div class="row center">${fromTag()}${hasPic(it) ? pic(it, "pic mini") : ""}</div>${main}`}</section>`;
+    bindHome();
+    const qs = plain(it.q);
+    document.getElementById("sq").onclick = () => sayQ(qs);
+    const btns = [...app.querySelectorAll(".tw")];
+    const mark = (b) => {
+      const k = b.dataset.k;
+      btns
+        .filter((x) => x.dataset.k === k)
+        .forEach((x, j) => {
+          x.classList.add("ok");
+          x.disabled = true;
+          if (!j && ans[k])
+            x.insertAdjacentHTML("beforeend", `<small>${esc(ans[k])}</small>`);
+        });
+    };
+    const finish = () => {
+      fin = true;
+      const got = Math.max(0, need - wrong - helped);
+      addPts(got);
+      if (got < need)
+        S.miss.push({
+          img: it.img,
+          vis: it.vis,
+          emoji: it.emoji,
+          right:
+            plain(it.q) +
+            " → " +
+            Object.keys(it.ans)
+              .map((k) =>
+                it.fix
+                  ? `${k} → [${it.ans[k]}]`
+                  : `[${k}]${it.ans[k] ? " (" + it.ans[k] + ")" : ""}`,
+              )
+              .join(", "),
+        });
+      document.getElementById("helpBtn").remove();
+      say(got === need ? pick(PRAISE) : "Well done!").then(() =>
+        it.x ? readEl(app.querySelector("#fbx .fx"), it.x) : null,
+      );
+      feedback(got === need, it.x ? `<span class="fx">${tx(it.x)}</span>` : "");
+    };
+    btns.forEach(
+      (b) =>
+        (b.onclick = () => {
+          if (fin) return;
+          const k = b.dataset.k;
+          if (ans[k] !== undefined && !found.has(k)) {
+            found.add(k);
+            mark(b);
+            document.querySelector("#tcount b").textContent = found.size;
+            say(
+              it.fix ? ans[k] : b.textContent.replace(/[.,!?;:”“"]/g, ""),
+              true,
+            );
+            if (found.size === need) setTimeout(finish, 700);
+            return;
+          }
+          if (found.has(k)) return;
+          wrong++;
+          b.classList.remove("no");
+          void b.offsetWidth;
+          b.classList.add("no");
+          say(b.textContent.replace(/[.,!?;:”“"]/g, ""), true).then(() =>
+            say(
+              it.fix ? "This word is spelled right. Try again!" : "Try again!",
+            ),
+          );
+        }),
+    );
+    document.getElementById("helpBtn").onclick = () => {
+      const k = Object.keys(ans).find((x) => !found.has(x));
+      const b = btns.find((x) => x.dataset.k === k);
+      if (!b) return;
+      helped++;
+      b.classList.add("hint");
+      setTimeout(() => b.classList.remove("hint"), 2500);
+      say("Look here.");
+    };
+    autoSayQ(qs);
+  }
+
+  /* --- sort words into boxes (English sounds and patterns) ---
+     {type: "sort", q, cols: [{k, t, ex, e}], words: [{w, k: "ee" | ["ea", "y"], e}]}: tap a word, then tap its box */
+  function itSort(it) {
+    const bank = shuf(it.words.map((w, i) => ({ ...w, i })));
+    const okFor = (w, k) => (Array.isArray(w.k) ? w.k : [w.k]).includes(k);
+    let sel = null,
+      fin = false;
+    const tries = {};
+    let pts = 0;
+    app.innerHTML = `${hud()}<section class="card pop">
+    <div class="row center">${fromTag()}</div>
+    ${qHTML(it.q)}
+    <p class="hint">Tap a word to hear it. Then tap its box.</p>
+    <div class="sort-bank" id="sbank"></div>
+    <div class="sort-cols n${it.cols.length}" id="scols">${it.cols
+      .map(
+        (c) =>
+          `<button type="button" class="scol" data-c="${esc(c.k)}"><span class="sh">${c.e ? `<span class="se">${esc(c.e)}</span>` : ""}<b>${esc(c.t)}</b>${c.ex ? `<small>${tx(c.ex)}</small>` : ""}</span><span class="sin"></span></button>`,
+      )
+      .join("")}</div>
+    <div id="fbx" class="fbx"></div></section>`;
+    bindHome();
+    const qs = plain(it.q);
+    document.getElementById("sq").onclick = () => sayQ(qs);
+    const chip = (w, cls) =>
+      `<span class="schip ${cls || ""}" data-i="${w.i}">${w.e ? `<span class="se">${esc(w.e)}</span>` : ""}${esc(w.w)}</span>`;
+    function draw() {
+      document.getElementById("sbank").innerHTML = bank
+        .map(
+          (w) =>
+            `<button type="button" class="schip${sel === w.i ? " sel" : ""}" data-w="${w.i}">${w.e ? `<span class="se">${esc(w.e)}</span>` : ""}${esc(w.w)}</button>`,
+        )
+        .join("");
+      app.querySelectorAll("[data-w]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            if (fin) return;
+            const i = +b.dataset.w;
+            sel = sel === i ? null : i;
+            say(it.words[i].w, true);
+            draw();
+          }),
+      );
+    }
+    draw();
+    app.querySelectorAll(".scol").forEach(
+      (c) =>
+        (c.onclick = () => {
+          if (fin) return;
+          const col = it.cols.find((x) => x.k === c.dataset.c);
+          if (sel === null) {
+            say(col.t + (col.ex ? ", as in " + plain(col.ex) : ""));
+            return;
+          }
+          const w = { ...it.words[sel], i: sel };
+          if (!okFor(w, col.k)) {
+            tries[w.i] = (tries[w.i] || 0) + 1;
+            c.classList.remove("no");
+            void c.offsetWidth;
+            c.classList.add("no");
+            say("Not this box. Try again!");
+            return;
+          }
+          if (!tries[w.i]) pts++;
+          else
+            S.miss.push({ emoji: w.e || "🔤", right: `${w.w} → [${col.t}]` });
+          bank.splice(
+            bank.findIndex((x) => x.i === w.i),
+            1,
+          );
+          c.querySelector(".sin").insertAdjacentHTML(
+            "beforeend",
+            chip(w, "ok"),
+          );
+          sel = null;
+          say(w.w + ". " + col.t, true);
+          draw();
+          if (!bank.length) {
+            fin = true;
+            addPts(pts);
+            feedback(
+              pts === it.words.length,
+              pts === it.words.length
+                ? "All in the right boxes!"
+                : `${pts} / ${it.words.length} the first time.`,
+            );
+          }
+        }),
+    );
+    autoSayQ(qs);
   }
 
   /* ================= END ================= */
