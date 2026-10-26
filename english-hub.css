@@ -70,9 +70,14 @@ body {
 }
 .item .snd {
   font-family: var(--display);
-  font-size: 2rem;
-  line-height: 1;
+  font-size: 1.5rem;
+  line-height: 1.2;
   color: var(--en);
+  /* one line, so every header has the same height: a long title ends with … */
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .item .date {
   font-weight: 700;
