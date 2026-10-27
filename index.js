@@ -79,21 +79,61 @@
     const i = PERIODS.indexOf(p);
     return i < 0 ? 99 : i;
   };
-  function draw() {
-    document.getElementById("school").innerHTML = SCHOOLS.map(
+  // School switch, built once: a thumb slides under the chosen logo, and the page slides in from that school's side
+  const sw = document.getElementById("school");
+  sw.innerHTML =
+    '<span class="thumb" aria-hidden="true"></span>' +
+    SCHOOLS.map(
       (s) =>
-        `<button type="button" id="sc-${s.k}" data-sc="${s.k}" aria-pressed="${s.k === school}" title="${esc(s.name)}">${s.logo ? `<img${s.wide ? ' class="wide"' : ""} src="${esc(s.logo)}" alt="${esc(s.name)}">` : `<span aria-hidden="true">${s.ic || ""}</span>${esc(s.name)}`}</button>`,
+        `<button type="button" id="sc-${s.k}" data-sc="${s.k}" title="${esc(s.name)}">${s.logo ? `<img${s.wide ? ' class="wide"' : ""} src="${esc(s.logo)}" alt="${esc(s.name)}">` : `<span aria-hidden="true">${s.ic || ""}</span>${esc(s.name)}`}</button>`,
     ).join("");
-    document.querySelectorAll("[data-sc]").forEach(
-      (b) =>
-        (b.onclick = () => {
-          if (b.dataset.sc === school) return;
-          school = b.dataset.sc;
-          store.set("st-school", school);
-          useSchool();
-          draw();
-        }),
+  const thumb = sw.querySelector(".thumb");
+  function moveThumb() {
+    sw.querySelectorAll("[data-sc]").forEach((b) => {
+      const on = b.dataset.sc === school;
+      b.setAttribute("aria-pressed", on);
+      if (on) {
+        thumb.style.left = b.offsetLeft + "px";
+        thumb.style.width = b.offsetWidth + "px";
+      }
+    });
+  }
+  new ResizeObserver(moveThumb).observe(sw); // again when the logos have loaded
+  const calm = matchMedia("(prefers-reduced-motion: reduce)");
+  function slideIn(dir) {
+    if (calm.matches || !document.body.animate) return;
+    [document.querySelector(".tools"), document.getElementById("list")].forEach(
+      (el, i) =>
+        el.animate(
+          [
+            { opacity: 0, transform: `translateX(${dir * 40}px)` },
+            { opacity: 1, transform: "none" },
+          ],
+          {
+            duration: 380,
+            delay: i * 60,
+            easing: "cubic-bezier(.2,.8,.3,1)",
+            fill: "backwards",
+          },
+        ),
     );
+  }
+  const place = (k) => SCHOOLS.findIndex((s) => s.k === k);
+  sw.querySelectorAll("[data-sc]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        if (b.dataset.sc === school) return;
+        const dir = place(b.dataset.sc) > place(school) ? 1 : -1;
+        school = b.dataset.sc;
+        store.set("st-school", school);
+        sw.classList.add("anim"); // no slide on the first drawing, only when a school is tapped
+        useSchool();
+        moveThumb();
+        draw();
+        slideIn(dir);
+      }),
+  );
+  function draw() {
     document.getElementById("filters").innerHTML = ["all", ...grades]
       .map((v) => {
         const n =
@@ -238,5 +278,6 @@
     }
   }
   useSchool();
+  moveThumb();
   draw();
 })();

@@ -3,6 +3,22 @@ html,
 body {
   margin: 0;
 }
+/* the graph paper fades to the other school's colour (theme.css sets them per school) */
+@property --paper {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f2f6fc;
+}
+@property --grid {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #dce6f3;
+}
+body {
+  transition:
+    --paper 0.5s,
+    --grid 0.5s;
+}
 body {
   padding-block: 28px 48px;
 }
@@ -41,6 +57,7 @@ h1 span {
 }
 /* school switch: one small pill with a logo per school (SCHOOLS in index.js). The logos are pictures, so the pill stays white in dark mode. */
 .school {
+  position: relative;
   display: inline-flex;
   gap: 2px;
   padding: 3px;
@@ -49,7 +66,24 @@ h1 span {
   border-radius: 999px;
   box-shadow: 2px 2px 0 var(--ink);
 }
+.school .thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  width: 0;
+  border-radius: 999px;
+  background: #fff3b0;
+  box-shadow: inset 0 0 0 2px #1b2440;
+  pointer-events: none;
+}
+.school.anim .thumb {
+  transition:
+    left 0.4s cubic-bezier(0.3, 1.4, 0.5, 1),
+    width 0.4s cubic-bezier(0.3, 1.4, 0.5, 1);
+} /* a little bounce at the end */
 .school button {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -63,11 +97,17 @@ h1 span {
   font-size: 1rem;
   filter: grayscale(1);
   opacity: 0.45;
+  transition:
+    filter 0.35s,
+    opacity 0.35s,
+    transform 0.35s;
 }
 .school button[aria-pressed="true"] {
   filter: none;
   opacity: 1;
-  box-shadow: inset 0 0 0 2px #1b2440;
+}
+.school button:active {
+  transform: scale(0.92);
 }
 .school img {
   display: block;
@@ -379,8 +419,11 @@ footer {
   font-size: 0.9rem;
 }
 @media (prefers-reduced-motion: reduce) {
+  body,
   .game,
-  .period summary::before {
+  .period summary::before,
+  .school.anim .thumb,
+  .school button {
     transition: none;
   }
 }
