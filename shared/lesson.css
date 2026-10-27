@@ -1171,6 +1171,15 @@ details.book[open] .alltext {
   object-fit: cover;
   display: block;
 }
+.item .cov .ic {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--emoji);
+  font-size: clamp(3.5rem, 9vw, 5rem);
+  background: color-mix(in srgb, var(--accent) 14%, var(--pic));
+} /* a lesson without a picture: a big emoji */
 .item .in {
   padding: 12px 16px 16px;
   display: flex;
