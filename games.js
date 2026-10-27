@@ -275,9 +275,9 @@ window.GAMES = [
     hub: true,
     lesson: "القراءة · Read, listen & practise each lesson",
     topics:
-      "Lesson 1 · الزَّهْرَةُ وَالصَّبَّارُ · Lesson 2 · السَّعَادَةُ فِي الْمُسَاعَدَةِ · Lesson 3 · أَوَّلُ مَنْ رَفَعَ يَدَهُ · Lesson 4 · أَخْلَاقُنَا: stories with pictures, audio & translation, words, opposites & plurals, exercises · Test 1 · التَّقْيِيمُ الْأُسْبُوعِيُّ",
+      "Lesson 1 · الزَّهْرَةُ وَالصَّبَّارُ · Lesson 2 · السَّعَادَةُ فِي الْمُسَاعَدَةِ · Lesson 3 · أَوَّلُ مَنْ رَفَعَ يَدَهُ · Lesson 4 · أَخْلَاقُنَا: stories with pictures, audio & translation, words, opposites & plurals, exercises · Tests 1–2 · التَّقْيِيمُ الْأُسْبُوعِيُّ",
     path: "grade-3/term-1/arabic/index.html",
-    countLabel: "4 lessons · 1 test",
+    countLabel: "4 lessons · 2 tests",
     year: "2026–2027",
     also: [
       "grade-3/term-1/arabic/arabic-lesson.css",
@@ -285,6 +285,8 @@ window.GAMES = [
       "grade-3/term-1/arabic/lessons.js",
       "grade-3/term-1/arabic/test-1.html",
       "grade-3/term-1/arabic/test-1.js",
+      "grade-3/term-1/arabic/test-2.html",
+      "grade-3/term-1/arabic/test-2.js",
       "grade-3/term-1/arabic/lesson-1.html",
       "grade-3/term-1/arabic/lesson-1-exercises.html",
       "grade-3/term-1/arabic/lesson-1.js",

@@ -341,7 +341,7 @@ window.LESSON = {
 ```
 
 Test items: `{type: "word", q: "… ___", a: ["right", "also right"]}` — the child types the word and taps Check (checked without tashkeel,
-alef forms or a leading ال; Show the answer stays), and `{type: "open", q, a}` for sentence answers. Each item has `en` / `uk`; no picture, the text above the tasks has one.
+alef forms or a leading ال; Show the answer stays), and `{type: "open", q, a}` for sentence answers (`plain: true` when the answer is not words, e.g. syllables "خَا / فَ"). Each item has `en` / `uk`; no picture, the text above the tasks has one.
 
 After adding a test: add it to `TESTS`, add `test-N.html` / `test-N.js` to `also` in `games.js`, and bump `VERSION` in `sw.js`.
 

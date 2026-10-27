@@ -49,4 +49,13 @@ window.TESTS = [
     cover: "img/lesson-2/teacher.jpg",
     note: "Groups A · B · C · 15 questions · text from Lesson 2",
   },
+  {
+    n: 2,
+    nAr: "الثَّانِي",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · The first to raise a hand",
+    path: "test-2.html",
+    cover: "img/lesson-3/teacher.jpg",
+    note: "Groups A · B · C · 21 questions · text from Lesson 3",
+  },
 ];
