@@ -42,6 +42,9 @@ grade-4/
   social-studies/          ← Social Studies (English): all terms, Computer lesson engine
     index.html, lessons.js ← list of lessons, by chapter
     chapter-1/             ← Chapter 1 lessons (lesson-N.html/.js, img/)
+  math/                    ← Math: all terms, Computer lesson engine + shared/math.js
+    index.html, lessons.js ← list of lessons, by book unit
+    unit-2/ unit-3/ unit-4/ ← one lesson page per unit (<name>.html/.js, img/cover.jpg)
 optima/                    ← the Ukrainian school (school: "optima" in games.js)
   grade-3/
     ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js
@@ -65,6 +68,7 @@ live in `shared/theme.css`; change them there and every page follows.
 | `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons, English stories |
 | `shared/story.css` | English stories: page text, the sentence being read, easy sentence, word meanings | English stories |
 | `shared/reading.css` / `shared/reading.js` | Ukrainian reading game: syllable tiles, flashing words, timed reading, the rocket | Optima Українська література |
+| `shared/math.js` / `shared/math.css` | Math: column sums with carry boxes, number pad, schemas (bar models), groups, arrays, times-table flower, place-value chart, number line | Math lessons |
 | `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards; `cover` picture or `ic` emoji), `Kit.scene` / `Kit.idiom` / `Kit.blocks` (animated pictures, sentence blocks) | quiz games, French and Computer lesson lists, English stories and lessons |
 
 Rules for new pages:
@@ -496,4 +500,44 @@ Lessons save their ticks under their own `key` (`ss4-c<chapter>-l<lesson>`).
 A picture card can show a row of pictures with `vis: {kind: "strip", items: [{img | e, label}]}`; its tile then uses the first picture.
 
 After adding a lesson: add it to its chapter in `lessons.js`, add its files to the `also: [...]` list of the Social Studies entry in `games.js`,
+and bump `VERSION` in `sw.js`.
+
+## Math lessons (Grade 4)
+
+Folder: `grade-4/math/`. One card on the home page ("Math", under Subjects, colour `--math`) opens `index.html`, which lists the lessons from `lessons.js`,
+one entry per book unit (`part: "Unit"`, `chapters: [{n, dir: "unit-2", title, items}]`); a unit is one lesson, so `label: "Unit"` puts "Unit 2" on the cards
+and `flat: true` shows all the cards together without unit headings (both options work for any lessons list). Book: Reveal Math, Grade 4.
+Lessons: Unit 2 `place-value.html` (place value, compare, round), Unit 3 `add-subtract.html` (columns with regrouping, word problems),
+Unit 4 `multiplication.html` (what multiplication is, times tables, times as many).
+
+The lessons use the **Computer lesson engine** with `<body data-subject="Math">`. The page loads `shared/common.js`, `shared/math.js`, its `<name>.js`, then the engine
+(and `shared/math.css` after `computer-lesson.css`). `shared/math.js` gives the engine new question types and drawings through `window.CS_EXT`
+(`items`, `vis`, `pts`); the engine falls back to them for a `type` / `kind` it doesn't know.
+
+Made for a child who learns from pictures: one colour per place (ones blue, tens green, hundreds orange, thousands purple …) in every drawing,
+answers typed on a big number pad (the computer keys work too, no tablet keyboard), 💡 Help explains the next column.
+
+Question types (games and exercises):
+- `{type: "col", op: "+" | "-", a, b}` – add or subtract in columns. Small boxes above the digits for the carried 1 (or the regrouped number, up to 2 digits),
+  boxes under the line for the answer (typing goes from the ones to the left). On subtraction, tapping a digit of the top number crosses it out.
+  ✓ Check marks the wrong places in red; 💡 Help explains one column; after 3 tries the answer is shown. When it is done, the carries are filled in.
+- A word problem: `col` with `story: {q, vis: <bar model>, ask: true, why, ans: "They have {} students."}` – first "Add or subtract?" next to the schema
+  (`why` replaces the default explanation), then the columns; `ans` is the answer sentence (`{}` = the result).
+- `{type: "num", q, a, pre: "3 × 4 =", post: "hours", hint, x}` – type a number (commas are added while typing). 2 tries.
+- `{type: "flower", n: 4, c: "var(--heat)"}` – the times-table flower: n × 1 … n × 10 on the petals (10 points).
+- The engine's own `mc`, `multi` and `tf` work as usual.
+
+Drawings (`vis`):
+- `{kind: "bar", rows: [{l, e, segs: [{t, v, q, c}], brace: {t, q}}], total: {t}, note}` – the schema (bar model). `v` = length, `q: true` = the unknown (dashed, yellow),
+  `c` = colour 0–3, `brace` = the total of that bar (on top), `total` = the total of all the bars (bracket on the right).
+  Repeated parts: `{l, seg: {t, v}, times: 5}` (times as many).
+- `{kind: "colshow", op, a, b, cap}` – a worked column sum with its carries / regrouping.
+- `{kind: "groups", n, of, e, cap}`, `{kind: "array", r, c, e, cap}` (no `e` = dots), `{kind: "cubes", rows: [{l, n, times, c}], cap}` – multiplication pictures; `cap: ""` hides the caption.
+- `{kind: "pv", n, hl: [places from the right], val: true, cap}` – place-value chart with periods; `hl` digits are yellow, `val` writes their value.
+- `{kind: "nline", lo, hi, n, hide}` – number line for rounding (`hide`: no answer shown).
+
+A lesson file is like a Science lesson (`words`, `ideas`, `games`, `exercises`, `key: "math4-u<unit>"`), with `imgDir: "img"` and `cover: "cover"`
+(the unit's opening picture from the book). Picture cards can set `ic` (the emoji on their tile).
+
+After adding a lesson: add it to its unit in `lessons.js` (a new unit: a new `unit-N/` folder and a new entry in `chapters`), add its files to the `also: [...]` list of the Math entry in `games.js`,
 and bump `VERSION` in `sw.js`.

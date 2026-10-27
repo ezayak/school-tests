@@ -39,6 +39,8 @@
   --rel: #e6dfcf;
   --comp: #6527c4;
   --ulit: #0057b7; /* Українська література (Optima) */
+  --math: #0d9488;
+  --math-ink: #0b7a70; /* Math text colour: --math is too light for small text on white */
   --other: #8a5cc9; /* subject colours */
   /* Lilita One and Atkinson Hyperlegible have no Cyrillic letters: Ukrainian text uses Nunito on the pages that load it (home, Optima) */
   --display: "Lilita One", "Nunito", "Arial Rounded MT Bold", "Trebuchet MS",
@@ -81,6 +83,8 @@
     --rel: #f3eee2;
     --comp: #9a6cff;
     --ulit: #6aa6ff;
+    --math: #2dd4bf;
+    --math-ink: #2dd4bf;
     --other: #b48cf0;
     --red: #ff6a5f;
     --blue: #6fa2f0;
@@ -125,6 +129,8 @@
   --rel: #f3eee2;
   --comp: #9a6cff;
   --ulit: #6aa6ff;
+  --math: #2dd4bf;
+  --math-ink: #2dd4bf;
   --other: #b48cf0;
   --red: #ff6a5f;
   --blue: #6fa2f0;

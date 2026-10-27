@@ -1,0 +1,782 @@
+/* Math lessons (Grade 4). Loads after shared/theme.css, shared/lesson.css and shared/computer-lesson.css; the parts come from shared/math.js.
+   One colour per place (ones, tens, hundreds …), the same in every drawing, so a column always looks the same. */
+[data-subject="Math"] {
+  --accent: var(--math-ink);
+}
+.p0 {
+  --pc: var(--cool);
+}
+.p1 {
+  --pc: var(--good);
+}
+.p2 {
+  --pc: var(--ke);
+}
+.p3 {
+  --pc: var(--comp);
+}
+.p4 {
+  --pc: var(--sci-ink);
+}
+.p5 {
+  --pc: var(--pe);
+}
+.p6 {
+  --pc: var(--ssa);
+}
+.p7 {
+  --pc: var(--muted);
+}
+.cap {
+  font-family: var(--display);
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+/* ---------- columns ---------- */
+.mx-grid {
+  --cs: clamp(40px, min(7vh, 8.5vw), 62px);
+  display: grid;
+  grid-template-columns: calc(var(--cs) * 0.7) repeat(var(--cols), var(--cs));
+  gap: 4px 6px;
+  justify-content: center;
+  align-items: end;
+  font-family: var(--display);
+}
+.mx-c {
+  position: relative;
+  width: var(--cs);
+  height: var(--cs);
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--cs) * 0.66);
+  line-height: 1;
+}
+.mx-c:first-child,
+.mx-c.op {
+  width: auto;
+}
+.mx-c.hd {
+  height: auto;
+  font-size: 0.95rem;
+  color: var(--pc);
+  border-bottom: 3px solid var(--pc);
+  padding-bottom: 2px;
+}
+.mx-c.dg {
+  background: color-mix(in srgb, var(--pc) 13%, transparent);
+  border-radius: 8px;
+}
+.mx-c.dg.none {
+  background: none;
+}
+.mx-c.cm::after {
+  content: ",";
+  position: absolute;
+  right: -0.3em;
+  bottom: 0.05em;
+  font-size: 0.8em;
+  color: var(--muted);
+}
+.mx-c.op {
+  font-size: calc(var(--cs) * 0.8);
+  color: var(--accent);
+  justify-self: end;
+}
+.mx-line {
+  grid-column: 1 / -1;
+  height: 4px;
+  background: var(--ink);
+  border-radius: 2px;
+}
+/* boxes to type in: small ones above (carry / regroup), big ones under the line */
+.mx-c.bx {
+  border: 2.5px dashed color-mix(in srgb, var(--pc) 70%, var(--ink));
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--display);
+  padding: 0;
+  cursor: pointer;
+}
+.mx-c.bx.c {
+  width: calc(var(--cs) * 0.78);
+  height: calc(var(--cs) * 0.66);
+  font-size: calc(var(--cs) * 0.46);
+  justify-self: center;
+  color: var(--heat);
+}
+.mx-c.bx.a {
+  border-style: solid;
+}
+.mx-c.bx.on {
+  outline: 4px solid var(--hl);
+  outline-offset: 1px;
+  border-style: solid;
+  border-color: var(--ink);
+}
+.mx-c.bx.ok {
+  background: color-mix(in srgb, var(--good) 22%, var(--card));
+  border-color: var(--good);
+}
+.mx-c.bx.no {
+  background: color-mix(in srgb, var(--bad) 20%, var(--card));
+  border-color: var(--bad);
+  animation: shake 0.35s;
+}
+.mx-c.bx.shown {
+  background: color-mix(in srgb, var(--hl) 45%, var(--card));
+}
+.mx-c.hl {
+  box-shadow: 0 0 0 4px var(--hl);
+  border-radius: 10px;
+}
+/* subtraction: a digit that gave 1 away is crossed out */
+.mx-c.dg.cross {
+  color: var(--muted);
+}
+.mx-c.dg.cross::before {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 50%;
+  height: 3px;
+  background: var(--heat);
+  transform: rotate(-30deg);
+  border-radius: 2px;
+}
+.mx-c.dg[data-x] {
+  cursor: pointer;
+}
+.mx-grid.show {
+  --cs: clamp(30px, 6.6vh, 56px);
+}
+.pic.rv .mx-grid.show {
+  --cs: 24px;
+}
+.mx-grid.show .bx.empty {
+  visibility: hidden;
+}
+.mx-grid.show .bx.fill.a {
+  background: color-mix(in srgb, var(--good) 16%, var(--card));
+}
+.mx-grid.show .bx.c.fill {
+  border-style: solid;
+  border-color: var(--heat);
+  background: color-mix(in srgb, var(--hl) 40%, var(--card));
+}
+.mx-task {
+  white-space: nowrap;
+  color: var(--accent);
+}
+
+/* ---------- the number pad ---------- */
+.mx-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  width: min(210px, 100%);
+}
+.mx-pad button {
+  min-height: clamp(42px, 7.2vh, 58px);
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 1.6rem;
+  box-shadow: 2px 2px 0 var(--ink);
+  cursor: pointer;
+}
+.mx-pad button:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+.mx-pad .del {
+  background: color-mix(in srgb, var(--bad) 12%, var(--card));
+}
+.mx-pad .ok {
+  background: var(--good);
+  color: #fff;
+}
+.mx-work {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px 26px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.mx-acts {
+  gap: 10px;
+}
+.mx-help {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--hl) 35%, var(--card));
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 1.1rem;
+  max-width: 620px;
+}
+.mx-help[hidden] {
+  display: none;
+}
+.mx-help b {
+  font-family: var(--emoji);
+}
+.q.sm .say {
+  font-size: 1.1rem;
+}
+.split .pic.card.mx-schema {
+  height: auto;
+  min-height: 200px;
+}
+.mx-colq .split .side .pic.card {
+  height: auto;
+  min-height: 0;
+}
+@media (orientation: landscape) and (min-width: 760px) {
+  .mx-colq .split {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+  .mx-colq .split .side .pic.vis,
+  .mx-schema.pic.vis {
+    min-height: 0;
+    height: auto;
+  }
+}
+
+/* ---------- type a number ---------- */
+.mx-numrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-family: var(--display);
+  font-size: 1.8rem;
+}
+.mx-num {
+  min-width: 5.5em;
+  min-height: 1.6em;
+  padding: 2px 14px;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  background: var(--card);
+  font-family: var(--display);
+  font-size: 2rem;
+  text-align: center;
+}
+.mx-num.on {
+  outline: 4px solid var(--hl);
+}
+.mx-num.ok {
+  background: color-mix(in srgb, var(--good) 22%, var(--card));
+  border-color: var(--good);
+}
+.mx-num.no {
+  background: color-mix(in srgb, var(--bad) 20%, var(--card));
+  border-color: var(--bad);
+  animation: shake 0.35s;
+}
+.mx-numq .mx-pad {
+  width: min(250px, 100%);
+}
+
+/* ---------- the times-table flower ---------- */
+.mx-flower {
+  --R: clamp(130px, min(29vh, 34vw), 210px);
+  position: relative;
+  width: calc(var(--R) * 2 + 70px);
+  height: calc(var(--R) * 2 + 70px);
+  max-width: 100%;
+}
+.mx-pet {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--R) * 0.5);
+  height: calc(var(--R) * 1.05);
+  margin-left: calc(var(--R) * -0.25);
+  margin-top: calc(var(--R) * -1.05);
+  transform-origin: 50% 100%;
+  transform: rotate(var(--a));
+  background: color-mix(in srgb, var(--fc) 22%, var(--card));
+  border: 2.5px solid var(--ink);
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+}
+.mx-pet .pin {
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  transform: translateX(-50%) rotate(calc(var(--a) * -1));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.mx-pet .m {
+  font-family: var(--display);
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1;
+}
+.mx-pet .bx {
+  width: calc(var(--R) * 0.34);
+  min-width: 40px;
+  height: 36px;
+  border: 2.5px solid var(--ink);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 1.3rem;
+  padding: 0;
+  cursor: pointer;
+}
+.mx-pet .bx.on {
+  outline: 4px solid var(--hl);
+}
+.mx-pet .bx.ok {
+  background: color-mix(in srgb, var(--good) 25%, var(--card));
+  border-color: var(--good);
+}
+.mx-pet .bx.no {
+  background: color-mix(in srgb, var(--bad) 22%, var(--card));
+  border-color: var(--bad);
+}
+.mx-pet .bx.fix {
+  background: color-mix(in srgb, var(--hl) 50%, var(--card));
+}
+.mx-mid {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--R) * 0.62);
+  height: calc(var(--R) * 0.62);
+  border-radius: 50%;
+  background: var(--hl);
+  border: 3px solid var(--ink);
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-size: calc(var(--R) * 0.2);
+  color: #1b2440;
+  z-index: 1;
+}
+.mx-flq .split .side {
+  align-items: center;
+}
+
+/* ---------- drawings ---------- */
+.c1 {
+  --sc: var(--cool);
+}
+.c2 {
+  --sc: var(--ke);
+}
+.c3 {
+  --sc: var(--good);
+}
+.c4 {
+  --sc: var(--comp);
+}
+/* bar model (schema of a word problem) */
+.vis-mbar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 6px;
+}
+.mb-title {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  text-align: center;
+}
+.mb-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+.vis-mbar.has-total .mb-rows {
+  padding-right: 104px;
+}
+.mb-row {
+  display: grid;
+  grid-template-columns: 6.6em 1fr;
+  align-items: end;
+  gap: 8px;
+}
+.mb-l {
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.15;
+  text-align: right;
+  padding-bottom: 8px;
+}
+.mb-l .e {
+  display: block;
+  font-family: var(--emoji);
+  font-size: 1.5rem;
+}
+.mb-track {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mb-bar {
+  display: flex;
+  height: 46px;
+}
+.mb-seg {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  border: 2.5px solid var(--ink);
+  margin-left: -2.5px;
+  background: color-mix(in srgb, var(--sc) 30%, var(--card));
+  font-family: var(--display);
+  font-size: 1.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.mb-seg:first-child {
+  margin-left: 0;
+  border-radius: 8px 0 0 8px;
+}
+.mb-seg:last-child {
+  border-radius: 0 8px 8px 0;
+}
+.mb-seg:only-child {
+  border-radius: 8px;
+}
+.mb-seg.q {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--hl) 35%, var(--card));
+  font-size: 1.3rem;
+}
+/* a brace over a bar: the total of that bar */
+.mb-brace {
+  position: relative;
+  height: 30px;
+  border: 3px solid var(--ink);
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 4px;
+  text-align: center;
+}
+.mb-brace b,
+.mb-total b {
+  position: absolute;
+  left: 50%;
+  top: -14px;
+  transform: translateX(-50%);
+  background: var(--card);
+  padding: 0 8px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  white-space: nowrap;
+}
+.mb-brace.q b,
+.mb-total.q b {
+  background: var(--hl);
+  color: #1b2440;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+}
+.mb-under {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+  border-top: 3px solid var(--muted);
+  border-radius: 0 0 8px 8px;
+}
+/* the total of all the bars: a bracket on the right */
+.mb-total {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 96px;
+}
+.mb-total::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  width: 14px;
+  top: 4px;
+  bottom: 4px;
+  border: 3px solid var(--ink);
+  border-left: 0;
+  border-radius: 0 10px 10px 0;
+}
+.mb-total b {
+  top: 50%;
+  left: 22px;
+  transform: translateY(-50%);
+  white-space: normal;
+  width: max-content;
+  max-width: 74px;
+  text-align: center;
+  line-height: 1.1;
+}
+.vis-mbar small {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+/* equal groups */
+.vis-groups,
+.vis-array,
+.vis-cubes,
+.vis-pv,
+.vis-nline,
+.vis-colshow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+.vis-groups .gs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.vis-groups .g {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 2px;
+  width: 104px;
+  min-height: 104px;
+  padding: 8px;
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 12%, var(--card));
+}
+.vis-groups .g span {
+  font-family: var(--emoji);
+  font-size: 1.45rem;
+  line-height: 1.1;
+}
+/* array */
+.vis-array .ar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.vis-array .arow {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.vis-array .rl {
+  width: 1.6em;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: right;
+}
+.vis-array .e {
+  font-family: var(--emoji);
+  font-size: clamp(1.2rem, 3.4vh, 1.8rem);
+  line-height: 1.1;
+}
+.vis-array .dot {
+  width: clamp(18px, 3.6vh, 28px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--ink);
+}
+/* sticks of cubes */
+.vis-cubes .cr {
+  display: grid;
+  grid-template-columns: 5.5em 1fr 2.4em;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.vis-cubes .cl {
+  font-weight: 700;
+  text-align: right;
+}
+.vis-cubes .sticks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.vis-cubes .stick {
+  display: flex;
+}
+.vis-cubes .stick i {
+  width: clamp(16px, 3.2vh, 24px);
+  aspect-ratio: 1;
+  background: color-mix(in srgb, var(--sc) 55%, var(--card));
+  border: 2px solid var(--ink);
+  margin-left: -2px;
+}
+.vis-cubes .cn {
+  font-family: var(--display);
+  font-size: 1.4rem;
+}
+/* place-value chart */
+.pvg {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(34px, 66px));
+  border: 2.5px solid var(--ink);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--card);
+}
+.pvg .pp {
+  font-family: var(--display);
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 3px 2px;
+  border-bottom: 2px solid var(--ink);
+  border-right: 2.5px solid var(--ink);
+  background: color-mix(in srgb, var(--accent) 14%, var(--card));
+}
+.pvg .pp:last-of-type {
+  border-right: 0;
+}
+.pvg .ps,
+.pvg .pd {
+  text-align: center;
+  border-right: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+}
+.pvg .ps {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--pc);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  padding: 2px 0;
+}
+.pvg .pd {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 5vh, 2.6rem);
+  padding: 4px 0;
+  color: var(--pc);
+}
+.pvg .end {
+  border-right: 2.5px solid var(--ink);
+}
+.pvg > :last-child,
+.pvg .ps:nth-last-child(1 of .ps) {
+  border-right: 0;
+}
+.pvg .pd.hl {
+  background: var(--hl);
+  color: #1b2440;
+}
+.pvv {
+  text-align: center;
+  font-size: 1.1rem;
+}
+.pvv .hlb {
+  background: var(--hl);
+  color: #1b2440;
+  padding: 0 6px;
+  border-radius: 6px;
+}
+/* number line */
+.vis-nline .nl {
+  position: relative;
+  width: 86%;
+  height: 92px;
+  margin-top: 30px;
+}
+.vis-nline .nl::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 40px;
+  height: 4px;
+  background: var(--ink);
+  border-radius: 2px;
+}
+.vis-nline .tk {
+  position: absolute;
+  top: 30px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 3px solid var(--ink);
+  height: 24px;
+}
+.vis-nline .tk b {
+  position: absolute;
+  top: 28px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+.vis-nline .tk.mid {
+  border-left-style: dashed;
+}
+.vis-nline .tk small {
+  position: absolute;
+  top: 50px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.vis-nline .pt {
+  position: absolute;
+  top: -28px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.vis-nline .pt b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  color: var(--heat);
+  white-space: nowrap;
+}
+.vis-nline .pt::after {
+  content: "";
+  width: 18px;
+  height: 18px;
+  margin-top: 26px;
+  border-radius: 50%;
+  background: var(--heat);
+  border: 2.5px solid var(--ink);
+}
+.vis-nline .pt.hide b {
+  visibility: hidden;
+}
+.vis-nline .go {
+  position: absolute;
+  top: 31px;
+  height: 0;
+  border-top: 4px dashed var(--heat);
+}
+/* math drawings use the card colour, so the ink-coloured lines and labels show in light and dark */
+.pic.vis:has(
+    > .vis-mbar,
+    > .vis-groups,
+    > .vis-array,
+    > .vis-cubes,
+    > .vis-pv,
+    > .vis-nline,
+    > .vis-colshow
+  ) {
+  background: var(--card);
+}

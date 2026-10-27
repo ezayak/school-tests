@@ -35,6 +35,7 @@
     English: "var(--en)",
     Religion: "var(--rel)",
     Computer: "var(--comp)",
+    Math: "var(--math)",
     "Українська література": "var(--ulit)",
   };
   const ALL = window.GAMES || [];
