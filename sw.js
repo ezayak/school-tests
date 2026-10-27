@@ -29,6 +29,8 @@ const CORE = [
   "./shared/arabic-revision.css",
   "./shared/spelling.css",
   "./shared/drag-words.css",
+  "./shared/reading.css",
+  "./shared/reading.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",

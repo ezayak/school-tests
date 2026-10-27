@@ -42,6 +42,9 @@ grade-4/
   social-studies/          ← Social Studies (English): all terms, Computer lesson engine
     index.html, lessons.js ← list of lessons, by chapter
     chapter-1/             ← Chapter 1 lessons (lesson-N.html/.js, img/)
+optima/                    ← the Ukrainian school (school: "optima" in games.js)
+  grade-3/
+    ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -61,6 +64,7 @@ live in `shared/theme.css`; change them there and every page follows.
 | `shared/drag-words.css` | drag tiles from a bank onto a line | "Mets en ordre", "Build the word" |
 | `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons, English stories |
 | `shared/story.css` | English stories: page text, the sentence being read, easy sentence, word meanings | English stories |
+| `shared/reading.css` / `shared/reading.js` | Ukrainian reading game: syllable tiles, flashing words, timed reading, the rocket | Optima Українська література |
 | `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards; `cover` picture or `ic` emoji), `Kit.scene` / `Kit.idiom` / `Kit.blocks` (animated pictures, sentence blocks) | quiz games, French and Computer lesson lists, English stories and lessons |
 
 Rules for new pages:
@@ -97,6 +101,35 @@ New school: add it to `SCHOOLS`, put its logo in `icons/` (and in `CORE` in `sw.
 
 Ukrainian text: Lilita One and Atkinson Hyperlegible have no Cyrillic letters, so the font stacks in `theme.css` fall back to **Nunito** for them.
 Pages with Ukrainian text load Nunito with the other Google fonts (the home page and the Optima pages do).
+
+## Ukrainian reading (Optima, Grade 3)
+
+Folder: `optima/grade-3/ukr-lit/`. One card on the Optima home page ("Українська література", colour `--ulit`) opens `index.html`, which lists the texts from `texts.js`
+(`items: [{n, title, en, path, ic, note}]`, `ic` = the emoji on the card). Made for a child who reads slowly; everything on screen is in Ukrainian.
+The engine is `shared/reading.js` + `shared/reading.css` (`<body data-view="list|game">`); the page loads `shared/common.js`, its `<text>.js`, then the engine.
+
+A text page has three steps (tabs), the rocket climbs a little in each:
+- **1. Склади** – the long words, one at a time, cut into syllables: tap them in order, they join into one word, read it whole.
+  **🔊 Читати разом** reads each syllable aloud as it is tapped, then the word (device voice, Ukrainian; ▶ Послухати plays it first).
+- **2. Слова** – words flash for 15, 10, 6, 5, 4, 3 or 2 seconds; «Ще раз» sends a word back to the end of the line.
+- **3. Читання** – the whole text line by line with a stopwatch (tap the text or «Далі»); the best time is saved on the device,
+  with a separate record when «показати склади» is on.
+
+### `<text>.js` format
+
+```js
+window.READING = {
+  key: "ulit3-bohdanchyk",      // saves the step, switches, speed and best times on the device
+  title: "Богданчик", sub: "Складова ракета",
+  text: ["Бог-*дан-чик си-*дів *ос-то-ронь.", …],   // the lines of the timed reading
+  launch: ["Бог-*дан-чик", …],  // step 1: long words to read by syllables
+  fuel: ["*ос-то-ронь", …],     // step 2: words that flash
+};
+```
+
+`-` goes between syllables and `*` before the stressed syllable (shown in colour).
+New text: copy `bohdanchyk.html` (change `bohdanchyk.js`), write its `.js`, add it to `texts.js`, add both files to the `also: [...]` list of the
+Українська література entry in `games.js`, update its `countLabel` / `topics`, and bump `VERSION` in `sw.js`.
 
 ## Player name
 

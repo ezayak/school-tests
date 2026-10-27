@@ -1,0 +1,356 @@
+/* Ukrainian reading practice (shared/reading.js): Optima, Українська література.
+   Loads after shared/theme.css and shared/lesson.css (page, cards, tabs, lesson list come from there). Only the reading parts are here. */
+:root {
+  --accent: var(--ulit);
+  --accent2: var(--ke);
+}
+.rd-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+}
+.rd-head .les-title {
+  font-size: clamp(2rem, 6vw, 2.8rem);
+}
+
+/* the step panel: the game on the left, the rocket's sky on the right */
+.rd-panel {
+  flex-direction: row;
+  align-items: stretch;
+  min-height: 420px;
+}
+.rd-stage {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+/* the top row stays at the top, the rest is centred in the space below */
+.rd-top {
+  margin-bottom: auto;
+  align-self: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.rd-stage::after {
+  content: "";
+  margin-top: auto;
+}
+.rd-count {
+  color: var(--muted);
+  font-weight: 700;
+}
+.rd-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.1rem;
+  text-align: center;
+}
+.rd-warn {
+  margin: 0;
+  color: var(--bad);
+  font-size: 0.9rem;
+}
+.rd-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.rd-ok {
+  background: var(--good);
+  color: #fff;
+}
+.rd-result {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  text-align: center;
+}
+.rd-result b {
+  color: var(--accent);
+}
+.rd-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+.rd-switch input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--accent);
+}
+.rd-st {
+  color: var(--accent2);
+} /* the stressed syllable */
+
+/* 1. syllable tiles: tap them in order, then they join into one word */
+.rd-tiles {
+  display: flex;
+  gap: 12px;
+  transition: gap 0.4s;
+}
+.rd-tiles.joined {
+  gap: 0;
+  filter: drop-shadow(4px 4px 0 var(--ink));
+}
+.rd-tile {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 7vw, 3.6rem);
+  line-height: 1.1;
+  padding: 12px 18px;
+  background: var(--card);
+  color: var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0 var(--ink);
+  opacity: 0.45;
+  transition:
+    opacity 0.3s,
+    background 0.3s,
+    border-radius 0.4s,
+    padding 0.4s;
+}
+.rd-tile.st {
+  text-decoration: underline;
+  text-decoration-color: var(--accent2);
+  text-decoration-thickness: 5px;
+  text-underline-offset: 8px;
+}
+.rd-tile.next {
+  opacity: 1;
+  background: var(--hl);
+  color: #1b2440;
+  animation: rd-pulse 1s infinite;
+}
+.rd-tile.done {
+  opacity: 1;
+  background: color-mix(in srgb, var(--accent) 22%, var(--card));
+}
+.rd-tile.say {
+  background: var(--hl);
+  color: #1b2440;
+}
+.rd-tiles.joined .rd-tile {
+  background: color-mix(in srgb, var(--good) 25%, var(--card));
+  border-radius: 0;
+  border-inline-width: 0;
+  box-shadow: none;
+  padding-inline: 2px;
+}
+.rd-tiles.joined .rd-tile:first-child {
+  border-radius: 16px 0 0 16px;
+  border-left-width: 2.5px;
+  padding-left: 18px;
+}
+.rd-tiles.joined .rd-tile:last-child {
+  border-radius: 0 16px 16px 0;
+  border-right-width: 2.5px;
+  padding-right: 18px;
+}
+@keyframes rd-pulse {
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+/* 2. a word flashes, the bar shows the time left */
+.rd-speed {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rd-speed button {
+  font-weight: 700;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  padding: 4px 12px;
+}
+.rd-speed button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--card);
+}
+.rd-flash {
+  font-family: var(--display);
+  font-size: clamp(2.6rem, 8vw, 4.2rem);
+  line-height: 1.2;
+  min-height: 1.3em;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.rd-flash.gone {
+  opacity: 0;
+}
+.rd-bar {
+  width: min(70%, 520px);
+  height: 14px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--card);
+}
+.rd-bar i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--hl);
+}
+
+/* 3. the whole text, one line at a time, against the clock */
+.rd-clock {
+  font-family: var(--display);
+  font-size: 2rem;
+  font-variant-numeric: tabular-nums;
+}
+.rd-text {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+.rd-line {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.35;
+  padding: 2px 10px;
+  border-radius: 10px;
+  visibility: hidden;
+}
+.rd-line.was {
+  visibility: visible;
+  opacity: 0.4;
+}
+.rd-line.cur {
+  visibility: visible;
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: var(--card);
+  box-shadow: inset 0 0 0 2.5px var(--accent);
+}
+
+/* the rocket's sky: a picture, so it keeps its colours in dark mode */
+.rd-sky {
+  position: relative;
+  flex: none;
+  width: 96px;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(#0a1230, #1b3b8a 70%, #2c6e49);
+}
+.rd-sky i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.8;
+}
+.rd-sky i:nth-child(1) {
+  left: 18%;
+  top: 8%;
+}
+.rd-sky i:nth-child(2) {
+  left: 70%;
+  top: 14%;
+}
+.rd-sky i:nth-child(3) {
+  left: 40%;
+  top: 24%;
+}
+.rd-sky i:nth-child(4) {
+  left: 82%;
+  top: 33%;
+}
+.rd-sky i:nth-child(5) {
+  left: 12%;
+  top: 40%;
+}
+.rd-sky i:nth-child(6) {
+  left: 58%;
+  top: 48%;
+}
+.rd-sky i:nth-child(7) {
+  left: 28%;
+  top: 58%;
+}
+.rd-sky i:nth-child(8) {
+  left: 76%;
+  top: 64%;
+}
+.rd-rocket {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  font-family: var(--emoji);
+  font-size: 2.6rem;
+  line-height: 1;
+  transform: translateX(-50%) rotate(-45deg);
+  transition:
+    bottom 0.6s ease,
+    transform 0.6s;
+}
+.rd-rocket.rd-win {
+  transform: translateX(-50%) rotate(-45deg) scale(1.3);
+}
+.rd-best {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 64px;
+  border-top: 3px dashed #ffe14d;
+  color: #ffe14d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* landscape tablet: everything on one screen */
+@media (orientation: landscape) and (min-width: 760px) {
+  .wrap {
+    max-width: 1200px;
+  }
+  .rd-card {
+    gap: 10px;
+    padding-block: 14px;
+  }
+  .rd-panel {
+    min-height: calc(100vh - 250px);
+  }
+}
+@media (max-width: 520px) {
+  .rd-sky {
+    width: 56px;
+  }
+  .rd-rocket {
+    font-size: 2rem;
+  }
+  .rd-line {
+    font-size: 1.25rem;
+  }
+  .rd-line.cur {
+    font-size: 1.4rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rd-tile.next {
+    animation: none;
+  }
+  .rd-rocket,
+  .rd-tiles,
+  .rd-tile {
+    transition: none;
+  }
+}

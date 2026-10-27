@@ -6,6 +6,7 @@
 // "Mid-term exam" / "Final exam" for exam revision games (one card per subject),
 // "Subjects" for subject pages that hold the lessons and dictations of every term (no term: field).
 // hub: true → the card opens a list page ("Open →") instead of a game.
+// school: "optima" → shown when Optima is chosen in the school switch (no school: field = SJAS); see SCHOOLS in index.js.
 window.GAMES = [
   {
     grade: 3,
@@ -1124,6 +1125,24 @@ window.GAMES = [
       "grade-3/computer/chapter-2/img/lesson-4/saveas.jpg",
       "grade-3/computer/chapter-2/img/lesson-4/saved.jpg",
       "grade-3/computer/chapter-2/img/lesson-4/spelling.jpg",
+    ],
+  },
+  {
+    school: "optima",
+    grade: 3,
+    period: "Subjects",
+    subject: "Українська література",
+    title: "Українська література",
+    hub: true,
+    lesson: "Читання · по складах, слова, весь текст на швидкість",
+    topics: "Богданчик",
+    path: "optima/grade-3/ukr-lit/index.html",
+    countLabel: "1 текст",
+    year: "2026–2027",
+    also: [
+      "optima/grade-3/ukr-lit/texts.js",
+      "optima/grade-3/ukr-lit/bohdanchyk.html",
+      "optima/grade-3/ukr-lit/bohdanchyk.js",
     ],
   },
 ];
