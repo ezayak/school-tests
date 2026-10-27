@@ -410,7 +410,9 @@
       .map((t) =>
         /^_{3,}$/.test(t.core)
           ? `${esc(t.pre)}<span class="gap"></span>${esc(t.post)}`
-          : `${esc(t.pre)}<span class="w">${esc(t.core)}</span>${esc(t.post)}`,
+          : /[ء-ي]/.test(t.core)
+            ? `${esc(t.pre)}<span class="w">${esc(t.core)}</span>${esc(t.post)}`
+            : esc(t.pre + t.core + t.post),
       )
       .join(" ");
   function bindTap(root) {
@@ -1302,7 +1304,7 @@
     } else if (it.type === "open") {
       A.innerHTML = `<p class="note">Say or write your answer, then check it.</p><div class="row"><button type="button" class="btn" id="showA">Show the answer</button></div>`;
       document.getElementById("showA").onclick = () => {
-        A.innerHTML = `<div class="model"><span class="lab">Model answer · الْإِجَابَةُ</span><p class="ar${L.tapq ? " tapw" : ""}" dir="rtl" style="margin:4px 0">${L.tapq ? tapHTML(it.a) : esc(it.a)}</p><button type="button" class="abtn" id="aSay"><span class="e">🔊</span> Listen</button></div>
+        A.innerHTML = `<div class="model"><span class="lab">Model answer · الْإِجَابَةُ</span><p class="ar${L.tapq && !it.plain ? " tapw" : ""}" dir="rtl" style="margin:4px 0">${L.tapq && !it.plain ? tapHTML(it.a) : esc(it.a)}</p><button type="button" class="abtn" id="aSay"><span class="e">🔊</span> Listen</button></div>
       <div class="tfrow" style="margin-top:12px"><button type="button" class="tfbtn" id="got-1" data-g="1">✓ I got it</button><button type="button" class="tfbtn" id="got-0" data-g="0">✗ Not yet</button></div>`;
         document.getElementById("aSay").onclick = () => say(it.a);
         bindTap(A);
