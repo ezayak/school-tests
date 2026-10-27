@@ -3,6 +3,13 @@ html,
 body {
   margin: 0;
 }
+/* coming back to the home page: it slides in from the left (the page transition is in theme.css) */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+    types: back;
+  }
+}
 /* the graph paper fades to the other school's colour (theme.css sets them per school) */
 @property --paper {
   syntax: "<color>";

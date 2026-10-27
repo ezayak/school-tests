@@ -152,6 +152,36 @@
   --grid: #2d2814;
 }
 
+/* Opening another page: the new page slides in like the changes on the home page (browsers with cross-page view transitions;
+   the others just open the page). Going deeper it comes from the right; the home page sets types: back (index.css), so it comes from the left. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+    types: forward;
+  }
+  ::view-transition-old(root) {
+    animation: page-out 0.18s ease-in both;
+  }
+  ::view-transition-new(root) {
+    animation: page-in 0.38s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+    --from: 40px;
+  }
+  html:active-view-transition-type(back)::view-transition-new(root) {
+    --from: -40px;
+  }
+}
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--from));
+  }
+}
+
 * {
   box-sizing: border-box;
 }
