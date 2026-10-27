@@ -1,4 +1,4 @@
-/* Home page: graph-paper page, one section per grade with Subjects (one card per subject) and Revisions (term buttons → Mid-term / Final folding sections → subject cards). Load after shared/theme.css. */
+/* Home page: school switch, graph-paper page, one section per grade with Subjects (one card per subject) and Revisions (term buttons → Mid-term / Final folding sections → subject cards). Load after shared/theme.css. */
 html,
 body {
   margin: 0;
@@ -29,10 +29,54 @@ h1 span {
 }
 .hero {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
+.hero-end {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+/* school switch: one small pill with a logo per school (SCHOOLS in index.js). The logos are pictures, so the pill stays white in dark mode. */
+.school {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.school button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #1b2440;
+  font-family: var(--display);
+  font-size: 1rem;
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+.school button[aria-pressed="true"] {
+  filter: none;
+  opacity: 1;
+  box-shadow: inset 0 0 0 2px #1b2440;
+}
+.school img {
+  display: block;
+  height: 28px;
+  width: auto;
+}
+.school .wide {
+  height: 24px;
+} /* a wide logo with its name in it (Optima) */
 .tools {
   display: flex;
   flex-direction: column;

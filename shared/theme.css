@@ -39,9 +39,11 @@
   --rel: #e6dfcf;
   --comp: #6527c4;
   --other: #8a5cc9; /* subject colours */
-  --display: "Lilita One", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
-  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI",
+  /* Lilita One and Atkinson Hyperlegible have no Cyrillic letters: Ukrainian text uses Nunito on the pages that load it (home, Optima) */
+  --display: "Lilita One", "Nunito", "Arial Rounded MT Bold", "Trebuchet MS",
     sans-serif;
+  --body: "Atkinson Hyperlegible", "Nunito", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
   --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
@@ -129,6 +131,22 @@
   --snow: #dce4ee;
   --wheat: #8f7f3e;
   color-scheme: dark;
+}
+
+/* Each school has its own graph paper: <body data-school="optima"> (home page when Optima is chosen, Optima pages). SJAS keeps the blue paper above. */
+[data-school="optima"] {
+  --paper: #fff8dc;
+  --grid: #f1e2a6;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [data-school="optima"] {
+    --paper: #1a170b;
+    --grid: #2d2814;
+  }
+}
+:root[data-theme="dark"] [data-school="optima"] {
+  --paper: #1a170b;
+  --grid: #2d2814;
 }
 
 * {

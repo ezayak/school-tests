@@ -1,5 +1,18 @@
-// Main screen: grade + subject filters, game cards, install button.
+// Main screen: school switch, grade + subject filters, game cards, install button.
 (function () {
+  // One button per school in the switch. A game belongs to the school in its school: field (no field = SJAS).
+  // logo: a picture in icons/ (wide: true for a logo with the name in it), or ic: an emoji shown with the name.
+  // revisions: false → only the Subjects cards, no Revisions part.
+  const SCHOOLS = [
+    { k: "sjas", name: "SJAS", logo: "icons/sjas.png", revisions: true },
+    {
+      k: "optima",
+      name: "Optima",
+      logo: "icons/optima.svg",
+      wide: true,
+      revisions: false,
+    },
+  ];
   const PERIODS = [
     "Mid-term exam",
     "Final exam",
@@ -23,7 +36,7 @@
     Religion: "var(--rel)",
     Computer: "var(--comp)",
   };
-  const games = window.GAMES || [];
+  const ALL = window.GAMES || [];
   const esc = (s) =>
     String(s).replace(
       /[&<>"]/g,
@@ -43,18 +56,43 @@
       } catch (e) {}
     },
   };
-  let grade = store.get("st-grade") || "all";
-  let subject = store.get("st-subject") || "all";
+  let school = store.get("st-school") || "sjas";
+  if (!SCHOOLS.some((s) => s.k === school)) school = "sjas";
   let term = +store.get("st-term") || 0; // chosen term for Revisions; 0 = the latest term with a revision
-  const grades = [...new Set(games.map((g) => g.grade))].sort((a, b) => a - b);
-  const subjects = [...new Set(games.map((g) => g.subject))].sort();
-  if (grade !== "all" && !grades.includes(+grade)) grade = "all";
-  if (subject !== "all" && !subjects.includes(subject)) subject = "all";
+  // the games, grades and subjects of the chosen school, and its saved grade / subject filters
+  // (SJAS keeps the old keys st-grade / st-subject, the other schools add their name)
+  let SCH, games, grades, subjects, grade, subject;
+  const key = (k) => (school === "sjas" ? k : `${k}-${school}`);
+  function useSchool() {
+    SCH = SCHOOLS.find((s) => s.k === school);
+    games = ALL.filter((g) => (g.school || "sjas") === school);
+    grades = [...new Set(games.map((g) => g.grade))].sort((a, b) => a - b);
+    subjects = [...new Set(games.map((g) => g.subject))].sort();
+    grade = store.get(key("st-grade")) || "all";
+    subject = store.get(key("st-subject")) || "all";
+    if (grade !== "all" && !grades.includes(+grade)) grade = "all";
+    if (subject !== "all" && !subjects.includes(subject)) subject = "all";
+    document.body.dataset.school = school; // its own paper colour (shared/theme.css)
+  }
   const pIdx = (p) => {
     const i = PERIODS.indexOf(p);
     return i < 0 ? 99 : i;
   };
   function draw() {
+    document.getElementById("school").innerHTML = SCHOOLS.map(
+      (s) =>
+        `<button type="button" id="sc-${s.k}" data-sc="${s.k}" aria-pressed="${s.k === school}" title="${esc(s.name)}">${s.logo ? `<img${s.wide ? ' class="wide"' : ""} src="${esc(s.logo)}" alt="${esc(s.name)}">` : `<span aria-hidden="true">${s.ic || ""}</span>${esc(s.name)}`}</button>`,
+    ).join("");
+    document.querySelectorAll("[data-sc]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          if (b.dataset.sc === school) return;
+          school = b.dataset.sc;
+          store.set("st-school", school);
+          useSchool();
+          draw();
+        }),
+    );
     document.getElementById("filters").innerHTML = ["all", ...grades]
       .map((v) => {
         const n =
@@ -68,7 +106,7 @@
       (b) =>
         (b.onclick = () => {
           grade = b.dataset.g;
-          store.set("st-grade", grade);
+          store.set(key("st-grade"), grade);
           draw();
         }),
     );
@@ -82,7 +120,7 @@
       (b) =>
         (b.onclick = () => {
           subject = b.dataset.s;
-          store.set("st-subject", subject);
+          store.set(key("st-subject"), subject);
           draw();
         }),
     );
@@ -98,7 +136,7 @@
       ? show
           .map((gr) => {
             const gs = pool.filter((g) => g.grade === gr);
-            return `<section class="grade"><h2>Grade ${gr}<small>${gs.length} game${gs.length > 1 ? "s" : ""}</small></h2>${subjectCards(gs)}${revisions(gs)}</section>`;
+            return `<section class="grade"><h2>Grade ${gr}<small>${gs.length} game${gs.length > 1 ? "s" : ""}</small></h2>${subjectCards(gs)}${SCH.revisions ? revisions(gs) : ""}</section>`;
           })
           .join("")
       : '<p class="empty">No games for this choice yet.</p>';
@@ -198,5 +236,6 @@
       document.querySelector("header").appendChild(t);
     }
   }
+  useSchool();
   draw();
 })();

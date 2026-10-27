@@ -34,6 +34,8 @@ const CORE = [
   "./icons/icon-maskable-512.png",
   "./icons/apple-touch-icon.png",
   "./icons/favicon-32.png",
+  "./icons/sjas.png",
+  "./icons/optima.svg",
 ];
 
 // Precache straight from the server, not the browser's HTTP cache, so one version never mixes old pages with new CSS.

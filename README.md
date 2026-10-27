@@ -1,6 +1,7 @@
 # Study Games
 
-Picture quiz games for school tests. Home page, per grade: **Subjects** first (one card per subject, opening a list page with the lessons or dictations of every term),
+Picture quiz games for school tests. A small switch at the top of the home page picks the school: **SJAS** (opens by default) or **Optima** (the Ukrainian school);
+see "Schools". Home page, per grade: **Subjects** first (one card per subject, opening a list page with the lessons or dictations of every term),
 then **Revisions**: term buttons (one term at a time, the latest by default) and two folding sections, **Mid-term** and **Final**, with the subject cards.
 The chosen term and each section's open / closed state are remembered on the device. Every card has the same height: the lesson line is cut after 2 lines and the topics after 4.
 Every page is a plain HTML file (no build step), so the repo works as-is on GitHub Pages.
@@ -76,6 +77,26 @@ Rules for new pages:
 
 Games link back to `../../../index.html`, so keep them exactly three folders deep (Computer lessons too: `grade-N/computer/chapter-N/`).
 The Computer lesson lists (`grade-N/computer/index.html`) are two folders deep and use `../../`.
+
+## Schools
+
+The home page shows one school at a time. The switch (top right) has one logo per school; the chosen school is remembered on the device, SJAS when nothing is saved.
+The schools are listed in `SCHOOLS` at the top of `index.js`:
+
+```js
+{ k: "optima", name: "Optima", logo: "icons/optima.svg", wide: true, revisions: false }
+```
+
+- `k`: the name used in `games.js` (`school: "optima"`) and on `<body data-school="optima">`. A game without `school:` belongs to SJAS.
+- `logo`: a picture in `icons/` (`wide: true` for a logo with the name in it), or `ic: "🧠"` to show an emoji with the `name` instead.
+- `revisions: false`: only the **Subjects** cards, no Revisions part.
+- Each school keeps its own grade and subject filter.
+
+Each school has its own graph-paper colour: `[data-school="optima"]` in `shared/theme.css` (light and dark). Optima pages set `data-school="optima"` on `<body>` too.
+New school: add it to `SCHOOLS`, put its logo in `icons/` (and in `CORE` in `sw.js`), give its games `school: "<k>"`, and add its paper colour to `theme.css` if it needs one.
+
+Ukrainian text: Lilita One and Atkinson Hyperlegible have no Cyrillic letters, so the font stacks in `theme.css` fall back to **Nunito** for them.
+Pages with Ukrainian text load Nunito with the other Google fonts (the home page and the Optima pages do).
 
 ## Player name
 
