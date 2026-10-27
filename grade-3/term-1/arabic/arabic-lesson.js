@@ -1368,7 +1368,9 @@
           "Not quite. Try again, or show the answer.";
       };
       document.getElementById("checkBtn").onclick = check;
-      inp.onkeydown = (e) => e.key === "Enter" && check();
+      inp.onkeydown = (e) => {
+        if (e.key === "Enter") check();
+      };
       inp.oninput = () => inp.classList.remove("wrong");
       document.getElementById("showA").onclick = () => done(false);
     } else if (it.type === "order") {
