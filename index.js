@@ -100,22 +100,22 @@
   }
   new ResizeObserver(moveThumb).observe(sw); // again when the logos have loaded
   const calm = matchMedia("(prefers-reduced-motion: reduce)");
-  function slideIn(dir) {
+  // the same slide for every change on this page: els slide in from the right (dir 1) or the left (dir -1), one after the other
+  function slide(els, dir) {
     if (calm.matches || !document.body.animate) return;
-    [document.querySelector(".tools"), document.getElementById("list")].forEach(
-      (el, i) =>
-        el.animate(
-          [
-            { opacity: 0, transform: `translateX(${dir * 40}px)` },
-            { opacity: 1, transform: "none" },
-          ],
-          {
-            duration: 380,
-            delay: i * 60,
-            easing: "cubic-bezier(.2,.8,.3,1)",
-            fill: "backwards",
-          },
-        ),
+    [...els].forEach((el, i) =>
+      el.animate(
+        [
+          { opacity: 0, transform: `translateX(${dir * 40}px)` },
+          { opacity: 1, transform: "none" },
+        ],
+        {
+          duration: 380,
+          delay: i * 60,
+          easing: "cubic-bezier(.2,.8,.3,1)",
+          fill: "backwards",
+        },
+      ),
     );
   }
   const place = (k) => SCHOOLS.findIndex((s) => s.k === k);
@@ -130,7 +130,10 @@
         useSchool();
         moveThumb();
         draw();
-        slideIn(dir);
+        slide(
+          [document.querySelector(".tools"), document.getElementById("list")],
+          dir,
+        );
       }),
   );
   function draw() {
@@ -146,9 +149,14 @@
     document.querySelectorAll("[data-g]").forEach(
       (b) =>
         (b.onclick = () => {
+          if (b.dataset.g === String(grade)) return;
+          const g = ["all", ...grades].map(String);
+          const dir =
+            g.indexOf(b.dataset.g) > g.indexOf(String(grade)) ? 1 : -1;
           grade = b.dataset.g;
           store.set(key("st-grade"), grade);
           draw();
+          slide([document.getElementById("list")], dir);
         }),
     );
     document.getElementById("subjects").innerHTML = ["all", ...subjects]
@@ -160,9 +168,13 @@
     document.querySelectorAll("[data-s]").forEach(
       (b) =>
         (b.onclick = () => {
+          if (b.dataset.s === subject) return;
+          const all = ["all", ...subjects];
+          const dir = all.indexOf(b.dataset.s) > all.indexOf(subject) ? 1 : -1;
           subject = b.dataset.s;
           store.set(key("st-subject"), subject);
           draw();
+          slide([document.getElementById("list")], dir);
         }),
     );
     const pool = games.filter(
@@ -184,19 +196,27 @@
     document.querySelectorAll("[data-t]").forEach(
       (b) =>
         (b.onclick = () => {
+          if (b.getAttribute("aria-pressed") === "true") return;
+          const shown = b.parentElement.querySelector('[aria-pressed="true"]');
+          const dir = +b.dataset.t > +(shown && shown.dataset.t) ? 1 : -1;
           term = +b.dataset.t;
           store.set("st-term", term);
           draw();
+          // only the Mid-term / Final sections of that grade move
+          const part = document.getElementById(b.id).closest(".part");
+          slide(part.querySelectorAll(".period"), dir);
         }),
     );
     // Mid-term / Final fold: remember open or closed for each grade, term and exam
-    document
-      .querySelectorAll("details[data-k]")
-      .forEach(
-        (d) =>
-          (d.ontoggle = () =>
-            store.set("st-fold-" + d.dataset.k, d.open ? "1" : "0")),
-      );
+    document.querySelectorAll("details[data-k]").forEach((d) => {
+      // "toggle" also comes when an open section is drawn: the cards slide only after a tap
+      d.querySelector("summary").onclick = () => (d.dataset.tapped = "1");
+      d.ontoggle = () => {
+        store.set("st-fold-" + d.dataset.k, d.open ? "1" : "0");
+        if (d.open && d.dataset.tapped)
+          slide(d.querySelectorAll(".cards, .empty"), 1);
+      };
+    });
   }
   const bySubject = (a, b) => a.subject.localeCompare(b.subject);
   const card = (g) =>
