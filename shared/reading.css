@@ -230,7 +230,7 @@
 }
 .rd-line.was {
   visibility: visible;
-  opacity: 0.4;
+  opacity: 0.2;
 }
 .rd-line.cur {
   visibility: visible;
