@@ -299,38 +299,43 @@
    LESSON LIST (index.html)
    ===================================================================== */
   function listView() {
-    const LS = window.LESSONS || [];
+    const LS = window.LESSONS || [],
+      TS = window.TESTS || [];
+    const card = (l, label) =>
+      `<a class="lesson" href="${esc(l.path)}"><img src="${esc(l.cover)}" alt=""><span class="in"><span class="n">${label} ${l.n} · ${label === "Test" ? "الاختبار" : "الدرس"} ${esc(l.nAr || "")}</span><span class="t ar" dir="rtl">${esc(l.title)}</span><span class="e">${esc(l.en)}</span><span class="parts">${esc(l.note || "")}</span></span></a>`;
     app.innerHTML = `<section class="card pop">
     <div class="toprow"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 · اللغة العربية</span></div>
     <h1 class="hero-title"><span class="p">Arabic</span> <span class="k">Lessons</span></h1>
     <p class="howto">Pick a lesson. Each lesson has the story to read and listen to, the new words, opposites and plurals, and the exercises from the book.</p>
   </section>
-  <div class="lessons">${LS.map((l) => `<a class="lesson" href="${esc(l.path)}"><img src="${esc(l.cover)}" alt=""><span class="in"><span class="n">Lesson ${l.n} · الدرس ${esc(l.nAr || "")}</span><span class="t ar" dir="rtl">${esc(l.title)}</span><span class="e">${esc(l.en)}</span><span class="parts">${esc(l.note || "")}</span></span></a>`).join("")}
-  <div class="soon">More lessons will be added here, one by one.</div></div>`;
+  <div class="lessons">${LS.map((l) => card(l, "Lesson")).join("")}
+  <div class="soon">More lessons will be added here, one by one.</div></div>
+  ${TS.length ? `<h2 class="lgroup">Tests · <span class="ar">الِاخْتِبَارَاتُ</span></h2><div class="lessons">${TS.map((l) => card(l, "Test")).join("")}</div>` : ""}`;
   }
 
   /* =====================================================================
    LESSON PAGE: tabs Story · Words · Opposites & plurals · Exercises
    ===================================================================== */
-  let tab = store.get(KEY + "tab", "story");
-  if (!["story", "words", "opp", "ex"].includes(tab)) tab = "story";
+  // a test page sets L.tabs: one tab per group, {k, ic, t, ar, story} = that text + the exercises with tab: k
+  const TABS = L.tabs || [
+    { k: "story", ic: "📖", t: "Story", ar: "القصة" },
+    { k: "words", ic: "🗂", t: "Words", ar: "الكلمات" },
+    {
+      k: "opp",
+      ic: "🔄",
+      t: "Opposites & plurals",
+      short: "Pl / Op",
+      ar: "مضاد وجمع",
+    },
+    { k: "ex", ic: "✏️", t: "Exercises", short: "Tasks", ar: "التدريبات" },
+  ];
+  let tab = store.get(KEY + "tab", TABS[0].k);
+  if (!TABS.some((t) => t.k === tab)) tab = TABS[0].k;
   let part = 0,
     story = null; // story=null → show the list of texts
   function lessonView() {
     hush();
     closePop();
-    const TABS = [
-      { k: "story", ic: "📖", t: "Story", ar: "القصة" },
-      { k: "words", ic: "🗂", t: "Words", ar: "الكلمات" },
-      {
-        k: "opp",
-        ic: "🔄",
-        t: "Opposites & plurals",
-        short: "Pl / Op",
-        ar: "مضاد وجمع",
-      },
-      { k: "ex", ic: "✏️", t: "Exercises", short: "Tasks", ar: "التدريبات" },
-    ];
     app.innerHTML = `<section class="card pop">
     <div class="toprow"><div class="links">${(
       L.links || [
@@ -341,7 +346,7 @@
       .map(([h, t]) => `<a class="back" href="${esc(h)}">${esc(t)}</a>`)
       .join("")}</div>${trSeg()}</div>
     <div class="les-head">${L.cover ? `<img src="${esc(L.cover)}" alt="">` : `<span class="les-ic" aria-hidden="true">${esc(L.ic || "📖")}</span>`}<div><span class="eyebrow">${esc(L.unit || "")}</span><h1 class="les-title ar" dir="rtl">${esc(L.title)}</h1><div class="les-sub">${esc(tr === "uk" ? L.uk : L.en)}</div></div></div>
-    <div class="tabbox"><div class="ftabs four" role="group" aria-label="Lesson part">${TABS.map((t) => `<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short || t.t)}</span><span class="sub ar">${t.ar}</span></button>`).join("")}</div>
+    <div class="tabbox"><div class="ftabs${TABS.length === 4 ? " four" : ""}" role="group" aria-label="Lesson part">${TABS.map((t) => `<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short || t.t)}</span><span class="sub ar">${t.ar}</span></button>`).join("")}</div>
     <div class="panel" id="panel"></div></div>
   </section>`;
     bindTr(lessonView);
@@ -359,7 +364,14 @@
     );
     const P = document.getElementById("panel");
     exHost = null;
-    if (tab === "story") storyPanel(P);
+    const T = TABS.find((t) => t.k === tab);
+    if (T.story != null) {
+      P.innerHTML = `<div id="tText"></div><div id="tEx"></div>`;
+      story = T.story;
+      storyPanel(P.querySelector("#tText"));
+      exHost = P.querySelector("#tEx");
+      exView();
+    } else if (tab === "story") storyPanel(P);
     else if (tab === "words") wordsPanel(P);
     else if (tab === "ex") {
       exHost = P;
@@ -392,6 +404,30 @@
     const k = Object.keys(L.gloss || {}).find((x) => bare(x) === b);
     return k ? L.gloss[k] : null;
   }
+  // L.tapq (tests): every word of a question and of its answer can be tapped, like in the story
+  const tapHTML = (text) =>
+    tokens(text)
+      .map((t) =>
+        /^_{3,}$/.test(t.core)
+          ? `${esc(t.pre)}<span class="gap"></span>${esc(t.post)}`
+          : `${esc(t.pre)}<span class="w">${esc(t.core)}</span>${esc(t.post)}`,
+      )
+      .join(" ");
+  function bindTap(root) {
+    root.querySelectorAll(".tapw .w").forEach(
+      (s) =>
+        (s.onclick = (e) => {
+          e.stopPropagation();
+          root
+            .querySelectorAll(".tapw .w.on")
+            .forEach((x) => x.classList.remove("on"));
+          s.classList.add("on");
+          showPop(s.textContent, gloss(s.textContent), () =>
+            s.classList.remove("on"),
+          );
+        }),
+    );
+  }
   function storyList(P) {
     P.innerHTML = `<p class="tab-sub">Choose a text to read · <span class="ar">اخْتَرْ نَصًّا</span></p>
     <div class="texts">${STORIES.map((t, i) => {
@@ -414,12 +450,13 @@
     if (part >= PS.length || part < 0) part = 0;
     const p = PS[part],
       tk = tokens(p.ar);
-    P.innerHTML = `<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span></div>
+    const fixed = !!L.tabs; // a test: one text per tab, no list, no part navigation
+    P.innerHTML = `${fixed ? "" : `<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span></div>`}
     ${ST.intro && part === 0 ? `<details class="readp"><summary>About this text · تمهيد</summary><p class="ar" dir="rtl" style="font-size:1.25rem;line-height:1.9;margin:8px 0">${esc(ST.intro.ar)}</p>${trText(ST.intro) ? `<p class="trans">${esc(trText(ST.intro))}</p>` : ""}</details>` : ""}
     <div class="part${p.img ? "" : " noimg"}">
       ${p.img ? `<div class="pic"><img src="${esc(p.img)}" alt=""></div>` : ""}
       <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
-        <span class="pchip"><span class="ar" dir="rtl">${esc(p.para)}</span><span>· Part ${part + 1} of ${PS.length}</span></span>
+        <span class="pchip"><span class="ar" dir="rtl">${esc(p.para)}</span>${fixed ? "" : `<span>· Part ${part + 1} of ${PS.length}</span>`}</span>
         <p class="story ar" dir="rtl" id="storyText">${tk.map((t, i) => `${esc(t.pre)}<span class="w" data-i="${i}">${esc(t.core)}</span>${esc(t.post)}`).join(" ")}</p>
         <div class="audio"><button type="button" class="abtn big" id="say1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="say2"><span class="e">🐢</span> Slowly</button><button type="button" class="abtn" id="pauseBtn"><span class="e">⏸</span> Pause</button><button type="button" class="abtn" id="stopBtn"><span class="e">⏹</span> Stop</button></div>
         ${noVoiceNote()}
@@ -427,9 +464,13 @@
         <p class="hintline">Tap any word to see what it means.</p>
       </div>
     </div>
-    <div class="nav" dir="rtl"><button type="button" class="btn ghost" id="prevBtn" ${part === 0 ? "disabled" : ""}><span class="na">→ السابق</span> <small>Back</small></button>
+    ${
+      fixed
+        ? ""
+        : `<div class="nav" dir="rtl"><button type="button" class="btn ghost" id="prevBtn" ${part === 0 ? "disabled" : ""}><span class="na">→ السابق</span> <small>Back</small></button>
       <div class="dots" dir="rtl">${PS.map((_, i) => `<button type="button" id="dot-${i}" data-dot="${i}" aria-label="Part ${i + 1}" aria-current="${i === part}"></button>`).join("")}</div>
-      ${part < PS.length - 1 ? `<button type="button" class="btn" id="nextPart"><span class="na">التالي ←</span> <small>Next</small></button>` : story < STORIES.length - 1 ? `<button type="button" class="btn" id="nextText"><span class="na">النص التالي ←</span> <small>Next text</small></button>` : `<button type="button" class="btn" id="toWords"><span class="na">الكلمات ←</span> <small>Words</small></button>`}</div>`;
+      ${part < PS.length - 1 ? `<button type="button" class="btn" id="nextPart"><span class="na">التالي ←</span> <small>Next</small></button>` : story < STORIES.length - 1 ? `<button type="button" class="btn" id="nextText"><span class="na">النص التالي ←</span> <small>Next text</small></button>` : `<button type="button" class="btn" id="toWords"><span class="na">الكلمات ←</span> <small>Words</small></button>`}</div>`
+    }`;
     const txt = document.getElementById("storyText");
     const spans = [...txt.querySelectorAll(".w")];
     onWord = (ci) => {
@@ -481,6 +522,7 @@
       storyPanel(P);
       P.scrollIntoView({ block: "nearest" });
     };
+    if (fixed) return;
     document.getElementById("prevBtn").onclick = () => part > 0 && go(part - 1);
     const nx = document.getElementById("nextPart");
     if (nx) nx.onclick = () => go(part + 1);
@@ -1090,7 +1132,7 @@
   function exView() {
     hush();
     if (xs) return xs.sec.cards ? qaCards() : exItem();
-    const SEC = L.exercises || [];
+    const SEC = (L.exercises || []).filter((s) => !s.tab || s.tab === tab);
     const H = exH();
     H.innerHTML = `<p class="tab-sub">${esc((L.exSub || [])[0] || "Exercises from the book")} · <span class="ar">${esc((L.exSub || [])[1] || "تَدْرِيبَاتُ الْكِتَابِ")}</span></p>
     <div class="modes secs">${SEC.map((s, i) => `<button type="button" class="mode" id="sec-${s.k}" data-s="${i}"><span class="mi-ic">${s.ic}</span><span class="ar" dir="rtl">${esc(s.t)}</span><b style="font-size:1.05rem">${esc(tr === "uk" ? s.uk : s.en)}</b><small>${s.items.length} ${s.cards ? "cards" : "questions"}</small></button>`).join("")}</div>
@@ -1126,7 +1168,7 @@
     );
   }
   const exTop = (H) => {
-    const t = exHost && exHost.closest(".tabbox");
+    const t = exHost && (L.tabs ? exHost : exHost.closest(".tabbox"));
     if (t && t.getBoundingClientRect().top < 0)
       t.scrollIntoView({ block: "start" });
   };
@@ -1162,7 +1204,7 @@
     ${ruleOf(xs.sec) ? ruleHTML(ruleOf(xs.sec)) : ""}
     ${para ? `<details class="readp"><summary>📖 Read / listen to the paragraph</summary><p class="ar" dir="rtl">${esc(para.ar)}</p><button type="button" class="abtn" id="paraSay"><span class="e">🔊</span> Listen</button></details>` : ""}
     ${it.tag ? `<span class="tag ar" dir="rtl">${esc(it.tag)}</span>` : ""}
-    ${it.type === "match" ? "" : `<p class="qar ar" dir="rtl">${qHTML(it.q)}</p>`}
+    ${it.type === "match" ? "" : `<p class="qar ar${L.tapq ? " tapw" : ""}" dir="rtl">${L.tapq ? tapHTML(it.q) : qHTML(it.q)}</p>`}
     ${it.type === "match" ? `<p class="qar ar" dir="rtl">${esc(it.q)}</p>` : ""}
     ${trText(it) ? `<p class="qhelp">${esc(trText(it))}</p>` : ""}
     <div class="audio"><button type="button" class="abtn" id="qSay"><span class="e">🔊</span> Read the question</button></div>
@@ -1173,6 +1215,8 @@
       xs = null;
       exView();
     };
+    closePop();
+    bindTap(H);
     document.getElementById("qSay").onclick = () => say(speakable(it.q));
     const ps = document.getElementById("paraSay");
     if (ps) ps.onclick = () => say(para.ar);
@@ -1258,9 +1302,10 @@
     } else if (it.type === "open") {
       A.innerHTML = `<p class="note">Say or write your answer, then check it.</p><div class="row"><button type="button" class="btn" id="showA">Show the answer</button></div>`;
       document.getElementById("showA").onclick = () => {
-        A.innerHTML = `<div class="model"><span class="lab">Model answer · الْإِجَابَةُ</span><p class="ar" dir="rtl" style="margin:4px 0">${esc(it.a)}</p><button type="button" class="abtn" id="aSay"><span class="e">🔊</span> Listen</button></div>
+        A.innerHTML = `<div class="model"><span class="lab">Model answer · الْإِجَابَةُ</span><p class="ar${L.tapq ? " tapw" : ""}" dir="rtl" style="margin:4px 0">${L.tapq ? tapHTML(it.a) : esc(it.a)}</p><button type="button" class="abtn" id="aSay"><span class="e">🔊</span> Listen</button></div>
       <div class="tfrow" style="margin-top:12px"><button type="button" class="tfbtn" id="got-1" data-g="1">✓ I got it</button><button type="button" class="tfbtn" id="got-0" data-g="0">✗ Not yet</button></div>`;
         document.getElementById("aSay").onclick = () => say(it.a);
+        bindTap(A);
         A.querySelectorAll("[data-g]").forEach(
           (b) =>
             (b.onclick = () => {
@@ -1280,6 +1325,52 @@
             }),
         );
       };
+    } else if (it.type === "word") {
+      // a: the accepted words; checked without tashkeel, alef forms or a leading ال
+      const norm = (w) =>
+        bare(w)
+          .replace(/[أإآٱ]/g, "ا")
+          .replace(/ى/g, "ي")
+          .replace(/ة/g, "ه")
+          .replace(/[^ء-ي]/g, "")
+          .replace(/^ال/, "");
+      const model = it.a.join(" ، ");
+      A.innerHTML = `<div class="ansrow"><input type="text" class="ansin ar" id="ansIn" dir="rtl" lang="ar" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer"><button type="button" class="btn" id="checkBtn">Check</button></div>
+      <p class="note" id="tryNote"></p><div class="row"><button type="button" class="btn ghost" id="showA">Show the answer</button></div>`;
+      const inp = document.getElementById("ansIn"),
+        done = (ok) => {
+          inp.disabled = true;
+          inp.classList.add(ok ? "right" : "wrong");
+          A.querySelector(".row").remove();
+          document.getElementById("checkBtn").remove();
+          document.getElementById("tryNote").remove();
+          A.insertAdjacentHTML(
+            "beforeend",
+            `<div class="model"><span class="lab">Model answer · الْإِجَابَةُ</span><p class="ar tapw" dir="rtl" style="margin:4px 0">${tapHTML(model)}</p><button type="button" class="abtn" id="aSay"><span class="e">🔊</span> Listen</button></div>`,
+          );
+          document.getElementById("aSay").onclick = () => say(model);
+          bindTap(A);
+          if (ok) xs.score++;
+          else xs.miss.push({ q: it.q, your: inp.value, right: model });
+          after(
+            ok,
+            ok ? "That's the word!" : "Read the answer and try to remember it.",
+          );
+        };
+      const check = () => {
+        const v = norm(inp.value);
+        if (!v) return inp.focus();
+        if (it.a.some((w) => norm(w) === v)) return done(true);
+        inp.classList.remove("wrong");
+        void inp.offsetWidth;
+        inp.classList.add("wrong");
+        document.getElementById("tryNote").textContent =
+          "Not quite. Try again, or show the answer.";
+      };
+      document.getElementById("checkBtn").onclick = check;
+      inp.onkeydown = (e) => e.key === "Enter" && check();
+      inp.oninput = () => inp.classList.remove("wrong");
+      document.getElementById("showA").onclick = () => done(false);
     } else if (it.type === "order") {
       const n = it.s.length,
         bank = shuf(it.s.map((_, i) => i));

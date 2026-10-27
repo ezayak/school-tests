@@ -149,16 +149,19 @@ body {
   margin: 0;
   text-align: right;
 }
-.story .w {
+.story .w,
+.tapw .w {
   cursor: pointer;
   border-radius: 6px;
   padding: 0 1px;
   transition: background 0.15s;
 }
-.story .w:hover {
+.story .w:hover,
+.tapw .w:hover {
   background: color-mix(in srgb, var(--hl) 45%, transparent);
 }
-.story .w.on {
+.story .w.on,
+.tapw .w.on {
   background: var(--hl);
   color: #1b2440;
 }
@@ -566,6 +569,11 @@ body {
   color: var(--muted);
   font-size: 0.9rem;
 }
+.lgroup {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  margin: 26px 0 12px;
+}
 .soon {
   border: 2.5px dashed var(--muted);
   border-radius: 18px;
@@ -773,4 +781,30 @@ body {
 /* lessons don't animate a new screen in: every picture would blink */
 .pop {
   animation: none;
+}
+/* tests: typed answers */
+.ansrow {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  margin-bottom: 8px;
+  margin-top: 6px;
+}
+.ansin {
+  flex: 1;
+  min-width: 0;
+  font-size: 1.6rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  padding: 6px 14px;
+  background: var(--card);
+  color: var(--ink);
+}
+.ansin.right {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 12%, var(--card));
+}
+.ansin.wrong {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 10%, var(--card));
 }
