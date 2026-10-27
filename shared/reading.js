@@ -128,6 +128,22 @@
   ];
   let tab = store.get(K + "-tab", "syl");
   if (!TABS.some((t) => t.k === tab)) tab = "syl";
+
+  // a tab change slides only the panel (theme.css: html[data-tabdir]); the pictures around it stay still.
+  // dir: > 0 a tab on the right, < 0 on the left. Same function in every engine with lesson tabs.
+  function tabSlide(dir, update) {
+    if (
+      !dir ||
+      !document.startViewTransition ||
+      matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return update();
+    const h = document.documentElement;
+    h.dataset.tabdir = dir > 0 ? "next" : "prev";
+    document
+      .startViewTransition(update)
+      .finished.finally(() => delete h.dataset.tabdir);
+  }
   app.innerHTML = `<section class="card rd-card">
     <div class="toprow"><div class="toplinks"><a class="back" href="${HOME}">← Усі ігри</a><a class="back" href="index.html">${SUBJ}</a></div></div>
     <div class="rd-head"><h1 class="les-title">${esc(T.title)}</h1><span class="les-sub">${esc(T.sub || "Складова ракета")}</span></div>
@@ -170,7 +186,15 @@
   }
   document
     .querySelectorAll("[data-tab]")
-    .forEach((b) => (b.onclick = () => go(b.dataset.tab)));
+    .forEach(
+      (b) =>
+        (b.onclick = () =>
+          tabSlide(
+            TABS.findIndex((t) => t.k === b.dataset.tab) -
+              TABS.findIndex((t) => t.k === tab),
+            () => go(b.dataset.tab),
+          )),
+    );
   const next = (k, label) =>
     `<button type="button" class="btn" data-go="${k}">${label}</button>`;
   function wireNext() {

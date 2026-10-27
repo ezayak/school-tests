@@ -265,6 +265,22 @@
     },
   ];
   let tab = store.get(KEY + "-tab", "read");
+
+  // a tab change slides only the panel (theme.css: html[data-tabdir]); the pictures around it stay still.
+  // dir: > 0 a tab on the right, < 0 on the left. Same function in every engine with lesson tabs.
+  function tabSlide(dir, update) {
+    if (
+      !dir ||
+      !document.startViewTransition ||
+      matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return update();
+    const h = document.documentElement;
+    h.dataset.tabdir = dir > 0 ? "next" : "prev";
+    document
+      .startViewTransition(update)
+      .finished.finally(() => delete h.dataset.tabdir);
+  }
   if (!TABS.some((t) => t.k === tab)) tab = "read";
   let pg = Math.min(+store.get(KEY + "-page", "0") || 0, S.pages.length - 1);
 
@@ -280,7 +296,15 @@
   const panel = document.getElementById("panel");
   app
     .querySelectorAll("[data-tab]")
-    .forEach((b) => (b.onclick = () => show(b.dataset.tab)));
+    .forEach(
+      (b) =>
+        (b.onclick = () =>
+          tabSlide(
+            TABS.findIndex((t) => t.k === b.dataset.tab) -
+              TABS.findIndex((t) => t.k === tab),
+            () => show(b.dataset.tab),
+          )),
+    );
   function show(k) {
     hush();
     tab = k;
