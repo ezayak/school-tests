@@ -512,22 +512,6 @@
   const setDone = (k) => store.set(`cs-done-${LK}-${k}`, "1");
   let tab = store.get("cs-tab-" + LK, "learn");
   if (!["learn", "play", "ex"].includes(tab)) tab = "learn";
-
-  // a tab change slides only the panel (theme.css: html[data-tabdir]); the pictures around it stay still.
-  // dir: > 0 a tab on the right, < 0 on the left. Same function in every engine with lesson tabs.
-  function tabSlide(dir, update) {
-    if (
-      !dir ||
-      !document.startViewTransition ||
-      matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return update();
-    const h = document.documentElement;
-    h.dataset.tabdir = dir > 0 ? "next" : "prev";
-    document
-      .startViewTransition(update)
-      .finished.finally(() => delete h.dataset.tabdir);
-  }
   const TABS = [
     {
       k: "learn",
@@ -727,16 +711,11 @@
     );
     app.querySelectorAll("[data-tab]").forEach(
       (b) =>
-        (b.onclick = () =>
-          tabSlide(
-            TABS.findIndex((t) => t.k === b.dataset.tab) -
-              TABS.findIndex((t) => t.k === tab),
-            () => {
-              tab = b.dataset.tab;
-              store.set("cs-tab-" + LK, tab);
-              home();
-            },
-          )),
+        (b.onclick = () => {
+          tab = b.dataset.tab;
+          store.set("cs-tab-" + LK, tab);
+          home();
+        }),
     );
     app.querySelectorAll("[data-sp]").forEach(
       (b) =>

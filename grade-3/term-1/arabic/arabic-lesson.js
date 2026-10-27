@@ -313,22 +313,6 @@
    LESSON PAGE: tabs Story · Words · Opposites & plurals · Exercises
    ===================================================================== */
   let tab = store.get(KEY + "tab", "story");
-
-  // a tab change slides only the panel (theme.css: html[data-tabdir]); the pictures around it stay still.
-  // dir: > 0 a tab on the right, < 0 on the left. Same function in every engine with lesson tabs.
-  function tabSlide(dir, update) {
-    if (
-      !dir ||
-      !document.startViewTransition ||
-      matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return update();
-    const h = document.documentElement;
-    h.dataset.tabdir = dir > 0 ? "next" : "prev";
-    document
-      .startViewTransition(update)
-      .finished.finally(() => delete h.dataset.tabdir);
-  }
   if (!["story", "words", "opp", "ex"].includes(tab)) tab = "story";
   let part = 0,
     story = null; // story=null → show the list of texts
@@ -363,20 +347,15 @@
     bindTr(lessonView);
     app.querySelectorAll("[data-tab]").forEach(
       (b) =>
-        (b.onclick = () =>
-          tabSlide(
-            TABS.findIndex((t) => t.k === b.dataset.tab) -
-              TABS.findIndex((t) => t.k === tab),
-            () => {
-              tab = b.dataset.tab;
-              store.set(KEY + "tab", tab);
-              wstate = null;
-              ostate = null;
-              story = null;
-              xs = null;
-              lessonView();
-            },
-          )),
+        (b.onclick = () => {
+          tab = b.dataset.tab;
+          store.set(KEY + "tab", tab);
+          wstate = null;
+          ostate = null;
+          story = null;
+          xs = null;
+          lessonView();
+        }),
     );
     const P = document.getElementById("panel");
     exHost = null;

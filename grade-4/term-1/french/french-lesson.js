@@ -297,22 +297,6 @@
     return `<button type="button" class="mode" ${data}>${pic(m, "thumb")}<b>${esc(m.t)}</b><small>${esc(m.en)}</small></button>`;
   }
   let tab = store.get("fr-tab-" + L.n, "learn");
-
-  // a tab change slides only the panel (theme.css: html[data-tabdir]); the pictures around it stay still.
-  // dir: > 0 a tab on the right, < 0 on the left. Same function in every engine with lesson tabs.
-  function tabSlide(dir, update) {
-    if (
-      !dir ||
-      !document.startViewTransition ||
-      matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return update();
-    const h = document.documentElement;
-    h.dataset.tabdir = dir > 0 ? "next" : "prev";
-    document
-      .startViewTransition(update)
-      .finished.finally(() => delete h.dataset.tabdir);
-  }
   if (!["learn", "play", "ex"].includes(tab)) tab = "learn";
   const TABS = [
     { k: "learn", ic: "📖", t: "Apprends", en: "Learn" },
@@ -362,16 +346,11 @@
     document.getElementById("coverBtn").onclick = () => story(0);
     app.querySelectorAll("[data-tab]").forEach(
       (b) =>
-        (b.onclick = () =>
-          tabSlide(
-            TABS.findIndex((t) => t.k === b.dataset.tab) -
-              TABS.findIndex((t) => t.k === tab),
-            () => {
-              tab = b.dataset.tab;
-              store.set("fr-tab-" + L.n, tab);
-              home();
-            },
-          )),
+        (b.onclick = () => {
+          tab = b.dataset.tab;
+          store.set("fr-tab-" + L.n, tab);
+          home();
+        }),
     );
     app.querySelectorAll("[data-tr]").forEach(
       (b) =>

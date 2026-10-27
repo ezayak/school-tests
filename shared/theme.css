@@ -175,27 +175,10 @@
   html:active-view-transition-type(back)::view-transition-new(root) {
     --from: -40px;
   }
-  /* Lessons (pages with tabs): no slide when the page opens or a tab changes, the pictures would blink.
-     Only the panel under the tabs slides, towards the tab that was chosen (the engines set html[data-tabdir], see tabSlide). */
+  /* Lessons (pages with tabs) have no page animation: the pictures would blink */
   html:has(.ftabs)::view-transition-old(root),
   html:has(.ftabs)::view-transition-new(root) {
     animation: none;
-  }
-  html[data-tabdir] .panel {
-    view-transition-name: tab-panel;
-  }
-  ::view-transition-group(tab-panel) {
-    animation: none;
-  }
-  ::view-transition-old(tab-panel) {
-    animation: page-out 0.14s ease-in both;
-  }
-  ::view-transition-new(tab-panel) {
-    animation: page-in 0.32s cubic-bezier(0.2, 0.8, 0.3, 1) both;
-    --from: 40px;
-  }
-  html[data-tabdir="prev"]::view-transition-new(tab-panel) {
-    --from: -40px;
   }
 }
 @keyframes page-out {

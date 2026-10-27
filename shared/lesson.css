@@ -1116,18 +1116,9 @@ details.book[open] .alltext {
 .pic.rv.emo span {
   font-size: 2.6rem;
 }
+/* lessons don't animate a new screen in: every picture would blink */
 .pop {
-  animation: pop 0.3s ease;
-}
-@keyframes pop {
-  from {
-    transform: scale(0.97);
-    opacity: 0.4;
-  }
-  to {
-    transform: none;
-    opacity: 1;
-  }
+  animation: none;
 }
 
 /* list of lessons */

@@ -769,3 +769,8 @@ body {
   margin-left: auto;
   text-align: right;
 } /* grade line on the right, like the other start pages */
+
+/* lessons don't animate a new screen in: every picture would blink */
+.pop {
+  animation: none;
+}
