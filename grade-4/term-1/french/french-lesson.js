@@ -376,23 +376,21 @@
           home();
         }),
     );
-    app
-      .querySelectorAll("[data-m]")
-      .forEach(
-        (b) =>
-          (b.onclick = () =>
-            ({
-              story: () => story(0),
-              words: () => words(0, "all"),
-              ou: ouView,
-              verb: verbView,
-              listen: gameListen,
-              match: gameMatch,
-              bword: gameBuildWord,
-              bsent: chooseSent,
-              ilelle: gameIlElle,
-            })[b.dataset.m]()),
-      );
+    app.querySelectorAll("[data-m]").forEach(
+      (b) =>
+        (b.onclick = () =>
+          ({
+            story: () => story(0),
+            words: () => words(0, "all"),
+            ou: ouView,
+            verb: verbView,
+            listen: gameListen,
+            match: gameMatch,
+            bword: gameBuildWord,
+            bsent: chooseSent,
+            ilelle: gameIlElle,
+          })[b.dataset.m]()),
+    );
     app
       .querySelectorAll("[data-x]")
       .forEach((b) => (b.onclick = () => startExercise(+b.dataset.x)));
