@@ -52,15 +52,29 @@
   if (view === "list") {
     const LS = window.CS_LESSONS || { grade: 4, chapters: [] };
     // one block per chapter; a lesson's path and cover are relative to its chapter folder
+    // label: the word on the cards ("Lesson"); flat: all the cards together, no chapter headings (Math: one lesson per unit)
+    const cards = (ch) =>
+      ch.items
+        .map((it) =>
+          Kit.lessonCard(
+            {
+              ...it,
+              path: `${ch.dir}/${it.path}`,
+              cover: `${ch.dir}/${it.cover}`,
+            },
+            LS.label || "Lesson",
+          ),
+        )
+        .join("");
     const chapter = (ch) =>
       `<h2 class="chapter">${esc(LS.part || "Chapter")} ${esc(ch.n)}${ch.title ? ` · ${esc(ch.title)}` : ""}</h2>
-  <div class="items">${ch.items.map((it) => Kit.lessonCard({ ...it, path: `${ch.dir}/${it.path}`, cover: `${ch.dir}/${it.cover}` }, "Lesson")).join("")}</div>`;
+  <div class="items">${cards(ch)}</div>`;
     app.innerHTML = `<section class="card">
     <div class="topbar"><a class="back" href="../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · ${esc(SUBJ)}</span></div>
     <h1 class="hero-title"><span class="p">${esc(SUBJ)}</span> <span class="k">Lessons</span></h1>
     <p class="howto">${esc(LS.intro || "Pick a lesson. Each lesson has big pictures, a pretend Windows computer to practise on, games, and the school exercises. Everything can be read aloud.")}</p>
   </section>
-  ${LS.chapters.map(chapter).join("")}
+  ${LS.flat ? `<div class="items">${LS.chapters.map(cards).join("")}</div>` : LS.chapters.map(chapter).join("")}
   <div class="soon">New lessons will be added here.</div>`;
     document.title = `${SUBJ} · Grade ${LS.grade}`;
     return;
@@ -71,6 +85,8 @@
   const IMG = (n) => `${L.imgDir || "img/lesson-" + L.n}/${n}.jpg`; // English lessons name their picture folder
   const LK = L.key || L.n; // saved ticks and tab; Science lessons set a key so topics don't share lesson numbers
   const W = window.WinSim || window.WordSim;
+  // a subject can add its own question types and drawings (Math: shared/math.js, loaded before this engine)
+  const EXT = window.CS_EXT;
   // the pretend program's name for the free-play tile: Mini Windows unless the program says otherwise
   const SIM = {
     name: (W && W.label) || "Mini Windows",
@@ -331,6 +347,8 @@
       case "blocks":
         return window.Kit ? Kit.blocks(v) : "";
     }
+    // drawings of another subject (Math: shared/math.js)
+    if (EXT && EXT.vis && EXT.vis[v.kind]) return EXT.vis[v.kind](v);
     return "";
   }
   // a picture box: book image, drawing, or emoji
@@ -618,7 +636,9 @@
                       (c.vis &&
                         c.vis.kind === "strip" &&
                         (c.vis.items.find((x) => x.img) || {}).img),
-                    ic: c.vis && c.vis.kind === "emoji" ? c.vis.e : "💡",
+                    ic:
+                      c.ic ||
+                      (c.vis && c.vis.kind === "emoji" ? c.vis.e : "💡"),
                   },
                   `data-i="${i}" id="i-${i}"`,
                 ),
@@ -1088,13 +1108,15 @@
     S.max = items.reduce(
       (a, it) =>
         a +
-        (it.type === "match"
-          ? it.pairs.length
-          : it.type === "wsearch" || it.type === "sort"
-            ? it.words.length
-            : it.type === "tapw"
-              ? Object.keys(it.ans).length
-              : 1),
+        (EXT && EXT.pts && EXT.pts[it.type]
+          ? EXT.pts[it.type](it)
+          : it.type === "match"
+            ? it.pairs.length
+            : it.type === "wsearch" || it.type === "sort"
+              ? it.words.length
+              : it.type === "tapw"
+                ? Object.keys(it.ans).length
+                : 1),
       0,
     );
     show();
@@ -1109,21 +1131,49 @@
     top0();
     const it = S.items[S.i];
 
-    ({
-      mc: itMC,
-      match: itMatch,
-      order: itOrder,
-      open: itOpen,
-      parts: itParts,
-      sim: itSim,
-      place: itPlace,
-      multi: itMulti,
-      touch: itTouch,
-      wsearch: itWsearch,
-      tapw: itTap,
-      sort: itSort,
-    })[it.type](it);
+    (
+      ({
+        mc: itMC,
+        match: itMatch,
+        order: itOrder,
+        open: itOpen,
+        parts: itParts,
+        sim: itSim,
+        place: itPlace,
+        multi: itMulti,
+        touch: itTouch,
+        wsearch: itWsearch,
+        tapw: itTap,
+        sort: itSort,
+      })[it.type] || ((x) => EXT.items[x.type](x, api()))
+    )(it);
   }
+  // what a question type from CS_EXT can use
+  const api = () => ({
+    app,
+    S,
+    esc,
+    kw,
+    tx,
+    plain,
+    shuf,
+    pick,
+    say,
+    sayQ,
+    autoSayQ,
+    hush,
+    hud,
+    qHTML,
+    fromTag,
+    split,
+    pic,
+    hasPic,
+    visHTML,
+    feedback,
+    addPts,
+    next,
+    bindHome,
+  });
   function next() {
     S.i++;
     if (S.i >= S.items.length) return end();
