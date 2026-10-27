@@ -325,6 +325,26 @@ Exercise item types (every item can have `en`/`uk` help text, `img`, `tag`, and 
 
 After adding a lesson: add it to `lessons.js`, add its files to the `also: [...]` list of the "Arabic Lessons" entry in `games.js` (so it works offline), and bump `VERSION` in `sw.js`.
 
+### Arabic tests
+
+The weekly التَّقْيِيمُ sheets, listed under **Tests** on the same `index.html` (`window.TESTS` in `lessons.js`, same fields as a lesson).
+A test is `test-N.html` (copy `test-1.html`, change `test-1.js`) + `test-N.js`, in the lesson format with three extra keys:
+
+```js
+window.LESSON = {
+  n: "t1", tapq: true,                      // n: a text key, so it saves apart from the lessons; tapq: tap any word of a question or answer
+  tabs: [{k: "a", ic: "📝", t: "Group A", short: "A", ar: "الْمَجْمُوعَةُ (أ)", story: 0}, …],  // one tab per group: the text, then its tasks
+  stories: [{title, parts: [{para, img, ar, en, uk}]}],   // the sheet's paragraph (one part)
+  gloss: {…},                               // every word of the text, the questions and the model answers
+  exercises: [{k, tab: "a", t, en, uk, ic, items: [ … ]}, …],  // tab: which group
+};
+```
+
+Test items: `{type: "word", q: "… ___", a: ["right", "also right"]}` — the child types the word and taps Check (checked without tashkeel,
+alef forms or a leading ال; Show the answer stays), and `{type: "open", q, a}` for sentence answers. Each item has `en` / `uk`; no picture, the text above the tasks has one.
+
+After adding a test: add it to `TESTS`, add `test-N.html` / `test-N.js` to `also` in `games.js`, and bump `VERSION` in `sw.js`.
+
 ## French lessons (Grade 4)
 
 Folder: `grade-4/term-1/french/`. One card on the home page ("Français", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`.

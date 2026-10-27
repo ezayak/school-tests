@@ -37,3 +37,16 @@ window.LESSONS = [
     note: "10 texts · 58 words · 184 exercises · November review",
   },
 ];
+
+// Tests (the weekly تقييم sheets): one page per sheet, one tab per group. Listed under "Tests" on the same page.
+window.TESTS = [
+  {
+    n: 1,
+    nAr: "الْأَوَّلُ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · Period 4",
+    path: "test-1.html",
+    cover: "img/lesson-2/teacher.jpg",
+    note: "Groups A · B · C · 15 questions · text from Lesson 2",
+  },
+];
