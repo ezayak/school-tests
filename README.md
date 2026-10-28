@@ -559,5 +559,10 @@ Drawings (`vis`):
 A lesson file is like a Science lesson (`words`, `ideas`, `games`, `exercises`, `key: "math4-u<unit>"`), with `imgDir: "img"` and `cover: "cover"`
 (the unit's opening picture from the book). Picture cards can set `ic` (the emoji on their tile).
 
+**Math revision** (Final term 1): `grade-4/term-1/final-term-1/math-revision.html` is a quiz page like the other revisions (`shared/quiz.css`, `quiz-common.js`,
+start screen with parts and length, matching rounds, score and review) that also loads `shared/math.css` and `shared/math.js`: its `col` and `num` questions are the Math
+lessons' question types, run through a small adapter object (`E`) that gives them the quiz look instead of the lesson look (`<body class="mx-rev">`,
+rules at the end of `shared/math.css`). Every word problem has its schema (`vis`).
+
 After adding a lesson: add it to its unit in `lessons.js` (a new unit: a new `unit-N/` folder and a new entry in `chapters`), add its files to the `also: [...]` list of the Math entry in `games.js`,
 and bump `VERSION` in `sw.js`.

@@ -1,0 +1,304 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<meta name="theme-color" content="#1B2440">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Study Games">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
+</head><body class="mx-rev" data-subject="Math">
+<title>Math Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<link rel="stylesheet" href="../../../shared/theme.css">
+<link rel="stylesheet" href="../../../shared/quiz.css">
+<link rel="stylesheet" href="../../../shared/math.css">
+
+<svg class="defs" aria-hidden="true"><defs>
+  <marker id="ah-ink" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="f-ink"/></marker>
+</defs></svg>
+
+<main class="wrap" id="app"></main>
+
+<script src="../../../shared/common.js"></script>
+<script src="../../../quiz-common.js"></script>
+<!-- the Math lessons' pictures and question types: schemas, cubes, columns with carry boxes, the number pad -->
+<script src="../../../shared/math.js"></script>
+<script>
+(function(){
+/* =====================================================================
+   Grade 4 Math · Final revision, Term 1
+   From the school's "Exam Extra Practice" sheet (questions 1–8 and 28–30), with more practice on the same topics
+   from the Math lessons: Unit 2 place value, Unit 3 add and subtract, Unit 4 multiplication as comparison,
+   and Lesson 14-1 lines, line segments and rays (on the Mid-term 1 sheet).
+   Question: {l: part 1–5 (1 = the school sheet), t: type, …}
+     t:'mc'  {q, o: [answers], c: right answer (default 0), k: keep the order, x: why, vis: a Math drawing | s: a drawn picture (SC)}
+     t:'col' {op: '+' | '-', a, b, story: {q, vis: schema, ask: true, ans}}  – columns with carry boxes (shared/math.js)
+     t:'num' {q, a, pre, post, vis, x}                                       – type a number on the number pad (shared/math.js)
+     t:'mt'  {t: title, p: [[icon, left, right], …]}                          – matching round
+   Every word problem has its schema (vis kind "bar" or "cubes").
+   ===================================================================== */
+const MX=window.CS_EXT;
+const {esc,shuf,pick,star}=Kit;
+const fmt=n=>Number(n).toLocaleString('en-US');
+
+/* ---------- schemas: small helpers for the bar models ---------- */
+// times as many: a short bar and a bar made of `times` copies of it; total = the label over the long bar
+const times=(l1,e1,v,l2,e2,n,total,q=true)=>({kind:'bar',rows:[{l:l1,e:e1,seg:{t:v},times:1},{l:l2,e:e2,seg:{t:v},times:n,brace:{t:total,q}}]});
+// more than: a bar, then the same bar with an extra piece
+const more=(l1,e1,a,l2,e2,b,total='?')=>({kind:'bar',rows:[{l:l1,e:e1,segs:[{t:fmt(a),v:a}]},{l:l2,e:e2,brace:{t:total,q:true},segs:[{t:fmt(a),v:a},{t:`${fmt(b)} more`,v:b,c:1}]}]});
+// two parts, the total is missing
+const join=(l1,e1,a,l2,e2,b,total)=>({kind:'bar',rows:[{l:l1,e:e1,segs:[{t:fmt(a),v:a}]},{l:l2,e:e2,segs:[{t:fmt(b),v:b}]}],total:{t:total}});
+// the whole and one part: the other part is missing
+const part=(l,e,whole,a,la,lq)=>({kind:'bar',rows:[{l,e,brace:{t:fmt(whole)},segs:[{t:`${fmt(a)} ${la}`,v:a},{t:lq,v:whole-a,q:true}]}]});
+// compare: how many more / fewer
+const cmp=(l1,e1,a,l2,e2,b)=>({kind:'bar',rows:[{l:l1,e:e1,segs:[{t:fmt(a),v:a}]},{l:l2,e:e2,segs:[{t:fmt(b),v:b},{t:'?',v:a-b,q:true}]}]});
+
+/* ---------- drawn pictures: lines, line segments, rays ---------- */
+const tx=(x,y,t,c='lbl')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central">${t}</text>`;
+const dot=(x,y,n,dy=-22)=>`<circle class="f-ink" cx="${x}" cy="${y}" r="7"/>${tx(x,y+dy,n,'lbl-big')}`;
+const ln=(x1,x2,y,a1,a2)=>`<line class="st-ink" x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke-width="5" stroke-linecap="round"${a1?' marker-start="url(#ah-ink)"':''}${a2?' marker-end="url(#ah-ink)"':''}/>`;
+const SKY='<rect class="f-sky" width="320" height="180"/>';
+const SC={
+line:()=>SKY+ln(30,290,90,1,1)+dot(110,90,'A')+dot(210,90,'B'),
+segment:()=>SKY+ln(80,240,90)+dot(80,90,'C')+dot(240,90,'D'),
+ray:()=>SKY+ln(70,290,90,0,1)+dot(70,90,'S')+dot(190,90,'T'),
+rayTS:()=>SKY+ln(30,250,90,1,0)+dot(250,90,'S')+dot(130,90,'T'),
+three:()=>SKY+ln(30,290,40,1,1)+tx(300,24,'1')+ln(80,240,90)+`<circle class="f-ink" cx="80" cy="90" r="6"/><circle class="f-ink" cx="240" cy="90" r="6"/>`+tx(300,74,'2')+ln(80,290,140,0,1)+`<circle class="f-ink" cx="80" cy="140" r="6"/>`+tx(300,124,'3'),
+forever:()=>SKY+ln(20,300,80,1,1)+tx(160,140,'Does it stop?','lbl-big'),
+};
+const svgScene=k=>`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${SC[k]()}</svg></div>`;
+const visScene=v=>`<div class="scene mx-scene" role="img" aria-label="Picture for the question">${MX.vis[v.kind](v)}</div>`;
+
+const QS=[
+/* ===== 1 · The school sheet: Exam Extra Practice ===== */
+{l:1,t:'mc',q:'56 is ? times as many as 8. The unknown is ___.',o:['7','4','5','6'],vis:{kind:'bar',rows:[{l:'8',seg:{t:'8'},times:1},{l:'56',segs:[{t:'56 = ? × 8',v:7,q:true}]}]},x:'? × 8 = 56. Count by 8s: 8, 16, 24, 32, 40, 48, 56 → 7 times.'},
+{l:1,t:'mc',q:'8 more than 12 is ___.',o:['20','42','34','14'],vis:more('12','🔵',12,'8 more','🔵',8),x:'“More than” → add: 12 + 8 = 20.'},
+{l:1,t:'mc',q:'There are 5 cars in a parking lot. There are 7 times as many cars in a parking garage. How many cars are in the parking garage?',o:['5 × 7 = b','5 × b = 7','5 + 6 = 7','7 × b = 5'],vis:times('Parking lot','🚗','5','Garage','🅿️',7,'b'),x:'7 times as many as 5 → 7 × 5 = 5 × 7 = b. b = 35 cars.'},
+{l:1,t:'mc',q:'Which equation shows the comparison “32 is 4 times as many as 8”?',o:['4 × 8 = 32','8 × 8 = 32','4 × 4 = 32','4 + 8 = 12'],vis:{kind:'cubes',rows:[{l:'8',n:8,c:1},{l:'32',n:8,times:4,c:0}],cap:'4 sticks of 8'},x:'“4 times as many as 8” → 4 × 8 = 32.'},
+{l:1,t:'mc',q:'Breona plants 3 trees. Chandler plants 9 trees more than Breona. Which shows how many trees Chandler plants?',o:['3 + 9 = 12','3 × 9 = 27','4 × 9 = 36','4 + 9 = 13'],vis:more('Breona','🌳',3,'Chandler','🌳',9),x:'“9 more than” → add, not multiply: 3 + 9 = 12.'},
+{l:1,t:'mc',q:'Which equation shows “? times as many as 4”?',o:['? × 4','? + 4','4 − ?'],vis:{kind:'bar',rows:[{l:'4',seg:{t:'4'},times:1},{l:'? times',segs:[{t:'4',v:1},{t:'4',v:1},{t:'… ? times',v:2,q:true}]}]},x:'“Times as many” → multiply: ? × 4.'},
+{l:1,t:'mc',q:'Write the equation and solve: 8 more than 9.',o:['9 + 8 = 17','9 × 8 = 72','9 − 8 = 1'],vis:more('9','🔵',9,'8 more','🔵',8),x:'“More than” → add: 9 + 8 = 17.'},
+{l:1,t:'mc',q:'Write the equation: 72 is 7 times as many as 8.',o:['72 = 7 × 8','72 = 7 + 8','8 = 7 × 72'],vis:times('8','🔵','8','72','🔵',7,'72',false),x:'72 is the big number: 72 = 7 × 8.'},
+{l:1,t:'col',op:'+',a:78365,b:45869,story:{ask:true,q:'A school collected 78,365 books in one campaign and 45,869 in another. How many books did it collect altogether?',vis:join('Campaign 1','📚',78365,'Campaign 2','📚',45869,'? books'),ans:'The school collected {} books altogether.'}},
+{l:1,t:'col',op:'-',a:74000,b:49700,story:{ask:true,q:'A stadium has 74,000 seats. If 49,700 seats are filled, how many seats are empty?',vis:part('Seats','🏟️',74000,49700,'filled','? empty'),ans:'{} seats are empty.'}},
+{l:1,t:'mc',q:'Maya has 7 stickers. Omar has 9 times as many stickers as Maya. Which equation finds how many stickers Omar has?',o:['9 × 7 = s','9 + 7 = s','9 − 7 = s'],vis:times('Maya','👧','7','Omar','👦',9,'s'),x:'9 times as many as 7 → 9 × 7 = 63 stickers.'},
+{l:1,t:'num',q:'Maya has 7 stickers. Omar has 9 times as many. How many stickers does Omar have?',pre:'9 × 7 =',post:'stickers',a:63,vis:times('Maya','👧','7','Omar','👦',9,'?')},
+
+/* ===== 2 · Times as many (Unit 4) ===== */
+{l:2,t:'num',q:'6 times as many as 4 is…',pre:'6 × 4 =',a:24,vis:{kind:'cubes',rows:[{l:'4',n:4,c:1},{l:'6 times',n:4,times:6,c:0}]}},
+{l:2,t:'num',q:'40 is ? times as many as 8.',pre:'40 =',post:'× 8',a:5,vis:{kind:'cubes',rows:[{l:'8',n:8,c:1},{l:'40',n:8,times:5,c:0}]},x:'5 × 8 = 40'},
+{l:2,t:'num',q:'45 is 5 times as many as ?',pre:'45 = 5 ×',a:9,vis:{kind:'bar',rows:[{l:'?',segs:[{t:'?',v:1,q:true}]},{l:'45',seg:{t:'?'},times:5,brace:{t:'45'}}]},x:'5 × 9 = 45'},
+{l:2,t:'num',q:'The unknown: 7 × n = 63. n = ?',pre:'n =',a:9,vis:{kind:'groups',n:7,of:9,e:'🔵',cap:'7 groups of ? = 63'},x:'7 × 9 = 63'},
+{l:2,t:'num',q:'n × 6 = 54. n = ?',pre:'n =',a:9,vis:{kind:'array',r:9,c:6,cap:'? rows of 6 = 54'},x:'9 × 6 = 54'},
+{l:2,t:'mc',q:'Which statement fits the equation 6 × 3 = 18?',o:['18 is 6 times as many as 3','6 is 3 times as many as 18','3 is 6 times as many as 18'],vis:{kind:'cubes',rows:[{l:'3',n:3,c:1},{l:'18',n:3,times:6,c:0}]},x:'The product, 18, is the big number.'},
+{l:2,t:'mc',q:'9 more than 5 is ___.',o:['14','45','4'],vis:more('5','🔵',5,'9 more','🔵',9),x:'More → add: 5 + 9 = 14.'},
+{l:2,t:'mc',q:'9 times as many as 5 is ___.',o:['45','14','4'],vis:times('5','🔵','5','9 times','🔵',9,'?'),x:'Times → multiply: 9 × 5 = 45.'},
+{l:2,t:'num',q:'A small dog weighs 6 pounds. A big dog weighs 8 times as much. How much does the big dog weigh?',post:'pounds',a:48,vis:times('Small dog','🐕','6','Big dog','🐕‍🦺',8,'?'),x:'8 × 6 = 48 pounds'},
+{l:2,t:'mc',q:'Lina read 4 books. Sam read 3 times as many books as Lina. Which equation shows how many books Sam read?',o:['3 × 4 = b','3 + 4 = b','4 − 3 = b'],vis:times('Lina','👧','4','Sam','👦',3,'b'),x:'3 times as many as 4 → 3 × 4 = 12 books.'},
+{l:2,t:'num',q:'Ali has 7 marbles. Sara has 6 more marbles than Ali. How many marbles does Sara have?',post:'marbles',a:13,vis:more('Ali','👦',7,'Sara','👧',6),x:'“More than” → add: 7 + 6 = 13.'},
+{l:2,t:'num',q:'A pencil costs $3. A book costs 8 times as much. How much does the book cost?',pre:'$',a:24,vis:times('Pencil','✏️','$3','Book','📘',8,'?'),x:'8 × $3 = $24'},
+{l:2,t:'mc',q:'A tree is 9 feet tall. A building is 5 times as tall. Which equation finds the height of the building?',o:['5 × 9 = h','5 + 9 = h','9 − 5 = h','9 × h = 5'],vis:times('Tree','🌳','9 ft','Building','🏢',5,'h'),x:'5 times as tall as 9 → 5 × 9 = 45 feet.'},
+{l:2,t:'mt',t2:'Match the words to the equation',p:[['➕','8 more than 9','9 + 8 = 17'],['✖️','8 times as many as 9','8 × 9 = 72'],['➕','5 more than 6','6 + 5 = 11'],['✖️','5 times as many as 6','5 × 6 = 30']]},
+{l:2,t:'mt',t2:'Match each comparison to its equation',p:[['🧱','32 is 4 times as many as 8','32 = 4 × 8'],['🧱','24 is 3 times as many as 8','24 = 3 × 8'],['🧱','56 is 7 times as many as 8','56 = 7 × 8'],['🧱','20 is 5 times as many as 4','20 = 5 × 4']]},
+
+/* ===== 3 · Add and subtract big numbers (Unit 3) ===== */
+{l:3,t:'col',op:'+',a:35482,b:8759,story:{ask:true,q:'A library had 35,482 books. It bought 8,759 more books. How many books does it have now?',vis:{kind:'bar',rows:[{l:'Books',e:'📚',brace:{t:'? now',q:true},segs:[{t:'35,482',v:35482},{t:'8,759 more',v:8759,c:1}]}]},ans:'The library has {} books now.'}},
+{l:3,t:'col',op:'-',a:52000,b:27465,story:{ask:true,q:'A farm had 52,000 apples. It sold 27,465 apples. How many apples are left?',vis:part('Apples','🍎',52000,27465,'sold','? left'),ans:'{} apples are left.'}},
+{l:3,t:'col',op:'-',a:64250,b:48875,story:{ask:true,q:'Stadium A has 64,250 seats. Stadium B has 48,875 seats. How many more seats does Stadium A have?',vis:cmp('Stadium A','🏟️',64250,'Stadium B','🏟️',48875),ans:'Stadium A has {} more seats.'}},
+{l:3,t:'col',op:'+',a:23908,b:19467,story:{ask:true,q:'One town has 23,908 people. Another town has 19,467 people. How many people live in both towns altogether?',vis:join('Town 1','🏘️',23908,'Town 2','🏘️',19467,'? people'),ans:'{} people live in both towns.'}},
+{l:3,t:'col',op:'-',a:8476,b:5389,story:{ask:true,q:'A road trip is 8,476 miles. The family has driven 5,389 miles. How many miles are left?',vis:part('The trip','🚗',8476,5389,'done','? left'),ans:'{} miles are left.'}},
+{l:3,t:'col',op:'+',a:46785,b:38946},
+{l:3,t:'col',op:'+',a:57689,b:26758},
+{l:3,t:'col',op:'-',a:90005,b:37268},
+{l:3,t:'col',op:'-',a:63040,b:28575},
+{l:3,t:'mc',q:'Estimate 78,365 + 45,869. Round to the nearest ten thousand.',o:['80,000 + 50,000 = 130,000','70,000 + 40,000 = 110,000','78,000 + 45,000 = 123,000'],vis:{kind:'nline',lo:70000,hi:80000,n:78365},x:'78,365 → 80,000 and 45,869 → 50,000. The real answer, 124,234, is close.'},
+{l:3,t:'mc',q:'To check 74,000 − 49,700 = 24,300, you can add…',o:['24,300 + 49,700','24,300 + 74,000','74,000 + 49,700'],vis:part('Seats','🏟️',74000,49700,'filled','24,300'),x:'Part + part = whole: 24,300 + 49,700 = 74,000 ✓'},
+{l:3,t:'mc',q:'“How many are left?” — do we add or subtract?',o:['Subtract','Add'],k:1,vis:part('Cookies','🍪',30,12,'eaten','? left'),x:'We know the whole and one part: subtract.'},
+{l:3,t:'mc',q:'“How many altogether?” — do we add or subtract?',o:['Add','Subtract'],k:1,vis:join('Red','🔴',25,'Blue','🔵',18,'?'),x:'We know the parts, the whole is missing: add.'},
+
+/* ===== 4 · Place value (Unit 2) ===== */
+{l:4,t:'num',q:'What is the value of the yellow 4 in 742,954?',a:40000,vis:{kind:'pv',n:742954,hl:[4]}},
+{l:4,t:'mc',q:'The expanded form of 53,894 is…',o:['50,000 + 3,000 + 800 + 90 + 4','50,000 + 30,000 + 800 + 90 + 4','5,000 + 3,000 + 800 + 90 + 4'],vis:{kind:'pv',n:53894},x:'Each digit times its place.'},
+{l:4,t:'mc',q:'70,295 in word form is…',o:['Seventy thousand, two hundred ninety-five','Seven thousand, two hundred ninety-five','Seventy thousand, twenty-nine five'],vis:{kind:'pv',n:70295}},
+{l:4,t:'num',q:'Write in standard form: five million, nine hundred seventy-six thousand, three hundred eighty-two',a:5976382,emoji:'✍️'},
+{l:4,t:'mc',q:'Which number is the least?',o:['9,999','52,875','78,023','321,567'],emoji:'🔎',x:'It has the fewest digits.'},
+{l:4,t:'mc',q:'643,290 ___ 643,209',o:['>','<','='],k:1,vis:{kind:'pv',n:643290,hl:[1]},x:'Same digits until the tens: 9 tens > 0 tens.'},
+{l:4,t:'num',q:'Round 543,986 to the nearest thousand.',a:544000,vis:{kind:'nline',lo:543000,hi:544000,n:543986,hide:true}},
+{l:4,t:'num',q:'Round 532,187 to the nearest ten thousand.',a:530000,vis:{kind:'pv',n:532187,hl:[4,3]},x:'Look at the thousands: 2 → stay.'},
+
+/* ===== 5 · Lines, line segments and rays (Lesson 14-1) ===== */
+{l:5,t:'mc',q:'What is this figure?',s:'line',o:['Line AB','Line segment AB','Ray AB'],x:'Arrows at both ends: it goes on forever both ways. A line.'},
+{l:5,t:'mc',q:'What is this figure?',s:'segment',o:['Line segment CD','Line CD','Ray CD'],x:'Two endpoints, no arrows: a line segment.'},
+{l:5,t:'mc',q:'What is this figure?',s:'ray',o:['Ray ST','Line ST','Line segment ST'],x:'One endpoint (S) and one arrow: a ray. Its name starts with the endpoint.'},
+{l:5,t:'mc',q:'Which figure has two arrows?',s:'three',o:['Line (1)','Line segment (2)','Ray (3)'],x:'A line goes on forever in both directions.'},
+{l:5,t:'mc',q:'Which figure continues forever in both directions?',s:'forever',o:['Line','Ray','Line segment'],x:'A ray goes on forever in one direction only.'},
+{l:5,t:'mc',q:'This ray starts at S and goes through T. Its name is…',s:'rayTS',o:['Ray ST','Ray TS','Line TS'],x:'Say the endpoint first: ray ST.'},
+];
+
+const LESSONS=[{n:0,l:'All'},{n:1,l:'School sheet'},{n:2,l:'Times as many'},{n:3,l:'Add & subtract'},{n:4,l:'Place value'},{n:5,l:'Lines & rays'}];
+const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
+const pool=()=>QS.filter(q=>!lesIdx||q.l===lesIdx);
+const LENS=[{n:10,l:'Quick · 10'},{n:20,l:'Normal · 20'},{n:0,l:'All'}];
+const store=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let lenIdx=1,lesIdx=0;
+try{const v=localStorage.getItem('mq-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
+try{const v=localStorage.getItem('mq-lesson');if(v!==null&&LESSONS[+v])lesIdx=+v}catch(e){}
+
+const S={list:[],i:0,score:0,max:0,miss:[]};
+const app=document.getElementById('app');
+const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+const pts=q=>q.t==='mt'?q.p.length:MX.pts&&MX.pts[q.t]?MX.pts[q.t](q):1;
+
+/* ---------- voice: the 🔊 buttons of the number questions (device voice, English) ---------- */
+const TTS='speechSynthesis' in window;
+const hush=()=>{try{TTS&&speechSynthesis.cancel()}catch(e){}};
+const say=t=>new Promise(res=>{if(!TTS)return res();hush();const u=new SpeechSynthesisUtterance(String(t).replace(/−/g,' minus ').replace(/×/g,' times '));u.lang='en-US';u.rate=.9;u.onend=u.onerror=()=>res();speechSynthesis.speak(u)});
+const plain=t=>String(t??'').replace(/[[\]]/g,'').replace(/___/g,'…');
+const kw=t=>esc(t).replace(/\[([^\]]+)\]/g,'<b class="kw">$1</b>');
+
+function start(){
+  const L=LENS[lenIdx];
+  let list=shuf(pool()).slice(0,L.n||undefined);
+  // avoid two matching rounds in a row when possible
+  for(let i=1;i<list.length;i++){if(list[i].t==='mt'&&list[i-1].t==='mt'){const j=list.findIndex((q,k)=>k>i&&q.t!=='mt');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
+  S.list=list;S.i=0;S.score=0;S.miss=[];
+  S.max=list.reduce((t,q)=>t+pts(q),0);
+  render();
+}
+
+function hud(){
+  const pct=Math.round(S.i/S.list.length*100);
+  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+}
+const nextRow=()=>`<div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+const goNext=()=>{hush();S.i++;render()};
+function bindNext(){const n=document.getElementById('nextBtn');n.onclick=goNext;n.focus({preventScroll:true})}
+
+/* what the Math question types (shared/math.js) need from the page: the quiz look instead of the lesson look */
+const E={
+  app,S,esc,kw,tx:kw,plain,shuf,pick,say,hush,
+  sayQ:t=>say(t),autoSayQ:()=>{},
+  hud,fromTag:()=>'',bindHome:()=>{},
+  qHTML:q=>`<div class="q"><span class="say qtext" id="qt">${kw(q)}</span><button type="button" class="abtn" id="sq" aria-label="Listen">🔊</button></div>`,
+  split:(side,main)=>side+main,
+  hasPic:it=>!!(it&&(it.vis||it.emoji)),
+  pic:it=>it.vis?visScene(it.vis):`<div class="scene mx-scene mx-emo" role="img" aria-label="Picture for the question">${esc(it.emoji||'')}</div>`,
+  visHTML:v=>MX.vis[v.kind](v),
+  addPts:n=>{S.score+=n;const p=document.getElementById('pts');if(p)p.textContent=S.score},
+  next:goNext,
+  feedback:(ok,html)=>{document.getElementById('fbx').innerHTML=`<div class="fb ${ok?'ok':'no'}"><b>${ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${html||''}</span></div>${nextRow()}`;bindNext()},
+};
+
+function render(){
+  if(!S.list.length) return home();
+  if(S.i>=S.list.length) return end();
+  const q=S.list[S.i];
+  if(q.t==='mc') renderMC(q);
+  else if(q.t==='mt') renderMT(q);
+  else MX.items[q.t](q,E);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function home(){
+  const n=pool().length;
+  app.innerHTML=`<section class="card pop">
+    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 4 Math · Final revision</span></div>
+    <h1 class="hero-title"><span class="p">Math</span> <span class="k">Quest</span></h1>
+    ${visScene(times('Football','⚽','$100','Chess','♟️',5,'? = 5 × $100'))}
+    <p class="howto">Ready? Look at the picture: every word problem has its schema. Choose the answer, or type it on the number pad. For big sums, write the carried 1s in the small boxes. 💡 Help explains one column at a time.</p>
+    <div class="chips"><span class="chip pe">Times as many</span><span class="chip ke">Add &amp; subtract</span><span class="chip">Word problems</span><span class="chip ht">Place value</span><span class="chip pe">Lines &amp; rays</span></div>
+    <div class="row"><span class="eyebrow">Which part?</span><div class="seg" role="group" aria-label="Part">${LESSONS.map((l,i)=>`<button type="button" id="les-${i}" data-les="${i}" aria-pressed="${i===lesIdx}">${l.l}</button>`).join('')}</div></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${i===LENS.length-1?'All · '+n:l.l}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
+  </section>`;
+  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;store('mq-len',lenIdx);home()});
+  app.querySelectorAll('[data-les]').forEach(b=>b.onclick=()=>{lesIdx=+b.dataset.les;store('mq-lesson',lesIdx);home()});
+  document.getElementById('startBtn').onclick=start;
+}
+
+function renderMC(q){
+  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
+  if(!q.k) opts=shuf(opts);
+  const long=opts.some(o=>o.t.length>34);
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mc">Choose the answer</span>
+    ${q.vis?visScene(q.vis):q.s?svgScene(q.s):E.pic(q)}
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="fbx"></div>
+  </section>`;
+  const btns=[...app.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.i];
+    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
+    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
+    document.getElementById('pts').textContent=S.score;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x||'')}</span></div>${nextRow()}`;
+    bindNext();
+  });
+}
+
+function renderMT(q){
+  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
+  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
+  const pair={}; // leftIdx -> rightIdx
+  let sel=null, checked=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    <p class="qtext">${esc(q.t2)}</p>
+    <p class="hint">Tap the words on the left, then tap the equation on the right. Tap again to undo.</p>
+    <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
+  </section>`;
+  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
+  function draw(){
+    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
+      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
+    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
+      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
+    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
+    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
+      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
+      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    checked=true;let got=0;
+    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
+    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
+    const all=got===q.p.length;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right equation under the words.'}</span></div>${nextRow()}`;
+    bindNext();
+  };
+}
+
+function end(){
+  hush();
+  const pct=Math.round(S.score/S.max*100);
+  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const msg=pct===100?'Perfect score! You are ready for the exam.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below, then try again.';
+  // the Math question types write only the right answer ({right}); the others also the question and the child's answer
+  const li=m=>m.q?`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`:`<li><div class="a">Right answer: <em>${esc(plain(m.right))}</em></div></li>`;
+  app.innerHTML=`<section class="card pop">
+    <span class="eyebrow">Your score</span>
+    <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
+    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <h2>${pct}% · ${msg}</h2>
+    <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
+  </section>
+  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(li).join('')}</ul></section>`:''}`;
+  document.getElementById('againBtn').onclick=start;
+  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+Quiz.watch(app);
+home();
+})();
+</script>
+</body></html>

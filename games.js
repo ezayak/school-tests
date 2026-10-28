@@ -176,6 +176,20 @@ window.GAMES = [
     // pictures and icons come from the Computer lessons (listed in the Computer entry's "also")
   },
   {
+    grade: 4,
+    term: 1,
+    period: "Final exam",
+    subject: "Math",
+    title: "Math Quest",
+    lesson: "Exam Extra Practice sheet · Units 2–4 · Lines & rays",
+    topics:
+      "Times as many, more than, equations · Add & subtract big numbers with schemas · Place value & rounding · Lines, segments, rays",
+    path: "grade-4/term-1/final-term-1/math-revision.html",
+    questions: 54,
+    year: "2026–2027",
+    // the schemas, columns and number pad come from shared/math.js and shared/math.css (in CORE in sw.js)
+  },
+  {
     grade: 3,
     period: "Subjects",
     subject: "English",

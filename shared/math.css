@@ -780,3 +780,62 @@
   ) {
   background: var(--card);
 }
+
+/* ---------- Math revision (a quiz page: shared/quiz.css + quiz-common.js, <body class="mx-rev">) ----------
+   The question types of shared/math.js run there too; these rules give them what shared/lesson.css gives them in the lessons. */
+.scene.mx-scene {
+  aspect-ratio: auto;
+  min-height: 200px;
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  background: var(--card);
+}
+.mx-rev .q {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mx-rev .q .say {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.mx-rev .q.sm .say {
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+.mx-rev .row.center {
+  justify-content: center;
+}
+.mx-rev .optrow {
+  display: flex;
+}
+.mx-rev .optrow .opt {
+  flex: 1;
+  justify-content: center;
+}
+.mx-rev .fb .btn {
+  align-self: center;
+}
+.mx-rev .mx-grid {
+  --cs: clamp(36px, min(6.6vh, 5.6vw), 58px);
+}
+.mx-rev .mx-pad button {
+  min-height: clamp(40px, 6.6vh, 56px);
+}
+@media (orientation: landscape) and (min-width: 760px) {
+  /* Help and Check side by side in the middle (landscape.css spreads the rows of a question with a picture) */
+  html .mx-rev .card:has(> .scene) > .row.mx-acts {
+    justify-content: center;
+  }
+  /* columns to fill in: a narrower picture, more room for the sum and the number pad */
+  html .mx-rev .card.mx-colq:has(> .scene) {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  }
+}
+.scene.mx-emo {
+  font-family: var(--emoji);
+  font-size: 5rem;
+}
