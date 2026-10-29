@@ -411,7 +411,7 @@
 }
 .mb-row {
   display: grid;
-  grid-template-columns: 6.6em 1fr;
+  grid-template-columns: 4em 1fr;
   align-items: end;
   gap: 8px;
 }
