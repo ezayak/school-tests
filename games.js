@@ -190,6 +190,21 @@ window.GAMES = [
     // the schemas, columns and number pad come from shared/math.js and shared/math.css (in CORE in sw.js)
   },
   {
+    grade: 4,
+    term: 1,
+    period: "Final exam",
+    subject: "Science",
+    title: "Science Quest",
+    lesson:
+      "Topic 1 · L1 Energy, speed & motion, L3 Energy transfer, L4 Electric circuits",
+    topics:
+      "Potential & kinetic energy, speed, transfer & transform · Heat, conduction, convection, radiation, light, sound · Charges, current, circuits, conductors & insulators",
+    path: "grade-4/term-1/final-term-1/science-revision.html",
+    questions: 144,
+    year: "2026–2027",
+    // the photos come from the Science lessons (listed in the Science entry's "also")
+  },
+  {
     grade: 3,
     period: "Subjects",
     subject: "English",

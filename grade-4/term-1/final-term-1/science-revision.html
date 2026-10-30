@@ -1,0 +1,339 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<meta name="theme-color" content="#1B2440">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Study Games">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
+</head><body>
+<title>Science Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<link rel="stylesheet" href="../../../shared/theme.css">
+<link rel="stylesheet" href="../../../shared/quiz.css">
+
+<main class="wrap" id="app"></main>
+
+<script src="../../../shared/common.js"></script>
+<script src="../../../quiz-common.js"></script>
+<script>
+(function(){
+/* =====================================================================
+   Grade 4 Science · Final revision, Term 1
+   Topic 1: L1 Energy, speed and motion, L3 Energy transfer, L4 Electric circuits
+   From the school sheets in the lessons (practice sheets, lesson quizzes, HW1, HW2, CW1, CW2, fill-in diagram,
+   extra practice sheet, L4 teacher's slides), with the answers already checked there.
+   Question: {l: lesson 1, 3 or 4, p: photo from that lesson's img folder (pl: another lesson's folder),
+              e: emoji picture, ps: photos side by side (A, B, C…, use k), q, o: [answers], c: right answer (default 0), k: keep the order, x: why}
+   ===================================================================== */
+
+/* ---------- drawing helpers ---------- */
+const em=(x,y,s,c,ex='')=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
+const tx=(x,y,t,c='lbl',a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
+const SKY='<rect class="f-sky" width="320" height="180"/>';
+const IMG=(l,p)=>`../../science/topic-1/img/lesson-${l}/${p}.jpg`;
+// whole photos in a grid (2×2 for four), each with its letter A, B, C… like the answer buttons
+const tiles=q=>{const n=q.ps.length,cols=n>3?2:n,rows=Math.ceil(n/cols),w=(320-6*(cols+1))/cols,h=(180-6*(rows+1))/rows;
+  return SKY+q.ps.map((p,i)=>{const x=6+(i%cols)*(w+6),y=6+Math.floor(i/cols)*(h+6);return `<rect class="f-card" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>${tx(x+14,y+h/2,'ABCD'[i],'lbl-big')}<image href="${IMG(q.l,p)}" x="${x+28}" y="${y+3}" width="${w-31}" height="${h-6}" preserveAspectRatio="xMidYMid meet"/>`}).join('')};
+// emoji picture: each group of emoji in its own slot, so a long row never runs off the picture
+const emo=e=>{const g=e.split(' '),s=Math.min(80,280/g.length/Math.max(...g.map(x=>x.replace(/[️‍]/g,'').length/2)));return SKY+g.map((x,i)=>em(160+(i-(g.length-1)/2)*(300/g.length),90,s,x)).join('')};
+
+const TF=['True','False'];
+const PK=['Potential energy','Kinetic energy'];
+const CI=['Conductor','Insulator'];
+const AR=['Attract','Repel'];
+const MC=[
+/* ===== Lesson 1 · Energy, speed and motion (practice sheet, Lesson Quiz, HW1, CW1, fill-in diagram, extra practice) ===== */
+{l:1,p:'kick',q:'___ is the energy of motion.',o:['Kinetic energy','Potential energy','Sound energy'],x:'Kinetic energy = the energy of motion.'},
+{l:1,p:'shelf',q:'Potential energy is ___ energy.',o:['stored','moving','sound'],x:'Potential energy is stored. It can change into kinetic energy.'},
+{l:1,p:'coaster',q:'Energy is the ability to ___',o:['do work or cause change','measure mass','measure speed']},
+{l:1,e:'🏃 📏 ⏱️',q:'___ is the distance an object moves in a specific time.',o:['Speed','Position','Direction']},
+{l:1,e:'⏱️ 🧭',q:'The two things used to describe motion are speed and ___',o:['direction','conduction','thermal'],x:'Motion must have a direction and a speed.'},
+{l:1,p:'bulb',q:'To change from one type of energy to another is energy ___',o:['transformation','transfer','storage'],x:'In a bulb, electrical energy changes into light and heat.'},
+{l:1,p:'wrecking-ball',q:'When energy moves from one object to another WITHOUT changing form, it is called energy ___',o:['transfer','transformation','storage'],x:'The ball gives its kinetic energy to the wall.'},
+{l:1,e:'🏎️ 💨',q:'The faster the car is moving, ___ kinetic energy it has.',o:['the more','the less','the same']},
+{l:1,e:'🐢 🚗',q:'___ cars have less kinetic energy than fast cars.',o:['Slow','Big','Small']},
+{l:1,e:'🏎️ 💨',q:'When the speed increases, kinetic energy decreases.',o:TF,c:1,k:1,x:'Faster = more kinetic energy.'},
+{l:1,e:'🏎️',q:'Cars traveling at a fast speed have more energy than cars traveling at a slow speed.',o:TF,k:1,x:'Faster = more kinetic energy.'},
+{l:1,e:'🚚 🚗',q:'Kinetic energy is affected by speed and ___',o:['mass','color','shape'],x:'Heavier and faster = more kinetic energy.'},
+{l:1,e:'🚗 🚶',q:'A moving car has ___ than a moving person.',o:['more kinetic energy','more potential energy','less kinetic energy'],x:'The car has more mass and more speed.'},
+{l:1,e:'🚚💨 🚚 🚲',q:'Which object has the MOST kinetic energy?',o:['A fast-moving truck','A parked truck','A slowly moving bicycle'],x:'A parked truck does not move, so it has no kinetic energy.'},
+{l:1,p:'kick',q:'What causes a ball that is not moving to gain kinetic energy?',o:['A force','Its speed','Its direction'],x:'A force (a push or a pull) makes it start to move.'},
+{l:1,p:'football',pl:3,q:'Any object that is moving has kinetic energy.',o:TF,k:1},
+{l:1,p:'shelf',q:'The amount of ___ in an object depends on its shape and position.',o:['potential energy','kinetic energy','sound energy']},
+{l:1,p:'shelf',q:'Which of these increases an object\'s potential energy the most?',o:['Its height','Its color','Its temperature','Its smell'],x:'The higher the object is, the more potential energy it has.'},
+{l:1,p:'coaster',q:'An object has the MOST potential energy when it is ___',o:['at its highest point','moving at top speed','resting on the ground','completely stopped']},
+{l:1,p:'coaster',q:'As a roller coaster cart goes down a hill, its kinetic energy ___',o:['increases','decreases','stays the same','disappears completely'],x:'Going down, it goes faster and faster.'},
+{l:1,p:'coaster',q:'A roller coaster changing potential energy into kinetic energy as it rolls downhill is an example of energy ___',o:['transformation','transfer','disappearing','storage']},
+{l:1,e:'⛰️ ⚽',q:'When a ball slowly starts rolling downhill, the ___ transforms to kinetic energy.',o:['potential energy','sound energy','electrical energy']},
+{l:1,p:'bow',q:'A stretched rubber band.',o:PK,k:1,x:'It is stored energy, ready to move.'},
+{l:1,e:'🚗 🛣️',q:'A car driving down the highway.',o:PK,c:1,k:1,x:'It is moving.'},
+{l:1,p:'shelf',q:'A book sitting on a high shelf.',o:PK,k:1,x:'It is high up and not moving.'},
+{l:1,e:'⚽ 💨',q:'A soccer ball rolling across a field.',o:PK,c:1,k:1,x:'It is moving.'},
+{l:1,e:'🏞️',q:'Water at the top of a waterfall.',o:PK,k:1,x:'It is high up, ready to fall.'},
+{l:1,e:'📚 ⚽ 🐕 🌀',q:'Which is an example of potential energy?',o:['📚 A book resting on a shelf','⚽ A rolling ball','🐕 A running dog','🌀 A spinning fan']},
+{l:1,e:'🐦 🪢 🚗 ⛰️',q:'Which is an example of kinetic energy?',o:['🐦 A bird flying through the air','🪢 A stretched rubber band','🚗 A parked car','⛰️ A ball resting on a hill']},
+{l:1,p:'bell',q:'___ is one form of kinetic energy that can be heard.',o:['Sound energy','Electrical energy','Potential energy']},
+{l:1,e:'📱 🔌',q:'___ is the energy used by a cellphone charger.',o:['Electrical energy','Sound energy','Chemical energy']},
+{l:1,p:'chemical',q:'When gasoline burns in the car engine, its ___ changes to kinetic energy as the car starts to move.',o:['chemical energy','sound energy','electrical energy']},
+{l:1,p:'dominoes',q:'When the dominoes are first set up (at rest), they have ___ energy because of their position.',o:['potential','kinetic','sound']},
+{l:1,p:'dominoes',q:'Falling dominoes have ___ energy.',o:['kinetic','potential','electrical']},
+{l:1,p:'dominoes',q:'Some kinetic energy is ___ from one domino to the next as they fall.',o:['transferred','transformed','destroyed']},
+{l:1,p:'dominoes',q:'The kinetic energy of the falling dominoes is ___ into sound energy. That is why you hear them click.',o:['transformed','transferred','stored']},
+{l:1,p:'dominoes',q:'What would happen if the first domino didn\'t fall and hit the second one?',o:['The other dominoes would not fall.','All the dominoes would fall faster.','The dominoes would make more sound.'],x:'The other dominoes would not get kinetic energy.'},
+{l:1,p:'rocket',q:'What would happen if the upward force on the rocket is smaller than the downward force?',o:['The rocket would not go up.','The rocket would go up faster.','The rocket would turn left.'],x:'It does not have the energy to launch.'},
+{l:1,p:'rocket',q:'If the upward force of a rocket is greater than its downward force, the rocket will go upward.',o:TF,k:1},
+{l:1,e:'🎳',q:'When you roll the ball down the lane, kinetic energy is transformed to potential energy.',o:TF,c:1,k:1,x:'The rolling ball has kinetic energy. It does not change into potential energy.'},
+{l:1,e:'🎳 🔊',q:'Some of the bowling ball\'s kinetic energy is transformed to sound energy.',o:TF,k:1,x:'You hear the pins crash.'},
+{l:1,p:'drummer',q:'How is energy transformed when the drummer\'s hand hits the drum?',o:['Kinetic energy is transformed into sound energy.','Kinetic energy is transformed into potential energy.','Sound energy is transformed into potential energy.','Potential energy is transformed into sound energy.']},
+{l:1,p:'race',q:'Emma races toy cars. They all have the same mass. Emma says: the red car had the greatest kinetic energy. Is she right?',o:['Yes, because the red car had the fastest speed.','No, because the blue car traveled for the longest time.','No, because the green car had the fastest speed.','Yes, because the red car traveled the farthest distance.'],x:'The red car took the shortest time, so it was the fastest.'},
+{l:1,p:'race',q:'During the race, some of the cars\' kinetic energy is transformed into ___',o:['sound energy','chemical energy','electrical energy'],x:'Emma can hear the wheels on the track.'},
+{l:1,p:'toaster',q:'Use evidence in the picture to explain the energy transfer.',o:['The toasted bread shows electrical energy goes to the toaster and is transformed into thermal energy.','The plugged-in toaster shows electrical energy goes to the toaster and is transformed into light energy.','The toasted bread shows chemical energy goes to the toaster and is transformed into thermal energy.','The plugged-in toaster shows chemical energy goes to the toaster and is transformed into electrical energy.'],x:'The bread is toasted: the toaster made heat (thermal energy) from electricity.'},
+{l:1,p:'toaster',q:'A toaster turning electricity into heat to toast bread is energy ___',o:['transformation','transfer','decreasing','disappearing']},
+{l:1,p:'eat-work',q:'The food the boy eats transforms into ___ for doing work.',o:['energy','motion','speed']},
+{l:1,p:'guitar',q:'Put the energy in order: from the guitar player\'s hand, to the amplifier, to the listener\'s ear.',o:['kinetic → electric → sound','sound → kinetic → electric','electric → sound → kinetic'],x:'The hand moves (kinetic), the amplifier uses electric energy, the ear hears sound.'},
+{l:1,e:'☕🙌',q:'A hot cup of cocoa warming your cold hands is energy ___',o:['transfer','storage','transformation','disappearing'],x:'Heat moves from the cup to your hands. It does not change form.'},
+{l:1,e:'🟠 ➡️ 🔵',q:'Ball A rolls and hits Ball B. After the hit, Ball A is ___, and Ball B now has kinetic energy.',o:['stopped','moving'],k:1,x:'Ball A gave its energy to Ball B.'},
+{l:1,e:'🟠 ➡️ 🔵',q:'The energy did not disappear. It ___ from Ball A to Ball B.',o:['moved (transferred)','was destroyed'],k:1},
+{l:1,e:'⚡ ♻️',q:'Energy cannot be made or ___',o:['destroyed','transferred','transformed'],x:'Energy only moves or changes form.'},
+{l:1,e:'❓ ➡️ ⚡',q:'Energy can be created from nothing.',o:TF,c:1,k:1,x:'Energy cannot be made or destroyed.'},
+
+/* ===== Lesson 3 · Energy transfer (practice sheet, Lesson Quiz, CW2, HW2, extra practice) ===== */
+{l:3,p:'hot-cup',q:'___ is the transfer of thermal energy.',o:['Heat','Sound','Light']},
+{l:3,e:'☕ ➡️ 🧊',q:'Heat moves from a ___ object to a ___ object.',o:['hot … cold','cold … hot','cold … cold'],k:1},
+{l:3,e:'🧊 ➡️ 🔥',q:'Heat always transfers from a cold object to a hot object.',o:TF,c:1,k:1,x:'Heat moves from hot to cold.'},
+{l:3,e:'🧊 ☕',q:'The cold object has more energy than the hot object.',o:TF,c:1,k:1,x:'The hot object has more energy. Its particles move faster.'},
+{l:3,e:'☕ 🧊 🥛',q:'Which object is warmer?',o:['☕ A hot cup of tea','🧊 Ice','🥛 Cold water']},
+{l:3,p:'particles',q:'The particles of an object move faster at ___ temperature.',o:['higher','lower','moderate']},
+{l:3,e:'☕ 🥛',q:'Mina holds a cup of hot tea and a cup of cold water. Which particles move faster?',o:['The hot tea','The cold water'],k:1},
+{l:3,e:'🌡️ ⬇️',q:'When the temperature decreases, the particles of the object slow down.',o:TF,k:1},
+{l:3,p:'particles',q:'When heat is transferred to an object, the object\'s particles move slower.',o:TF,c:1,k:1,x:'The particles move faster.'},
+{l:3,p:'particles',q:'Low temperature of the particles means that they are moving faster.',o:TF,c:1,k:1,x:'Low temperature = particles move slower.'},
+{l:3,e:'🌡️',q:'We use it to measure the temperature.',o:['🌡️ Thermometer','〰️ Radiation','💡 Light']},
+{l:3,e:'🥄 🍲',q:'A metal spoon in hot soup can become ___',o:['hot','colder','blue']},
+{l:3,e:'🥄 ☕',q:'The heat transfers to the spoon in a hot cup of tea by ___',o:['conduction','convection','radiation'],k:1,x:'The spoon touches the hot tea.'},
+{l:3,e:'✋ 🥄 🍲',q:'Heat that moves through a solid by direct touch is called ___',o:['conduction','direction','thermal']},
+{l:3,p:'tea-cup',q:'When you touch a hot cup of tea, the heat moves from the cup to your hands by ___',o:['conduction','convection','radiation'],k:1},
+{l:3,e:'✋ 🍳',q:'When you touch a hot pan, the heat transfers to you by conduction.',o:TF,k:1,x:'Conduction: heat moves by touching.'},
+{l:3,e:'♨️ 🍲',q:'Boiling water gets the heat energy by convection.',o:TF,k:1,x:'The moving water carries the heat.'},
+{l:3,p:'campfire',q:'A way of heat transfer from the fire to you.',o:['Radiation','Thermometer','Sound']},
+{l:3,p:'sun',q:'A way of heat transfer from the sun to the Earth: ___',o:['radiation','conduction','convection'],k:1,x:'The heat travels as a wave.'},
+{l:3,p:'sun',q:'___ is the energy that travels as a wave.',o:['Radiation','Potential energy','Sound energy']},
+{l:3,p:'sun',q:'When radiation carries energy from the sun to your skin, you feel cooler.',o:TF,c:1,k:1,x:'You feel hotter.'},
+{l:3,p:'sun',q:'Some of the energy that is radiated to Earth from the sun can be seen as light energy.',o:TF,k:1},
+{l:3,p:'sun',q:'A form of energy we can see.',o:['Light','Sound','Heat']},
+{l:3,p:'jellyfish',q:'___ produce their own light as a natural source of light energy.',o:['Jellyfish','Hot objects','Waves']},
+{l:3,p:'jellyfish',q:'To ___ is to make or produce.',o:['generate','transfer','transform']},
+{l:3,p:'flashlight',q:'___ is another source of light energy.',o:['A flashlight','Headphones','A telephone']},
+{l:3,p:'flashlight',q:'In the torch (flashlight), electrical energy transforms into ___',o:['light energy','sound energy','potential energy']},
+{l:3,p:'tent',q:'What evidence in the picture shows that light energy can transfer from place to place?',o:['The boy can see the map.','The flashlight is on.','It is nighttime.','There is no electricity in the woods.'],x:'The light travels from the flashlight to the map, so he can see it.'},
+{l:3,p:'drums',q:'A form of energy that comes from vibrating objects.',o:['Sound','Light','Heat']},
+{l:3,p:'drums',q:'Sound is made when objects vibrate.',o:TF,k:1},
+{l:3,p:'sound-wave',q:'A ___ is a form of energy transfer.',o:['wave','jellyfish','cold object']},
+{l:3,p:'sound-wave',q:'A sound wave moves only in one direction from the source of the sound.',o:TF,c:1,k:1,x:'It moves in all directions.'},
+{l:3,p:'sound-wave',q:'Sound can travel through solids and liquids only.',o:TF,c:1,k:1,x:'Sound travels through solids, liquids and gases.'},
+{l:3,p:'flute',q:'As energy is produced from the instrument, ___ moves through matter.',o:['a sound wave','radiation','light']},
+{l:3,p:'flute',q:'The sound wave moves through matter and lets the crowd ___ hear the music.',o:['in all directions','in only one direction'],k:1},
+{l:3,p:'bell',q:'When you ring the bell, kinetic energy is transformed into ___',o:['sound energy','light energy','thermal energy']},
+{l:3,p:'speaker',q:'In a loudspeaker, electrical energy is transformed into ___',o:['sound energy','potential energy','heat only']},
+{l:3,p:'heater',q:'A heater uses ___ energy and gives out ___ energy.',o:['electrical … heat','chemical … sound','sound … light']},
+{l:3,p:'toaster-coils',q:'In a toaster, electrical energy is transformed into ___',o:['thermal (heat) energy','potential energy','sound energy']},
+{l:3,p:'candle',q:'The candle is burning. Which two types of energy does it produce?',o:['Thermal and light','Sound and wave','Kinetic and sound']},
+{l:3,e:'⛽ 🚗',q:'When gasoline burns in the engine of a car, its chemical energy transforms to ___',o:['kinetic energy and heat energy','electric energy and light energy','potential and electric energy']},
+{l:3,e:'🙌 🔥',q:'When you rub your hands together, kinetic energy is transformed into ___',o:['thermal (heat) energy','light energy','electrical energy']},
+{l:3,e:'☀️ ➡️ 🔥',q:'A solar-powered heater transforms light energy into ___ energy.',o:['thermal','kinetic','more']},
+{l:3,p:'football',q:'The flying football can have ___',o:['kinetic, potential and sound energy','only electrical energy','only light energy'],x:'It moves (kinetic), it is high up (potential), and you hear the kick (sound).'},
+{l:3,p:'jackson-table',q:'Jackson heats water on a hot plate. Which observation shows that energy can be transferred by heat?',o:['The temperature of the water on the hot plate increased over time.','The water temperature was 21°C at the beginning.','The hot plate was set at medium heat.','The air temperature of the room was 21°C at the beginning.']},
+{l:3,p:'jackson-table',q:'The temperature change of the water is evidence for ___ energy transfer to the water particles.',o:['kinetic','sound','wave','light'],x:'The water particles move faster: more kinetic energy.'},
+{l:3,p:'jackson-table',q:'The energy moves ___ the water particles.',o:['to','from'],k:1,x:'The hot plate gives energy to the water.'},
+{l:3,p:'jackson-table',q:'Which is most likely the missing measurement at 6 minutes?',o:['35°C','21°C','40°C','58°C'],x:'It must be between 29°C (3 minutes) and 40°C (9 minutes).'},
+
+/* ===== Lesson 4 · Electric circuits (teacher's slides, practice sheet, Lesson Quiz) ===== */
+{l:4,p:'closed-circuit',q:'When you turn on the light, ___ energy moves.',o:['electric','sound','chemical']},
+{l:4,p:'closed-circuit',q:'The flow of electric energy happens because the particles that make up matter ___',o:['move','stop','melt']},
+{l:4,p:'balloon',q:'___ is a property that causes matter to have a force.',o:['Electric charge','Insulators','Resistor']},
+{l:4,p:'charge-pm',q:'Electric charges can be ___',o:['positive (+) or negative (−)','hot or cold','big or small']},
+{l:4,p:'charge-ppp',q:'All matter is made up of positive charged particles only.',o:TF,c:1,k:1,x:'Matter has positive and negative particles.'},
+{l:4,p:'charge-mp',q:'Electric forces are the ___ or ___ of charged objects on each other.',o:['push … pull','heat … light','sound … color']},
+{l:4,p:'charge-mp',q:'Negative and Positive: attract or repel?',o:AR,k:1,x:'Opposite charges attract (pull).'},
+{l:4,p:'charge-pp',q:'Positive and Positive: attract or repel?',o:AR,c:1,k:1,x:'The same charges repel (push).'},
+{l:4,p:'charge-pm',q:'Positive and Negative: attract or repel?',o:AR,k:1,x:'Opposite charges attract (pull).'},
+{l:4,p:'charge-mm',q:'Negative and Negative: attract or repel?',o:AR,c:1,k:1,x:'The same charges repel (push).'},
+{l:4,p:'circuit',q:'___ is the flow of charged particles.',o:['Electric current','Electric force','Repel']},
+{l:4,p:'current-sizes',q:'Electric current is the flow of charged particles in the ___ direction.',o:['same','opposite','every']},
+{l:4,e:'⬅️ ⚡ ➡️',q:'In electric current, charged particles flow in different directions.',o:TF,c:1,k:1,x:'They flow in the same direction.'},
+{l:4,e:'⚡ ➡️',q:'Particles with electric charge can move from place to place.',o:TF,k:1},
+{l:4,p:'battery',q:'In conducting materials, such as wire, the electric current needs a source of energy to keep it moving.',o:TF,k:1,x:'The battery is the source of energy.'},
+{l:4,p:'circuit',q:'An ___ is a complete path that lets the electric current flow through it.',o:['electric circuit','insulator','switch']},
+{l:4,p:'circuit-c',q:'The electric current must flow in an open electric circuit.',o:TF,c:1,k:1,x:'It must flow in a complete (closed) circuit.'},
+{l:4,p:'circuit',q:'The ___ turns the electric current on or off.',o:['🔘 switch','🔋 battery','🔩 metal']},
+{l:4,p:'battery',q:'The ___ is the power source in the electric circuit.',o:['battery','switch','insulator']},
+{l:4,p:'wires',q:'Conductors are materials that allow ___ to easily flow through them.',o:['electric current','air','water']},
+{l:4,p:'copper-wire',q:'Metals are good conductors of electricity.',o:TF,k:1},
+{l:4,p:'copper-wire',q:'___ is a metal that is used to make electric wires.',o:['Copper','Plastic','Wood']},
+{l:4,p:'circuit',q:'The wire that carries the current to and from the light bulb is made of a ___',o:['conductor','resistor','insulator']},
+{l:4,p:'plastic-coating',q:'___ are materials that do not allow electricity to pass through them.',o:['Insulators','Metals','Batteries']},
+{l:4,p:'plastic-wires',q:'Is plastic a conductor or an insulator?',o:CI,c:1,k:1},
+{l:4,p:'copper-wire',q:'Is copper a conductor or an insulator?',o:CI,k:1},
+{l:4,p:'rubber',q:'Is rubber a conductor or an insulator?',o:CI,c:1,k:1},
+{l:4,p:'wood',q:'Is wood a conductor or an insulator?',o:CI,c:1,k:1},
+{l:4,p:'silver',q:'Are metals conductors or insulators?',o:['Conductors','Insulators'],k:1},
+{l:4,p:'glass',q:'Is glass a conductor or an insulator?',o:CI,c:1,k:1},
+{l:4,ps:['plastic-wires','wood','glass','gold'],q:'Three of these are insulators. Which one is NOT?',o:['Plastic','Wood','Glass','Gold'],c:3,k:1,x:'Gold is a metal, so it is a conductor.'},
+{l:4,p:'resistor',q:'A ___ is a device used to control the flow of the electric current.',o:['resistor','conductor','insulator']},
+{l:4,p:'resistor',q:'Through a resistor the ___ energy is changed to light energy.',o:['electrical','chemical','thermal']},
+{l:4,ps:['bulb-wire','battery','copper-wire','plastic-coating'],q:'Which object is the BEST example of a resistor?',o:['Wire in a bulb','Battery','Copper wire','Plastic coating'],k:1,x:'The thin wire in the bulb changes electrical energy into light and heat.'},
+{l:4,e:'🔊 💡 🔥',q:'Which list names different forms of energy?',o:['sound, light, heat','magnetic, resistor, conductor','copper, battery, switch','transform, transfer, circuits']},
+{l:4,p:'bulb-broken',q:'Inside a light bulb is a wire. Electric energy changes into heat and light in it. What happens if the wire breaks?',o:['The wire is part of the electric circuit. The electric current will not flow if it breaks.','The wire is not part of the electric circuit. The electric current will continue to flow, but the bulb will not light.','The wire is not part of the electric circuit. The electric current will flow, but the bulb is burned out.']},
+{l:4,ps:['circuit-a','circuit-b','circuit-c','circuit-d'],q:'Which diagram shows current flowing through an electric circuit?',o:['A: the parts are not connected','B: the battery is not connected','C: only one wire to the battery','D: battery, switch and bulb in one loop'],c:3,k:1,x:'The current flows only in a complete loop.'},
+];
+
+const MT=[
+{l:1,t:'Match each word to its meaning',p:[['🏃','Kinetic energy','The energy of motion'],['🔋','Potential energy','The stored energy in an object'],['🧭','Motion','Must have direction and speed'],['⏱️','Speed','How fast or slow an object moves']]},
+{l:1,t:'Match each word to its meaning',p:[['🔄','Energy transformed','Energy changes from one form to another'],['➡️','Energy transferred','Energy moves from one object to another'],['🧭','Direction','The way an object moves: north or south']]},
+{l:3,t:'Match each energy to its meaning',p:[['🔥','Thermal energy','Energy of moving particles'],['🔊','Sound energy','Vibrates as it passes through matter'],['💡','Light energy','A form of energy that we can see']]},
+{l:3,t:'Match each way heat moves',p:[['✋','Conduction','Heat moves by touching'],['🌀','Convection','Moving air or water carries the heat'],['〰️','Radiation','Energy that travels as a wave']]},
+{l:4,t:'Match each part to its job',p:[['🔋','Battery','The power source'],['🔘','Switch','Turns the current on or off'],['🟠','Conductor','Lets the current flow easily'],['🧤','Insulator','Does not let electricity pass'],['💡','Resistor','Controls the flow of the current']]},
+{l:4,t:'Match each word to its meaning',p:[['➕➖','Opposite charges','Attract (pull)'],['➕➕','Same charges','Repel (push)'],['⚡','Electric current','The flow of charged particles'],['🔁','Electric circuit','A complete path for the current']]},
+];
+
+const LESSONS=[{n:0,l:'All lessons'},{n:1,l:'L1 · Energy & speed'},{n:3,l:'L3 · Energy transfer'},{n:4,l:'L4 · Electric circuits'}];
+const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
+const pool=()=>{const n=LESSONS[lesIdx].n;return {mc:MC.filter(q=>!n||q.l===n),mt:MT.filter(q=>!n||q.l===n)}};
+const LENS=[{mc:8,mt:2,l:'Quick · 10'},{mc:16,mt:4,l:'Normal · 20'},{mc:0,mt:0,l:'All'}];
+const store=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let lenIdx=1,lesIdx=0;
+try{const v=localStorage.getItem('sfq-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
+try{const v=localStorage.getItem('sfq-lesson');if(v!==null&&LESSONS[+v])lesIdx=+v}catch(e){}
+
+const S={list:[],i:0,score:0,max:0,miss:[]};
+const app=document.getElementById('app');
+const {esc,shuf,pick,star}=Kit;
+const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+const scene=q=>q.p?`<img class="scene pic fit" src="${IMG(q.pl||q.l,q.p)}" alt="Picture for the question">`:`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${q.ps?tiles(q):emo(q.e)}</svg></div>`;
+
+function start(){
+  const L=LENS[lenIdx],P=pool();
+  const mc=shuf(P.mc).slice(0,L.mc||P.mc.length).map(q=>({type:'mc',...q}));
+  const mt=shuf(P.mt).slice(0,L.mt||P.mt.length).map(q=>({type:'mt',...q}));
+  let list=shuf(mc.concat(mt));
+  // avoid two matching rounds in a row when possible
+  for(let i=1;i<list.length;i++){if(list[i].type==='mt'&&list[i-1].type==='mt'){const j=list.findIndex((q,k)=>k>i&&q.type==='mc');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
+  S.list=list;S.i=0;S.score=0;S.miss=[];
+  S.max=list.reduce((t,q)=>t+(q.type==='mc'?1:q.p.length),0);
+  render();
+}
+
+function hud(){
+  const pct=Math.round(S.i/S.list.length*100);
+  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+}
+
+function render(){
+  if(!S.list.length) return home();
+  if(S.i>=S.list.length) return end();
+  const q=S.list[S.i];
+  q.type==='mc'?renderMC(q):renderMT(q);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function home(){
+  const P=pool(),n=P.mc.length+P.mt.length;
+  app.innerHTML=`<section class="card pop">
+    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 4 Science · Final revision</span></div>
+    <h1 class="hero-title"><span class="p">Science</span> <span class="k">Quest</span></h1>
+    ${scene({l:1,p:'coaster'})}
+    <p class="howto">Ready? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
+    <div class="chips"><span class="chip pe">Energy, speed &amp; motion</span><span class="chip ht">Energy transfer</span><span class="chip ke">Electric circuits</span></div>
+    <div class="row"><span class="eyebrow">Which lessons?</span><div class="seg" role="group" aria-label="Lessons">${LESSONS.map((l,i)=>`<button type="button" id="les-${i}" data-les="${i}" aria-pressed="${i===lesIdx}">${l.l}</button>`).join('')}</div></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${i===LENS.length-1?'All · '+n:l.l}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
+  </section>`;
+  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;store('sfq-len',lenIdx);home()});
+  app.querySelectorAll('[data-les]').forEach(b=>b.onclick=()=>{lesIdx=+b.dataset.les;store('sfq-lesson',lesIdx);home()});
+  document.getElementById('startBtn').onclick=start;
+}
+
+function renderMC(q){
+  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
+  if(!q.k) opts=shuf(opts);
+  const long=opts.some(o=>o.t.length>34);
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mc">${q.o===TF?'True or false':'Choose the answer'}</span>
+    ${scene(q)}
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="fbx"></div>
+  </section>`;
+  const btns=[...app.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.i];
+    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
+    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
+    document.getElementById('pts').textContent=S.score;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x||"")}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  });
+}
+
+function renderMT(q){
+  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
+  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
+  const pair={}; // leftIdx -> rightIdx
+  let sel=null, checked=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    <p class="qtext">${esc(q.t)}</p>
+    <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
+    <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
+  </section>`;
+  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
+  function draw(){
+    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
+      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
+    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
+      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
+    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
+    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
+      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
+      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    checked=true;let got=0;
+    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
+    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
+    const all=got===q.p.length;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right meaning under the word.'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  };
+}
+
+function end(){
+  const pct=Math.round(S.score/S.max*100);
+  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const msg=pct===100?'Perfect score! You are ready for the exam.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below and play again.';
+  app.innerHTML=`<section class="card pop">
+    <span class="eyebrow">Your score</span>
+    <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
+    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <h2>${pct}% · ${msg}</h2>
+    <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
+  </section>
+  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
+  document.getElementById('againBtn').onclick=start;
+  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+Quiz.watch(app);
+home();
+})();
+</script>
+</body></html>

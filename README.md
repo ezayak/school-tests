@@ -506,6 +506,10 @@ its "Book questions" set uses the book's Lesson Check with model answers written
 After adding a lesson: add it to its topic in `lessons.js` (a new topic: a new `topic-N/` folder and a new entry in `chapters`),
 add its files (not the videos) to the `also: [...]` list of the Science entry in `games.js`, and bump `VERSION` in `sw.js`.
 
+**Science revision** (Final term 1): `grade-4/term-1/final-term-1/science-revision.html` is a quiz page like the other revisions, made from the school-sheet
+exercises of Topic 1 L1, L3 and L4. Its pictures are the lessons' photos (`p`, from `topic-1/img/lesson-N/`), emoji pictures (`e`), or several photos in a grid
+labelled A, B, C… (`ps`, with `k` so the answers keep that order). It has no image files of its own: the photos are already offline through the Science entry.
+
 ## Social Studies lessons (Grade 4)
 
 Folder: `grade-4/social-studies/`. One card on the home page ("Social Studies", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`,
