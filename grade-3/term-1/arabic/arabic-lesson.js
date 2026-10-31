@@ -304,10 +304,18 @@
       HW = window.HOMEWORK || [];
     const card = (l, label, arLabel) =>
       `<a class="lesson" href="${esc(l.path)}"><img src="${esc(l.cover)}" alt=""><span class="in"><span class="n">${label} ${l.n} · ${arLabel} ${esc(l.nAr || "")}</span><span class="t ar" dir="rtl">${esc(l.title)}</span><span class="e">${esc(l.en)}</span><span class="parts">${esc(l.note || "")}</span></span></a>`;
+    // another subject's list page sets window.LIST_HEAD (same keys)
+    const LH = window.LIST_HEAD || {
+      eyebrow: "Grade 3 · اللغة العربية",
+      p: "Arabic",
+      k: "Lessons",
+      howto:
+        "Pick a lesson. Each lesson has the story to read and listen to, the new words, opposites and plurals, and the exercises from the book.",
+    };
     app.innerHTML = `<section class="card pop">
-    <div class="toprow"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 · اللغة العربية</span></div>
-    <h1 class="hero-title"><span class="p">Arabic</span> <span class="k">Lessons</span></h1>
-    <p class="howto">Pick a lesson. Each lesson has the story to read and listen to, the new words, opposites and plurals, and the exercises from the book.</p>
+    <div class="toprow"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">${esc(LH.eyebrow)}</span></div>
+    <h1 class="hero-title"><span class="p">${esc(LH.p)}</span> <span class="k">${esc(LH.k)}</span></h1>
+    <p class="howto">${esc(LH.howto)}</p>
   </section>
   <div class="lessons">${LS.map((l) => card(l, "Lesson", "الدرس")).join("")}
   <div class="soon">More lessons will be added here, one by one.</div></div>
@@ -351,22 +359,14 @@
     <div class="panel" id="panel"></div></div>
   </section>`;
     bindTr(lessonView);
-    app.querySelectorAll("[data-tab]").forEach(
-      (b) =>
-        (b.onclick = () => {
-          tab = b.dataset.tab;
-          store.set(KEY + "tab", tab);
-          wstate = null;
-          ostate = null;
-          story = null;
-          xs = null;
-          lessonView();
-        }),
-    );
+    app
+      .querySelectorAll("[data-tab]")
+      .forEach((b) => (b.onclick = () => goTab(b.dataset.tab)));
     const P = document.getElementById("panel");
     exHost = null;
     const T = TABS.find((t) => t.k === tab);
-    if (L.tabs) {
+    // custom tabs named story or verse (a Religion lesson) get those panels; other custom tabs: a text + tasks
+    if (L.tabs && !["story", "verse"].includes(T.k)) {
       // homework tabs may have no text: then only the tasks
       P.innerHTML = `<div id="tText"></div><div id="tEx"></div>`;
       if (T.story != null) {
@@ -376,11 +376,22 @@
       exHost = P.querySelector("#tEx");
       exView();
     } else if (tab === "story") storyPanel(P);
+    else if (tab === "verse") versePanel(P);
     else if (tab === "words") wordsPanel(P);
     else if (tab === "ex") {
       exHost = P;
       exView();
     } else oppPanel(P);
+  }
+  function goTab(k) {
+    tab = k;
+    store.set(KEY + "tab", tab);
+    wstate = null;
+    ostate = null;
+    vstate = null;
+    story = null;
+    xs = null;
+    lessonView();
   }
 
   /* ---------- story ---------- */
@@ -456,7 +467,8 @@
     if (part >= PS.length || part < 0) part = 0;
     const p = PS[part],
       tk = tokens(p.ar);
-    const fixed = !!L.tabs; // a test: one text per tab, no list, no part navigation
+    const fixed = !!L.tabs && tab !== "story"; // a test: one text per tab, no list, no part navigation
+    const nextTab = TABS[TABS.findIndex((t) => t.k === tab) + 1];
     P.innerHTML = `${fixed ? "" : `<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span></div>`}
     ${ST.intro && part === 0 ? `<details class="readp"><summary>About this text · تمهيد</summary><p class="ar" dir="rtl" style="font-size:1.25rem;line-height:1.9;margin:8px 0">${esc(ST.intro.ar)}</p>${trText(ST.intro) ? `<p class="trans">${esc(trText(ST.intro))}</p>` : ""}</details>` : ""}
     <div class="part${p.img ? "" : " noimg"}">
@@ -475,7 +487,7 @@
         ? ""
         : `<div class="nav" dir="rtl"><button type="button" class="btn ghost" id="prevBtn" ${part === 0 ? "disabled" : ""}><span class="na">→ السابق</span> <small>Back</small></button>
       <div class="dots" dir="rtl">${PS.map((_, i) => `<button type="button" id="dot-${i}" data-dot="${i}" aria-label="Part ${i + 1}" aria-current="${i === part}"></button>`).join("")}</div>
-      ${part < PS.length - 1 ? `<button type="button" class="btn" id="nextPart"><span class="na">التالي ←</span> <small>Next</small></button>` : story < STORIES.length - 1 ? `<button type="button" class="btn" id="nextText"><span class="na">النص التالي ←</span> <small>Next text</small></button>` : `<button type="button" class="btn" id="toWords"><span class="na">الكلمات ←</span> <small>Words</small></button>`}</div>`
+      ${part < PS.length - 1 ? `<button type="button" class="btn" id="nextPart"><span class="na">التالي ←</span> <small>Next</small></button>` : story < STORIES.length - 1 ? `<button type="button" class="btn" id="nextText"><span class="na">النص التالي ←</span> <small>Next text</small></button>` : nextTab ? `<button type="button" class="btn" id="toNextTab"><span class="na">${esc(nextTab.ar)} ←</span> <small>${esc(nextTab.t)}</small></button>` : ""}</div>`
     }`;
     const txt = document.getElementById("storyText");
     const spans = [...txt.querySelectorAll(".w")];
@@ -548,15 +560,8 @@
       story = null;
       storyPanel(P);
     };
-    const tw = document.getElementById("toWords");
-    if (tw)
-      tw.onclick = () => {
-        tab = "words";
-        store.set(KEY + "tab", tab);
-        wstate = null;
-        story = null;
-        lessonView();
-      };
+    const tw = document.getElementById("toNextTab");
+    if (tw) tw.onclick = () => goTab(nextTab.k);
     P.querySelectorAll("[data-dot]").forEach(
       (b) => (b.onclick = () => go(+b.dataset.dot)),
     );
@@ -1129,6 +1134,186 @@
     );
   }
 
+  /* ---------- golden verse (Religion lessons): learn, complete, build ---------- */
+  // L.verses = [{ar, ref, re, en, uk, img, gaps: [[right, wrong, wrong], …]}]; each right word appears once in ar
+  let vstate = null;
+  const VERSES = () => L.verses || [];
+  function versePanel(P) {
+    if (vstate) return verseGame(P);
+    const MODES = [
+      {
+        k: "learn",
+        ic: "📖",
+        t: "Learn the verse",
+        ar: "احْفَظِ الْآيَةَ",
+        d: "Read, listen and tap the words",
+      },
+      {
+        k: "fill",
+        ic: "🧩",
+        t: "Complete the verse",
+        ar: "أَكْمِلِ الْآيَةَ",
+        d: "Choose the missing word",
+      },
+      {
+        k: "build",
+        ic: "🔤",
+        t: "Build the verse",
+        ar: "رَتِّبِ الْكَلِمَاتِ",
+        d: "Put the words in order",
+      },
+    ];
+    P.innerHTML = `<p class="tab-sub">${VERSES().length > 1 ? VERSES().length + " verses" : "The golden verse"} · <span class="ar">الْآيَةُ الذَّهَبِيَّةُ</span></p>
+    <div class="modes">${MODES.map((m) => `<button type="button" class="mode" id="vm-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small class="ar" style="font-size:1.05rem">${m.ar}</small><small>${m.d}</small></button>`).join("")}</div>${noVoiceNote()}`;
+    P.querySelectorAll("[data-m]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          const m = b.dataset.m;
+          const list =
+            m === "learn"
+              ? VERSES().slice()
+              : m === "fill"
+                ? shuf(VERSES().flatMap((v) => v.gaps.map((g) => ({ v, g }))))
+                : shuf(VERSES());
+          vstate = {
+            mode: m,
+            list,
+            i: 0,
+            score: 0,
+            max: list.length,
+            miss: [],
+          };
+          verseGame(P);
+        }),
+    );
+  }
+  function verseGame(P) {
+    hush();
+    closePop();
+    const S = vstate,
+      n = S.list.length,
+      last = S.i + 1 >= n;
+    const it = S.list[S.i],
+      v = it.v || it,
+      learn = S.mode === "learn";
+    const back = () => {
+      vstate = null;
+      versePanel(P);
+    };
+    const nextV = () => {
+      S.i++;
+      if (S.i < n) return verseGame(P);
+      P.innerHTML = scoreCard(
+        S.score,
+        S.max,
+        S.miss,
+        0,
+        "Other verse games",
+        "Golden verse",
+      );
+      P.querySelector("#againBtn").onclick = () => {
+        const m = S.mode;
+        vstate = null;
+        versePanel(P);
+        P.querySelector(`[data-m="${m}"]`).click();
+      };
+      P.querySelector("#backBtn").onclick = back;
+    };
+    const gap = S.mode === "fill" ? it.g[0] : null,
+      at = gap ? v.ar.indexOf(gap) : -1;
+    const pre = gap ? v.ar.slice(0, at) : v.ar,
+      post = gap ? v.ar.slice(at + gap.length) : "";
+    const textHTML = (w) =>
+      gap
+        ? `${tapHTML(pre)}<span class="gap">${w ? esc(w) : ""}</span>${tapHTML(post)}`
+        : tapHTML(v.ar);
+    const spoken = gap ? `${pre} … ${post}` : v.ar;
+    P.innerHTML = `<div class="hud"><button type="button" class="abtn" id="vBack" aria-label="Back to verse games">←</button><span class="qnum">${learn ? `Verse ${S.i + 1} of ${n}` : `${S.i + 1} / ${n}`}</span><div class="meter"><i style="width:${Math.round((S.i / n) * 100)}%"></i></div>${learn ? "" : `<span class="score">${bolt}<b id="pts">${S.score}</b></span>`}</div>
+  <section class="card pop exq">
+    ${v.img ? `<div class="scene photo"><img src="${esc(v.img)}" alt=""></div>` : ""}
+    ${S.mode === "build" ? "" : `<p class="verse ar tapw" dir="rtl" id="vText">${textHTML()}</p>`}
+    <p class="ref"><span class="ar" dir="rtl">${esc(v.ref)}</span> · ${esc(v.re)}</p>
+    ${trText(v) ? `<p class="trans">${esc(trText(v))}</p>` : ""}
+    <div class="audio"><button type="button" class="abtn big" id="s1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="s2"><span class="e">🐢</span> Slowly</button></div>
+    ${learn ? '<p class="hintline">Tap any word to see what it means.</p>' : ""}
+    <div id="ans"></div><div id="fbx"></div>
+    ${learn ? `<div class="nav" dir="rtl">${S.i ? `<button type="button" class="btn ghost" id="pv"><span class="na">→ السابق</span> <small>Back</small></button>` : ""}<button type="button" class="btn" id="nx" style="margin-inline-start:auto"><span class="na">${last ? "انْتَهَيْتُ" : "التالي ←"}</span> <small>${last ? "Done" : "Next"}</small></button></div>` : ""}
+  </section>`;
+    P.querySelector("#vBack").onclick = back;
+    P.querySelector("#s1").onclick = () => say(spoken);
+    P.querySelector("#s2").onclick = () => say(spoken, true);
+    bindTap(P);
+    if (learn) {
+      const pv = P.querySelector("#pv");
+      if (pv)
+        pv.onclick = () => {
+          S.i -= 2;
+          nextV();
+        };
+      P.querySelector("#nx").onclick = () => (last ? back() : nextV());
+      return;
+    }
+    const A = P.querySelector("#ans");
+    const done = (ok, your) => {
+      if (ok) S.score++;
+      else S.miss.push({ q: v.re, your, right: v.ar });
+      P.querySelector("#pts").textContent = S.score;
+      P.querySelector("#fbx").innerHTML = fbHTML(
+        ok,
+        `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc(v.ar)}</span>`,
+        last,
+      );
+      P.querySelector("#nextBtn").onclick = nextV;
+      say(v.ar);
+    };
+    if (gap) {
+      const opts = shuf(it.g.map((t, j) => ({ t, ok: !j })));
+      const gl = (t) => {
+        const g = tr === "off" ? null : gloss(t);
+        return g ? `<small>${esc(g[tr === "uk" ? 1 : 0])}</small>` : "";
+      };
+      A.innerHTML = `<div class="opts">${opts.map((o, j) => `<button type="button" class="opt aro" id="vo-${j}" data-j="${j}"><span class="L">${"ABCDEF"[j]}</span><span class="ow"><span class="ar">${esc(o.t)}</span>${gl(o.t)}</span></button>`).join("")}</div>`;
+      A.querySelectorAll("[data-j]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            const o = opts[+b.dataset.j];
+            A.querySelectorAll("[data-j]").forEach((x, j) => {
+              x.disabled = true;
+              if (opts[j].ok) x.classList.add("right");
+              else if (x !== b) x.classList.add("dim");
+            });
+            if (!o.ok) b.classList.add("wrong");
+            P.querySelector("#vText").innerHTML = textHTML(gap);
+            bindTap(P);
+            done(o.ok, o.t);
+          }),
+      );
+      return;
+    }
+    // build: the verse's words are tiles (Kit.dragTiles); quotes and end punctuation are not tiles
+    const body = v.ar.replace(/[«»]/g, "").replace(/[.،؟!]+$/, "");
+    const words = body.split(" ");
+    let bank = shuf(words.map((t) => ({ t })));
+    for (let k = 0; k < 6 && bank.map((w) => w.t).join(" ") === body; k++)
+      bank = shuf(bank);
+    A.innerHTML = `<div class="line" id="vLine" dir="rtl"></div><div class="bank" id="vBank" dir="rtl" style="margin-top:12px"></div><p class="hint">Drag the words onto the line in the right order, or tap them. The verse starts on the right.</p><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" id="checkBtn" type="button" disabled>Check my verse</button></div>`;
+    const cb = A.querySelector("#checkBtn"),
+      VL = A.querySelector("#vLine");
+    const T = Kit.dragTiles(VL, A.querySelector("#vBank"), bank, {
+      cls: "ar",
+      ph: "Drop the words here",
+      onChange: (_, b) => (cb.disabled = b.length > 0),
+    });
+    cb.onclick = () => {
+      const mine = T.line.map((w) => w.t).join(" "),
+        ok = mine === body;
+      T.lock();
+      cb.remove();
+      VL.classList.add(ok ? "ok" : "no");
+      done(ok, mine);
+    };
+  }
+
   /* =====================================================================
    EXERCISES PAGE
    ===================================================================== */
@@ -1140,7 +1325,8 @@
     if (xs) return xs.sec.cards ? qaCards() : exItem();
     const SEC = (L.exercises || []).filter((s) => !s.tab || s.tab === tab);
     const H = exH();
-    H.innerHTML = `<p class="tab-sub">${esc((L.exSub || [])[0] || "Exercises from the book")} · <span class="ar">${esc((L.exSub || [])[1] || "تَدْرِيبَاتُ الْكِتَابِ")}</span></p>
+    const sub = (TABS.find((t) => t.k === tab) || {}).sub || L.exSub || [];
+    H.innerHTML = `<p class="tab-sub">${esc(sub[0] || "Exercises from the book")} · <span class="ar">${esc(sub[1] || "تَدْرِيبَاتُ الْكِتَابِ")}</span></p>
     <div class="modes secs">${SEC.map((s, i) => `<button type="button" class="mode" id="sec-${s.k}" data-s="${i}"><span class="mi-ic">${s.ic}</span><span class="ar" dir="rtl">${esc(s.t)}</span><b style="font-size:1.05rem">${esc(tr === "uk" ? s.uk : s.en)}</b><small>${s.items.length} ${s.cards ? "cards" : "questions"}</small></button>`).join("")}</div>
     <p class="note">Questions marked “answer” have no single right wording: read the model answer, then tick whether you got it.</p>`;
     H.querySelectorAll("[data-s]").forEach(
@@ -1187,7 +1373,7 @@
     return r || null;
   };
   const ruleHTML = (r) =>
-    `<details class="readp rule"><summary>📘 The rule · الْقَاعِدَةُ</summary>${r.img ? `<img src="${esc(r.img)}" alt="" class="ruleimg">` : ""}<p class="ar" dir="rtl">${esc(r.ar)}</p><button type="button" class="abtn" id="ruleSay"><span class="e">🔊</span> Listen</button>${tr !== "off" ? `<p class="trans">${esc(tr === "uk" ? r.uk : r.en)}</p>` : ""}</details>`;
+    `<details class="readp rule"><summary>${esc(r.t || "📘 The rule · الْقَاعِدَةُ")}</summary>${r.img ? `<img src="${esc(r.img)}" alt="" class="ruleimg">` : ""}<p class="ar" dir="rtl">${esc(r.ar)}</p><button type="button" class="abtn" id="ruleSay"><span class="e">🔊</span> Listen</button>${tr !== "off" ? `<p class="trans">${esc(tr === "uk" ? r.uk : r.en)}</p>` : ""}</details>`;
   // it.help = {q, o, en, uk}: a folded practice question (first option right), not scored; an option is "ar" or [ar, en, uk]
   const helpOpt = (o) => (Array.isArray(o) ? o : [o]);
   const helpHTML = (h, opts) =>

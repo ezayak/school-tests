@@ -181,3 +181,16 @@
   color: var(--muted);
   margin-inline-start: 4px;
 }
+/* a Bible verse and its reference (religion revisions, golden verse in Religion lessons) */
+.verse {
+  font-size: 1.6rem;
+  line-height: 1.9;
+  text-align: center;
+  margin: 0;
+}
+.ref {
+  text-align: center;
+  margin: 0;
+  color: var(--muted);
+  font-weight: 700;
+}
