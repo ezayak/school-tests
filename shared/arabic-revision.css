@@ -53,12 +53,6 @@
 .show-en .en {
   display: block;
 }
-.ow {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 0;
-}
 .opt .ow .en {
   font-family: var(--body);
   font-weight: 400;
