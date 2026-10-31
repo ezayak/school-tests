@@ -1,4 +1,4 @@
-// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard}=Kit;
+// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard,dragTiles}=Kit;
 window.Kit = (function () {
   const esc = (s) =>
     String(s ?? "").replace(
@@ -101,6 +101,140 @@ window.Kit = (function () {
       .join("");
     return `<div class="vis-blk">${v.title ? `<b class="blk-title">${esc(v.title)}</b>` : ""}${rows}${v.legend === false ? "" : `<div class="blk-legend">${legend}</div>`}${v.note ? `<small>${esc(v.note)}</small>` : ""}</div>`;
   }
+  // Tiles moved from a bank onto a line by dragging or tapping (letters of a word, words of a sentence). Styles: drag-words.css.
+  // L, B: the line and bank elements; tiles: [{t}] in bank order. opts: {cls: extra tile class, ph: line placeholder, onChange(line, bank)}.
+  // Returns {line, bank, use(line, bank), draw, lock}; use() switches to other arrays (one line per word). A dir="rtl" line works too.
+  function dragTiles(L, B, tiles, opts = {}) {
+    let line = [],
+      bank = tiles.slice(),
+      locked = false;
+    const tile = (w, k, from) =>
+      `<button type="button" class="tile ${opts.cls || ""}" data-from="${from}" data-k="${k}">${esc(w.t)}</button>`;
+    function draw() {
+      L.innerHTML = line.length
+        ? line.map((w, k) => tile(w, k, "line")).join("")
+        : `<span class="ph">${esc(opts.ph || "")}</span>`;
+      B.innerHTML = bank.map((w, k) => tile(w, k, "bank")).join("");
+      if (locked) {
+        L.querySelectorAll(".tile").forEach((t) => (t.disabled = true));
+        return;
+      }
+      [...L.querySelectorAll(".tile"), ...B.querySelectorAll(".tile")].forEach(
+        bind,
+      );
+      if (opts.onChange) opts.onChange(line, bank);
+    }
+    function move(from, k, to, idx) {
+      const src = from === "line" ? line : bank;
+      const [w] = src.splice(k, 1);
+      const dst = to === "line" ? line : bank;
+      if (idx != null && from === to && idx > k) idx--;
+      if (idx == null || idx > dst.length) idx = dst.length;
+      dst.splice(idx, 0, w);
+      draw();
+    }
+    // where a tile dropped at (x, y) goes in the line
+    function insertIndex(x, y) {
+      const rtl = getComputedStyle(L).direction === "rtl";
+      let idx = 0;
+      for (const t of L.querySelectorAll(".tile")) {
+        const r = t.getBoundingClientRect();
+        if (y < r.top - 4) break;
+        if (
+          y <= r.bottom + 4 &&
+          (rtl ? x > r.right - r.width / 2 : x < r.left + r.width / 2)
+        )
+          break;
+        idx++;
+      }
+      return idx;
+    }
+    const toggle = (from, k) =>
+      from === "bank"
+        ? move("bank", k, "line", null)
+        : move("line", k, "bank", null);
+    function bind(el) {
+      el.onpointerdown = (e) => {
+        if (locked) return;
+        e.preventDefault();
+        const from = el.dataset.from,
+          k = +el.dataset.k,
+          sx = e.clientX,
+          sy = e.clientY,
+          r = el.getBoundingClientRect(),
+          ox = sx - r.left,
+          oy = sy - r.top;
+        let ghost = null;
+        try {
+          el.setPointerCapture(e.pointerId);
+        } catch (_) {}
+        const inLine = (ev) => {
+          const lr = L.getBoundingClientRect();
+          return (
+            ev.clientX >= lr.left &&
+            ev.clientX <= lr.right &&
+            ev.clientY >= lr.top - 10 &&
+            ev.clientY <= lr.bottom + 10
+          );
+        };
+        const mv = (ev) => {
+          if (!ghost && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 6) {
+            ghost = el.cloneNode(true);
+            ghost.classList.add("drag");
+            document.body.appendChild(ghost);
+            el.classList.add("ghost");
+          }
+          if (ghost) {
+            ghost.style.left = ev.clientX - ox + "px";
+            ghost.style.top = ev.clientY - oy + "px";
+            L.classList.toggle("over", inLine(ev));
+          }
+        };
+        const up = (ev) => {
+          removeEventListener("pointermove", mv);
+          removeEventListener("pointerup", up);
+          removeEventListener("pointercancel", up);
+          L.classList.remove("over");
+          if (!ghost) return toggle(from, k);
+          ghost.remove();
+          el.classList.remove("ghost");
+          if (inLine(ev))
+            move(from, k, "line", insertIndex(ev.clientX, ev.clientY));
+          else if (from === "line") move("line", k, "bank", null);
+          else draw();
+        };
+        // on the window, not the tile: the release still arrives if the finger leaves it
+        addEventListener("pointermove", mv);
+        addEventListener("pointerup", up);
+        addEventListener("pointercancel", up);
+      };
+      el.onkeydown = (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle(el.dataset.from, +el.dataset.k);
+        }
+      };
+    }
+    draw();
+    return {
+      get line() {
+        return line;
+      },
+      get bank() {
+        return bank;
+      },
+      use(l, b) {
+        line = l;
+        bank = b;
+        draw();
+      },
+      draw,
+      lock() {
+        locked = true;
+        draw();
+      },
+    };
+  }
   // tap an animated picture to see it again from the start
   document.addEventListener("click", (e) => {
     const s = e.target.closest && e.target.closest(".scene, .vis-blk");
@@ -110,5 +244,5 @@ window.Kit = (function () {
         a.play();
       });
   });
-  return { esc, shuf, pick, star, lessonCard, scene, idiom, blocks };
+  return { esc, shuf, pick, star, lessonCard, scene, idiom, blocks, dragTiles };
 })();
