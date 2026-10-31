@@ -21,6 +21,7 @@ grade-3/
       social-studies-weather-climate.html
       french-la-presentation.html
     arabic/ english/       ← subject pages (lessons, dictations)
+    religion/              ← Religion lessons (the Arabic lesson engine from arabic/)
   computer/                ← Computer: one subject for all terms
     index.html, lessons.js ← list of lessons, by chapter
     chapter-1/             ← Unit 1 lessons (lesson-N.html/.js, img/, video/)
@@ -61,8 +62,8 @@ live in `shared/theme.css`; change them there and every page follows.
 |---|---|---|
 | `shared/theme.css` | colours (light/dark), fonts, page, cards, buttons, menu tiles | every page, first |
 | `shared/quiz.css` | quiz parts: score bar, picture, answers, matching, results, SVG drawing colours | quiz games, Arabic lessons |
-| `shared/arabic.css` | Arabic text, Arabic answers, folder tabs | Arabic lessons and Arabic revision quizzes |
-| `shared/arabic-revision.css` | verses, word tools, English toggle | religion / Arabic social-studies revisions |
+| `shared/arabic.css` | Arabic text, Arabic answers, folder tabs, Bible verse and reference | Arabic and Religion lessons, Arabic revision quizzes |
+| `shared/arabic-revision.css` | word tools, English toggle | religion / Arabic social-studies revisions |
 | `shared/spelling.css` | flash cards, letter tiles, typing | English dictations |
 | `shared/drag-words.css` | drag tiles from a bank onto a line (with `Kit.dragTiles`) | "Mets en ordre", "Build the word", Arabic homework (word order) |
 | `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons, English stories |
@@ -313,7 +314,7 @@ window.LESSON = {
   plurals:   [[singular, plural, "en", "uk"], …],
   meanings:  [[word, meaning, "en = …", "uk = …"], …],
   exercises: [{k, t: "Arabic section title", en, uk, ic: "📝", items: [ … ]}, …]   // one menu tile per section; add cards: true for Q&A flash cards
-                                             // a section can have rule: {img, ar, en, uk} (shown as "The rule"), or rule: "<k of another section>"
+                                             // a section can have rule: {img, ar, en, uk} (shown as "The rule"; t: "📝 The words · …" for another label), or rule: "<k of another section>"
 };
 ```
 
@@ -360,6 +361,30 @@ Same format as a test, with one tab per book page (`{k: "p31", ic, t: "Page 31",
   An option can be `[ar, en, uk]`: the translation is shown in small letters under the Arabic when the translation is on
 
 After adding homework: add it to `HOMEWORK` (`n` = the lesson number), add `hw-N.html` / `hw-N.js` and new pictures to `also` in `games.js`, and bump `VERSION` in `sw.js`.
+
+## Religion lessons (Grade 3)
+
+Folder: `grade-3/term-1/religion/`. One card on the home page ("Religion", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`
+(`window.LIST_HEAD` there changes the list page's heading; the Arabic list has none and keeps its own).
+Book: التربية الدينية المسيحية, Grade 3, Term 1 (PDF in `~/Documents/2026-2027/Lucas/Religion/`).
+The lessons use the **Arabic lesson engine**: the pages load `../arabic/arabic-lesson.js` and `../arabic/arabic-lesson.css` (don't copy them),
+plus `shared/drag-words.css` and `shared/common.js` for the verse tiles, like `hw-3.html`.
+
+A lesson is `uN-lesson-M.html` (copy `u2-lesson-4.html`, change the `.js`) + `uN-lesson-M.js` + pictures in `img/uN-lesson-M/` (cropped from the book, ~700px; the
+small activity pictures ~300px). Same format as an Arabic lesson (`stories`, `gloss`, `exercises`), with:
+- `n: "rel-u2l4"` (a text key, so it saves apart from the Arabic lessons), `tapq: true`, `links` back to `index.html` ("Religion lessons")
+- `tabs`: Story · Games · Golden verse · Homework. A custom tab named `story` gets the normal story list with part-by-part navigation; one named `verse` gets the verse games;
+  the others show their exercises (`tab: "games"` / `tab: "hw"`). A tab can have `sub: [en, ar]`, the line above its exercise list.
+- Story: the book text in short parts with full tashkeel, a picture on each part, `en` / `uk` for each part; the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.
+- Games: every أنشطة والممارسات activity of the lesson, one section each (who am I → `mc`; writing → `open` with a model answer and a `help` question).
+- The lesson's أسئلة الدرس part is a Games section too (fill the gaps from the word bank → one `mc` per gap, the word bank as the section's `rule` with `t: "📝 The words · الْكَلِمَاتُ"`).
+- Homework: the page the teacher actually gave (the parent sends a photo); it can be another lesson's page (Lesson 4's homework is p. 36, the Bethesda lesson).
+  Say which page and lesson in the tab's `sub`; ✓ / ✗ questions → `tf` with `x` (why it is false); its pictures come from that lesson's pages.
+- `verses: [{ar, ref, re, en, uk, img, gaps: [[right, wrong, wrong], …]}]`: the golden verse (الآية الذهبية). Learn (tap the words), Complete (one round per gap; each right word
+  must appear once in `ar`), Build (the words as tiles, `Kit.dragTiles`).
+- `gloss` has every Arabic word of the texts, the verse and its choices, the questions, options, help questions and model answers.
+
+After adding a lesson: add it to `LESSONS` in `lessons.js`, add its files and pictures to `also` of the Religion entry in `games.js` (plus `countLabel` / `topics`), and bump `VERSION` in `sw.js`.
 
 ## French lessons (Grade 4)
 
