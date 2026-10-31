@@ -313,15 +313,13 @@ function listen(){
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();check()}});
 }
 
-/* ---------- BUILD THE WORD (drag letters) ---------- */
+/* ---------- BUILD THE WORD (drag letters: Kit.dragTiles) ---------- */
 function build(){
   const it=S.list[S.i];const sent=it.type==='sentence';
   const mix=w=>{let b=shuf(w.split('').map((t,i)=>({t,i})));for(let n=0;n<6&&w.length>1&&b.map(x=>x.t).join('')===w;n++)b=shuf(b);return b};
   // each word gets its own line and bank; trailing punctuation is fixed, not built
   const W=(sent?it.w.split(' '):[it.w]).map(c=>{const [,w,p]=sent?c.match(/^(.*?)([.,!?;:]*)$/):[0,c,''];return {w,p,line:[],bank:mix(w)}});
-  let act=-1,line=[],bank=[];let done=false;
-  const sel=a=>{act=a;line=W[a].line;bank=W[a].bank};
-  if(!sent)sel(0);
+  let act=-1;let done=false;
   app.innerHTML=`${hud(`${sent?'Sentence':'Word'} ${S.i+1} of ${S.list.length}`)}<section class="card pop fc">
     <span class="qtype dr">Build the ${sent?'sentence':'word'}</span>
     ${drawPic(it,'scene small')}${trHTML(it)}
@@ -337,42 +335,21 @@ function build(){
   document.getElementById('say2').onclick=()=>say(it.w,true);
   const L=document.getElementById('line'),B=document.getElementById('bank'),SR=document.getElementById('sent');
   const built=x=>x.line.map(l=>l.t).join('');
-  function draw(){
-    if(sent){
-      SR.innerHTML=W.map((x,k)=>`<span class="wgrp"><button type="button" class="wbox${k===act?' sel':''}${done?(built(x)===x.w?' ok':' no'):''}" id="wb-${k}" data-w="${k}" aria-label="Word ${k+1}, ${x.w.length} letters" aria-pressed="${k===act}" ${done?'disabled':''}>${x.w.split('').map((_,j)=>`<span>${x.line[j]?esc(x.line[j].t):''}</span>`).join('')}</button>${x.p?`<span class="punct">${esc(x.p)}</span>`:''}</span>`).join('');
-      SR.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{sel(+b.dataset.w);say(W[act].w,false);draw()});
-      L.style.display=B.style.display=done?'none':'';
-    }
-    L.innerHTML=line.length?line.map((w,k)=>`<button type="button" class="tile let" id="tl-${k}" data-from="line" data-k="${k}">${esc(w.t)}</button>`).join(''):`<span class="ph">${act<0?'Tap a word in the sentence':'Drop the letters here'}</span>`;
-    B.innerHTML=bank.map((w,k)=>`<button type="button" class="tile let" id="tb-${k}" data-from="bank" data-k="${k}">${esc(w.t)}</button>`).join('');
-    if(done){L.querySelectorAll('.tile').forEach(t=>t.disabled=true);return}
-    document.querySelectorAll('#line .tile,#bank .tile').forEach(bindTile);
-    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=W.some(x=>x.bank.length);
+  // the sentence row: one box per word, filled with the letters placed so far
+  function drawSent(){
+    if(!sent)return;
+    SR.innerHTML=W.map((x,k)=>`<span class="wgrp"><button type="button" class="wbox${k===act?' sel':''}${done?(built(x)===x.w?' ok':' no'):''}" id="wb-${k}" data-w="${k}" aria-label="Word ${k+1}, ${x.w.length} letters" aria-pressed="${k===act}" ${done?'disabled':''}>${x.w.split('').map((_,j)=>`<span>${x.line[j]?esc(x.line[j].t):''}</span>`).join('')}</button>${x.p?`<span class="punct">${esc(x.p)}</span>`:''}</span>`).join('');
+    SR.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{sel(+b.dataset.w);say(W[act].w,false)});
+    L.style.display=B.style.display=done?'none':'';
   }
-  function move(from,k,to,idx){const src=from==='line'?line:bank;const [w]=src.splice(k,1);const dst=to==='line'?line:bank;
-    if(idx!=null&&from===to&&idx>k)idx--;if(idx==null||idx>dst.length)idx=dst.length;dst.splice(idx,0,w);draw()}
-  function insertIndex(x,y){let idx=0;for(const t of L.querySelectorAll('.tile')){const r=t.getBoundingClientRect();if(y<r.top-4)break;if(y<=r.bottom+4&&x<r.left+r.width/2)break;idx++}return idx}
-  function bindTile(el){
-    el.onpointerdown=e=>{
-      if(done)return;e.preventDefault();
-      const from=el.dataset.from,k=+el.dataset.k,sx=e.clientX,sy=e.clientY;let ghost=null;const r=el.getBoundingClientRect();const ox=sx-r.left,oy=sy-r.top;
-      try{el.setPointerCapture(e.pointerId)}catch(_){}
-      const inLine=ev=>{const lr=L.getBoundingClientRect();return ev.clientX>=lr.left&&ev.clientX<=lr.right&&ev.clientY>=lr.top-10&&ev.clientY<=lr.bottom+10};
-      const mv=ev=>{if(!ghost&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>6){ghost=el.cloneNode(true);ghost.classList.add('drag');ghost.removeAttribute('id');document.body.appendChild(ghost);el.classList.add('ghost')}
-        if(ghost){ghost.style.left=(ev.clientX-ox)+'px';ghost.style.top=(ev.clientY-oy)+'px';L.classList.toggle('over',inLine(ev))}};
-      const up=ev=>{el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);L.classList.remove('over');
-        if(!ghost){from==='bank'?move('bank',k,'line',null):move('line',k,'bank',null);return}
-        ghost.remove();el.classList.remove('ghost');
-        if(inLine(ev))move(from,k,'line',insertIndex(ev.clientX,ev.clientY));else if(from==='line')move('line',k,'bank',null);else draw()};
-      el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
-    };
-    el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const from=el.dataset.from,k=+el.dataset.k;from==='bank'?move('bank',k,'line',null):move('line',k,'bank',null)}};
-  }
-  draw();
+  const T=Kit.dragTiles(L,B,[],{cls:'let',ph:()=>act<0?'Tap a word in the sentence':'Drop the letters here',
+    onChange:()=>{drawSent();const cb=document.getElementById('checkBtn');if(cb)cb.disabled=W.some(x=>x.bank.length)}});
+  const sel=a=>{act=a;T.use(W[a].line,W[a].bank)};
+  if(!sent)sel(0);
   document.getElementById('checkBtn').onclick=()=>{
     done=true;const mine=W.map(x=>built(x)+x.p).join(' ');const ok=mine===it.w;
     if(ok)S.score++;else S.miss.push({q:sent?'Build the sentence':'Build the word',your:mine,right:it.w});
-    document.getElementById('pts').textContent=S.score;L.classList.add(ok?'ok':'no');draw();
+    document.getElementById('pts').textContent=S.score;L.classList.add(ok?'ok':'no');T.lock();drawSent();
     document.getElementById('fbx').innerHTML=fb(ok,ok?`<strong>${esc(it.w)}</strong>`:`The correct spelling is <strong>${esc(it.w)}</strong>${sent?'':'.'}`);
     if(ok)say(it.w,false);
     bindNext();

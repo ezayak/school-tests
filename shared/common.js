@@ -102,7 +102,7 @@ window.Kit = (function () {
     return `<div class="vis-blk">${v.title ? `<b class="blk-title">${esc(v.title)}</b>` : ""}${rows}${v.legend === false ? "" : `<div class="blk-legend">${legend}</div>`}${v.note ? `<small>${esc(v.note)}</small>` : ""}</div>`;
   }
   // Tiles moved from a bank onto a line by dragging or tapping (letters of a word, words of a sentence). Styles: drag-words.css.
-  // L, B: the line and bank elements; tiles: [{t}] in bank order. opts: {cls: extra tile class, ph: line placeholder, onChange(line, bank)}.
+  // L, B: the line and bank elements; tiles: [{t}] in bank order. opts: {cls: extra tile class, ph: line placeholder (text, or a function that returns it), onChange(line, bank)}.
   // Returns {line, bank, use(line, bank), draw, lock}; use() switches to other arrays (one line per word). A dir="rtl" line works too.
   function dragTiles(L, B, tiles, opts = {}) {
     let line = [],
@@ -113,7 +113,7 @@ window.Kit = (function () {
     function draw() {
       L.innerHTML = line.length
         ? line.map((w, k) => tile(w, k, "line")).join("")
-        : `<span class="ph">${esc(opts.ph || "")}</span>`;
+        : `<span class="ph">${esc((typeof opts.ph === "function" ? opts.ph() : opts.ph) || "")}</span>`;
       B.innerHTML = bank.map((w, k) => tile(w, k, "bank")).join("");
       if (locked) {
         L.querySelectorAll(".tile").forEach((t) => (t.disabled = true));
