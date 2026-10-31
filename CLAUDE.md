@@ -65,6 +65,34 @@ Rules for every Arabic file:
 - السُّؤَالُ الثَّانِي: اكْتُبْ مَا يُمْلَى عَلَيْكَ (dictation) is left out: the teacher dictates it, the sheet has no text.
 - `TESTS` entry: `{n, nAr, title, en, path, cover, note: "Groups A · B · C · <count> questions · text from Lesson N"}`; in `games.js`: `test-N.html` / `.js` in `also`, `countLabel` ("… · N tests") and `topics` ("Tests 1–N").
 
+## Religion (Grade 3): lessons
+Folder `grade-3/term-1/religion/`, engine `../arabic/arabic-lesson.js` (shared with Arabic, don't copy it). Format in README: "Religion lessons".
+Book: التربية الدينية المسيحية, `~/Documents/2026-2027/Lucas/Religion/` (book PDF + the teacher's slides). Lucas has aphasia: a picture on every part and question.
+
+Sorting:
+- The lesson = one book lesson (الوحدة N، الدرس M), story pages + الأنشطة والممارسات pages. The slides are a summary: use the book text.
+- Homework = the page the parent sends a photo of (his real homework). It can be another lesson's page: put it in this lesson's Homework tab
+  and say which page and lesson in the tab's `sub`. If unsure which part is homework, ask before building.
+- Words missing or unreadable: never guess. List them and ask.
+
+What to build: `uN-lesson-M.js` + `uN-lesson-M.html` (copy u2-lesson-4.html), pictures in `img/uN-lesson-M/` (`pdftoppm -r 300`, then PIL; story ~700px, small activity pictures ~300px).
+- `n: "rel-uNlM"`, `tapq: true`, `links` back to "Religion lessons", four `tabs`: story · games · verse · hw.
+- Story: the book text word for word in short parts (one picture each, reuse a picture for two parts if needed); the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.
+- Games: every activity of the lesson, one section each, plus the lesson's أسئلة الدرس (unless it is the homework).
+- Verse: the golden verse (الآية الذهبية) in `verses`, with 3–4 `gaps` (right word first; each right word once in the verse).
+- Item types: "من أنا" / choose → `mc` (with `q: "… أَنَا ___"`); word bank → one `mc` per gap, the bank as the section's `rule` with `t: "📝 The words · الْكَلِمَاتُ"`;
+  ✓ / ✗ → `tf` with `x` (why it is false); write / what would you do / picture-and-event → `open` with a model answer and a `help` question (`[ar, en, uk]` options).
+  Colouring and drawing activities are left out.
+
+Rules:
+- Full tashkeel. Keep the book's wording; fix only plain grammar mistakes and list them for the user.
+- `en` / `uk` on every text, part, section, item and help option.
+- `gloss` has every Arabic word of the texts, paragraph titles, verse and its gap choices, questions, options, `x`, help and model answers. Same spelling with different meanings
+  (حَلَمَ / حُلْمَ, مِنْ / مَنْ, حَدَثَ / حَدَثٍ) get their own exact-tashkeel keys. Check with a script: no word without a gloss, no item without a picture, every `img` exists, every gap once.
+- Then: entry in `LESSONS` (`religion/lessons.js`); files + pictures in `also` of the Religion entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+- A change to the engine must leave the Arabic pages as they were: check an Arabic lesson (story → Words button) and a test (fixed text, no part navigation).
+- Check in the browser: the list, each tab, the verse games (tiles move with real taps, not script `.click()`).
+
 ## Checking changes
 - Local server: `python3 -m http.server 8765 --bind 127.0.0.1` from the repo root; open the hubs:
   `index.html`, `grade-4/term-1/{french,english}/index.html`, `grade-{3,4}/computer/index.html`, `grade-3/term-1/english/index.html`.
