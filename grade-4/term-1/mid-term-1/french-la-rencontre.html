@@ -264,7 +264,6 @@ function renderDR(q){
   const target=q.w;
   let bank=shuf(target.map((t,i)=>({t,i})));
   for(let n=0;n<5&&bank.every((b,k)=>b.i===k);n++)bank=shuf(bank);
-  let line=[];let done=false;
   app.innerHTML=`${hud()}<section class="card pop">
     <span class="qtype dr">Drag the words · Mets en ordre</span>
     ${scene(q.s)}
@@ -275,57 +274,12 @@ function renderDR(q){
     <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my sentence</button></div></div>
   </section>`;
   const L=document.getElementById('line'),B=document.getElementById('bank');
-  function draw(){
-    L.innerHTML=line.length?line.map((w,k)=>`<button type="button" class="tile" id="tl-${k}" data-from="line" data-k="${k}">${esc(w.t)}</button>`).join(''):'<span class="ph">Drop the words here</span>';
-    B.innerHTML=bank.map((w,k)=>`<button type="button" class="tile" id="tb-${k}" data-from="bank" data-k="${k}">${esc(w.t)}</button>`).join('');
-    if(done){L.querySelectorAll('.tile').forEach(t=>t.disabled=true);return}
-    document.querySelectorAll('#line .tile,#bank .tile').forEach(bindTile);
-    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=bank.length>0;
-  }
-  function move(from,k,to,idx){
-    const src=from==='line'?line:bank;const [w]=src.splice(k,1);
-    const dst=to==='line'?line:bank;
-    if(idx!=null&&from===to&&idx>k)idx--;
-    if(idx==null||idx>dst.length)idx=dst.length;
-    dst.splice(idx,0,w);draw();
-  }
-  function insertIndex(x,y){
-    const tiles=[...L.querySelectorAll('.tile:not(.ghost)')];let idx=0;const all=[...L.querySelectorAll('.tile')];
-    for(const t of all){const r=t.getBoundingClientRect();if(y<r.top-4)break;if(y<=r.bottom+4&&x<r.left+r.width/2)break;idx++}
-    return idx;
-  }
-  function bindTile(el){
-    el.onpointerdown=e=>{
-      if(done)return;e.preventDefault();
-      const from=el.dataset.from,k=+el.dataset.k,sx=e.clientX,sy=e.clientY;let ghost=null;
-      const r=el.getBoundingClientRect();const ox=sx-r.left,oy=sy-r.top;
-      try{el.setPointerCapture(e.pointerId)}catch(_){}
-      const mv=ev=>{
-        if(!ghost&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>6){ghost=el.cloneNode(true);ghost.classList.add('drag');ghost.removeAttribute('id');document.body.appendChild(ghost);el.classList.add('ghost')}
-        if(ghost){ghost.style.left=(ev.clientX-ox)+'px';ghost.style.top=(ev.clientY-oy)+'px';const lr=L.getBoundingClientRect();L.classList.toggle('over',ev.clientX>=lr.left&&ev.clientX<=lr.right&&ev.clientY>=lr.top-10&&ev.clientY<=lr.bottom+10)}
-      };
-      const up=ev=>{
-        el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);
-        L.classList.remove('over');
-        if(!ghost){ // tap
-          from==='bank'?move('bank',k,'line',null):move('line',k,'bank',null);return}
-        ghost.remove();el.classList.remove('ghost');
-        const lr=L.getBoundingClientRect(),br=B.getBoundingClientRect();
-        const inLine=ev.clientX>=lr.left&&ev.clientX<=lr.right&&ev.clientY>=lr.top-10&&ev.clientY<=lr.bottom+10;
-        if(inLine){move(from,k,'line',insertIndex(ev.clientX,ev.clientY))}
-        else if(from==='line'){move('line',k,'bank',null)}
-        else draw();
-      };
-      el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
-    };
-    el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const from=el.dataset.from,k=+el.dataset.k;from==='bank'?move('bank',k,'line',null):move('line',k,'bank',null)}};
-  }
-  draw();
+  const T=Kit.dragTiles(L,B,bank,{ph:'Drop the words here',onChange:(_,b)=>{const cb=document.getElementById('checkBtn');if(cb)cb.disabled=b.length>0}});
   document.getElementById('checkBtn').onclick=()=>{
-    done=true;const nice=t=>t.replace(/' /g,"'");const mineRaw=line.map(w=>w.t).join(' '),rightRaw=target.join(' ');const ok=mineRaw===rightRaw;const mine=nice(mineRaw),right=nice(rightRaw);
+    const nice=t=>t.replace(/' /g,"'");const mineRaw=T.line.map(w=>w.t).join(' '),rightRaw=target.join(' ');const ok=mineRaw===rightRaw;const mine=nice(mineRaw),right=nice(rightRaw);
     if(ok)S.score++;else S.miss.push({q:'Mets en ordre',your:mine,right});
     document.getElementById('pts').textContent=S.score;
-    L.classList.add(ok?'ok':'no');draw();
+    L.classList.add(ok?'ok':'no');T.lock();
     document.getElementById('fbx').innerHTML=`<div class="fb ${ok?'ok':'no'}"><b>${ok?pick(['Bravo !','Très bien !','Super !','Correct!']):'Not quite.'}</b><span>${ok?'Your sentence is correct.':'The correct sentence is: <strong>'+esc(right)+'</strong>'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
     const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
   };

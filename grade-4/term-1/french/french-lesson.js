@@ -1078,123 +1078,21 @@
     document.getElementById("checkBtn").onclick = check;
   }
 
-  /* --- tiles you can drag or tap (shared by order & letters) --- */
+  /* --- tiles you can drag or tap (shared by order & letters): Kit.dragTiles + right / wrong marks and the 💡 hint --- */
+  // st = {target, line, bank, done}; the game changes st.done, then calls st.draw()
   function tiles(Lel, Bel, st, { cls = "", ph = "", onChange }) {
-    function move(from, k, to, idx) {
-      const src = st[from];
-      const [w] = src.splice(k, 1);
-      const dst = st[to];
-      if (idx != null && from === to && idx > k) idx--;
-      if (idx == null || idx > dst.length) idx = dst.length;
-      dst.splice(idx, 0, w);
-      draw();
-    }
-    function insertIndex(x, y) {
-      let idx = 0;
-      for (const t of Lel.querySelectorAll(".tile")) {
-        const r = t.getBoundingClientRect();
-        if (y < r.top - 4) break;
-        if (y <= r.bottom + 4 && x < r.left + r.width / 2) break;
-        idx++;
-      }
-      return idx;
-    }
-    function bindTile(el) {
-      el.onpointerdown = (e) => {
-        if (st.done) return;
-        e.preventDefault();
-        const from = el.dataset.from,
-          k = +el.dataset.k,
-          sx = e.clientX,
-          sy = e.clientY;
-        let ghost = null;
-        const r = el.getBoundingClientRect();
-        const ox = sx - r.left,
-          oy = sy - r.top;
-        try {
-          el.setPointerCapture(e.pointerId);
-        } catch (_) {}
-        const inLine = (ev) => {
-          const lr = Lel.getBoundingClientRect();
-          return (
-            ev.clientX >= lr.left &&
-            ev.clientX <= lr.right &&
-            ev.clientY >= lr.top - 14 &&
-            ev.clientY <= lr.bottom + 14
-          );
-        };
-        const mv = (ev) => {
-          if (!ghost && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 8) {
-            ghost = el.cloneNode(true);
-            ghost.classList.add("drag");
-            ghost.removeAttribute("id");
-            ghost.style.width = r.width + "px";
-            document.body.appendChild(ghost);
-            el.classList.add("ghost");
-          }
-          if (ghost) {
-            ghost.style.left = ev.clientX - ox + "px";
-            ghost.style.top = ev.clientY - oy + "px";
-            Lel.classList.toggle("over", inLine(ev));
-          }
-        };
-        const up = (ev) => {
-          el.removeEventListener("pointermove", mv);
-          el.removeEventListener("pointerup", up);
-          el.removeEventListener("pointercancel", up);
-          Lel.classList.remove("over");
-          if (!ghost) {
-            const t = st[from][k];
-            if (from === "bank") {
-              move("bank", k, "line", null);
-              if (t.say) say(t.say, true);
-            } else move("line", k, "bank", null);
-            return;
-          }
-          ghost.remove();
-          el.classList.remove("ghost");
-          if (inLine(ev))
-            move(from, k, "line", insertIndex(ev.clientX, ev.clientY));
-          else if (from === "line") move("line", k, "bank", null);
-          else draw();
-        };
-        el.addEventListener("pointermove", mv);
-        el.addEventListener("pointerup", up);
-        el.addEventListener("pointercancel", up);
-      };
-      el.onkeydown = (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          const from = el.dataset.from,
-            k = +el.dataset.k;
-          from === "bank"
-            ? move("bank", k, "line", null)
-            : move("line", k, "bank", null);
-        }
-      };
-    }
-    function draw() {
-      Lel.innerHTML = st.line.length
-        ? st.line
-            .map(
-              (w, k) =>
-                `<button type="button" class="tile ${cls}${st.done ? (w.t === st.target[k] ? " ok" : " no") : ""}" data-from="line" data-k="${k}" ${st.done ? "disabled" : ""}>${esc(w.t)}</button>`,
-            )
-            .join("")
-        : `<span class="ph">${esc(ph)}</span>`;
-      Bel.innerHTML = st.bank
-        .map(
-          (w, k) =>
-            `<button type="button" class="tile ${cls}" data-from="bank" data-k="${k}">${esc(w.t)}</button>`,
-        )
-        .join("");
-      if (!st.done)
-        [
-          ...Lel.querySelectorAll(".tile"),
-          ...Bel.querySelectorAll(".tile"),
-        ].forEach(bindTile);
-      onChange && onChange();
-    }
+    const T = Kit.dragTiles(Lel, Bel, [], {
+      cls,
+      ph,
+      mark: (w, k) => (st.done ? (w.t === st.target[k] ? "ok" : "no") : ""),
+      onPlace: (w) => w.say && say(w.say, true),
+      onChange,
+    });
+    T.use(st.line, st.bank);
+    st.draw = () => {
+      if (st.done) T.lock();
+      else T.unlock();
+    };
     // 💡 hint: put the next right tile in place
     st.hint = () => {
       let k = 0;
@@ -1206,10 +1104,9 @@
         st.line.push(w);
         if (w.say) say(w.say, true);
       }
-      draw();
+      T.draw();
     };
-    st.draw = draw;
-    draw();
+    st.draw();
     return st;
   }
   const mixed = (arr, target) => {

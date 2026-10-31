@@ -102,14 +102,15 @@ window.Kit = (function () {
     return `<div class="vis-blk">${v.title ? `<b class="blk-title">${esc(v.title)}</b>` : ""}${rows}${v.legend === false ? "" : `<div class="blk-legend">${legend}</div>`}${v.note ? `<small>${esc(v.note)}</small>` : ""}</div>`;
   }
   // Tiles moved from a bank onto a line by dragging or tapping (letters of a word, words of a sentence). Styles: drag-words.css.
-  // L, B: the line and bank elements; tiles: [{t}] in bank order. opts: {cls: extra tile class, ph: line placeholder (text, or a function that returns it), onChange(line, bank)}.
-  // Returns {line, bank, use(line, bank), draw, lock}; use() switches to other arrays (one line per word). A dir="rtl" line works too.
+  // L, B: the line and bank elements; tiles: [{t}] in bank order. opts: {cls: extra tile class, ph: line placeholder (text, or a function that returns it),
+  // mark(w, k): extra class of a tile on the line (e.g. "ok" / "no" after a check), onPlace(w): a tile went onto the line, onChange(line, bank)}.
+  // Returns {line, bank, use(line, bank), draw, lock, unlock}; use() switches to other arrays (one line per word). A dir="rtl" line works too.
   function dragTiles(L, B, tiles, opts = {}) {
     let line = [],
       bank = tiles.slice(),
       locked = false;
     const tile = (w, k, from) =>
-      `<button type="button" class="tile ${opts.cls || ""}" data-from="${from}" data-k="${k}">${esc(w.t)}</button>`;
+      `<button type="button" class="tile ${opts.cls || ""}${from === "line" && opts.mark ? " " + opts.mark(w, k) : ""}" data-from="${from}" data-k="${k}">${esc(w.t)}</button>`;
     function draw() {
       L.innerHTML = line.length
         ? line.map((w, k) => tile(w, k, "line")).join("")
@@ -132,6 +133,7 @@ window.Kit = (function () {
       if (idx == null || idx > dst.length) idx = dst.length;
       dst.splice(idx, 0, w);
       draw();
+      if (from === "bank" && to === "line" && opts.onPlace) opts.onPlace(w);
     }
     // where a tile dropped at (x, y) goes in the line
     function insertIndex(x, y) {
@@ -181,6 +183,7 @@ window.Kit = (function () {
           if (!ghost && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 6) {
             ghost = el.cloneNode(true);
             ghost.classList.add("drag");
+            ghost.style.width = r.width + "px";
             document.body.appendChild(ghost);
             el.classList.add("ghost");
           }
@@ -231,6 +234,10 @@ window.Kit = (function () {
       draw,
       lock() {
         locked = true;
+        draw();
+      },
+      unlock() {
+        locked = false;
         draw();
       },
     };
