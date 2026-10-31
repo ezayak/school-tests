@@ -64,12 +64,12 @@ live in `shared/theme.css`; change them there and every page follows.
 | `shared/arabic.css` | Arabic text, Arabic answers, folder tabs | Arabic lessons and Arabic revision quizzes |
 | `shared/arabic-revision.css` | verses, word tools, English toggle | religion / Arabic social-studies revisions |
 | `shared/spelling.css` | flash cards, letter tiles, typing | English dictations |
-| `shared/drag-words.css` | drag tiles from a bank onto a line | "Mets en ordre", "Build the word" |
+| `shared/drag-words.css` | drag tiles from a bank onto a line (with `Kit.dragTiles`) | "Mets en ordre", "Build the word", Arabic homework (word order) |
 | `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons, English stories |
 | `shared/story.css` | English stories: page text, the sentence being read, easy sentence, word meanings | English stories |
 | `shared/reading.css` / `shared/reading.js` | Ukrainian reading game: syllable tiles, flashing words, timed reading, the rocket | Optima Українська література |
 | `shared/math.js` / `shared/math.css` | Math: column sums with carry boxes, number pad, schemas (bar models), groups, arrays, times-table flower, place-value chart, number line | Math lessons |
-| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards; `cover` picture or `ic` emoji), `Kit.scene` / `Kit.idiom` / `Kit.blocks` (animated pictures, sentence blocks) | quiz games, French and Computer lesson lists, English stories and lessons |
+| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards; `cover` picture or `ic` emoji), `Kit.scene` / `Kit.idiom` / `Kit.blocks` (animated pictures, sentence blocks), `Kit.dragTiles` (drag or tap tiles from a bank onto a line: letters of a word, words of a sentence; works right-to-left) | quiz games, French and Computer lesson lists, English stories and lessons |
 
 Rules for new pages:
 - Copy an existing page of the same kind and keep its `<link>`s. Never add a `<style>` block or new colour values.
@@ -344,6 +344,22 @@ Test items: `{type: "word", q: "… ___", a: ["right", "also right"]}` — the c
 alef forms or a leading ال; Show the answer stays), and `{type: "open", q, a}` for sentence answers (`plain: true` when the answer is not words, e.g. syllables "خَا / فَ"). Each item has `en` / `uk`; no picture, the text above the tasks has one.
 
 After adding a test: add it to `TESTS`, add `test-N.html` / `test-N.js` to `also` in `games.js`, and bump `VERSION` in `sw.js`.
+
+### Arabic homework
+
+The ثَانِيًا: الْأَدَاءَاتُ الْمَنْزِلِيَّةُ part of the book pages (the classwork, أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ, is left out), listed under **Homework** on `index.html` (`window.HOMEWORK` in `lessons.js`).
+One page per lesson: `hw-N.html` + `hw-N.js` is the homework of Lesson N (the lesson whose story the page is about). A new homework sheet for the same lesson is one more tab, not a new page.
+Same format as a test, with one tab per book page (`{k: "p31", ic, t: "Page 31", short: "p.31", ar: "صَفْحَةُ ٣١"}`) and `n: "hN"`:
+- a tab with `story: i` shows that text above its tasks (e.g. a story to give a new ending); a tab without `story` shows only its tasks
+- every item has a picture (`img`, or `ic` with emoji), because there is usually no text above them
+- `{type: "word"}` for one word, `{type: "mc"}` when the sheet gives the choices in brackets, `{type: "open"}` for sentences, writing and copying,
+  `{type: "build", q, a: "the sentence."}` for "رَتِّبْ": the words of `a` are tiles to drag or tap into order, like the letters in the dictation games (the end punctuation stays).
+  A page with `build` loads `shared/drag-words.css` (before `arabic.css`) and `shared/common.js` (after `quiz-common.js`), like `hw-3.html`
+- a section can have its own `rule: {ar, en, uk}` (a rule given as a string only finds sections of the same file)
+- a writing task can have `help: {q, o: [right, wrong, …], en, uk}`: a folded "💡 Help" practice question shown with the task (not scored), e.g. pick the ending that is new and fits the story.
+  An option can be `[ar, en, uk]`: the translation is shown in small letters under the Arabic when the translation is on
+
+After adding homework: add it to `HOMEWORK` (`n` = the lesson number), add `hw-N.html` / `hw-N.js` and new pictures to `also` in `games.js`, and bump `VERSION` in `sw.js`.
 
 ## French lessons (Grade 4)
 
