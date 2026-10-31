@@ -69,7 +69,7 @@ live in `shared/theme.css`; change them there and every page follows.
 | `shared/story.css` | English stories: page text, the sentence being read, easy sentence, word meanings | English stories |
 | `shared/reading.css` / `shared/reading.js` | Ukrainian reading game: syllable tiles, flashing words, timed reading, the rocket | Optima Українська література |
 | `shared/math.js` / `shared/math.css` | Math: column sums with carry boxes, number pad, schemas (bar models), groups, arrays, times-table flower, place-value chart, number line | Math lessons |
-| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards; `cover` picture or `ic` emoji), `Kit.scene` / `Kit.idiom` / `Kit.blocks` (animated pictures, sentence blocks), `Kit.dragTiles` (drag or tap tiles from a bank onto a line: letters of a word, words of a sentence; works right-to-left) | quiz games, French and Computer lesson lists, English stories and lessons |
+| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards; `cover` picture or `ic` emoji), `Kit.scene` / `Kit.idiom` / `Kit.blocks` (animated pictures, sentence blocks), `Kit.dragTiles` (drag or tap tiles from a bank onto a line: letters of a word, words of a sentence; works right-to-left; every tile game uses it) | quiz games, French and Computer lesson lists, French lessons, English stories and lessons, tile games |
 
 Rules for new pages:
 - Copy an existing page of the same kind and keep its `<link>`s. Never add a `<style>` block or new colour values.

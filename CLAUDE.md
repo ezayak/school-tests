@@ -9,6 +9,7 @@ Read README.md first. It has the structure, the lesson/dictation formats and the
   Example: `.play-arrow` (keeps "Play →" / "Open →" on one line) lives only in theme.css, not copied into index.css / lesson.css / english-hub.css.
 - Before adding CSS, check which stylesheets the target pages actually load (`grep -n "<link" .../index.html`). The English hubs load theme.css + english-hub.css only, not lesson.css.
 - Markup shared by several engines goes into `Kit` in `shared/common.js` (e.g. `Kit.lessonCard(it, label)` for French and Computer hub cards). A page that uses Kit must load `shared/common.js` before its own scripts.
+- Tiles dragged or tapped from a bank onto a line (build a word, put words in order) always use `Kit.dragTiles`; never copy drag code into a page. The page keeps only its own check and feedback.
 
 ## Formatting
 - All JS and the shared CSS are Prettier-formatted (Prettier 3.3.3, installed globally, defaults, no config). Keep it that way. The user reads the code.
