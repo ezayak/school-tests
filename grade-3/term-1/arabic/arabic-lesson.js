@@ -300,17 +300,18 @@
    ===================================================================== */
   function listView() {
     const LS = window.LESSONS || [],
-      TS = window.TESTS || [];
-    const card = (l, label) =>
-      `<a class="lesson" href="${esc(l.path)}"><img src="${esc(l.cover)}" alt=""><span class="in"><span class="n">${label} ${l.n} · ${label === "Test" ? "الاختبار" : "الدرس"} ${esc(l.nAr || "")}</span><span class="t ar" dir="rtl">${esc(l.title)}</span><span class="e">${esc(l.en)}</span><span class="parts">${esc(l.note || "")}</span></span></a>`;
+      TS = window.TESTS || [],
+      HW = window.HOMEWORK || [];
+    const card = (l, label, arLabel) =>
+      `<a class="lesson" href="${esc(l.path)}"><img src="${esc(l.cover)}" alt=""><span class="in"><span class="n">${label} ${l.n} · ${arLabel} ${esc(l.nAr || "")}</span><span class="t ar" dir="rtl">${esc(l.title)}</span><span class="e">${esc(l.en)}</span><span class="parts">${esc(l.note || "")}</span></span></a>`;
     app.innerHTML = `<section class="card pop">
     <div class="toprow"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 · اللغة العربية</span></div>
     <h1 class="hero-title"><span class="p">Arabic</span> <span class="k">Lessons</span></h1>
     <p class="howto">Pick a lesson. Each lesson has the story to read and listen to, the new words, opposites and plurals, and the exercises from the book.</p>
   </section>
-  <div class="lessons">${LS.map((l) => card(l, "Lesson")).join("")}
+  <div class="lessons">${LS.map((l) => card(l, "Lesson", "الدرس")).join("")}
   <div class="soon">More lessons will be added here, one by one.</div></div>
-  ${TS.length ? `<h2 class="lgroup">Tests · <span class="ar">الِاخْتِبَارَاتُ</span></h2><div class="lessons">${TS.map((l) => card(l, "Test")).join("")}</div>` : ""}`;
+  ${TS.length ? `<h2 class="lgroup">Tests · <span class="ar">الِاخْتِبَارَاتُ</span></h2><div class="lessons">${TS.map((l) => card(l, "Test", "الاختبار")).join("")}</div>` : ""}${HW.length ? `<h2 class="lgroup">Homework · <span class="ar">الْوَاجِبَاتُ</span></h2><div class="lessons">${HW.map((l) => card(l, "Homework · Lesson", "وَاجِبُ الدَّرْسِ")).join("")}</div>` : ""}`;
   }
 
   /* =====================================================================
@@ -365,10 +366,13 @@
     const P = document.getElementById("panel");
     exHost = null;
     const T = TABS.find((t) => t.k === tab);
-    if (T.story != null) {
+    if (L.tabs) {
+      // homework tabs may have no text: then only the tasks
       P.innerHTML = `<div id="tText"></div><div id="tEx"></div>`;
-      story = T.story;
-      storyPanel(P.querySelector("#tText"));
+      if (T.story != null) {
+        story = T.story;
+        storyPanel(P.querySelector("#tText"));
+      }
       exHost = P.querySelector("#tEx");
       exView();
     } else if (tab === "story") storyPanel(P);
@@ -1184,6 +1188,10 @@
   };
   const ruleHTML = (r) =>
     `<details class="readp rule"><summary>📘 The rule · الْقَاعِدَةُ</summary>${r.img ? `<img src="${esc(r.img)}" alt="" class="ruleimg">` : ""}<p class="ar" dir="rtl">${esc(r.ar)}</p><button type="button" class="abtn" id="ruleSay"><span class="e">🔊</span> Listen</button>${tr !== "off" ? `<p class="trans">${esc(tr === "uk" ? r.uk : r.en)}</p>` : ""}</details>`;
+  // it.help = {q, o, en, uk}: a folded practice question (first option right), not scored; an option is "ar" or [ar, en, uk]
+  const helpOpt = (o) => (Array.isArray(o) ? o : [o]);
+  const helpHTML = (h, opts) =>
+    `<details class="readp help"><summary>💡 Help · مُسَاعَدَةٌ</summary><p class="ar tapw" dir="rtl">${tapHTML(h.q)}</p>${trText(h) ? `<p class="qhelp">${esc(trText(h))}</p>` : ""}<div class="opts long">${opts.map((o, j) => `<button type="button" class="opt aro" data-h="${j}"><span class="L">${"ABCDEF"[j]}</span><span class="ow"><span class="ar">${esc(o.t)}</span>${o.tr ? `<small>${esc(o.tr)}</small>` : ""}</span></button>`).join("")}</div></details>`;
   const qHTML = (q) => esc(q).replace(/_{3,}/g, '<span class="gap"></span>');
   function exItem() {
     const it = xs.list[xs.i],
@@ -1197,6 +1205,14 @@
         : (Array.isArray(it.read)
             ? (STORIES[it.read[0]] || { parts: [] }).parts[it.read[1]]
             : (STORIES[0] || { parts: [] }).parts[it.read]) || null;
+    const hOpts =
+      it.help &&
+      shuf(
+        it.help.o.map((o, j) => {
+          const [t, en, uk] = helpOpt(o);
+          return { t, tr: trText({ en, uk }), ok: j === 0 };
+        }),
+      );
     const H = exH();
     exTop(H);
     H.innerHTML = `<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to exercise list">←</button><span class="qnum">${esc(tr === "uk" ? xs.sec.uk : xs.sec.en)} · ${xs.i + 1} / ${n}</span><div class="meter"><i style="width:${pct}%"></i></div><span class="score">${bolt}<b id="pts">${xs.score}</b></span></div>
@@ -1209,6 +1225,7 @@
     ${it.type === "match" ? "" : `<p class="qar ar${L.tapq ? " tapw" : ""}" dir="rtl">${L.tapq ? tapHTML(it.q) : qHTML(it.q)}</p>`}
     ${it.type === "match" ? `<p class="qar ar" dir="rtl">${esc(it.q)}</p>` : ""}
     ${trText(it) ? `<p class="qhelp">${esc(trText(it))}</p>` : ""}
+    ${hOpts ? helpHTML(it.help, hOpts) : ""}
     <div class="audio"><button type="button" class="abtn" id="qSay"><span class="e">🔊</span> Read the question</button></div>
     <div id="ans"></div>
     <div id="fbx"></div>
@@ -1224,6 +1241,18 @@
     if (ps) ps.onclick = () => say(para.ar);
     const rs = document.getElementById("ruleSay");
     if (rs) rs.onclick = () => say(ruleOf(xs.sec).ar);
+    H.querySelectorAll("[data-h]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          H.querySelectorAll("[data-h]").forEach((x, j) => {
+            x.disabled = true;
+            if (hOpts[j].ok) x.classList.add("right");
+            else if (x !== b) x.classList.add("dim");
+          });
+          if (!hOpts[+b.dataset.h].ok) b.classList.add("wrong");
+          say(helpOpt(it.help.o[0])[0]);
+        }),
+    );
     const rd = H.querySelector("details.rule");
     if (rd) {
       rd.open = xs.i === 0 && !xs.ruleSeen;
@@ -1375,6 +1404,35 @@
       };
       inp.oninput = () => inp.classList.remove("wrong");
       document.getElementById("showA").onclick = () => done(false);
+    } else if (it.type === "build") {
+      // a: the sentence; its words are tiles to drag or tap into order (Kit.dragTiles), end punctuation stays
+      const [, body, end] = it.a.match(/^(.*?)([.،؟!]*)$/);
+      const words = body.split(" ");
+      let bank = shuf(words.map((t) => ({ t })));
+      for (let n = 0; n < 6 && bank.map((w) => w.t).join(" ") === body; n++)
+        bank = shuf(bank);
+      A.innerHTML = `<div class="line" id="bLine" dir="rtl"></div><div class="bank" id="bBank" dir="rtl" style="margin-top:12px"></div><p class="hint">Drag the words onto the line in the right order, or tap them.</p><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" id="checkBtn" type="button" disabled>Check my sentence</button></div>`;
+      const cb = A.querySelector("#checkBtn"),
+        BL = A.querySelector("#bLine");
+      const T = Kit.dragTiles(BL, A.querySelector("#bBank"), bank, {
+        cls: "ar",
+        ph: "Drop the words here",
+        onChange: (_, b) => (cb.disabled = b.length > 0),
+      });
+      cb.onclick = () => {
+        const mine = T.line.map((w) => w.t).join(" "),
+          ok = mine === body;
+        T.lock();
+        cb.remove();
+        BL.classList.add(ok ? "ok" : "no");
+        if (ok) xs.score++;
+        else xs.miss.push({ q: it.q, your: mine + end, right: it.a });
+        after(
+          ok,
+          `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc(it.a)}</span>`,
+        );
+        say(it.a);
+      };
     } else if (it.type === "order") {
       const n = it.s.length,
         bank = shuf(it.s.map((_, i) => i));
