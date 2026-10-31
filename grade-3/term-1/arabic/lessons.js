@@ -59,3 +59,25 @@ window.TESTS = [
     note: "Groups A · B · C · 21 questions · text from Lesson 3",
   },
 ];
+
+// Homework (the الأداءات المنزلية parts of the book pages): hw-N = Lesson N, one tab per book page. Listed under "Homework".
+window.HOMEWORK = [
+  {
+    n: 2,
+    nAr: "الثَّانِي",
+    title: "السَّعَادَةُ فِي الْمُسَاعَدَةِ",
+    en: "Homework · Happiness in Helping",
+    path: "hw-2.html",
+    cover: "img/lesson-2/cover.jpg",
+    note: "p. 30 · 31 · 32 · 8 questions",
+  },
+  {
+    n: 3,
+    nAr: "الثَّالِثُ",
+    title: "أَوَّلُ مَنْ رَفَعَ يَدَهُ",
+    en: "Homework · The First to Raise a Hand",
+    path: "hw-3.html",
+    cover: "img/lesson-3/cover.jpg",
+    note: "p. 34 · 35 · 36–37 · 11 questions",
+  },
+];
