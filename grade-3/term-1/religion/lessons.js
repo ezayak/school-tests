@@ -9,6 +9,15 @@ window.LIST_HEAD = {
 };
 window.LESSONS = [
   {
+    n: "5 (Unit 1)",
+    nAr: "الْخَامِسُ",
+    title: "الرُّعَاةُ وَالْمَجُوسُ",
+    en: "The Shepherds and the Wise Men",
+    path: "u1-lesson-5.html",
+    cover: "img/u1-lesson-5/visit.jpg",
+    note: "Story in 7 parts · 4 games · golden verse",
+  },
+  {
     n: "1 (Unit 2)",
     nAr: "الْأَوَّلُ",
     title:
