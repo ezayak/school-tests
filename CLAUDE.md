@@ -71,12 +71,12 @@ Book: التربية الدينية المسيحية, `~/Documents/2026-2027/Luc
 
 Sorting:
 - The lesson = one book lesson (الوحدة N، الدرس M), story pages + الأنشطة والممارسات pages. The slides are a summary: use the book text.
-- Homework = the page the parent sends a photo of (his real homework). It can be another lesson's page: put it in this lesson's Homework tab
-  and say which page and lesson in the tab's `sub`. If unsure which part is homework, ask before building.
+- Homework = the page the parent sends a photo of (his real homework). Check its lesson by the page number and story: a page of another lesson
+  belongs to that lesson (build that lesson if it is missing, then put the page there). If unsure which part is homework, ask before building.
 - Words missing or unreadable: never guess. List them and ask.
 
 What to build: `uN-lesson-M.js` + `uN-lesson-M.html` (copy u2-lesson-4.html), pictures in `img/uN-lesson-M/` (`pdftoppm -r 300`, then PIL; story ~700px, small activity pictures ~300px).
-- `n: "rel-uNlM"`, `tapq: true`, `links` back to "Religion lessons", four `tabs`: story · games · verse · hw.
+- `n: "rel-uNlM"`, `tapq: true`, `links` back to "Religion lessons", `tabs`: story · games · verse, plus hw only when there is real homework for this lesson.
 - Story: the book text word for word in short parts (one picture each, reuse a picture for two parts if needed); the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.
 - Games: every activity of the lesson, one section each, plus the lesson's أسئلة الدرس (unless it is the homework).
 - Verse: the golden verse (الآية الذهبية) in `verses`, with 3–4 `gaps` (right word first; each right word once in the verse).

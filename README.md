@@ -380,13 +380,13 @@ plus `shared/drag-words.css` and `shared/common.js` for the verse tiles, like `h
 A lesson is `uN-lesson-M.html` (copy `u2-lesson-4.html`, change the `.js`) + `uN-lesson-M.js` + pictures in `img/uN-lesson-M/` (cropped from the book, ~700px; the
 small activity pictures ~300px). Same format as an Arabic lesson (`stories`, `gloss`, `exercises`), with:
 - `n: "rel-u2l4"` (a text key, so it saves apart from the Arabic lessons), `tapq: true`, `links` back to `index.html` ("Religion lessons")
-- `tabs`: Story · Games · Golden verse · Homework. A custom tab named `story` gets the normal story list with part-by-part navigation; one named `verse` gets the verse games;
+- `tabs`: Story · Games · Golden verse (· Homework, when there is real homework). A custom tab named `story` gets the normal story list with part-by-part navigation; one named `verse` gets the verse games;
   the others show their exercises (`tab: "games"` / `tab: "hw"`). A tab can have `sub: [en, ar]`, the line above its exercise list.
 - Story: the book text in short parts with full tashkeel, a picture on each part, `en` / `uk` for each part; the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.
 - Games: every أنشطة والممارسات activity of the lesson, one section each (who am I → `mc`; writing → `open` with a model answer and a `help` question).
 - The lesson's أسئلة الدرس part is a Games section too (fill the gaps from the word bank → one `mc` per gap, the word bank as the section's `rule` with `t: "📝 The words · الْكَلِمَاتُ"`).
-- Homework: the page the teacher actually gave (the parent sends a photo); it can be another lesson's page (Lesson 4's homework is p. 36, the Bethesda lesson).
-  Say which page and lesson in the tab's `sub`; ✓ / ✗ questions → `tf` with `x` (why it is false); its pictures come from that lesson's pages.
+- Homework (`tab: "hw"`): only the page the teacher actually gave (the parent sends a photo). A page from another lesson belongs to that lesson:
+  build that lesson and put it there. A lesson without real homework has no Homework tab (Lessons 1 and 4 have none yet). ✓ / ✗ questions → `tf` with `x` (why it is false).
 - `verses: [{ar, ref, re, en, uk, img, gaps: [[right, wrong, wrong], …]}]`: the golden verse (الآية الذهبية). Learn (tap the words), Complete (one round per gap; each right word
   must appear once in `ar`), Build (the words as tiles, `Kit.dragTiles`).
 - `gloss` has every Arabic word of the texts, the verse and its choices, the questions, options, help questions and model answers.
