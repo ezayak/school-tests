@@ -1482,4 +1482,6 @@
       },
     ],
   };
+  // the revision page loads several weeks: each one keeps its data here
+  (window.EN_DATA = window.EN_DATA || {})[3] = window.LESSON;
 })();

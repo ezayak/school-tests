@@ -1077,7 +1077,8 @@
   function startExercise(i) {
     const X = L.exercises[i];
     S.back = openTab("ex");
-    run(X.t, prep(X.items, X.k !== "handson"), X.from, "x-" + X.k);
+    // keep: true → the items stay in the book's order (a summary frame)
+    run(X.t, prep(X.items, X.k !== "handson" && !X.keep), X.from, "x-" + X.k);
   }
   function prep(items, mix) {
     return (mix ? shuf(items) : items.slice()).map((it) =>
