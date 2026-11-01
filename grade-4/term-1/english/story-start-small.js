@@ -85,7 +85,7 @@ window.STORY = {
       ch: "Chapter 1 · From Small Beginnings",
       img: "img/start-small/wallaces.jpg",
       text: [
-        "DeWitt and Lila Wallace decided to start a new magazine in 1919. DeWitt Wallace began a process of finding nonfiction articles that had been published. He made the articles shorter and put them into a magazine called *Reader’s Digest*.",
+        "DeWitt and Lila Wallace decided to start a new magazine in 1919. DeWitt Wallace began a process of finding nonfiction articles that had been published. He made the articles shorter and put them into a magazine called *Reader’s* *Digest*.",
         "DeWitt Wallace sent 200 copies of the magazine to publishers. He hoped one of them would want to publish the magazine.",
       ],
       easy: "The Wallaces made a magazine of short true articles: Reader’s Digest.",
@@ -95,8 +95,8 @@ window.STORY = {
       img: "img/start-small/readers-digest.jpg",
       text: [
         "None of the publishers thought the Wallaces’ idea would work. So, the Wallaces decided to sell the magazine through the mail.",
-        "The Wallaces raised enough funds to print 5,000 copies of *Reader’s Digest* in 1922.",
-        "The magazine was successful. In 1926, 20,000 copies were sold by mail in the United States. By 1929, *Reader’s Digest* was sold on newsstands, as well as by mail.",
+        "The Wallaces raised enough funds to print 5,000 copies of *Reader’s* *Digest* in 1922.",
+        "The magazine was successful. In 1926, 20,000 copies were sold by mail in the United States. By 1929, *Reader’s* *Digest* was sold on newsstands, as well as by mail.",
       ],
       easy: "Nobody wanted their magazine, so they sold it by mail. Soon it was a success.",
     },
@@ -106,10 +106,10 @@ window.STORY = {
       text: [
         {
           box: "Number of Copies of Reader’s Digest Sold in the United States",
-          p: "In 2010, *Reader’s Digest* began publishing ten times a year instead of twelve. This meant that fewer copies were published.",
+          p: "In 2010, *Reader’s* *Digest* began publishing ten times a year instead of twelve. This meant that fewer copies were published.",
         },
         "The Wallaces wanted to help their community. They gave money to The Juilliard School. This school in New York City teaches dance, music, and drama.",
-        "The Wallaces died in the 1980s. They left all their money to educational organizations and arts programs. *Reader’s Digest* is still one of the most popular magazines in the world.",
+        "The Wallaces died in the 1980s. They left all their money to educational organizations and arts programs. *Reader’s* *Digest* is still one of the most popular magazines in the world.",
       ],
       easy: "The Wallaces gave their money to schools and arts programs.",
     },
@@ -141,7 +141,7 @@ window.STORY = {
       text: [
         "In Los Angeles, Ailey became interested in dance. In the early 1950s, Ailey moved to New York City. He studied ballet, modern dance, and acting. He also worked as a dancer and actor.",
         "Ailey formed the Alvin Ailey American Dance Theater in 1958. He wanted to use dance to help show what the African-American experience was really like.",
-        "The company’s first big performance was an innovative ballet called *Blues Suite*.",
+        "The company’s first big performance was an innovative ballet called *Blues* *Suite*.",
       ],
       easy: "Ailey started his own dance company. Its first show, Blues Suite, was new and different.",
     },

@@ -60,7 +60,7 @@ window.STORY = {
       ch: "Dollars and Sense",
       img: "img/dollars-sense/shoes.jpg",
       text: [
-        "*Behind the success of these big businesses is a desire to help others.*",
+        "Behind the success of these big businesses is a desire to help others.",
         "Good business is not always about the bottom line. A compassionate company knows that making money is not the only way to measure success. Many large businesses in the United States and all over the world are finding unusual ways to help people in need.",
       ],
       easy: "Some big companies make money and also help people in need.",
