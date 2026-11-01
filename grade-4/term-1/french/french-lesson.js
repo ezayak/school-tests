@@ -300,7 +300,9 @@
     }));
   const LEARN = menu(L.learn);
   const PLAY = menu(L.play);
-  const mAttr = (m, i) => `data-m="${m.k}" data-i="${i}" id="m-${m.s || m.k}"`;
+  // id: m-story, m-ou (a sound), m-game6 (game tiles are numbered: a lesson can have several)
+  const mAttr = (m, i) =>
+    `data-m="${m.k}" data-i="${i}" id="m-${m.s || (m.k === "game" ? "game" + i : m.k)}"`;
   function tile(m, data) {
     return `<button type="button" class="mode" ${data}>${pic(m, "thumb")}<b>${esc(m.t)}</b><small>${esc(m.en)}</small></button>`;
   }
@@ -308,6 +310,7 @@
   const TABS = [
     { k: "learn", ic: "📖", t: "Apprends", en: "Learn" },
     { k: "play", ic: "🎲", t: "Joue", en: "Play" },
+    { k: "dictee", ic: "🎧", t: "Dictée", en: "Spelling" },
     { k: "ex", ic: "✏️", t: "Exercices", en: "School exercises" },
   ].filter((t) => t.k === "ex" || L[t.k]);
   let tab = store.get("fr-tab-" + L.n, TABS[0].k);
@@ -321,14 +324,18 @@
         ? LEARN.map((m, i) => tile(m, mAttr(m, i))).join("")
         : tab === "play"
           ? PLAY.map((m, i) => tile(m, mAttr(m, LEARN.length + i))).join("")
-          : L.exercises
-              .map((x, i) =>
-                tile(
-                  { t: x.t, en: x.en, img: x.img, emoji: x.emoji },
-                  `data-x="${i}" id="x-${x.k}"`,
-                ),
-              )
-              .join("");
+          : tab === "dictee"
+            ? L.dictee
+                .map((d, i) => tile(d, `data-d="${i}" id="d-${d.k}"`))
+                .join("")
+            : L.exercises
+                .map((x, i) =>
+                  tile(
+                    { t: x.t, en: x.en, img: x.img, emoji: x.emoji },
+                    `data-x="${i}" id="x-${x.k}"`,
+                  ),
+                )
+                .join("");
     app.innerHTML = `<section class="card pop">
     <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="index.html">Français</a></div>
       <div class="seg" role="group" aria-label="Translation">${[
@@ -349,7 +356,7 @@
       <div class="og"><span class="lab">Auto sound</span><div class="seg" role="group" aria-label="Play sound automatically"><button type="button" id="au-1" data-au="1" aria-pressed="${auto}">On</button><button type="button" id="au-0" data-au="0" aria-pressed="${!auto}">Off</button></div></div>
     </div>
     ${TTS ? "" : '<p class="note">This browser cannot speak. Open the lesson in Chrome or Safari to hear the French words.</p>'}
-    <div class="tabbox"><div class="ftabs" role="group" aria-label="Lesson part">${TABS.map((t) => `<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span>${esc(t.t)}<span class="sub">${esc(t.en)}</span></button>`).join("")}</div>
+    <div class="tabbox"><div class="ftabs${TABS.length > 3 ? " four" : ""}" role="group" aria-label="Lesson part">${TABS.map((t) => `<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span>${esc(t.t)}<span class="sub">${esc(t.en)}</span></button>`).join("")}</div>
       <div class="panel" id="panel"><div class="modes">${tiles}</div>${tab === "learn" ? '<p class="hint">Tap any French word to hear it.</p>' : ""}</div></div>
   </section>`;
     document.getElementById("coverBtn").onclick = () => L.story && story(0);
@@ -405,6 +412,9 @@
     app
       .querySelectorAll("[data-x]")
       .forEach((b) => (b.onclick = () => startExercise(+b.dataset.x)));
+    app
+      .querySelectorAll("[data-d]")
+      .forEach((b) => (b.onclick = () => dicteeView(L.dictee[+b.dataset.d])));
     document.title = `${L.title} · Français ${L.label || "Leçon " + L.n}`;
   }
 
@@ -426,7 +436,10 @@
     <details class="book" id="allBox"><summary>📄 Lis tout <small class="muted">Read the whole text</small></summary><div class="alltext" id="all">${L.story
       .filter((s) => s.lines.length && !s.title)
       .flatMap((s) => s.lines)
-      .map((l) => `<p><b class="nm">${esc(l.who)} :</b> ${wordsHTML(l.fr)}</p>`)
+      .map(
+        (l) =>
+          `<p>${l.who ? `<b class="nm">${esc(l.who)} :</b> ` : ""}${wordsHTML(l.fr)}</p>`,
+      )
       .join(
         "",
       )}</div><div class="audio left"><button type="button" class="abtn" id="allPlay">🔊 Écoute tout</button><button type="button" class="abtn" id="allStep">👆 Mot à mot</button></div></details>`,
@@ -463,8 +476,11 @@
   let showWord = store.get("fr-show", "1") === "1";
   function words(i, set) {
     hush();
-    const list =
-      set === "people"
+    // a lesson without people (Les salutations) shows only the word cards
+    const hasP = (L.people || []).length > 0;
+    const list = !hasP
+      ? L.phrases
+      : set === "people"
         ? L.people
         : set === "phrases"
           ? L.phrases
@@ -472,22 +488,26 @@
     const n = list.length;
     i = (i + n) % n;
     const it = list[i];
-    const isP = L.people.includes(it);
+    const isP = hasP && L.people.includes(it);
     const say1 = isP ? sayOf(it) : it.fr;
     app.innerHTML = `${titleBar("Les mots", `<span class="count">${i + 1} / ${n}</span>`)}<section class="card pop fc">
     ${split(
       pic(it, "pic card"),
       `<div class="opts-row center">
-      <div class="seg" role="group" aria-label="Cards">${[
-        ["all", "Tous"],
-        ["people", "Les personnages"],
-        ["phrases", "Les phrases"],
-      ]
-        .map(
-          ([k, t]) =>
-            `<button type="button" data-set="${k}" aria-pressed="${set === k}">${t}</button>`,
-        )
-        .join("")}</div>
+      ${
+        hasP
+          ? `<div class="seg" role="group" aria-label="Cards">${[
+              ["all", "Tous"],
+              ["people", "Les personnages"],
+              ["phrases", "Les phrases"],
+            ]
+              .map(
+                ([k, t]) =>
+                  `<button type="button" data-set="${k}" aria-pressed="${set === k}">${t}</button>`,
+              )
+              .join("")}</div>`
+          : ""
+      }
       <div class="seg" role="group" aria-label="Show the word"><button type="button" data-sw="1" aria-pressed="${showWord}">🖼️ + Aa</button><button type="button" data-sw="0" aria-pressed="${!showWord}">🖼️ only</button></div>
     </div>
     <div id="wbox">${showWord ? `<div class="fc-word">${wordsHTML(it.fr)}</div>${isP ? `<div class="sub">${wordsHTML(say1)}</div>` : ""}${trHTML(it.fr, it)}` : `<button type="button" class="fc-hidden" id="reveal">👁️ Montre le mot</button>`}</div>
@@ -645,7 +665,7 @@
     <div class="verb">${V.rows.map((r, k) => `<button type="button" class="vrow" data-v="${k}">${pic(r, "pic face2")}<span class="vpv"><span class="vp">${esc(r.p)}</span> <span class="vv"><span class="el">${esc(r.el)}</span>appell<span class="end">${esc(r.end)}</span></span></span><span class="vn">${esc(r.name)}</span>${trLang !== "off" ? `<span class="vt" ${trLang === "ar" ? 'dir="rtl"' : ""}>${esc(r[trLang])} ${esc(personOf(r.name) ? N3(r.name) : r.name)}</span>` : ""}</button>`).join("")}</div>
 `,
       `<div class="audio"><button type="button" class="abtn big" id="vAll">🔊 <span>Écoute tout</span></button></div>
-    <details class="book"><summary>📕 The page in the book</summary>${pic({ img: V.img }, "pic wide")}</details>
+    ${V.img ? `<details class="book"><summary>📕 The page in the book</summary>${pic({ img: V.img }, "pic wide")}</details>` : ""}
     <div class="row center"><button type="button" class="btn" id="vIl">👦 Il ou Elle ? 👧</button><button type="button" class="btn ghost" id="vFill">✍️ Complète</button></div>`,
       "wide",
     )}
@@ -678,6 +698,71 @@
     return t.replace(/^(This is |Це |هذا )/, "").replace(/[.]$/, "");
   }
 
+  /* ================= DICTÉE: a spelling list ================= */
+  // D = one of L.dictee: {k, t, en, img, from, words: [{fr, img|emoji}], sentences: [{fr, img|emoji}]}
+  function dicteeView(D) {
+    hush();
+    const all = D.words.concat(D.sentences);
+    const modes = [
+      [
+        "lw",
+        "🔤",
+        "Construis les mots",
+        "Build each word from its letters",
+        "letters",
+        D.words,
+      ],
+      [
+        "sw",
+        "🎧",
+        "Écris les mots",
+        "Hear the word, write it",
+        "spell",
+        D.words,
+      ],
+      [
+        "ls",
+        "🔤",
+        "Construis les phrases",
+        "Build each word of the sentence",
+        "letters",
+        D.sentences,
+      ],
+      [
+        "ss",
+        "🎧",
+        "Écris les phrases",
+        "Hear the sentence, write it",
+        "spell",
+        D.sentences,
+      ],
+    ].filter((m) => m[5].length);
+    app.innerHTML = `${titleBar(D.t)}<section class="card pop">
+    <div class="modes two">${modes.map((m, i) => `<button type="button" class="mode" id="dm-${m[0]}" data-dm="${i}"><span class="mi-ic">${m[1]}</span><b>${m[2]}</b><small>${m[3]}</small></button>`).join("")}</div>
+    <span class="qtype">📋 La liste <small class="muted">${esc(D.from)}</small></span>
+    <div class="lines tight">${all.map((x, i) => `<div class="line">${pic(x, "pic face")}<div class="said">${wordsHTML(x.fr, "big")}${trHTML(x.fr)}</div><button type="button" class="abtn sm" data-h="${i}" aria-label="Listen">🔊</button></div>`).join("")}</div>
+  </section>`;
+    bindHome();
+    bindWords();
+    app
+      .querySelectorAll("[data-h]")
+      .forEach((b) => (b.onclick = () => say(all[+b.dataset.h].fr, true)));
+    app.querySelectorAll("[data-dm]").forEach((b) => {
+      const m = modes[+b.dataset.dm];
+      b.onclick = () =>
+        run(
+          m[2],
+          shuf(m[5]).map((x) => ({
+            type: m[4],
+            fr: x.fr,
+            img: x.img,
+            emoji: x.emoji,
+          })),
+          D.from,
+        );
+    });
+  }
+
   /* ================= PLAY: game builders ================= */
   function gameListen() {
     const P = people();
@@ -708,7 +793,9 @@
   }
   // build: "Bouli" (picture found by wordPic) or {fr: "garçon", img: "chadi"}
   function gameBuildWord() {
-    const pics = { pics: Object.assign({}, ...L.sounds.map((s) => s.pics)) };
+    const pics = {
+      pics: Object.assign({}, ...(L.sounds || []).map((s) => s.pics)),
+    };
     run(
       "Construis le mot",
       shuf(L.build).map((w) =>
@@ -866,6 +953,7 @@
       letters: itLetters,
       fill: itFill,
       match: itMatch,
+      spell: itSpell,
     })[it.type](it);
   }
   function next() {
@@ -1065,6 +1153,98 @@
     setTimeout(() => say(it.fr), 350);
   }
 
+  /* --- listen and write (Dictée): the word or sentence is said, the child types it --- */
+  // letters and accents must be right; capitals, ’ or ' and the end mark don't count
+  const spellNorm = (s) =>
+    String(s)
+      .replace(/[’‘`']/g, "’")
+      .replace(/\s+/g, " ")
+      .replace(/\s*([?!])/g, " $1")
+      .replace(/\s+([.,])/g, "$1")
+      .trim();
+  const spellLoose = (s) =>
+    spellNorm(s)
+      .toLowerCase()
+      .replace(/\s*[.!?]+$/, "");
+  // the letters of `a`, green where they match `b` at the same place, red where not
+  const spellDiff = (a, b) => {
+    const x = [...spellNorm(a)],
+      y = [...spellNorm(b).toLowerCase()];
+    return x
+      .map(
+        (c, i) =>
+          `<span class="${c.toLowerCase() === y[i] ? "ok" : "bad"}">${c === " " ? "&nbsp;" : esc(c)}</span>`,
+      )
+      .join("");
+  };
+  const ACCENTS = ["é", "è", "ê", "à", "â", "ç", "’"];
+  function itSpell(it) {
+    let tries = 0;
+    const sent = /\s/.test(it.fr.trim());
+    const n = (it.fr.match(/\p{L}/gu) || []).length;
+    app.innerHTML = `${hud()}<section class="card pop fc">
+    ${split(
+      `<span class="qtype">🎧 Écoute et écris</span>
+    ${pic(it, "pic card")}`,
+      `<div class="audio"><button type="button" class="abtn big" id="s1">🔊 <span>Écoute</span></button><button type="button" class="abtn" id="s2">🐢</button></div>
+    <p class="hint">${sent ? "Listen and write the sentence." : `Listen and write the word (${n} letters).`}</p>
+    <input class="spell-in" id="spell" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your spelling">
+    <div class="chips-o" id="acc">${ACCENTS.map((c) => `<button type="button" class="chip-o" data-c="${c}">${c}</button>`).join("")}</div>
+    <div id="fbx" class="fbx"><div class="row center"><button class="btn" id="checkBtn" type="button">✔ Vérifie</button></div></div>`,
+    )}</section>`;
+    bindHome();
+    const inp = document.getElementById("spell");
+    document.getElementById("s1").onclick = () => say(it.fr);
+    document.getElementById("s2").onclick = () => say(it.fr, true);
+    // the accent buttons put their letter where the cursor is
+    app.querySelectorAll("[data-c]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          const p = inp.selectionStart ?? inp.value.length;
+          const q = inp.selectionEnd ?? p;
+          inp.value = inp.value.slice(0, p) + b.dataset.c + inp.value.slice(q);
+          inp.focus();
+          inp.setSelectionRange(p + 1, p + 1);
+        }),
+    );
+    const check = () => {
+      const v = inp.value;
+      if (!v.trim()) return inp.focus();
+      const ok = spellLoose(v) === spellLoose(it.fr);
+      if (!ok && tries === 0) {
+        tries++;
+        say("Essaie encore !", false, () => say(it.fr, true));
+        document.getElementById("fbx").innerHTML =
+          `<div class="diff">${spellDiff(v, it.fr)}</div><div class="fb no"><b>Presque ! Essaie encore.</b><span>The red letters are wrong. Listen again and fix them.</span></div><div class="row center"><button class="btn" id="checkBtn" type="button">✔ Vérifie</button></div>`;
+        document.getElementById("checkBtn").onclick = check;
+        inp.focus();
+        return;
+      }
+      inp.disabled = true;
+      document.getElementById("acc").remove();
+      if (ok && !tries) addPts(1);
+      else S.miss.push({ img: it.img, emoji: it.emoji, right: it.fr });
+      say(it.fr);
+      const tip =
+        ok && sent && spellNorm(v) !== spellNorm(it.fr)
+          ? "<br>Remember the capital letter at the start and . or ? at the end."
+          : "";
+      feedback(
+        ok,
+        `${ok ? "" : `<div class="diff">${spellDiff(v, it.fr)}</div>`}${answerHTML(it.fr)}${tip}`,
+      );
+    };
+    document.getElementById("checkBtn").onclick = check;
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        check();
+      }
+    });
+    inp.focus({ preventScroll: true });
+    setTimeout(() => say(it.fr), 350);
+  }
+
   /* --- fill the blanks (verb s'appeler) --- */
   function itFill(it) {
     const blanks = it.parts.filter((p) => Array.isArray(p));
@@ -1231,7 +1411,8 @@
     return out;
   }
   function itOrder(it) {
-    const target = orderTokens(it.fr);
+    // cards: the cards as the school sheet cuts them, when it differs from orderTokens
+    const target = it.cards || orderTokens(it.fr);
     let tries = 0;
     app.innerHTML = `${hud()}<section class="card pop fc">
     ${split(

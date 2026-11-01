@@ -1280,6 +1280,9 @@ details.book[open] .alltext {
   margin-bottom: -2.5px;
   position: relative;
 }
+.ftabs.four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
 .ftabs button {
   font-family: var(--display);
   font-size: 1.3rem;
@@ -1326,6 +1329,10 @@ details.book[open] .alltext {
   .ftabs button {
     font-size: 1.15rem;
     padding-inline: 4px;
+  }
+  .ftabs.four button {
+    font-size: 0.95rem;
+    padding-inline: 2px;
   }
   .ftabs .ti,
   .ftabs .sub {
