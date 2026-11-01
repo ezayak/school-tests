@@ -1,0 +1,283 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<meta name="theme-color" content="#1B2440">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Study Games">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
+</head><body>
+<title>Social Studies Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<link rel="stylesheet" href="../../../shared/theme.css">
+<link rel="stylesheet" href="../../../shared/quiz.css">
+
+<main class="wrap" id="app"></main>
+
+<script src="../../../shared/common.js"></script>
+<script src="../../../quiz-common.js"></script>
+<script>
+(function(){
+/* =====================================================================
+   Grade 4 Social Studies · Final revision, Term 1
+   Chapter 1: L2 Weather and Climate, L3 Regions and Resources (the final-term memo)
+   From the lessons: teacher's slides, booklet exercise sheets and activities, Graded HW 2.
+   Soil is renewable; gas is natural, money is capital (as in Lesson 3).
+   Question: {l: lesson 2 or 3, p: photo from that lesson's img folder (pl: another lesson's folder),
+              e: emoji picture, ps: photos side by side (A, B, C…, use k), q, o: [answers], c: right answer (default 0), k: keep the order, x: why}
+   ===================================================================== */
+
+/* ---------- drawing helpers ---------- */
+const em=(x,y,s,c,ex='')=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
+const tx=(x,y,t,c='lbl',a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
+const SKY='<rect class="f-sky" width="320" height="180"/>';
+const IMG=(l,p)=>`../../social-studies/chapter-1/img/lesson-${l}/${p}.jpg`;
+// whole photos in a grid (2×2 for four), each with its letter A, B, C… like the answer buttons
+const tiles=q=>{const n=q.ps.length,cols=n>3?2:n,rows=Math.ceil(n/cols),w=(320-6*(cols+1))/cols,h=(180-6*(rows+1))/rows;
+  return SKY+q.ps.map((p,i)=>{const x=6+(i%cols)*(w+6),y=6+Math.floor(i/cols)*(h+6);return `<rect class="f-card" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>${tx(x+14,y+h/2,'ABCD'[i],'lbl-big')}<image href="${IMG(q.l,p)}" x="${x+28}" y="${y+3}" width="${w-31}" height="${h-6}" preserveAspectRatio="xMidYMid meet"/>`}).join('')};
+// emoji picture: each group of emoji in its own slot, so a long row never runs off the picture
+const emo=e=>{const g=e.split(' '),s=Math.min(80,280/g.length/Math.max(...g.map(x=>x.replace(/[️‍]/g,'').length/2)));return SKY+g.map((x,i)=>em(160+(i-(g.length-1)/2)*(300/g.length),90,s,x)).join('')};
+
+const TF=['True','False'];
+const WC=['Weather','Climate'];
+const RN=['Renewable','Non-renewable'];
+const NHC=['Natural','Human','Capital'];
+const MC=[
+/* ===== Lesson 2 · Weather and Climate (slides, booklet exercise sheet A, B, C and the sorting activity) ===== */
+{l:2,p:'umbrella',q:'Why do you need a raincoat one day and shorts the next day?',o:['Because the weather changes','Because the climate changes every day','Because the landforms move'],x:"It's all about weather! Weather changes all the time."},
+{l:2,p:'weather-icon',q:'Weather is like the ___ of the air.',o:['mood','color','shape'],x:'Weather is like the mood of the air. It can be sunny, rainy or snowy.'},
+{l:2,p:'temperature',q:'Weather changes…',o:['From day to day','Only once every 100 years','Never'],x:'Weather changes from day to day.'},
+{l:2,p:'northeast',q:'Climate is…',o:['The weather in a place over a period of time','The weather right now','The amount of water in the air'],x:'Climate is the weather in a place over a period of time (the long-term weather pattern).'},
+{l:2,p:'northeast',q:'Seasons are part of…',o:['Climate','Landforms','Regions'],x:'Remember seasons? Those are part of climate too!'},
+{l:2,pl:1,p:'lf-mountain',q:'Mountains might have ___ weather all year round.',o:['colder','hotter','drier'],x:'Mountains might have colder weather all year round.'},
+{l:2,p:'weather-icon',q:'Which one is NOT a factor that determines the weather?',o:['The color of the houses','Temperature','Humidity','Precipitation'],x:'The factors are temperature, precipitation, humidity and location.'},
+{l:2,p:'temperature',q:'What does temperature tell us about?',o:['How hot or cold it is','How loud a sound is','How much rain falls'],x:'Temperature tells us how hot or cold a place is, like a giant thermometer!'},
+{l:2,p:'precipitation',q:'What is precipitation?',o:['The amount of rain or snow that falls in a place','The amount of wind in an area','The amount of water in the air']},
+{l:2,p:'humidity',q:'What is humidity?',o:['The amount of water in the air','The rocks found on the soil','How hot or cold it is'],x:'Humidity is the invisible water in the air.'},
+{l:2,p:'humidity',q:'Where does the invisible water in the air come from?',o:['Bodies of water like rivers, lakes, and oceans','Deserts','Mountains and canyons']},
+{l:2,p:'equator',q:'The equator is an imaginary line circling the Earth halfway ___',o:['between the North and South Poles','between the East and West poles'],x:'It is like a big jump rope around the middle of Earth.'},
+{l:2,p:'equator',q:'The ___ is an imaginary line halfway between the North Pole and the South Pole.',o:['equator','arctic','Northeast']},
+{l:2,p:'equator',q:'Places near the equator receive…',o:['The most direct sunlight','The least sunlight','No sunlight']},
+{l:2,p:'equator',q:'What kind of climate do places near the equator have?',o:['Very hot','Very cold']},
+{l:2,p:'equator',q:'How does the climate change as you move away from the equator?',o:['It gets cooler','It gets hotter','It gets wetter']},
+{l:2,p:'equator',q:'Which would be warmer: a place 100 miles from the equator, or a place 2,000 miles from the equator?',o:['100 miles from the equator','2,000 miles from the equator'],k:1,x:'It is closer to the equator.'},
+{l:2,p:'equator',q:'Why is a place 100 miles from the equator warmer than a place 2,000 miles from the equator?',o:['It is closer to the equator, so it gets more direct sunlight','It has more mountains','It is farther from the equator'],x:'As you move away from the equator, the climate gets cooler.'},
+{l:2,p:'polar-bears',q:'Which climate is this?',o:['Arctic','Tropical','Temperate'],k:1,x:'Arctic: the coldest, near the North Pole.'},
+{l:2,p:'florida',q:'Which climate is this?',o:['Arctic','Tropical','Temperate'],c:1,k:1,x:'Tropical: warm or hot all year.'},
+{l:2,p:'northeast',q:'Which climate is this?',o:['Arctic','Tropical','Temperate'],c:2,k:1,x:'Temperate: not too cold, not too hot.'},
+{l:2,p:'polar-bears',q:'Where can you find arctic or polar climates?',o:['Near the North Pole','Near the equator']},
+{l:2,p:'polar-bears',q:'Places near the North Pole have a/an ___ climate.',o:['arctic','tropical','temperate']},
+{l:2,p:'polar-bears',q:'What kind of climate is the Arctic or polar climate?',o:['The coldest','The hottest']},
+{l:2,p:'alaska',q:'What is the temperature like in Arctic regions?',o:['Very cold all year','Very hot all year']},
+{l:2,p:'alaska',q:'What is the climate like in Alaska?',o:['Arctic','Tropical','Temperate']},
+{l:2,p:'alaska',q:'Where in the United States can you find an arctic climate?',o:['Alaska','South Florida','The Northeast'],x:'Up north in Alaska, where polar bears might eat your cone!'},
+{l:2,p:'florida',q:'What kind of climate is the tropical climate?',o:['Warm or hot all year','Cold and snowy','Not too hot and not too cold']},
+{l:2,p:'florida',q:'___ climate is described as warm or hot all year round.',o:['Tropical','Temperate','Arctic']},
+{l:2,p:'florida',q:'What kind of climate does South Florida have?',o:['Tropical','Temperate','Arctic']},
+{l:2,p:'summer-kids',q:'Where in the U.S.A. can you wear shorts even in winter?',o:['South Florida','Arctic regions','Alaska']},
+{l:2,p:'picnic',q:'What is the temperate climate known for?',o:['Warm summers and cool winters','Rainfall every single day','Snow all year']},
+{l:2,p:'picnic',q:'___ climate is not too cold nor too hot.',o:['Temperate','Tropical','Arctic']},
+{l:2,p:'northeast',q:'Where can you find a temperate climate?',o:['In most parts of the USA, like the Northeast','In the Arctic','Near the equator']},
+{l:2,p:'northeast',q:'The ___ region in the U.S.A. is where you can find a temperate climate.',o:['Northeast','equator','arctic']},
+// weather or climate? (slides, then the booklet sorting activity)
+{l:2,p:'umbrella',q:'Weather or climate? "It is raining today."',o:WC,k:1,x:'Weather is what happens today.'},
+{l:2,p:'florida',q:'Weather or climate? "South Florida is warm all year."',o:WC,c:1,k:1,x:'Climate is the weather over a long time.'},
+{l:2,p:'summer-kids',q:'Weather or climate? "It is sunny this morning."',o:WC,k:1},
+{l:2,p:'alaska',q:'Weather or climate? "Alaska is very cold all year."',o:WC,c:1,k:1},
+{l:2,p:'snow-kids',q:'Weather or climate? "Tomorrow it will snow."',o:WC,k:1},
+{l:2,p:'northeast',q:'Weather or climate? "The Northeast has warm summers and cool winters."',o:WC,c:1,k:1},
+{l:2,p:'humidity',q:'Weather or climate? "Foggy"',o:WC,k:1},
+{l:2,p:'snow-kids',q:'Weather or climate? "Blizzard"',o:WC,k:1},
+{l:2,p:'weather-icon',q:'Weather or climate? "Can change quickly from day to day"',o:WC,k:1},
+{l:2,p:'northeast',q:'Weather or climate? "Usually changes slowly over time"',o:WC,c:1,k:1},
+{l:2,p:'florida',q:'Weather or climate? "Tropical"',o:WC,c:1,k:1},
+{l:2,p:'polar-bears',q:'Weather or climate? "Polar"',o:WC,c:1,k:1},
+{l:2,pl:1,p:'grand-canyon',q:'Weather or climate? "A dry desert region that has little rain"',o:WC,c:1,k:1},
+
+/* ===== Lesson 3 · Regions and Resources (slides, booklet exercise sheet A, activities, Graded HW 2) ===== */
+{l:3,p:'explore',q:'A resource is…',o:['Any material that is used to make things','A kind of weather','A line on a map'],x:'We make food, houses, clothes and toys from resources.'},
+{l:3,p:'natural-chart',q:'___ resources are things in nature that people can use.',o:['Natural','Human','Capital']},
+{l:3,p:'tractor',q:'___ resources are human-made things used to develop or make other things.',o:['Capital','Human','Natural'],x:'Tools, machines and buildings are capital resources.'},
+{l:3,p:'carpenter',q:'What are human resources?',o:['People and their skills, ideas, and hard work','Animals in the wild','Machines and tools']},
+{l:3,p:'carpenter',q:'The most important resource of all is…',o:['People','Gold','Machines'],x:'Every person who has a job is a human resource.'},
+{l:3,p:'planting',q:'What does renewable mean?',o:['Can be replaced over time','Can never be replaced']},
+{l:3,p:'coal-truck',q:'What does nonrenewable mean?',o:['Cannot be replaced or would take a long time to form again','Can be replaced quickly']},
+{l:3,p:'soil',q:'Soil is renewable, but new soil forms…',o:['Very, very slowly','In one day','Never'],x:'So we must protect the soil we have.'},
+{l:3,p:'oil',q:'___ is making resources useful through extra steps.',o:['Processing','Packaging','Pollution']},
+{l:3,p:'oil',q:'Why does oil need processing?',o:['To make gasoline for cars','To make it disappear','To make paper']},
+{l:3,p:'trees',q:'What happens to wood when it is processed?',o:['It becomes paper','It turns into metal','It turns into water']},
+{l:3,p:'furniture',q:'We use wood from trees to make…',o:['Furniture and school desks','Gasoline for cars','Metal']},
+{l:3,p:'soil',q:'Pollution is…',o:['Anything that makes the earth dirty and unhealthy','Saving and protecting resources','Making resources useful'],x:'Pollution can harm water and soil.'},
+{l:3,p:'lights-off',q:'To conserve means to…',o:['Save and protect','Use up quickly','Throw away']},
+{l:3,p:'trees',q:'Which of the following is an example of a natural resource?',o:['Tree / wood','A key','A teacher']},
+{l:3,p:'office',q:'Which of the following is a capital resource?',o:['A building','The Moon','A farmer']},
+{l:3,p:'coal',q:'Which of the following is a non-renewable resource?',o:['Coal','Wind','Water']},
+{l:3,p:'energy-sources',q:'Which energy sources are all non-renewable?',o:['Coal, oil, natural gas, nuclear','Sun, wind, water, plants','Trees, soil, air']},
+{l:3,p:'energy-sources',q:'Which energy sources are all renewable?',o:['Sun, wind, water, plants','Coal, oil, natural gas, nuclear','Gold, iron, coal']},
+{l:3,p:'planting',q:'How can we care for our forests?',o:['Plant more trees and recycle paper','Cut down all the trees']},
+{l:3,p:'soil',q:'What is a good way to protect water and soil?',o:['Clean the water and protect the soil','Pollute them more']},
+{l:3,p:'bike',q:'Which of the following is a good practice for conserving / saving resources?',o:['Walking or biking instead of driving','Leaving lights on all the time','Driving everywhere']},
+{l:3,p:'lights-off',q:'How can we save nonrenewable resources?',o:['Turn off the lights and walk or bike instead of driving','Leave the lights on and drive everywhere','Burn more coal and oil'],x:'Graded Homework 2, question 1.'},
+{l:3,p:'explore',q:'What is the main idea behind conserving / saving resources?',o:['Save them for future generations','Use them as quickly as possible']},
+{l:3,p:'coal-truck',q:'Why is it important to protect nonrenewable resources?',o:['Because they are precious and limited','Because they can be replaced']},
+{l:3,p:'natural-chart',q:'Choose one example of a natural resource.',o:['Trees','A tractor','A farmer'],x:'Also: water, soil, coal, animals, stone.'},
+{l:3,p:'machinery',q:'Choose one example of a capital resource.',o:['A tractor','Trees','A teacher'],x:'Also: machines, tools, buildings, vehicles.'},
+{l:3,p:'carpenter',q:'Choose one example of a human resource.',o:['A farmer','A tractor','Coal'],x:'Also: a teacher, a carpenter, a truck driver.'},
+// renewable or non-renewable? (booklet activity, plus soil)
+...[['Water','water',0],['Oil','oil',1],['Solar energy','sun',0],['Nuclear energy','nuclear',1],['Wind energy','wind',0],['Plants','plants',0],['Gold','gold',1],['Coal','coal-cart',1],['Natural gas','gas',1],['Trees','tree',0],['Iron','iron',1],['Air','air',0],['Soil','soil',0]]
+  .map(([w,p,c])=>({l:3,p,q:`Renewable or non-renewable? "${w}"`,o:RN,c,k:1,x:w==='Soil'?'Soil forms very slowly. Protect it!':''})),
+// natural, human or capital? (lesson pictures, then the booklet "Sorting Resources": emoji where the lesson has no photo)
+...[['Coal','coal',0],['Animals','animals',0],['Stone','stone',0],['A carpenter and his skills','carpenter',1],['A worker at the gas station','worker',1],['Office furniture','office',2],['Machinery','machinery',2],['Vehicles','vehicles',2],['Stationery','stationery',2],['Packing boxes','boxes',2],['Uniforms','uniform',2],
+    ['Sunlight','sun',0],['Water','water',0],['Gas','gas',0],['Soil','soil',0],['Trees','trees',0],['Tractors','tractor',2]]
+  .map(([w,p,c])=>({l:3,p,q:`Natural, human or capital resource? "${w}"`,o:NHC,c,k:1})),
+...[['Honeybees','🐝',0],['Fields','🌾',0],['Farmers','🧑‍🌾',1],['Teachers','🧑‍🏫',1],['Truck drivers','🚚 🧑',1],['Grain silos','🌾 🏗️',2],['Money','💵',2],['Greenhouses','🏡 🌱',2],['Farming tools','🧰',2]]
+  .map(([w,e,c])=>({l:3,e,q:`Natural, human or capital resource? "${w}"`,o:NHC,c,k:1,x:w==='Money'?'Money is used to make other things: capital.':''})),
+];
+
+const MT=[
+{l:2,t:'Match each word to its meaning',p:[['🌦️','Weather','The mood of the air; changes from day to day'],['📅','Climate','The weather in a place over a period of time'],['🌧️','Precipitation','The amount of rain or snow that falls'],['💧','Humidity','The amount of water in the air'],['🔴','Equator','An imaginary line that circles Earth in the middle']]},
+{l:2,t:'Match each climate to where you find it',p:[['🐻‍❄️','Arctic climate','Alaska, the coldest'],['🌴','Tropical climate','South Florida, hot all year'],['🍂','Temperate climate','The Northeast and most of the USA']]},
+{l:3,t:'Match each resource to its meaning',p:[['🌳','Natural resources','Are in the environment and people can use them'],['🚜','Capital resources','Human-made things we use to make other things'],['🧑‍🔧','Human resources','People and their skills, ideas, and hard work'],['♻️','Renewable resources','Can be replaced'],['⛔','Non-renewable resources','Cannot be replaced, or take a long time to form again']]},
+{l:3,t:'Match each word to its meaning',p:[['🧱','Resource','Any material that is used to make things'],['🏭','Processing','Making resources useful through extra steps'],['🏭💨','Pollution','Anything that makes the earth dirty and unhealthy'],['🛡️','Conserve','Save and protect']]},
+];
+
+const LESSONS=[{n:0,l:'All lessons'},{n:2,l:'L2 · Weather & climate'},{n:3,l:'L3 · Regions & resources'}];
+const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
+const pool=()=>{const n=LESSONS[lesIdx].n;return {mc:MC.filter(q=>!n||q.l===n),mt:MT.filter(q=>!n||q.l===n)}};
+const LENS=[{mc:8,mt:2,l:'Quick · 10'},{mc:16,mt:4,l:'Normal · 20'},{mc:0,mt:0,l:'All'}];
+const store=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let lenIdx=1,lesIdx=0;
+try{const v=localStorage.getItem('ssfq-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
+try{const v=localStorage.getItem('ssfq-lesson');if(v!==null&&LESSONS[+v])lesIdx=+v}catch(e){}
+
+const S={list:[],i:0,score:0,max:0,miss:[]};
+const app=document.getElementById('app');
+const {esc,shuf,pick,star}=Kit;
+const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+const scene=q=>q.p?`<img class="scene pic fit" src="${IMG(q.pl||q.l,q.p)}" alt="Picture for the question">`:`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${q.ps?tiles(q):emo(q.e)}</svg></div>`;
+
+function start(){
+  const L=LENS[lenIdx],P=pool();
+  const mc=shuf(P.mc).slice(0,L.mc||P.mc.length).map(q=>({type:'mc',...q}));
+  const mt=shuf(P.mt).slice(0,L.mt||P.mt.length).map(q=>({type:'mt',...q}));
+  let list=shuf(mc.concat(mt));
+  // avoid two matching rounds in a row when possible
+  for(let i=1;i<list.length;i++){if(list[i].type==='mt'&&list[i-1].type==='mt'){const j=list.findIndex((q,k)=>k>i&&q.type==='mc');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
+  S.list=list;S.i=0;S.score=0;S.miss=[];
+  S.max=list.reduce((t,q)=>t+(q.type==='mc'?1:q.p.length),0);
+  render();
+}
+
+function hud(){
+  const pct=Math.round(S.i/S.list.length*100);
+  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+}
+
+function render(){
+  if(!S.list.length) return home();
+  if(S.i>=S.list.length) return end();
+  const q=S.list[S.i];
+  q.type==='mc'?renderMC(q):renderMT(q);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function home(){
+  const P=pool(),n=P.mc.length+P.mt.length;
+  app.innerHTML=`<section class="card pop">
+    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 4 Social Studies · Final revision</span></div>
+    <h1 class="hero-title"><span class="p">Social Studies</span> <span class="k">Quest</span></h1>
+    ${scene({l:3,p:'explore'})}
+    <p class="howto">Ready? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
+    <div class="chips"><span class="chip pe">Weather &amp; climate</span><span class="chip ke">Regions &amp; resources</span></div>
+    <div class="row"><span class="eyebrow">Which lessons?</span><div class="seg" role="group" aria-label="Lessons">${LESSONS.map((l,i)=>`<button type="button" id="les-${i}" data-les="${i}" aria-pressed="${i===lesIdx}">${l.l}</button>`).join('')}</div></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${i===LENS.length-1?'All · '+n:l.l}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
+  </section>`;
+  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;store('ssfq-len',lenIdx);home()});
+  app.querySelectorAll('[data-les]').forEach(b=>b.onclick=()=>{lesIdx=+b.dataset.les;store('ssfq-lesson',lesIdx);home()});
+  document.getElementById('startBtn').onclick=start;
+}
+
+function renderMC(q){
+  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
+  if(!q.k) opts=shuf(opts);
+  const long=opts.some(o=>o.t.length>34);
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mc">${q.o===TF?'True or false':'Choose the answer'}</span>
+    ${scene(q)}
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="fbx"></div>
+  </section>`;
+  const btns=[...app.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.i];
+    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
+    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
+    document.getElementById('pts').textContent=S.score;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x||"")}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  });
+}
+
+function renderMT(q){
+  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
+  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
+  const pair={}; // leftIdx -> rightIdx
+  let sel=null, checked=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    <p class="qtext">${esc(q.t)}</p>
+    <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
+    <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
+  </section>`;
+  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
+  function draw(){
+    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
+      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
+    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
+      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
+    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
+    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
+      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
+      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    checked=true;let got=0;
+    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
+    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
+    const all=got===q.p.length;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right meaning under the word.'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  };
+}
+
+function end(){
+  const pct=Math.round(S.score/S.max*100);
+  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const msg=pct===100?'Perfect score! You are ready for the exam.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below and play again.';
+  app.innerHTML=`<section class="card pop">
+    <span class="eyebrow">Your score</span>
+    <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
+    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <h2>${pct}% · ${msg}</h2>
+    <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
+  </section>
+  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
+  document.getElementById('againBtn').onclick=start;
+  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+Quiz.watch(app);
+home();
+})();
+</script>
+</body></html>

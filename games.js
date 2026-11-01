@@ -385,6 +385,20 @@ window.GAMES = [
     grade: 4,
     term: 1,
     period: "Final exam",
+    subject: "Social Studies",
+    title: "Social Studies Quest",
+    lesson: "Ch. 1 · L2 Weather and Climate, L3 Regions and Resources",
+    topics:
+      "Weather vs climate, temperature, precipitation, humidity, the equator, climates of the USA · Natural, human & capital resources, renewable & non-renewable, processing, conserving",
+    path: "grade-4/term-1/final-term-1/social-studies-revision.html",
+    questions: 119,
+    year: "2026–2027",
+    // the photos come from the Social Studies lessons (listed in the Social Studies entry's "also")
+  },
+  {
+    grade: 4,
+    term: 1,
+    period: "Final exam",
     subject: "French",
     title: "Révision",
     lesson: "Leçons 1 et 2 · Exercices d’application du 1er terme",
