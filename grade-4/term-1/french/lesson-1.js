@@ -30,6 +30,21 @@
     book: "Français plus 1 · pages 8–9 · Cahier pages 4–5",
     cover: "comic",
 
+    // Menu tiles and their pictures. Titles come from MODES in french-lesson.js.
+    learn: [
+      { k: "story", img: "panel2" },
+      { k: "words", img: "bouli" },
+      { k: "sound", s: "ou", img: "minou" },
+      { k: "verb", img: "verbe" },
+    ],
+    play: [
+      { k: "listen", img: "nounours" },
+      { k: "match", img: "lapinou" },
+      { k: "bword", img: "noura" },
+      { k: "bsent", img: "ph-stephanie" },
+      { k: "ilelle", img: "alice" },
+    ],
+
     // The people of the lesson. g: "il" (boy / animal) or "elle" (girl).
     people: [
       {
@@ -201,21 +216,28 @@
     ],
 
     // Le son « ou » (page 9): the 8 words of the lesson, and words without « ou » for the game.
-    ou: {
-      img: "ou",
-      words: [
-        "Bonjour",
-        "Bouli",
-        "Fouad",
-        "Mounir",
-        "Nounours",
-        "Lapinou",
-        "Noura",
-        "Minou",
-      ],
-      pics: { Bonjour: "panel2" },
-      not: ["Alice", "Stéphanie", "Moi", "Toi", "Elle", "Il"],
-    },
+    // intro / hear: what the voice says when the screen opens / on the big button.
+    sounds: [
+      {
+        s: "ou",
+        ipa: "[u]",
+        intro: "Le son ou.",
+        hear: "ou… ou… Bonjour, Bouli, Minou",
+        img: "ou",
+        words: [
+          "Bonjour",
+          "Bouli",
+          "Fouad",
+          "Mounir",
+          "Nounours",
+          "Lapinou",
+          "Noura",
+          "Minou",
+        ],
+        pics: { Bonjour: "panel2" },
+        not: ["Alice", "Stéphanie", "Moi", "Toi", "Elle", "Il"],
+      },
+    ],
 
     // Le verbe s'appeler (page 9)
     verb: {
@@ -831,4 +853,6 @@
       return null;
     },
   };
+  // a revision page loads several lessons: each one keeps its data here
+  (window.FR_DATA = window.FR_DATA || {})[1] = window.LESSON;
 })();

@@ -52,7 +52,12 @@
 
   /* ================= lesson ================= */
   const L = window.LESSON;
-  const IMG = (n) => `img/lesson-${L.n}/${n}.jpg`;
+  // "bouli" → this lesson's folder; "lesson-1/bouli" → another lesson's folder
+  const IMG = (n) =>
+    n.includes("/") ? `img/${n}.jpg` : `img/lesson-${L.n}/${n}.jpg`;
+  // other lessons loaded on the page (a revision): their translations and exercises can be used
+  const DATA = window.FR_DATA || {};
+  const SRC = [L].concat((L.use || []).map((n) => DATA[n]).filter(Boolean));
   let trLang = store.get("fr-tr", "off");
   if (!["off", "en", "uk", "ar"].includes(trLang)) trLang = "off";
   let slow = store.get("fr-slow", "0") === "1";
@@ -64,10 +69,13 @@
     if (trLang === "off") return "";
     if (obj && obj[trLang]) return obj[trLang];
     const k = String(fr || "").trim();
-    const d = L.dict && (L.dict[k] || L.dict[k.replace(/[.!]$/, "")]);
-    if (d) return d[TRI[trLang]];
-    const a = L.auto && L.auto(k);
-    return a ? a[TRI[trLang]] : "";
+    for (const S of SRC) {
+      const d = S.dict && (S.dict[k] || S.dict[k.replace(/[.!]$/, "")]);
+      if (d) return d[TRI[trLang]];
+      const a = S.auto && S.auto(k);
+      if (a) return a[TRI[trLang]];
+    }
+    return "";
   }
   const trHTML = (fr, obj) => {
     const t = trOf(fr, obj);
@@ -194,7 +202,7 @@
     return `<span class="say ${cls}">${tokens(fr)
       .map(
         (t) =>
-          `<button type="button" class="w" data-say="${esc(bare(t))}">${hlOu(t)}</button>`,
+          `<button type="button" class="w" data-say="${esc(bare(t))}">${hlSnd(t)}</button>`,
       )
       .join(" ")}</span>`;
   }
@@ -210,10 +218,12 @@
       };
     });
   }
-  let ouOn = false; // highlight « ou » only in the sound lesson
-  function hlOu(t) {
+  let hl = ""; // the sound to highlight (« ou », « ch »…), only on the sound screen
+  function hlSnd(t) {
     const e = esc(t);
-    return ouOn ? e.replace(/ou/gi, (m) => `<span class="ou">${m}</span>`) : e;
+    return hl
+      ? e.replace(new RegExp(hl, "gi"), (m) => `<span class="ou">${m}</span>`)
+      : e;
   }
 
   /* ---------- pictures ---------- */
@@ -223,7 +233,10 @@
     return `<div class="${cls} emo"><span>${esc((it && it.emoji) || "❓")}</span></div>`;
   }
   const people = () => L.people;
-  const personOf = (n) => L.people.find((p) => p.fr === n);
+  const personOf = (n) => (L.people || []).find((p) => p.fr === n);
+  // what a person card says: its own sentence, or "Il / Elle s’appelle …"
+  const sayOf = (p) =>
+    p.say || `${p.g === "elle" ? "Elle" : "Il"} s’appelle ${p.fr}.`;
 
   /* ---------- shared bits ---------- */
   const bolt =
@@ -265,53 +278,49 @@
     `<div class="split ${cls}"><div class="side">${side}</div><div class="main">${main}</div></div>`;
 
   /* ================= HOME ================= */
-  const LEARN = [
-    { k: "story", t: "L’histoire", en: "The story", img: "panel2" },
-    { k: "words", t: "Les mots", en: "Words & names", img: "bouli" },
-    { k: "ou", t: "Le son « ou »", en: "The sound ou", img: "minou" },
-    {
-      k: "verb",
-      t: "Le verbe s’appeler",
-      en: "The verb s’appeler",
-      img: "verbe",
-    },
-  ];
-  const PLAY = [
-    {
-      k: "listen",
-      t: "Écoute et touche",
-      en: "Listen, tap the picture",
-      img: "nounours",
-    },
-    { k: "match", t: "Relie", en: "Match pictures and names", img: "lapinou" },
-    { k: "bword", t: "Construis le mot", en: "Build the word", img: "noura" },
-    {
-      k: "bsent",
-      t: "Construis la phrase",
-      en: "Build the sentence",
-      img: "ph-stephanie",
-    },
-    { k: "ilelle", t: "Il ou Elle ?", en: "He or she?", img: "alice" },
-  ];
+  // Menu titles. The lesson file lists its tiles and their pictures (learn / play).
+  // sound: {k, s: "ou"} → L.sounds; rule: L.rule; game: {k, t, en, items} → its own items.
+  const MODES = {
+    story: { t: "L’histoire", en: "The story" },
+    words: { t: "Les mots", en: "Words & names" },
+    verb: { t: "Le verbe s’appeler", en: "The verb s’appeler" },
+    rule: { t: (L.rule || {}).t, en: (L.rule || {}).en },
+    listen: { t: "Écoute et touche", en: "Listen, tap the picture" },
+    match: { t: "Relie", en: "Match pictures and names" },
+    bword: { t: "Construis le mot", en: "Build the word" },
+    bsent: { t: "Construis la phrase", en: "Build the sentence" },
+    ilelle: { t: "Il ou Elle ?", en: "He or she?" },
+  };
+  const menu = (list) =>
+    (list || []).map((m) => ({
+      ...(m.k === "sound"
+        ? { t: `Le son « ${m.s} »`, en: `The sound ${m.s}` }
+        : MODES[m.k]),
+      ...m,
+    }));
+  const LEARN = menu(L.learn);
+  const PLAY = menu(L.play);
+  const mAttr = (m, i) => `data-m="${m.k}" data-i="${i}" id="m-${m.s || m.k}"`;
   function tile(m, data) {
     return `<button type="button" class="mode" ${data}>${pic(m, "thumb")}<b>${esc(m.t)}</b><small>${esc(m.en)}</small></button>`;
   }
-  let tab = store.get("fr-tab-" + L.n, "learn");
-  if (!["learn", "play", "ex"].includes(tab)) tab = "learn";
+  // a revision has no learn / play lists: only the Exercices tab
   const TABS = [
     { k: "learn", ic: "📖", t: "Apprends", en: "Learn" },
     { k: "play", ic: "🎲", t: "Joue", en: "Play" },
     { k: "ex", ic: "✏️", t: "Exercices", en: "School exercises" },
-  ];
+  ].filter((t) => t.k === "ex" || L[t.k]);
+  let tab = store.get("fr-tab-" + L.n, TABS[0].k);
+  if (!TABS.some((t) => t.k === tab)) tab = TABS[0].k;
   function home() {
     hush();
-    ouOn = false;
+    hl = "";
     const sub = trLang === "uk" ? L.uk : trLang === "ar" ? L.ar : L.en;
     const tiles =
       tab === "learn"
-        ? LEARN.map((m) => tile(m, `data-m="${m.k}" id="m-${m.k}"`)).join("")
+        ? LEARN.map((m, i) => tile(m, mAttr(m, i))).join("")
         : tab === "play"
-          ? PLAY.map((m) => tile(m, `data-m="${m.k}" id="m-${m.k}"`)).join("")
+          ? PLAY.map((m, i) => tile(m, mAttr(m, LEARN.length + i))).join("")
           : L.exercises
               .map((x, i) =>
                 tile(
@@ -334,7 +343,7 @@
         )
         .join("")}</div></div>
     <div class="les-head"><button type="button" class="les-cov" id="coverBtn" aria-label="Open the story"><img src="${IMG(L.cover)}" alt=""></button>
-      <div><span class="eyebrow">Grade ${esc(L.grade)} · Leçon ${esc(L.n)} · ${esc(L.book)}</span><h1 class="les-title">${esc(L.title)}</h1>${sub ? `<div class="les-sub" ${trLang === "ar" ? 'dir="rtl"' : ""}>${esc(sub)}</div>` : ""}</div></div>
+      <div><span class="eyebrow">Grade ${esc(L.grade)} · ${esc(L.label || "Leçon " + L.n)} · ${esc(L.book)}</span><h1 class="les-title">${esc(L.title)}</h1>${sub ? `<div class="les-sub" ${trLang === "ar" ? 'dir="rtl"' : ""}>${esc(sub)}</div>` : ""}</div></div>
     <div class="opts-row">
       <div class="og"><span class="lab">Voice</span><div class="seg" role="group" aria-label="Voice speed"><button type="button" id="sp-0" data-sp="0" aria-pressed="${!slow}">Normal</button><button type="button" id="sp-1" data-sp="1" aria-pressed="${slow}">🐢 Slow</button></div></div>
       <div class="og"><span class="lab">Auto sound</span><div class="seg" role="group" aria-label="Play sound automatically"><button type="button" id="au-1" data-au="1" aria-pressed="${auto}">On</button><button type="button" id="au-0" data-au="0" aria-pressed="${!auto}">Off</button></div></div>
@@ -343,7 +352,7 @@
     <div class="tabbox"><div class="ftabs" role="group" aria-label="Lesson part">${TABS.map((t) => `<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span>${esc(t.t)}<span class="sub">${esc(t.en)}</span></button>`).join("")}</div>
       <div class="panel" id="panel"><div class="modes">${tiles}</div>${tab === "learn" ? '<p class="hint">Tap any French word to hear it.</p>' : ""}</div></div>
   </section>`;
-    document.getElementById("coverBtn").onclick = () => story(0);
+    document.getElementById("coverBtn").onclick = () => L.story && story(0);
     app.querySelectorAll("[data-tab]").forEach(
       (b) =>
         (b.onclick = () => {
@@ -376,25 +385,27 @@
           home();
         }),
     );
-    app.querySelectorAll("[data-m]").forEach(
-      (b) =>
-        (b.onclick = () =>
-          ({
-            story: () => story(0),
-            words: () => words(0, "all"),
-            ou: ouView,
-            verb: verbView,
-            listen: gameListen,
-            match: gameMatch,
-            bword: gameBuildWord,
-            bsent: chooseSent,
-            ilelle: gameIlElle,
-          })[b.dataset.m]()),
-    );
+    app.querySelectorAll("[data-m]").forEach((b) => {
+      const m = LEARN.concat(PLAY)[+b.dataset.i];
+      b.onclick = () =>
+        ({
+          story: () => story(0),
+          words: () => words(0, "all"),
+          sound: () => soundView(soundOf(m.s)),
+          verb: verbView,
+          rule: ruleView,
+          listen: gameListen,
+          match: gameMatch,
+          bword: gameBuildWord,
+          bsent: chooseSent,
+          ilelle: gameIlElle,
+          game: () => run(m.t, shuf(m.items)),
+        })[m.k]();
+    });
     app
       .querySelectorAll("[data-x]")
       .forEach((b) => (b.onclick = () => startExercise(+b.dataset.x)));
-    document.title = `${L.title} · Français Leçon ${L.n}`;
+    document.title = `${L.title} · Français ${L.label || "Leçon " + L.n}`;
   }
 
   /* ================= LEARN: story ================= */
@@ -462,9 +473,7 @@
     i = (i + n) % n;
     const it = list[i];
     const isP = L.people.includes(it);
-    const say1 = isP
-      ? `${it.g === "elle" ? "Elle" : "Il"} s’appelle ${it.fr}.`
-      : it.fr;
+    const say1 = isP ? sayOf(it) : it.fr;
     app.innerHTML = `${titleBar("Les mots", `<span class="count">${i + 1} / ${n}</span>`)}<section class="card pop fc">
     ${split(
       pic(it, "pic card"),
@@ -520,24 +529,31 @@
     autoSay(isP ? say1 : it.fr);
   }
 
-  /* ================= LEARN: le son « ou » ================= */
-  const ouPic = (w) => {
-    const p = personOf(w);
-    return p ? { img: p.img } : { img: (L.ou.pics || {})[w] };
-  };
-  function ouView() {
+  /* ================= LEARN: a sound (« ou », « ch », « on »…) ================= */
+  // S = one of L.sounds: {s, ipa, intro, hear, img, words, pics, not}
+  const soundOf = (s) => L.sounds.find((x) => x.s === s);
+  // the picture of a word: the sound's own list (pics), a person, or a word card
+  function wordPic(w, S) {
+    const q = ((S && S.pics) || {})[w];
+    if (q) return typeof q === "string" ? { img: q } : q;
+    const p =
+      personOf(w) ||
+      (L.phrases || []).find((x) => bare(x.fr) === bare(w)) ||
+      {};
+    return { img: p.img, ic: p.ic, emoji: p.emoji };
+  }
+  function soundView(S) {
     hush();
-    ouOn = true;
-    app.innerHTML = `${titleBar("Le son « ou »")}<section class="card pop">
-    <div class="ou-hero"><button type="button" class="ou-big" id="ouBig"><span class="ou">ou</span> = [u] 🔊</button>${pic({ img: L.ou.img }, "pic strip")}</div>
-    <p class="hint">Tap a picture to hear the word. Listen for <b class="ou">ou</b>.</p>
-    <div class="ou-grid">${L.ou.words.map((w, k) => `<button type="button" class="ou-card" data-ou="${k}">${pic(ouPic(w), "pic sq")}<span class="ou-w">${hlOu(w)}</span></button>`).join("")}</div>
-    <div class="row center"><button type="button" class="btn" id="ouGame">🎲 Tu entends « ou » ?</button><button type="button" class="btn ghost" id="ouBuild">🔤 Construis les mots</button></div>
+    hl = S.s;
+    app.innerHTML = `${titleBar(`Le son « ${S.s} »`)}<section class="card pop">
+    <div class="ou-hero"><button type="button" class="ou-big" id="ouBig"><span class="ou">${esc(S.s)}</span> = ${esc(S.ipa)} 🔊</button>${pic({ img: S.img }, "pic strip")}</div>
+    <p class="hint">Tap a picture to hear the word. Listen for <b class="ou">${esc(S.s)}</b>.</p>
+    <div class="ou-grid">${S.words.map((w, k) => `<button type="button" class="ou-card" data-ou="${k}">${pic(wordPic(w, S), "pic sq")}<span class="ou-w">${hlSnd(w)}</span></button>`).join("")}</div>
+    <div class="row center"><button type="button" class="btn" id="ouGame">🎲 Tu entends « ${esc(S.s)} » ?</button><button type="button" class="btn ghost" id="ouBuild">🔤 Construis les mots</button></div>
   </section>`;
     bindHome();
-    document.getElementById("ouBig").onclick = () =>
-      say("ou… ou… Bonjour, Bouli, Minou", true);
-    autoSay("Le son ou. " + L.ou.words.join(", "), true);
+    document.getElementById("ouBig").onclick = () => say(S.hear, true);
+    autoSay(S.intro + " " + S.words.join(", "), true);
     app.querySelectorAll("[data-ou]").forEach(
       (b) =>
         (b.onclick = () => {
@@ -546,32 +562,76 @@
             .querySelectorAll(".ou-card")
             .forEach((x) => x.classList.remove("on"));
           b.classList.add("on");
-          say(L.ou.words[+b.dataset.ou], true);
+          say(S.words[+b.dataset.ou], true);
         }),
     );
     document.getElementById("ouGame").onclick = () => {
-      ouOn = false;
-      run("Tu entends « ou » ?", ouItems());
+      hl = "";
+      run(`Tu entends « ${S.s} » ?`, soundItems(S));
     };
     document.getElementById("ouBuild").onclick = () => {
       run(
-        "Construis les mots « ou »",
-        shuf(L.ou.words).map((w) => ({ type: "letters", fr: w, ...ouPic(w) })),
+        `Construis les mots « ${S.s} »`,
+        shuf(S.words).map((w) => ({
+          type: "letters",
+          fr: w,
+          ...wordPic(w, S),
+        })),
       );
     };
   }
-  function ouItems() {
-    const yes = L.ou.words.map((w) => ({
+  function soundItems(S) {
+    const yn = (w, a) => ({
       type: "yn",
       fr: w,
-      a: true,
-      ...ouPic(w),
-    }));
-    const no = L.ou.not.map((w) => {
-      const p = personOf(w) || L.phrases.find((x) => x.fr === w) || {};
-      return { type: "yn", fr: w, a: false, img: p.img, ic: p.ic };
+      a,
+      snd: S.s,
+      ask: `🔉 Tu entends « ${S.s} » ?`,
+      ...wordPic(w, S),
     });
-    return shuf(yes.concat(no));
+    return shuf(
+      S.words.map((w) => yn(w, true)).concat(S.not.map((w) => yn(w, false))),
+    );
+  }
+
+  /* ================= LEARN: a grammar card (La phrase) ================= */
+  // R = L.rule: {t, en, fr, tr, img, groups: [{t, en, lines}], games: [{t, x: exercise k}]}
+  // a sentence you can tap, with its capital letter and its end mark lit up
+  function ruleWords(fr) {
+    const T = tokens(fr);
+    return `<span class="say big">${T.map((t, k) => {
+      let h = esc(t);
+      if (k === 0) h = `<span class="ou">${esc(t[0])}</span>${esc(t.slice(1))}`;
+      if (k === T.length - 1)
+        h = h.replace(/([.?!])$/, `<span class="ou">$1</span>`);
+      return `<button type="button" class="w" data-say="${esc(bare(t))}">${h}</button>`;
+    }).join(" ")}</span>`;
+  }
+  function ruleView() {
+    hush();
+    const R = L.rule;
+    const all = R.groups.flatMap((g) => g.lines);
+    app.innerHTML = `${titleBar(R.t)}<section class="card pop">
+    <div class="q">${wordsHTML(R.fr, "big")}</div>${trHTML(R.fr, R.tr)}
+    ${R.groups.map((g) => `<span class="qtype">${esc(g.t)} <small class="muted">${esc(g.en)}</small></span><div class="lines tight">${g.lines.map((l) => `<div class="line"><div class="said">${ruleWords(l)}${trHTML(l)}</div><button type="button" class="abtn sm" data-r="${all.indexOf(l)}" aria-label="Listen">🔊</button></div>`).join("")}</div>`).join("")}
+    <details class="book"><summary>📕 The page in the book</summary>${pic({ img: R.img }, "pic wide")}</details>
+    <div class="row center">${R.games.map((x, i) => `<button type="button" class="btn${i ? " ghost" : ""}" data-g="${i}">${esc(x.t)}</button>`).join("")}</div>
+  </section>`;
+    bindHome();
+    bindWords();
+    app
+      .querySelectorAll("[data-r]")
+      .forEach((b) => (b.onclick = () => say(all[+b.dataset.r], true)));
+    app
+      .querySelectorAll("[data-g]")
+      .forEach(
+        (b) =>
+          (b.onclick = () =>
+            startExercise(
+              L.exercises.findIndex((x) => x.k === R.games[+b.dataset.g].x),
+            )),
+      );
+    autoSay(R.fr);
   }
 
   /* ================= LEARN: le verbe s'appeler ================= */
@@ -625,7 +685,7 @@
       const others = shuf(P.filter((x) => x !== p)).slice(0, 2);
       return {
         type: "tap",
-        say: `${p.g === "elle" ? "Elle" : "Il"} s’appelle ${p.fr}.`,
+        say: sayOf(p),
         opts: shuf([p, ...others]).map((x) => x.img),
         a: p.img,
       };
@@ -633,8 +693,11 @@
     run("Écoute et touche", items);
   }
   function gameMatch() {
+    // rounds of at most 5 pairs, as even as possible (9 → 5 + 4, 11 → 4 + 4 + 3)
     const P = shuf(people());
-    const rounds = [P.slice(0, 5), P.slice(5)];
+    const size = Math.ceil(P.length / Math.ceil(P.length / 5));
+    const rounds = [];
+    for (let i = 0; i < P.length; i += size) rounds.push(P.slice(i, i + size));
     run(
       "Relie",
       rounds.map((r) => ({
@@ -643,18 +706,16 @@
       })),
     );
   }
+  // build: "Bouli" (picture found by wordPic) or {fr: "garçon", img: "chadi"}
   function gameBuildWord() {
+    const pics = { pics: Object.assign({}, ...L.sounds.map((s) => s.pics)) };
     run(
       "Construis le mot",
-      shuf(L.build).map((w) => {
-        const p = personOf(w) || L.phrases.find((x) => bare(x.fr) === w) || {};
-        return {
-          type: "letters",
-          fr: w,
-          img: p.img || (L.ou.pics || {})[w],
-          ic: p.ic,
-        };
-      }),
+      shuf(L.build).map((w) =>
+        typeof w === "string"
+          ? { type: "letters", fr: w, ...wordPic(w, pics) }
+          : { type: "letters", ...w },
+      ),
     );
   }
   function chooseSent() {
@@ -714,12 +775,33 @@
           ],
         };
       });
-    else if (items === "ou-yn") items = ouItems();
-    else
+    else if (/-yn$/.test(items))
+      items = soundItems(soundOf(items.slice(0, -3)));
+    else {
+      if (X.ref) items = refItems(X.ref);
       items =
-        X.k === "entends" || X.k === "relie" ? items.slice() : shuf(items);
+        X.keep || X.k === "entends" || X.k === "relie"
+          ? items.slice()
+          : shuf(items);
+    }
     if (X.text) return readText(X, items);
     run(X.t, items, X.from);
+  }
+  // ref: "2:phrase" → the items of exercise "phrase" of Lesson 2, pictures from its folder
+  function refItems(ref) {
+    const [n, k] = ref.split(":");
+    const R = DATA[n];
+    const p = (im) => (im && !im.includes("/") ? `lesson-${R.n}/${im}` : im);
+    return R.exercises
+      .find((x) => x.k === k)
+      .items.map((it) => ({
+        ...it,
+        img: p(it.img),
+        ...(it.type === "tap" ? { opts: it.opts.map(p), a: p(it.a) } : {}),
+        ...(it.pairs
+          ? { pairs: it.pairs.map((q) => ({ ...q, img: p(q.img) })) }
+          : {}),
+      }));
   }
   function readText(X, items) {
     hush();
@@ -920,12 +1002,13 @@
     autoSay(qs);
   }
 
-  /* --- yes / no: do you hear « ou »? --- */
+  /* --- yes / no: do you hear the sound (snd)? is it a sentence? --- */
+  // {type: "yn", fr, a, ask, snd?} or a sentence: {…, x: why, fix?: the right sentence}
   function itYN(it) {
     let tries = 0;
     app.innerHTML = `${hud()}<section class="card pop fc">
     ${split(
-      `<span class="qtype">🔉 Tu entends « ou » ?</span>
+      `<span class="qtype">${esc(it.ask)}</span>
     ${pic(it, "pic card")}`,
       `<div class="fc-word">${wordsHTML(it.fr)}</div>
     <div class="audio"><button type="button" class="abtn big" id="s1">🔊 <span>Écoute</span></button><button type="button" class="abtn" id="s2">🐢</button></div>
@@ -953,17 +1036,29 @@
           else
             S.miss.push({
               img: it.img,
-              right: it.fr + (it.a ? " — oui, « ou »" : " — non"),
+              emoji: it.emoji,
+              right: it.snd
+                ? it.fr + (it.a ? ` — oui, « ${it.snd} »` : " — non")
+                : it.a
+                  ? it.fr + " — oui"
+                  : `${it.fr} — non → ${it.fix || ""}`,
             });
-          ouOn = true;
+          if (!it.snd) {
+            if (it.fix) say(it.fix);
+            return feedback(
+              true,
+              `${esc(it.x || "")}${it.fix ? answerHTML(it.fix) : ""}`,
+            );
+          }
+          hl = it.snd;
           app.querySelector(".fc-word").innerHTML = wordsHTML(it.fr);
-          ouOn = false;
+          hl = "";
           bindWords();
           feedback(
             true,
             it.a
-              ? `<b>${esc(it.fr)}</b> : on entend <b class="ou">ou</b>.`
-              : `<b>${esc(it.fr)}</b> : pas de « ou ».`,
+              ? `<b>${esc(it.fr)}</b> : on entend <b class="ou">${esc(it.snd)}</b>.`
+              : `<b>${esc(it.fr)}</b> : pas de « ${esc(it.snd)} ».`,
           );
         }),
     );
@@ -982,7 +1077,8 @@
           ? it.ans[it.parts.slice(0, k).filter(Array.isArray).length]
           : p,
       )
-      .join("");
+      .join("")
+      .replace(/\s*([?!])/g, " $1");
     function draw(done) {
       let b = -1;
       const sent = it.parts
@@ -998,7 +1094,8 @@
             : k === act
               ? " act"
               : "";
-          return `<button type="button" class="blank${cls}" data-b="${k}" ${done ? "disabled" : ""}>${v ? esc(v) : "&nbsp;?&nbsp;"}</button>`;
+          const ph = p.includes("?") ? "…" : "?"; // ". ? !" blanks: an empty box is not a "?"
+          return `<button type="button" class="blank${cls}" data-b="${k}" ${done ? "disabled" : ""}>${v ? esc(v) : `&nbsp;${ph}&nbsp;`}</button>`;
         })
         .join("");
       document.getElementById("sent").innerHTML = sent;
@@ -1123,11 +1220,11 @@
   };
 
   /* --- word cards in order (Mets en ordre) --- */
-  // elided verbs are cut like at school: "s’appelle" → "s’" + "appelle"
+  // elided words are cut like at school: "s’appelle" → "s’" + "appelle", "J’ai" → "J’" + "ai"
   function orderTokens(fr) {
     const out = [];
     tokens(fr).forEach((t) => {
-      const m = t.match(/^([mtsMTS]’)(appel.*)$/);
+      const m = t.match(/^([mtsMTS]’(?=appel)|[jJ]’)(.+)$/);
       if (m) out.push(m[1], m[2]);
       else out.push(t);
     });
