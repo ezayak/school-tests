@@ -1,5 +1,5 @@
 // Should Kids Have Homework Every Day? (Homework Booklet Term 1, pages 37–39, Unit 1 Week 5, argumentative text). Engine: shared/story.js.
-// The booklet has no model answers: the answers here are written from the text.
+// Open answers from the school's model answer key (HW pp. 37–39); "possible answers" lists every answer the key accepts.
 window.STORY = {
   key: "en4-homework",
   title: "Should Kids Have Homework Every Day?",
@@ -24,6 +24,8 @@ window.STORY = {
     reinforce: "to make stronger",
     habits: "things you do again and again",
     overwhelmed: "feeling there is too much to do",
+    overwhelm: "to give someone too much to do",
+    relaxation: "rest",
   },
   pages: [
     {
@@ -182,7 +184,7 @@ window.STORY = {
         items: [{ e: "👍", x: 50, y: 50, s: 40, a: "pulse" }],
       },
       q: "What are two advantages of homework?",
-      a: "Homework helps students practice what they learned in school. It also teaches responsibility, because kids learn to manage their time.",
+      a: "Possible answers: It helps students practice and remember what they learned in school. It teaches responsibility and helps children manage their time. It allows parents to see what their children are learning and how well they understand it.",
     },
     {
       tag: "Text evidence",
@@ -193,7 +195,7 @@ window.STORY = {
         items: [{ e: "👎", x: 50, y: 50, s: 40, a: "pulse" }],
       },
       q: "What are two disadvantages of homework?",
-      a: "After six to seven hours in school, children need time to relax and play. Too much homework can cause stress and take away from family time or hobbies.",
+      a: "Possible answers: Too much homework can cause stress and reduce time for relaxation. It takes away from family time, hobbies, and playing with friends. It may not be necessary if a student already understands the topic.",
     },
     {
       tag: "Point of view",
@@ -204,7 +206,7 @@ window.STORY = {
         items: [{ e: "⚖️", x: 50, y: 50, s: 44, a: "nod" }],
       },
       q: "What is the author’s point of view?",
-      a: "The author thinks homework can help students learn and build good habits, but too much homework can make students feel overwhelmed.",
+      a: "The author believes homework helps reinforce learning, but too much homework can overwhelm students and take away from other activities.",
     },
   ],
 };

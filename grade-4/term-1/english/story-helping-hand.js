@@ -1,6 +1,6 @@
 // A Helping Hand (Wonders Genre Passages, Grade 4 Unit 1 Week 5, argumentative text). Classwork Booklet Term 1, pages 34–36.
 // Engine: shared/story.js. The headings of the text are shown above each page (text features: headings, a graph).
-// The booklet has no model answers: the answers here are written from the text.
+// Open answers from the school's model answer key (CW pp. 34–36). The key's printing words Q1 and Q3 differently: Q3 keeps an answer to the booklet's question.
 window.STORY = {
   key: "en4-helping-hand",
   title: "A Helping Hand",
@@ -25,6 +25,8 @@ window.STORY = {
     creativity: "being able to make new things",
     clinics: "small places where doctors help sick people",
     appreciate: "to be thankful for something",
+    caption: "the words under a picture or a graph",
+    percentages: "parts out of 100 (%)",
     corporation: "a big company",
     foundation: "a group that gives money to help",
     individual: "one person",
@@ -290,20 +292,20 @@ window.STORY = {
         ],
       },
       q: "What are some details the author uses to show how people can help in their communities?",
-      a: "People can clean a local park, visit a senior citizen center, collect food for a food bank, and make activity books for children in clinics or hospitals.",
+      a: "Cleaning a park so people will appreciate and enjoy it more; visiting a senior citizen center to get to know people in the community; collecting and donating food to help people in need; creating activity books for children in hospitals or clinics.",
     },
     {
       tag: "Text features: graph",
       type: "open",
       img: "img/helping-hand/graph.jpg",
       q: "What do the graph and caption show?",
-      a: "They show where donations came from in the United States in 2015. Individuals gave the most, then foundations, and corporations gave the least.",
+      a: "The graph compares the percentages of donations given by three groups; the caption tells where the donations came from and the year they were given.",
     },
     {
       tag: "Text features: graph",
       type: "open",
       img: "img/helping-hand/graph.jpg",
-      q: "How does the graph support the idea that many people think it is important to help others?",
+      q: "How does the information in the graph support the article’s main idea that many people think it is important to help others?",
       a: "The graph shows that individuals, people like you, give the most donations. So many people think helping others is important.",
     },
   ],

@@ -1,5 +1,5 @@
 // Should Kids Have Pets? (Homework Booklet Term 1, pages 40–42, Unit 1 Week 5, argumentative text). Engine: shared/story.js.
-// The booklet has no model answers: the answers here are written from the text.
+// Open answers from the school's model answer key (HW pp. 40–42).
 window.STORY = {
   key: "en4-pets",
   title: "Should Kids Have Pets?",
@@ -26,6 +26,7 @@ window.STORY = {
     moreover: "also",
     expensive: "costing a lot of money",
     vet: "an animal doctor",
+    veterinary: "of an animal doctor",
     afford: "to have enough money for something",
     valuable: "very useful and important",
   },
@@ -207,7 +208,7 @@ window.STORY = {
         items: [{ e: "👍", x: 50, y: 50, s: 40, a: "pulse" }],
       },
       q: "What are two reasons people think kids should have pets?",
-      a: "Having a pet helps children learn responsibility. Pets can also provide friendship, so kids feel less lonely.",
+      a: "Pets teach kids responsibility by having to feed and care for them. Pets offer friendship and comfort, helping kids feel less lonely.",
     },
     {
       tag: "Text evidence",
@@ -218,7 +219,7 @@ window.STORY = {
         items: [{ e: "👎", x: 50, y: 50, s: 40, a: "pulse" }],
       },
       q: "What are two reasons people think kids should not have pets?",
-      a: "The job of caring for the pet often falls to the parents. Pets can also be expensive: food, toys and vet visits cost a lot.",
+      a: "Pets require a lot of time, and the work often falls on busy parents. They are expensive due to costs like food, toys, and veterinary visits.",
     },
     {
       tag: "Point of view",
@@ -229,7 +230,7 @@ window.STORY = {
         items: [{ e: "⚖️", x: 50, y: 50, s: 44, a: "nod" }],
       },
       q: "What is the author’s point of view?",
-      a: "The author thinks pets can bring a lot of joy and teach kids valuable lessons, but they also need a lot of time, money, and responsibility.",
+      a: "The author believes pets bring joy and teach lessons, but they also require a lot of time, money, and responsibility.",
     },
   ],
 };
