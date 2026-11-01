@@ -576,6 +576,10 @@ add its files (not the videos) to the `also: [...]` list of the Science entry in
 exercises of Topic 1 L1, L3 and L4. Its pictures are the lessons' photos (`p`, from `topic-1/img/lesson-N/`), emoji pictures (`e`), or several photos in a grid
 labelled A, B, C… (`ps`, with `k` so the answers keep that order). It has no image files of its own: the photos are already offline through the Science entry.
 
+**Grade 3 Science revision** (Final term 1): `grade-3/term-1/final-term-1/science-revision.html` ("Forces Quest") is the same page for Topic 1 L2, L3 and L4,
+made from the teacher's slides, the Friction cut-and-paste sheet and Graded HW 2. Grade 3 has no Science lessons, so its pictures are cropped from those sheets
+into `final-term-1/img/science/` (`p` is the file name) and listed in the card's `also` in `games.js`.
+
 ## Social Studies lessons (Grade 4)
 
 Folder: `grade-4/social-studies/`. One card on the home page ("Social Studies", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`,
