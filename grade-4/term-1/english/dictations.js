@@ -28,8 +28,8 @@ window.ENGLISH = {
       title: "Unit 1 · Week 5",
       sound: "Run-on sentences",
       words:
-        "Fragments · long o · suffixes · 8 words · Dollars and Sense, A Helping Hand, homework, pets",
-      note: "4 texts · 17 exercise sets",
+        "Fragments · long o · suffixes · 8 words · Dollars and Sense, Start Small, Think Big, A Helping Hand, homework, pets",
+      note: "5 texts · 17 exercise sets",
       path: "unit1-week5.html",
     },
     {
@@ -109,10 +109,16 @@ window.ENGLISH = {
         "story-dollars-sense.html",
         "5 pages · 22 questions",
       ],
+      [
+        "Start Small, Think Big",
+        "Leveled reader · Unit 1 Week 5 · Paired read: Spending and Saving",
+        "story-start-small.html",
+        "15 pages · 33 questions",
+      ],
     ].map(([title, words, path, note]) => ({
       kind: "Story",
       title,
-      sound: /Should|Helping|Dollars/.test(title)
+      sound: /Should|Helping|Dollars|Start/.test(title)
         ? "Argumentative text"
         : "Realistic fiction",
       words,

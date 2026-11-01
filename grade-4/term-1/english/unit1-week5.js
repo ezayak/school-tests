@@ -87,6 +87,12 @@
         cover: { src: "img/dollars-sense/shoes.jpg" },
       },
       {
+        t: "Start Small, Think Big",
+        en: "Leveled reader · entrepreneurs",
+        path: "story-start-small.html",
+        cover: { src: "img/start-small/cover.jpg" },
+      },
+      {
         t: "A Helping Hand",
         en: "Classwork booklet · headings and a graph",
         path: "story-helping-hand.html",

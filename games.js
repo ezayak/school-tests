@@ -424,9 +424,9 @@ window.GAMES = [
     lesson:
       "Lessons · stories read aloud, words & idioms with moving pictures, booklet exercises · Dictations · Stories",
     topics:
-      "Unit 1 Week 3 (compound sentences, long e) · Week 4 (complex sentences, long i, idioms) · Week 5 (run-on sentences, long o, suffixes) · 9 stories",
+      "Unit 1 Week 3 (compound sentences, long e) · Week 4 (complex sentences, long i, idioms) · Week 5 (run-on sentences, long o, suffixes) · 10 stories",
     path: "grade-4/term-1/english/index.html",
-    countLabel: "3 lessons · 2 dictations · 9 stories",
+    countLabel: "3 lessons · 2 dictations · 10 stories",
     year: "2026–2027",
     also: [
       "grade-4/term-1/english/dictations.js",
@@ -492,6 +492,20 @@ window.GAMES = [
       "grade-4/term-1/english/img/dollars-sense/hard-rock.jpg",
       "grade-4/term-1/english/img/dollars-sense/shoes.jpg",
       "grade-4/term-1/english/img/dollars-sense/volunteers.jpg",
+      "grade-4/term-1/english/story-start-small.html",
+      "grade-4/term-1/english/story-start-small.js",
+      "grade-4/term-1/english/img/start-small/ailey.jpg",
+      "grade-4/term-1/english/img/start-small/blues-suite.jpg",
+      "grade-4/term-1/english/img/start-small/budget.jpg",
+      "grade-4/term-1/english/img/start-small/cover.jpg",
+      "grade-4/term-1/english/img/start-small/earthquake.jpg",
+      "grade-4/term-1/english/img/start-small/gates.jpg",
+      "grade-4/term-1/english/img/start-small/giannini.jpg",
+      "grade-4/term-1/english/img/start-small/golden-gate.jpg",
+      "grade-4/term-1/english/img/start-small/graph.jpg",
+      "grade-4/term-1/english/img/start-small/kavita.jpg",
+      "grade-4/term-1/english/img/start-small/readers-digest.jpg",
+      "grade-4/term-1/english/img/start-small/wallaces.jpg",
     ],
   },
   {
