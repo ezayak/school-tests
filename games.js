@@ -424,9 +424,9 @@ window.GAMES = [
     lesson:
       "Lessons · stories read aloud, words & idioms with moving pictures, booklet exercises · Dictations · Stories",
     topics:
-      "Unit 1 Week 3 (compound sentences, long e) · Week 4 (complex sentences, long i, idioms) · Week 5 (run-on sentences, long o, suffixes) · 8 stories",
+      "Unit 1 Week 3 (compound sentences, long e) · Week 4 (complex sentences, long i, idioms) · Week 5 (run-on sentences, long o, suffixes) · 9 stories",
     path: "grade-4/term-1/english/index.html",
-    countLabel: "3 lessons · 2 dictations · 8 stories",
+    countLabel: "3 lessons · 2 dictations · 9 stories",
     year: "2026–2027",
     also: [
       "grade-4/term-1/english/dictations.js",
@@ -485,6 +485,13 @@ window.GAMES = [
       "grade-4/term-1/english/story-pets.html",
       "grade-4/term-1/english/story-pets.js",
       "grade-4/term-1/english/img/pets/pets.jpg",
+      "grade-4/term-1/english/story-dollars-sense.html",
+      "grade-4/term-1/english/story-dollars-sense.js",
+      "grade-4/term-1/english/img/dollars-sense/employees.jpg",
+      "grade-4/term-1/english/img/dollars-sense/graph.jpg",
+      "grade-4/term-1/english/img/dollars-sense/hard-rock.jpg",
+      "grade-4/term-1/english/img/dollars-sense/shoes.jpg",
+      "grade-4/term-1/english/img/dollars-sense/volunteers.jpg",
     ],
   },
   {

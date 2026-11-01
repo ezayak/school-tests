@@ -81,6 +81,12 @@
 
     stories: [
       {
+        t: "Dollars and Sense",
+        en: "Shared read · headings and a graph",
+        path: "story-dollars-sense.html",
+        cover: { src: "img/dollars-sense/shoes.jpg" },
+      },
+      {
         t: "A Helping Hand",
         en: "Classwork booklet · headings and a graph",
         path: "story-helping-hand.html",
