@@ -1659,19 +1659,6 @@ details.book[open] .alltext {
   }
 }
 
-/* top row on every start page: "← All games" on the left, grade / subject line on the right */
-.topbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px 16px;
-}
-.topbar .eyebrow {
-  margin-left: auto;
-  text-align: right;
-}
-
 /* animated pictures made of emoji (Kit.scene): English words and idioms, story pictures. They are pictures, so they keep their colours in dark mode. */
 .scene {
   position: relative;
