@@ -396,6 +396,20 @@ window.GAMES = [
     // the page and pictures are offline through the Français entry's "also" (lesson-1.js, lesson-2.js, img/)
   },
   {
+    grade: 4,
+    term: 1,
+    period: "Final exam",
+    subject: "English",
+    title: "Final Exam Revision",
+    lesson: "Unit 1 Weeks 3–5 · the Final exam memo",
+    topics:
+      "Compound & complex sentences, the 8 words, long o (o, ow, oa, oe, o_e), argumentative text (graphs & headings, central idea, reread), suffixes -ly -ive -ity, writing an argument",
+    path: "grade-4/term-1/english/revision-1.html",
+    countLabel: "32 exercises · 5 texts",
+    year: "2026–2027",
+    // the page, the week files it loads and the pictures are offline through the English entry's "also"
+  },
+  {
     grade: 3,
     period: "Subjects",
     subject: "English",
@@ -492,6 +506,8 @@ window.GAMES = [
       "grade-4/term-1/english/img/dollars-sense/hard-rock.jpg",
       "grade-4/term-1/english/img/dollars-sense/shoes.jpg",
       "grade-4/term-1/english/img/dollars-sense/volunteers.jpg",
+      "grade-4/term-1/english/revision-1.html",
+      "grade-4/term-1/english/revision-1.js",
       "grade-4/term-1/english/story-start-small.html",
       "grade-4/term-1/english/story-start-small.js",
       "grade-4/term-1/english/img/start-small/ailey.jpg",
