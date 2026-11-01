@@ -110,6 +110,7 @@ What to build:
   Learn: story (every panel, then "Des phrases pour parler" with `title`), words (`people` with `say`, `phrases` = the page's Vocabulaire), one `sound` tile per Phonétique sound, a `rule` card for a grammar box. The `verb` view only knows s'appeler: another verb needs an engine change first.
   Play: listen, match, bword, bsent, ilelle (if people have il / elle), and `game` tiles for the lesson's own point (Un ou une ?).
   Exercices: every book "Parle" / cahier exercise / sheet task, one section each, `from` = where it is ("Cahier p. 7 ex. 5"); a sheet task the lesson already has is not built twice.
+  Dictée: a "(by spelling)" sheet or list = one entry in `dictee` (its words and its sentences, a picture on each); the engine makes the build-from-letters and hear-and-type games.
 - **Revision** `revision-N.js` + `revision-N.html` (copy revision-1.html; it loads every lesson it uses before its own file): Exercices only, the term sheet's tasks in its order,
   then the lessons' main exercises through `ref: "N:k"`; pictures from the lessons (`img: "lesson-2/parle-9"`), never new copies.
 - Item types: put in order → `order` (`q` for "Réponds" / "Regarde et écris"); write a word with a sound → `letters`; choose / entoure / oui-non question → `mc` (right one first, `full` for the whole answer);
@@ -120,7 +121,8 @@ Rules for every French file:
 - Every French text has an EN / UA / AR translation through `dict` or `auto`; names need none.
 - Check with a script before calling it done: every sentence translates, every item has a picture, every `img` exists, every picture file is used and listed in `also`.
 - Then: entry in `lessons.js` (lesson) or a "Final exam" / "Mid-term exam" card in `games.js` (revision); new files and pictures in `also` of the French entry, plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
-- Grade 3: its own `grade-3/term-1/french/` folder with `index.html`, `lessons.js` (`grade: 3`) and lessons; pages load the engine from `../../../grade-4/term-1/french/french-lesson.js`, and a "Subjects" card for Grade 3 French goes in `games.js`.
+- Grade 3: `grade-3/term-1/french/` (Lessons 1–4 and `revision-1`, the same format); pages load the engine from `../../../grade-4/term-1/french/french-lesson.js`.
+  Grade 3 has no book slides after « La présentation »: a lesson is a topic sheet (Les salutations, Les consignes de la classe) or a topic of the sheets (Les lettres et les mots).
 - A change to the engine must leave the existing lessons as they were: render every screen of the old and new version with the same `Math.random` seed and compare (headless Chrome: `google-chrome --headless=new --dump-dom` on a harness page that clicks through an iframe), then play every game and exercise to the score screen.
 - Check in the browser: the list, each tab, the sound and rule screens, translations on, one exercise of each type.
 

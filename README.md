@@ -60,11 +60,11 @@ live in `shared/theme.css`; change them there and every page follows.
 
 | File | What | Who loads it |
 |---|---|---|
-| `shared/theme.css` | colours (light/dark), fonts, page, cards, buttons, menu tiles | every page, first |
+| `shared/theme.css` | colours (light/dark), fonts, page, cards, buttons, menu tiles, the typing box (`.spell-in`, `.diff`) | every page, first |
 | `shared/quiz.css` | quiz parts: score bar, picture, answers, matching, results, SVG drawing colours | quiz games, Arabic lessons |
 | `shared/arabic.css` | Arabic text, Arabic answers, folder tabs, Bible verse and reference | Arabic and Religion lessons, Arabic revision quizzes |
 | `shared/arabic-revision.css` | word tools, English toggle | religion / Arabic social-studies revisions |
-| `shared/spelling.css` | flash cards, letter tiles, typing | English dictations |
+| `shared/spelling.css` | flash cards, letter tiles | English dictations |
 | `shared/drag-words.css` | drag tiles from a bank onto a line (with `Kit.dragTiles`) | "Mets en ordre", "Build the word", Arabic homework (word order) |
 | `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons, English stories |
 | `shared/story.css` | English stories: page text, the sentence being read, easy sentence, word meanings | English stories |
@@ -386,9 +386,10 @@ small activity pictures ~300px). Same format as an Arabic lesson (`stories`, `gl
 
 After adding a lesson: add it to `LESSONS` in `lessons.js`, add its files and pictures to `also` of the Religion entry in `games.js` (plus `countLabel` / `topics`), and bump `VERSION` in `sw.js`.
 
-## French lessons (Grade 4)
+## French lessons (Grade 3 and 4)
 
 Folder: `grade-4/term-1/french/`. One card on the home page ("Français", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`.
+Grade 3: `grade-3/term-1/french/` (its own `index.html`, `lessons.js`, lessons, `img/` and `revision-1`); its pages load the engine from `../../../grade-4/term-1/french/french-lesson.js`.
 Made to be understood from pictures and sound: big pictures from the book, every French word can be tapped to hear it (device voice, French),
 🔊 / 🐢 slow / 👆 word-by-word reading, wrong answers can be tried again, 💡 help in the building games. Optional translation EN / UA / AR.
 
@@ -405,10 +406,14 @@ A lesson page has three tabs, like the Arabic lessons (the last tab used is reme
 - **Joue** – `play: [{k, img}]`, k = `listen` (hear a person’s sentence, tap the picture), `match` (pictures ↔ names, rounds of up to 5),
   `bword` (letters, from `build`), `bsent` (word cards or letters, from `sentences`), `ilelle` (Il ou Elle ?),
   or `game` with its own `t`, `en` and `items` (e.g. Un ou une ?)
+- **Dictée** (only when the lesson has `dictee`) – spelling lists: `dictee: [{k, t, en, img, from, words: [{fr, img|emoji}], sentences: [{fr, img|emoji}]}]`.
+  A list shows its words and sentences (tap to hear) and four games: build the words / the sentences from letters, or hear them and type them.
+  Typing (`{type:"spell", fr}`): letters and accents must be right, capitals, ’ / ' and the end mark don’t count; buttons for é è ê à â ç ’;
+  a wrong first try marks the wrong letters in red, the second shows the right spelling. The typing box and the red / green letters are in `shared/theme.css`.
 - **Exercices** – the school sheets: `exercises: [{k, t, en, img, from, items, keep?}]` (`keep: true` keeps the order)
 
 The parts of a lesson file:
-- `people: [{fr, img, g: "il"|"elle", say?, en, uk, ar}]` – `say` is what the card says (“C’est un garçon. Il s’appelle Chadi.”), otherwise “Il / Elle s’appelle …”
+- `people: [{fr, img, g: "il"|"elle", say?, en, uk, ar}]` (`people: []` for a lesson without people: the word cards are only `phrases`, and no listen / match / ilelle tiles) – `say` is what the card says (“C’est un garçon. Il s’appelle Chadi.”), otherwise “Il / Elle s’appelle …”
 - `phrases: [{fr, img|emoji, en, uk, ar}]`, `story: [{img, title?, lines: [{who, fr}]}]` (`title` = “Des phrases pour parler”: not in “Lis tout”)
 - `sounds: [{s, ipa, intro, hear, img, words, pics, not}]` – `intro` / `hear`: what the voice says when the screen opens / on the big button;
   a word’s picture comes from `pics`, a person or a phrase card; `not` = words without the sound, for the “Tu entends … ?” game
@@ -418,11 +423,11 @@ The parts of a lesson file:
 - the last line keeps the data for a revision: `(window.FR_DATA = window.FR_DATA || {})[N] = window.LESSON;`
 
 Exercise item types (each can have `img` or `emoji`):
-- `{type:"order", fr, q?}` – Mets en ordre (m’ / t’ / s’ before « appel… » and j’ become their own cards, like at school)
+- `{type:"order", fr, q?, cards?}` – Mets en ordre (m’ / t’ / s’ before « appel… » and j’ become their own cards, like at school; `cards` when the sheet cuts them differently, e.g. `["J’ai", "huit", "ans."]`)
 - `{type:"letters", fr}` – build a word, or a sentence word by word
 - `{type:"fill", parts:["Je ", ["m’","t’","s’"], "appell", ["e","es"], " Bouli."], ans:["m’","e"]}` – also capital letters (`[["c","C"], "omment…"]`) and end marks (`["Comment tu t’appelles", [".","?","!"]]`)
 - `{type:"mc", q, opts:[right, wrong, …], icons?, full?}` – the first option is the right one; `full` = the whole answer that is said and shown
-- `{type:"tap", say, opts:[img, img, img]}` – the first picture is the right one
+- `{type:"tap", say, opts:[img, img, img], a?}` – the first picture is the right one, or `a` (then the pictures stay in the given order)
 - `{type:"match", pairs:[{img, fr}, …]}`
 - `{type:"yn", fr, a:true|false, ask, x, fix?}` – “C’est une phrase ?”: `x` explains, `fix` is the right sentence
 - `items: "people-mc"` (Comment il / elle s’appelle ? for every person), `items: "ou-yn"` (“Tu entends « ou » ?” for that sound)
