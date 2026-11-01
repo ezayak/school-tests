@@ -95,6 +95,20 @@ window.GAMES = [
     // the pictures come from the Computer lessons (listed in the Computer entry's "also")
   },
   {
+    grade: 3,
+    term: 1,
+    period: "Final exam",
+    subject: "French",
+    title: "Révision",
+    lesson: "Exercices d’application · Examen final · 1er terme",
+    topics:
+      "Le verbe s’appeler, les salutations, voyelles et consonnes, Comment s’appelle ton école ?, choisis la bonne réponse, les consignes, les mots français",
+    path: "grade-3/term-1/french/revision-1.html",
+    countLabel: "12 exercises",
+    year: "2026–2027",
+    // the page and pictures are offline through the Grade 3 Français entry's "also"
+  },
+  {
     grade: 4,
     term: 1,
     period: "Mid-term exam",
@@ -473,6 +487,7 @@ window.GAMES = [
       "grade-3/term-1/french/lesson-3.js",
       "grade-3/term-1/french/lesson-4.html",
       "grade-3/term-1/french/lesson-4.js",
+      "grade-3/term-1/french/revision-1.js",
       "grade-3/term-1/french/img/lesson-1/age.jpg",
       "grade-3/term-1/french/img/lesson-1/ahmed.jpg",
       "grade-3/term-1/french/img/lesson-1/bonjour.jpg",
