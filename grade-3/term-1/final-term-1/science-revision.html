@@ -1,0 +1,299 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<meta name="theme-color" content="#1B2440">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Study Games">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
+</head><body>
+<title>Forces Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<link rel="stylesheet" href="../../../shared/theme.css">
+<link rel="stylesheet" href="../../../shared/quiz.css">
+
+<main class="wrap" id="app"></main>
+
+<script src="../../../shared/common.js"></script>
+<script src="../../../quiz-common.js"></script>
+<script>
+(function(){
+/* =====================================================================
+   Grade 3 Science · Final revision, Term 1
+   Topic 1: L2 Patterns in Motion, L3 Forces and Motion, L4 Balanced and Unbalanced Forces
+   From the teacher's slides, the Friction cut-and-paste sheet and Graded HW 2.
+   Pictures: img/science/<p>.jpg, cropped from those slides and sheets.
+   Question: {l: lesson 2, 3 or 4, p: picture, e: emoji picture, ps: pictures side by side (A, B, C…, use k),
+              q, o: [answers], c: right answer (default 0), k: keep the order, x: why}
+   ===================================================================== */
+
+/* ---------- drawing helpers ---------- */
+const em=(x,y,s,c,ex='')=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
+const tx=(x,y,t,c='lbl',a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
+const SKY='<rect class="f-sky" width="320" height="180"/>';
+const IMG=p=>`img/science/${p}.jpg`;
+// whole pictures in a grid (2×2 for four), each with its letter A, B, C… like the answer buttons
+const tiles=q=>{const n=q.ps.length,cols=n>3?2:n,rows=Math.ceil(n/cols),w=(320-6*(cols+1))/cols,h=(180-6*(rows+1))/rows;
+  return SKY+q.ps.map((p,i)=>{const x=6+(i%cols)*(w+6),y=6+Math.floor(i/cols)*(h+6);return `<rect class="f-card" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>${tx(x+14,y+h/2,'ABCD'[i],'lbl-big')}<image href="${IMG(p)}" x="${x+28}" y="${y+3}" width="${w-31}" height="${h-6}" preserveAspectRatio="xMidYMid meet"/>`}).join('')};
+// emoji picture: each group of emoji in its own slot, so a long row never runs off the picture
+const emo=e=>{const g=e.split(' '),s=Math.min(80,280/g.length/Math.max(...g.map(x=>x.replace(/[️‍]/g,'').length/2)));return SKY+g.map((x,i)=>em(160+(i-(g.length-1)/2)*(300/g.length),90,s,x)).join('')};
+
+const TF=['True','False'];
+const PP=['Push','Pull'];
+const AR=['Attract','Repel'];
+const BU=['Balanced','Unbalanced'];
+const CN=['Contact force','Noncontact force'];
+const FR=['Less friction: easy to move','More friction: hard to move'];
+const MC=[
+/* ===== Lesson 2 · Patterns in Motion (slides, Book p. 18) ===== */
+{l:2,p:'seesaw',q:'Many types of motion can be described by patterns.',o:TF,k:1},
+{l:2,p:'swing',q:'When you predict, you…',o:['Tell what will happen in the future','Tell what happened yesterday','Measure how far something went'],x:'When you predict, you tell what will happen in the future.'},
+{l:2,p:'swing',q:'Why can you predict the motion of a swing?',o:['Because it moves in a pattern','Because it never moves','Because it moves in a different way every time'],x:'A swing repeats the same motion, so you can predict where it will go next.'},
+{l:2,p:'swing',q:'What kind of motion does a swing have?',o:['Back and forth motion','Up and down motion','No pattern'],x:'A swing moves back and forth in a pattern.'},
+{l:2,p:'seesaw',q:'What kind of motion does a seesaw have?',o:['Up and down motion','Back and forth motion','Round and round motion'],x:'Each end of the seesaw goes up, then down, again and again.'},
+{l:2,p:'clock',q:'How do the hands of a clock move?',o:['Around in a circle','Up and down','With no pattern'],x:'Clock hands move around and around in a circle. That is a pattern.'},
+{l:2,p:'pendulum-clock',q:'How does the pendulum of a clock move?',o:['Back and forth','Up and down','Around in a circle'],x:'The pendulum swings back and forth, like a swing.'},
+{l:2,p:'bounce',q:'A bouncing ball moves…',o:['Up and down','Back and forth','Around in a circle'],x:'A bouncing ball goes up and down again and again.'},
+{l:2,p:'ball-box',q:'Predict: the ball bounces between the top and bottom of the box. What will its path look like?',o:['A zigzag','A circle','A straight line that stops'],x:'The ball goes down, bounces up, bounces down again… This makes a zigzag pattern.'},
+{l:2,p:'speakers',q:'The speakers on a TV vibrate. Why is this pattern of motion hard to see?',o:['We cannot see the vibrations','The speakers do not move at all','The speakers move in a big circle'],x:'The speakers vibrate, but we cannot see those vibrations.'},
+{l:2,p:'speaker',q:'Which pattern of motion is hard to see?',o:['A speaker that vibrates','A swing','A seesaw'],x:'We cannot see the vibrations of a speaker.'},
+{l:2,p:'wind-chime',q:'If a strong wind blows, the wind chime will…',o:['Swing back and forth quickly','Swing slowly','Stop moving'],x:'A strong wind makes the chime swing back and forth quickly.'},
+{l:2,p:'wind-chime',q:'If the wind stops, the wind chime will…',o:['Swing more slowly until it stops','Swing faster and faster','Fly away'],x:'Without wind, the chime swings more slowly until it stops.'},
+{l:2,p:'wind-chime',q:'If the wind changes direction, the wind chime will…',o:['Move in different directions','Stop right away','Move in the same direction as before'],x:'If the wind changes direction, the chime moves in different directions.'},
+{l:2,p:'wind-chime',q:'Changing directions will change the…',o:['Pattern of motion','Color of the object','Size of the object'],x:'Changing directions will change the pattern of motion.'},
+{l:2,p:'wasps',q:'Why are wasps hard to avoid?',o:['You cannot tell where they will go next','They always fly in a circle','They never move'],x:'Wasps move without a pattern, so you cannot predict where they will go.'},
+{l:2,p:'wasp',q:'Which one is motion WITHOUT a pattern?',o:['A wasp flying around','A swing','The hands of a clock'],x:'A swing and clock hands repeat their motion. A wasp does not.'},
+{l:2,p:'wasp',q:'All motion has a pattern.',o:TF,c:1,k:1,x:'Some motion does not have a pattern, like a wasp flying.'},
+
+/* ===== Lesson 3 · Forces and Motion (slides, Friction sheet, Graded HW 2) ===== */
+{l:3,p:'running-boy',q:'When something is moving, it is in ___',o:['motion','gravity','balance'],x:'When something is moving, it is in motion.'},
+{l:3,p:'train',q:'The train is moving. It is in ___',o:['motion','friction','tension']},
+{l:3,p:'rolling-ball',q:'What makes things move?',o:['A force','A picture','A color'],x:'A force makes things move.'},
+{l:3,p:'push-pull-door',q:'A force is…',o:['A push or a pull','A kind of food','The place where an object is'],x:'A force is a push or a pull.'},
+{l:3,p:'push-door',q:'Is the boy pushing or pulling the door?',o:PP,k:1,x:'The door says Push! He presses it away from him.'},
+{l:3,p:'pull-door',q:'Is the man pushing or pulling the door?',o:PP,c:1,k:1,x:'The door says PULL. He moves it toward him.'},
+{l:3,p:'wheelbarrow',q:'Is the boy pushing or pulling the wheelbarrow?',o:PP,k:1,x:'He moves it away from him.'},
+{l:3,p:'piglet',q:'Is the pig pushing or pulling the flower?',o:PP,c:1,k:1,x:'He moves the flower toward him.'},
+{l:3,p:'donkey',q:'Is the man pushing or pulling the donkey?',o:PP,c:1,k:1,x:'He holds the rope and moves the donkey toward him.'},
+{l:3,p:'pull-rope',q:'Is he pushing or pulling the rope?',o:PP,c:1,k:1},
+{l:3,p:'push-bus',q:'Are the children pushing or pulling the car?',o:PP,k:1,x:'They move the car away from them.'},
+{l:3,p:'push-car',q:'When you push something, it moves ___',o:['far from you','toward you','up into the sky'],x:'When you push something, it moves far from you.'},
+{l:3,p:'pull-wagon',q:'When you pull something, it moves ___',o:['toward you','far from you','in a circle'],x:'When you pull something, it moves toward you.'},
+{l:3,p:'tug-rope',q:'The children are pulling the rope. The rope moves ___ them.',o:['toward','far from'],k:1,x:'When you pull something, it moves toward you.'},
+{l:3,p:'catch-ball',q:'The boy throws the ball. The force makes the ball ___',o:['move','stop','disappear'],x:'A force can make something move.'},
+{l:3,p:'kick-ball',q:'The goalkeeper catches the ball. A force can ___ something from moving.',o:['stop','push','pull'],x:'A force can stop something from moving.'},
+{l:3,p:'stop-train',q:'Spider-Man holds back the moving train. A force can ___ a moving object.',o:['slow down','paint','stretch'],x:'A force can speed up or slow down a moving object.'},
+{l:3,p:'rolling-ball',q:'What can a force do?',o:['All of these','Make something move','Stop something from moving','Speed up or slow down a moving object'],k:1,x:'A force can make something move, stop it, or speed it up or slow it down.'},
+{l:3,p:'rubber-band',q:'Contact forces act between objects that are ___',o:['touching','not touching','far away'],x:'Contact forces act between objects that are touching.'},
+{l:3,p:'earth-gravity',q:'Noncontact forces act between objects that are ___',o:['not touching','touching','stuck together'],x:'Noncontact forces act between objects that are not touching.'},
+{l:3,p:'rubber-band',q:'Tension force is a ___ force that stretches something.',o:['pulling','pushing','noncontact'],x:'Tension: a pulling force that stretches something.'},
+{l:3,p:'exercise-band',q:'She pulls and stretches the band. Which force is this?',o:['Tension force','Gravity','Magnetism'],x:'A pulling force that stretches something is tension.'},
+{l:3,p:'spring',q:'Spring force comes from an object that has been ___',o:['stretched or squeezed','painted','frozen'],x:'Spring force is exerted by an object that has been stretched or squeezed.'},
+{l:3,p:'trampoline',q:'The trampoline pushes the girl up. Which force is this?',o:['Spring force','Friction','Gravity'],x:'The trampoline is squeezed and pushes back: spring force.'},
+{l:3,p:'spring-ramp',q:'The spring board throws the bike up. Which force is this?',o:['Spring force','Magnetism','Electricity']},
+{l:3,p:'rough-grass',q:'Friction is the force that makes objects ___',o:['hard to move','fly','shine'],x:'Friction is the force that makes objects hard to move.'},
+{l:3,p:'rough-grass',q:'Friction acts ___ the motion of an object.',o:['against','with','above'],x:'Friction is a contact force that acts against the direction of motion.'},
+{l:3,p:'rough-grass',q:'Friction can ___ the object.',o:['slow down or stop','speed up','lift up'],x:'Friction slows down or stops the object.'},
+{l:3,p:'smooth-road',q:'The car is on a smooth road. Is it easy or hard to move?',o:FR,k:1,x:'Smooth surface: less friction, easier to move.'},
+{l:3,p:'rough-grass',q:'The car is on rough grass. Is it easy or hard to move?',o:FR,c:1,k:1,x:'Rough surface: more friction, difficult to move.'},
+{l:3,p:'car-floor',q:'A toy car on a smooth floor.',o:FR,k:1,x:'The floor is smooth.'},
+{l:3,p:'car-carpet',q:'A toy car on a carpet.',o:FR,c:1,k:1,x:'A carpet is rough.'},
+{l:3,p:'box-floor',q:'A box on a smooth floor.',o:FR,k:1,x:'The floor is smooth.'},
+{l:3,p:'box-rough',q:'A box on a rough surface.',o:FR,c:1,k:1,x:'The surface is rough.'},
+{l:3,p:'skates-ice',q:'Skates on ice.',o:FR,k:1,x:'Ice is smooth.'},
+{l:3,p:'shoe-rough',q:'A shoe on a rough surface.',o:FR,c:1,k:1,x:'The surface is rough.'},
+{l:3,p:'push-box-floor',q:'She pushes a box on a smooth floor.',o:FR,k:1,x:'The floor is smooth.'},
+{l:3,p:'push-box-rough',q:'He pushes a box on a rough surface.',o:FR,c:1,k:1,x:'The surface is rough.'},
+{l:3,p:'smooth-road',q:'Friction is a noncontact force.',o:TF,c:1,k:1,x:'Friction is a contact force: the surfaces touch.'},
+{l:3,p:'apple-tree',q:'Gravity pulls an object toward another object. Gravity is a ___',o:CN,c:1,k:1,x:'Gravity pulls the apple down without touching it.'},
+{l:3,p:'apple-head',q:'Gravity pulls the apple ___',o:['down toward Earth','up to the sky','sideways'],x:'Gravity pulls the apple down toward Earth.'},
+{l:3,p:'gravity-boy',q:'Why is gravity a noncontact force?',o:['It pulls things without touching them','It only pushes','It needs a rope'],x:'Gravity pulls the apple down toward Earth without touching it.'},
+{l:3,p:'earth-gravity',q:'Which force pulls things down toward Earth?',o:['Gravity','Friction','Tension']},
+{l:3,p:'apple-tree',q:'Gravity is a contact force.',o:TF,c:1,k:1,x:'Gravity is a noncontact force.'},
+{l:3,p:'circuit',q:'Electricity acts between objects that are electrically ___',o:['charged','wet','heavy'],x:'Electricity acts between objects that are electrically charged.'},
+{l:3,p:'charges-attract',q:'A + and a − charge. Opposite charges ___ each other.',o:AR,k:1,x:'Opposite charges attract each other and move to each other.'},
+{l:3,p:'charges-repel',q:'Two + charges, or two − charges. The same charges ___ each other.',o:AR,c:1,k:1,x:'Objects with the same charge repel each other and move far away.'},
+{l:3,p:'magnet-nails',q:'Magnetic force can pull all ___ materials.',o:['magnetic','wooden','plastic'],x:'Magnetic force pulls all magnetic materials.'},
+{l:3,p:'magnets-attract',q:'Magnets can attract or ___ other magnets.',o:['repel','stretch','squeeze'],x:'Magnets can attract or repel other magnets.'},
+{l:3,p:'magnets-repel',q:'Magnetism is a ___',o:CN,c:1,k:1,x:'Magnets pull or push without touching.'},
+{l:3,p:'circuit',q:'Which one is a noncontact force?',o:['Electricity','Spring'],k:1,x:'Graded HW 2. Electricity acts between objects that are not touching.'},
+{l:3,p:'smooth-road',q:'Which one is a contact force?',o:['Friction','Gravity'],k:1,x:'Graded HW 2. Friction acts between surfaces that touch.'},
+{l:3,p:'exercise-band',q:'Which one is NOT a contact force?',o:['Magnetism','Tension','Spring','Friction'],x:'Contact forces: tension, spring, friction. Noncontact: gravity, electricity, magnetism.'},
+{l:3,p:'hw-apple-tree',q:'The apples fall from the tree. Which force?',o:['Gravity','Tension','Spring'],x:'Graded HW 2: gravity pulls the apples down.'},
+{l:3,p:'hw-band-man',q:'He stretches a rubber band. Which force?',o:['Tension','Gravity','Spring'],x:'Graded HW 2: a pulling force that stretches something is tension.'},
+{l:3,p:'hw-trampoline',q:'They jump on a trampoline. Which force?',o:['Spring','Gravity','Tension'],x:'Graded HW 2: the trampoline is squeezed and pushes back.'},
+{l:3,p:'hw-magnets',q:'The N end faces the N end. Attract or repel?',o:AR,c:1,k:1,x:'Graded HW 2: the arrows go apart. The same ends repel.'},
+{l:3,p:'hw-charges',q:'A + charge and a − charge. Attract or repel?',o:AR,k:1,x:'Graded HW 2: opposite charges attract.'},
+
+/* ===== Lesson 4 · Balanced and Unbalanced Forces (slides, Graded HW 2) ===== */
+{l:4,p:'balanced',q:'Two opposite forces of equal strength are ___ forces.',o:BU,k:1,x:'Balanced forces: two opposite forces of equal strength.'},
+{l:4,p:'unbalanced',q:'Two opposite forces with unequal strength are ___ forces.',o:BU,c:1,k:1,x:'Unbalanced forces: two opposite forces with unequal strength.'},
+{l:4,p:'balanced',q:'The forces are balanced. What happens to the box?',o:['No motion: it stays still','It moves'],k:1,x:'Balanced forces: there is no motion.'},
+{l:4,p:'unbalanced',q:'The forces are unbalanced. What happens to the box?',o:['It moves','No motion: it stays still'],k:1,x:'Unbalanced forces: motion occurs.'},
+{l:4,p:'balanced-1n',q:'1 N pushes one way, 1 N pushes the other way. Balanced or unbalanced?',o:BU,k:1,x:'Forces equal in strength, opposite in direction.'},
+{l:4,p:'unbalanced-1n',q:'2 N push one way, 1 N pushes the other way. Balanced or unbalanced?',o:BU,c:1,k:1,x:'Forces not equal in strength, opposite in direction.'},
+{l:4,p:'balanced-1n',q:'When the forces are balanced, the net force is ___',o:['zero','very big','gravity'],x:'Balanced forces: net force is zero.'},
+{l:4,p:'unbalanced-1n',q:'Unbalanced forces ___ motion.',o:['create','do not create'],k:1,x:'Unbalanced forces create motion.'},
+{l:4,p:'balanced',q:'Balanced forces create motion.',o:TF,c:1,k:1,x:'Balanced forces do not create motion.'},
+{l:4,p:'unbalanced',q:'Balanced and unbalanced forces are both ___ in direction.',o:['opposite','the same'],k:1,x:'In both, the forces are opposite in direction.'},
+{l:4,p:'hw-tug-of-war',q:'400 N pulls left, 300 N pulls right. The forces are…',o:BU,c:1,k:1,x:'Graded HW 2: 400 N and 300 N are not equal.'},
+{l:4,p:'hw-tug-of-war',q:'The two teams pull in ___ directions.',o:['opposite','the same'],k:1,x:'Graded HW 2: one team pulls left, the other pulls right.'},
+{l:4,p:'hw-tug-of-war',q:'Which way will the rope move?',o:['Left, to the 400 N team','Right, to the 300 N team','It will not move'],k:1,x:'The forces are unbalanced, so there is motion toward the stronger force (400 N).'},
+{l:4,p:'bike',q:'Many forces act on the bike. All forces combine to keep the bike moving. This is a ___ force.',o:['combined','spring','magnetic'],x:'Combined force: all forces combine to keep the bike moving.'},
+{l:4,p:'bike',q:'Which force acts on the bike wheels to slow the bike?',o:['Friction','Magnetism','Electricity'],x:'Friction acts on the bike wheels to slow the bike.'},
+{l:4,p:'bike',q:'To turn the bike, she pushes harder on the ___',o:['handlebars','wheels','helmet'],x:'Push harder on the handlebars to turn the bike.'},
+{l:4,p:'unbalanced-1n',q:'The sum of forces acting on an object is the ___',o:['Net force','Gravity'],k:1,x:'Graded HW 2: net force = the sum of forces acting on an object.'},
+{l:4,p:'spring-scale',q:'How can you find the strength of a force?',o:['By using a spring scale','By using a clock','By using a magnet'],x:'We measure the strength of a force with a spring scale.'},
+{l:4,p:'spring-scale',q:'The unit of force is the ___',o:['Newton (N)','Meter (m)','Second (s)'],x:'The unit of force is the newton (N).'},
+];
+
+const MT=[
+{l:2,t:'Match each thing to its pattern of motion',p:[['🧒','Swing','Back and forth'],['👧','Seesaw','Up and down'],['🕒','Clock hands','Around in a circle'],['🐝','Wasp','No pattern']]},
+{l:2,t:'Match what the wind does to what the wind chime does',p:[['💨','A strong wind blows','The chime swings back and forth quickly'],['🍃','The wind stops','The chime swings more slowly until it stops'],['🔄','The wind changes direction','The chime moves in different directions']]},
+{l:3,t:'Match each force to the picture (Graded HW 2)',p:[['🍎','Gravity','The apples fall from the tree'],['🪢','Tension','He stretches a rubber band'],['🤸','Spring','They jump on a trampoline']]},
+{l:3,t:'Match each contact force to its meaning',p:[['🪢','Tension','A pulling force that stretches something'],['🌀','Spring force','From an object that was stretched or squeezed'],['🛑','Friction','Makes objects hard to move']]},
+{l:3,t:'Match each noncontact force to its meaning',p:[['🍎','Gravity','Pulls an object toward another object'],['⚡','Electricity','Acts between electrically charged objects'],['🧲','Magnetism','Pulls magnetic materials']]},
+{l:3,t:'Match each word to its meaning',p:[['💪','Force','A push or a pull'],['🤝','Contact forces','Act between objects that are touching'],['🌍','Noncontact forces','Act between objects that are not touching'],['➕➖','Opposite charges','Attract each other']]},
+{l:4,t:'Match each word to its meaning',p:[['⚖️','Balanced forces','Equal in strength: no motion'],['📦','Unbalanced forces','Not equal in strength: motion'],['➕','Net force','The sum of forces acting on an object'],['🔩','Spring scale','Finds the strength of a force'],['N','Newton (N)','The unit of force']]},
+];
+
+const LESSONS=[{n:0,l:'All lessons'},{n:2,l:'L2 · Patterns in motion'},{n:3,l:'L3 · Forces & motion'},{n:4,l:'L4 · Balanced & unbalanced'}];
+const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
+const pool=()=>{const n=LESSONS[lesIdx].n;return {mc:MC.filter(q=>!n||q.l===n),mt:MT.filter(q=>!n||q.l===n)}};
+const LENS=[{mc:8,mt:2,l:'Quick · 10'},{mc:16,mt:4,l:'Normal · 20'},{mc:0,mt:0,l:'All'}];
+const store=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let lenIdx=1,lesIdx=0;
+try{const v=localStorage.getItem('g3fq-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
+try{const v=localStorage.getItem('g3fq-lesson');if(v!==null&&LESSONS[+v])lesIdx=+v}catch(e){}
+
+const S={list:[],i:0,score:0,max:0,miss:[]};
+const app=document.getElementById('app');
+const {esc,shuf,pick,star}=Kit;
+const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+const scene=q=>q.p?`<img class="scene pic fit" src="${IMG(q.p)}" alt="Picture for the question">`:`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${q.ps?tiles(q):emo(q.e)}</svg></div>`;
+
+function start(){
+  const L=LENS[lenIdx],P=pool();
+  const mc=shuf(P.mc).slice(0,L.mc||P.mc.length).map(q=>({type:'mc',...q}));
+  const mt=shuf(P.mt).slice(0,L.mt||P.mt.length).map(q=>({type:'mt',...q}));
+  let list=shuf(mc.concat(mt));
+  // avoid two matching rounds in a row when possible
+  for(let i=1;i<list.length;i++){if(list[i].type==='mt'&&list[i-1].type==='mt'){const j=list.findIndex((q,k)=>k>i&&q.type==='mc');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
+  S.list=list;S.i=0;S.score=0;S.miss=[];
+  S.max=list.reduce((t,q)=>t+(q.type==='mc'?1:q.p.length),0);
+  render();
+}
+
+function hud(){
+  const pct=Math.round(S.i/S.list.length*100);
+  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+}
+
+function render(){
+  if(!S.list.length) return home();
+  if(S.i>=S.list.length) return end();
+  const q=S.list[S.i];
+  q.type==='mc'?renderMC(q):renderMT(q);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function home(){
+  const P=pool(),n=P.mc.length+P.mt.length;
+  app.innerHTML=`<section class="card pop">
+    <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 Science · Final revision</span></div>
+    <h1 class="hero-title"><span class="p">Forces</span> <span class="k">Quest</span></h1>
+    ${scene({p:'hw-tug-of-war'})}
+    <p class="howto">Ready? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
+    <div class="chips"><span class="chip pe">Patterns in motion</span><span class="chip ht">Forces &amp; motion</span><span class="chip ke">Balanced &amp; unbalanced forces</span></div>
+    <div class="row"><span class="eyebrow">Which lessons?</span><div class="seg" role="group" aria-label="Lessons">${LESSONS.map((l,i)=>`<button type="button" id="les-${i}" data-les="${i}" aria-pressed="${i===lesIdx}">${l.l}</button>`).join('')}</div></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${i===LENS.length-1?'All · '+n:l.l}</button>`).join('')}</div></div>
+    <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
+  </section>`;
+  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;store('g3fq-len',lenIdx);home()});
+  app.querySelectorAll('[data-les]').forEach(b=>b.onclick=()=>{lesIdx=+b.dataset.les;store('g3fq-lesson',lesIdx);home()});
+  document.getElementById('startBtn').onclick=start;
+}
+
+function renderMC(q){
+  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
+  if(!q.k) opts=shuf(opts);
+  const long=opts.some(o=>o.t.length>34);
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mc">${q.o===TF?'True or false':'Choose the answer'}</span>
+    ${scene(q)}
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="fbx"></div>
+  </section>`;
+  const btns=[...app.querySelectorAll('.opt')];
+  btns.forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.i];
+    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
+    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
+    document.getElementById('pts').textContent=S.score;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x||"")}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  });
+}
+
+function renderMT(q){
+  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
+  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
+  const pair={}; // leftIdx -> rightIdx
+  let sel=null, checked=false;
+  app.innerHTML=`${hud()}<section class="card pop">
+    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    <p class="qtext">${esc(q.t)}</p>
+    <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
+    <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
+    <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
+  </section>`;
+  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
+  function draw(){
+    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
+      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
+    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
+      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
+    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
+    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
+      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
+      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
+    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
+  }
+  draw();
+  document.getElementById('checkBtn').onclick=()=>{
+    checked=true;let got=0;
+    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
+    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
+    const all=got===q.p.length;
+    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right meaning under the word.'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
+    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
+  };
+}
+
+function end(){
+  const pct=Math.round(S.score/S.max*100);
+  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const msg=pct===100?'Perfect score! You are ready for the exam.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below and play again.';
+  app.innerHTML=`<section class="card pop">
+    <span class="eyebrow">Your score</span>
+    <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
+    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <h2>${pct}% · ${msg}</h2>
+    <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
+  </section>
+  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
+  document.getElementById('againBtn').onclick=start;
+  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+Quiz.watch(app);
+home();
+})();
+</script>
+</body></html>
