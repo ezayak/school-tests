@@ -276,10 +276,17 @@ Booklet texts are **story pages** (`story-*.html/.js`, the story engine) with `l
     `i` independent clause, `d` dependent clause, `c` conjunction, `p` punctuation, `f` fragment, `x` a mistake, `l` a plain label
 - more item types: `{type: "tapw", q, s: "text", ans: {word: "label"}, fix: true}` (tap the words: long e words, conjunctions, or spelling mistakes with `fix`),
   `{type: "sort", q, cols: [{k, t, ex, e}], words: [{w, k, e}]}` (tap a word, then its box; `k` can be a list), `mc` with `keep: [...]` (answers always in this order),
-  `order` with a picture (build a sentence from cards)
+  `order` with a picture (build a sentence from cards); an exercise with `keep: true` keeps its items in order (a summary frame)
 
 New week: copy a week's `.html` (change the `.js`), write its `.js`, add it to `english/dictations.js` (`kind: "Lesson"`),
 add its files and pictures to the English entry's `also` in `games.js`, and bump `VERSION` in `sw.js`.
+
+### English revision (Grade 4)
+
+`grade-4/term-1/english/revision-1.html` is the Term 1 final exam revision, on the same engine. The page loads `unit1-week3/4/5.js`
+(each one keeps its data in `window.EN_DATA[N]`) before `revision-1.js`, so the revision can reuse their decks, games and exercises:
+`ref("5:vfill", "exercises", g)` takes exercise `vfill` of Week 5 and shows it in section `g`. Sections follow the school's exam memo;
+new exercises use the week's texts (pictures by `src`). It is a "Final exam" card in `games.js` (not on the English page); its files are in the English entry's `also`.
 
 ## Arabic lessons (Grade 3)
 
