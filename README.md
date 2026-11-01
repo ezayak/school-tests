@@ -393,26 +393,46 @@ Made to be understood from pictures and sound: big pictures from the book, every
 🔊 / 🐢 slow / 👆 word-by-word reading, wrong answers can be tried again, 💡 help in the building games. Optional translation EN / UA / AR.
 
 Shared files (no need to touch them for a new lesson):
-- `french-lesson.js` — the engine (`<body data-view="list|lesson">`)
+- `french-lesson.js` — the engine (`<body data-view="list|lesson">`); a lesson or a revision is only data
 - `shared/lesson.css` — the lesson look (shared with the Computer lessons); the base comes from `shared/theme.css`
 
-Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`), `lesson-N.js` (all the content), `img/lesson-N/` (pictures cropped from the book).
+Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js` and the title), `lesson-N.js` (all the content), `img/lesson-N/` (pictures cropped from the book).
+`lesson-2.js` is the fullest example. A picture is `img: "chadi"` (this lesson's folder), `img: "lesson-1/mounir"` (another lesson's folder) or `emoji: "👧"`.
 
-A lesson page has three tabs, like the Arabic lessons (the last tab used is remembered):
-- **Apprends** – the story (picture by picture), the words (flash cards), a sound (« ou »), the verb
-- **Joue** – Écoute et touche (hear a sentence, tap the picture), Relie (pictures ↔ names), Construis le mot (letters), Construis la phrase (word cards or letters), Il ou Elle ?
-- **Exercices** – the school sheets: `exercises: [{k, t, en, img, from, items}]`
+A lesson page has three tabs, like the Arabic lessons (the last tab used is remembered). The lesson file lists its tiles and their pictures:
+- **Apprends** – `learn: [{k, img}]`, k = `story` (picture by picture), `words` (flash cards of `people` + `phrases`),
+  `sound` with `s: "ou"` (one tile per sound in `sounds`), `verb` (only s’appeler), `rule` (a grammar card: `rule`)
+- **Joue** – `play: [{k, img}]`, k = `listen` (hear a person’s sentence, tap the picture), `match` (pictures ↔ names, rounds of up to 5),
+  `bword` (letters, from `build`), `bsent` (word cards or letters, from `sentences`), `ilelle` (Il ou Elle ?),
+  or `game` with its own `t`, `en` and `items` (e.g. Un ou une ?)
+- **Exercices** – the school sheets: `exercises: [{k, t, en, img, from, items, keep?}]` (`keep: true` keeps the order)
 
-Exercise item types (each can have `img: "name"` or `emoji: "👧"`):
-- `{type:"order", fr, q?}` – Mets en ordre (m’ / t’ / s’ become their own cards, like at school)
+The parts of a lesson file:
+- `people: [{fr, img, g: "il"|"elle", say?, en, uk, ar}]` – `say` is what the card says (“C’est un garçon. Il s’appelle Chadi.”), otherwise “Il / Elle s’appelle …”
+- `phrases: [{fr, img|emoji, en, uk, ar}]`, `story: [{img, title?, lines: [{who, fr}]}]` (`title` = “Des phrases pour parler”: not in “Lis tout”)
+- `sounds: [{s, ipa, intro, hear, img, words, pics, not}]` – `intro` / `hear`: what the voice says when the screen opens / on the big button;
+  a word’s picture comes from `pics`, a person or a phrase card; `not` = words without the sound, for the “Tu entends … ?” game
+- `rule: {t, en, fr, img, groups: [{t, en, lines}], games: [{t, x: exercise k}]}` – the capital letter and the end mark of each line light up
+- `sentences: [{fr, img}]`, `build: ["Chadi", {fr: "garçon", img: "fouad"}]`
+- `dict` (sentence → [en, uk, ar]) and `auto(fr)` (translations made from a pattern; null when it doesn’t know)
+- the last line keeps the data for a revision: `(window.FR_DATA = window.FR_DATA || {})[N] = window.LESSON;`
+
+Exercise item types (each can have `img` or `emoji`):
+- `{type:"order", fr, q?}` – Mets en ordre (m’ / t’ / s’ before « appel… » and j’ become their own cards, like at school)
 - `{type:"letters", fr}` – build a word, or a sentence word by word
-- `{type:"fill", parts:["Je ", ["m’","t’","s’"], "appell", ["e","es"], " Bouli."], ans:["m’","e"]}`
-- `{type:"mc", q, opts:[right, wrong, …], icons?}` – the first option is the right one
+- `{type:"fill", parts:["Je ", ["m’","t’","s’"], "appell", ["e","es"], " Bouli."], ans:["m’","e"]}` – also capital letters (`[["c","C"], "omment…"]`) and end marks (`["Comment tu t’appelles", [".","?","!"]]`)
+- `{type:"mc", q, opts:[right, wrong, …], icons?, full?}` – the first option is the right one; `full` = the whole answer that is said and shown
 - `{type:"tap", say, opts:[img, img, img]}` – the first picture is the right one
 - `{type:"match", pairs:[{img, fr}, …]}`
-- `{type:"yn", fr, a:true|false}`
+- `{type:"yn", fr, a:true|false, ask, x, fix?}` – “C’est une phrase ?”: `x` explains, `fix` is the right sentence
+- `items: "people-mc"` (Comment il / elle s’appelle ? for every person), `items: "ou-yn"` (“Tu entends « ou » ?” for that sound)
 
-After adding a lesson: add it to `lessons.js`, add its files to the `also: [...]` list of the French entry in `games.js`, and bump `VERSION` in `sw.js`.
+After adding a lesson: add it to `lessons.js`, add its files and pictures to the `also: [...]` list of the French entry in `games.js` (plus `countLabel` / `topics`), and bump `VERSION` in `sw.js`.
+
+**French revision** (Final term 1): `revision-1.html` / `revision-1.js` in the same folder, on the same engine, so the sound, tap-a-word and translations work.
+The page loads `lesson-1.js` and `lesson-2.js` before `revision-1.js`. The revision has only the Exercices tab (no `learn` / `play`), `label: "Révision"`,
+`use: [1, 2]` (the lessons’ translations), pictures from the lessons’ folders (`img: "lesson-2/parle-9"`), and can take a lesson’s exercise as it is: `ref: "2:phrase"`.
+Its card is under “Final exam” in `games.js`; its files are in the French entry’s `also`.
 
 ## Computer lessons (Grade 4)
 
