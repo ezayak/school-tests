@@ -205,6 +205,20 @@ window.GAMES = [
     // the photos come from the Science lessons (listed in the Science entry's "also")
   },
   {
+    grade: 4,
+    term: 1,
+    period: "Final exam",
+    subject: "French",
+    title: "Révision",
+    lesson: "Leçons 1 et 2 · Exercices d’application du 1er terme",
+    topics:
+      "Mets en ordre, le verbe s’appeler, Comment il / elle s’appelle ?, les sons « on » et « ch », C’est une phrase ?, Réponds, . ? !, la majuscule, Qui est-ce ?",
+    path: "grade-4/term-1/french/revision-1.html",
+    countLabel: "11 exercises",
+    year: "2026–2027",
+    // the page and pictures are offline through the Français entry's "also" (lesson-1.js, lesson-2.js, img/)
+  },
+  {
     grade: 3,
     period: "Subjects",
     subject: "English",
@@ -494,6 +508,7 @@ window.GAMES = [
       "grade-4/term-1/french/img/lesson-1/x-mounir.jpg",
       "grade-4/term-1/french/lesson-2.html",
       "grade-4/term-1/french/lesson-2.js",
+      "grade-4/term-1/french/revision-1.js",
       "grade-4/term-1/french/img/lesson-2/alice.jpg",
       "grade-4/term-1/french/img/lesson-2/bongo.jpg",
       "grade-4/term-1/french/img/lesson-2/bouli.jpg",
