@@ -125,40 +125,12 @@ body {
   gap: 10px;
   width: 100%;
 }
-.spell-in {
-  font: 700 1.6rem var(--body);
-  letter-spacing: 0.06em;
-  color: var(--ink);
-  background: var(--card);
-  border: 2.5px solid var(--ink);
-  border-radius: 14px;
-  padding: 12px 14px;
-  width: 100%;
-  text-align: center;
-}
-.spell-in:focus-visible {
-  outline: 3px solid var(--cool);
-  outline-offset: 2px;
-}
 .dots {
   font-family: var(--display);
   font-size: 1.4rem;
   letter-spacing: 0.35em;
   color: var(--muted);
   text-align: center;
-}
-.diff {
-  font: 700 1.6rem var(--body);
-  letter-spacing: 0.06em;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-.diff .ok {
-  color: var(--good);
-}
-.diff .bad {
-  color: var(--bad);
-  text-decoration: underline;
 }
 .slots {
   display: flex;
