@@ -170,5 +170,24 @@ window.ENGLISH = {
       path: "../../term-2/english/" + path,
       term: 2,
     })),
+    {
+      kind: "Lesson",
+      title: "Unit 3 · Week 2",
+      sound: "Verb tenses",
+      words:
+        "Past, present, future · simple and progressive · subject-verb agreement · silent letters · context clues · How Vera Helped",
+      note: "1 story · 18 exercise sets",
+      path: "../../term-2/english/unit3-week2.html",
+      term: 2,
+    },
+    {
+      kind: "Story",
+      title: "How Vera Helped",
+      sound: "Realistic fiction",
+      words: "Classwork booklet · Unit 3 Week 2",
+      note: "8 pages · 7 questions",
+      path: "../../term-2/english/story-vera.html",
+      term: 2,
+    },
   ],
 };
