@@ -147,6 +147,7 @@ Rules for every French file:
 Folders: `grade-4/term-1/english/`, `grade-4/term-2/english/`, … One English page for all terms: `grade-4/term-1/english/index.html` (list in its `dictations.js`).
 Engines: lessons `shared/computer-lesson.js` (`<body data-subject="English">`), stories `shared/story.js` (don't copy them; a lesson or a story is only a data file).
 Format in README: "English stories", "English lessons (Grade 4)", "English revision"; `term-1/english/unit1-week5.js` is the fullest example.
+Step-by-step procedure, lessons learned and the check scripts (data check, play-through, screenshots, offline list): the `english-lesson` skill in `.claude/skills/english-lesson/`.
 Sources: the term booklets in `~/Documents/2026-2027/Alex/!booklets/` (Classwork and Homework Booklet), and `~/Documents/2026-2027/Alex/English/Term N/`
 (shared reads, leveled readers, model answers, memos, dictations). Alex is learning to read again: everything is read aloud, a picture on every item.
 

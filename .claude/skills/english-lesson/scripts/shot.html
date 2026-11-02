@@ -1,0 +1,32 @@
+<!doctype html><meta charset="utf-8" />
+<body style="margin: 0">
+  <iframe id="f" style="width: 1280px; height: 900px; border: 0"></iframe>
+  <script>
+    // ?tab=exercises&sec=2&id=x-ssort&card=0 → opens that tile; card=N clicks "next card" N times in a deck
+    const P = new URLSearchParams(location.search),
+      f = document.getElementById("f");
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    f.src = P.get("p") + "?t=" + Math.random();
+    f.onload = async () => {
+      const d = f.contentDocument,
+        q = (s) => d.querySelector(s);
+      await wait(200);
+      if (P.get("tab")) {
+        q(`[data-tab="${P.get("tab")}"]`).click();
+        await wait(100);
+      }
+      if (P.get("sec")) {
+        q(`[data-sec="${P.get("sec")}"]`).click();
+        await wait(100);
+      }
+      if (P.get("id")) {
+        q("#" + P.get("id")).click();
+        await wait(300);
+      }
+      for (let i = 0; i < +(P.get("card") || 0); i++) {
+        q("#nextBtn").click();
+        await wait(150);
+      }
+    };
+  </script>
+</body>
