@@ -621,8 +621,8 @@ window.LESSON = {
       k: "who",
       tab: "games",
       t: "نَشَاطٌ (١): مَنْ أَنَا؟",
-      en: "Activity 1: Who am I?",
-      uk: "Завдання 1: Хто я?",
+      en: "Activity 1 (p. 47): Who am I?",
+      uk: "Завдання 1 (с. 47): Хто я?",
       ic: "🙋",
       items: [
         {
@@ -679,8 +679,8 @@ window.LESSON = {
       k: "crown",
       tab: "games",
       t: "نَشَاطٌ (٢): تَاجُ الْأَمَانَةِ",
-      en: "Activity 2: The crowns of Joseph's virtues",
-      uk: "Завдання 2: Корони Йосипових чеснот",
+      en: "Activity 2 (p. 47): The crowns of Joseph's virtues",
+      uk: "Завдання 2 (с. 47): Корони Йосипових чеснот",
       ic: "👑",
       rule: {
         t: "📝 What to do · الْمَطْلُوبُ",
@@ -735,8 +735,8 @@ window.LESSON = {
       k: "pic",
       tab: "games",
       t: "نَشَاطٌ (٣): صُورَةٌ وَحَدَثٌ",
-      en: "Activity 3: A picture and an event",
-      uk: "Завдання 3: Малюнок і подія",
+      en: "Activity 3 (p. 47): A picture and an event",
+      uk: "Завдання 3 (с. 47): Малюнок і подія",
       ic: "🖼️",
       items: [
         {
@@ -925,8 +925,8 @@ window.LESSON = {
       k: "do",
       tab: "games",
       t: "نَشَاطٌ (٤): مَاذَا تَفْعَلُ؟",
-      en: "Activity 4: What would you do?",
-      uk: "Завдання 4: Що ти зробиш?",
+      en: "Activity 4 (p. 48): What would you do?",
+      uk: "Завдання 4 (с. 48): Що ти зробиш?",
       ic: "🤔",
       items: [
         {

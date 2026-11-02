@@ -459,8 +459,8 @@ window.LESSON = {
       k: "sick",
       tab: "games",
       t: "نَشَاطٌ (١): لَوِّنْ وَنَاقِشْ",
-      en: "Activity 1: Colour and talk about it",
-      uk: "Завдання 1: Розфарбуй і обговори",
+      en: "Activity 1 (p. 35): Colour and talk about it",
+      uk: "Завдання 1 (с. 35): Розфарбуй і обговори",
       ic: "🩺",
       items: [
         {
@@ -499,8 +499,8 @@ window.LESSON = {
       k: "pics",
       tab: "games",
       t: "نَشَاطٌ (٢): حَدَثٌ وَصُورَةٌ",
-      en: "Activity 2: An event and a picture",
-      uk: "Завдання 2: Подія і малюнок",
+      en: "Activity 2 (p. 35): An event and a picture",
+      uk: "Завдання 2 (с. 35): Подія і малюнок",
       ic: "🖼️",
       items: [
         {
@@ -549,8 +549,8 @@ window.LESSON = {
       k: "secret",
       tab: "games",
       t: "نَشَاطٌ (٣): كَلِمَةُ السِّرِّ",
-      en: "Activity 3: The secret sentence",
-      uk: "Завдання 3: Таємне речення",
+      en: "Activity 3 (p. 36): The secret sentence",
+      uk: "Завдання 3 (с. 36): Таємне речення",
       ic: "🔐",
       items: [
         {
@@ -567,8 +567,8 @@ window.LESSON = {
       k: "like",
       tab: "games",
       t: "نَشَاطٌ (٤): أَنَا أَتَمَثَّلُ بِالرَّبِّ يَسُوعَ",
-      en: "Activity 4: I act like the Lord Jesus (✓ = 🙂, ✗ = 🙁)",
-      uk: "Завдання 4: Я наслідую Господа Ісуса (✓ = 🙂, ✗ = 🙁)",
+      en: "Activity 4 (p. 36): I act like the Lord Jesus (✓ = 🙂, ✗ = 🙁)",
+      uk: "Завдання 4 (с. 36): Я наслідую Господа Ісуса (✓ = 🙂, ✗ = 🙁)",
       ic: "🙂",
       items: [
         {

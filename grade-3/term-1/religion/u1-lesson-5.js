@@ -489,8 +489,8 @@ window.LESSON = {
       k: "order",
       tab: "games",
       t: "نَشَاطٌ (١): رَتِّبِ الْأَحْدَاثَ",
-      en: "Activity 1: Put the events in order",
-      uk: "Завдання 1: Розташуй події по порядку",
+      en: "Activity 1 (p. 25): Put the events in order",
+      uk: "Завдання 1 (с. 25): Розташуй події по порядку",
       ic: "🔢",
       items: [
         {
@@ -538,8 +538,8 @@ window.LESSON = {
       k: "pic",
       tab: "games",
       t: "نَشَاطٌ (٢): صُورَةٌ وَحَدَثٌ",
-      en: "Activity 2: A picture and an event",
-      uk: "Завдання 2: Малюнок і подія",
+      en: "Activity 2 (p. 25): A picture and an event",
+      uk: "Завдання 2 (с. 25): Малюнок і подія",
       ic: "🖼️",
       items: [
         {
@@ -620,8 +620,8 @@ window.LESSON = {
       k: "imagine",
       tab: "games",
       t: "نَشَاطٌ (٣): تَخَيَّلْ وَاكْتُبْ",
-      en: "Activity 3: Imagine and write",
-      uk: "Завдання 3: Уяви й напиши",
+      en: "Activity 3 (p. 26): Imagine and write",
+      uk: "Завдання 3 (с. 26): Уяви й напиши",
       ic: "✍️",
       items: [
         {
