@@ -5,6 +5,7 @@ window.STORY = {
   title: "The Beauty of Nature",
   kind: "Poetry · Haiku · Homework booklet",
   cover: "img/beauty-nature/leaves.jpg",
+  lesson: { path: "unit2-week5.html", label: "Unit 2 · Week 5" },
   hub: "../../term-1/english/index.html",
   question: "How are writers inspired by nature?",
   gloss: {

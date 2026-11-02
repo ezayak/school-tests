@@ -126,6 +126,16 @@ window.ENGLISH = {
       path,
     })),
     // Term 2: files in grade-4/term-2/english/
+    {
+      kind: "Lesson",
+      title: "Unit 2 · Week 5",
+      sound: "Combining sentences",
+      words:
+        "Phrases, appositives, interjections · suffixes · similes & metaphors · 4 words · Deer, The Nautilus, The Beauty of Nature, The Magic of Rain",
+      note: "4 poems · 19 exercise sets",
+      path: "../../term-2/english/unit2-week5.html",
+      term: 2,
+    },
     ...[
       [
         "Deer",

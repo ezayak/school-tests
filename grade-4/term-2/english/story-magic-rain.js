@@ -5,6 +5,7 @@ window.STORY = {
   title: "The Magic of Rain",
   kind: "Poetry · Homework booklet",
   cover: "img/magic-rain/raindrops.jpg",
+  lesson: { path: "unit2-week5.html", label: "Unit 2 · Week 5" },
   hub: "../../term-1/english/index.html",
   question: "How are writers inspired by nature?",
   gloss: {

@@ -6,6 +6,7 @@ window.STORY = {
   title: "Deer",
   kind: "Poetry · Classwork booklet",
   cover: "img/deer/deer.jpg",
+  lesson: { path: "unit2-week5.html", label: "Unit 2 · Week 5" },
   hub: "../../term-1/english/index.html",
   question: "How are writers inspired by animals?",
   gloss: {
