@@ -21,7 +21,8 @@ window.STORY = {
     backward: "going back, not forward",
     steer: "to make it go the right way",
     puzzling: "hard to understand",
-    lyric: "a lyric poem tells the poet’s own feelings, often with rhyme, like a song",
+    lyric:
+      "a lyric poem tells the poet’s own feelings, often with rhyme, like a song",
     rhyme: "words that end with the same sound: sea, me",
     scheme: "a rhyme scheme = which lines rhyme with which",
     speaker: "the person who talks in the poem",

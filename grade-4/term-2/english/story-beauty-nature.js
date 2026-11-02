@@ -12,8 +12,10 @@ window.STORY = {
     crisp: "cool, dry and fresh",
     whispers: "speaks very softly",
     autumn: "the season when the leaves fall; also called fall",
-    haiku: "a short poem from Japan: 3 lines, with 5, 7 and 5 syllables, about nature",
-    lyric: "a lyric poem tells the poet’s own feelings, often with rhyme, like a song",
+    haiku:
+      "a short poem from Japan: 3 lines, with 5, 7 and 5 syllables, about nature",
+    lyric:
+      "a lyric poem tells the poet’s own feelings, often with rhyme, like a song",
     consistent: "always the same",
     meter: "the beat of a poem: how many syllables in each line",
     syllables: "the beats in a word: gol-den = 2 syllables",

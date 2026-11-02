@@ -26,9 +26,11 @@ window.STORY = {
     ignored: "not listened to",
     glee: "great joy",
     harmony: "music notes that sound nice together",
-    lyric: "a lyric poem tells the poet’s own feelings, often with rhyme, like a song",
+    lyric:
+      "a lyric poem tells the poet’s own feelings, often with rhyme, like a song",
     serenity: "calm and peace",
-    haiku: "a short poem from Japan: 3 lines, with 5, 7 and 5 syllables, about nature",
+    haiku:
+      "a short poem from Japan: 3 lines, with 5, 7 and 5 syllables, about nature",
     metaphor: "says one thing is another thing: each drop is a note",
     syllables: "the beats in a word: rain-drops = 2 syllables",
     stanza: "a group of lines in a poem, like a paragraph",

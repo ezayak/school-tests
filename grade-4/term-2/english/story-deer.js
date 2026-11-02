@@ -218,7 +218,11 @@ window.STORY = {
         ],
       },
       q: "What are the “six white arrows”?",
-      o: ["the white tails of the deer", "real arrows", "the lights of the car"],
+      o: [
+        "the white tails of the deer",
+        "real arrows",
+        "the lights of the car",
+      ],
       x: "This is a metaphor: the tails are not arrows, but they point up like arrows.",
     },
     {
@@ -243,11 +247,7 @@ window.STORY = {
         ],
       },
       q: "“Calm as ponds.” What does it tell us about the deer?",
-      o: [
-        "They are quiet and peaceful.",
-        "They are wet.",
-        "They are angry.",
-      ],
+      o: ["They are quiet and peaceful.", "They are wet.", "They are angry."],
       x: "The water of a pond is still and quiet, like the deer.",
     },
     {
