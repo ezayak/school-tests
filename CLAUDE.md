@@ -126,6 +126,46 @@ Rules for every French file:
 - A change to the engine must leave the existing lessons as they were: render every screen of the old and new version with the same `Math.random` seed and compare (headless Chrome: `google-chrome --headless=new --dump-dom` on a harness page that clicks through an iframe), then play every game and exercise to the score screen.
 - Check in the browser: the list, each tab, the sound and rule screens, translations on, one exercise of each type.
 
+## English (Grade 4): lessons and stories
+Folders: `grade-4/term-1/english/`, `grade-4/term-2/english/`, … One English page for all terms: `grade-4/term-1/english/index.html` (list in its `dictations.js`).
+Engines: lessons `shared/computer-lesson.js` (`<body data-subject="English">`), stories `shared/story.js` (don't copy them; a lesson or a story is only a data file).
+Format in README: "English stories", "English lessons (Grade 4)", "English revision"; `term-1/english/unit1-week5.js` is the fullest example.
+Sources: the term booklets in `~/Documents/2026-2027/Alex/!booklets/` (Classwork and Homework Booklet), and `~/Documents/2026-2027/Alex/English/Term N/`
+(shared reads, leveled readers, model answers, memos, dictations). Alex is learning to read again: everything is read aloud, a picture on every item.
+
+Sources log (Term 2 on; Term 1 sources are in the `// Sources:` line at the top of each file):
+- Each term folder has `SOURCES.md` (every source file page by page: what it was built into, `file · key`, or why it was skipped),
+  `TODO.md` (tasks waiting for a text that is not scanned yet), `UNVERIFIED.md` (answers written without a school key).
+- Before building: read `SOURCES.md` and compare it with the source folders; build only the pages that are not in it, and say which ones are already built.
+- With every lesson or story: update its rows in the three files, in the same commit.
+
+Sorting:
+- Wonders pages say the week at the foot ("Grade 4 · Unit 2 · Week 5"), school sheets at the top ("Unit 2 week 5"). The booklets go week by week after a divider page
+  (with "Talk About It" = the week's cover picture and Essential Question).
+- A text (Genre Passages O1–O3, a homework comprehension text, a poem) = a story; its questions go in the story. Grammar, phonics, spelling, vocabulary pages = exercises of the week's lesson.
+- Skipped: cover, dividers, fluency charts ("Words Read / Number of Errors"), a page printed in both booklets (build it once).
+  A task about a text that is not in the booklet (writing frames, "Read this excerpt from …"): into `TODO.md` until the user sends the scan.
+- Words missing or unreadable: never guess. List them and ask.
+- Answers: from the school's model answers or memo when there are some. Without a key: give the likely answer, add a `// unverified` comment and a row in `UNVERIFIED.md`.
+
+What to build:
+- **Lesson** `unitN-weekM.js` + `.html` (copy `term-1/english/unit1-week5.html`, change the `.js` and the title), pictures in `img/unitN-weekM/`.
+  `key: "en4-uNwM"`, `unit: "Unit N · Week M"`, `hub`: the English page (`"../../term-1/english/index.html"` from a later term), `question` = the Essential Question.
+  Learn: the week's story tiles, then decks (vocabulary words, the grammar rule boxes, the spelling list by pattern, figurative language), each card with `vis`, `src` or `emoji`.
+  Play: games for the week's points (sort, match, mc). Exercises: every booklet task, one exercise each, `from: "Classwork p. 3"` (the PDF page number, printed at the bottom centre),
+  `g` = the section ("🧩 Grammar · …", "🔊 Phonics · …", "🔤 Vocabulary", "🧱 Vocabulary strategy · …", "📖 Reading · …"); items in the booklet's order.
+- **Story** `story-<name>.js` + `.html` (copy `term-1/english/story-helping-hand.html`, change the `.js`), pictures in `img/<name>/` (`pdftoppm -r 200`, then PIL; ~700px, small pictures ~400px).
+  Text exactly as printed, short pages, one `easy` sentence each, `gloss` for the hard words, the booklet's questions in order; `lesson: {path, label}`, and `hub` (as above) from a later term.
+- Item types: circle / choose / which sentence is right → `mc` (right one first; `keep` for a fixed list like the tense names); underline or circle words in a sentence → `tapw`;
+  word sort, "write the words that contain …" → `sort`; match a word to its meaning → `match` or `mc`; complete a verb, fill a gap → `mc` with likely wrong forms;
+  rewrite / combine / correct a sentence → `mc` (which is right) or `order` (build it from cards); question about a text, writing task → `open` with a model answer.
+
+Then:
+- Entry in `term-1/english/dictations.js` (`kind: "Lesson"` / `"Story"`, `term: N` for a later term, which shows a "Term N" tag; path from the term-1 folder: `"../../term-2/english/…"`).
+- The new files and pictures in `also` of the Grade 4 English entry in `games.js`, plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+- Check with a script: every item has a picture, every `img` / `src` exists, every picture file is used and in `also`, every `path` and `hub` link opens.
+- Check in the browser: the English page (the tag), each tab and section of the lesson, every story page, one exercise of each type, the back links.
+
 ## Checking changes
 - Local server: `python3 -m http.server 8765 --bind 127.0.0.1` from the repo root; open the hubs:
   `index.html`, `grade-4/term-1/{french,english}/index.html`, `grade-{3,4}/computer/index.html`, `grade-3/term-1/english/index.html`.
