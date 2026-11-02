@@ -32,6 +32,10 @@
   margin: 0 0 0.5em;
   line-height: 1.7;
 }
+/* a poem page (poem: true): one line of the poem per row, no gap between the lines */
+.story-text.poem p {
+  margin: 0;
+}
 /* the sentence being read */
 .s {
   border-radius: 6px;

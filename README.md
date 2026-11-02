@@ -236,6 +236,7 @@ window.STORY = {
   gloss: {desperately: "very, very much", …}, // tap-a-word meanings (lowercase word); these words are shown in colour
   pages: [{ch: "Chapter 1 · …", img | emoji | vis, text: ["paragraph", …, {box: "Side box title", p: "…"}], easy: "one easy sentence"}, …],
                                              // text exactly as in the book; *word* = italic
+                                             // poem: true on a page = text is the lines of one stanza, shown one per row
   summary: [{t: "Characters", img | emoji | vis, text}, …],      // vis: an animated emoji picture (see English lessons)
   questions: [{tag: "Stop and check", img | emoji | vis, q, o: [right, wrong, wrong], x: "why (optional)"},   // first option is right; shuffled on screen
               {type: "open", tag, img | emoji, q, a: "model answer"}, …],

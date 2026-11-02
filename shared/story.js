@@ -306,7 +306,7 @@
       <div class="side">${pic(P, "pic story")}</div>
       <div class="main">
         ${P.ch ? `<div class="pg-ch">${esc(P.ch)}</div>` : ""}
-        <div class="story-text">${paras}</div>
+        <div class="story-text${P.poem ? " poem" : ""}">${paras}</div>
         ${P.easy ? `<div class="easy"><div class="easy-h"><b>💡 In easy words</b><span class="easy-btns"><button type="button" class="abtn sm" data-easy="0" aria-label="Read the easy words">🔊 <span>Read</span></button><button type="button" class="abtn sm" data-easy="1" aria-label="Read the easy words slowly">🐢</button></span></div><p>${textHTML(P.easy)}</p></div>` : ""}
         <div class="gloss" hidden></div>
         ${audioBtns}
