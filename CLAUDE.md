@@ -14,8 +14,8 @@ Read README.md first. It has the structure, the lesson/dictation formats and the
 
 ## Formatting
 
-- All JS and the shared CSS are Prettier-formatted (Prettier 3.3.3, installed globally, defaults, no config). Keep it that way. The user reads the code.
-- Check: `prettier --check "**/*.js" shared/ index.css english-hub.css`. Fix: `prettier --write <files>`.
+- The whole repo (JS, CSS, HTML, Markdown, manifest) is Prettier-formatted (Prettier 3.9.10, installed globally, defaults, no config). Keep it that way. The user reads the code.
+- Check: `prettier --check .`. Fix: `prettier --write <files>` (only the files you changed). If `prettier` is not on the PATH (nvm not loaded), use `npx --no-install prettier`.
 - Formatting-only changes go in their own commit, never mixed with logic changes.
 - `sw.js` finds game files by running regexes on the text of `games.js` (`path: "…"`, `also: [...]`). After reformatting games.js, confirm that it still finds the same file list.
 
