@@ -4,6 +4,7 @@ Study games for Grade 3–4 tablets: plain HTML/CSS/JS, no build step, served fr
 Read README.md first. It has the structure, the lesson/dictation formats and the "after adding X" steps.
 
 ## Styling and shared code
+
 - `shared/` is the one place for styles and helpers; pages have no `<style>` blocks. The goal is that new pages can't drift from the standard look.
 - A rule used by more than one page goes into the shared file every one of those pages loads. `shared/theme.css` is loaded first by every page, including all hubs.
   Example: `.play-arrow` (keeps "Play →" / "Open →" on one line) lives only in theme.css, not copied into index.css / lesson.css / english-hub.css.
@@ -12,21 +13,25 @@ Read README.md first. It has the structure, the lesson/dictation formats and the
 - Tiles dragged or tapped from a bank onto a line (build a word, put words in order) always use `Kit.dragTiles`; never copy drag code into a page. The page keeps only its own check and feedback.
 
 ## Formatting
+
 - All JS and the shared CSS are Prettier-formatted (Prettier 3.3.3, installed globally, defaults, no config). Keep it that way. The user reads the code.
 - Check: `prettier --check "**/*.js" shared/ index.css english-hub.css`. Fix: `prettier --write <files>`.
 - Formatting-only changes go in their own commit, never mixed with logic changes.
 - `sw.js` finds game files by running regexes on the text of `games.js` (`path: "…"`, `also: [...]`). After reformatting games.js, confirm that it still finds the same file list.
 
 ## Offline cache (sw.js)
+
 - Any change to a precached file (CORE, anything in games.js `path`/`also`) needs `VERSION` bumped in `sw.js`, or installed tablets keep the old files offline.
 - Bump once, in a separate last commit after the related changes.
 - Precache uses `new Request(p, {cache: "reload"})` so a version never mixes old pages with new CSS. Keep it.
 
 ## Arabic (Grade 3): lessons, tests, homework
+
 Folder `grade-3/term-1/arabic/`, engine `arabic-lesson.js` (don't copy it, only data files change). Formats are in README: "Arabic lessons", "Arabic tests", "Arabic homework".
 The user sends scans of Lucas's book pages (PDFs in `~/Documents/2026-2027/Lucas/Arabic/`). Lucas has aphasia; the parent explains each question by pointing at the picture.
 
 Sorting a scan:
+
 - Each page header says the lesson (title of the story, الأسبوع week number, الفترة period). Match it to `lessons.js` by title. A scan can hold pages of two lessons: put each page with its own lesson, and say so.
 - أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ = classwork (skip unless asked). ثَانِيًا: الْأَدَاءَاتُ الْمَنْزِلِيَّةُ = homework. التَّقْيِيمُ sheets with groups (أ)(ب)(ج) = tests.
 - Handwriting on the page is Lucas's own answers: ignore it, it is not the key. Duplicate pages in a scan: use the cleanest one.
@@ -34,6 +39,7 @@ Sorting a scan:
 - Words missing or covered in the scan: never guess. List them and ask.
 
 What to build:
+
 - **Lesson** `lesson-N.js` + `lesson-N.html` + `lesson-N-exercises.html` (copy lesson-1's), pictures cropped from the book into `img/lesson-N/` (~700px).
   Story texts, words, opposites / plurals / meanings (the book's قاموس), every book exercise as a section; every item has a picture.
 - **Test** `test-N.js` + `test-N.html` (copy test-2.html): one tab per group, the sheet's paragraph with a picture above the tasks, items without pictures. See "Arabic tests" below.
@@ -44,6 +50,7 @@ What to build:
 - `en` / `uk` translate every Arabic word they mention; never a transliteration like «tamdee».
 
 Rules for every Arabic file:
+
 - Full tashkeel on all Arabic. `en` and `uk` on every text, section and item.
 - `gloss` has every Arabic word of the texts, questions, options and model answers (one entry per word without tashkeel is enough). Check it with a script before calling it done: no word without a gloss, no item without a picture (tests: the text has it), every `img` path exists.
 - Pictures: crop from the scan (`pdftoppm -r 400`, then PIL), or reuse one from `img/lesson-*/`. An emoji `ic` is at most 2 emoji with no space ("🧴🧴"); more get cut off on a landscape tablet.
@@ -51,6 +58,7 @@ Rules for every Arabic file:
 - Check in the browser: the list on `index.html`, each tab, one typed answer.
 
 ### Arabic tests
+
 - A test is one التَّقْيِيمُ الْأُسْبُوعِيُّ sheet (الْفَتْرَةُ الرَّابِعَةُ, after the lesson's homework pages). Numbered in the order the sheets come: `test-1`, `test-2`, … Before building, check `TESTS` and the `unit` page numbers: the same sheet may be built already.
 - Head: `n: "tN"`, `title: "التَّقْيِيمُ الْأُسْبُوعِيُّ"`, `en: "Weekly test · <story in English>"`, `unit: "الْفَتْرَةُ الرَّابِعَةُ · p. X–Y"`, `cover` = a picture of that text from `img/lesson-N/`,
   `tapq: true`, `exSub: ["Answer the questions", "أَجِبْ عَنِ الْأَسْئِلَةِ التَّالِيَةِ"]`.
@@ -66,16 +74,19 @@ Rules for every Arabic file:
 - `TESTS` entry: `{n, nAr, title, en, path, cover, note: "Groups A · B · C · <count> questions · text from Lesson N"}`; in `games.js`: `test-N.html` / `.js` in `also`, `countLabel` ("… · N tests") and `topics` ("Tests 1–N").
 
 ## Religion (Grade 3): lessons
+
 Folder `grade-3/term-1/religion/`, engine `../arabic/arabic-lesson.js` (shared with Arabic, don't copy it). Format in README: "Religion lessons".
 Book: التربية الدينية المسيحية, `~/Documents/2026-2027/Lucas/Religion/` (book PDF + the teacher's slides). Lucas has aphasia: a picture on every part and question.
 
 Sorting:
+
 - The lesson = one book lesson (الوحدة N، الدرس M), story pages + الأنشطة والممارسات pages. The slides are a summary: use the book text.
 - Homework = the page the parent sends a photo of (his real homework). Check its lesson by the page number and story: a page of another lesson
   belongs to that lesson (build that lesson if it is missing, then put the page there). If unsure which part is homework, ask before building.
 - Words missing or unreadable: never guess. List them and ask.
 
 What to build: `uN-lesson-M.js` + `uN-lesson-M.html` (copy u2-lesson-4.html), pictures in `img/uN-lesson-M/` (`pdftoppm -r 300`, then PIL; story ~700px, small activity pictures ~300px).
+
 - `n: "rel-uNlM"`, `tapq: true`, `links` back to "Religion lessons", `tabs`: story · games · verse, plus hw only when there is real homework for this lesson.
 - Story: the book text word for word in short parts (one picture each, reuse a picture for two parts if needed); the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.
 - Games: every activity of the lesson, one section each, plus the lesson's أسئلة الدرس (unless it is the homework).
@@ -85,6 +96,7 @@ What to build: `uN-lesson-M.js` + `uN-lesson-M.html` (copy u2-lesson-4.html), pi
   Colouring and drawing activities are left out.
 
 Rules:
+
 - Full tashkeel. Keep the book's wording; fix only plain grammar mistakes and list them for the user.
 - `en` / `uk` on every text, part, section, item and help option.
 - `gloss` has every Arabic word of the texts, paragraph titles, verse and its gap choices, questions, options, `x`, help and model answers. Same spelling with different meanings
@@ -94,18 +106,21 @@ Rules:
 - Check in the browser: the list, each tab, the verse games (tiles move with real taps, not script `.click()`).
 
 ## French (Grade 3 and 4): lessons and revisions
+
 Engine `grade-4/term-1/french/french-lesson.js` (don't copy it; a lesson or a revision is only a data file). Format in README: "French lessons (Grade 4)"; `lesson-2.js` is the fullest example.
 Sources: Grade 4 (Alex) `~/Documents/2026-2027/Alex/French/`, Grade 3 (Lucas) `~/Documents/2026-2027/Lucas/French/`: the teacher's lesson slides (book pages
 "Livre p. N", "Cahier d'exercices p. N", often with the answers filled in), class work / homework sheets (Travail de classe, Devoir noté, some with a "Modèle de réponse"),
 and the term sheet "Exercices d'application" (mid-term / final). The boys learn from pictures and sound: a picture on every item.
 
 Sorting:
+
 - Each slide says its book page. The lesson = book pages + cahier pages + the sheets for that lesson. A sheet file name can be wrong (a "Devoir noté" that says "Travail de classe" on the page): say so.
 - Sheets on several lessons (Exercices d'application) = the revision, not a lesson. A sentence from neither lesson (e.g. « J'ai une gomme rouge ») goes in with an emoji picture: list it for the user.
 - Answers come from the teacher's filled-in pages and "Modèle de réponse". An answer with no key (no model answer, a picture to interpret): give the likely one and say it is unverified.
 - Words missing or unreadable: never guess. List them and ask.
 
 What to build:
+
 - **Lesson** `lesson-N.js` + `lesson-N.html` (copy lesson-2.html, change the script and title), pictures in `img/lesson-N/` (`pdftoppm -r 200`, find boxes on a grid, crop with PIL; people ~250–500px, panels ~700px, comic cover ~1000px; check a contact sheet for cut text or bits of the next panel).
   Learn: story (every panel, then "Des phrases pour parler" with `title`), words (`people` with `say`, `phrases` = the page's Vocabulaire), one `sound` tile per Phonétique sound, a `rule` card for a grammar box. The `verb` view only knows s'appeler: another verb needs an engine change first.
   Play: listen, match, bword, bsent, ilelle (if people have il / elle), and `game` tiles for the lesson's own point (Un ou une ?).
@@ -117,6 +132,7 @@ What to build:
   complete a verb, a capital letter, . ? ! → `fill`; "Mets un (x) si c'est une phrase" → `yn` with `ask`, `x`, `fix`; listen and point → `tap`; relie → `match`.
 
 Rules for every French file:
+
 - French exactly as the book prints it (’ apostrophes, a space before ? and !); only the teacher's slide typos are fixed, and listed for the user.
 - Every French text has an EN / UA / AR translation through `dict` or `auto`; names need none.
 - Check with a script before calling it done: every sentence translates, every item has a picture, every `img` exists, every picture file is used and listed in `also`.
@@ -127,6 +143,7 @@ Rules for every French file:
 - Check in the browser: the list, each tab, the sound and rule screens, translations on, one exercise of each type.
 
 ## English (Grade 4): lessons and stories
+
 Folders: `grade-4/term-1/english/`, `grade-4/term-2/english/`, … One English page for all terms: `grade-4/term-1/english/index.html` (list in its `dictations.js`).
 Engines: lessons `shared/computer-lesson.js` (`<body data-subject="English">`), stories `shared/story.js` (don't copy them; a lesson or a story is only a data file).
 Format in README: "English stories", "English lessons (Grade 4)", "English revision"; `term-1/english/unit1-week5.js` is the fullest example.
@@ -134,12 +151,14 @@ Sources: the term booklets in `~/Documents/2026-2027/Alex/!booklets/` (Classwork
 (shared reads, leveled readers, model answers, memos, dictations). Alex is learning to read again: everything is read aloud, a picture on every item.
 
 Sources log (Term 2 on; Term 1 sources are in the `// Sources:` line at the top of each file):
+
 - Each term folder has `SOURCES.md` (every source file page by page: what it was built into, `file · key`, or why it was skipped),
   `TODO.md` (tasks waiting for a text that is not scanned yet), `UNVERIFIED.md` (answers written without a school key).
 - Before building: read `SOURCES.md` and compare it with the source folders; build only the pages that are not in it, and say which ones are already built.
 - With every lesson or story: update its rows in the three files, in the same commit.
 
 Sorting:
+
 - Wonders pages say the week at the foot ("Grade 4 · Unit 2 · Week 5"), school sheets at the top ("Unit 2 week 5"). The booklets go week by week after a divider page
   (with "Talk About It" = the week's cover picture and Essential Question).
 - A text (Genre Passages O1–O3, a homework comprehension text, a poem) = a story; its questions go in the story. Grammar, phonics, spelling, vocabulary pages = exercises of the week's lesson.
@@ -149,6 +168,7 @@ Sorting:
 - Answers: from the school's model answers or memo when there are some. Without a key: give the likely answer, add a `// unverified` comment and a row in `UNVERIFIED.md`.
 
 What to build:
+
 - **Lesson** `unitN-weekM.js` + `.html` (copy `term-1/english/unit1-week5.html`, change the `.js` and the title), pictures in `img/unitN-weekM/`.
   `key: "en4-uNwM"`, `unit: "Unit N · Week M"`, `hub`: the English page (`"../../term-1/english/index.html"` from a later term), `question` = the Essential Question.
   Learn: the week's story tiles, then decks (vocabulary words, the grammar rule boxes, the spelling list by pattern, figurative language), each card with `vis`, `src` or `emoji`.
@@ -161,12 +181,14 @@ What to build:
   rewrite / combine / correct a sentence → `mc` (which is right) or `order` (build it from cards); question about a text, writing task → `open` with a model answer.
 
 Then:
+
 - Entry in `term-1/english/dictations.js` (`kind: "Lesson"` / `"Story"`, `term: N` for a later term, which shows a "Term N" tag; path from the term-1 folder: `"../../term-2/english/…"`).
 - The new files and pictures in `also` of the Grade 4 English entry in `games.js`, plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 - Check with a script: every item has a picture, every `img` / `src` exists, every picture file is used and in `also`, every `path` and `hub` link opens.
 - Check in the browser: the English page (the tag), each tab and section of the lesson, every story page, one exercise of each type, the back links.
 
 ## Checking changes
+
 - Local server: `python3 -m http.server 8765 --bind 127.0.0.1` from the repo root; open the hubs:
   `index.html`, `grade-4/term-1/{french,english}/index.html`, `grade-{3,4}/computer/index.html`, `grade-3/term-1/english/index.html`.
 - The service worker caches aggressively. For old-vs-new comparisons, use a fresh port or unregister the SW first.
@@ -174,6 +196,7 @@ Then:
 - JS syntax check: `node --check <file>`.
 
 ## Workflow
+
 - Changes come in small stages (≤5 changes each). Show the diff and wait for approval before applying.
 - One commit per concern: fix / refactor / formatting / sw.js version bump.
 - Commit messages: no Co-Authored-By line. Don't push unless asked.

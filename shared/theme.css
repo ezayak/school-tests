@@ -43,11 +43,13 @@
   --math-ink: #ff8a3d; /* Math text colour: --math is too light for small text on white */
   --other: #8a5cc9; /* subject colours */
   /* Lilita One and Atkinson Hyperlegible have no Cyrillic letters: Ukrainian text uses Nunito on the pages that load it (home, Optima) */
-  --display: "Lilita One", "Nunito", "Arial Rounded MT Bold", "Trebuchet MS",
+  --display:
+    "Lilita One", "Nunito", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+  --body:
+    "Atkinson Hyperlegible", "Nunito", system-ui, -apple-system, "Segoe UI",
     sans-serif;
-  --body: "Atkinson Hyperlegible", "Nunito", system-ui, -apple-system,
-    "Segoe UI", sans-serif;
-  --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  --emoji:
+    "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -198,7 +200,8 @@
 }
 body {
   background-color: var(--paper);
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px),
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size: 24px 24px;
   color: var(--ink);

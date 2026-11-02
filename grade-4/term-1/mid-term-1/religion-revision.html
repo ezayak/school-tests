@@ -1,30 +1,51 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="referrer" content="no-referrer">
-<link rel="manifest" href="../../../manifest.webmanifest">
-<meta name="theme-color" content="#1B2440">
-<link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
-<link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Study Games">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
-</head><body>
-<title>Religion Revision</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
-<link rel="stylesheet" href="../../../shared/theme.css">
-<link rel="stylesheet" href="../../../shared/quiz.css">
-<link rel="stylesheet" href="../../../shared/arabic.css">
-<link rel="stylesheet" href="../../../shared/arabic-revision.css">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <link rel="manifest" href="../../../manifest.webmanifest" />
+    <meta name="theme-color" content="#1B2440" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../../../icons/favicon-32.png"
+    />
+    <link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Study Games" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <script>
+      if ("serviceWorker" in navigator)
+        addEventListener("load", () =>
+          navigator.serviceWorker.register("../../../sw.js").catch(() => {}),
+        );
+    </script>
+  </head>
+  <body>
+    <title>Religion Revision</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap"
+    />
+    <link rel="stylesheet" href="../../../shared/theme.css" />
+    <link rel="stylesheet" href="../../../shared/quiz.css" />
+    <link rel="stylesheet" href="../../../shared/arabic.css" />
+    <link rel="stylesheet" href="../../../shared/arabic-revision.css" />
 
-<main class="wrap" id="app"></main>
+    <main class="wrap" id="app"></main>
 
-<script src="../../../shared/common.js"></script>
-<script src="../../../quiz-common.js"></script>
-<script>
-/* =====================================================================
+    <script src="../../../shared/common.js"></script>
+    <script src="../../../quiz-common.js"></script>
+    <script>
+      /* =====================================================================
    Grade 4 Christian religion (التربية الدينية المسيحية) · mid-term revision sheet.
    Questions 1–5 of the sheet; question 6 (memory verse) is the Verses tab.
    Question: {q: Arabic (___ = the gap), en: English, o: [right, wrong, wrong], p: picture}
@@ -32,259 +53,877 @@
    True/false: {q, en, tf: true|false, x?: why it is false}
    Pictures: img/religion/<p>.jpg, from the Grade 4 religion textbook.
    ===================================================================== */
-const SHEET=[
- {k:'tf',ic:'⚖️',t:'True or false',ar:'ضع علامة ✓ أو ✗',qs:[
-  {q:'في الصلاة الربانية نطلب أن يغفر الله لنا ذنوبنا كما نغفر نحن أيضًا للآخرين.',en:"In the Lord's Prayer we ask God to forgive our sins as we also forgive others.",tf:true,p:'jesus2'},
-  {q:'قال إليشع للمرأة السامرية: في مثل هذا الوقت من السنة القادمة سترزقين بابن.',en:'Elisha said to the Samaritan woman: "About this time next year you will have a son."',tf:false,x:'He said it to the Shunammite woman (المرأة الشونمية), not the Samaritan woman.',p:'gehazi'},
-  {q:'ظهر الملاك جبرائيل للسيدة العذراء عندما كانت تصلي.',en:'The angel Gabriel appeared to the Virgin Mary while she was praying.',tf:true,p:'annunc'},
-  {q:'يشوع قاد الشعب لعبور نهر النيل بمعجزة عظيمة.',en:'Joshua led the people across the river Nile with a great miracle.',tf:false,x:'It was the river Jordan (نهر الأردن), not the Nile.',p:'ark'},
-  {q:'يشوع قاد شعب إسرائيل بعد موسى النبي.',en:'Joshua led the people of Israel after the prophet Moses.',tf:true,p:'hands'},
-  {q:'كان لرجل الله (إليشع) غلام يساعده اسمه جيحزي.',en:'The man of God (Elisha) had a servant who helped him, named Gehazi.',tf:true,p:'room'},
-  {q:'مكثت السيدة العذراء عند إليصابات خمسة أشهر تخدمها.',en:'The Virgin Mary stayed with Elizabeth for five months to serve her.',tf:false,x:'She stayed three months (ثلاثة أشهر).',p:'serve'},
-  {q:'نتعلم من المرأة الشونمية إضافة الغرباء والثقة في وعود الله.',en:"From the Shunammite woman we learn to welcome strangers and to trust God's promises.",tf:true,p:'feed'}]},
- {k:'who',ic:'🙋',t:'Who is it?',ar:'من هو؟ من هي؟',qs:[
-  {q:'تلميذ إيليا النبي.',en:'The disciple of the prophet Elijah.',o:['إليشع النبي','جيحزي','يشوع بن نون'],p:'room'},
-  {q:'نتعلم منها ضيافة الغرباء.',en:'From her we learn to welcome strangers.',o:['المرأة الشونمية','إليصابات','العذراء مريم'],p:'feed'},
-  {q:'تلميذ إليشع النبي.',en:'The disciple of the prophet Elisha.',o:['جيحزي','يشوع بن نون','زكريا الكاهن'],p:'gehazi'},
-  {q:'سجد وهو في بطن أمه للرب يسوع وهو في بطن أمه العذراء.',en:"While still in his mother's womb, he bowed down to the Lord Jesus in the womb of His mother, the Virgin.",o:['يوحنا المعمدان','زكريا الكاهن','يشوع بن نون'],p:'greet'},
-  {q:'قائد لشعب بني إسرائيل بعد موت موسى النبي.',en:'The leader of the people of Israel after the prophet Moses died.',o:['يشوع بن نون','إليشع النبي','جيحزي'],p:'jericho'},
-  {q:'سافرت رحلة طويلة وشاقة لتخدم إليصابات.',en:'She made a long, hard journey to serve Elizabeth.',o:['العذراء مريم','المرأة الشونمية','إليصابات'],p:'donkey'},
-  {q:'اختار يشوع قائدًا لشعب الله، ووضع يده عليه وباركه أمام الجميع.',en:"He chose Joshua to lead God's people, laid his hand on him and blessed him in front of everyone.",o:['موسى النبي','إليشع النبي','زكريا الكاهن'],p:'hands'}]},
- {k:'choose',ic:'✅',t:'Choose the answer',ar:'اختر الإجابة الصحيحة',qs:[
-  {q:'سافرت السيدة العذراء مريم رحلة طويلة وشاقة لتخدم ___.',en:'The Virgin Mary made a long, hard journey to serve ___.',o:['إليصابات','سارة','راحيل'],p:'donkey'},
-  {q:'نتعلم من قصة إليشع والمرأة الشونمية ___.',en:'From the story of Elisha and the Shunammite woman we learn ___.',o:['ضيافة الغرباء','حياة الاستعداد','زيارة المريض'],p:'feed'},
-  {q:'مكثت السيدة العذراء عند إليصابات تخدمها ___ أشهر.',en:'The Virgin Mary stayed with Elizabeth for ___ months to serve her.',o:['٣','٤','٥'],p:'serve'},
-  {q:'كان لإليشع النبي تلميذ اسمه ___.',en:'The prophet Elisha had a disciple named ___.',o:['جيحزي','موسى','هوشع'],p:'gehazi'},
-  {q:'لا تنسوا إضافة ___.',en:'Do not forget to welcome ___.',o:['الغرباء','الأقرباء','الأصدقاء'],p:'feed'},
-  {q:'وظيفة زكريا هي ___.',en:"Zechariah's job was ___.",o:['كاهن','نجار','صياد'],p:'angelzech'},
-  {q:'والدة يوحنا المعمدان هي ___.',en:'The mother of John the Baptist is ___.',o:['إليصابات','المرأة الشونمية','حنة'],p:'zechpray'}]},
- {k:'comp',ic:'✏️',t:'Complete',ar:'أكمل',qs:[
-  {q:'مبارك الرب إله إسرائيل لأنه ___ وصنع فداء لشعبه.',en:'Blessed is the Lord God of Israel, for He has ___ and redeemed His people.',o:['افتقد','نسي','غضب'],p:'naming'},
-  {q:'مبارك الرب إله إسرائيل لأنه افتقد وصنع فداء ___.',en:'Blessed is the Lord God of Israel, for He has visited and redeemed ___.',o:['لشعبه','لنفسه','للملائكة'],p:'naming'},
-  {q:'مباركة أنت في النساء، ومباركة هي ___.',en:'Blessed are you among women, and blessed is ___.',o:['ثمرة بطنك','بيتك','مدينتك'],p:'greet'},
-  {q:'قال موسى ليشوع: «تشجع ولا ___».',en:'Moses said to Joshua: "Be brave and do not ___."',o:['ترهب','تتكلم','تنم'],p:'moses'},
-  {q:'أرعب الله الأعداء وأمطرهم ب___ من السماء.',en:'God terrified the enemies and rained ___ on them from the sky.',o:['حجارة','المن','السلوى'],p:'battle'},
-  {q:'متى صليتم فقولوا: أبانا ___.',en:'When you pray, say: "Our Father ___."',o:['الذي في السماوات','الذي على الأرض','الذي في الهيكل'],p:'prayer'},
-  {q:'تشدد وتشجع، لا ترهب ولا ___، لأن الرب إلهك معك حيثما تذهب.',en:'Be strong and brave; do not be afraid or ___, for the Lord your God is with you wherever you go.',o:['ترتعب','تفرح','تتعب'],p:'jericho'},
-  {q:'تشدد وتشجع، لا ترهب ولا ترتعب، لأن الرب إلهك معك حيثما ___.',en:'Be strong and brave; do not be afraid or dismayed, for the Lord your God is with you wherever you ___.',o:['تذهب','تنام','تأكل'],p:'ark'}]},
- {k:'said',ic:'💬',t:'Who said it?',ar:'من القائل؟ لمن قيلت؟',qs:[
-  {q:'لا يقف إنسان في وجهك كل أيام حياتك. كما كنت مع موسى أكون معك، لا أهملك ولا أتركك.',en:'"No one will be able to stand against you all the days of your life. As I was with Moses, so I will be with you; I will not leave you or forsake you."',by:['الله','موسى النبي','إليشع النبي'],to:['يشوع بن نون','موسى النبي','جيحزي'],p:'moses'},
-  {q:'مباركة أنت في النساء ومباركة هي ثمرة بطنك. فمن أين لي هذا أن تأتي أم ربي إليّ؟',en:'"Blessed are you among women, and blessed is the fruit of your womb! Why is this granted to me, that the mother of my Lord should come to me?"',by:['إليصابات','الملاك جبرائيل','المرأة الشونمية'],to:['العذراء مريم','إليصابات','المرأة الشونمية'],p:'greet'},
-  {q:'تشجع ولا تخف.',en:'"Be brave and do not be afraid."',by:['موسى النبي','الملاك جبرائيل','إليشع النبي'],to:['يشوع بن نون','زكريا الكاهن','جيحزي'],p:'hands'},
-  {q:'أنا شيخ كبير في السن، وزوجتي امرأة عجوز عاقر.',en:'"I am an old man, and my wife is old and cannot have children."',by:['زكريا الكاهن','إليشع النبي','موسى النبي'],to:['الملاك جبرائيل','إليصابات','يشوع بن نون'],p:'zech'},
-  {q:'الروح القدس يحل عليك، وقوة العلي تظللك، فلذلك أيضًا القدوس المولود منك يُدعى ابن الله.',en:'"The Holy Spirit will come upon you, and the power of the Most High will overshadow you; so the holy one born of you will be called the Son of God."',by:['الملاك جبرائيل','إليصابات','زكريا الكاهن'],to:['العذراء مريم','إليصابات','زكريا الكاهن'],p:'annunc'}]},
-];
-// English for every answer choice
-const EN={'إليشع النبي':'the prophet Elisha','جيحزي':'Gehazi','يشوع بن نون':'Joshua son of Nun','المرأة الشونمية':'the Shunammite woman',
- 'إليصابات':'Elizabeth','العذراء مريم':'the Virgin Mary','زكريا الكاهن':'Zechariah the priest','يوحنا المعمدان':'John the Baptist',
- 'موسى النبي':'the prophet Moses','الله':'God','الملاك جبرائيل':'the angel Gabriel','سارة':'Sarah','راحيل':'Rachel','حنة':'Hannah',
- 'ضيافة الغرباء':'to welcome strangers','حياة الاستعداد':'to be ready','زيارة المريض':'to visit the sick','٣':'3','٤':'4','٥':'5',
- 'موسى':'Moses','هوشع':'Hoshea','الغرباء':'strangers','الأقرباء':'relatives','الأصدقاء':'friends','كاهن':'a priest','نجار':'a carpenter','صياد':'a fisherman',
- 'افتقد':'visited','نسي':'forgotten','غضب':'been angry','لشعبه':'His people','لنفسه':'Himself','للملائكة':'the angels',
- 'ثمرة بطنك':'the fruit of your womb','بيتك':'your house','مدينتك':'your town','ترهب':'be afraid','تتكلم':'speak','تنم':'sleep',
- 'حجارة':'stones (hail)','المن':'manna','السلوى':'quails','الذي في السماوات':'in heaven','الذي على الأرض':'on earth','الذي في الهيكل':'in the temple',
- 'ترتعب':'dismayed','تفرح':'happy','تتعب':'tired','تذهب':'go','تنام':'sleep','تأكل':'eat',
- 'صح':'true ✓','خطأ':'false ✗'};
-const MIX=15;
-/* VERSES (المحفوظات): the memory list and each lesson's golden verse.
+      const SHEET = [
+        {
+          k: "tf",
+          ic: "⚖️",
+          t: "True or false",
+          ar: "ضع علامة ✓ أو ✗",
+          qs: [
+            {
+              q: "في الصلاة الربانية نطلب أن يغفر الله لنا ذنوبنا كما نغفر نحن أيضًا للآخرين.",
+              en: "In the Lord's Prayer we ask God to forgive our sins as we also forgive others.",
+              tf: true,
+              p: "jesus2",
+            },
+            {
+              q: "قال إليشع للمرأة السامرية: في مثل هذا الوقت من السنة القادمة سترزقين بابن.",
+              en: 'Elisha said to the Samaritan woman: "About this time next year you will have a son."',
+              tf: false,
+              x: "He said it to the Shunammite woman (المرأة الشونمية), not the Samaritan woman.",
+              p: "gehazi",
+            },
+            {
+              q: "ظهر الملاك جبرائيل للسيدة العذراء عندما كانت تصلي.",
+              en: "The angel Gabriel appeared to the Virgin Mary while she was praying.",
+              tf: true,
+              p: "annunc",
+            },
+            {
+              q: "يشوع قاد الشعب لعبور نهر النيل بمعجزة عظيمة.",
+              en: "Joshua led the people across the river Nile with a great miracle.",
+              tf: false,
+              x: "It was the river Jordan (نهر الأردن), not the Nile.",
+              p: "ark",
+            },
+            {
+              q: "يشوع قاد شعب إسرائيل بعد موسى النبي.",
+              en: "Joshua led the people of Israel after the prophet Moses.",
+              tf: true,
+              p: "hands",
+            },
+            {
+              q: "كان لرجل الله (إليشع) غلام يساعده اسمه جيحزي.",
+              en: "The man of God (Elisha) had a servant who helped him, named Gehazi.",
+              tf: true,
+              p: "room",
+            },
+            {
+              q: "مكثت السيدة العذراء عند إليصابات خمسة أشهر تخدمها.",
+              en: "The Virgin Mary stayed with Elizabeth for five months to serve her.",
+              tf: false,
+              x: "She stayed three months (ثلاثة أشهر).",
+              p: "serve",
+            },
+            {
+              q: "نتعلم من المرأة الشونمية إضافة الغرباء والثقة في وعود الله.",
+              en: "From the Shunammite woman we learn to welcome strangers and to trust God's promises.",
+              tf: true,
+              p: "feed",
+            },
+          ],
+        },
+        {
+          k: "who",
+          ic: "🙋",
+          t: "Who is it?",
+          ar: "من هو؟ من هي؟",
+          qs: [
+            {
+              q: "تلميذ إيليا النبي.",
+              en: "The disciple of the prophet Elijah.",
+              o: ["إليشع النبي", "جيحزي", "يشوع بن نون"],
+              p: "room",
+            },
+            {
+              q: "نتعلم منها ضيافة الغرباء.",
+              en: "From her we learn to welcome strangers.",
+              o: ["المرأة الشونمية", "إليصابات", "العذراء مريم"],
+              p: "feed",
+            },
+            {
+              q: "تلميذ إليشع النبي.",
+              en: "The disciple of the prophet Elisha.",
+              o: ["جيحزي", "يشوع بن نون", "زكريا الكاهن"],
+              p: "gehazi",
+            },
+            {
+              q: "سجد وهو في بطن أمه للرب يسوع وهو في بطن أمه العذراء.",
+              en: "While still in his mother's womb, he bowed down to the Lord Jesus in the womb of His mother, the Virgin.",
+              o: ["يوحنا المعمدان", "زكريا الكاهن", "يشوع بن نون"],
+              p: "greet",
+            },
+            {
+              q: "قائد لشعب بني إسرائيل بعد موت موسى النبي.",
+              en: "The leader of the people of Israel after the prophet Moses died.",
+              o: ["يشوع بن نون", "إليشع النبي", "جيحزي"],
+              p: "jericho",
+            },
+            {
+              q: "سافرت رحلة طويلة وشاقة لتخدم إليصابات.",
+              en: "She made a long, hard journey to serve Elizabeth.",
+              o: ["العذراء مريم", "المرأة الشونمية", "إليصابات"],
+              p: "donkey",
+            },
+            {
+              q: "اختار يشوع قائدًا لشعب الله، ووضع يده عليه وباركه أمام الجميع.",
+              en: "He chose Joshua to lead God's people, laid his hand on him and blessed him in front of everyone.",
+              o: ["موسى النبي", "إليشع النبي", "زكريا الكاهن"],
+              p: "hands",
+            },
+          ],
+        },
+        {
+          k: "choose",
+          ic: "✅",
+          t: "Choose the answer",
+          ar: "اختر الإجابة الصحيحة",
+          qs: [
+            {
+              q: "سافرت السيدة العذراء مريم رحلة طويلة وشاقة لتخدم ___.",
+              en: "The Virgin Mary made a long, hard journey to serve ___.",
+              o: ["إليصابات", "سارة", "راحيل"],
+              p: "donkey",
+            },
+            {
+              q: "نتعلم من قصة إليشع والمرأة الشونمية ___.",
+              en: "From the story of Elisha and the Shunammite woman we learn ___.",
+              o: ["ضيافة الغرباء", "حياة الاستعداد", "زيارة المريض"],
+              p: "feed",
+            },
+            {
+              q: "مكثت السيدة العذراء عند إليصابات تخدمها ___ أشهر.",
+              en: "The Virgin Mary stayed with Elizabeth for ___ months to serve her.",
+              o: ["٣", "٤", "٥"],
+              p: "serve",
+            },
+            {
+              q: "كان لإليشع النبي تلميذ اسمه ___.",
+              en: "The prophet Elisha had a disciple named ___.",
+              o: ["جيحزي", "موسى", "هوشع"],
+              p: "gehazi",
+            },
+            {
+              q: "لا تنسوا إضافة ___.",
+              en: "Do not forget to welcome ___.",
+              o: ["الغرباء", "الأقرباء", "الأصدقاء"],
+              p: "feed",
+            },
+            {
+              q: "وظيفة زكريا هي ___.",
+              en: "Zechariah's job was ___.",
+              o: ["كاهن", "نجار", "صياد"],
+              p: "angelzech",
+            },
+            {
+              q: "والدة يوحنا المعمدان هي ___.",
+              en: "The mother of John the Baptist is ___.",
+              o: ["إليصابات", "المرأة الشونمية", "حنة"],
+              p: "zechpray",
+            },
+          ],
+        },
+        {
+          k: "comp",
+          ic: "✏️",
+          t: "Complete",
+          ar: "أكمل",
+          qs: [
+            {
+              q: "مبارك الرب إله إسرائيل لأنه ___ وصنع فداء لشعبه.",
+              en: "Blessed is the Lord God of Israel, for He has ___ and redeemed His people.",
+              o: ["افتقد", "نسي", "غضب"],
+              p: "naming",
+            },
+            {
+              q: "مبارك الرب إله إسرائيل لأنه افتقد وصنع فداء ___.",
+              en: "Blessed is the Lord God of Israel, for He has visited and redeemed ___.",
+              o: ["لشعبه", "لنفسه", "للملائكة"],
+              p: "naming",
+            },
+            {
+              q: "مباركة أنت في النساء، ومباركة هي ___.",
+              en: "Blessed are you among women, and blessed is ___.",
+              o: ["ثمرة بطنك", "بيتك", "مدينتك"],
+              p: "greet",
+            },
+            {
+              q: "قال موسى ليشوع: «تشجع ولا ___».",
+              en: 'Moses said to Joshua: "Be brave and do not ___."',
+              o: ["ترهب", "تتكلم", "تنم"],
+              p: "moses",
+            },
+            {
+              q: "أرعب الله الأعداء وأمطرهم ب___ من السماء.",
+              en: "God terrified the enemies and rained ___ on them from the sky.",
+              o: ["حجارة", "المن", "السلوى"],
+              p: "battle",
+            },
+            {
+              q: "متى صليتم فقولوا: أبانا ___.",
+              en: 'When you pray, say: "Our Father ___."',
+              o: ["الذي في السماوات", "الذي على الأرض", "الذي في الهيكل"],
+              p: "prayer",
+            },
+            {
+              q: "تشدد وتشجع، لا ترهب ولا ___، لأن الرب إلهك معك حيثما تذهب.",
+              en: "Be strong and brave; do not be afraid or ___, for the Lord your God is with you wherever you go.",
+              o: ["ترتعب", "تفرح", "تتعب"],
+              p: "jericho",
+            },
+            {
+              q: "تشدد وتشجع، لا ترهب ولا ترتعب، لأن الرب إلهك معك حيثما ___.",
+              en: "Be strong and brave; do not be afraid or dismayed, for the Lord your God is with you wherever you ___.",
+              o: ["تذهب", "تنام", "تأكل"],
+              p: "ark",
+            },
+          ],
+        },
+        {
+          k: "said",
+          ic: "💬",
+          t: "Who said it?",
+          ar: "من القائل؟ لمن قيلت؟",
+          qs: [
+            {
+              q: "لا يقف إنسان في وجهك كل أيام حياتك. كما كنت مع موسى أكون معك، لا أهملك ولا أتركك.",
+              en: '"No one will be able to stand against you all the days of your life. As I was with Moses, so I will be with you; I will not leave you or forsake you."',
+              by: ["الله", "موسى النبي", "إليشع النبي"],
+              to: ["يشوع بن نون", "موسى النبي", "جيحزي"],
+              p: "moses",
+            },
+            {
+              q: "مباركة أنت في النساء ومباركة هي ثمرة بطنك. فمن أين لي هذا أن تأتي أم ربي إليّ؟",
+              en: '"Blessed are you among women, and blessed is the fruit of your womb! Why is this granted to me, that the mother of my Lord should come to me?"',
+              by: ["إليصابات", "الملاك جبرائيل", "المرأة الشونمية"],
+              to: ["العذراء مريم", "إليصابات", "المرأة الشونمية"],
+              p: "greet",
+            },
+            {
+              q: "تشجع ولا تخف.",
+              en: '"Be brave and do not be afraid."',
+              by: ["موسى النبي", "الملاك جبرائيل", "إليشع النبي"],
+              to: ["يشوع بن نون", "زكريا الكاهن", "جيحزي"],
+              p: "hands",
+            },
+            {
+              q: "أنا شيخ كبير في السن، وزوجتي امرأة عجوز عاقر.",
+              en: '"I am an old man, and my wife is old and cannot have children."',
+              by: ["زكريا الكاهن", "إليشع النبي", "موسى النبي"],
+              to: ["الملاك جبرائيل", "إليصابات", "يشوع بن نون"],
+              p: "zech",
+            },
+            {
+              q: "الروح القدس يحل عليك، وقوة العلي تظللك، فلذلك أيضًا القدوس المولود منك يُدعى ابن الله.",
+              en: '"The Holy Spirit will come upon you, and the power of the Most High will overshadow you; so the holy one born of you will be called the Son of God."',
+              by: ["الملاك جبرائيل", "إليصابات", "زكريا الكاهن"],
+              to: ["العذراء مريم", "إليصابات", "زكريا الكاهن"],
+              p: "annunc",
+            },
+          ],
+        },
+      ];
+      // English for every answer choice
+      const EN = {
+        "إليشع النبي": "the prophet Elisha",
+        جيحزي: "Gehazi",
+        "يشوع بن نون": "Joshua son of Nun",
+        "المرأة الشونمية": "the Shunammite woman",
+        إليصابات: "Elizabeth",
+        "العذراء مريم": "the Virgin Mary",
+        "زكريا الكاهن": "Zechariah the priest",
+        "يوحنا المعمدان": "John the Baptist",
+        "موسى النبي": "the prophet Moses",
+        الله: "God",
+        "الملاك جبرائيل": "the angel Gabriel",
+        سارة: "Sarah",
+        راحيل: "Rachel",
+        حنة: "Hannah",
+        "ضيافة الغرباء": "to welcome strangers",
+        "حياة الاستعداد": "to be ready",
+        "زيارة المريض": "to visit the sick",
+        "٣": "3",
+        "٤": "4",
+        "٥": "5",
+        موسى: "Moses",
+        هوشع: "Hoshea",
+        الغرباء: "strangers",
+        الأقرباء: "relatives",
+        الأصدقاء: "friends",
+        كاهن: "a priest",
+        نجار: "a carpenter",
+        صياد: "a fisherman",
+        افتقد: "visited",
+        نسي: "forgotten",
+        غضب: "been angry",
+        لشعبه: "His people",
+        لنفسه: "Himself",
+        للملائكة: "the angels",
+        "ثمرة بطنك": "the fruit of your womb",
+        بيتك: "your house",
+        مدينتك: "your town",
+        ترهب: "be afraid",
+        تتكلم: "speak",
+        تنم: "sleep",
+        حجارة: "stones (hail)",
+        المن: "manna",
+        السلوى: "quails",
+        "الذي في السماوات": "in heaven",
+        "الذي على الأرض": "on earth",
+        "الذي في الهيكل": "in the temple",
+        ترتعب: "dismayed",
+        تفرح: "happy",
+        تتعب: "tired",
+        تذهب: "go",
+        تنام: "sleep",
+        تأكل: "eat",
+        صح: "true ✓",
+        خطأ: "false ✗",
+      };
+      const MIX = 15;
+      /* VERSES (المحفوظات): the memory list and each lesson's golden verse.
    {ref, re: English reference, t: Arabic verse, en: English, p: picture,
     g: words that can be left out: [[right, wrong, wrong], ...] (each must appear once in t)} */
-const VERSES=[
- {ref:'لوقا ١: ٦٨',re:'Luke 1:68',p:'naming',t:'مبارك الرب إله إسرائيل لأنه افتقد وصنع فداء لشعبه',en:'Blessed is the Lord God of Israel, for He has visited and redeemed His people.',g:[['افتقد','نسي','غضب'],['فداء','بيتًا','حربًا']]},
- {ref:'لوقا ١: ٤٦-٤٨',re:'Luke 1:46–48',p:'magnif',t:'تعظم نفسي الرب، وتبتهج روحي بالله مخلصي، لأنه نظر إلى اتضاع أمته. فهوذا منذ الآن جميع الأجيال تطوبني',en:'My soul magnifies the Lord, and my spirit rejoices in God my Saviour, for He has looked on the humble state of His servant. From now on all generations will call me blessed.',g:[['تعظم','تحزن','تنسى'],['مخلصي','ملكي','معلمي'],['اتضاع','غنى','قوة']]},
- {ref:'لوقا ١: ٤٩-٥٣',re:'Luke 1:49–53',p:'serve',t:'لأن القدير صنع بي عظائم واسمه قدوس، ورحمته إلى جيل الأجيال للذين يتقونه. صنع قوة بذراعه، شتت المستكبرين بفكر قلوبهم. أنزل الأعزاء عن الكراسي ورفع المتضعين. أشبع الجياع وصرف الأغنياء فارغين',en:'For the Mighty One has done great things for me, and holy is His name. His mercy is on those who fear Him, from generation to generation. He has shown strength with His arm; He has scattered the proud in the thoughts of their hearts. He has brought down the mighty from their thrones and lifted up the humble. He has filled the hungry and sent the rich away empty.',g:[['عظائم','أخطاء','حروبًا'],['الجياع','الملوك','الأقوياء'],['فارغين','فرحين','أقوياء']]},
- {ref:'لوقا ١١: ٢',re:'Luke 11:2',p:'prayer',t:'متى صليتم فقولوا: أبانا الذي في السماوات',en:'When you pray, say: "Our Father in heaven."',g:[['صليتم','أكلتم','نمتم'],['أبانا','ملكنا','معلمنا']]},
- {ref:'يشوع ١: ٩',re:'Joshua 1:9',p:'jericho',t:'تشدد وتشجع، لا ترهب ولا ترتعب، لأن الرب إلهك معك حيثما تذهب',en:'Be strong and brave. Do not be afraid or dismayed, for the Lord your God is with you wherever you go.',g:[['ترتعب','تفرح','تتعب'],['تذهب','تنام','تأكل']]},
- {ref:'لوقا ١: ٤٢-٤٣',re:'Luke 1:42–43',p:'greet',t:'مباركة أنت في النساء ومباركة هي ثمرة بطنك، فمن أين لي هذا أن تأتي أم ربي إليّ؟',en:'Blessed are you among women, and blessed is the fruit of your womb! Why is this granted to me, that the mother of my Lord should come to me?',g:[['ثمرة بطنك','بيتك','مدينتك'],['أم ربي','أختي','صديقتي']]},
- {ref:'عبرانيين ١٣: ٢',re:'Hebrews 13:2',p:'feed',t:'لا تنسوا إضافة الغرباء',en:'Do not forget to welcome strangers.',g:[['الغرباء','الأقرباء','الأصدقاء'],['تنسوا','تحبوا','تعرفوا']]},
-];
+      const VERSES = [
+        {
+          ref: "لوقا ١: ٦٨",
+          re: "Luke 1:68",
+          p: "naming",
+          t: "مبارك الرب إله إسرائيل لأنه افتقد وصنع فداء لشعبه",
+          en: "Blessed is the Lord God of Israel, for He has visited and redeemed His people.",
+          g: [
+            ["افتقد", "نسي", "غضب"],
+            ["فداء", "بيتًا", "حربًا"],
+          ],
+        },
+        {
+          ref: "لوقا ١: ٤٦-٤٨",
+          re: "Luke 1:46–48",
+          p: "magnif",
+          t: "تعظم نفسي الرب، وتبتهج روحي بالله مخلصي، لأنه نظر إلى اتضاع أمته. فهوذا منذ الآن جميع الأجيال تطوبني",
+          en: "My soul magnifies the Lord, and my spirit rejoices in God my Saviour, for He has looked on the humble state of His servant. From now on all generations will call me blessed.",
+          g: [
+            ["تعظم", "تحزن", "تنسى"],
+            ["مخلصي", "ملكي", "معلمي"],
+            ["اتضاع", "غنى", "قوة"],
+          ],
+        },
+        {
+          ref: "لوقا ١: ٤٩-٥٣",
+          re: "Luke 1:49–53",
+          p: "serve",
+          t: "لأن القدير صنع بي عظائم واسمه قدوس، ورحمته إلى جيل الأجيال للذين يتقونه. صنع قوة بذراعه، شتت المستكبرين بفكر قلوبهم. أنزل الأعزاء عن الكراسي ورفع المتضعين. أشبع الجياع وصرف الأغنياء فارغين",
+          en: "For the Mighty One has done great things for me, and holy is His name. His mercy is on those who fear Him, from generation to generation. He has shown strength with His arm; He has scattered the proud in the thoughts of their hearts. He has brought down the mighty from their thrones and lifted up the humble. He has filled the hungry and sent the rich away empty.",
+          g: [
+            ["عظائم", "أخطاء", "حروبًا"],
+            ["الجياع", "الملوك", "الأقوياء"],
+            ["فارغين", "فرحين", "أقوياء"],
+          ],
+        },
+        {
+          ref: "لوقا ١١: ٢",
+          re: "Luke 11:2",
+          p: "prayer",
+          t: "متى صليتم فقولوا: أبانا الذي في السماوات",
+          en: 'When you pray, say: "Our Father in heaven."',
+          g: [
+            ["صليتم", "أكلتم", "نمتم"],
+            ["أبانا", "ملكنا", "معلمنا"],
+          ],
+        },
+        {
+          ref: "يشوع ١: ٩",
+          re: "Joshua 1:9",
+          p: "jericho",
+          t: "تشدد وتشجع، لا ترهب ولا ترتعب، لأن الرب إلهك معك حيثما تذهب",
+          en: "Be strong and brave. Do not be afraid or dismayed, for the Lord your God is with you wherever you go.",
+          g: [
+            ["ترتعب", "تفرح", "تتعب"],
+            ["تذهب", "تنام", "تأكل"],
+          ],
+        },
+        {
+          ref: "لوقا ١: ٤٢-٤٣",
+          re: "Luke 1:42–43",
+          p: "greet",
+          t: "مباركة أنت في النساء ومباركة هي ثمرة بطنك، فمن أين لي هذا أن تأتي أم ربي إليّ؟",
+          en: "Blessed are you among women, and blessed is the fruit of your womb! Why is this granted to me, that the mother of my Lord should come to me?",
+          g: [
+            ["ثمرة بطنك", "بيتك", "مدينتك"],
+            ["أم ربي", "أختي", "صديقتي"],
+          ],
+        },
+        {
+          ref: "عبرانيين ١٣: ٢",
+          re: "Hebrews 13:2",
+          p: "feed",
+          t: "لا تنسوا إضافة الغرباء",
+          en: "Do not forget to welcome strangers.",
+          g: [
+            ["الغرباء", "الأقرباء", "الأصدقاء"],
+            ["تنسوا", "تحبوا", "تعرفوا"],
+          ],
+        },
+      ];
 
-(function(){
-/* ---------- utilities ---------- */
-const app=document.getElementById('app');
-const {esc,shuf,pick,star}=Kit;
-const ar=s=>`<span class="ar" lang="ar" dir="rtl">${esc(s)}</span>`;
-const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
-const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const bolt='<svg viewBox="0 0 16 16" aria-hidden="true" width="16" height="16"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
-const pic=p=>`<img class="scene pic" src="img/religion/${p}.jpg" alt="">`;
+      (function () {
+        /* ---------- utilities ---------- */
+        const app = document.getElementById("app");
+        const { esc, shuf, pick, star } = Kit;
+        const ar = (s) =>
+          `<span class="ar" lang="ar" dir="rtl">${esc(s)}</span>`;
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const store = {
+          get(k, d) {
+            try {
+              const v = localStorage.getItem(k);
+              return v === null ? d : v;
+            } catch (e) {
+              return d;
+            }
+          },
+          set(k, v) {
+            try {
+              localStorage.setItem(k, v);
+            } catch (e) {}
+          },
+        };
+        const bolt =
+          '<svg viewBox="0 0 16 16" aria-hidden="true" width="16" height="16"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+        const pic = (p) =>
+          `<img class="scene pic" src="img/religion/${p}.jpg" alt="">`;
 
-/* ---------- voice: the device's Arabic voice, else Google's online voice (needs internet) ---------- */
-const TTS='speechSynthesis' in window;
-let voice=null;
-function pickVoice(){if(!TTS)return;voice=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith('ar'))||null}
-if(TTS){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
-const canSpeak=()=>!!voice||navigator.onLine;
-// Online voice: unofficial Google Translate endpoint; max ~200 chars per request and it refuses requests with a referrer (meta tag in <head>)
-const TTS_URL='https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=';
-const player=new Audio();let parts=[],reading=false; // reading: an online text is mid-way (so Resume may continue it)
-function chunks(t){const out=[];let s=t.replace(/\n/g,'. ').trim();
-  while(s.length>180){let k=Math.max(...['.','،','؛','؟','!',':'].map(c=>s.lastIndexOf(c,180)));if(k<40)k=s.lastIndexOf(' ',180);if(k<1)k=180;out.push(s.slice(0,k+1).trim());s=s.slice(k+1).trim()}
-  if(s)out.push(s);return out}
-function hush(){try{TTS&&speechSynthesis.cancel()}catch(e){}parts=[];reading=false;player.pause()}
-function sayOnline(text,slow){parts=chunks(text);reading=true;const rate=slow?.7:1;
-  const nextPart=()=>{const t=parts.shift();if(!t){reading=false;return}player.src=TTS_URL+encodeURIComponent(t);player.defaultPlaybackRate=player.playbackRate=rate;player.play().catch(()=>{})};
-  player.onended=nextPart;nextPart()}
-function say(text,slow){hush();if(voice){try{const u=new SpeechSynthesisUtterance(text);u.lang=voice.lang;u.voice=voice;u.rate=slow?.55:.75;speechSynthesis.speak(u)}catch(e){}}else if(navigator.onLine)sayOnline(text,slow)}
+        /* ---------- voice: the device's Arabic voice, else Google's online voice (needs internet) ---------- */
+        const TTS = "speechSynthesis" in window;
+        let voice = null;
+        function pickVoice() {
+          if (!TTS) return;
+          voice =
+            speechSynthesis
+              .getVoices()
+              .find((v) => v.lang.toLowerCase().startsWith("ar")) || null;
+        }
+        if (TTS) {
+          pickVoice();
+          speechSynthesis.onvoiceschanged = pickVoice;
+        }
+        const canSpeak = () => !!voice || navigator.onLine;
+        // Online voice: unofficial Google Translate endpoint; max ~200 chars per request and it refuses requests with a referrer (meta tag in <head>)
+        const TTS_URL =
+          "https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=";
+        const player = new Audio();
+        let parts = [],
+          reading = false; // reading: an online text is mid-way (so Resume may continue it)
+        function chunks(t) {
+          const out = [];
+          let s = t.replace(/\n/g, ". ").trim();
+          while (s.length > 180) {
+            let k = Math.max(
+              ...[".", "،", "؛", "؟", "!", ":"].map((c) =>
+                s.lastIndexOf(c, 180),
+              ),
+            );
+            if (k < 40) k = s.lastIndexOf(" ", 180);
+            if (k < 1) k = 180;
+            out.push(s.slice(0, k + 1).trim());
+            s = s.slice(k + 1).trim();
+          }
+          if (s) out.push(s);
+          return out;
+        }
+        function hush() {
+          try {
+            TTS && speechSynthesis.cancel();
+          } catch (e) {}
+          parts = [];
+          reading = false;
+          player.pause();
+        }
+        function sayOnline(text, slow) {
+          parts = chunks(text);
+          reading = true;
+          const rate = slow ? 0.7 : 1;
+          const nextPart = () => {
+            const t = parts.shift();
+            if (!t) {
+              reading = false;
+              return;
+            }
+            player.src = TTS_URL + encodeURIComponent(t);
+            player.defaultPlaybackRate = player.playbackRate = rate;
+            player.play().catch(() => {});
+          };
+          player.onended = nextPart;
+          nextPart();
+        }
+        function say(text, slow) {
+          hush();
+          if (voice) {
+            try {
+              const u = new SpeechSynthesisUtterance(text);
+              u.lang = voice.lang;
+              u.voice = voice;
+              u.rate = slow ? 0.55 : 0.75;
+              speechSynthesis.speak(u);
+            } catch (e) {}
+          } else if (navigator.onLine) sayOnline(text, slow);
+        }
 
-/* ---------- English toggle: remembered between questions ---------- */
-let enOn=store.get('rel4-en','0')==='1';
-// listen + English buttons for the Arabic text t
-const tools=()=>`<div class="tools">${canSpeak()?'<button type="button" class="abtn" id="say1">🔊 Listen</button><button type="button" class="abtn" id="say2">🐢 Slowly</button>':''}<button type="button" class="abtn" id="enBtn" aria-pressed="${enOn}">🇬🇧 English</button></div>`;
-function bindTools(t){
-  const s1=document.getElementById('say1');if(s1){s1.onclick=()=>say(t);document.getElementById('say2').onclick=()=>say(t,true)}
-  const b=document.getElementById('enBtn');
-  b.onclick=()=>{enOn=!enOn;store.set('rel4-en',enOn?'1':'0');b.setAttribute('aria-pressed',enOn);document.getElementById('qcard').classList.toggle('show-en',enOn)};
-}
+        /* ---------- English toggle: remembered between questions ---------- */
+        let enOn = store.get("rel4-en", "0") === "1";
+        // listen + English buttons for the Arabic text t
+        const tools = () =>
+          `<div class="tools">${canSpeak() ? '<button type="button" class="abtn" id="say1">🔊 Listen</button><button type="button" class="abtn" id="say2">🐢 Slowly</button>' : ""}<button type="button" class="abtn" id="enBtn" aria-pressed="${enOn}">🇬🇧 English</button></div>`;
+        function bindTools(t) {
+          const s1 = document.getElementById("say1");
+          if (s1) {
+            s1.onclick = () => say(t);
+            document.getElementById("say2").onclick = () => say(t, true);
+          }
+          const b = document.getElementById("enBtn");
+          b.onclick = () => {
+            enOn = !enOn;
+            store.set("rel4-en", enOn ? "1" : "0");
+            b.setAttribute("aria-pressed", enOn);
+            document.getElementById("qcard").classList.toggle("show-en", enOn);
+          };
+        }
 
-/* ---------- home: pick a tab, then a game ---------- */
-const ALLQ=SHEET.flatMap(s=>expand(s));
-const MODE_NAME=Object.fromEntries([...SHEET.map(s=>[s.k,s.t]),['mix','Mixed questions'],['fill','Complete the verse'],['build','Build the verse']]);
-const VMODES=[
- {k:'learn',ic:'📖',t:'Learn the verses',d:'Read, listen and see each verse in English'},
- {k:'fill',ic:'🧩',t:'Complete the verse',d:`${ar('أكمل الآية')}<br>Choose the missing words`},
- {k:'build',ic:'🔤',t:'Build the verse',d:`${ar('رتب الكلمات')}<br>Put the words in order`},
-];
-const TABS=[{k:'sheet',ic:'📝',t:'Revision sheet',short:'Sheet',sub:'شيت المراجعة',
-  ms:[...SHEET.map(s=>({k:s.k,ic:s.ic,t:s.t,d:`${ar(s.ar)}<br>${expand(s).length} questions`})),{k:'mix',ic:'🎲',t:'Mixed',d:`${MIX} questions from the whole sheet`}]},
- {k:'verses',ic:'📜',t:'Bible verses',short:'Verses',sub:'المحفوظات',ms:VMODES}];
-let tab=store.get('rel4-tab','sheet'); if(!TABS.some(t=>t.k===tab))tab='sheet';
-const UNITS=[{k:'all',t:'All'}];
-let unit=store.get('rel4-unit','all'); if(!UNITS.some(u=>u.k===unit))unit='all';
-const verses=()=>VERSES.filter(v=>unit==='all'||String(v.u)===unit);
-const modeBtns=ms=>`<div class="modes">${ms.map(m=>`<button type="button" class="mode" id="mode-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small>${m.d}</small></button>`).join('')}</div>`;
-function home(still){ // still===true: switching tab, so no pop animation
-  hush();
-  const T=TABS.find(t=>t.k===tab);
-  app.innerHTML=`<section class="card ${still===true?'':'pop'}">
+        /* ---------- home: pick a tab, then a game ---------- */
+        const ALLQ = SHEET.flatMap((s) => expand(s));
+        const MODE_NAME = Object.fromEntries([
+          ...SHEET.map((s) => [s.k, s.t]),
+          ["mix", "Mixed questions"],
+          ["fill", "Complete the verse"],
+          ["build", "Build the verse"],
+        ]);
+        const VMODES = [
+          {
+            k: "learn",
+            ic: "📖",
+            t: "Learn the verses",
+            d: "Read, listen and see each verse in English",
+          },
+          {
+            k: "fill",
+            ic: "🧩",
+            t: "Complete the verse",
+            d: `${ar("أكمل الآية")}<br>Choose the missing words`,
+          },
+          {
+            k: "build",
+            ic: "🔤",
+            t: "Build the verse",
+            d: `${ar("رتب الكلمات")}<br>Put the words in order`,
+          },
+        ];
+        const TABS = [
+          {
+            k: "sheet",
+            ic: "📝",
+            t: "Revision sheet",
+            short: "Sheet",
+            sub: "شيت المراجعة",
+            ms: [
+              ...SHEET.map((s) => ({
+                k: s.k,
+                ic: s.ic,
+                t: s.t,
+                d: `${ar(s.ar)}<br>${expand(s).length} questions`,
+              })),
+              {
+                k: "mix",
+                ic: "🎲",
+                t: "Mixed",
+                d: `${MIX} questions from the whole sheet`,
+              },
+            ],
+          },
+          {
+            k: "verses",
+            ic: "📜",
+            t: "Bible verses",
+            short: "Verses",
+            sub: "المحفوظات",
+            ms: VMODES,
+          },
+        ];
+        let tab = store.get("rel4-tab", "sheet");
+        if (!TABS.some((t) => t.k === tab)) tab = "sheet";
+        const UNITS = [{ k: "all", t: "All" }];
+        let unit = store.get("rel4-unit", "all");
+        if (!UNITS.some((u) => u.k === unit)) unit = "all";
+        const verses = () =>
+          VERSES.filter((v) => unit === "all" || String(v.u) === unit);
+        const modeBtns = (ms) =>
+          `<div class="modes">${ms.map((m) => `<button type="button" class="mode" id="mode-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small>${m.d}</small></button>`).join("")}</div>`;
+        function home(still) {
+          // still===true: switching tab, so no pop animation
+          hush();
+          const T = TABS.find((t) => t.k === tab);
+          app.innerHTML = `<section class="card ${still === true ? "" : "pop"}">
     <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 4 Religion · Mid-term revision</span></div>
     <h1 class="hero-title"><span class="p">Religion</span> <span class="k">Revision</span></h1>
     <div class="hero-ar ar" lang="ar" dir="rtl">مراجعة التربية الدينية المسيحية</div>
     <p class="howto">Ready? Pick a tab, then choose a game. On every question you can listen to the Arabic and see it in English.</p>
-    <div class="tabbox"><div class="ftabs" role="group" aria-label="Kind of game">${TABS.map(t=>`<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab===t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short)}</span></button>`).join('')}</div>
+    <div class="tabbox"><div class="ftabs" role="group" aria-label="Kind of game">${TABS.map((t) => `<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short)}</span></button>`).join("")}</div>
     <div class="panel">
     <div class="ar tab-sub" lang="ar" dir="rtl">${esc(T.sub)}</div>
-    ${tab==='verses'&&UNITS.length>1?`<div class="row"><span class="lab">Verses</span><div class="seg" role="group" aria-label="Verses">${UNITS.map(u=>`<button type="button" id="un-${u.k}" data-un="${u.k}" aria-pressed="${unit===u.k}">${u.t} · ${VERSES.filter(v=>u.k==='all'||String(v.u)===u.k).length}</button>`).join('')}</div></div>`:''}
+    ${tab === "verses" && UNITS.length > 1 ? `<div class="row"><span class="lab">Verses</span><div class="seg" role="group" aria-label="Verses">${UNITS.map((u) => `<button type="button" id="un-${u.k}" data-un="${u.k}" aria-pressed="${unit === u.k}">${u.t} · ${VERSES.filter((v) => u.k === "all" || String(v.u) === u.k).length}</button>`).join("")}</div></div>` : ""}
     ${modeBtns(T.ms)}
     </div></div>
   </section>`;
-  app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;store.set('rel4-tab',tab);home(true)});
-  app.querySelectorAll('[data-un]').forEach(b=>b.onclick=()=>{unit=b.dataset.un;store.set('rel4-unit',unit);home(true)});
-  app.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>startMode(b.dataset.m));
-}
+          app.querySelectorAll("[data-tab]").forEach(
+            (b) =>
+              (b.onclick = () => {
+                tab = b.dataset.tab;
+                store.set("rel4-tab", tab);
+                home(true);
+              }),
+          );
+          app.querySelectorAll("[data-un]").forEach(
+            (b) =>
+              (b.onclick = () => {
+                unit = b.dataset.un;
+                store.set("rel4-unit", unit);
+                home(true);
+              }),
+          );
+          app
+            .querySelectorAll("[data-m]")
+            .forEach((b) => (b.onclick = () => startMode(b.dataset.m)));
+        }
 
-/* ---------- shared game state ---------- */
-const S={mode:null,list:[],i:0,score:0,max:0,miss:[]};
-// one sheet section → its questions; each quote in "Who said it?" gives two
-function expand(s){
-  return s.qs.flatMap(q=>s.k==='said'
-    ?[{...q,sec:s,ask:'من القائل؟',askE:'Who said it?',o:q.by},{...q,sec:s,ask:'لمن قيلت؟',askE:'Who was it said to?',o:q.to}]
-    :[{...q,sec:s,ask:s.k==='who'?'من أنا؟':'',askE:s.k==='who'?'Who am I?':''}]);
-}
-function hud(label){
-  const pct=Math.round(S.i/Math.max(1,S.list.length)*100);
-  return `<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">${label}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
-}
-function bindHome(){const h=document.getElementById('homeBtn');if(h)h.onclick=home}
-function startMode(m){
-  S.mode=m;S.i=0;S.score=0;S.miss=[];
-  tab=TABS.find(t=>t.ms.some(x=>x.k===m)).k;store.set('rel4-tab',tab); // back to this game's tab afterwards
-  if(m==='mix')S.list=shuf(ALLQ).slice(0,MIX);
-  else if(m==='learn')S.list=verses();
-  else if(m==='fill')S.list=shuf(verses()).map(v=>({v,g:pick(v.g)}));
-  else if(m==='build')S.list=shuf(verses());
-  else{const s=SHEET.find(x=>x.k===m);S.list=m==='said'?expand(s):shuf(expand(s))} // quote pairs stay together
-  S.max=S.list.length;
-  next(true);
-}
-function next(first){if(!first)S.i++;if(S.i>=S.list.length)return S.mode==='learn'?home():end();({learn,fill,build}[S.mode]||quiz)();window.scrollTo({top:0,behavior:'smooth'})}
-function fb(ok,html){return `<div class="fb ${ok?'ok':'no'}"><b>${ok?pick(['Correct!','Great job!','You got it!','Super!','ممتاز!']):'Not quite.'}</b><span>${html}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`}
-function bindNext(){const n=document.getElementById('nextBtn');n.onclick=()=>next();n.focus({preventScroll:true})}
+        /* ---------- shared game state ---------- */
+        const S = { mode: null, list: [], i: 0, score: 0, max: 0, miss: [] };
+        // one sheet section → its questions; each quote in "Who said it?" gives two
+        function expand(s) {
+          return s.qs.flatMap((q) =>
+            s.k === "said"
+              ? [
+                  {
+                    ...q,
+                    sec: s,
+                    ask: "من القائل؟",
+                    askE: "Who said it?",
+                    o: q.by,
+                  },
+                  {
+                    ...q,
+                    sec: s,
+                    ask: "لمن قيلت؟",
+                    askE: "Who was it said to?",
+                    o: q.to,
+                  },
+                ]
+              : [
+                  {
+                    ...q,
+                    sec: s,
+                    ask: s.k === "who" ? "من أنا؟" : "",
+                    askE: s.k === "who" ? "Who am I?" : "",
+                  },
+                ],
+          );
+        }
+        function hud(label) {
+          const pct = Math.round((S.i / Math.max(1, S.list.length)) * 100);
+          return `<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">${label}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+        }
+        function bindHome() {
+          const h = document.getElementById("homeBtn");
+          if (h) h.onclick = home;
+        }
+        function startMode(m) {
+          S.mode = m;
+          S.i = 0;
+          S.score = 0;
+          S.miss = [];
+          tab = TABS.find((t) => t.ms.some((x) => x.k === m)).k;
+          store.set("rel4-tab", tab); // back to this game's tab afterwards
+          if (m === "mix") S.list = shuf(ALLQ).slice(0, MIX);
+          else if (m === "learn") S.list = verses();
+          else if (m === "fill")
+            S.list = shuf(verses()).map((v) => ({ v, g: pick(v.g) }));
+          else if (m === "build") S.list = shuf(verses());
+          else {
+            const s = SHEET.find((x) => x.k === m);
+            S.list = m === "said" ? expand(s) : shuf(expand(s));
+          } // quote pairs stay together
+          S.max = S.list.length;
+          next(true);
+        }
+        function next(first) {
+          if (!first) S.i++;
+          if (S.i >= S.list.length) return S.mode === "learn" ? home() : end();
+          (({ learn, fill, build })[S.mode] || quiz)();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        function fb(ok, html) {
+          return `<div class="fb ${ok ? "ok" : "no"}"><b>${ok ? pick(["Correct!", "Great job!", "You got it!", "Super!", "ممتاز!"]) : "Not quite."}</b><span>${html}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i + 1 < S.list.length ? "Next" : "See my score"}</button></div>`;
+        }
+        function bindNext() {
+          const n = document.getElementById("nextBtn");
+          n.onclick = () => next();
+          n.focus({ preventScroll: true });
+        }
 
-/* ---------- SHEET QUESTION: picture, Arabic sentence, 3 choices (or ✓ / ✗) ---------- */
-function quiz(){
-  const q=S.list[S.i],gap=q.q.includes('___');
-  const opts=q.tf!==undefined?[{a:'صح',ok:q.tf},{a:'خطأ',ok:!q.tf}]:shuf(q.o.map((a,i)=>({a,ok:!i})));
-  const right=opts.find(o=>o.ok).a;
-  const sent=g=>gap?esc(q.q).replace('___',`<span class="gap">${g?esc(g):'&nbsp;'}</span>`):(q.sec.k==='said'?`«${esc(q.q)}»`:esc(q.q));
-  const spoken=q.q.replace('___','...');
-  app.innerHTML=`${hud(`Question ${S.i+1} of ${S.list.length}`)}<section class="card pop${enOn?' show-en':''}" id="qcard">
+        /* ---------- SHEET QUESTION: picture, Arabic sentence, 3 choices (or ✓ / ✗) ---------- */
+        function quiz() {
+          const q = S.list[S.i],
+            gap = q.q.includes("___");
+          const opts =
+            q.tf !== undefined
+              ? [
+                  { a: "صح", ok: q.tf },
+                  { a: "خطأ", ok: !q.tf },
+                ]
+              : shuf(q.o.map((a, i) => ({ a, ok: !i })));
+          const right = opts.find((o) => o.ok).a;
+          const sent = (g) =>
+            gap
+              ? esc(q.q).replace(
+                  "___",
+                  `<span class="gap">${g ? esc(g) : "&nbsp;"}</span>`,
+                )
+              : q.sec.k === "said"
+                ? `«${esc(q.q)}»`
+                : esc(q.q);
+          const spoken = q.q.replace("___", "...");
+          app.innerHTML = `${hud(`Question ${S.i + 1} of ${S.list.length}`)}<section class="card pop${enOn ? " show-en" : ""}" id="qcard">
     <div class="qhead"><span class="qtype mc">${esc(q.sec.t)}</span><span class="ar sec" lang="ar" dir="rtl">${esc(q.sec.ar)}</span></div>
     ${pic(q.p)}
-    ${q.ask?`<p class="ask"><span class="ar" lang="ar" dir="rtl">${esc(q.ask)}</span><small>${esc(q.askE)}</small></p>`:''}
-    <p class="sent ar${q.q.length>60?' long':''}" lang="ar" dir="rtl" id="sent">${sent()}</p>
+    ${q.ask ? `<p class="ask"><span class="ar" lang="ar" dir="rtl">${esc(q.ask)}</span><small>${esc(q.askE)}</small></p>` : ""}
+    <p class="sent ar${q.q.length > 60 ? " long" : ""}" lang="ar" dir="rtl" id="sent">${sent()}</p>
     <p class="en">${esc(q.en)}</p>
     ${tools()}
-    <div class="opts">${opts.map((o,i)=>`<button type="button" class="opt aro" id="opt-${i}" data-i="${i}"><span class="L">${'ABC'[i]}</span><span class="ow">${ar(o.a)}<small class="en">${esc(EN[o.a]||'')}</small></span></button>`).join('')}</div>
+    <div class="opts">${opts.map((o, i) => `<button type="button" class="opt aro" id="opt-${i}" data-i="${i}"><span class="L">${"ABC"[i]}</span><span class="ow">${ar(o.a)}<small class="en">${esc(EN[o.a] || "")}</small></span></button>`).join("")}</div>
     <div id="fbx"></div>
   </section>`;
-  bindHome();bindTools(spoken);
-  const btns=[...app.querySelectorAll('.opt')];
-  btns.forEach(b=>b.onclick=()=>{
-    const o=opts[+b.dataset.i];
-    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
-    if(o.ok)S.score++;else{b.classList.add('wrong');S.miss.push({q:`${q.ask?ar(q.ask)+' ':''}${ar(q.q)}`,your:o.a,right})}
-    document.getElementById('pts').textContent=S.score;
-    let html;
-    if(gap){const full=q.q.replace('___',right);document.getElementById('sent').innerHTML=sent(right);say(full);
-      html=`<span class="full">${ar(full)}</span><span class="fen">${esc(cap(q.en.replace('___',EN[right])))}</span>`}
-    else if(q.tf!==undefined){html=`This sentence is ${ar(right)} (${q.tf?'true':'false'}).${q.x?' '+esc(q.x).replace(/[؀-ۿ]+/g,ar):''}<span class="fen">${esc(q.en)}</span>`}
-    else{say(right);html=`${esc(q.askE)} ${ar(right)} · ${esc(cap(EN[right]))}`}
-    document.getElementById('fbx').innerHTML=fb(o.ok,html);bindNext();
-  });
-}
+          bindHome();
+          bindTools(spoken);
+          const btns = [...app.querySelectorAll(".opt")];
+          btns.forEach(
+            (b) =>
+              (b.onclick = () => {
+                const o = opts[+b.dataset.i];
+                btns.forEach((x, i) => {
+                  x.disabled = true;
+                  if (opts[i].ok) x.classList.add("right");
+                  else if (x !== b) x.classList.add("dim");
+                });
+                if (o.ok) S.score++;
+                else {
+                  b.classList.add("wrong");
+                  S.miss.push({
+                    q: `${q.ask ? ar(q.ask) + " " : ""}${ar(q.q)}`,
+                    your: o.a,
+                    right,
+                  });
+                }
+                document.getElementById("pts").textContent = S.score;
+                let html;
+                if (gap) {
+                  const full = q.q.replace("___", right);
+                  document.getElementById("sent").innerHTML = sent(right);
+                  say(full);
+                  html = `<span class="full">${ar(full)}</span><span class="fen">${esc(cap(q.en.replace("___", EN[right])))}</span>`;
+                } else if (q.tf !== undefined) {
+                  html = `This sentence is ${ar(right)} (${q.tf ? "true" : "false"}).${q.x ? " " + esc(q.x).replace(/[؀-ۿ]+/g, ar) : ""}<span class="fen">${esc(q.en)}</span>`;
+                } else {
+                  say(right);
+                  html = `${esc(q.askE)} ${ar(right)} · ${esc(cap(EN[right]))}`;
+                }
+                document.getElementById("fbx").innerHTML = fb(o.ok, html);
+                bindNext();
+              }),
+          );
+        }
 
-/* ---------- VERSES: learn, complete, build ---------- */
-const vhead=(t,a)=>`<div class="qhead"><span class="qtype mc">${t}</span><span class="ar sec" lang="ar" dir="rtl">${a}</span></div>`;
-const vref=v=>`<p class="ref"><span class="ar" lang="ar" dir="rtl">${esc(v.ref)}</span> · ${esc(v.re)}</p>`;
-function learn(){
-  const v=S.list[S.i],n=S.list.length;
-  app.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">Verse ${S.i+1} of ${n}</span></div>
-  <section class="card pop${enOn?' show-en':''}" id="qcard">
-    ${vhead('Learn the verse','المحفوظات')}
+        /* ---------- VERSES: learn, complete, build ---------- */
+        const vhead = (t, a) =>
+          `<div class="qhead"><span class="qtype mc">${t}</span><span class="ar sec" lang="ar" dir="rtl">${a}</span></div>`;
+        const vref = (v) =>
+          `<p class="ref"><span class="ar" lang="ar" dir="rtl">${esc(v.ref)}</span> · ${esc(v.re)}</p>`;
+        function learn() {
+          const v = S.list[S.i],
+            n = S.list.length;
+          app.innerHTML = `<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">Verse ${S.i + 1} of ${n}</span></div>
+  <section class="card pop${enOn ? " show-en" : ""}" id="qcard">
+    ${vhead("Learn the verse", "المحفوظات")}
     ${pic(v.p)}
     <p class="verse ar" lang="ar" dir="rtl">${esc(v.t)}</p>
     ${vref(v)}
     <p class="en">${esc(v.en)}</p>
     ${tools()}
-    <div class="row" style="justify-content:space-between"><button class="btn ghost" id="prevBtn" type="button" ${S.i?'':'disabled'}>Back</button><button class="btn" id="nextBtn" type="button">${S.i+1<n?'Next verse':'Done'}</button></div>
+    <div class="row" style="justify-content:space-between"><button class="btn ghost" id="prevBtn" type="button" ${S.i ? "" : "disabled"}>Back</button><button class="btn" id="nextBtn" type="button">${S.i + 1 < n ? "Next verse" : "Done"}</button></div>
   </section>`;
-  bindHome();bindTools(v.t);
-  document.getElementById('prevBtn').onclick=()=>{S.i-=2;next()};
-  document.getElementById('nextBtn').onclick=()=>next();
-}
-function fill(){
-  const {v,g}=S.list[S.i],right=g[0],opts=shuf(g.map((a,i)=>({a,ok:!i})));
-  const at=v.t.indexOf(right),pre=v.t.slice(0,at),post=v.t.slice(at+right.length);
-  const show=w=>`${esc(pre)}<span class="gap">${w?esc(w):'&nbsp;'}</span>${esc(post)}`;
-  app.innerHTML=`${hud(`Verse ${S.i+1} of ${S.list.length}`)}<section class="card pop${enOn?' show-en':''}" id="qcard">
-    ${vhead('Complete the verse','أكمل الآية')}
+          bindHome();
+          bindTools(v.t);
+          document.getElementById("prevBtn").onclick = () => {
+            S.i -= 2;
+            next();
+          };
+          document.getElementById("nextBtn").onclick = () => next();
+        }
+        function fill() {
+          const { v, g } = S.list[S.i],
+            right = g[0],
+            opts = shuf(g.map((a, i) => ({ a, ok: !i })));
+          const at = v.t.indexOf(right),
+            pre = v.t.slice(0, at),
+            post = v.t.slice(at + right.length);
+          const show = (w) =>
+            `${esc(pre)}<span class="gap">${w ? esc(w) : "&nbsp;"}</span>${esc(post)}`;
+          app.innerHTML = `${hud(`Verse ${S.i + 1} of ${S.list.length}`)}<section class="card pop${enOn ? " show-en" : ""}" id="qcard">
+    ${vhead("Complete the verse", "أكمل الآية")}
     ${pic(v.p)}
     <p class="verse ar" lang="ar" dir="rtl" id="sent">${show()}</p>
     ${vref(v)}
     <p class="en">${esc(v.en)}</p>
     ${tools()}
-    <div class="opts">${opts.map((o,i)=>`<button type="button" class="opt aro" id="opt-${i}" data-i="${i}"><span class="L">${'ABC'[i]}</span>${ar(o.a)}</button>`).join('')}</div>
+    <div class="opts">${opts.map((o, i) => `<button type="button" class="opt aro" id="opt-${i}" data-i="${i}"><span class="L">${"ABC"[i]}</span>${ar(o.a)}</button>`).join("")}</div>
     <div id="fbx"></div>
   </section>`;
-  bindHome();bindTools(pre+' ... '+post);
-  const btns=[...app.querySelectorAll('.opt')];
-  btns.forEach(b=>b.onclick=()=>{
-    const o=opts[+b.dataset.i];
-    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
-    if(o.ok)S.score++;else{b.classList.add('wrong');S.miss.push({q:`${ar(pre+'___'+post)}<br>${esc(v.re)}`,your:o.a,right})}
-    document.getElementById('pts').textContent=S.score;
-    document.getElementById('sent').innerHTML=show(right);say(v.t);
-    document.getElementById('fbx').innerHTML=fb(o.ok,`<span class="fen">${esc(v.re)}: ${esc(v.en)}</span>`);bindNext();
-  });
-}
-// tiles: single words, or 2–3 words for long verses
-const tilesOf=v=>{const w=v.t.split(' '),n=w.length>24?3:w.length>12?2:1,r=[];for(let i=0;i<w.length;i+=n)r.push(w.slice(i,i+n).join(' '));return r};
-function build(){
-  const v=S.list[S.i],tiles=tilesOf(v);
-  const bank=shuf(tiles.map((_,i)=>i));let line=[],checked=false;
-  app.innerHTML=`${hud(`Verse ${S.i+1} of ${S.list.length}`)}<section class="card pop${enOn?' show-en':''}" id="qcard">
-    ${vhead('Build the verse','رتب الكلمات')}
+          bindHome();
+          bindTools(pre + " ... " + post);
+          const btns = [...app.querySelectorAll(".opt")];
+          btns.forEach(
+            (b) =>
+              (b.onclick = () => {
+                const o = opts[+b.dataset.i];
+                btns.forEach((x, i) => {
+                  x.disabled = true;
+                  if (opts[i].ok) x.classList.add("right");
+                  else if (x !== b) x.classList.add("dim");
+                });
+                if (o.ok) S.score++;
+                else {
+                  b.classList.add("wrong");
+                  S.miss.push({
+                    q: `${ar(pre + "___" + post)}<br>${esc(v.re)}`,
+                    your: o.a,
+                    right,
+                  });
+                }
+                document.getElementById("pts").textContent = S.score;
+                document.getElementById("sent").innerHTML = show(right);
+                say(v.t);
+                document.getElementById("fbx").innerHTML = fb(
+                  o.ok,
+                  `<span class="fen">${esc(v.re)}: ${esc(v.en)}</span>`,
+                );
+                bindNext();
+              }),
+          );
+        }
+        // tiles: single words, or 2–3 words for long verses
+        const tilesOf = (v) => {
+          const w = v.t.split(" "),
+            n = w.length > 24 ? 3 : w.length > 12 ? 2 : 1,
+            r = [];
+          for (let i = 0; i < w.length; i += n)
+            r.push(w.slice(i, i + n).join(" "));
+          return r;
+        };
+        function build() {
+          const v = S.list[S.i],
+            tiles = tilesOf(v);
+          const bank = shuf(tiles.map((_, i) => i));
+          let line = [],
+            checked = false;
+          app.innerHTML = `${hud(`Verse ${S.i + 1} of ${S.list.length}`)}<section class="card pop${enOn ? " show-en" : ""}" id="qcard">
+    ${vhead("Build the verse", "رتب الكلمات")}
     ${pic(v.p)}
     <p class="hint">Tap the words in order. The verse starts on the right. Tap a word in the verse to take it back.</p>
     ${vref(v)}
@@ -294,44 +933,93 @@ function build(){
     <div class="words" id="bank" dir="rtl"></div>
     <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my verse</button></div></div>
   </section>`;
-  bindHome();bindTools(v.t);
-  const tile=(i,cls)=>`<button type="button" class="mi ${cls}" data-w="${i}" ${checked?'disabled':''}><span class="tx">${ar(tiles[i])}</span></button>`;
-  function draw(){
-    document.getElementById('vline').innerHTML=line.length?line.map((i,k)=>tile(i,checked?(tiles[i]===tiles[k]?'ok':'no'):'')).join(''):'<span class="hint" dir="ltr">Tap the first word.</span>';
-    document.getElementById('bank').innerHTML=bank.map(i=>tile(i,'')).join('');
-    app.querySelectorAll('#vline [data-w]').forEach(b=>b.onclick=()=>{const i=+b.dataset.w;line=line.filter(x=>x!==i);bank.push(i);draw()});
-    app.querySelectorAll('#bank [data-w]').forEach(b=>b.onclick=()=>{const i=+b.dataset.w;bank.splice(bank.indexOf(i),1);line.push(i);say(tiles[i]);draw()});
-    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=bank.length>0;
-  }
-  draw();
-  document.getElementById('checkBtn').onclick=()=>{
-    checked=true;const built=line.map(i=>tiles[i]).join(' '),ok=built===v.t;
-    if(ok)S.score++;else S.miss.push({q:esc(v.re),your:built,right:v.t});
-    document.getElementById('pts').textContent=S.score;draw();say(v.t);
-    document.getElementById('fbx').innerHTML=fb(ok,`${ok?'':'The red words are in the wrong place. '}<span class="full">${ar(v.t)}</span><span class="fen">${esc(v.re)}: ${esc(v.en)}</span>`);bindNext();
-  };
-}
+          bindHome();
+          bindTools(v.t);
+          const tile = (i, cls) =>
+            `<button type="button" class="mi ${cls}" data-w="${i}" ${checked ? "disabled" : ""}><span class="tx">${ar(tiles[i])}</span></button>`;
+          function draw() {
+            document.getElementById("vline").innerHTML = line.length
+              ? line
+                  .map((i, k) =>
+                    tile(
+                      i,
+                      checked ? (tiles[i] === tiles[k] ? "ok" : "no") : "",
+                    ),
+                  )
+                  .join("")
+              : '<span class="hint" dir="ltr">Tap the first word.</span>';
+            document.getElementById("bank").innerHTML = bank
+              .map((i) => tile(i, ""))
+              .join("");
+            app.querySelectorAll("#vline [data-w]").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  const i = +b.dataset.w;
+                  line = line.filter((x) => x !== i);
+                  bank.push(i);
+                  draw();
+                }),
+            );
+            app.querySelectorAll("#bank [data-w]").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  const i = +b.dataset.w;
+                  bank.splice(bank.indexOf(i), 1);
+                  line.push(i);
+                  say(tiles[i]);
+                  draw();
+                }),
+            );
+            const cb = document.getElementById("checkBtn");
+            if (cb) cb.disabled = bank.length > 0;
+          }
+          draw();
+          document.getElementById("checkBtn").onclick = () => {
+            checked = true;
+            const built = line.map((i) => tiles[i]).join(" "),
+              ok = built === v.t;
+            if (ok) S.score++;
+            else S.miss.push({ q: esc(v.re), your: built, right: v.t });
+            document.getElementById("pts").textContent = S.score;
+            draw();
+            say(v.t);
+            document.getElementById("fbx").innerHTML = fb(
+              ok,
+              `${ok ? "" : "The red words are in the wrong place. "}<span class="full">${ar(v.t)}</span><span class="fen">${esc(v.re)}: ${esc(v.en)}</span>`,
+            );
+            bindNext();
+          };
+        }
 
-/* ---------- END ---------- */
-function end(){
-  hush();
-  const pct=Math.round(S.score/Math.max(1,S.max)*100);const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
-  const msg=pct===100?'Perfect! You know it all.':pct>=90?'Excellent!':pct>=70?'Good work! Look at the answers below.':'Keep practising. Look at the answers below, then play again.';
-  app.innerHTML=`<section class="card pop">
+        /* ---------- END ---------- */
+        function end() {
+          hush();
+          const pct = Math.round((S.score / Math.max(1, S.max)) * 100);
+          const st = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
+          const msg =
+            pct === 100
+              ? "Perfect! You know it all."
+              : pct >= 90
+                ? "Excellent!"
+                : pct >= 70
+                  ? "Good work! Look at the answers below."
+                  : "Keep practising. Look at the answers below, then play again.";
+          app.innerHTML = `<section class="card pop">
     <span class="eyebrow">${MODE_NAME[S.mode]} · your score</span>
     <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
-    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <div class="stars">${[0, 1, 2].map((i) => star(i < st)).join("")}</div>
     <h2>${pct}% · ${msg}</h2>
     <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="modesBtn" type="button">Other games</button></div>
   </section>
-  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${m.q}</div><div class="a">You chose: <s>${ar(m.your)}</s><br>Right answer: <em>${ar(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
-  document.getElementById('againBtn').onclick=()=>startMode(S.mode);
-  document.getElementById('modesBtn').onclick=home;
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+  ${S.miss.length ? `<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map((m) => `<li><div class="q">${m.q}</div><div class="a">You chose: <s>${ar(m.your)}</s><br>Right answer: <em>${ar(m.right)}</em></div></li>`).join("")}</ul></section>` : ""}`;
+          document.getElementById("againBtn").onclick = () => startMode(S.mode);
+          document.getElementById("modesBtn").onclick = home;
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
 
-Quiz.watch(app);
-home();
-})();
-</script>
-</body></html>
+        Quiz.watch(app);
+        home();
+      })();
+    </script>
+  </body>
+</html>

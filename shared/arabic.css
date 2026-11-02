@@ -1,7 +1,8 @@
 /* Arabic text, Arabic answers and folder tabs. Load after quiz.css. */
 .ar {
-  font-family: "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting",
-    "Times New Roman", serif;
+  font-family:
+    "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting", "Times New Roman",
+    serif;
   font-weight: 700;
   line-height: 1.5;
 }

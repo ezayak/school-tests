@@ -58,21 +58,22 @@ Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1
 One look for every page. Colours, fonts, buttons, cards and subject colours (`--sci`, `--en`, `--fr`, …)
 live in `shared/theme.css`; change them there and every page follows.
 
-| File | What | Who loads it |
-|---|---|---|
-| `shared/theme.css` | colours (light/dark), fonts, page, cards, buttons, menu tiles, the typing box (`.spell-in`, `.diff`) | every page, first |
-| `shared/quiz.css` | quiz parts: score bar, picture, answers, matching, results, SVG drawing colours | quiz games, Arabic lessons |
-| `shared/arabic.css` | Arabic text, Arabic answers, folder tabs, Bible verse and reference | Arabic and Religion lessons, Arabic revision quizzes |
-| `shared/arabic-revision.css` | word tools, English toggle | religion / Arabic social-studies revisions |
-| `shared/spelling.css` | flash cards, letter tiles | English dictations |
-| `shared/drag-words.css` | drag tiles from a bank onto a line (with `Kit.dragTiles`) | "Mets en ordre", "Build the word", Arabic homework (word order) |
-| `shared/lesson.css` | lesson pages with tabs, picture cards, games (subject colour = `--accent`) | French and Computer lessons, English stories |
-| `shared/story.css` | English stories: page text, the sentence being read, easy sentence, word meanings | English stories |
-| `shared/reading.css` / `shared/reading.js` | Ukrainian reading game: syllable tiles, flashing words, timed reading, the rocket | Optima Українська література |
-| `shared/math.js` / `shared/math.css` | Math: column sums with carry boxes, number pad, schemas (bar models), groups, arrays, times-table flower, place-value chart, number line | Math lessons |
-| `shared/common.js` | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards; `cover` picture or `ic` emoji), `Kit.scene` / `Kit.idiom` / `Kit.blocks` (animated pictures, sentence blocks), `Kit.dragTiles` (drag or tap tiles from a bank onto a line: letters of a word, words of a sentence; works right-to-left; every tile game uses it) | quiz games, French and Computer lesson lists, French lessons, English stories and lessons, tile games |
+| File                                       | What                                                                                                                                                                                                                                                                                                                                                | Who loads it                                                                                          |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `shared/theme.css`                         | colours (light/dark), fonts, page, cards, buttons, menu tiles, the typing box (`.spell-in`, `.diff`)                                                                                                                                                                                                                                                | every page, first                                                                                     |
+| `shared/quiz.css`                          | quiz parts: score bar, picture, answers, matching, results, SVG drawing colours                                                                                                                                                                                                                                                                     | quiz games, Arabic lessons                                                                            |
+| `shared/arabic.css`                        | Arabic text, Arabic answers, folder tabs, Bible verse and reference                                                                                                                                                                                                                                                                                 | Arabic and Religion lessons, Arabic revision quizzes                                                  |
+| `shared/arabic-revision.css`               | word tools, English toggle                                                                                                                                                                                                                                                                                                                          | religion / Arabic social-studies revisions                                                            |
+| `shared/spelling.css`                      | flash cards, letter tiles                                                                                                                                                                                                                                                                                                                           | English dictations                                                                                    |
+| `shared/drag-words.css`                    | drag tiles from a bank onto a line (with `Kit.dragTiles`)                                                                                                                                                                                                                                                                                           | "Mets en ordre", "Build the word", Arabic homework (word order)                                       |
+| `shared/lesson.css`                        | lesson pages with tabs, picture cards, games (subject colour = `--accent`)                                                                                                                                                                                                                                                                          | French and Computer lessons, English stories                                                          |
+| `shared/story.css`                         | English stories: page text, the sentence being read, easy sentence, word meanings                                                                                                                                                                                                                                                                   | English stories                                                                                       |
+| `shared/reading.css` / `shared/reading.js` | Ukrainian reading game: syllable tiles, flashing words, timed reading, the rocket                                                                                                                                                                                                                                                                   | Optima Українська література                                                                          |
+| `shared/math.js` / `shared/math.css`       | Math: column sums with carry boxes, number pad, schemas (bar models), groups, arrays, times-table flower, place-value chart, number line                                                                                                                                                                                                            | Math lessons                                                                                          |
+| `shared/common.js`                         | `Kit.esc`, `Kit.shuf`, `Kit.pick`, `Kit.star`, `Kit.lessonCard` (lesson-hub cards; `cover` picture or `ic` emoji), `Kit.scene` / `Kit.idiom` / `Kit.blocks` (animated pictures, sentence blocks), `Kit.dragTiles` (drag or tap tiles from a bank onto a line: letters of a word, words of a sentence; works right-to-left; every tile game uses it) | quiz games, French and Computer lesson lists, French lessons, English stories and lessons, tile games |
 
 Rules for new pages:
+
 - Copy an existing page of the same kind and keep its `<link>`s. Never add a `<style>` block or new colour values.
 - A rule needed by more than one page goes into the matching `shared/` file, not into the page.
 - A new file in `shared/` must also be added to `CORE` in `sw.js` (then bump `VERSION`), or it won't work offline.
@@ -114,6 +115,7 @@ Folder: `optima/grade-3/ukr-lit/`. One card on the Optima home page ("Украї
 The engine is `shared/reading.js` + `shared/reading.css` (`<body data-view="list|game">`); the page loads `shared/common.js`, its `<text>.js`, then the engine.
 
 A text page has three steps (tabs), the rocket climbs a little in each:
+
 - **1. Склади** – the long words, one at a time, cut into syllables: tap them in order, they join into one word, read it whole.
   **🔊 Читати разом** reads each syllable aloud as it is tapped, then the word (device voice, Ukrainian; ▶ Послухати plays it first).
 - **2. Слова** – words flash for 15, 10, 6, 5, 4, 3 or 2 seconds; «Ще раз» sends a word back to the end of the line.
@@ -175,7 +177,7 @@ The French and Computer lessons have the same layout built into `shared/lesson.c
 
 The site is a Progressive Web App: it can be installed and works **offline** after the first visit.
 
-- **Android tablet (Chrome):** open the site → tap **Install app** on the home page (or ⋮ menu → *Install app* / *Add to Home screen*).
+- **Android tablet (Chrome):** open the site → tap **Install app** on the home page (or ⋮ menu → _Install app_ / _Add to Home screen_).
 - **iPad (Safari):** open the site → **Share** → **Add to Home Screen**.
 - **Windows / Mac (Chrome or Edge):** install icon in the address bar.
 
@@ -220,6 +222,7 @@ Shared files (no need to touch them for a new story): `shared/story.js` (the eng
 The page loads `shared/common.js`, its `story-*.js`, then `shared/story.js`.
 
 A story page has three tabs:
+
 - **Read** – one book page at a time: the picture, the book text, "In easy words"; 🔊 Read (sentence by sentence), 🐢 Slow (word by word), ⏹ Stop
   read the book text only; the easy words have their own 🔊 / 🐢 buttons in their box; a switch turns the pages by itself
 - **Summary** – the book's story map as picture cards (Characters, Setting, Problem, Events, Solution, Message), read aloud
@@ -255,6 +258,7 @@ Made for a child who is learning to read again: every question, answer and card 
 
 They use the **Computer lesson engine** (`shared/computer-lesson.js`) with `<body data-subject="English">`, which turns on the read-along and the English colour.
 The page loads `shared/common.js` first (animated pictures), then its `unitN-weekN.js`, then the engine. Same three tabs as the other subjects:
+
 - **Learn** – the stories of the week (tiles that open the story pages, `stories`), then card decks (`decks`): vocabulary, grammar, phonics, idioms, suffixes
 - **Play** – the `games`
 - **Exercises** – the booklet pages, grouped by topic (Grammar · …, Phonics · …, Vocabulary · …)
@@ -264,6 +268,7 @@ Each tab shows a row of **section buttons** (one per group, with the number of t
 Booklet texts are **story pages** (`story-*.html/.js`, the story engine) with `lesson: {path, label}` (a link back to the lesson); questions use the school's model answers when there are some.
 
 `unitN-weekN.js` is a normal lesson file (see Computer lessons) plus:
+
 - `hub: "index.html"` (the English page), `imgDir: "img/unit1-week3"` (the pictures folder)
 - `stories: [{t, en, path, cover: {src}, g}]`, `decks: [{k, g, t, en, ic, cover: {vis | src}, cards: [{t, lines, vis | img | src}]}]`, `ideas: []`
 - `g` on stories, decks, games and exercises: the section the tile belongs to (its section button)
@@ -295,10 +300,12 @@ new exercises use the week's texts (pictures by `src`). It is a "Final exam" car
 Folder: `grade-3/term-1/arabic/`. One card on the home page ("Arabic Lessons") opens `index.html`, which lists the lessons from `lessons.js`.
 
 Shared files (no need to touch them for a new lesson):
+
 - `arabic-lesson.js` — the engine. The page's `<body data-view="list|lesson|exercises">` picks the view.
 - `arabic-lesson.css` — engine-only styles; the base comes from `shared/`.
 
 Each lesson has four files:
+
 - `lesson-N.js` — all the content (`window.LESSON = {...}`)
 - `lesson-N.html` — story, words, opposites & plurals (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`)
 - `lesson-N-exercises.html` — the book exercises (copy `lesson-1-exercises.html` the same way)
@@ -328,6 +335,7 @@ window.LESSON = {
 ```
 
 Exercise item types (every item can have `en`/`uk` help text, `img`, `tag`, and `read: [textIndex, partIndex]` to show that paragraph; a plain number means a part of the first text):
+
 - `{type:"tf", q, a: true|false, x: "explanation"}`
 - `{type:"mc", q: "… ___ …", o: [correct, wrong, wrong]}` — the first option is the right one; they are shuffled on screen
 - `{type:"open", q, a: "model answer"}` — the child answers, sees the model answer and marks themselves
@@ -360,6 +368,7 @@ After adding a test: add it to `TESTS`, add `test-N.html` / `test-N.js` to `also
 The ثَانِيًا: الْأَدَاءَاتُ الْمَنْزِلِيَّةُ part of the book pages (the classwork, أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ, is left out), listed under **Homework** on `index.html` (`window.HOMEWORK` in `lessons.js`).
 One page per lesson: `hw-N.html` + `hw-N.js` is the homework of Lesson N (the lesson whose story the page is about). A new homework sheet for the same lesson is one more tab, not a new page.
 Same format as a test, with one tab per book page (`{k: "p31", ic, t: "Page 31", short: "p.31", ar: "صَفْحَةُ ٣١"}`) and `n: "hN"`:
+
 - a tab with `story: i` shows that text above its tasks (e.g. a story to give a new ending); a tab without `story` shows only its tasks
 - every item has a picture (`img`, or `ic` with emoji), because there is usually no text above them
 - `{type: "word"}` for one word, `{type: "mc"}` when the sheet gives the choices in brackets, `{type: "open"}` for sentences, writing and copying,
@@ -381,6 +390,7 @@ plus `shared/drag-words.css` and `shared/common.js` for the verse tiles, like `h
 
 A lesson is `uN-lesson-M.html` (copy `u2-lesson-4.html`, change the `.js`) + `uN-lesson-M.js` + pictures in `img/uN-lesson-M/` (cropped from the book, ~700px; the
 small activity pictures ~300px). Same format as an Arabic lesson (`stories`, `gloss`, `exercises`), with:
+
 - `n: "rel-u2l4"` (a text key, so it saves apart from the Arabic lessons), `tapq: true`, `links` back to `index.html` ("Religion lessons")
 - `tabs`: Story · Games · Golden verse (· Homework, when there is real homework). A custom tab named `story` gets the normal story list with part-by-part navigation; one named `verse` gets the verse games;
   the others show their exercises (`tab: "games"` / `tab: "hw"`). A tab can have `sub: [en, ar]`, the line above its exercise list.
@@ -403,6 +413,7 @@ Made to be understood from pictures and sound: big pictures from the book, every
 🔊 / 🐢 slow / 👆 word-by-word reading, wrong answers can be tried again, 💡 help in the building games. Optional translation EN / UA / AR.
 
 Shared files (no need to touch them for a new lesson):
+
 - `french-lesson.js` — the engine (`<body data-view="list|lesson">`); a lesson or a revision is only data
 - `shared/lesson.css` — the lesson look (shared with the Computer lessons); the base comes from `shared/theme.css`
 
@@ -410,6 +421,7 @@ Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `les
 `lesson-2.js` is the fullest example. A picture is `img: "chadi"` (this lesson's folder), `img: "lesson-1/mounir"` (another lesson's folder) or `emoji: "👧"`.
 
 A lesson page has three tabs, like the Arabic lessons (the last tab used is remembered). The lesson file lists its tiles and their pictures:
+
 - **Apprends** – `learn: [{k, img}]`, k = `story` (picture by picture), `words` (flash cards of `people` + `phrases`),
   `sound` with `s: "ou"` (one tile per sound in `sounds`), `verb` (only s’appeler), `rule` (a grammar card: `rule`)
 - **Joue** – `play: [{k, img}]`, k = `listen` (hear a person’s sentence, tap the picture), `match` (pictures ↔ names, rounds of up to 5),
@@ -422,6 +434,7 @@ A lesson page has three tabs, like the Arabic lessons (the last tab used is reme
 - **Exercices** – the school sheets: `exercises: [{k, t, en, img, from, items, keep?}]` (`keep: true` keeps the order)
 
 The parts of a lesson file:
+
 - `people: [{fr, img, g: "il"|"elle", say?, en, uk, ar}]` (`people: []` for a lesson without people: the word cards are only `phrases`, and no listen / match / ilelle tiles) – `say` is what the card says (“C’est un garçon. Il s’appelle Chadi.”), otherwise “Il / Elle s’appelle …”
 - `phrases: [{fr, img|emoji, en, uk, ar}]`, `story: [{img, title?, lines: [{who, fr}]}]` (`title` = “Des phrases pour parler”: not in “Lis tout”)
 - `sounds: [{s, ipa, intro, hear, img, words, pics, not}]` – `intro` / `hear`: what the voice says when the screen opens / on the big button;
@@ -432,6 +445,7 @@ The parts of a lesson file:
 - the last line keeps the data for a revision: `(window.FR_DATA = window.FR_DATA || {})[N] = window.LESSON;`
 
 Exercise item types (each can have `img` or `emoji`):
+
 - `{type:"order", fr, q?, cards?}` – Mets en ordre (m’ / t’ / s’ before « appel… » and j’ become their own cards, like at school; `cards` when the sheet cuts them differently, e.g. `["J’ai", "huit", "ans."]`)
 - `{type:"letters", fr}` – build a word, or a sentence word by word
 - `{type:"fill", parts:["Je ", ["m’","t’","s’"], "appell", ["e","es"], " Bouli."], ans:["m’","e"]}` – also capital letters (`[["c","C"], "omment…"]`) and end marks (`["Comment tu t’appelles", [".","?","!"]]`)
@@ -457,6 +471,7 @@ Made to be understood from pictures and sound: short sentences, key words in col
 wrong answers can be tried again. The computer steps are practised on **Mini Windows**, a pretend Windows 11 screen.
 
 Shared files (no need to touch them for a new lesson):
+
 - `shared/computer-lesson.js` — the engine (`<body data-view="list|lesson">`), loads after `winsim.js`
 - `winsim.js` / `winsim.css` — Mini Windows: desktop, taskbar (clock, Wi-Fi, speaker, battery), Search, Start menu (Pinned, All apps, power → Restart),
   File Explorer (8 views, Details columns, zip / extract, rename + F2, cut / paste), right-click menus (also the old "Show more options" menu and Send to),
@@ -469,6 +484,7 @@ Each lesson, in its `chapter-N/` folder: `lesson-N.html` (copy `lesson-1.html`, 
 `video/` (the school videos, made smaller: `ffmpeg -i in.mp4 -vf scale=-2:720 -c:v libx264 -crf 28 -c:a aac -b:a 64k -ac 1 -movflags +faststart out.mp4`).
 
 A lesson page has three tabs:
+
 - **Learn** – the big question, **Big ideas** (`ideas`: picture cards with 1–3 short lines), and one **How to …** per book box (`howto`):
   Mini Windows with ▶ Show me (a pretend mouse does it) and ✋ Your turn (the right place glows after a wrong click), the school video, the book picture
 - **Play** – Mini Windows free play + missions, and the `games`
@@ -502,6 +518,7 @@ the lessons have no `howto`, so the Play tab has only the games. Instead, the Le
 `lessons.js` can set its own `intro` sentence for the lessons page.
 
 Extra things a lesson can have (both grades can use them):
+
 - `videos: [{k, t, video: "l2-thermal", img: "thermal"}]` – school videos as tiles on the Learn tab; a big idea card can also have `video: "l2-thermal"`.
 - Item `place`: drag a thing to the right place, or tap the place. `{type: "place", q, thing: {img | emoji, label}, spots: [{t, img | emoji}, …], x}` – the first spot is right.
 - Item `multi`: choose all the right ones. `{type: "multi", q, opts: [{t, img | emoji, ok: true}, …]}`.
@@ -542,6 +559,7 @@ with **Mini Word** from `shared/`. A lesson with `words` and how-to's shows both
 Book Hands on 4.1 of Lesson 4 is left out (it did not load in the book).
 
 Mini Word can also do the Grade 4 skills (the targets are listed at the top of `shared/wordsim.js`):
+
 - Home › Paragraph: Decrease / Increase Indent, Tab at the start of a paragraph (`pstart:<p>` then key `Tab`), Line and Paragraph Spacing
   (1.0–3.0, Add Space Before, Remove Space After), Shading (colours), Borders (bottom, top, left, right, outside, all, inside, none), Show/Hide ¶;
   the Font window's Advanced tab (Spacing Expanded / Condensed, By 3 pt); Replace (Ctrl + H: Find what, Replace with, Replace, Replace All, Find Next).
@@ -554,7 +572,7 @@ Mini Word can also do the Grade 4 skills (the targets are listed at the top of `
 - View: Read Mode (View › Edit Document to go back), Print Layout, Web Layout, Ruler. File › Print (or Ctrl + P, then Enter): Copies, the Printer list
   (local / network), Print All Pages / Selection / Current Page / Custom Print with a Pages box, Portrait / Landscape, page arrows and zoom.
 - Starts: `doc: "animals" | "animalsPic" | "dolphin" | "tiny" | "parrot" | "sports" | "school" | "schoolPyr" | "water" | "waterCycle" | "facts" |
-  "grammar" | "marco" | "marcoFixed" | "report"` (the book's texts), `obj: <paragraph>` (a selected picture or diagram), `replace: true`,
+"grammar" | "marco" | "marcoFixed" | "report"` (the book's texts), `obj: <paragraph>` (a selected picture or diagram), `replace: true`,
   `view: "read"`, `marks: true`, `ruler: true`.
 - Pictures of the buttons for games: `oi` / `icon` with `indent-inc`, `linespacing`, `shading`, `borders:outside`, `marks`, `removebg`, `crop`,
   `wraptext`, `piceffects`, `picborder`, `smartart`, `shapes`, `readmode`, `printlayout`, `weblayout`, `portrait`, `landscape`, …
@@ -567,6 +585,7 @@ Book: Elevate Science, Grade 4. The lessons use the **Computer lesson engine** (
 the pages set `<body data-subject="Science">`, which changes the subject name and the colour (`--sci-ink`, a darker gold that reads well on white).
 
 A lesson has the same three tabs and the same `lesson-N.js` format as a Grade 3 Computer lesson, plus:
+
 - `words: [{w: "Kinetic energy", m: "the energy of motion"}, …]` – the book's vocabulary; the first Learn tile becomes **Key words**
   (each word with its short meaning, read aloud) instead of "Big ideas".
 - A word instead of a picture in a `match` (word ↔ meaning): `{vis: {kind: "lines", rows: ["Kinetic energy"]}, label: "Is the energy of motion."}`.
@@ -621,6 +640,7 @@ Made for a child who learns from pictures: one colour per place (ones blue, tens
 answers typed on a big number pad (the computer keys work too, no tablet keyboard), 💡 Help explains the next column.
 
 Question types (games and exercises):
+
 - `{type: "col", op: "+" | "-", a, b}` – add or subtract in columns. Small boxes above the digits for the carried 1 (or the regrouped number, up to 2 digits),
   boxes under the line for the answer (typing goes from the ones to the left). On subtraction, tapping a digit of the top number crosses it out.
   ✓ Check marks the wrong places in red; 💡 Help explains one column; after 3 tries the answer is shown. When it is done, the carries are filled in.
@@ -631,6 +651,7 @@ Question types (games and exercises):
 - The engine's own `mc`, `multi` and `tf` work as usual.
 
 Drawings (`vis`):
+
 - `{kind: "bar", rows: [{l, e, segs: [{t, v, q, c}], brace: {t, q}}], total: {t}, note}` – the schema (bar model). `v` = length, `q: true` = the unknown (dashed, yellow),
   `c` = colour 0–3, `brace` = the total of that bar (on top), `total` = the total of all the bars (bracket on the right).
   Repeated parts: `{l, seg: {t, v}, times: 5}` (times as many).

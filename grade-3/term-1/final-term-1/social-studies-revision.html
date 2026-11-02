@@ -1,28 +1,49 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<link rel="manifest" href="../../../manifest.webmanifest">
-<meta name="theme-color" content="#1B2440">
-<link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
-<link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Study Games">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
-</head><body>
-<title>Social Studies Quest</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
-<link rel="stylesheet" href="../../../shared/theme.css">
-<link rel="stylesheet" href="../../../shared/quiz.css">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <link rel="manifest" href="../../../manifest.webmanifest" />
+    <meta name="theme-color" content="#1B2440" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../../../icons/favicon-32.png"
+    />
+    <link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Study Games" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <script>
+      if ("serviceWorker" in navigator)
+        addEventListener("load", () =>
+          navigator.serviceWorker.register("../../../sw.js").catch(() => {}),
+        );
+    </script>
+  </head>
+  <body>
+    <title>Social Studies Quest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap"
+    />
+    <link rel="stylesheet" href="../../../shared/theme.css" />
+    <link rel="stylesheet" href="../../../shared/quiz.css" />
 
-<main class="wrap" id="app"></main>
+    <main class="wrap" id="app"></main>
 
-<script src="../../../shared/common.js"></script>
-<script src="../../../quiz-common.js"></script>
-<script>
-(function(){
-/* =====================================================================
+    <script src="../../../shared/common.js"></script>
+    <script src="../../../quiz-common.js"></script>
+    <script>
+      (function () {
+        /* =====================================================================
    Grade 3 Social Studies · Final revision, Term 1
    Chapter 1: L2 Weather, Climate, and Forces of Nature, L3 Using Earth's Resources (the final-term memo)
    From the teacher's slides, the booklet (L2 pp. 2–8, L3 pp. 9–14), Graded HW 1 and Graded HW 2.
@@ -31,288 +52,1360 @@
               q, o: [answers], c: right answer (default 0), k: keep the order, x: why}
    ===================================================================== */
 
-/* ---------- drawing helpers ---------- */
-const em=(x,y,s,c,ex='')=>`<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
-const tx=(x,y,t,c='lbl',a='middle')=>`<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
-const SKY='<rect class="f-sky" width="320" height="180"/>';
-const IMG=p=>`img/social-studies/${p}.jpg`;
-// whole pictures in a grid (2×2 for four), each with its letter A, B, C… like the answer buttons
-const tiles=q=>{const n=q.ps.length,cols=n>3?2:n,rows=Math.ceil(n/cols),w=(320-6*(cols+1))/cols,h=(180-6*(rows+1))/rows;
-  return SKY+q.ps.map((p,i)=>{const x=6+(i%cols)*(w+6),y=6+Math.floor(i/cols)*(h+6);return `<rect class="f-card" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>${tx(x+14,y+h/2,'ABCD'[i],'lbl-big')}<image href="${IMG(p)}" x="${x+28}" y="${y+3}" width="${w-31}" height="${h-6}" preserveAspectRatio="xMidYMid meet"/>`}).join('')};
-// emoji picture: each group of emoji in its own slot, so a long row never runs off the picture
-const emo=e=>{const g=e.split(' '),s=Math.min(80,280/g.length/Math.max(...g.map(x=>x.replace(/[️‍]/g,'').length/2)));return SKY+g.map((x,i)=>em(160+(i-(g.length-1)/2)*(300/g.length),90,s,x)).join('')};
+        /* ---------- drawing helpers ---------- */
+        const em = (x, y, s, c, ex = "") =>
+          `<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central" ${ex}>${c}</text>`;
+        const tx = (x, y, t, c = "lbl", a = "middle") =>
+          `<text class="${c}" x="${x}" y="${y}" text-anchor="${a}" dominant-baseline="central">${t}</text>`;
+        const SKY = '<rect class="f-sky" width="320" height="180"/>';
+        const IMG = (p) => `img/social-studies/${p}.jpg`;
+        // whole pictures in a grid (2×2 for four), each with its letter A, B, C… like the answer buttons
+        const tiles = (q) => {
+          const n = q.ps.length,
+            cols = n > 3 ? 2 : n,
+            rows = Math.ceil(n / cols),
+            w = (320 - 6 * (cols + 1)) / cols,
+            h = (180 - 6 * (rows + 1)) / rows;
+          return (
+            SKY +
+            q.ps
+              .map((p, i) => {
+                const x = 6 + (i % cols) * (w + 6),
+                  y = 6 + Math.floor(i / cols) * (h + 6);
+                return `<rect class="f-card" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>${tx(x + 14, y + h / 2, "ABCD"[i], "lbl-big")}<image href="${IMG(p)}" x="${x + 28}" y="${y + 3}" width="${w - 31}" height="${h - 6}" preserveAspectRatio="xMidYMid meet"/>`;
+              })
+              .join("")
+          );
+        };
+        // emoji picture: each group of emoji in its own slot, so a long row never runs off the picture
+        const emo = (e) => {
+          const g = e.split(" "),
+            s = Math.min(
+              80,
+              280 /
+                g.length /
+                Math.max(...g.map((x) => x.replace(/[️‍]/g, "").length / 2)),
+            );
+          return (
+            SKY +
+            g
+              .map((x, i) =>
+                em(160 + (i - (g.length - 1) / 2) * (300 / g.length), 90, s, x),
+              )
+              .join("")
+          );
+        };
 
-const TF=['True','False'];
-const RN=['Renewable','Non-renewable'];
-const AI=['Agricultural region','Industrial region'];
-const HW=['Natural resource','Crop people can consume','Product from crops'];
-const VEG=['Forests','Grasslands','Tundra','Deserts'];
-const DIS=['Tornado','Hurricane','Tsunami','Avalanche','Volcano','Earthquake'];
-const MC=[
-/* ===== Lesson 2 · Weather, Climate, and Forces of Nature (slides, Graded HW 1, booklet pp. 2–4) ===== */
-{l:2,p:'climate-map',q:'___ is the weather of a place over a long period of time.',o:['Climate','Temperature','Precipitation'],x:'Climate is the weather of a place over a long period of time.'},
-{l:2,p:'weather-climate',q:'Weather can change within…',o:['A few minutes or hours','Only after 100 years','Never'],x:'Weather changes daily, sometimes within a few minutes or hours.'},
-{l:2,p:'weather-climate',q:'Which one takes a very long time to change?',o:['Climate','Weather'],k:1,x:'Weather changes fast. Climate takes a very long time to change.'},
-{l:2,p:'weather-icons',q:'Weather is…',o:['The condition of the air (atmosphere) at a place right now','The weather over many years','The height of a mountain'],x:'Weather is the temporary condition of the atmosphere at a place.'},
-{l:2,p:'boy-umbrella',q:'___ changes daily. Often, we describe it as hot, rainy, sunny, freezing, or snowy.',o:['Weather','Climate','Vegetation']},
-{l:2,p:'climate-map',q:'Climate is the overall ___ weather at a place over a period of time.',o:['average','fastest','loudest'],x:'Climate is the overall average weather at a place over a period of time.'},
-{l:2,p:'globe',q:'The climate of a place depends on its…',o:['Location and elevation','Color and size','Name and shape'],x:'Climate depends on location (near the equator or poles) and elevation (height).'},
-{l:2,p:'hemispheres',q:'Places near the equator will be…',o:['Hot','Cold','Cool'],k:1,x:'Places near the equator have a hotter climate.'},
-{l:2,p:'globe',q:'Places near the North and South Poles have a ___ climate.',o:['Colder','Hotter'],k:1,x:'Places near the poles have a colder climate.'},
-{l:2,p:'elevation',q:'Elevation means…',o:['The height above sea level','The rain','The wind'],x:'Elevation means the height (above sea level).'},
-{l:2,p:'cool-mountain',q:'High places and mountains are ___ most of the time during the year.',o:['Cool','Hot','Dry'],x:'High places and mountains are cool most of the year.'},
-{l:2,p:'hemispheres',q:'What is the red line around the middle of the Earth called?',o:['The equator','The North Pole','Sea level'],x:'The equator is the line around the middle of the Earth.'},
-{l:2,p:'hemispheres',q:'The part of the Earth north of (above) the equator is the…',o:['Northern Hemisphere','Southern Hemisphere'],k:1,x:'North of the equator = Northern Hemisphere. South of it = Southern Hemisphere.'},
-{l:2,p:'rain-snow',q:"A region's climate consists of…",o:['Temperature and precipitation','Mountains and rivers','Plants and animals'],x:"A region's climate is made of temperature and precipitation."},
-{l:2,p:'thermometer',q:'Temperature is…',o:['How hot or cold it is','The amount of rain that falls','How high a mountain is']},
-{l:2,p:'rain-snow',q:'Precipitation is…',o:['The amount of rain or snow that falls','How hot or cold it is','A kind of plant']},
-{l:2,p:'tropical',q:'Which climate is warm and hot, has no winter, and is near the equator?',o:['Tropical climate','Temperate climate','Arctic climate']},
-{l:2,p:'temperate',q:'Which climate is north of the equator, with warmer summers and colder winters?',o:['Temperate climate','Tropical climate','Arctic climate']},
-{l:2,p:'tundra',q:'Arctic climates are…',o:['Very cold','Warm and hot','Hot with no winter']},
-{l:2,p:'globe',q:'Which climate has NO winter?',o:['Tropical','Temperate','Arctic'],x:'Tropical climates have no winter.'},
-{l:2,p:'usa-map',q:'Most of the United States is in the…',o:['Temperate climate','Arctic climate','Tropical climate'],x:'Most of the United States is in the temperate climate region.'},
-{l:2,p:'climate-plants',q:'The climate of a place affects…',o:['The plants that grow there','The color of the sky','The names of the cities']},
-{l:2,p:'climate-plants',q:'Temperature and the amount of rainfall determine the types of…',o:['Vegetation','Mountains','Hemispheres']},
-{l:2,p:'veg-types',q:'___ means kinds of plant life that grow.',o:['Vegetation','Precipitation','Weather']},
-{l:2,p:'veg-types',q:'What are the four types of vegetation in the United States?',o:['Forests, grasslands, deserts and tundra','Oceans, rivers, lakes and seas','Cities, towns, villages and farms']},
-{l:2,p:'forest',q:'___ cover most of North America.',o:VEG,k:1},
-{l:2,p:'forest',q:'___ have plenty of rainfall.',o:VEG,k:1},
-{l:2,p:'usa-map',q:'Where are forests found in the United States?',o:['Near the Great Lakes and in the eastern United States','Only in the desert','Only in the Arctic']},
-{l:2,p:'forest-animals',q:'Which animals live in forests?',o:['Bears, deer and raccoons','Camels and lizards','Penguins and seals']},
-{l:2,p:'grassland',q:'___ has / have dry climates in the Western Great Plains.',o:VEG,c:1,k:1},
-{l:2,p:'grassland',q:'What grows in grasslands?',o:['Berry bushes and small trees','Huge rainforest trees','Nothing at all']},
-{l:2,p:'prairie-dog',q:'Prairie dogs live in…',o:['Grasslands','Forests','Tundra']},
-{l:2,p:'caribou',q:'___ is the animal that lives in the tundra.',o:['Caribou','Bear','Deer'],x:'In the tundra live deer called caribou.'},
-{l:2,p:'arctic-circle',q:'Most tundra is around the…',o:['Arctic Circle','Equator','Great Lakes']},
-{l:2,p:'tundra',q:"___ cover / covers almost 20 percent of Earth's surface.",o:VEG,c:2,k:1},
-{l:2,p:'desert',q:'___ are the driest places on Earth.',o:VEG,c:3,k:1},
-{l:2,p:'desert',q:'Deserts get fewer than ___ inches of rain a year.',o:['10','50','100'],k:1,x:'Deserts get fewer than 10 inches (25 centimetres) of rain a year.'},
-{l:2,p:'cactus',q:'Large cactuses called ___ grow in Mexico.',o:['Saguaros','Palms','Pines']},
-{l:2,p:'ecosystem',q:'An ___ is a system where plants and animals interact and work together.',o:['ecosystem','United States','temperature']},
-{l:2,p:'ecosystem',q:'In the ecosystem example, birds and squirrels depend on…',o:['Trees','Volcanoes','Snow'],x:'Birds and squirrels depend on trees. Some seeds drop into the soil and grow into new trees.'},
-{l:2,p:'hazards',q:'A natural hazard is…',o:['Any natural event that causes a change in the land or the environment','Something people build','A kind of plant']},
-{l:2,p:'volcano',q:'A ___ is a mountain that erupts in an explosion of molten rock, gases, and ash.',o:['volcano','earthquake','ecosystem']},
-{l:2,p:'earthquake',q:'An earthquake is…',o:['A violent shaking of the earth','A mountain that erupts','A very cold place']},
-{l:2,p:'disaster-houses',q:'A natural disaster is…',o:['Something that causes damage to people and buildings or bridges','Any kind of nice weather','A plant that grows in the desert']},
-{l:2,p:'disaster-houses',q:'Natural hazards turn into natural disasters when…',o:['Damage takes place','The sun comes out','It is winter']},
-{l:2,p:'hazards',q:'Which of these is NOT a natural disaster?',o:['A rainbow','A tornado','A tsunami','A forest fire']},
-// which natural disaster? (booklet p. 8 "Draw the natural disaster", with the slide photos)
-...[['tornado',0],['hurricane',1],['tsunami',2],['avalanche',3],['volcano-photo',4],['earthquake',5]]
-  .map(([p,c])=>({l:2,p,q:'Which natural disaster is this?',o:DIS,c,k:1})),
-// true or false (Graded HW 1 B and booklet C)
-{l:2,p:'temperate',q:'"Temperate climate doesn\'t have winter."',o:TF,c:1,k:1,x:'Temperate climate has colder winters. The TROPICAL climate has no winter.'},
-{l:2,p:'temperate',q:'"Temperate climates have colder summers."',o:TF,c:1,k:1,x:'Temperate climates have WARMER summers and colder winters.'},
-{l:2,p:'forest',q:'"Forests are near the Great Lakes in the eastern United States."',o:TF,k:1},
-{l:2,p:'veg-types',q:'"Vegetation is a kind of plant life that grows."',o:TF,k:1},
-{l:2,p:'prairie-dog',q:'"Prairie dogs live in forests."',o:TF,c:1,k:1,x:'Prairie dogs live in GRASSLANDS.'},
-{l:2,p:'weather-icons',q:'"Weather changes daily."',o:TF,k:1},
-{l:2,p:'disaster-houses',q:'"A natural hazard is something that causes damage to people, buildings, and bridges."',o:TF,c:1,k:1,x:'That is a natural DISASTER. A natural hazard is a natural event that changes the land or the environment.'},
-{l:2,p:'hazards',q:'"A natural hazard is any natural event that causes a change in the land or in the environment."',o:TF,k:1},
-{l:2,p:'disaster-houses',q:'"Natural disasters turn into natural hazards when damage takes place."',o:TF,c:1,k:1,x:'It is the other way: natural HAZARDS turn into natural DISASTERS when damage takes place.'},
-{l:2,p:'volcano',q:'"A volcano is a violent shaking of the earth."',o:TF,c:1,k:1,x:'That is an EARTHQUAKE. A volcano is a mountain that erupts molten rock, gases, and ash.'},
-{l:2,p:'arctic-circle',q:'"Most tundra is found around the Arctic Circle."',o:TF,k:1},
-{l:2,p:'elevation',q:'"Elevation means the height above sea level."',o:TF,k:1},
-{l:2,p:'hemispheres',q:'"Places near the equator will have a colder climate than places near the North and South Poles, which will have a hotter climate."',o:TF,c:1,k:1,x:'Near the equator it is HOTTER. Near the poles it is COLDER.'},
-{l:2,p:'rain-snow',q:'"Precipitation is how hot or cold the weather is."',o:TF,c:1,k:1,x:'That is TEMPERATURE. Precipitation is the amount of rain or snow that falls.'},
+        const TF = ["True", "False"];
+        const RN = ["Renewable", "Non-renewable"];
+        const AI = ["Agricultural region", "Industrial region"];
+        const HW = [
+          "Natural resource",
+          "Crop people can consume",
+          "Product from crops",
+        ];
+        const VEG = ["Forests", "Grasslands", "Tundra", "Deserts"];
+        const DIS = [
+          "Tornado",
+          "Hurricane",
+          "Tsunami",
+          "Avalanche",
+          "Volcano",
+          "Earthquake",
+        ];
+        const MC = [
+          /* ===== Lesson 2 · Weather, Climate, and Forces of Nature (slides, Graded HW 1, booklet pp. 2–4) ===== */
+          {
+            l: 2,
+            p: "climate-map",
+            q: "___ is the weather of a place over a long period of time.",
+            o: ["Climate", "Temperature", "Precipitation"],
+            x: "Climate is the weather of a place over a long period of time.",
+          },
+          {
+            l: 2,
+            p: "weather-climate",
+            q: "Weather can change within…",
+            o: ["A few minutes or hours", "Only after 100 years", "Never"],
+            x: "Weather changes daily, sometimes within a few minutes or hours.",
+          },
+          {
+            l: 2,
+            p: "weather-climate",
+            q: "Which one takes a very long time to change?",
+            o: ["Climate", "Weather"],
+            k: 1,
+            x: "Weather changes fast. Climate takes a very long time to change.",
+          },
+          {
+            l: 2,
+            p: "weather-icons",
+            q: "Weather is…",
+            o: [
+              "The condition of the air (atmosphere) at a place right now",
+              "The weather over many years",
+              "The height of a mountain",
+            ],
+            x: "Weather is the temporary condition of the atmosphere at a place.",
+          },
+          {
+            l: 2,
+            p: "boy-umbrella",
+            q: "___ changes daily. Often, we describe it as hot, rainy, sunny, freezing, or snowy.",
+            o: ["Weather", "Climate", "Vegetation"],
+          },
+          {
+            l: 2,
+            p: "climate-map",
+            q: "Climate is the overall ___ weather at a place over a period of time.",
+            o: ["average", "fastest", "loudest"],
+            x: "Climate is the overall average weather at a place over a period of time.",
+          },
+          {
+            l: 2,
+            p: "globe",
+            q: "The climate of a place depends on its…",
+            o: ["Location and elevation", "Color and size", "Name and shape"],
+            x: "Climate depends on location (near the equator or poles) and elevation (height).",
+          },
+          {
+            l: 2,
+            p: "hemispheres",
+            q: "Places near the equator will be…",
+            o: ["Hot", "Cold", "Cool"],
+            k: 1,
+            x: "Places near the equator have a hotter climate.",
+          },
+          {
+            l: 2,
+            p: "globe",
+            q: "Places near the North and South Poles have a ___ climate.",
+            o: ["Colder", "Hotter"],
+            k: 1,
+            x: "Places near the poles have a colder climate.",
+          },
+          {
+            l: 2,
+            p: "elevation",
+            q: "Elevation means…",
+            o: ["The height above sea level", "The rain", "The wind"],
+            x: "Elevation means the height (above sea level).",
+          },
+          {
+            l: 2,
+            p: "cool-mountain",
+            q: "High places and mountains are ___ most of the time during the year.",
+            o: ["Cool", "Hot", "Dry"],
+            x: "High places and mountains are cool most of the year.",
+          },
+          {
+            l: 2,
+            p: "hemispheres",
+            q: "What is the red line around the middle of the Earth called?",
+            o: ["The equator", "The North Pole", "Sea level"],
+            x: "The equator is the line around the middle of the Earth.",
+          },
+          {
+            l: 2,
+            p: "hemispheres",
+            q: "The part of the Earth north of (above) the equator is the…",
+            o: ["Northern Hemisphere", "Southern Hemisphere"],
+            k: 1,
+            x: "North of the equator = Northern Hemisphere. South of it = Southern Hemisphere.",
+          },
+          {
+            l: 2,
+            p: "rain-snow",
+            q: "A region's climate consists of…",
+            o: [
+              "Temperature and precipitation",
+              "Mountains and rivers",
+              "Plants and animals",
+            ],
+            x: "A region's climate is made of temperature and precipitation.",
+          },
+          {
+            l: 2,
+            p: "thermometer",
+            q: "Temperature is…",
+            o: [
+              "How hot or cold it is",
+              "The amount of rain that falls",
+              "How high a mountain is",
+            ],
+          },
+          {
+            l: 2,
+            p: "rain-snow",
+            q: "Precipitation is…",
+            o: [
+              "The amount of rain or snow that falls",
+              "How hot or cold it is",
+              "A kind of plant",
+            ],
+          },
+          {
+            l: 2,
+            p: "tropical",
+            q: "Which climate is warm and hot, has no winter, and is near the equator?",
+            o: ["Tropical climate", "Temperate climate", "Arctic climate"],
+          },
+          {
+            l: 2,
+            p: "temperate",
+            q: "Which climate is north of the equator, with warmer summers and colder winters?",
+            o: ["Temperate climate", "Tropical climate", "Arctic climate"],
+          },
+          {
+            l: 2,
+            p: "tundra",
+            q: "Arctic climates are…",
+            o: ["Very cold", "Warm and hot", "Hot with no winter"],
+          },
+          {
+            l: 2,
+            p: "globe",
+            q: "Which climate has NO winter?",
+            o: ["Tropical", "Temperate", "Arctic"],
+            x: "Tropical climates have no winter.",
+          },
+          {
+            l: 2,
+            p: "usa-map",
+            q: "Most of the United States is in the…",
+            o: ["Temperate climate", "Arctic climate", "Tropical climate"],
+            x: "Most of the United States is in the temperate climate region.",
+          },
+          {
+            l: 2,
+            p: "climate-plants",
+            q: "The climate of a place affects…",
+            o: [
+              "The plants that grow there",
+              "The color of the sky",
+              "The names of the cities",
+            ],
+          },
+          {
+            l: 2,
+            p: "climate-plants",
+            q: "Temperature and the amount of rainfall determine the types of…",
+            o: ["Vegetation", "Mountains", "Hemispheres"],
+          },
+          {
+            l: 2,
+            p: "veg-types",
+            q: "___ means kinds of plant life that grow.",
+            o: ["Vegetation", "Precipitation", "Weather"],
+          },
+          {
+            l: 2,
+            p: "veg-types",
+            q: "What are the four types of vegetation in the United States?",
+            o: [
+              "Forests, grasslands, deserts and tundra",
+              "Oceans, rivers, lakes and seas",
+              "Cities, towns, villages and farms",
+            ],
+          },
+          {
+            l: 2,
+            p: "forest",
+            q: "___ cover most of North America.",
+            o: VEG,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "forest",
+            q: "___ have plenty of rainfall.",
+            o: VEG,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "usa-map",
+            q: "Where are forests found in the United States?",
+            o: [
+              "Near the Great Lakes and in the eastern United States",
+              "Only in the desert",
+              "Only in the Arctic",
+            ],
+          },
+          {
+            l: 2,
+            p: "forest-animals",
+            q: "Which animals live in forests?",
+            o: [
+              "Bears, deer and raccoons",
+              "Camels and lizards",
+              "Penguins and seals",
+            ],
+          },
+          {
+            l: 2,
+            p: "grassland",
+            q: "___ has / have dry climates in the Western Great Plains.",
+            o: VEG,
+            c: 1,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "grassland",
+            q: "What grows in grasslands?",
+            o: [
+              "Berry bushes and small trees",
+              "Huge rainforest trees",
+              "Nothing at all",
+            ],
+          },
+          {
+            l: 2,
+            p: "prairie-dog",
+            q: "Prairie dogs live in…",
+            o: ["Grasslands", "Forests", "Tundra"],
+          },
+          {
+            l: 2,
+            p: "caribou",
+            q: "___ is the animal that lives in the tundra.",
+            o: ["Caribou", "Bear", "Deer"],
+            x: "In the tundra live deer called caribou.",
+          },
+          {
+            l: 2,
+            p: "arctic-circle",
+            q: "Most tundra is around the…",
+            o: ["Arctic Circle", "Equator", "Great Lakes"],
+          },
+          {
+            l: 2,
+            p: "tundra",
+            q: "___ cover / covers almost 20 percent of Earth's surface.",
+            o: VEG,
+            c: 2,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "desert",
+            q: "___ are the driest places on Earth.",
+            o: VEG,
+            c: 3,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "desert",
+            q: "Deserts get fewer than ___ inches of rain a year.",
+            o: ["10", "50", "100"],
+            k: 1,
+            x: "Deserts get fewer than 10 inches (25 centimetres) of rain a year.",
+          },
+          {
+            l: 2,
+            p: "cactus",
+            q: "Large cactuses called ___ grow in Mexico.",
+            o: ["Saguaros", "Palms", "Pines"],
+          },
+          {
+            l: 2,
+            p: "ecosystem",
+            q: "An ___ is a system where plants and animals interact and work together.",
+            o: ["ecosystem", "United States", "temperature"],
+          },
+          {
+            l: 2,
+            p: "ecosystem",
+            q: "In the ecosystem example, birds and squirrels depend on…",
+            o: ["Trees", "Volcanoes", "Snow"],
+            x: "Birds and squirrels depend on trees. Some seeds drop into the soil and grow into new trees.",
+          },
+          {
+            l: 2,
+            p: "hazards",
+            q: "A natural hazard is…",
+            o: [
+              "Any natural event that causes a change in the land or the environment",
+              "Something people build",
+              "A kind of plant",
+            ],
+          },
+          {
+            l: 2,
+            p: "volcano",
+            q: "A ___ is a mountain that erupts in an explosion of molten rock, gases, and ash.",
+            o: ["volcano", "earthquake", "ecosystem"],
+          },
+          {
+            l: 2,
+            p: "earthquake",
+            q: "An earthquake is…",
+            o: [
+              "A violent shaking of the earth",
+              "A mountain that erupts",
+              "A very cold place",
+            ],
+          },
+          {
+            l: 2,
+            p: "disaster-houses",
+            q: "A natural disaster is…",
+            o: [
+              "Something that causes damage to people and buildings or bridges",
+              "Any kind of nice weather",
+              "A plant that grows in the desert",
+            ],
+          },
+          {
+            l: 2,
+            p: "disaster-houses",
+            q: "Natural hazards turn into natural disasters when…",
+            o: ["Damage takes place", "The sun comes out", "It is winter"],
+          },
+          {
+            l: 2,
+            p: "hazards",
+            q: "Which of these is NOT a natural disaster?",
+            o: ["A rainbow", "A tornado", "A tsunami", "A forest fire"],
+          },
+          // which natural disaster? (booklet p. 8 "Draw the natural disaster", with the slide photos)
+          ...[
+            ["tornado", 0],
+            ["hurricane", 1],
+            ["tsunami", 2],
+            ["avalanche", 3],
+            ["volcano-photo", 4],
+            ["earthquake", 5],
+          ].map(([p, c]) => ({
+            l: 2,
+            p,
+            q: "Which natural disaster is this?",
+            o: DIS,
+            c,
+            k: 1,
+          })),
+          // true or false (Graded HW 1 B and booklet C)
+          {
+            l: 2,
+            p: "temperate",
+            q: '"Temperate climate doesn\'t have winter."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "Temperate climate has colder winters. The TROPICAL climate has no winter.",
+          },
+          {
+            l: 2,
+            p: "temperate",
+            q: '"Temperate climates have colder summers."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "Temperate climates have WARMER summers and colder winters.",
+          },
+          {
+            l: 2,
+            p: "forest",
+            q: '"Forests are near the Great Lakes in the eastern United States."',
+            o: TF,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "veg-types",
+            q: '"Vegetation is a kind of plant life that grows."',
+            o: TF,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "prairie-dog",
+            q: '"Prairie dogs live in forests."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "Prairie dogs live in GRASSLANDS.",
+          },
+          {
+            l: 2,
+            p: "weather-icons",
+            q: '"Weather changes daily."',
+            o: TF,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "disaster-houses",
+            q: '"A natural hazard is something that causes damage to people, buildings, and bridges."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "That is a natural DISASTER. A natural hazard is a natural event that changes the land or the environment.",
+          },
+          {
+            l: 2,
+            p: "hazards",
+            q: '"A natural hazard is any natural event that causes a change in the land or in the environment."',
+            o: TF,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "disaster-houses",
+            q: '"Natural disasters turn into natural hazards when damage takes place."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "It is the other way: natural HAZARDS turn into natural DISASTERS when damage takes place.",
+          },
+          {
+            l: 2,
+            p: "volcano",
+            q: '"A volcano is a violent shaking of the earth."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "That is an EARTHQUAKE. A volcano is a mountain that erupts molten rock, gases, and ash.",
+          },
+          {
+            l: 2,
+            p: "arctic-circle",
+            q: '"Most tundra is found around the Arctic Circle."',
+            o: TF,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "elevation",
+            q: '"Elevation means the height above sea level."',
+            o: TF,
+            k: 1,
+          },
+          {
+            l: 2,
+            p: "hemispheres",
+            q: '"Places near the equator will have a colder climate than places near the North and South Poles, which will have a hotter climate."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "Near the equator it is HOTTER. Near the poles it is COLDER.",
+          },
+          {
+            l: 2,
+            p: "rain-snow",
+            q: '"Precipitation is how hot or cold the weather is."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "That is TEMPERATURE. Precipitation is the amount of rain or snow that falls.",
+          },
 
-/* ===== Lesson 3 · Using Earth's Resources (slides, booklet pp. 9–14, Graded HW 2) ===== */
-{l:3,p:'natural-resources',q:'Natural resources are…',o:['Found in nature and can be used by people','Made in factories','Only found in the ocean']},
-{l:3,p:'earth-resources',q:'___ are found in nature and can be used by people.',o:['Natural resources','Industrial regions','Products']},
-{l:3,p:'natural-resources',q:'Which one is NOT a natural resource?',o:['A chair','Water','Soil','Air'],x:'A chair is a product made from wood.'},
-{l:3,p:'earth-resources',q:'Metal ores, minerals, coal and crude oil are…',o:["Earth's natural resources",'Products from crops','Factories']},
-...[['nr-air','Air',['Water','Soil']],['nr-fossil','Fossil fuels',['Stone','Plants']],['nr-minerals','Minerals',['Plants','Water']],['nr-stone','Stone',['Soil','Air']],['nr-soil','Soil',['Stone','Fossil fuels']],['nr-animals','Animals',['Plants','Minerals']]]
-  .map(([p,a,w])=>({l:3,p,q:'Which natural resource is this?',o:[a,...w]})),
-{l:3,p:'agri-region',q:'In an ___, people use the land and soil for farming.',o:['agricultural region','industrial region']},
-{l:3,p:'agri-region',q:'An agricultural region is a place where there is…',o:['Much flat land and rich soil','Many kinds of factories','Ice all year']},
-{l:3,p:'factory',q:'An ___ is a place where many kinds of factories are located.',o:['industrial region','agricultural region']},
-{l:3,p:'agri-region',q:'Which region is this?',o:AI,k:1,x:'Farm fields: an agricultural region.'},
-{l:3,p:'industrial-region',q:'Which region is this?',o:AI,c:1,k:1,x:'Many factories: an industrial region.'},
-{l:3,p:'wheat',q:'The top crops in the United States are…',o:['Corn, soybeans, wheat and cotton','Rice, potatoes, bananas and apples','Oil, coal, iron and copper']},
-{l:3,p:'agri-region',q:'One of the top crops in the United States is…',o:['cotton','rice','potato']},
-...[['corn',0],['soybeans',1],['wheat',2],['cotton',3]].map(([p,c])=>({l:3,p,q:'Which top crop is this?',o:['Corn','Soybeans','Wheat','Cotton'],c,k:1})),
-{l:3,p:'farmer',q:'Some crops are grown for people to consume (use), such as…',o:['Vegetables and fruits','Coins and steel','Plastic and fuel']},
-{l:3,p:'cotton-boll',q:'___ is a product that is made into fabric for clothing.',o:['Cotton','Wheat','Soybean']},
-{l:3,p:'wood-table',q:'Some crops are made into products such as…',o:['trees','wheat','fruits'],x:'People cut down trees and use the wood in many products.'},
-{l:3,p:'wood-table',q:'People cut down trees and use the wood to make…',o:['Tables and chairs','Coins','Gasoline']},
-{l:3,p:'factory',q:'Some products are made from resources found…',o:['Underground','In the clouds','On the Moon'],x:'Many of these products are made in industrial regions.'},
-{l:3,p:'oil-pumps',q:'People use ___ to extract oil and natural gas from underground.',o:['pumping','fishing','farming']},
-{l:3,p:'oil-pumps',q:'People used pumping to extract ___ from underground.',o:['oil and natural gas','water and soil','wheat and cotton']},
-{l:3,p:'crude-oil',q:'Oil is made into…',o:['Fuel (gasoline)','Wood','Cotton']},
-{l:3,p:'crude-oil',q:'Oil can be heated to make…',o:['Plastic','Paper','Fabric']},
-{l:3,p:'coal',q:'___ is used to help make electricity.',o:['Coal','Iron','Copper']},
-{l:3,p:'iron',q:'Iron is used to make…',o:['Steel','Coins','Electricity']},
-{l:3,p:'copper',q:'Copper is used to make…',o:['Coins','Steel','Electricity']},
-{l:3,p:'us-forest',q:'The United States has forests and rich…',o:['soil','ice','sand'],x:'It also has minerals, coal and iron.'},
-{l:3,p:'us-farm',q:'In the United States, land is used for mining and…',o:['raising animals','building volcanoes','making snow']},
-{l:3,p:'earth',q:'It takes the Earth so long to make many natural resources, so there is a ___ supply of them.',o:['limited','never-ending','huge']},
-{l:3,p:'us-forest',q:'___ are natural resources that can be replaced in a short time.',o:['Renewable resources','Non-renewable resources','Industrial regions']},
-{l:3,p:'logs',q:'Renewable resources can grow again or come back, such as…',o:['Trees and soil','Oil and natural gas','Coal and iron']},
-{l:3,p:'nonrenewable',q:'Non-renewable resources are those that…',o:['Take a long time to replace or cannot be replaced after they are used','Can be replaced in a short time','Grow again quickly']},
-{l:3,p:'nr-air',q:'___ is a renewable resource.',o:['Air','Oil','Gas']},
-{l:3,p:'e-wind',q:'Wind power is a renewable energy source that…',o:['Does not harm the environment','Makes the air dirty','Comes from coal']},
-// renewable or non-renewable? (booklet p. 13)
-...[['Coal','e-coal',1],['Hydropower','e-hydro',0],['Sun','e-solar',0],['Biomass','e-biomass',0],['Nuclear','e-nuclear',1],['Wind','e-wind',0],['Waves','',0],['Oil','e-oil',1],['Natural gas','e-gas',1],['Geothermal','e-geothermal',0]]
-  .map(([w,p,c])=>({l:3,...(p?{p}:{e:'🌊'}),q:`Renewable or non-renewable? "${w}"`,o:RN,c,k:1})),
-{l:3,p:'conserve',q:'___ means "save and protect".',o:['Conservation','Renewable','Industrial']},
-{l:3,p:'earth',q:'People conserve resources so that…',o:['Everyone has enough natural resources to live','Factories can close','Resources run out quickly']},
-{l:3,p:'recycling',q:'People conserve resources by…',o:['Using less, being careful and recycling','Using more of these resources','Throwing everything away']},
-{l:3,p:'recycling',q:'Recycle means…',o:['To use an item again','To throw an item away','To dig under the ground']},
-// true or false (booklet C)
-{l:3,p:'copper',q:'"Copper is used to make coins."',o:TF,k:1},
-{l:3,p:'conserve',q:'"People conserve resources by using more of these resources."',o:TF,c:1,k:1,x:'People conserve resources by using LESS of them.'},
-{l:3,p:'recycling',q:'"Recycle means to use an item again."',o:TF,k:1},
-{l:3,p:'nonrenewable',q:'"Non-renewable resources are natural resources that can be replaced in a short time."',o:TF,c:1,k:1,x:'That is RENEWABLE resources. Non-renewable ones take a long time or cannot be replaced.'},
-{l:3,p:'oil-pumps',q:'"Some products are made from resources found underground."',o:TF,k:1},
-// where does it go? (Graded HW 2)
-...[['Sunlight','hw-sunlight',0],['Soil','hw-soil',0],['Water','hw-water',0],['Plants','hw-plants',0],['Carrot','hw-carrot',1],['Apple','hw-apple',1],['Lettuce','hw-lettuce',1],['Banana','hw-banana',1],['Clothes','hw-clothes',2],['Chair','hw-chair',2]]
-  .map(([w,p,c])=>({l:3,p,q:`Where does it go? "${w}"`,o:HW,c,k:1})),
-];
+          /* ===== Lesson 3 · Using Earth's Resources (slides, booklet pp. 9–14, Graded HW 2) ===== */
+          {
+            l: 3,
+            p: "natural-resources",
+            q: "Natural resources are…",
+            o: [
+              "Found in nature and can be used by people",
+              "Made in factories",
+              "Only found in the ocean",
+            ],
+          },
+          {
+            l: 3,
+            p: "earth-resources",
+            q: "___ are found in nature and can be used by people.",
+            o: ["Natural resources", "Industrial regions", "Products"],
+          },
+          {
+            l: 3,
+            p: "natural-resources",
+            q: "Which one is NOT a natural resource?",
+            o: ["A chair", "Water", "Soil", "Air"],
+            x: "A chair is a product made from wood.",
+          },
+          {
+            l: 3,
+            p: "earth-resources",
+            q: "Metal ores, minerals, coal and crude oil are…",
+            o: [
+              "Earth's natural resources",
+              "Products from crops",
+              "Factories",
+            ],
+          },
+          ...[
+            ["nr-air", "Air", ["Water", "Soil"]],
+            ["nr-fossil", "Fossil fuels", ["Stone", "Plants"]],
+            ["nr-minerals", "Minerals", ["Plants", "Water"]],
+            ["nr-stone", "Stone", ["Soil", "Air"]],
+            ["nr-soil", "Soil", ["Stone", "Fossil fuels"]],
+            ["nr-animals", "Animals", ["Plants", "Minerals"]],
+          ].map(([p, a, w]) => ({
+            l: 3,
+            p,
+            q: "Which natural resource is this?",
+            o: [a, ...w],
+          })),
+          {
+            l: 3,
+            p: "agri-region",
+            q: "In an ___, people use the land and soil for farming.",
+            o: ["agricultural region", "industrial region"],
+          },
+          {
+            l: 3,
+            p: "agri-region",
+            q: "An agricultural region is a place where there is…",
+            o: [
+              "Much flat land and rich soil",
+              "Many kinds of factories",
+              "Ice all year",
+            ],
+          },
+          {
+            l: 3,
+            p: "factory",
+            q: "An ___ is a place where many kinds of factories are located.",
+            o: ["industrial region", "agricultural region"],
+          },
+          {
+            l: 3,
+            p: "agri-region",
+            q: "Which region is this?",
+            o: AI,
+            k: 1,
+            x: "Farm fields: an agricultural region.",
+          },
+          {
+            l: 3,
+            p: "industrial-region",
+            q: "Which region is this?",
+            o: AI,
+            c: 1,
+            k: 1,
+            x: "Many factories: an industrial region.",
+          },
+          {
+            l: 3,
+            p: "wheat",
+            q: "The top crops in the United States are…",
+            o: [
+              "Corn, soybeans, wheat and cotton",
+              "Rice, potatoes, bananas and apples",
+              "Oil, coal, iron and copper",
+            ],
+          },
+          {
+            l: 3,
+            p: "agri-region",
+            q: "One of the top crops in the United States is…",
+            o: ["cotton", "rice", "potato"],
+          },
+          ...[
+            ["corn", 0],
+            ["soybeans", 1],
+            ["wheat", 2],
+            ["cotton", 3],
+          ].map(([p, c]) => ({
+            l: 3,
+            p,
+            q: "Which top crop is this?",
+            o: ["Corn", "Soybeans", "Wheat", "Cotton"],
+            c,
+            k: 1,
+          })),
+          {
+            l: 3,
+            p: "farmer",
+            q: "Some crops are grown for people to consume (use), such as…",
+            o: ["Vegetables and fruits", "Coins and steel", "Plastic and fuel"],
+          },
+          {
+            l: 3,
+            p: "cotton-boll",
+            q: "___ is a product that is made into fabric for clothing.",
+            o: ["Cotton", "Wheat", "Soybean"],
+          },
+          {
+            l: 3,
+            p: "wood-table",
+            q: "Some crops are made into products such as…",
+            o: ["trees", "wheat", "fruits"],
+            x: "People cut down trees and use the wood in many products.",
+          },
+          {
+            l: 3,
+            p: "wood-table",
+            q: "People cut down trees and use the wood to make…",
+            o: ["Tables and chairs", "Coins", "Gasoline"],
+          },
+          {
+            l: 3,
+            p: "factory",
+            q: "Some products are made from resources found…",
+            o: ["Underground", "In the clouds", "On the Moon"],
+            x: "Many of these products are made in industrial regions.",
+          },
+          {
+            l: 3,
+            p: "oil-pumps",
+            q: "People use ___ to extract oil and natural gas from underground.",
+            o: ["pumping", "fishing", "farming"],
+          },
+          {
+            l: 3,
+            p: "oil-pumps",
+            q: "People used pumping to extract ___ from underground.",
+            o: ["oil and natural gas", "water and soil", "wheat and cotton"],
+          },
+          {
+            l: 3,
+            p: "crude-oil",
+            q: "Oil is made into…",
+            o: ["Fuel (gasoline)", "Wood", "Cotton"],
+          },
+          {
+            l: 3,
+            p: "crude-oil",
+            q: "Oil can be heated to make…",
+            o: ["Plastic", "Paper", "Fabric"],
+          },
+          {
+            l: 3,
+            p: "coal",
+            q: "___ is used to help make electricity.",
+            o: ["Coal", "Iron", "Copper"],
+          },
+          {
+            l: 3,
+            p: "iron",
+            q: "Iron is used to make…",
+            o: ["Steel", "Coins", "Electricity"],
+          },
+          {
+            l: 3,
+            p: "copper",
+            q: "Copper is used to make…",
+            o: ["Coins", "Steel", "Electricity"],
+          },
+          {
+            l: 3,
+            p: "us-forest",
+            q: "The United States has forests and rich…",
+            o: ["soil", "ice", "sand"],
+            x: "It also has minerals, coal and iron.",
+          },
+          {
+            l: 3,
+            p: "us-farm",
+            q: "In the United States, land is used for mining and…",
+            o: ["raising animals", "building volcanoes", "making snow"],
+          },
+          {
+            l: 3,
+            p: "earth",
+            q: "It takes the Earth so long to make many natural resources, so there is a ___ supply of them.",
+            o: ["limited", "never-ending", "huge"],
+          },
+          {
+            l: 3,
+            p: "us-forest",
+            q: "___ are natural resources that can be replaced in a short time.",
+            o: [
+              "Renewable resources",
+              "Non-renewable resources",
+              "Industrial regions",
+            ],
+          },
+          {
+            l: 3,
+            p: "logs",
+            q: "Renewable resources can grow again or come back, such as…",
+            o: ["Trees and soil", "Oil and natural gas", "Coal and iron"],
+          },
+          {
+            l: 3,
+            p: "nonrenewable",
+            q: "Non-renewable resources are those that…",
+            o: [
+              "Take a long time to replace or cannot be replaced after they are used",
+              "Can be replaced in a short time",
+              "Grow again quickly",
+            ],
+          },
+          {
+            l: 3,
+            p: "nr-air",
+            q: "___ is a renewable resource.",
+            o: ["Air", "Oil", "Gas"],
+          },
+          {
+            l: 3,
+            p: "e-wind",
+            q: "Wind power is a renewable energy source that…",
+            o: [
+              "Does not harm the environment",
+              "Makes the air dirty",
+              "Comes from coal",
+            ],
+          },
+          // renewable or non-renewable? (booklet p. 13)
+          ...[
+            ["Coal", "e-coal", 1],
+            ["Hydropower", "e-hydro", 0],
+            ["Sun", "e-solar", 0],
+            ["Biomass", "e-biomass", 0],
+            ["Nuclear", "e-nuclear", 1],
+            ["Wind", "e-wind", 0],
+            ["Waves", "", 0],
+            ["Oil", "e-oil", 1],
+            ["Natural gas", "e-gas", 1],
+            ["Geothermal", "e-geothermal", 0],
+          ].map(([w, p, c]) => ({
+            l: 3,
+            ...(p ? { p } : { e: "🌊" }),
+            q: `Renewable or non-renewable? "${w}"`,
+            o: RN,
+            c,
+            k: 1,
+          })),
+          {
+            l: 3,
+            p: "conserve",
+            q: '___ means "save and protect".',
+            o: ["Conservation", "Renewable", "Industrial"],
+          },
+          {
+            l: 3,
+            p: "earth",
+            q: "People conserve resources so that…",
+            o: [
+              "Everyone has enough natural resources to live",
+              "Factories can close",
+              "Resources run out quickly",
+            ],
+          },
+          {
+            l: 3,
+            p: "recycling",
+            q: "People conserve resources by…",
+            o: [
+              "Using less, being careful and recycling",
+              "Using more of these resources",
+              "Throwing everything away",
+            ],
+          },
+          {
+            l: 3,
+            p: "recycling",
+            q: "Recycle means…",
+            o: [
+              "To use an item again",
+              "To throw an item away",
+              "To dig under the ground",
+            ],
+          },
+          // true or false (booklet C)
+          {
+            l: 3,
+            p: "copper",
+            q: '"Copper is used to make coins."',
+            o: TF,
+            k: 1,
+          },
+          {
+            l: 3,
+            p: "conserve",
+            q: '"People conserve resources by using more of these resources."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "People conserve resources by using LESS of them.",
+          },
+          {
+            l: 3,
+            p: "recycling",
+            q: '"Recycle means to use an item again."',
+            o: TF,
+            k: 1,
+          },
+          {
+            l: 3,
+            p: "nonrenewable",
+            q: '"Non-renewable resources are natural resources that can be replaced in a short time."',
+            o: TF,
+            c: 1,
+            k: 1,
+            x: "That is RENEWABLE resources. Non-renewable ones take a long time or cannot be replaced.",
+          },
+          {
+            l: 3,
+            p: "oil-pumps",
+            q: '"Some products are made from resources found underground."',
+            o: TF,
+            k: 1,
+          },
+          // where does it go? (Graded HW 2)
+          ...[
+            ["Sunlight", "hw-sunlight", 0],
+            ["Soil", "hw-soil", 0],
+            ["Water", "hw-water", 0],
+            ["Plants", "hw-plants", 0],
+            ["Carrot", "hw-carrot", 1],
+            ["Apple", "hw-apple", 1],
+            ["Lettuce", "hw-lettuce", 1],
+            ["Banana", "hw-banana", 1],
+            ["Clothes", "hw-clothes", 2],
+            ["Chair", "hw-chair", 2],
+          ].map(([w, p, c]) => ({
+            l: 3,
+            p,
+            q: `Where does it go? "${w}"`,
+            o: HW,
+            c,
+            k: 1,
+          })),
+        ];
 
-const MT=[
-{l:2,t:'Match each word to its meaning',p:[['🌦️','Weather','The condition of the air at a place right now'],['🌍','Climate','The weather of a place over a long period of time'],['⛰️','Elevation','The height'],['🌿','Vegetation','Kinds of plant life that grow']]},
-{l:2,t:'Match each word to its meaning',p:[['🌡️','Temperature','How hot or cold it is'],['🌧️','Precipitation','The amount of rain or snow that falls'],['🐿️','Ecosystem','Plants and animals interact and work together'],['🔴','Equator','The line around the middle of the Earth']]},
-{l:2,t:'Match each climate to what it is like',p:[['🌴','Tropical climate','Warm and hot, no winter, near the equator'],['🍂','Temperate climate','Warmer summers and colder winters'],['🐻‍❄️','Arctic climate','Very cold']]},
-{l:2,t:'Match each place to an animal or plant that lives there',p:[['🌲','Forests','Bears, deer and raccoons'],['🌾','Grasslands','Prairie dogs'],['❄️','Tundra','Caribou'],['🏜️','Deserts','Saguaro cactuses']]},
-{l:2,t:'Match each word to its meaning',p:[['🌪️','Natural hazard','A natural event that changes the land or environment'],['🏚️','Natural disaster','Causes damage to people, buildings and bridges'],['🌋','Volcano','A mountain that erupts molten rock, gases and ash'],['🏠','Earthquake','A violent shaking of the earth']]},
-{l:2,t:'Match each type of vegetation to where it is or what it is like',p:[['🌲','Forests','Plenty of rainfall'],['🏜️','Deserts','The driest places on Earth'],['❄️','Tundra','Mostly around the Arctic Circle'],['🌾','Grasslands','Dry climates of the Western Great Plains']]},
-{l:3,t:'Match each word to its meaning',p:[['🌍','Natural resources','Found in nature and can be used by people'],['🌳','Renewable resources','Can be replaced in a short time'],['🛢️','Non-renewable resources','Take a long time or cannot be replaced'],['🛡️','Conservation','Save and protect'],['♻️','Recycle','Use an item again']]},
-{l:3,t:'Match each word to its meaning',p:[['🚜','Agricultural region','Much flat land and rich soil for farming'],['🏭','Industrial region','Many kinds of factories'],['⛽','Pumping','Takes oil and natural gas from underground'],['👕','Cotton','Made into fabric for clothing']]},
-{l:3,t:'Match each resource to what it is used for',p:[['⚫','Coal','Helps make electricity'],['🔨','Iron','Makes steel'],['🪙','Copper','Makes coins'],['🛢️','Oil','Fuel (gasoline) and plastic']]},
-];
+        const MT = [
+          {
+            l: 2,
+            t: "Match each word to its meaning",
+            p: [
+              [
+                "🌦️",
+                "Weather",
+                "The condition of the air at a place right now",
+              ],
+              [
+                "🌍",
+                "Climate",
+                "The weather of a place over a long period of time",
+              ],
+              ["⛰️", "Elevation", "The height"],
+              ["🌿", "Vegetation", "Kinds of plant life that grow"],
+            ],
+          },
+          {
+            l: 2,
+            t: "Match each word to its meaning",
+            p: [
+              ["🌡️", "Temperature", "How hot or cold it is"],
+              ["🌧️", "Precipitation", "The amount of rain or snow that falls"],
+              [
+                "🐿️",
+                "Ecosystem",
+                "Plants and animals interact and work together",
+              ],
+              ["🔴", "Equator", "The line around the middle of the Earth"],
+            ],
+          },
+          {
+            l: 2,
+            t: "Match each climate to what it is like",
+            p: [
+              [
+                "🌴",
+                "Tropical climate",
+                "Warm and hot, no winter, near the equator",
+              ],
+              ["🍂", "Temperate climate", "Warmer summers and colder winters"],
+              ["🐻‍❄️", "Arctic climate", "Very cold"],
+            ],
+          },
+          {
+            l: 2,
+            t: "Match each place to an animal or plant that lives there",
+            p: [
+              ["🌲", "Forests", "Bears, deer and raccoons"],
+              ["🌾", "Grasslands", "Prairie dogs"],
+              ["❄️", "Tundra", "Caribou"],
+              ["🏜️", "Deserts", "Saguaro cactuses"],
+            ],
+          },
+          {
+            l: 2,
+            t: "Match each word to its meaning",
+            p: [
+              [
+                "🌪️",
+                "Natural hazard",
+                "A natural event that changes the land or environment",
+              ],
+              [
+                "🏚️",
+                "Natural disaster",
+                "Causes damage to people, buildings and bridges",
+              ],
+              [
+                "🌋",
+                "Volcano",
+                "A mountain that erupts molten rock, gases and ash",
+              ],
+              ["🏠", "Earthquake", "A violent shaking of the earth"],
+            ],
+          },
+          {
+            l: 2,
+            t: "Match each type of vegetation to where it is or what it is like",
+            p: [
+              ["🌲", "Forests", "Plenty of rainfall"],
+              ["🏜️", "Deserts", "The driest places on Earth"],
+              ["❄️", "Tundra", "Mostly around the Arctic Circle"],
+              ["🌾", "Grasslands", "Dry climates of the Western Great Plains"],
+            ],
+          },
+          {
+            l: 3,
+            t: "Match each word to its meaning",
+            p: [
+              [
+                "🌍",
+                "Natural resources",
+                "Found in nature and can be used by people",
+              ],
+              ["🌳", "Renewable resources", "Can be replaced in a short time"],
+              [
+                "🛢️",
+                "Non-renewable resources",
+                "Take a long time or cannot be replaced",
+              ],
+              ["🛡️", "Conservation", "Save and protect"],
+              ["♻️", "Recycle", "Use an item again"],
+            ],
+          },
+          {
+            l: 3,
+            t: "Match each word to its meaning",
+            p: [
+              [
+                "🚜",
+                "Agricultural region",
+                "Much flat land and rich soil for farming",
+              ],
+              ["🏭", "Industrial region", "Many kinds of factories"],
+              ["⛽", "Pumping", "Takes oil and natural gas from underground"],
+              ["👕", "Cotton", "Made into fabric for clothing"],
+            ],
+          },
+          {
+            l: 3,
+            t: "Match each resource to what it is used for",
+            p: [
+              ["⚫", "Coal", "Helps make electricity"],
+              ["🔨", "Iron", "Makes steel"],
+              ["🪙", "Copper", "Makes coins"],
+              ["🛢️", "Oil", "Fuel (gasoline) and plastic"],
+            ],
+          },
+        ];
 
-const LESSONS=[{n:0,l:'All lessons'},{n:2,l:"L2 · Weather, climate & nature"},{n:3,l:"L3 · Earth's resources"}];
-const PAIRC=['var(--ke)','var(--pe)','var(--cool)','var(--heat)','var(--green)'];
-const pool=()=>{const n=LESSONS[lesIdx].n;return {mc:MC.filter(q=>!n||q.l===n),mt:MT.filter(q=>!n||q.l===n)}};
-const LENS=[{mc:8,mt:2,l:'Quick · 10'},{mc:16,mt:4,l:'Normal · 20'},{mc:0,mt:0,l:'All'}];
-const store=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
-let lenIdx=1,lesIdx=0;
-try{const v=localStorage.getItem('g3ssq-len');if(v!==null&&LENS[+v])lenIdx=+v}catch(e){}
-try{const v=localStorage.getItem('g3ssq-lesson');if(v!==null&&LESSONS[+v])lesIdx=+v}catch(e){}
+        const LESSONS = [
+          { n: 0, l: "All lessons" },
+          { n: 2, l: "L2 · Weather, climate & nature" },
+          { n: 3, l: "L3 · Earth's resources" },
+        ];
+        const PAIRC = [
+          "var(--ke)",
+          "var(--pe)",
+          "var(--cool)",
+          "var(--heat)",
+          "var(--green)",
+        ];
+        const pool = () => {
+          const n = LESSONS[lesIdx].n;
+          return {
+            mc: MC.filter((q) => !n || q.l === n),
+            mt: MT.filter((q) => !n || q.l === n),
+          };
+        };
+        const LENS = [
+          { mc: 8, mt: 2, l: "Quick · 10" },
+          { mc: 16, mt: 4, l: "Normal · 20" },
+          { mc: 0, mt: 0, l: "All" },
+        ];
+        const store = (k, v) => {
+          try {
+            localStorage.setItem(k, v);
+          } catch (e) {}
+        };
+        let lenIdx = 1,
+          lesIdx = 0;
+        try {
+          const v = localStorage.getItem("g3ssq-len");
+          if (v !== null && LENS[+v]) lenIdx = +v;
+        } catch (e) {}
+        try {
+          const v = localStorage.getItem("g3ssq-lesson");
+          if (v !== null && LESSONS[+v]) lesIdx = +v;
+        } catch (e) {}
 
-const S={list:[],i:0,score:0,max:0,miss:[]};
-const app=document.getElementById('app');
-const {esc,shuf,pick,star}=Kit;
-const bolt='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
-const scene=q=>q.p?`<img class="scene pic fit" src="${IMG(q.p)}" alt="Picture for the question">`:`<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${q.ps?tiles(q):emo(q.e)}</svg></div>`;
+        const S = { list: [], i: 0, score: 0, max: 0, miss: [] };
+        const app = document.getElementById("app");
+        const { esc, shuf, pick, star } = Kit;
+        const bolt =
+          '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+        const scene = (q) =>
+          q.p
+            ? `<img class="scene pic fit" src="${IMG(q.p)}" alt="Picture for the question">`
+            : `<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${q.ps ? tiles(q) : emo(q.e)}</svg></div>`;
 
-function start(){
-  const L=LENS[lenIdx],P=pool();
-  const mc=shuf(P.mc).slice(0,L.mc||P.mc.length).map(q=>({type:'mc',...q}));
-  const mt=shuf(P.mt).slice(0,L.mt||P.mt.length).map(q=>({type:'mt',...q}));
-  let list=shuf(mc.concat(mt));
-  // avoid two matching rounds in a row when possible
-  for(let i=1;i<list.length;i++){if(list[i].type==='mt'&&list[i-1].type==='mt'){const j=list.findIndex((q,k)=>k>i&&q.type==='mc');if(j>0)[list[i],list[j]]=[list[j],list[i]]}}
-  S.list=list;S.i=0;S.score=0;S.miss=[];
-  S.max=list.reduce((t,q)=>t+(q.type==='mc'?1:q.p.length),0);
-  render();
-}
+        function start() {
+          const L = LENS[lenIdx],
+            P = pool();
+          const mc = shuf(P.mc)
+            .slice(0, L.mc || P.mc.length)
+            .map((q) => ({ type: "mc", ...q }));
+          const mt = shuf(P.mt)
+            .slice(0, L.mt || P.mt.length)
+            .map((q) => ({ type: "mt", ...q }));
+          let list = shuf(mc.concat(mt));
+          // avoid two matching rounds in a row when possible
+          for (let i = 1; i < list.length; i++) {
+            if (list[i].type === "mt" && list[i - 1].type === "mt") {
+              const j = list.findIndex((q, k) => k > i && q.type === "mc");
+              if (j > 0) [list[i], list[j]] = [list[j], list[i]];
+            }
+          }
+          S.list = list;
+          S.i = 0;
+          S.score = 0;
+          S.miss = [];
+          S.max = list.reduce(
+            (t, q) => t + (q.type === "mc" ? 1 : q.p.length),
+            0,
+          );
+          render();
+        }
 
-function hud(){
-  const pct=Math.round(S.i/S.list.length*100);
-  return `<div class="hud"><span class="qnum">Question ${S.i+1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
-}
+        function hud() {
+          const pct = Math.round((S.i / S.list.length) * 100);
+          return `<div class="hud"><span class="qnum">Question ${S.i + 1} of ${S.list.length}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+        }
 
-function render(){
-  if(!S.list.length) return home();
-  if(S.i>=S.list.length) return end();
-  const q=S.list[S.i];
-  q.type==='mc'?renderMC(q):renderMT(q);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+        function render() {
+          if (!S.list.length) return home();
+          if (S.i >= S.list.length) return end();
+          const q = S.list[S.i];
+          q.type === "mc" ? renderMC(q) : renderMT(q);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
 
-function home(){
-  const P=pool(),n=P.mc.length+P.mt.length;
-  app.innerHTML=`<section class="card pop">
+        function home() {
+          const P = pool(),
+            n = P.mc.length + P.mt.length;
+          app.innerHTML = `<section class="card pop">
     <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 3 Social Studies · Final revision</span></div>
     <h1 class="hero-title"><span class="p">Social Studies</span> <span class="k">Quest</span></h1>
-    ${scene({p:'earth-resources'})}
+    ${scene({ p: "earth-resources" })}
     <p class="howto">Ready? Look at each picture, then choose the right answer. In matching rounds, tap a word and then tap its meaning. The questions are mixed up every time you play.</p>
     <div class="chips"><span class="chip pe">Weather, climate &amp; nature</span><span class="chip ke">Using Earth’s resources</span></div>
-    <div class="row"><span class="eyebrow">Which lessons?</span><div class="seg" role="group" aria-label="Lessons">${LESSONS.map((l,i)=>`<button type="button" id="les-${i}" data-les="${i}" aria-pressed="${i===lesIdx}">${l.l}</button>`).join('')}</div></div>
-    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l,i)=>`<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i===lenIdx}">${i===LENS.length-1?'All · '+n:l.l}</button>`).join('')}</div></div>
+    <div class="row"><span class="eyebrow">Which lessons?</span><div class="seg" role="group" aria-label="Lessons">${LESSONS.map((l, i) => `<button type="button" id="les-${i}" data-les="${i}" aria-pressed="${i === lesIdx}">${l.l}</button>`).join("")}</div></div>
+    <div class="row"><span class="eyebrow">How many questions?</span><div class="seg" role="group" aria-label="Number of questions">${LENS.map((l, i) => `<button type="button" id="len-${i}" data-len="${i}" aria-pressed="${i === lenIdx}">${i === LENS.length - 1 ? "All · " + n : l.l}</button>`).join("")}</div></div>
     <div class="row"><button class="btn big" id="startBtn" type="button">Start</button></div>
   </section>`;
-  app.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{lenIdx=+b.dataset.len;store('g3ssq-len',lenIdx);home()});
-  app.querySelectorAll('[data-les]').forEach(b=>b.onclick=()=>{lesIdx=+b.dataset.les;store('g3ssq-lesson',lesIdx);home()});
-  document.getElementById('startBtn').onclick=start;
-}
+          app.querySelectorAll("[data-len]").forEach(
+            (b) =>
+              (b.onclick = () => {
+                lenIdx = +b.dataset.len;
+                store("g3ssq-len", lenIdx);
+                home();
+              }),
+          );
+          app.querySelectorAll("[data-les]").forEach(
+            (b) =>
+              (b.onclick = () => {
+                lesIdx = +b.dataset.les;
+                store("g3ssq-lesson", lesIdx);
+                home();
+              }),
+          );
+          document.getElementById("startBtn").onclick = start;
+        }
 
-function renderMC(q){
-  let opts=q.o.map((t,i)=>({t,ok:i===(q.c||0)}));
-  if(!q.k) opts=shuf(opts);
-  const long=opts.some(o=>o.t.length>34);
-  app.innerHTML=`${hud()}<section class="card pop">
-    <span class="qtype mc">${q.o===TF?'True or false':'Choose the answer'}</span>
+        function renderMC(q) {
+          let opts = q.o.map((t, i) => ({ t, ok: i === (q.c || 0) }));
+          if (!q.k) opts = shuf(opts);
+          const long = opts.some((o) => o.t.length > 34);
+          app.innerHTML = `${hud()}<section class="card pop">
+    <span class="qtype mc">${q.o === TF ? "True or false" : "Choose the answer"}</span>
     ${scene(q)}
     <p class="qtext">${esc(q.q)}</p>
-    <div class="opts ${long?'long':''}">${opts.map((o,i)=>`<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div class="opts ${long ? "long" : ""}">${opts.map((o, i) => `<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${"ABCD"[i]}</span><span>${esc(o.t)}</span></button>`).join("")}</div>
     <div id="fbx"></div>
   </section>`;
-  const btns=[...app.querySelectorAll('.opt')];
-  btns.forEach(b=>b.onclick=()=>{
-    const o=opts[+b.dataset.i];
-    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
-    if(o.ok){S.score++}else{b.classList.add('wrong');S.miss.push({q:q.q,your:o.t,right:opts.find(z=>z.ok).t})}
-    document.getElementById('pts').textContent=S.score;
-    document.getElementById('fbx').innerHTML=`<div class="fb ${o.ok?'ok':'no'}"><b>${o.ok?pick(['Correct!','Great job!','You got it!','Nice work!']):'Not quite.'}</b><span>${o.ok?'':'The answer is <strong>'+esc(opts.find(z=>z.ok).t)+'</strong>. '}${esc(q.x||"")}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
-    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
-  });
-}
+          const btns = [...app.querySelectorAll(".opt")];
+          btns.forEach(
+            (b) =>
+              (b.onclick = () => {
+                const o = opts[+b.dataset.i];
+                btns.forEach((x, i) => {
+                  x.disabled = true;
+                  if (opts[i].ok) x.classList.add("right");
+                  else if (x !== b) x.classList.add("dim");
+                });
+                if (o.ok) {
+                  S.score++;
+                } else {
+                  b.classList.add("wrong");
+                  S.miss.push({
+                    q: q.q,
+                    your: o.t,
+                    right: opts.find((z) => z.ok).t,
+                  });
+                }
+                document.getElementById("pts").textContent = S.score;
+                document.getElementById("fbx").innerHTML =
+                  `<div class="fb ${o.ok ? "ok" : "no"}"><b>${o.ok ? pick(["Correct!", "Great job!", "You got it!", "Nice work!"]) : "Not quite."}</b><span>${o.ok ? "" : "The answer is <strong>" + esc(opts.find((z) => z.ok).t) + "</strong>. "}${esc(q.x || "")}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i + 1 < S.list.length ? "Next" : "See my score"}</button></div>`;
+                const n = document.getElementById("nextBtn");
+                n.onclick = () => {
+                  S.i++;
+                  render();
+                };
+                n.focus({ preventScroll: true });
+              }),
+          );
+        }
 
-function renderMT(q){
-  const left=shuf(q.p.map((p,i)=>({i,ic:p[0],t:p[1]})));
-  const right=shuf(q.p.map((p,i)=>({i,t:p[2]})));
-  const pair={}; // leftIdx -> rightIdx
-  let sel=null, checked=false;
-  app.innerHTML=`${hud()}<section class="card pop">
+        function renderMT(q) {
+          const left = shuf(q.p.map((p, i) => ({ i, ic: p[0], t: p[1] })));
+          const right = shuf(q.p.map((p, i) => ({ i, t: p[2] })));
+          const pair = {}; // leftIdx -> rightIdx
+          let sel = null,
+            checked = false;
+          app.innerHTML = `${hud()}<section class="card pop">
     <span class="qtype mt">Matching · ${q.p.length} points</span>
     <p class="qtext">${esc(q.t)}</p>
     <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
     <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
     <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
   </section>`;
-  const colL=document.getElementById('colL'),colR=document.getElementById('colR');
-  function draw(){
-    colL.innerHTML=left.map((l,k)=>{const p=pair[l.i]!==undefined;const ok=checked&&pair[l.i]===l.i;const cls=checked?(ok?'ok':'no'):(sel===l.i?'sel':'');
-      return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked?'disabled':''}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked&&!ok?`<span class="fix">→ ${esc(q.p[l.i][2])}</span>`:''}</span>${p?`<span class="tag" style="background:${PAIRC[k%PAIRC.length]}">${k+1}</span>`:''}</button>`}).join('');
-    colR.innerHTML=right.map((r,k)=>{const li=Object.keys(pair).find(x=>pair[x]===r.i);const lk=li!==undefined?left.findIndex(x=>x.i===+li):-1;const cls=checked&&li!==undefined?(+li===r.i?'ok':'no'):'';
-      return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked?'disabled':''}><span class="tx">${esc(r.t)}</span>${lk>=0?`<span class="tag" style="background:${PAIRC[lk%PAIRC.length]}">${lk+1}</span>`:''}</button>`}).join('');
-    colL.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const li=+b.dataset.l;if(pair[li]!==undefined){delete pair[li];sel=li}else sel=(sel===li?null:li);draw()});
-    colR.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const ri=+b.dataset.r;const owner=Object.keys(pair).find(x=>pair[x]===ri);
-      if(sel===null){if(owner!==undefined){delete pair[owner];draw()}return}
-      if(owner!==undefined)delete pair[owner];pair[sel]=ri;sel=null;draw()});
-    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=Object.keys(pair).length<q.p.length;
-  }
-  draw();
-  document.getElementById('checkBtn').onclick=()=>{
-    checked=true;let got=0;
-    q.p.forEach((p,i)=>{if(pair[i]===i)got++;else S.miss.push({q:'Match: '+p[1],your:q.p[pair[i]][2],right:p[2]})});
-    S.score+=got;document.getElementById('pts').textContent=S.score;draw();
-    const all=got===q.p.length;
-    document.getElementById('fbx').innerHTML=`<div class="fb ${all?'ok':'no'}"><b>${all?'All matched!':got+' of '+q.p.length+' correct'}</b><span>${all?'Every pair is right. Great job!':'Check the green and red boxes. The red ones show the right meaning under the word.'}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`;
-    const n=document.getElementById('nextBtn');n.onclick=()=>{S.i++;render()};n.focus({preventScroll:true});
-  };
-}
+          const colL = document.getElementById("colL"),
+            colR = document.getElementById("colR");
+          function draw() {
+            colL.innerHTML = left
+              .map((l, k) => {
+                const p = pair[l.i] !== undefined;
+                const ok = checked && pair[l.i] === l.i;
+                const cls = checked
+                  ? ok
+                    ? "ok"
+                    : "no"
+                  : sel === l.i
+                    ? "sel"
+                    : "";
+                return `<button type="button" class="mi ${cls}" id="ml-${k}" data-l="${l.i}" ${checked ? "disabled" : ""}><span class="ic">${l.ic}</span><span class="tx">${esc(l.t)}${checked && !ok ? `<span class="fix">→ ${esc(q.p[l.i][2])}</span>` : ""}</span>${p ? `<span class="tag" style="background:${PAIRC[k % PAIRC.length]}">${k + 1}</span>` : ""}</button>`;
+              })
+              .join("");
+            colR.innerHTML = right
+              .map((r, k) => {
+                const li = Object.keys(pair).find((x) => pair[x] === r.i);
+                const lk =
+                  li !== undefined ? left.findIndex((x) => x.i === +li) : -1;
+                const cls =
+                  checked && li !== undefined
+                    ? +li === r.i
+                      ? "ok"
+                      : "no"
+                    : "";
+                return `<button type="button" class="mi ${cls}" id="mr-${k}" data-r="${r.i}" ${checked ? "disabled" : ""}><span class="tx">${esc(r.t)}</span>${lk >= 0 ? `<span class="tag" style="background:${PAIRC[lk % PAIRC.length]}">${lk + 1}</span>` : ""}</button>`;
+              })
+              .join("");
+            colL.querySelectorAll("[data-l]").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  const li = +b.dataset.l;
+                  if (pair[li] !== undefined) {
+                    delete pair[li];
+                    sel = li;
+                  } else sel = sel === li ? null : li;
+                  draw();
+                }),
+            );
+            colR.querySelectorAll("[data-r]").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  const ri = +b.dataset.r;
+                  const owner = Object.keys(pair).find((x) => pair[x] === ri);
+                  if (sel === null) {
+                    if (owner !== undefined) {
+                      delete pair[owner];
+                      draw();
+                    }
+                    return;
+                  }
+                  if (owner !== undefined) delete pair[owner];
+                  pair[sel] = ri;
+                  sel = null;
+                  draw();
+                }),
+            );
+            const cb = document.getElementById("checkBtn");
+            if (cb) cb.disabled = Object.keys(pair).length < q.p.length;
+          }
+          draw();
+          document.getElementById("checkBtn").onclick = () => {
+            checked = true;
+            let got = 0;
+            q.p.forEach((p, i) => {
+              if (pair[i] === i) got++;
+              else
+                S.miss.push({
+                  q: "Match: " + p[1],
+                  your: q.p[pair[i]][2],
+                  right: p[2],
+                });
+            });
+            S.score += got;
+            document.getElementById("pts").textContent = S.score;
+            draw();
+            const all = got === q.p.length;
+            document.getElementById("fbx").innerHTML =
+              `<div class="fb ${all ? "ok" : "no"}"><b>${all ? "All matched!" : got + " of " + q.p.length + " correct"}</b><span>${all ? "Every pair is right. Great job!" : "Check the green and red boxes. The red ones show the right meaning under the word."}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i + 1 < S.list.length ? "Next" : "See my score"}</button></div>`;
+            const n = document.getElementById("nextBtn");
+            n.onclick = () => {
+              S.i++;
+              render();
+            };
+            n.focus({ preventScroll: true });
+          };
+        }
 
-function end(){
-  const pct=Math.round(S.score/S.max*100);
-  const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
-  const msg=pct===100?'Perfect score! You are ready for the exam.':pct>=90?'Excellent! Almost perfect.':pct>=70?'Good work! Look at the review below and play again.':pct>=50?'Not bad. Read the review below, then try again.':'Keep practicing. Read the review below and play again.';
-  app.innerHTML=`<section class="card pop">
+        function end() {
+          const pct = Math.round((S.score / S.max) * 100);
+          const st = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
+          const msg =
+            pct === 100
+              ? "Perfect score! You are ready for the exam."
+              : pct >= 90
+                ? "Excellent! Almost perfect."
+                : pct >= 70
+                  ? "Good work! Look at the review below and play again."
+                  : pct >= 50
+                    ? "Not bad. Read the review below, then try again."
+                    : "Keep practicing. Read the review below and play again.";
+          app.innerHTML = `<section class="card pop">
     <span class="eyebrow">Your score</span>
     <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
-    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <div class="stars">${[0, 1, 2].map((i) => star(i < st)).join("")}</div>
     <h2>${pct}% · ${msg}</h2>
     <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="homeBtn" type="button">Back to start</button></div>
   </section>
-  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
-  document.getElementById('againBtn').onclick=start;
-  document.getElementById('homeBtn').onclick=()=>{S.list=[];home()};
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+  ${S.miss.length ? `<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map((m) => `<li><div class="q">${esc(m.q)}</div><div class="a">You chose: <s>${esc(m.your)}</s><br>Right answer: <em>${esc(m.right)}</em></div></li>`).join("")}</ul></section>` : ""}`;
+          document.getElementById("againBtn").onclick = start;
+          document.getElementById("homeBtn").onclick = () => {
+            S.list = [];
+            home();
+          };
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
 
-Quiz.watch(app);
-home();
-})();
-</script>
-</body></html>
+        Quiz.watch(app);
+        home();
+      })();
+    </script>
+  </body>
+</html>

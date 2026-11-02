@@ -1,31 +1,51 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="referrer" content="no-referrer">
-<link rel="manifest" href="../../../manifest.webmanifest">
-<meta name="theme-color" content="#1B2440">
-<link rel="icon" type="image/png" sizes="32x32" href="../../../icons/favicon-32.png">
-<link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Study Games">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
-</head><body>
-<title>Social Studies Revision</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
-<link rel="stylesheet" href="../../../shared/theme.css">
-<link rel="stylesheet" href="../../../shared/quiz.css">
-<link rel="stylesheet" href="../../../shared/arabic.css">
-<link rel="stylesheet" href="../../../shared/arabic-revision.css">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <link rel="manifest" href="../../../manifest.webmanifest" />
+    <meta name="theme-color" content="#1B2440" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../../../icons/favicon-32.png"
+    />
+    <link rel="apple-touch-icon" href="../../../icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Study Games" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <script>
+      if ("serviceWorker" in navigator)
+        addEventListener("load", () =>
+          navigator.serviceWorker.register("../../../sw.js").catch(() => {}),
+        );
+    </script>
+  </head>
+  <body>
+    <title>Social Studies Revision</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap"
+    />
+    <link rel="stylesheet" href="../../../shared/theme.css" />
+    <link rel="stylesheet" href="../../../shared/quiz.css" />
+    <link rel="stylesheet" href="../../../shared/arabic.css" />
+    <link rel="stylesheet" href="../../../shared/arabic-revision.css" />
 
-<main class="wrap" id="app"></main>
+    <main class="wrap" id="app"></main>
 
-<script src="../../../shared/common.js"></script>
-<script src="../../../quiz-common.js"></script>
-<script>
-
-/* =====================================================================
+    <script src="../../../shared/common.js"></script>
+    <script src="../../../quiz-common.js"></script>
+    <script>
+      /* =====================================================================
    Grade 4 Social Studies in Arabic (الدراسات الاجتماعية) · October revision sheet
    (مراجعة دروس شهر أكتوبر), unit 1, lessons 1–4.
    Question: {q: Arabic (___ = the gap), en: English, o: [right, wrong, ...], p: picture, fit?: show the whole picture (maps)}
@@ -33,292 +53,1645 @@
    The sheet's written answers (explain, prove, link, answer) become choices: the sheet's answer + 2 wrong ones.
    Pictures: img/ss-arabic/<p>.jpg, from the lesson handouts and the sheet's maps.
    ===================================================================== */
-const SHEET=[
- {k:'map',ic:'🗺️',t:'Read the maps',ar:'لاحظ الخرائط ثم أجب',qs:[
-  {q:'يشير رقم (١) على الخريطة إلى أحد عناصر الخريطة، وهو ___.',en:'Number (1) on the map points to one of the map elements: ___.',o:[['وردة البوصلة','the compass rose'],['مقياس الرسم','the scale'],['مفتاح الخريطة','the map key']],p:'map1',fit:1},
-  {q:'ما أهمية العنصر رقم (٢) على الخريطة؟',en:'What is element number (2) on the map for?',o:[['يوضح النسبة بين المسافة على الخريطة وما يقابلها على الطبيعة','It shows the ratio between a distance on the map and the real distance'],['يوضح الاتجاهات على الخريطة','It shows the directions on the map'],['يوضح موضوع الخريطة','It shows what the map is about']],p:'map1',fit:1},
-  {q:'اختر عنوانًا مناسبًا للخريطة.',en:'Choose a good title for the map.',o:[['خريطة مصر','Map of Egypt'],['خريطة العالم','Map of the world'],['خريطة القاهرة','Map of Cairo']],p:'map1',fit:1},
-  {q:'العنصر رقم (١) على الخريطة هو ___.',en:'Element number (1) on the map is ___.',o:[['وردة البوصلة','the compass rose'],['مقياس الرسم','the scale'],['عنوان الخريطة','the map title']],p:'map2',fit:1},
-  {q:'العنصر رقم (٢) على الخريطة هو ___.',en:'Element number (2) on the map is ___.',o:[['مقياس الرسم','the scale'],['مفتاح الخريطة','the map key'],['وردة البوصلة','the compass rose']],p:'map2',fit:1},
-  {q:'العنصر رقم (٣) على الخريطة هو ___.',en:'Element number (3) on the map is ___.',o:[['مفتاح الخريطة','the map key'],['عنوان الخريطة','the map title'],['مقياس الرسم','the scale']],p:'map2',fit:1},
-  {q:'العنصر الناقص في الخريطة هو ___.',en:'The element missing from the map is ___.',o:[['عنوان الخريطة','the map title'],['وردة البوصلة','the compass rose'],['مقياس الرسم','the scale']],p:'map2',fit:1},
-  {q:'اختر عنوان الخريطة.',en:'Choose the title of the map.',o:[['خريطة المسطحات المائية في مصر','Map of the water bodies in Egypt'],['خريطة المرتفعات في مصر','Map of the highlands in Egypt'],['خريطة المدن في مصر','Map of the cities in Egypt']],p:'map3b',fit:1},
-  {q:'في مفتاح هذه الخريطة، اللون الأزرق يعني ___.',en:'In this map key, the blue colour means ___.',o:[['مسطحات مائية','water bodies'],['جبال','mountains'],['صحراء','desert']],p:'map3b',fit:1},
-  {q:'العنصر المفقود في الخريطة هو ___.',en:'The element missing from the map is ___.',o:[['وردة البوصلة','the compass rose'],['مفتاح الخريطة','the map key'],['عنوان الخريطة','the map title']],p:'map3',fit:1}]},
- {k:'comp',ic:'✏️',t:'Complete',ar:'أكمل العبارات',qs:[
-  {q:'من أشهر العلماء العرب الذين برعوا في رسم الخرائط ___.',en:'One of the most famous Arab scholars who were great at drawing maps is ___.',o:[['الإدريسي','al-Idrisi'],['ابن سينا','Ibn Sina'],['الخوارزمي','al-Khwarizmi']],p:'idrisi'},
-  {q:'رسم المصريون القدماء الخرائط على ورق ___.',en:'The ancient Egyptians drew maps on ___ paper.',o:[['البردي','papyrus'],['الشجر','tree'],['القطن','cotton']],p:'papyrus'},
-  {q:'رسم الإدريسي خريطة لـ___.',en:'Al-Idrisi drew a map of ___.',o:[['العالم','the world'],['القاهرة','Cairo'],['النيل','the Nile']],p:'idrisi'},
-  {q:'استخدم المصريون القدماء الخرائط لوصف مسار ___.',en:'The ancient Egyptians used maps to describe the course of ___.',o:[['نهر النيل','the river Nile'],['القطارات','the trains'],['الطائرات','the planes']],p:'cover3'},
-  {q:'يعرض تطبيق GPS خرائط ___.',en:'The GPS app shows ___ maps.',o:[['رقمية','digital'],['يدوية','hand-drawn'],['ورقية','paper']],p:'satellite'},
-  {q:'استخدم المصريون القدماء الخرائط لتحديد مواقع ___.',en:'The ancient Egyptians used maps to find the places of ___.',o:[['المناجم','the mines'],['المطارات','the airports'],['المدارس','the schools']],p:'cover3'},
-  {q:'يعتمد نظام GPS في تحديد المواقع على ___.',en:'GPS finds places using ___.',o:[['الأقمار الصناعية','satellites'],['النجوم','the stars'],['الشمس','the sun']],p:'satellite'},
-  {q:'المعلومات الصحيحة التي تم التأكد منها تُعد ___.',en:'Correct information that has been checked is called ___.',o:[['حقائق','facts'],['آراء','opinions'],['شائعات','rumours']],p:'kids'},
-  {q:'من المصادر الثانوية الكتب و___.',en:'Secondary sources include books and ___.',o:[['المقالات','articles'],['البرديات','papyri'],['الآثار','monuments']],p:'articles'},
-  {q:'من المصادر الأولية الآثار و___.',en:'Primary sources include monuments and ___.',o:[['البرديات','papyri'],['المقالات','articles'],['الأفلام التاريخية','historical films']],p:'carving'},
-  {q:'أحد مصادر المعلومات، ويتمثل في كل ما تركه القدماء من مبانٍ وتماثيل، هو ___.',en:'One source of information, which is everything the ancients left behind such as buildings and statues, is ___.',o:[['الآثار','monuments'],['المقالات','articles'],['الكتب','books']],p:'pyramid'},
-  {q:'المصادر التي كُتبت أثناء وقوع الحدث تُعد مصادر ___.',en:'Sources written while the event was happening are ___ sources.',o:[['أولية','primary'],['ثانوية','secondary'],['حديثة','modern']],p:'writings'},
-  {q:'نقل الأخبار والمعلومات دون التحقق من صدقها يُعد ___.',en:'Passing on news and information without checking it is called ___.',o:[['شائعات','rumours'],['حقائق','facts'],['مصادر أولية','primary sources']],p:'kids'},
-  {q:'المسؤول عن تصميم وبناء المنازل هو ___.',en:'The person in charge of designing and building houses is ___.',o:[['المهندس','the engineer'],['الطبيب','the doctor'],['المزارع','the farmer']],p:'users'},
-  {q:'المكان الذي يتعلم فيه التلميذ هو ___.',en:'The place where a pupil learns is ___.',o:[['المدرسة','the school'],['السوق','the market'],['المستشفى','the hospital']],p:'cover4'},
-  {q:'أقرب طريق للوصول إلى مكان ما هو الطريق ___.',en:'The shortest way to get to a place is the ___ way.',o:[['المباشر','direct'],['الطويل','long'],['المتعرج','winding']],p:'cover1'},
-  {q:'استخدم الإنسان قديمًا لتحديد الاتجاهات نهارًا ___.',en:'Long ago, people used ___ to find directions in the daytime.',o:[['الشمس','the sun'],['القمر','the moon'],['النجم القطبي','the North Star']],p:'sunface'},
-  {q:'يشير النجم القطبي في السماء لاتجاه ___.',en:'The North Star in the sky points ___.',o:[['الشمال','north'],['الجنوب','south'],['الشرق','east']],p:'star'},
-  {q:'أحد عناصر الخريطة يمكننا استخدامه لحساب المسافة بين مدينتين على الخريطة وما يقابلها على الطبيعة هو ___.',en:'The map element we can use to work out the real distance between two cities on the map is ___.',o:[['مقياس الرسم','the scale'],['وردة البوصلة','the compass rose'],['مفتاح الخريطة','the map key']],p:'mapparts'}]},
- {k:'why',ic:'🤔',t:'Explain why',ar:'بم تفسر؟',ask:'بم تفسر؟',askE:'Why?',qs:[
-  {q:'اهتمام المصريين القدماء برسم الخرائط.',en:'The ancient Egyptians cared a lot about drawing maps.',o:[['لوصف مسار نهر النيل ومواقع المناجم','To describe the course of the Nile and where the mines were'],['لتزيين جدران بيوتهم فقط','Only to decorate the walls of their houses'],['لأنهم كانوا يسافرون إلى الفضاء','Because they travelled to space']],p:'cover3'},
-  {q:'أهمية الصور الجوية.',en:'Why aerial photos are important.',o:[['لأنها من أهم مصادر رسم الخرائط','They are one of the most important sources for drawing maps'],['لأنها تحدد أوقات الصلاة','They tell the prayer times'],['لأنها تُلتقط من الفضاء بالأقمار الصناعية','They are taken from space by satellites']],p:'aerial'},
-  {q:'تلقيب مريم عالمة الفلك بمريم الإسطرلابية.',en:'Why Mariam the astronomer is called Mariam al-Astrulabi.',o:[['لأنها قامت بحسابات رياضية دقيقة لتطوير الإسطرلاب','She did exact maths to improve the astrolabe'],['لأنها رسمت خريطة العالم','She drew the map of the world'],['لأنها اخترعت البوصلة الرقمية','She invented the digital compass']],p:'mariam'},
-  {q:'تُعد البرديات من المصادر الأولية.',en:'Papyri are primary sources.',o:[['لأنها سجلت أخبار وأحداث المصريين القدماء في وقت وقوع الحدث','They recorded the news and events of the ancient Egyptians when they happened'],['لأنها كُتبت بعد وقوع الحدث بفترة طويلة','They were written long after the events'],['لأنها تعبر عن آراء شخصية','They give personal opinions']],p:'papyrus'},
-  {q:'تُعد الكتب والموسوعات من المصادر الثانوية.',en:'Books and encyclopedias are secondary sources.',o:[['لأنها سُجلت بعد وقوع الحدث بفترة زمنية طويلة، ويسهل الحصول عليها','They were written long after the events, and they are easy to get'],['لأنها سُجلت في زمن وقوع الحدث','They were written when the events happened'],['لأنها محفورة على الحجر','They are carved in stone']],p:'books'},
-  {q:'تُعد الأفلام التاريخية من المصادر الثانوية.',en:'Historical films are secondary sources.',o:[['لأنها سُجلت بعد وقوع الحدث بفترة زمنية طويلة، ويسهل الحصول عليها','They were made long after the events, and they are easy to get'],['لأنها صُوّرت في زمن وقوع الحدث','They were filmed when the events happened'],['لأنها شائعات','They are rumours']],p:'films'},
-  {q:'أهمية البوصلة الرقمية في حياتنا.',en:'Why the digital compass is important in our lives.',o:[['تُستخدم في تحديد الاتجاهات بسرعة ودقة','It finds directions quickly and exactly'],['تُستخدم في قياس درجة الحرارة','It measures the temperature'],['تُستخدم في حساب المسافات على الخريطة','It works out distances on the map']],p:'compass'},
-  {q:'أهمية النجم القطبي الشمالي عند المصريين القدماء.',en:'Why the North Star was important to the ancient Egyptians.',o:[['استعانوا به في تحديد الاتجاهات ليلًا','They used it to find directions at night'],['استعانوا به في تحديد الاتجاهات نهارًا','They used it to find directions in the daytime'],['استخدموه في صناعة البردي','They used it to make papyrus']],p:'star'},
-  {q:'أهمية الخريطة للمزارع.',en:'Why a map is important to a farmer.',o:[['يستخدمها في تحديد موقع الأرض الزراعية','He uses it to find where the farmland is'],['يستخدمها في تحديد المواقع العسكرية','He uses it to find military positions'],['يستخدمها في تحديد مسار الرحلات','He uses it to plan flight routes']],p:'users'},
-  {q:'ما أهمية مفتاح الخريطة؟',en:'What is the map key for?',o:[['يوضح معنى الرموز والألوان على الخريطة','It explains what the symbols and colours on the map mean'],['يوضح الاتجاهات على الخريطة','It shows the directions on the map'],['يوضح موضوع الخريطة','It shows what the map is about']],p:'mapparts'},
-  {q:'أهمية الخريطة للجندي.',en:'Why a map is important to a soldier.',o:[['يستخدمها في تحديد المواقع العسكرية','He uses it to find military positions'],['يستخدمها في تحديد موقع الأرض الزراعية','He uses it to find farmland'],['يستخدمها للتخطيط لإنشاء المباني والطرق','He uses it to plan buildings and roads']],p:'users'},
-  {q:'ما أهمية عنوان الخريطة؟',en:'What is the map title for?',o:[['يوضح موضوع الخريطة','It shows what the map is about'],['يوضح الاتجاهات على الخريطة','It shows the directions on the map'],['يوضح معنى الرموز والألوان','It explains the symbols and colours']],p:'mapparts'},
-  {q:'أهمية الخريطة للمهندس.',en:'Why a map is important to an engineer.',o:[['يستخدمها للتخطيط لإنشاء المباني والطرق','He uses it to plan buildings and roads'],['يستخدمها في تحديد المواقع العسكرية','He uses it to find military positions'],['يستخدمها للوصول إلى الأماكن السياحية','He uses it to get to tourist places']],p:'users'},
-  {q:'ما أهمية وردة البوصلة على الخريطة؟',en:'What is the compass rose on the map for?',o:[['توضح الاتجاهات على الخريطة','It shows the directions on the map'],['توضح موضوع الخريطة','It shows what the map is about'],['توضح النسبة بين المسافة على الخريطة وما يقابلها على الطبيعة','It shows the ratio between map distance and real distance']],p:'compass'}]},
- {k:'prove',ic:'🔗',t:'Prove & link',ar:'دلل · ما العلاقة بين؟',qs:[
-  {ask:'دلل (أثبت):',askE:'Prove it:',q:'المصريون القدماء أول من عرفوا رسم الخرائط.',en:'The ancient Egyptians were the first to draw maps.',o:[['رسموا الخرائط على ورق البردي وجدران المعابد، واستخدموها في وصف مسار نهر النيل','They drew maps on papyrus and temple walls and used them to describe the course of the Nile'],['رسموا خرائط رقمية على الهواتف','They drew digital maps on phones'],['رسموا خريطة العالم بالأقمار الصناعية','They drew the world map with satellites']],p:'papyrus'},
-  {ask:'دلل (أثبت):',askE:'Prove it:',q:'تقدير العالم حديثًا لجهود عالمة الفلك مريم الإسطرلابية.',en:'Today the world honours the work of the astronomer Mariam al-Astrulabi.',o:[['تمت تسمية أحد الكويكبات المكتشفة باسمها','An asteroid was named after her'],['رُسمت صورتها على كل الخرائط','Her picture is drawn on every map'],['سُميت مدينة في مصر باسمها','A city in Egypt was named after her']],p:'mariam'},
-  {ask:'دلل (أثبت):',askE:'Prove it:',q:'براعة المصريين القدماء في علم الفلك.',en:'The ancient Egyptians were skilled in astronomy.',o:[['استعانوا بالنجم القطبي الشمالي في تحديد الاتجاهات ليلًا','They used the North Star to find directions at night'],['اخترعوا نظام GPS','They invented GPS'],['التقطوا الصور الفضائية','They took space photos']],p:'star'},
-  {ask:'ما العلاقة بين:',askE:'What is the link between:',q:'الصور الجوية والخرائط',en:'Aerial photos and maps',o:[['الصور الجوية من أهم مصادر رسم الخرائط','Aerial photos are one of the most important sources for drawing maps'],['الصور الجوية تحدد أوقات الصلاة','Aerial photos tell the prayer times'],['الصور الجوية تُلتقط من الفضاء خارج الكرة الأرضية','Aerial photos are taken from space, outside the Earth']],p:'aerial'},
-  {ask:'ما العلاقة بين:',askE:'What is the link between:',q:'مريم عالمة الفلك والإسطرلاب',en:'Mariam the astronomer and the astrolabe',o:[['قامت مريم بحسابات رياضية دقيقة لتطوير الإسطرلاب','Mariam did exact maths to improve the astrolabe'],['رسمت مريم خريطة النيل على الإسطرلاب','Mariam drew a map of the Nile on the astrolabe'],['اشترت مريم الإسطرلاب من السوق','Mariam bought the astrolabe at the market']],p:'astrolabe'},
-  {ask:'ما العلاقة بين:',askE:'What is the link between:',q:'الصور الفضائية والخرائط',en:'Space photos and maps',o:[['الصور الفضائية من أهم مصادر رسم الخرائط','Space photos are one of the most important sources for drawing maps'],['الصور الفضائية تُلتقط بواسطة الطائرات','Space photos are taken by aeroplanes'],['الصور الفضائية من المصادر الأولية للتاريخ','Space photos are primary sources of history']],p:'space'},
-  {ask:'ما العلاقة بين:',askE:'What is the link between:',q:'الشمس والاتجاهات',en:'The sun and directions',o:[['كانت الشمس تُستخدم قديمًا في تحديد الاتجاهات نهارًا','Long ago the sun was used to find directions in the daytime'],['كانت الشمس تُستخدم قديمًا في تحديد الاتجاهات ليلًا','Long ago the sun was used to find directions at night'],['الشمس تشير دائمًا إلى اتجاه الشمال','The sun always points north']],p:'sunface'},
-  {ask:'ما العلاقة بين:',askE:'What is the link between:',q:'النجم القطبي الشمالي والاتجاهات',en:'The North Star and directions',o:[['كان النجم القطبي الشمالي يُستخدم قديمًا في تحديد الاتجاهات ليلًا','Long ago the North Star was used to find directions at night'],['كان النجم القطبي الشمالي يُستخدم في تحديد الاتجاهات نهارًا','The North Star was used to find directions in the daytime'],['النجم القطبي يشير دائمًا إلى اتجاه الجنوب','The North Star always points south']],p:'star'}]},
- {k:'ans',ic:'💡',t:'Answer',ar:'أجب عما يلي',qs:[
-  {q:'اذكر استخدامين للإسطرلاب.',en:'Name two uses of the astrolabe.',o:[['تحديد اتجاه القبلة وأوقات الصلاة','Finding the direction of the qibla and the prayer times'],['قياس الوزن والتقاط الصور','Weighing things and taking pictures'],['قياس درجة الحرارة وسرعة الرياح','Measuring temperature and wind speed']],p:'astrolabe'},
-  {q:'أيهما أدق: الخرائط الرقمية أم الخرائط اليدوية؟ ولماذا؟',en:'Which are more exact, digital maps or hand-drawn maps? Why?',o:[['الخرائط الرقمية أدق، لأن الخرائط اليدوية بسيطة مرسومة باليد','Digital maps, because hand-drawn maps are simple and drawn by hand'],['الخرائط اليدوية أدق، لأنها مرسومة باليد','Hand-drawn maps, because they are drawn by hand'],['كلاهما بنفس الدقة','Both are just as exact']],p:'satellite'},
-  {q:'اشرح كيفية تحديد الاتجاهات عند المصريين القدماء ليلًا.',en:'Explain how the ancient Egyptians found directions at night.',o:[['بالاستعانة بالنجم القطبي الشمالي الذي يشير دائمًا لاتجاه الشمال، ومنه يمكن تحديد باقي الاتجاهات','Using the North Star, which always points north; from north you can find the other directions'],['بالنظر إلى الشمس عند شروقها','By looking at the sun when it rises'],['باستخدام البوصلة الرقمية','By using a digital compass']],p:'star'},
-  {q:'ما أهمية المدرسة بالنسبة لنا؟',en:'Why is school important to us?',o:[['تعتبر بيتنا الثاني، والمكان الذي نتعلم فيه ونقضي وقتًا ممتعًا مع الأصدقاء والمعلمين','It is our second home, where we learn and have a good time with friends and teachers'],['هي مكان لشراء الطعام فقط','It is only a place to buy food'],['هي مكان للنوم','It is a place to sleep']],p:'cover4'},
-  {q:'اشرح كيفية تحديد الاتجاهات بالنهار قديمًا.',en:'Explain how people found directions in the daytime long ago.',o:[['باستخدام الشمس: عندما نقف أمامها عند شروقها نتجه نحو الشرق، والغرب خلفنا، والجنوب على يميننا، والشمال على يسارنا','Using the sun: facing the sunrise we face east, west is behind us, south is on our right and north is on our left'],['باستخدام الشمس: عندما نقف أمامها عند شروقها نتجه نحو الغرب، والشرق خلفنا','Using the sun: facing the sunrise we face west, and east is behind us'],['باستخدام النجم القطبي الشمالي','Using the North Star']],p:'sunface'},
-  {q:'ما واجبنا نحو مدرستنا؟',en:'What is our duty towards our school?',o:[['المحافظة عليها واتباع القوانين بها','To take care of it and follow its rules'],['الكتابة على جدرانها','To write on its walls'],['ترك الفصل غير نظيف','To leave the classroom dirty']],p:'cover4'},
-  {q:'اشرح مدلول اللون البني على الخريطة مع تقديم مثال.',en:'Explain what brown means on a map, with an example.',o:[['يعبر عن المرتفعات مثل الجبال والهضاب (مثل جبل سانت كاترين وهضبة التيه)','Highlands such as mountains and plateaus (e.g. Mount Saint Catherine and the Tih Plateau)'],['يعبر عن المسطحات المائية مثل البحار والبحيرات','Water bodies such as seas and lakes'],['يعبر عن المناطق الأقل ارتفاعًا مثل السهول','Low land such as plains']],p:'mapparts'},
-  {q:'اشرح مدلول اللون الأخضر على الخريطة مع إعطاء مثال.',en:'Explain what green means on a map, with an example.',o:[['يعبر عن المناطق الأقل ارتفاعًا مثل السهول','Low land such as plains'],['يعبر عن المرتفعات مثل الجبال والهضاب','Highlands such as mountains and plateaus'],['يعبر عن المسطحات المائية مثل البحار والبحيرات','Water bodies such as seas and lakes']],p:'mapparts'},
-  {q:'اشرح مدلول اللون الأزرق على الخريطة مع تقديم مثال.',en:'Explain what blue means on a map, with an example.',o:[['يعبر عن المسطحات المائية مثل البحار والبحيرات (مثل البحر الأحمر والبحر المتوسط وبحيرة ناصر)','Water bodies such as seas and lakes (e.g. the Red Sea, the Mediterranean and Lake Nasser)'],['يعبر عن المرتفعات مثل الجبال والهضاب','Highlands such as mountains and plateaus'],['يعبر عن المناطق الأقل ارتفاعًا مثل السهول','Low land such as plains']],p:'map3'}]},
- {k:'choose',ic:'✅',t:'Choose the answer',ar:'اختر الإجابة الصحيحة',qs:[
-  {q:'المسؤول عن تصميم وبناء المنازل والمدارس هو ___.',en:'The person in charge of designing and building houses and schools is ___.',o:[['المهندس','the engineer'],['المعلم','the teacher'],['الطبيب','the doctor'],['المزارع','the farmer']],p:'users'},
-  {q:'ما الاتجاه الذي يكون على يسارك إذا واجهت الشمس عند شروقها؟',en:'Which direction is on your left when you face the rising sun?',o:[['الشمال','north'],['الجنوب','south'],['الغرب','west'],['الشرق','east']],p:'cover1'},
-  {q:'الاتجاه الفرعي الذي يقع بين الشمال والشرق هو ___.',en:'The in-between direction that lies between north and east is ___.',o:[['الشمال الشرقي','north-east'],['الجنوب الشرقي','south-east'],['الشمال الغربي','north-west'],['الجنوب الغربي','south-west']],p:'compass'},
-  {q:'أي من العناصر التالية يعبر عن موضوع الخريطة؟',en:'Which of these elements tells what the map is about?',o:[['عنوان الخريطة','the map title'],['مفتاح الخريطة','the map key'],['وردة البوصلة','the compass rose'],['مقياس الرسم','the scale']],p:'mapparts'},
-  {q:'أي من هؤلاء يستخدم الخريطة في تحديد المواقع العسكرية؟',en:'Which of these people uses a map to find military positions?',o:[['الجندي','the soldier'],['المعلم','the teacher'],['السائح','the tourist'],['المزارع','the farmer']],p:'users'},
-  {q:'ساعد الإسطرلاب قديمًا في ___.',en:'Long ago the astrolabe helped with ___.',o:[['تحديد المواقع','finding places'],['قياس الوزن','weighing things'],['قياس المسافات','measuring distances'],['التقاط الصور','taking pictures']],p:'astrolabe'},
-  {q:'أشهر من رسم الخرائط من العلماء العرب هو ___.',en:'The most famous Arab scholar who drew maps is ___.',o:[['الإدريسي','al-Idrisi'],['ابن سينا','Ibn Sina'],['ابن خلدون','Ibn Khaldun'],['الخوارزمي','al-Khwarizmi']],p:'idrisi'},
-  {q:'أحد المصادر الأولية التي يمكن استخدامها عند كتابة بحث عن تاريخ مصر هو ___.',en:'One primary source you can use when writing a project about the history of Egypt is ___.',o:[['كتابات المؤرخين','the writings of historians'],['الإنترنت','the internet'],['المقالات الصحفية','newspaper articles'],['الأبحاث','research papers']],p:'writings'}]},
- {k:'tf',ic:'⚖️',t:'Right or wrong',ar:'صواب أم خطأ؟',qs:[
-  {q:'يستخدم الطيار الخريطة في تحديد مسار الرحلات.',en:'A pilot uses a map to plan the route of flights.',tf:true,p:'users'},
-  {q:'المصادر الأولية أكثر دقة من الثانوية.',en:'Primary sources are more exact than secondary sources.',tf:true,p:'carving'},
-  {q:'يكون اتجاه الغرب على يمينك عند مواجهة الشمس صباحًا.',en:'West is on your right when you face the sun in the morning.',tf:false,x:'Facing the morning sun, west is behind you; south (الجنوب) is on your right.',p:'compass'},
-  {q:'يقتصر استخدام الخرائط على مهندسي الطرق.',en:'Only road engineers use maps.',tf:false,x:'Many people use maps: farmers, soldiers, tourists, pilots and engineers.',p:'users'},
-  {q:'يقع اتجاه الشمال الغربي بين الغرب والشرق.',en:'North-west lies between west and east.',tf:false,x:'North-west (الشمال الغربي) lies between north and west.',p:'compass'},
-  {q:'يصعب قراءة الخريطة بدون مفتاح الخريطة.',en:'It is hard to read a map without its key.',tf:true,p:'mapparts'}]},
-];
-const MIX=15;
-/* KEY TERMS (أهم المصطلحات) from the end of each lesson handout.
+      const SHEET = [
+        {
+          k: "map",
+          ic: "🗺️",
+          t: "Read the maps",
+          ar: "لاحظ الخرائط ثم أجب",
+          qs: [
+            {
+              q: "يشير رقم (١) على الخريطة إلى أحد عناصر الخريطة، وهو ___.",
+              en: "Number (1) on the map points to one of the map elements: ___.",
+              o: [
+                ["وردة البوصلة", "the compass rose"],
+                ["مقياس الرسم", "the scale"],
+                ["مفتاح الخريطة", "the map key"],
+              ],
+              p: "map1",
+              fit: 1,
+            },
+            {
+              q: "ما أهمية العنصر رقم (٢) على الخريطة؟",
+              en: "What is element number (2) on the map for?",
+              o: [
+                [
+                  "يوضح النسبة بين المسافة على الخريطة وما يقابلها على الطبيعة",
+                  "It shows the ratio between a distance on the map and the real distance",
+                ],
+                [
+                  "يوضح الاتجاهات على الخريطة",
+                  "It shows the directions on the map",
+                ],
+                ["يوضح موضوع الخريطة", "It shows what the map is about"],
+              ],
+              p: "map1",
+              fit: 1,
+            },
+            {
+              q: "اختر عنوانًا مناسبًا للخريطة.",
+              en: "Choose a good title for the map.",
+              o: [
+                ["خريطة مصر", "Map of Egypt"],
+                ["خريطة العالم", "Map of the world"],
+                ["خريطة القاهرة", "Map of Cairo"],
+              ],
+              p: "map1",
+              fit: 1,
+            },
+            {
+              q: "العنصر رقم (١) على الخريطة هو ___.",
+              en: "Element number (1) on the map is ___.",
+              o: [
+                ["وردة البوصلة", "the compass rose"],
+                ["مقياس الرسم", "the scale"],
+                ["عنوان الخريطة", "the map title"],
+              ],
+              p: "map2",
+              fit: 1,
+            },
+            {
+              q: "العنصر رقم (٢) على الخريطة هو ___.",
+              en: "Element number (2) on the map is ___.",
+              o: [
+                ["مقياس الرسم", "the scale"],
+                ["مفتاح الخريطة", "the map key"],
+                ["وردة البوصلة", "the compass rose"],
+              ],
+              p: "map2",
+              fit: 1,
+            },
+            {
+              q: "العنصر رقم (٣) على الخريطة هو ___.",
+              en: "Element number (3) on the map is ___.",
+              o: [
+                ["مفتاح الخريطة", "the map key"],
+                ["عنوان الخريطة", "the map title"],
+                ["مقياس الرسم", "the scale"],
+              ],
+              p: "map2",
+              fit: 1,
+            },
+            {
+              q: "العنصر الناقص في الخريطة هو ___.",
+              en: "The element missing from the map is ___.",
+              o: [
+                ["عنوان الخريطة", "the map title"],
+                ["وردة البوصلة", "the compass rose"],
+                ["مقياس الرسم", "the scale"],
+              ],
+              p: "map2",
+              fit: 1,
+            },
+            {
+              q: "اختر عنوان الخريطة.",
+              en: "Choose the title of the map.",
+              o: [
+                [
+                  "خريطة المسطحات المائية في مصر",
+                  "Map of the water bodies in Egypt",
+                ],
+                ["خريطة المرتفعات في مصر", "Map of the highlands in Egypt"],
+                ["خريطة المدن في مصر", "Map of the cities in Egypt"],
+              ],
+              p: "map3b",
+              fit: 1,
+            },
+            {
+              q: "في مفتاح هذه الخريطة، اللون الأزرق يعني ___.",
+              en: "In this map key, the blue colour means ___.",
+              o: [
+                ["مسطحات مائية", "water bodies"],
+                ["جبال", "mountains"],
+                ["صحراء", "desert"],
+              ],
+              p: "map3b",
+              fit: 1,
+            },
+            {
+              q: "العنصر المفقود في الخريطة هو ___.",
+              en: "The element missing from the map is ___.",
+              o: [
+                ["وردة البوصلة", "the compass rose"],
+                ["مفتاح الخريطة", "the map key"],
+                ["عنوان الخريطة", "the map title"],
+              ],
+              p: "map3",
+              fit: 1,
+            },
+          ],
+        },
+        {
+          k: "comp",
+          ic: "✏️",
+          t: "Complete",
+          ar: "أكمل العبارات",
+          qs: [
+            {
+              q: "من أشهر العلماء العرب الذين برعوا في رسم الخرائط ___.",
+              en: "One of the most famous Arab scholars who were great at drawing maps is ___.",
+              o: [
+                ["الإدريسي", "al-Idrisi"],
+                ["ابن سينا", "Ibn Sina"],
+                ["الخوارزمي", "al-Khwarizmi"],
+              ],
+              p: "idrisi",
+            },
+            {
+              q: "رسم المصريون القدماء الخرائط على ورق ___.",
+              en: "The ancient Egyptians drew maps on ___ paper.",
+              o: [
+                ["البردي", "papyrus"],
+                ["الشجر", "tree"],
+                ["القطن", "cotton"],
+              ],
+              p: "papyrus",
+            },
+            {
+              q: "رسم الإدريسي خريطة لـ___.",
+              en: "Al-Idrisi drew a map of ___.",
+              o: [
+                ["العالم", "the world"],
+                ["القاهرة", "Cairo"],
+                ["النيل", "the Nile"],
+              ],
+              p: "idrisi",
+            },
+            {
+              q: "استخدم المصريون القدماء الخرائط لوصف مسار ___.",
+              en: "The ancient Egyptians used maps to describe the course of ___.",
+              o: [
+                ["نهر النيل", "the river Nile"],
+                ["القطارات", "the trains"],
+                ["الطائرات", "the planes"],
+              ],
+              p: "cover3",
+            },
+            {
+              q: "يعرض تطبيق GPS خرائط ___.",
+              en: "The GPS app shows ___ maps.",
+              o: [
+                ["رقمية", "digital"],
+                ["يدوية", "hand-drawn"],
+                ["ورقية", "paper"],
+              ],
+              p: "satellite",
+            },
+            {
+              q: "استخدم المصريون القدماء الخرائط لتحديد مواقع ___.",
+              en: "The ancient Egyptians used maps to find the places of ___.",
+              o: [
+                ["المناجم", "the mines"],
+                ["المطارات", "the airports"],
+                ["المدارس", "the schools"],
+              ],
+              p: "cover3",
+            },
+            {
+              q: "يعتمد نظام GPS في تحديد المواقع على ___.",
+              en: "GPS finds places using ___.",
+              o: [
+                ["الأقمار الصناعية", "satellites"],
+                ["النجوم", "the stars"],
+                ["الشمس", "the sun"],
+              ],
+              p: "satellite",
+            },
+            {
+              q: "المعلومات الصحيحة التي تم التأكد منها تُعد ___.",
+              en: "Correct information that has been checked is called ___.",
+              o: [
+                ["حقائق", "facts"],
+                ["آراء", "opinions"],
+                ["شائعات", "rumours"],
+              ],
+              p: "kids",
+            },
+            {
+              q: "من المصادر الثانوية الكتب و___.",
+              en: "Secondary sources include books and ___.",
+              o: [
+                ["المقالات", "articles"],
+                ["البرديات", "papyri"],
+                ["الآثار", "monuments"],
+              ],
+              p: "articles",
+            },
+            {
+              q: "من المصادر الأولية الآثار و___.",
+              en: "Primary sources include monuments and ___.",
+              o: [
+                ["البرديات", "papyri"],
+                ["المقالات", "articles"],
+                ["الأفلام التاريخية", "historical films"],
+              ],
+              p: "carving",
+            },
+            {
+              q: "أحد مصادر المعلومات، ويتمثل في كل ما تركه القدماء من مبانٍ وتماثيل، هو ___.",
+              en: "One source of information, which is everything the ancients left behind such as buildings and statues, is ___.",
+              o: [
+                ["الآثار", "monuments"],
+                ["المقالات", "articles"],
+                ["الكتب", "books"],
+              ],
+              p: "pyramid",
+            },
+            {
+              q: "المصادر التي كُتبت أثناء وقوع الحدث تُعد مصادر ___.",
+              en: "Sources written while the event was happening are ___ sources.",
+              o: [
+                ["أولية", "primary"],
+                ["ثانوية", "secondary"],
+                ["حديثة", "modern"],
+              ],
+              p: "writings",
+            },
+            {
+              q: "نقل الأخبار والمعلومات دون التحقق من صدقها يُعد ___.",
+              en: "Passing on news and information without checking it is called ___.",
+              o: [
+                ["شائعات", "rumours"],
+                ["حقائق", "facts"],
+                ["مصادر أولية", "primary sources"],
+              ],
+              p: "kids",
+            },
+            {
+              q: "المسؤول عن تصميم وبناء المنازل هو ___.",
+              en: "The person in charge of designing and building houses is ___.",
+              o: [
+                ["المهندس", "the engineer"],
+                ["الطبيب", "the doctor"],
+                ["المزارع", "the farmer"],
+              ],
+              p: "users",
+            },
+            {
+              q: "المكان الذي يتعلم فيه التلميذ هو ___.",
+              en: "The place where a pupil learns is ___.",
+              o: [
+                ["المدرسة", "the school"],
+                ["السوق", "the market"],
+                ["المستشفى", "the hospital"],
+              ],
+              p: "cover4",
+            },
+            {
+              q: "أقرب طريق للوصول إلى مكان ما هو الطريق ___.",
+              en: "The shortest way to get to a place is the ___ way.",
+              o: [
+                ["المباشر", "direct"],
+                ["الطويل", "long"],
+                ["المتعرج", "winding"],
+              ],
+              p: "cover1",
+            },
+            {
+              q: "استخدم الإنسان قديمًا لتحديد الاتجاهات نهارًا ___.",
+              en: "Long ago, people used ___ to find directions in the daytime.",
+              o: [
+                ["الشمس", "the sun"],
+                ["القمر", "the moon"],
+                ["النجم القطبي", "the North Star"],
+              ],
+              p: "sunface",
+            },
+            {
+              q: "يشير النجم القطبي في السماء لاتجاه ___.",
+              en: "The North Star in the sky points ___.",
+              o: [
+                ["الشمال", "north"],
+                ["الجنوب", "south"],
+                ["الشرق", "east"],
+              ],
+              p: "star",
+            },
+            {
+              q: "أحد عناصر الخريطة يمكننا استخدامه لحساب المسافة بين مدينتين على الخريطة وما يقابلها على الطبيعة هو ___.",
+              en: "The map element we can use to work out the real distance between two cities on the map is ___.",
+              o: [
+                ["مقياس الرسم", "the scale"],
+                ["وردة البوصلة", "the compass rose"],
+                ["مفتاح الخريطة", "the map key"],
+              ],
+              p: "mapparts",
+            },
+          ],
+        },
+        {
+          k: "why",
+          ic: "🤔",
+          t: "Explain why",
+          ar: "بم تفسر؟",
+          ask: "بم تفسر؟",
+          askE: "Why?",
+          qs: [
+            {
+              q: "اهتمام المصريين القدماء برسم الخرائط.",
+              en: "The ancient Egyptians cared a lot about drawing maps.",
+              o: [
+                [
+                  "لوصف مسار نهر النيل ومواقع المناجم",
+                  "To describe the course of the Nile and where the mines were",
+                ],
+                [
+                  "لتزيين جدران بيوتهم فقط",
+                  "Only to decorate the walls of their houses",
+                ],
+                [
+                  "لأنهم كانوا يسافرون إلى الفضاء",
+                  "Because they travelled to space",
+                ],
+              ],
+              p: "cover3",
+            },
+            {
+              q: "أهمية الصور الجوية.",
+              en: "Why aerial photos are important.",
+              o: [
+                [
+                  "لأنها من أهم مصادر رسم الخرائط",
+                  "They are one of the most important sources for drawing maps",
+                ],
+                ["لأنها تحدد أوقات الصلاة", "They tell the prayer times"],
+                [
+                  "لأنها تُلتقط من الفضاء بالأقمار الصناعية",
+                  "They are taken from space by satellites",
+                ],
+              ],
+              p: "aerial",
+            },
+            {
+              q: "تلقيب مريم عالمة الفلك بمريم الإسطرلابية.",
+              en: "Why Mariam the astronomer is called Mariam al-Astrulabi.",
+              o: [
+                [
+                  "لأنها قامت بحسابات رياضية دقيقة لتطوير الإسطرلاب",
+                  "She did exact maths to improve the astrolabe",
+                ],
+                ["لأنها رسمت خريطة العالم", "She drew the map of the world"],
+                [
+                  "لأنها اخترعت البوصلة الرقمية",
+                  "She invented the digital compass",
+                ],
+              ],
+              p: "mariam",
+            },
+            {
+              q: "تُعد البرديات من المصادر الأولية.",
+              en: "Papyri are primary sources.",
+              o: [
+                [
+                  "لأنها سجلت أخبار وأحداث المصريين القدماء في وقت وقوع الحدث",
+                  "They recorded the news and events of the ancient Egyptians when they happened",
+                ],
+                [
+                  "لأنها كُتبت بعد وقوع الحدث بفترة طويلة",
+                  "They were written long after the events",
+                ],
+                ["لأنها تعبر عن آراء شخصية", "They give personal opinions"],
+              ],
+              p: "papyrus",
+            },
+            {
+              q: "تُعد الكتب والموسوعات من المصادر الثانوية.",
+              en: "Books and encyclopedias are secondary sources.",
+              o: [
+                [
+                  "لأنها سُجلت بعد وقوع الحدث بفترة زمنية طويلة، ويسهل الحصول عليها",
+                  "They were written long after the events, and they are easy to get",
+                ],
+                [
+                  "لأنها سُجلت في زمن وقوع الحدث",
+                  "They were written when the events happened",
+                ],
+                ["لأنها محفورة على الحجر", "They are carved in stone"],
+              ],
+              p: "books",
+            },
+            {
+              q: "تُعد الأفلام التاريخية من المصادر الثانوية.",
+              en: "Historical films are secondary sources.",
+              o: [
+                [
+                  "لأنها سُجلت بعد وقوع الحدث بفترة زمنية طويلة، ويسهل الحصول عليها",
+                  "They were made long after the events, and they are easy to get",
+                ],
+                [
+                  "لأنها صُوّرت في زمن وقوع الحدث",
+                  "They were filmed when the events happened",
+                ],
+                ["لأنها شائعات", "They are rumours"],
+              ],
+              p: "films",
+            },
+            {
+              q: "أهمية البوصلة الرقمية في حياتنا.",
+              en: "Why the digital compass is important in our lives.",
+              o: [
+                [
+                  "تُستخدم في تحديد الاتجاهات بسرعة ودقة",
+                  "It finds directions quickly and exactly",
+                ],
+                ["تُستخدم في قياس درجة الحرارة", "It measures the temperature"],
+                [
+                  "تُستخدم في حساب المسافات على الخريطة",
+                  "It works out distances on the map",
+                ],
+              ],
+              p: "compass",
+            },
+            {
+              q: "أهمية النجم القطبي الشمالي عند المصريين القدماء.",
+              en: "Why the North Star was important to the ancient Egyptians.",
+              o: [
+                [
+                  "استعانوا به في تحديد الاتجاهات ليلًا",
+                  "They used it to find directions at night",
+                ],
+                [
+                  "استعانوا به في تحديد الاتجاهات نهارًا",
+                  "They used it to find directions in the daytime",
+                ],
+                ["استخدموه في صناعة البردي", "They used it to make papyrus"],
+              ],
+              p: "star",
+            },
+            {
+              q: "أهمية الخريطة للمزارع.",
+              en: "Why a map is important to a farmer.",
+              o: [
+                [
+                  "يستخدمها في تحديد موقع الأرض الزراعية",
+                  "He uses it to find where the farmland is",
+                ],
+                [
+                  "يستخدمها في تحديد المواقع العسكرية",
+                  "He uses it to find military positions",
+                ],
+                [
+                  "يستخدمها في تحديد مسار الرحلات",
+                  "He uses it to plan flight routes",
+                ],
+              ],
+              p: "users",
+            },
+            {
+              q: "ما أهمية مفتاح الخريطة؟",
+              en: "What is the map key for?",
+              o: [
+                [
+                  "يوضح معنى الرموز والألوان على الخريطة",
+                  "It explains what the symbols and colours on the map mean",
+                ],
+                [
+                  "يوضح الاتجاهات على الخريطة",
+                  "It shows the directions on the map",
+                ],
+                ["يوضح موضوع الخريطة", "It shows what the map is about"],
+              ],
+              p: "mapparts",
+            },
+            {
+              q: "أهمية الخريطة للجندي.",
+              en: "Why a map is important to a soldier.",
+              o: [
+                [
+                  "يستخدمها في تحديد المواقع العسكرية",
+                  "He uses it to find military positions",
+                ],
+                [
+                  "يستخدمها في تحديد موقع الأرض الزراعية",
+                  "He uses it to find farmland",
+                ],
+                [
+                  "يستخدمها للتخطيط لإنشاء المباني والطرق",
+                  "He uses it to plan buildings and roads",
+                ],
+              ],
+              p: "users",
+            },
+            {
+              q: "ما أهمية عنوان الخريطة؟",
+              en: "What is the map title for?",
+              o: [
+                ["يوضح موضوع الخريطة", "It shows what the map is about"],
+                [
+                  "يوضح الاتجاهات على الخريطة",
+                  "It shows the directions on the map",
+                ],
+                [
+                  "يوضح معنى الرموز والألوان",
+                  "It explains the symbols and colours",
+                ],
+              ],
+              p: "mapparts",
+            },
+            {
+              q: "أهمية الخريطة للمهندس.",
+              en: "Why a map is important to an engineer.",
+              o: [
+                [
+                  "يستخدمها للتخطيط لإنشاء المباني والطرق",
+                  "He uses it to plan buildings and roads",
+                ],
+                [
+                  "يستخدمها في تحديد المواقع العسكرية",
+                  "He uses it to find military positions",
+                ],
+                [
+                  "يستخدمها للوصول إلى الأماكن السياحية",
+                  "He uses it to get to tourist places",
+                ],
+              ],
+              p: "users",
+            },
+            {
+              q: "ما أهمية وردة البوصلة على الخريطة؟",
+              en: "What is the compass rose on the map for?",
+              o: [
+                [
+                  "توضح الاتجاهات على الخريطة",
+                  "It shows the directions on the map",
+                ],
+                ["توضح موضوع الخريطة", "It shows what the map is about"],
+                [
+                  "توضح النسبة بين المسافة على الخريطة وما يقابلها على الطبيعة",
+                  "It shows the ratio between map distance and real distance",
+                ],
+              ],
+              p: "compass",
+            },
+          ],
+        },
+        {
+          k: "prove",
+          ic: "🔗",
+          t: "Prove & link",
+          ar: "دلل · ما العلاقة بين؟",
+          qs: [
+            {
+              ask: "دلل (أثبت):",
+              askE: "Prove it:",
+              q: "المصريون القدماء أول من عرفوا رسم الخرائط.",
+              en: "The ancient Egyptians were the first to draw maps.",
+              o: [
+                [
+                  "رسموا الخرائط على ورق البردي وجدران المعابد، واستخدموها في وصف مسار نهر النيل",
+                  "They drew maps on papyrus and temple walls and used them to describe the course of the Nile",
+                ],
+                [
+                  "رسموا خرائط رقمية على الهواتف",
+                  "They drew digital maps on phones",
+                ],
+                [
+                  "رسموا خريطة العالم بالأقمار الصناعية",
+                  "They drew the world map with satellites",
+                ],
+              ],
+              p: "papyrus",
+            },
+            {
+              ask: "دلل (أثبت):",
+              askE: "Prove it:",
+              q: "تقدير العالم حديثًا لجهود عالمة الفلك مريم الإسطرلابية.",
+              en: "Today the world honours the work of the astronomer Mariam al-Astrulabi.",
+              o: [
+                [
+                  "تمت تسمية أحد الكويكبات المكتشفة باسمها",
+                  "An asteroid was named after her",
+                ],
+                [
+                  "رُسمت صورتها على كل الخرائط",
+                  "Her picture is drawn on every map",
+                ],
+                [
+                  "سُميت مدينة في مصر باسمها",
+                  "A city in Egypt was named after her",
+                ],
+              ],
+              p: "mariam",
+            },
+            {
+              ask: "دلل (أثبت):",
+              askE: "Prove it:",
+              q: "براعة المصريين القدماء في علم الفلك.",
+              en: "The ancient Egyptians were skilled in astronomy.",
+              o: [
+                [
+                  "استعانوا بالنجم القطبي الشمالي في تحديد الاتجاهات ليلًا",
+                  "They used the North Star to find directions at night",
+                ],
+                ["اخترعوا نظام GPS", "They invented GPS"],
+                ["التقطوا الصور الفضائية", "They took space photos"],
+              ],
+              p: "star",
+            },
+            {
+              ask: "ما العلاقة بين:",
+              askE: "What is the link between:",
+              q: "الصور الجوية والخرائط",
+              en: "Aerial photos and maps",
+              o: [
+                [
+                  "الصور الجوية من أهم مصادر رسم الخرائط",
+                  "Aerial photos are one of the most important sources for drawing maps",
+                ],
+                [
+                  "الصور الجوية تحدد أوقات الصلاة",
+                  "Aerial photos tell the prayer times",
+                ],
+                [
+                  "الصور الجوية تُلتقط من الفضاء خارج الكرة الأرضية",
+                  "Aerial photos are taken from space, outside the Earth",
+                ],
+              ],
+              p: "aerial",
+            },
+            {
+              ask: "ما العلاقة بين:",
+              askE: "What is the link between:",
+              q: "مريم عالمة الفلك والإسطرلاب",
+              en: "Mariam the astronomer and the astrolabe",
+              o: [
+                [
+                  "قامت مريم بحسابات رياضية دقيقة لتطوير الإسطرلاب",
+                  "Mariam did exact maths to improve the astrolabe",
+                ],
+                [
+                  "رسمت مريم خريطة النيل على الإسطرلاب",
+                  "Mariam drew a map of the Nile on the astrolabe",
+                ],
+                [
+                  "اشترت مريم الإسطرلاب من السوق",
+                  "Mariam bought the astrolabe at the market",
+                ],
+              ],
+              p: "astrolabe",
+            },
+            {
+              ask: "ما العلاقة بين:",
+              askE: "What is the link between:",
+              q: "الصور الفضائية والخرائط",
+              en: "Space photos and maps",
+              o: [
+                [
+                  "الصور الفضائية من أهم مصادر رسم الخرائط",
+                  "Space photos are one of the most important sources for drawing maps",
+                ],
+                [
+                  "الصور الفضائية تُلتقط بواسطة الطائرات",
+                  "Space photos are taken by aeroplanes",
+                ],
+                [
+                  "الصور الفضائية من المصادر الأولية للتاريخ",
+                  "Space photos are primary sources of history",
+                ],
+              ],
+              p: "space",
+            },
+            {
+              ask: "ما العلاقة بين:",
+              askE: "What is the link between:",
+              q: "الشمس والاتجاهات",
+              en: "The sun and directions",
+              o: [
+                [
+                  "كانت الشمس تُستخدم قديمًا في تحديد الاتجاهات نهارًا",
+                  "Long ago the sun was used to find directions in the daytime",
+                ],
+                [
+                  "كانت الشمس تُستخدم قديمًا في تحديد الاتجاهات ليلًا",
+                  "Long ago the sun was used to find directions at night",
+                ],
+                [
+                  "الشمس تشير دائمًا إلى اتجاه الشمال",
+                  "The sun always points north",
+                ],
+              ],
+              p: "sunface",
+            },
+            {
+              ask: "ما العلاقة بين:",
+              askE: "What is the link between:",
+              q: "النجم القطبي الشمالي والاتجاهات",
+              en: "The North Star and directions",
+              o: [
+                [
+                  "كان النجم القطبي الشمالي يُستخدم قديمًا في تحديد الاتجاهات ليلًا",
+                  "Long ago the North Star was used to find directions at night",
+                ],
+                [
+                  "كان النجم القطبي الشمالي يُستخدم في تحديد الاتجاهات نهارًا",
+                  "The North Star was used to find directions in the daytime",
+                ],
+                [
+                  "النجم القطبي يشير دائمًا إلى اتجاه الجنوب",
+                  "The North Star always points south",
+                ],
+              ],
+              p: "star",
+            },
+          ],
+        },
+        {
+          k: "ans",
+          ic: "💡",
+          t: "Answer",
+          ar: "أجب عما يلي",
+          qs: [
+            {
+              q: "اذكر استخدامين للإسطرلاب.",
+              en: "Name two uses of the astrolabe.",
+              o: [
+                [
+                  "تحديد اتجاه القبلة وأوقات الصلاة",
+                  "Finding the direction of the qibla and the prayer times",
+                ],
+                [
+                  "قياس الوزن والتقاط الصور",
+                  "Weighing things and taking pictures",
+                ],
+                [
+                  "قياس درجة الحرارة وسرعة الرياح",
+                  "Measuring temperature and wind speed",
+                ],
+              ],
+              p: "astrolabe",
+            },
+            {
+              q: "أيهما أدق: الخرائط الرقمية أم الخرائط اليدوية؟ ولماذا؟",
+              en: "Which are more exact, digital maps or hand-drawn maps? Why?",
+              o: [
+                [
+                  "الخرائط الرقمية أدق، لأن الخرائط اليدوية بسيطة مرسومة باليد",
+                  "Digital maps, because hand-drawn maps are simple and drawn by hand",
+                ],
+                [
+                  "الخرائط اليدوية أدق، لأنها مرسومة باليد",
+                  "Hand-drawn maps, because they are drawn by hand",
+                ],
+                ["كلاهما بنفس الدقة", "Both are just as exact"],
+              ],
+              p: "satellite",
+            },
+            {
+              q: "اشرح كيفية تحديد الاتجاهات عند المصريين القدماء ليلًا.",
+              en: "Explain how the ancient Egyptians found directions at night.",
+              o: [
+                [
+                  "بالاستعانة بالنجم القطبي الشمالي الذي يشير دائمًا لاتجاه الشمال، ومنه يمكن تحديد باقي الاتجاهات",
+                  "Using the North Star, which always points north; from north you can find the other directions",
+                ],
+                [
+                  "بالنظر إلى الشمس عند شروقها",
+                  "By looking at the sun when it rises",
+                ],
+                ["باستخدام البوصلة الرقمية", "By using a digital compass"],
+              ],
+              p: "star",
+            },
+            {
+              q: "ما أهمية المدرسة بالنسبة لنا؟",
+              en: "Why is school important to us?",
+              o: [
+                [
+                  "تعتبر بيتنا الثاني، والمكان الذي نتعلم فيه ونقضي وقتًا ممتعًا مع الأصدقاء والمعلمين",
+                  "It is our second home, where we learn and have a good time with friends and teachers",
+                ],
+                ["هي مكان لشراء الطعام فقط", "It is only a place to buy food"],
+                ["هي مكان للنوم", "It is a place to sleep"],
+              ],
+              p: "cover4",
+            },
+            {
+              q: "اشرح كيفية تحديد الاتجاهات بالنهار قديمًا.",
+              en: "Explain how people found directions in the daytime long ago.",
+              o: [
+                [
+                  "باستخدام الشمس: عندما نقف أمامها عند شروقها نتجه نحو الشرق، والغرب خلفنا، والجنوب على يميننا، والشمال على يسارنا",
+                  "Using the sun: facing the sunrise we face east, west is behind us, south is on our right and north is on our left",
+                ],
+                [
+                  "باستخدام الشمس: عندما نقف أمامها عند شروقها نتجه نحو الغرب، والشرق خلفنا",
+                  "Using the sun: facing the sunrise we face west, and east is behind us",
+                ],
+                ["باستخدام النجم القطبي الشمالي", "Using the North Star"],
+              ],
+              p: "sunface",
+            },
+            {
+              q: "ما واجبنا نحو مدرستنا؟",
+              en: "What is our duty towards our school?",
+              o: [
+                [
+                  "المحافظة عليها واتباع القوانين بها",
+                  "To take care of it and follow its rules",
+                ],
+                ["الكتابة على جدرانها", "To write on its walls"],
+                ["ترك الفصل غير نظيف", "To leave the classroom dirty"],
+              ],
+              p: "cover4",
+            },
+            {
+              q: "اشرح مدلول اللون البني على الخريطة مع تقديم مثال.",
+              en: "Explain what brown means on a map, with an example.",
+              o: [
+                [
+                  "يعبر عن المرتفعات مثل الجبال والهضاب (مثل جبل سانت كاترين وهضبة التيه)",
+                  "Highlands such as mountains and plateaus (e.g. Mount Saint Catherine and the Tih Plateau)",
+                ],
+                [
+                  "يعبر عن المسطحات المائية مثل البحار والبحيرات",
+                  "Water bodies such as seas and lakes",
+                ],
+                [
+                  "يعبر عن المناطق الأقل ارتفاعًا مثل السهول",
+                  "Low land such as plains",
+                ],
+              ],
+              p: "mapparts",
+            },
+            {
+              q: "اشرح مدلول اللون الأخضر على الخريطة مع إعطاء مثال.",
+              en: "Explain what green means on a map, with an example.",
+              o: [
+                [
+                  "يعبر عن المناطق الأقل ارتفاعًا مثل السهول",
+                  "Low land such as plains",
+                ],
+                [
+                  "يعبر عن المرتفعات مثل الجبال والهضاب",
+                  "Highlands such as mountains and plateaus",
+                ],
+                [
+                  "يعبر عن المسطحات المائية مثل البحار والبحيرات",
+                  "Water bodies such as seas and lakes",
+                ],
+              ],
+              p: "mapparts",
+            },
+            {
+              q: "اشرح مدلول اللون الأزرق على الخريطة مع تقديم مثال.",
+              en: "Explain what blue means on a map, with an example.",
+              o: [
+                [
+                  "يعبر عن المسطحات المائية مثل البحار والبحيرات (مثل البحر الأحمر والبحر المتوسط وبحيرة ناصر)",
+                  "Water bodies such as seas and lakes (e.g. the Red Sea, the Mediterranean and Lake Nasser)",
+                ],
+                [
+                  "يعبر عن المرتفعات مثل الجبال والهضاب",
+                  "Highlands such as mountains and plateaus",
+                ],
+                [
+                  "يعبر عن المناطق الأقل ارتفاعًا مثل السهول",
+                  "Low land such as plains",
+                ],
+              ],
+              p: "map3",
+            },
+          ],
+        },
+        {
+          k: "choose",
+          ic: "✅",
+          t: "Choose the answer",
+          ar: "اختر الإجابة الصحيحة",
+          qs: [
+            {
+              q: "المسؤول عن تصميم وبناء المنازل والمدارس هو ___.",
+              en: "The person in charge of designing and building houses and schools is ___.",
+              o: [
+                ["المهندس", "the engineer"],
+                ["المعلم", "the teacher"],
+                ["الطبيب", "the doctor"],
+                ["المزارع", "the farmer"],
+              ],
+              p: "users",
+            },
+            {
+              q: "ما الاتجاه الذي يكون على يسارك إذا واجهت الشمس عند شروقها؟",
+              en: "Which direction is on your left when you face the rising sun?",
+              o: [
+                ["الشمال", "north"],
+                ["الجنوب", "south"],
+                ["الغرب", "west"],
+                ["الشرق", "east"],
+              ],
+              p: "cover1",
+            },
+            {
+              q: "الاتجاه الفرعي الذي يقع بين الشمال والشرق هو ___.",
+              en: "The in-between direction that lies between north and east is ___.",
+              o: [
+                ["الشمال الشرقي", "north-east"],
+                ["الجنوب الشرقي", "south-east"],
+                ["الشمال الغربي", "north-west"],
+                ["الجنوب الغربي", "south-west"],
+              ],
+              p: "compass",
+            },
+            {
+              q: "أي من العناصر التالية يعبر عن موضوع الخريطة؟",
+              en: "Which of these elements tells what the map is about?",
+              o: [
+                ["عنوان الخريطة", "the map title"],
+                ["مفتاح الخريطة", "the map key"],
+                ["وردة البوصلة", "the compass rose"],
+                ["مقياس الرسم", "the scale"],
+              ],
+              p: "mapparts",
+            },
+            {
+              q: "أي من هؤلاء يستخدم الخريطة في تحديد المواقع العسكرية؟",
+              en: "Which of these people uses a map to find military positions?",
+              o: [
+                ["الجندي", "the soldier"],
+                ["المعلم", "the teacher"],
+                ["السائح", "the tourist"],
+                ["المزارع", "the farmer"],
+              ],
+              p: "users",
+            },
+            {
+              q: "ساعد الإسطرلاب قديمًا في ___.",
+              en: "Long ago the astrolabe helped with ___.",
+              o: [
+                ["تحديد المواقع", "finding places"],
+                ["قياس الوزن", "weighing things"],
+                ["قياس المسافات", "measuring distances"],
+                ["التقاط الصور", "taking pictures"],
+              ],
+              p: "astrolabe",
+            },
+            {
+              q: "أشهر من رسم الخرائط من العلماء العرب هو ___.",
+              en: "The most famous Arab scholar who drew maps is ___.",
+              o: [
+                ["الإدريسي", "al-Idrisi"],
+                ["ابن سينا", "Ibn Sina"],
+                ["ابن خلدون", "Ibn Khaldun"],
+                ["الخوارزمي", "al-Khwarizmi"],
+              ],
+              p: "idrisi",
+            },
+            {
+              q: "أحد المصادر الأولية التي يمكن استخدامها عند كتابة بحث عن تاريخ مصر هو ___.",
+              en: "One primary source you can use when writing a project about the history of Egypt is ___.",
+              o: [
+                ["كتابات المؤرخين", "the writings of historians"],
+                ["الإنترنت", "the internet"],
+                ["المقالات الصحفية", "newspaper articles"],
+                ["الأبحاث", "research papers"],
+              ],
+              p: "writings",
+            },
+          ],
+        },
+        {
+          k: "tf",
+          ic: "⚖️",
+          t: "Right or wrong",
+          ar: "صواب أم خطأ؟",
+          qs: [
+            {
+              q: "يستخدم الطيار الخريطة في تحديد مسار الرحلات.",
+              en: "A pilot uses a map to plan the route of flights.",
+              tf: true,
+              p: "users",
+            },
+            {
+              q: "المصادر الأولية أكثر دقة من الثانوية.",
+              en: "Primary sources are more exact than secondary sources.",
+              tf: true,
+              p: "carving",
+            },
+            {
+              q: "يكون اتجاه الغرب على يمينك عند مواجهة الشمس صباحًا.",
+              en: "West is on your right when you face the sun in the morning.",
+              tf: false,
+              x: "Facing the morning sun, west is behind you; south (الجنوب) is on your right.",
+              p: "compass",
+            },
+            {
+              q: "يقتصر استخدام الخرائط على مهندسي الطرق.",
+              en: "Only road engineers use maps.",
+              tf: false,
+              x: "Many people use maps: farmers, soldiers, tourists, pilots and engineers.",
+              p: "users",
+            },
+            {
+              q: "يقع اتجاه الشمال الغربي بين الغرب والشرق.",
+              en: "North-west lies between west and east.",
+              tf: false,
+              x: "North-west (الشمال الغربي) lies between north and west.",
+              p: "compass",
+            },
+            {
+              q: "يصعب قراءة الخريطة بدون مفتاح الخريطة.",
+              en: "It is hard to read a map without its key.",
+              tf: true,
+              p: "mapparts",
+            },
+          ],
+        },
+      ];
+      const MIX = 15;
+      /* KEY TERMS (أهم المصطلحات) from the end of each lesson handout.
    {u: lesson, w: term, we: English term, t: Arabic definition, en: English, p: picture} */
-const TERMS=[
- {u:1,w:'النجم القطبي',we:'The North Star',t:'هو نجم لامع في السماء يشير دائمًا إلى اتجاه الشمال',en:'A bright star in the sky that always points north.',p:'star'},
- {u:1,w:'البوصلة',we:'The compass',t:'هي أداة تحتوي على إبرة مغناطيسية تشير دائمًا إلى الشمال المغناطيسي',en:'A tool with a magnetic needle that always points to magnetic north.',p:'compass'},
- {u:2,w:'المخطط',we:'The plan',t:'شكل مبسط لفكرة الخريطة',en:'A simple drawing that gives the idea of a map.',p:'cover2'},
- {u:2,w:'الخريطة',we:'The map',t:'رسم مصغر لسطح الأرض أو جزء منه باستخدام الرموز والألوان ومقياس رسم محدد',en:"A small drawing of the Earth's surface, or part of it, using symbols, colours and a set scale.",p:'mapparts'},
- {u:2,w:'مقياس الرسم',we:'The scale',t:'هو النسبة بين المسافة على الخريطة وما يقابلها على الطبيعة',en:'The ratio between a distance on the map and the real distance on the ground.',p:'map2'},
- {u:3,w:'نظام تحديد المواقع العالمي',we:'GPS (Global Positioning System)',t:'نظام يعتمد على الأقمار الصناعية في تحديد المواقع والاتجاهات',en:'A system that uses satellites to find places and directions.',p:'satellite'},
- {u:3,w:'الصورة الجوية',we:'Aerial photo',t:'صورة يتم التقاطها من الجو بواسطة الطائرات',en:'A picture taken from the air by aeroplanes.',p:'aerial'},
- {u:3,w:'الصورة الفضائية',we:'Space photo',t:'صورة يتم التقاطها من الفضاء خارج الكرة الأرضية بواسطة الأقمار الصناعية',en:'A picture taken from space, outside the Earth, by satellites.',p:'space'},
- {u:3,w:'الإسطرلاب',we:'The astrolabe',t:'أداة فلكية قديمة استُخدمت لتحديد المواقع والاتجاهات من خلال النجوم',en:'An old astronomy tool used to find places and directions from the stars.',p:'astrolabe'},
- {u:4,w:'المصادر الأولية',we:'Primary sources',t:'هي مصادر سُجلت في زمن وقوع الحدث',en:'Sources recorded at the time the event happened.',p:'carving'},
- {u:4,w:'المصادر الثانوية',we:'Secondary sources',t:'هي مصادر سُجلت بعد وقوع الحدث بفترة زمنية طويلة، وتعتمد على المصادر الأولية',en:'Sources recorded a long time after the event, based on primary sources.',p:'books'},
- {u:4,w:'الآثار',we:'Monuments',t:'كل ما تركه القدماء من مبانٍ وتماثيل وأدوات وغيرها',en:'Everything the ancients left behind: buildings, statues, tools and more.',p:'pyramid'},
- {u:4,w:'النقوش الأثرية',we:'Ancient carvings',t:'تشمل الصور والكتابات والرموز المحفورة على الحجر وغيره',en:'Pictures, writing and symbols carved on stone and other materials.',p:'carving'},
- {u:4,w:'البرديات',we:'Papyri',t:'أحد أنواع الورق ابتكره المصريون القدماء لتسجيل أخبارهم وأحداث حياتهم، صُنع من نبات البردي الذي ينمو على ضفاف نهر النيل',en:'A kind of paper the ancient Egyptians invented to record their news and lives, made from the papyrus plant that grows on the banks of the Nile.',p:'papyrus'},
- {u:4,w:'كتابات المؤرخين',we:'Writings of historians',t:'كل ما كتبه المؤرخون الذين عاصروا الحدث',en:'Everything written by historians who lived at the time of the event.',p:'writings'},
- {u:4,w:'الحقائق',we:'Facts',t:'معلومات صحيحة تم التأكد منها ويمكن إثباتها',en:'Correct information that has been checked and can be proved.',p:'kids'},
- {u:4,w:'الآراء',we:'Opinions',t:'تعبر عن وجهات نظر شخصية، قد تكون صحيحة أو غير صحيحة',en:'Personal points of view; they may be right or wrong.',p:'kids'},
- {u:4,w:'الشائعات',we:'Rumours',t:'الأحاديث غير الصحيحة التي يتناقلها الناس دون معرفة مصادرها',en:'Untrue talk that people pass on without knowing where it came from.',p:'kids'},
-];
+      const TERMS = [
+        {
+          u: 1,
+          w: "النجم القطبي",
+          we: "The North Star",
+          t: "هو نجم لامع في السماء يشير دائمًا إلى اتجاه الشمال",
+          en: "A bright star in the sky that always points north.",
+          p: "star",
+        },
+        {
+          u: 1,
+          w: "البوصلة",
+          we: "The compass",
+          t: "هي أداة تحتوي على إبرة مغناطيسية تشير دائمًا إلى الشمال المغناطيسي",
+          en: "A tool with a magnetic needle that always points to magnetic north.",
+          p: "compass",
+        },
+        {
+          u: 2,
+          w: "المخطط",
+          we: "The plan",
+          t: "شكل مبسط لفكرة الخريطة",
+          en: "A simple drawing that gives the idea of a map.",
+          p: "cover2",
+        },
+        {
+          u: 2,
+          w: "الخريطة",
+          we: "The map",
+          t: "رسم مصغر لسطح الأرض أو جزء منه باستخدام الرموز والألوان ومقياس رسم محدد",
+          en: "A small drawing of the Earth's surface, or part of it, using symbols, colours and a set scale.",
+          p: "mapparts",
+        },
+        {
+          u: 2,
+          w: "مقياس الرسم",
+          we: "The scale",
+          t: "هو النسبة بين المسافة على الخريطة وما يقابلها على الطبيعة",
+          en: "The ratio between a distance on the map and the real distance on the ground.",
+          p: "map2",
+        },
+        {
+          u: 3,
+          w: "نظام تحديد المواقع العالمي",
+          we: "GPS (Global Positioning System)",
+          t: "نظام يعتمد على الأقمار الصناعية في تحديد المواقع والاتجاهات",
+          en: "A system that uses satellites to find places and directions.",
+          p: "satellite",
+        },
+        {
+          u: 3,
+          w: "الصورة الجوية",
+          we: "Aerial photo",
+          t: "صورة يتم التقاطها من الجو بواسطة الطائرات",
+          en: "A picture taken from the air by aeroplanes.",
+          p: "aerial",
+        },
+        {
+          u: 3,
+          w: "الصورة الفضائية",
+          we: "Space photo",
+          t: "صورة يتم التقاطها من الفضاء خارج الكرة الأرضية بواسطة الأقمار الصناعية",
+          en: "A picture taken from space, outside the Earth, by satellites.",
+          p: "space",
+        },
+        {
+          u: 3,
+          w: "الإسطرلاب",
+          we: "The astrolabe",
+          t: "أداة فلكية قديمة استُخدمت لتحديد المواقع والاتجاهات من خلال النجوم",
+          en: "An old astronomy tool used to find places and directions from the stars.",
+          p: "astrolabe",
+        },
+        {
+          u: 4,
+          w: "المصادر الأولية",
+          we: "Primary sources",
+          t: "هي مصادر سُجلت في زمن وقوع الحدث",
+          en: "Sources recorded at the time the event happened.",
+          p: "carving",
+        },
+        {
+          u: 4,
+          w: "المصادر الثانوية",
+          we: "Secondary sources",
+          t: "هي مصادر سُجلت بعد وقوع الحدث بفترة زمنية طويلة، وتعتمد على المصادر الأولية",
+          en: "Sources recorded a long time after the event, based on primary sources.",
+          p: "books",
+        },
+        {
+          u: 4,
+          w: "الآثار",
+          we: "Monuments",
+          t: "كل ما تركه القدماء من مبانٍ وتماثيل وأدوات وغيرها",
+          en: "Everything the ancients left behind: buildings, statues, tools and more.",
+          p: "pyramid",
+        },
+        {
+          u: 4,
+          w: "النقوش الأثرية",
+          we: "Ancient carvings",
+          t: "تشمل الصور والكتابات والرموز المحفورة على الحجر وغيره",
+          en: "Pictures, writing and symbols carved on stone and other materials.",
+          p: "carving",
+        },
+        {
+          u: 4,
+          w: "البرديات",
+          we: "Papyri",
+          t: "أحد أنواع الورق ابتكره المصريون القدماء لتسجيل أخبارهم وأحداث حياتهم، صُنع من نبات البردي الذي ينمو على ضفاف نهر النيل",
+          en: "A kind of paper the ancient Egyptians invented to record their news and lives, made from the papyrus plant that grows on the banks of the Nile.",
+          p: "papyrus",
+        },
+        {
+          u: 4,
+          w: "كتابات المؤرخين",
+          we: "Writings of historians",
+          t: "كل ما كتبه المؤرخون الذين عاصروا الحدث",
+          en: "Everything written by historians who lived at the time of the event.",
+          p: "writings",
+        },
+        {
+          u: 4,
+          w: "الحقائق",
+          we: "Facts",
+          t: "معلومات صحيحة تم التأكد منها ويمكن إثباتها",
+          en: "Correct information that has been checked and can be proved.",
+          p: "kids",
+        },
+        {
+          u: 4,
+          w: "الآراء",
+          we: "Opinions",
+          t: "تعبر عن وجهات نظر شخصية، قد تكون صحيحة أو غير صحيحة",
+          en: "Personal points of view; they may be right or wrong.",
+          p: "kids",
+        },
+        {
+          u: 4,
+          w: "الشائعات",
+          we: "Rumours",
+          t: "الأحاديث غير الصحيحة التي يتناقلها الناس دون معرفة مصادرها",
+          en: "Untrue talk that people pass on without knowing where it came from.",
+          p: "kids",
+        },
+      ];
 
-(function(){
-/* ---------- utilities ---------- */
-const app=document.getElementById('app');
-const {esc,shuf,pick,star}=Kit;
-const ar=s=>`<span class="ar" lang="ar" dir="rtl">${esc(s)}</span>`;
-const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
-const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const bolt='<svg viewBox="0 0 16 16" aria-hidden="true" width="16" height="16"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
-const pic=(p,fit)=>`<img class="scene pic${fit?' fit':''}" src="img/ss-arabic/${p}.jpg" alt="">`;
+      (function () {
+        /* ---------- utilities ---------- */
+        const app = document.getElementById("app");
+        const { esc, shuf, pick, star } = Kit;
+        const ar = (s) =>
+          `<span class="ar" lang="ar" dir="rtl">${esc(s)}</span>`;
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const store = {
+          get(k, d) {
+            try {
+              const v = localStorage.getItem(k);
+              return v === null ? d : v;
+            } catch (e) {
+              return d;
+            }
+          },
+          set(k, v) {
+            try {
+              localStorage.setItem(k, v);
+            } catch (e) {}
+          },
+        };
+        const bolt =
+          '<svg viewBox="0 0 16 16" aria-hidden="true" width="16" height="16"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
+        const pic = (p, fit) =>
+          `<img class="scene pic${fit ? " fit" : ""}" src="img/ss-arabic/${p}.jpg" alt="">`;
 
-/* ---------- voice: the device's Arabic voice, else Google's online voice (needs internet) ---------- */
-const TTS='speechSynthesis' in window;
-let voice=null;
-function pickVoice(){if(!TTS)return;voice=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith('ar'))||null}
-if(TTS){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
-const canSpeak=()=>!!voice||navigator.onLine;
-// Online voice: unofficial Google Translate endpoint; max ~200 chars per request and it refuses requests with a referrer (meta tag in <head>)
-const TTS_URL='https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=';
-const player=new Audio();let parts=[],reading=false; // reading: an online text is mid-way (so Resume may continue it)
-function chunks(t){const out=[];let s=t.replace(/\n/g,'. ').trim();
-  while(s.length>180){let k=Math.max(...['.','،','؛','؟','!',':'].map(c=>s.lastIndexOf(c,180)));if(k<40)k=s.lastIndexOf(' ',180);if(k<1)k=180;out.push(s.slice(0,k+1).trim());s=s.slice(k+1).trim()}
-  if(s)out.push(s);return out}
-function hush(){try{TTS&&speechSynthesis.cancel()}catch(e){}parts=[];reading=false;player.pause()}
-function sayOnline(text,slow){parts=chunks(text);reading=true;const rate=slow?.7:1;
-  const nextPart=()=>{const t=parts.shift();if(!t){reading=false;return}player.src=TTS_URL+encodeURIComponent(t);player.defaultPlaybackRate=player.playbackRate=rate;player.play().catch(()=>{})};
-  player.onended=nextPart;nextPart()}
-function say(text,slow){hush();if(voice){try{const u=new SpeechSynthesisUtterance(text);u.lang=voice.lang;u.voice=voice;u.rate=slow?.55:.75;speechSynthesis.speak(u)}catch(e){}}else if(navigator.onLine)sayOnline(text,slow)}
+        /* ---------- voice: the device's Arabic voice, else Google's online voice (needs internet) ---------- */
+        const TTS = "speechSynthesis" in window;
+        let voice = null;
+        function pickVoice() {
+          if (!TTS) return;
+          voice =
+            speechSynthesis
+              .getVoices()
+              .find((v) => v.lang.toLowerCase().startsWith("ar")) || null;
+        }
+        if (TTS) {
+          pickVoice();
+          speechSynthesis.onvoiceschanged = pickVoice;
+        }
+        const canSpeak = () => !!voice || navigator.onLine;
+        // Online voice: unofficial Google Translate endpoint; max ~200 chars per request and it refuses requests with a referrer (meta tag in <head>)
+        const TTS_URL =
+          "https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=";
+        const player = new Audio();
+        let parts = [],
+          reading = false; // reading: an online text is mid-way (so Resume may continue it)
+        function chunks(t) {
+          const out = [];
+          let s = t.replace(/\n/g, ". ").trim();
+          while (s.length > 180) {
+            let k = Math.max(
+              ...[".", "،", "؛", "؟", "!", ":"].map((c) =>
+                s.lastIndexOf(c, 180),
+              ),
+            );
+            if (k < 40) k = s.lastIndexOf(" ", 180);
+            if (k < 1) k = 180;
+            out.push(s.slice(0, k + 1).trim());
+            s = s.slice(k + 1).trim();
+          }
+          if (s) out.push(s);
+          return out;
+        }
+        function hush() {
+          try {
+            TTS && speechSynthesis.cancel();
+          } catch (e) {}
+          parts = [];
+          reading = false;
+          player.pause();
+        }
+        function sayOnline(text, slow) {
+          parts = chunks(text);
+          reading = true;
+          const rate = slow ? 0.7 : 1;
+          const nextPart = () => {
+            const t = parts.shift();
+            if (!t) {
+              reading = false;
+              return;
+            }
+            player.src = TTS_URL + encodeURIComponent(t);
+            player.defaultPlaybackRate = player.playbackRate = rate;
+            player.play().catch(() => {});
+          };
+          player.onended = nextPart;
+          nextPart();
+        }
+        function say(text, slow) {
+          hush();
+          if (voice) {
+            try {
+              const u = new SpeechSynthesisUtterance(text);
+              u.lang = voice.lang;
+              u.voice = voice;
+              u.rate = slow ? 0.55 : 0.75;
+              speechSynthesis.speak(u);
+            } catch (e) {}
+          } else if (navigator.onLine) sayOnline(text, slow);
+        }
 
-/* ---------- English toggle: remembered between questions ---------- */
-let enOn=store.get('ssa4-en','0')==='1';
-const tools=()=>`<div class="tools">${canSpeak()?'<button type="button" class="abtn" id="say1">🔊 Listen</button><button type="button" class="abtn" id="say2">🐢 Slowly</button>':''}<button type="button" class="abtn" id="enBtn" aria-pressed="${enOn}">🇬🇧 English</button></div>`;
-function bindTools(t){
-  const s1=document.getElementById('say1');if(s1){s1.onclick=()=>say(t);document.getElementById('say2').onclick=()=>say(t,true)}
-  const b=document.getElementById('enBtn');
-  b.onclick=()=>{enOn=!enOn;store.set('ssa4-en',enOn?'1':'0');b.setAttribute('aria-pressed',enOn);document.getElementById('qcard').classList.toggle('show-en',enOn)};
-}
+        /* ---------- English toggle: remembered between questions ---------- */
+        let enOn = store.get("ssa4-en", "0") === "1";
+        const tools = () =>
+          `<div class="tools">${canSpeak() ? '<button type="button" class="abtn" id="say1">🔊 Listen</button><button type="button" class="abtn" id="say2">🐢 Slowly</button>' : ""}<button type="button" class="abtn" id="enBtn" aria-pressed="${enOn}">🇬🇧 English</button></div>`;
+        function bindTools(t) {
+          const s1 = document.getElementById("say1");
+          if (s1) {
+            s1.onclick = () => say(t);
+            document.getElementById("say2").onclick = () => say(t, true);
+          }
+          const b = document.getElementById("enBtn");
+          b.onclick = () => {
+            enOn = !enOn;
+            store.set("ssa4-en", enOn ? "1" : "0");
+            b.setAttribute("aria-pressed", enOn);
+            document.getElementById("qcard").classList.toggle("show-en", enOn);
+          };
+        }
 
-/* ---------- home: pick a tab, then a game ---------- */
-const ALLQ=SHEET.flatMap(s=>expand(s));
-const MODE_NAME=Object.fromEntries([...SHEET.map(s=>[s.k,s.t]),['mix','Mixed questions'],['fill','Which term?'],['build','Build the definition']]);
-const TMODES=[
- {k:'learn',ic:'📖',t:'Learn the terms',d:'Read, listen and see each term in English'},
- {k:'fill',ic:'🧩',t:'Which term?',d:`${ar('ما المصطلح؟')}<br>Read the meaning, choose the term`},
- {k:'build',ic:'🔤',t:'Build the definition',d:`${ar('رتب الكلمات')}<br>Put the words in order`},
-];
-const TABS=[{k:'sheet',ic:'📝',t:'Revision sheet',short:'Sheet',sub:'مراجعة دروس شهر أكتوبر',
-  ms:[...SHEET.map(s=>({k:s.k,ic:s.ic,t:s.t,d:`${ar(s.ar)}<br>${expand(s).length} questions`})),{k:'mix',ic:'🎲',t:'Mixed',d:`${MIX} questions from the whole sheet`}]},
- {k:'terms',ic:'📚',t:'Key terms',short:'Terms',sub:'أهم المصطلحات',ms:TMODES}];
-let tab=store.get('ssa4-tab','sheet'); if(!TABS.some(t=>t.k===tab))tab='sheet';
-const UNITS=[{k:'1',t:'Lesson 1'},{k:'2',t:'Lesson 2'},{k:'3',t:'Lesson 3'},{k:'4',t:'Lesson 4'},{k:'all',t:'All'}];
-let unit=store.get('ssa4-unit','all'); if(!UNITS.some(u=>u.k===unit))unit='all';
-const terms=()=>TERMS.filter(v=>unit==='all'||String(v.u)===unit);
-const modeBtns=ms=>`<div class="modes">${ms.map(m=>`<button type="button" class="mode" id="mode-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small>${m.d}</small></button>`).join('')}</div>`;
-function home(still){ // still===true: switching tab, so no pop animation
-  hush();
-  const T=TABS.find(t=>t.k===tab);
-  app.innerHTML=`<section class="card ${still===true?'':'pop'}">
+        /* ---------- home: pick a tab, then a game ---------- */
+        const ALLQ = SHEET.flatMap((s) => expand(s));
+        const MODE_NAME = Object.fromEntries([
+          ...SHEET.map((s) => [s.k, s.t]),
+          ["mix", "Mixed questions"],
+          ["fill", "Which term?"],
+          ["build", "Build the definition"],
+        ]);
+        const TMODES = [
+          {
+            k: "learn",
+            ic: "📖",
+            t: "Learn the terms",
+            d: "Read, listen and see each term in English",
+          },
+          {
+            k: "fill",
+            ic: "🧩",
+            t: "Which term?",
+            d: `${ar("ما المصطلح؟")}<br>Read the meaning, choose the term`,
+          },
+          {
+            k: "build",
+            ic: "🔤",
+            t: "Build the definition",
+            d: `${ar("رتب الكلمات")}<br>Put the words in order`,
+          },
+        ];
+        const TABS = [
+          {
+            k: "sheet",
+            ic: "📝",
+            t: "Revision sheet",
+            short: "Sheet",
+            sub: "مراجعة دروس شهر أكتوبر",
+            ms: [
+              ...SHEET.map((s) => ({
+                k: s.k,
+                ic: s.ic,
+                t: s.t,
+                d: `${ar(s.ar)}<br>${expand(s).length} questions`,
+              })),
+              {
+                k: "mix",
+                ic: "🎲",
+                t: "Mixed",
+                d: `${MIX} questions from the whole sheet`,
+              },
+            ],
+          },
+          {
+            k: "terms",
+            ic: "📚",
+            t: "Key terms",
+            short: "Terms",
+            sub: "أهم المصطلحات",
+            ms: TMODES,
+          },
+        ];
+        let tab = store.get("ssa4-tab", "sheet");
+        if (!TABS.some((t) => t.k === tab)) tab = "sheet";
+        const UNITS = [
+          { k: "1", t: "Lesson 1" },
+          { k: "2", t: "Lesson 2" },
+          { k: "3", t: "Lesson 3" },
+          { k: "4", t: "Lesson 4" },
+          { k: "all", t: "All" },
+        ];
+        let unit = store.get("ssa4-unit", "all");
+        if (!UNITS.some((u) => u.k === unit)) unit = "all";
+        const terms = () =>
+          TERMS.filter((v) => unit === "all" || String(v.u) === unit);
+        const modeBtns = (ms) =>
+          `<div class="modes">${ms.map((m) => `<button type="button" class="mode" id="mode-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small>${m.d}</small></button>`).join("")}</div>`;
+        function home(still) {
+          // still===true: switching tab, so no pop animation
+          hush();
+          const T = TABS.find((t) => t.k === tab);
+          app.innerHTML = `<section class="card ${still === true ? "" : "pop"}">
     <div class="topbar"><a class="back" href="../../../index.html">← All games</a><span class="eyebrow">Grade 4 Social Studies (Arabic) · October revision</span></div>
     <h1 class="hero-title"><span class="p">Social Studies</span> <span class="k">Revision</span></h1>
     <div class="hero-ar ar" lang="ar" dir="rtl">مراجعة الدراسات الاجتماعية</div>
     <p class="howto">Ready? Pick a tab, then choose a game. On every question you can listen to the Arabic and see it in English.</p>
-    <div class="tabbox"><div class="ftabs" role="group" aria-label="Kind of game">${TABS.map(t=>`<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab===t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short)}</span></button>`).join('')}</div>
+    <div class="tabbox"><div class="ftabs" role="group" aria-label="Kind of game">${TABS.map((t) => `<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span><span class="tl">${esc(t.t)}</span><span class="ts">${esc(t.short)}</span></button>`).join("")}</div>
     <div class="panel">
     <div class="ar tab-sub" lang="ar" dir="rtl">${esc(T.sub)}</div>
-    ${tab==='terms'?`<div class="row"><span class="lab">Terms</span><div class="seg" role="group" aria-label="Terms">${UNITS.map(u=>`<button type="button" id="un-${u.k}" data-un="${u.k}" aria-pressed="${unit===u.k}">${u.t} · ${TERMS.filter(v=>u.k==='all'||String(v.u)===u.k).length}</button>`).join('')}</div></div>`:''}
+    ${tab === "terms" ? `<div class="row"><span class="lab">Terms</span><div class="seg" role="group" aria-label="Terms">${UNITS.map((u) => `<button type="button" id="un-${u.k}" data-un="${u.k}" aria-pressed="${unit === u.k}">${u.t} · ${TERMS.filter((v) => u.k === "all" || String(v.u) === u.k).length}</button>`).join("")}</div></div>` : ""}
     ${modeBtns(T.ms)}
     </div></div>
   </section>`;
-  app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;store.set('ssa4-tab',tab);home(true)});
-  app.querySelectorAll('[data-un]').forEach(b=>b.onclick=()=>{unit=b.dataset.un;store.set('ssa4-unit',unit);home(true)});
-  app.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>startMode(b.dataset.m));
-}
+          app.querySelectorAll("[data-tab]").forEach(
+            (b) =>
+              (b.onclick = () => {
+                tab = b.dataset.tab;
+                store.set("ssa4-tab", tab);
+                home(true);
+              }),
+          );
+          app.querySelectorAll("[data-un]").forEach(
+            (b) =>
+              (b.onclick = () => {
+                unit = b.dataset.un;
+                store.set("ssa4-unit", unit);
+                home(true);
+              }),
+          );
+          app
+            .querySelectorAll("[data-m]")
+            .forEach((b) => (b.onclick = () => startMode(b.dataset.m)));
+        }
 
-/* ---------- shared game state ---------- */
-const S={mode:null,list:[],i:0,score:0,max:0,miss:[]};
-// one sheet section → its questions, each knowing its section and question word
-function expand(s){return s.qs.map(q=>({ask:s.ask||'',askE:s.askE||'',...q,sec:s}))}
-function hud(label){
-  const pct=Math.round(S.i/Math.max(1,S.list.length)*100);
-  return `<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">${label}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
-}
-function bindHome(){const h=document.getElementById('homeBtn');if(h)h.onclick=home}
-function startMode(m){
-  S.mode=m;S.i=0;S.score=0;S.miss=[];
-  tab=TABS.find(t=>t.ms.some(x=>x.k===m)).k;store.set('ssa4-tab',tab); // back to this game's tab afterwards
-  if(m==='mix')S.list=shuf(ALLQ).slice(0,MIX);
-  else if(m==='learn')S.list=terms();
-  else if(m==='fill'||m==='build')S.list=shuf(terms());
-  else{const s=SHEET.find(x=>x.k===m);S.list=m==='map'?expand(s):shuf(expand(s))} // map questions follow the sheet's order
-  S.max=S.list.length;
-  next(true);
-}
-function next(first){if(!first)S.i++;if(S.i>=S.list.length)return S.mode==='learn'?home():end();({learn,fill,build}[S.mode]||quiz)();window.scrollTo({top:0,behavior:'smooth'})}
-function fb(ok,html){return `<div class="fb ${ok?'ok':'no'}"><b>${ok?pick(['Correct!','Great job!','You got it!','Super!','ممتاز!']):'Not quite.'}</b><span>${html}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i+1<S.list.length?'Next':'See my score'}</button></div>`}
-function bindNext(){const n=document.getElementById('nextBtn');n.onclick=()=>next();n.focus({preventScroll:true})}
+        /* ---------- shared game state ---------- */
+        const S = { mode: null, list: [], i: 0, score: 0, max: 0, miss: [] };
+        // one sheet section → its questions, each knowing its section and question word
+        function expand(s) {
+          return s.qs.map((q) => ({
+            ask: s.ask || "",
+            askE: s.askE || "",
+            ...q,
+            sec: s,
+          }));
+        }
+        function hud(label) {
+          const pct = Math.round((S.i / Math.max(1, S.list.length)) * 100);
+          return `<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">${label}</span><div class="meter" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress"><i style="width:${pct}%"></i></div><span class="score" aria-label="Points">${bolt}<b id="pts">${S.score}</b></span></div>`;
+        }
+        function bindHome() {
+          const h = document.getElementById("homeBtn");
+          if (h) h.onclick = home;
+        }
+        function startMode(m) {
+          S.mode = m;
+          S.i = 0;
+          S.score = 0;
+          S.miss = [];
+          tab = TABS.find((t) => t.ms.some((x) => x.k === m)).k;
+          store.set("ssa4-tab", tab); // back to this game's tab afterwards
+          if (m === "mix") S.list = shuf(ALLQ).slice(0, MIX);
+          else if (m === "learn") S.list = terms();
+          else if (m === "fill" || m === "build") S.list = shuf(terms());
+          else {
+            const s = SHEET.find((x) => x.k === m);
+            S.list = m === "map" ? expand(s) : shuf(expand(s));
+          } // map questions follow the sheet's order
+          S.max = S.list.length;
+          next(true);
+        }
+        function next(first) {
+          if (!first) S.i++;
+          if (S.i >= S.list.length) return S.mode === "learn" ? home() : end();
+          (({ learn, fill, build })[S.mode] || quiz)();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        function fb(ok, html) {
+          return `<div class="fb ${ok ? "ok" : "no"}"><b>${ok ? pick(["Correct!", "Great job!", "You got it!", "Super!", "ممتاز!"]) : "Not quite."}</b><span>${html}</span></div><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn next" id="nextBtn" type="button">${S.i + 1 < S.list.length ? "Next" : "See my score"}</button></div>`;
+        }
+        function bindNext() {
+          const n = document.getElementById("nextBtn");
+          n.onclick = () => next();
+          n.focus({ preventScroll: true });
+        }
 
-/* ---------- SHEET QUESTION: picture, Arabic sentence, choices (or صواب / خطأ) ---------- */
-function quiz(){
-  const q=S.list[S.i],gap=q.q.includes('___');
-  const opts=q.tf!==undefined?[{a:'صواب',e:'right ✓',ok:q.tf},{a:'خطأ',e:'wrong ✗',ok:!q.tf}]:shuf(q.o.map(([a,e],i)=>({a,e,ok:!i})));
-  const R=opts.find(o=>o.ok),right=R.a,long=opts.some(o=>o.a.length>30);
-  const sent=g=>gap?esc(q.q).replace('___',`<span class="gap">${g?esc(g):'&nbsp;'}</span>`):esc(q.q);
-  const spoken=(q.ask?q.ask+' ':'')+q.q.replace('___','...');
-  app.innerHTML=`${hud(`Question ${S.i+1} of ${S.list.length}`)}<section class="card pop${enOn?' show-en':''}" id="qcard">
+        /* ---------- SHEET QUESTION: picture, Arabic sentence, choices (or صواب / خطأ) ---------- */
+        function quiz() {
+          const q = S.list[S.i],
+            gap = q.q.includes("___");
+          const opts =
+            q.tf !== undefined
+              ? [
+                  { a: "صواب", e: "right ✓", ok: q.tf },
+                  { a: "خطأ", e: "wrong ✗", ok: !q.tf },
+                ]
+              : shuf(q.o.map(([a, e], i) => ({ a, e, ok: !i })));
+          const R = opts.find((o) => o.ok),
+            right = R.a,
+            long = opts.some((o) => o.a.length > 30);
+          const sent = (g) =>
+            gap
+              ? esc(q.q).replace(
+                  "___",
+                  `<span class="gap">${g ? esc(g) : "&nbsp;"}</span>`,
+                )
+              : esc(q.q);
+          const spoken = (q.ask ? q.ask + " " : "") + q.q.replace("___", "...");
+          app.innerHTML = `${hud(`Question ${S.i + 1} of ${S.list.length}`)}<section class="card pop${enOn ? " show-en" : ""}" id="qcard">
     <div class="qhead"><span class="qtype mc">${esc(q.sec.t)}</span><span class="ar sec" lang="ar" dir="rtl">${esc(q.sec.ar)}</span></div>
-    ${pic(q.p,q.fit)}
-    ${q.ask?`<p class="ask"><span class="ar" lang="ar" dir="rtl">${esc(q.ask)}</span><small>${esc(q.askE)}</small></p>`:''}
-    <p class="sent ar${q.q.length>60?' long':''}" lang="ar" dir="rtl" id="sent">${sent()}</p>
+    ${pic(q.p, q.fit)}
+    ${q.ask ? `<p class="ask"><span class="ar" lang="ar" dir="rtl">${esc(q.ask)}</span><small>${esc(q.askE)}</small></p>` : ""}
+    <p class="sent ar${q.q.length > 60 ? " long" : ""}" lang="ar" dir="rtl" id="sent">${sent()}</p>
     <p class="en">${esc(q.en)}</p>
     ${tools()}
-    <div class="opts${long?' long':''}">${opts.map((o,i)=>`<button type="button" class="opt aro${long?' lng':''}" id="opt-${i}" data-i="${i}"><span class="L">${'ABCD'[i]}</span><span class="ow">${ar(o.a)}<small class="en">${esc(o.e)}</small></span></button>`).join('')}</div>
+    <div class="opts${long ? " long" : ""}">${opts.map((o, i) => `<button type="button" class="opt aro${long ? " lng" : ""}" id="opt-${i}" data-i="${i}"><span class="L">${"ABCD"[i]}</span><span class="ow">${ar(o.a)}<small class="en">${esc(o.e)}</small></span></button>`).join("")}</div>
     <div id="fbx"></div>
   </section>`;
-  bindHome();bindTools(spoken);
-  const btns=[...app.querySelectorAll('.opt')];
-  btns.forEach(b=>b.onclick=()=>{
-    const o=opts[+b.dataset.i];
-    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
-    if(o.ok)S.score++;else{b.classList.add('wrong');S.miss.push({q:`${q.ask?ar(q.ask)+' ':''}${ar(q.q)}`,your:o.a,right})}
-    document.getElementById('pts').textContent=S.score;
-    let html;
-    if(gap){const full=q.q.replace('___',right);document.getElementById('sent').innerHTML=sent(right);say(full);
-      html=`<span class="full">${ar(full)}</span><span class="fen">${esc(cap(q.en.replace('___',R.e)))}</span>`}
-    else if(q.tf!==undefined){html=`This sentence is ${ar(right)} (${q.tf?'right':'wrong'}).${q.x?' '+esc(q.x).replace(/[؀-ۿ]+(?:\s+[؀-ۿ]+)*/g,ar):''}<span class="fen">${esc(q.en)}</span>`}
-    else{say(right);html=`<span class="full">${ar(right)}</span><span class="fen">${esc(cap(R.e))}</span>`}
-    document.getElementById('fbx').innerHTML=fb(o.ok,html);bindNext();
-  });
-}
+          bindHome();
+          bindTools(spoken);
+          const btns = [...app.querySelectorAll(".opt")];
+          btns.forEach(
+            (b) =>
+              (b.onclick = () => {
+                const o = opts[+b.dataset.i];
+                btns.forEach((x, i) => {
+                  x.disabled = true;
+                  if (opts[i].ok) x.classList.add("right");
+                  else if (x !== b) x.classList.add("dim");
+                });
+                if (o.ok) S.score++;
+                else {
+                  b.classList.add("wrong");
+                  S.miss.push({
+                    q: `${q.ask ? ar(q.ask) + " " : ""}${ar(q.q)}`,
+                    your: o.a,
+                    right,
+                  });
+                }
+                document.getElementById("pts").textContent = S.score;
+                let html;
+                if (gap) {
+                  const full = q.q.replace("___", right);
+                  document.getElementById("sent").innerHTML = sent(right);
+                  say(full);
+                  html = `<span class="full">${ar(full)}</span><span class="fen">${esc(cap(q.en.replace("___", R.e)))}</span>`;
+                } else if (q.tf !== undefined) {
+                  html = `This sentence is ${ar(right)} (${q.tf ? "right" : "wrong"}).${q.x ? " " + esc(q.x).replace(/[؀-ۿ]+(?:\s+[؀-ۿ]+)*/g, ar) : ""}<span class="fen">${esc(q.en)}</span>`;
+                } else {
+                  say(right);
+                  html = `<span class="full">${ar(right)}</span><span class="fen">${esc(cap(R.e))}</span>`;
+                }
+                document.getElementById("fbx").innerHTML = fb(o.ok, html);
+                bindNext();
+              }),
+          );
+        }
 
-/* ---------- KEY TERMS: learn, which term, build the definition ---------- */
-const thead=(t,a)=>`<div class="qhead"><span class="qtype mc">${t}</span><span class="ar sec" lang="ar" dir="rtl">${a}</span></div>`;
-const tname=v=>`<p class="term"><span class="ar" lang="ar" dir="rtl">${esc(v.w)}</span><small>${esc(v.we)}</small></p>`;
-function learn(){
-  const v=S.list[S.i],n=S.list.length;
-  app.innerHTML=`<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">Term ${S.i+1} of ${n}</span></div>
-  <section class="card pop${enOn?' show-en':''}" id="qcard">
-    ${thead('Learn the term','أهم المصطلحات')}
-    ${pic(v.p,v.p.startsWith('map'))}
+        /* ---------- KEY TERMS: learn, which term, build the definition ---------- */
+        const thead = (t, a) =>
+          `<div class="qhead"><span class="qtype mc">${t}</span><span class="ar sec" lang="ar" dir="rtl">${a}</span></div>`;
+        const tname = (v) =>
+          `<p class="term"><span class="ar" lang="ar" dir="rtl">${esc(v.w)}</span><small>${esc(v.we)}</small></p>`;
+        function learn() {
+          const v = S.list[S.i],
+            n = S.list.length;
+          app.innerHTML = `<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to games">←</button><span class="qnum">Term ${S.i + 1} of ${n}</span></div>
+  <section class="card pop${enOn ? " show-en" : ""}" id="qcard">
+    ${thead("Learn the term", "أهم المصطلحات")}
+    ${pic(v.p, v.p.startsWith("map"))}
     ${tname(v)}
     <p class="verse ar" lang="ar" dir="rtl">${esc(v.t)}</p>
     <p class="en">${esc(v.en)}</p>
     ${tools()}
-    <div class="row" style="justify-content:space-between"><button class="btn ghost" id="prevBtn" type="button" ${S.i?'':'disabled'}>Back</button><button class="btn" id="nextBtn" type="button">${S.i+1<n?'Next term':'Done'}</button></div>
+    <div class="row" style="justify-content:space-between"><button class="btn ghost" id="prevBtn" type="button" ${S.i ? "" : "disabled"}>Back</button><button class="btn" id="nextBtn" type="button">${S.i + 1 < n ? "Next term" : "Done"}</button></div>
   </section>`;
-  bindHome();bindTools(v.w+'. '+v.t);
-  document.getElementById('prevBtn').onclick=()=>{S.i-=2;next()};
-  document.getElementById('nextBtn').onclick=()=>next();
-}
-// definition shown → choose its term from three (the others come from all the terms)
-function fill(){
-  const v=S.list[S.i];
-  const opts=shuf([{v,ok:true},...shuf(TERMS.filter(x=>x.w!==v.w)).slice(0,2).map(x=>({v:x,ok:false}))]);
-  app.innerHTML=`${hud(`Term ${S.i+1} of ${S.list.length}`)}<section class="card pop${enOn?' show-en':''}" id="qcard">
-    ${thead('Which term?','ما المصطلح؟')}
-    ${pic(v.p,v.p.startsWith('map'))}
+          bindHome();
+          bindTools(v.w + ". " + v.t);
+          document.getElementById("prevBtn").onclick = () => {
+            S.i -= 2;
+            next();
+          };
+          document.getElementById("nextBtn").onclick = () => next();
+        }
+        // definition shown → choose its term from three (the others come from all the terms)
+        function fill() {
+          const v = S.list[S.i];
+          const opts = shuf([
+            { v, ok: true },
+            ...shuf(TERMS.filter((x) => x.w !== v.w))
+              .slice(0, 2)
+              .map((x) => ({ v: x, ok: false })),
+          ]);
+          app.innerHTML = `${hud(`Term ${S.i + 1} of ${S.list.length}`)}<section class="card pop${enOn ? " show-en" : ""}" id="qcard">
+    ${thead("Which term?", "ما المصطلح؟")}
+    ${pic(v.p, v.p.startsWith("map"))}
     <p class="verse ar" lang="ar" dir="rtl">${esc(v.t)}</p>
     <p class="en">${esc(v.en)}</p>
     ${tools()}
-    <div class="opts">${opts.map((o,i)=>`<button type="button" class="opt aro" id="opt-${i}" data-i="${i}"><span class="L">${'ABC'[i]}</span><span class="ow">${ar(o.v.w)}<small class="en">${esc(o.v.we)}</small></span></button>`).join('')}</div>
+    <div class="opts">${opts.map((o, i) => `<button type="button" class="opt aro" id="opt-${i}" data-i="${i}"><span class="L">${"ABC"[i]}</span><span class="ow">${ar(o.v.w)}<small class="en">${esc(o.v.we)}</small></span></button>`).join("")}</div>
     <div id="fbx"></div>
   </section>`;
-  bindHome();bindTools(v.t);
-  const btns=[...app.querySelectorAll('.opt')];
-  btns.forEach(b=>b.onclick=()=>{
-    const o=opts[+b.dataset.i];
-    btns.forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('right');else if(x!==b)x.classList.add('dim')});
-    if(o.ok)S.score++;else{b.classList.add('wrong');S.miss.push({q:ar(v.t),your:o.v.w,right:v.w})}
-    document.getElementById('pts').textContent=S.score;say(v.w);
-    document.getElementById('fbx').innerHTML=fb(o.ok,`<span class="full">${ar(v.w)} · ${esc(v.we)}</span><span class="fen">${esc(v.en)}</span>`);bindNext();
-  });
-}
-// tiles: single words, or 2–3 words for long definitions
-const tilesOf=v=>{const w=v.t.split(' '),n=w.length>24?3:w.length>12?2:1,r=[];for(let i=0;i<w.length;i+=n)r.push(w.slice(i,i+n).join(' '));return r};
-function build(){
-  const v=S.list[S.i],tiles=tilesOf(v);
-  const bank=shuf(tiles.map((_,i)=>i));let line=[],checked=false;
-  app.innerHTML=`${hud(`Term ${S.i+1} of ${S.list.length}`)}<section class="card pop${enOn?' show-en':''}" id="qcard">
-    ${thead('Build the definition','رتب الكلمات')}
-    ${pic(v.p,v.p.startsWith('map'))}
+          bindHome();
+          bindTools(v.t);
+          const btns = [...app.querySelectorAll(".opt")];
+          btns.forEach(
+            (b) =>
+              (b.onclick = () => {
+                const o = opts[+b.dataset.i];
+                btns.forEach((x, i) => {
+                  x.disabled = true;
+                  if (opts[i].ok) x.classList.add("right");
+                  else if (x !== b) x.classList.add("dim");
+                });
+                if (o.ok) S.score++;
+                else {
+                  b.classList.add("wrong");
+                  S.miss.push({ q: ar(v.t), your: o.v.w, right: v.w });
+                }
+                document.getElementById("pts").textContent = S.score;
+                say(v.w);
+                document.getElementById("fbx").innerHTML = fb(
+                  o.ok,
+                  `<span class="full">${ar(v.w)} · ${esc(v.we)}</span><span class="fen">${esc(v.en)}</span>`,
+                );
+                bindNext();
+              }),
+          );
+        }
+        // tiles: single words, or 2–3 words for long definitions
+        const tilesOf = (v) => {
+          const w = v.t.split(" "),
+            n = w.length > 24 ? 3 : w.length > 12 ? 2 : 1,
+            r = [];
+          for (let i = 0; i < w.length; i += n)
+            r.push(w.slice(i, i + n).join(" "));
+          return r;
+        };
+        function build() {
+          const v = S.list[S.i],
+            tiles = tilesOf(v);
+          const bank = shuf(tiles.map((_, i) => i));
+          let line = [],
+            checked = false;
+          app.innerHTML = `${hud(`Term ${S.i + 1} of ${S.list.length}`)}<section class="card pop${enOn ? " show-en" : ""}" id="qcard">
+    ${thead("Build the definition", "رتب الكلمات")}
+    ${pic(v.p, v.p.startsWith("map"))}
     ${tname(v)}
     <p class="hint">Tap the words in order to write what the term means. Start on the right. Tap a word in your answer to take it back.</p>
     <p class="en">${esc(v.en)}</p>
@@ -327,44 +1700,98 @@ function build(){
     <div class="words" id="bank" dir="rtl"></div>
     <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check</button></div></div>
   </section>`;
-  bindHome();bindTools(v.t);
-  const tile=(i,cls)=>`<button type="button" class="mi ${cls}" data-w="${i}" ${checked?'disabled':''}><span class="tx">${ar(tiles[i])}</span></button>`;
-  function draw(){
-    document.getElementById('vline').innerHTML=line.length?line.map((i,k)=>tile(i,checked?(tiles[i]===tiles[k]?'ok':'no'):'')).join(''):'<span class="hint" dir="ltr">Tap the first word.</span>';
-    document.getElementById('bank').innerHTML=bank.map(i=>tile(i,'')).join('');
-    app.querySelectorAll('#vline [data-w]').forEach(b=>b.onclick=()=>{const i=+b.dataset.w;line=line.filter(x=>x!==i);bank.push(i);draw()});
-    app.querySelectorAll('#bank [data-w]').forEach(b=>b.onclick=()=>{const i=+b.dataset.w;bank.splice(bank.indexOf(i),1);line.push(i);say(tiles[i]);draw()});
-    const cb=document.getElementById('checkBtn');if(cb)cb.disabled=bank.length>0;
-  }
-  draw();
-  document.getElementById('checkBtn').onclick=()=>{
-    checked=true;const built=line.map(i=>tiles[i]).join(' '),ok=built===v.t;
-    if(ok)S.score++;else S.miss.push({q:`${ar(v.w)} · ${esc(v.we)}`,your:built,right:v.t});
-    document.getElementById('pts').textContent=S.score;draw();say(v.t);
-    document.getElementById('fbx').innerHTML=fb(ok,`${ok?'':'The red words are in the wrong place. '}<span class="full">${ar(v.t)}</span><span class="fen">${esc(v.we)}: ${esc(v.en)}</span>`);bindNext();
-  };
-}
+          bindHome();
+          bindTools(v.t);
+          const tile = (i, cls) =>
+            `<button type="button" class="mi ${cls}" data-w="${i}" ${checked ? "disabled" : ""}><span class="tx">${ar(tiles[i])}</span></button>`;
+          function draw() {
+            document.getElementById("vline").innerHTML = line.length
+              ? line
+                  .map((i, k) =>
+                    tile(
+                      i,
+                      checked ? (tiles[i] === tiles[k] ? "ok" : "no") : "",
+                    ),
+                  )
+                  .join("")
+              : '<span class="hint" dir="ltr">Tap the first word.</span>';
+            document.getElementById("bank").innerHTML = bank
+              .map((i) => tile(i, ""))
+              .join("");
+            app.querySelectorAll("#vline [data-w]").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  const i = +b.dataset.w;
+                  line = line.filter((x) => x !== i);
+                  bank.push(i);
+                  draw();
+                }),
+            );
+            app.querySelectorAll("#bank [data-w]").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  const i = +b.dataset.w;
+                  bank.splice(bank.indexOf(i), 1);
+                  line.push(i);
+                  say(tiles[i]);
+                  draw();
+                }),
+            );
+            const cb = document.getElementById("checkBtn");
+            if (cb) cb.disabled = bank.length > 0;
+          }
+          draw();
+          document.getElementById("checkBtn").onclick = () => {
+            checked = true;
+            const built = line.map((i) => tiles[i]).join(" "),
+              ok = built === v.t;
+            if (ok) S.score++;
+            else
+              S.miss.push({
+                q: `${ar(v.w)} · ${esc(v.we)}`,
+                your: built,
+                right: v.t,
+              });
+            document.getElementById("pts").textContent = S.score;
+            draw();
+            say(v.t);
+            document.getElementById("fbx").innerHTML = fb(
+              ok,
+              `${ok ? "" : "The red words are in the wrong place. "}<span class="full">${ar(v.t)}</span><span class="fen">${esc(v.we)}: ${esc(v.en)}</span>`,
+            );
+            bindNext();
+          };
+        }
 
-/* ---------- END ---------- */
-function end(){
-  hush();
-  const pct=Math.round(S.score/Math.max(1,S.max)*100);const st=pct>=90?3:pct>=70?2:pct>=50?1:0;
-  const msg=pct===100?'Perfect! You know it all.':pct>=90?'Excellent!':pct>=70?'Good work! Look at the answers below.':'Keep practising. Look at the answers below, then play again.';
-  app.innerHTML=`<section class="card pop">
+        /* ---------- END ---------- */
+        function end() {
+          hush();
+          const pct = Math.round((S.score / Math.max(1, S.max)) * 100);
+          const st = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
+          const msg =
+            pct === 100
+              ? "Perfect! You know it all."
+              : pct >= 90
+                ? "Excellent!"
+                : pct >= 70
+                  ? "Good work! Look at the answers below."
+                  : "Keep practising. Look at the answers below, then play again.";
+          app.innerHTML = `<section class="card pop">
     <span class="eyebrow">${MODE_NAME[S.mode]} · your score</span>
     <div class="big-score">${S.score}<small> / ${S.max} points</small></div>
-    <div class="stars">${[0,1,2].map(i=>star(i<st)).join('')}</div>
+    <div class="stars">${[0, 1, 2].map((i) => star(i < st)).join("")}</div>
     <h2>${pct}% · ${msg}</h2>
     <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="modesBtn" type="button">Other games</button></div>
   </section>
-  ${S.miss.length?`<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map(m=>`<li><div class="q">${m.q}</div><div class="a">You chose: <s>${ar(m.your)}</s><br>Right answer: <em>${ar(m.right)}</em></div></li>`).join('')}</ul></section>`:''}`;
-  document.getElementById('againBtn').onclick=()=>startMode(S.mode);
-  document.getElementById('modesBtn').onclick=home;
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+  ${S.miss.length ? `<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map((m) => `<li><div class="q">${m.q}</div><div class="a">You chose: <s>${ar(m.your)}</s><br>Right answer: <em>${ar(m.right)}</em></div></li>`).join("")}</ul></section>` : ""}`;
+          document.getElementById("againBtn").onclick = () => startMode(S.mode);
+          document.getElementById("modesBtn").onclick = home;
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
 
-Quiz.watch(app);
-home();
-})();
-</script>
-</body></html>
+        Quiz.watch(app);
+        home();
+      })();
+    </script>
+  </body>
+</html>

@@ -1701,12 +1701,8 @@ details.book[open] .alltext {
   background: linear-gradient(#c7e8ff 0 66%, #8fd16a 66%);
 }
 .sc-stage {
-  background: linear-gradient(
-      90deg,
-      #b3202a 0 10%,
-      transparent 10% 90%,
-      #b3202a 90%
-    ),
+  background:
+    linear-gradient(90deg, #b3202a 0 10%, transparent 10% 90%, #b3202a 90%),
     linear-gradient(#ffe7a8 0 78%, #a8692e 78%);
 }
 .sc-school {

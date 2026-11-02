@@ -20,7 +20,12 @@
   height: 540px;
   transform-origin: 0 0;
   overflow: hidden;
-  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    Roboto,
+    sans-serif;
   font-size: 14px;
   line-height: 1.25;
   color: #1b1b1b;
@@ -59,7 +64,12 @@
   position: absolute;
   inset: 0 0 48px 0;
   background:
-    radial-gradient(ellipse 60% 55% at 62% 58%, #5aa8ff 0%, rgba(47, 125, 225, 0.55) 35%, transparent 60%),
+    radial-gradient(
+      ellipse 60% 55% at 62% 58%,
+      #5aa8ff 0%,
+      rgba(47, 125, 225, 0.55) 35%,
+      transparent 60%
+    ),
     radial-gradient(ellipse 45% 70% at 80% 30%, #1d5fd1 0%, transparent 70%),
     radial-gradient(ellipse 80% 60% at 20% 90%, #13306b 0%, transparent 70%),
     linear-gradient(135deg, #0b2a66 0%, #1a56c4 45%, #0d2f73 100%);
@@ -1231,23 +1241,58 @@
 /* wallpapers (Personalize › Background) */
 .ws-desk.wall-1,
 .wall-1 {
-  background: radial-gradient(ellipse 55% 60% at 65% 55%, #8fd0ff 0%, #2f7de1 40%, transparent 70%), linear-gradient(135deg, #0a2d6e, #1d63d6 60%, #0b2a66);
+  background:
+    radial-gradient(
+      ellipse 55% 60% at 65% 55%,
+      #8fd0ff 0%,
+      #2f7de1 40%,
+      transparent 70%
+    ),
+    linear-gradient(135deg, #0a2d6e, #1d63d6 60%, #0b2a66);
 }
 .ws-desk.wall-2,
 .wall-2 {
-  background: radial-gradient(ellipse 60% 55% at 50% 60%, #ff6ad5 0%, #7a2fd0 40%, transparent 72%), linear-gradient(160deg, #12062e, #3b0f6e 55%, #0b0420);
+  background:
+    radial-gradient(
+      ellipse 60% 55% at 50% 60%,
+      #ff6ad5 0%,
+      #7a2fd0 40%,
+      transparent 72%
+    ),
+    linear-gradient(160deg, #12062e, #3b0f6e 55%, #0b0420);
 }
 .ws-desk.wall-3,
 .wall-3 {
-  background: radial-gradient(ellipse 30% 45% at 45% 55%, #ffd23f 0%, #ff7a1a 35%, transparent 60%), radial-gradient(ellipse 30% 40% at 60% 45%, #ff4f8b 0%, transparent 60%), linear-gradient(150deg, #1a0710, #3a0d1e 60%, #120409);
+  background:
+    radial-gradient(
+      ellipse 30% 45% at 45% 55%,
+      #ffd23f 0%,
+      #ff7a1a 35%,
+      transparent 60%
+    ),
+    radial-gradient(ellipse 30% 40% at 60% 45%, #ff4f8b 0%, transparent 60%),
+    linear-gradient(150deg, #1a0710, #3a0d1e 60%, #120409);
 }
 .ws-desk.wall-4,
 .wall-4 {
-  background: linear-gradient(180deg, #8ec5e8 0%, #f6c9a3 45%, #3a8fa8 55%, #1d5a73 100%);
+  background: linear-gradient(
+    180deg,
+    #8ec5e8 0%,
+    #f6c9a3 45%,
+    #3a8fa8 55%,
+    #1d5a73 100%
+  );
 }
 .ws-desk.wall-5,
 .wall-5 {
-  background: radial-gradient(ellipse 60% 70% at 70% 50%, #ffffff 0%, #cfe2f7 40%, transparent 75%), linear-gradient(135deg, #a9c8ea, #e8f1fb 60%, #8fb3dc);
+  background:
+    radial-gradient(
+      ellipse 60% 70% at 70% 50%,
+      #ffffff 0%,
+      #cfe2f7 40%,
+      transparent 75%
+    ),
+    linear-gradient(135deg, #a9c8ea, #e8f1fb 60%, #8fb3dc);
 }
 .ws-desk.wall-6,
 .wall-6 {
@@ -1320,7 +1365,8 @@
   border-radius: 8px;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  font-family:
+    "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
   font-size: 20px;
   flex: none;
 }
@@ -1333,7 +1379,8 @@
 }
 .ws-bigapp {
   font-size: 90px;
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  font-family:
+    "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
 }
 
 /* Settings, Windows Security, Get Help windows */
@@ -1379,7 +1426,8 @@
 .ws-nic {
   width: 20px;
   text-align: center;
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  font-family:
+    "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
 }
 .ws-user {
   display: flex;
@@ -1456,7 +1504,8 @@ button.ws-srow:hover {
 .ws-sic {
   width: 22px;
   text-align: center;
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  font-family:
+    "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
   flex: none;
 }
 .ws-sic svg {

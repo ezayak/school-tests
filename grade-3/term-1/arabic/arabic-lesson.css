@@ -12,8 +12,9 @@ body {
   }
 }
 .ar {
-  font-family: "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting",
-    "Times New Roman", serif;
+  font-family:
+    "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting", "Times New Roman",
+    serif;
 }
 .les-head {
   display: grid;
