@@ -90,6 +90,9 @@ What to build: `uN-lesson-M.js` + `uN-lesson-M.html` (copy u2-lesson-4.html), pi
 - `n: "rel-uNlM"`, `tapq: true`, `links` back to "Religion lessons", `tabs`: story · games · verse, plus hw only when there is real homework for this lesson.
 - Story: the book text word for word in short parts (one picture each, reuse a picture for two parts if needed); the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.
 - Games: every activity of the lesson, one section each, plus the lesson's أسئلة الدرس (unless it is the homework).
+  Every section's `en` / `uk` starts with its book page: "Activity 2 (p. 8): …" / "Завдання 2 (с. 8): …", "Lesson questions (p. 9): …".
+- A المحفوظات lesson (memory verses, Lesson 2 of each unit) has no story: tabs verse · story · games, all its verses in `verses`, the story tab (`t: "Words"`) is its word list
+  (one part per word, `para` = the word, `ar` = the book's meaning), pictures reused from the lessons the verses come from.
 - Verse: the golden verse (الآية الذهبية) in `verses`, with 3–4 `gaps` (right word first; each right word once in the verse).
 - Item types: "من أنا" / choose → `mc` (with `q: "… أَنَا ___"`); word bank → one `mc` per gap, the bank as the section's `rule` with `t: "📝 The words · الْكَلِمَاتُ"`;
   ✓ / ✗ → `tf` with `x` (why it is false); write / what would you do / picture-and-event → `open` with a model answer and a `help` question (`[ar, en, uk]` options).
