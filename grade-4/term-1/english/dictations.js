@@ -189,5 +189,43 @@ window.ENGLISH = {
       path: "../../term-2/english/story-vera.html",
       term: 2,
     },
+    {
+      kind: "Lesson",
+      title: "Unit 3 · Week 5",
+      sound: "Irregular verbs",
+      words:
+        "Irregular past verbs · compound words · 8 words · Greek roots · Food for Thought, bedtime, dessert",
+      note: "3 texts · 16 exercise sets",
+      path: "../../term-2/english/unit3-week5.html",
+      term: 2,
+    },
+    ...[
+      [
+        "Food for Thought",
+        "Classwork booklet · Unit 3 Week 5 · hydroponics",
+        "story-food-thought.html",
+        "6 pages · 7 questions",
+      ],
+      [
+        "Should Kids Be Allowed to Choose Their Own Bedtime?",
+        "Homework booklet · Unit 3 Week 5",
+        "story-bedtime.html",
+        "4 pages · 4 questions",
+      ],
+      [
+        "Should Kids Be Allowed to Have Dessert Every Day?",
+        "Homework booklet · Unit 3 Week 5",
+        "story-dessert.html",
+        "4 pages · 4 questions",
+      ],
+    ].map(([title, words, path, note]) => ({
+      kind: "Story",
+      title,
+      sound: "Argumentative text",
+      words,
+      note,
+      path: "../../term-2/english/" + path,
+      term: 2,
+    })),
   ],
 };
