@@ -125,5 +125,40 @@ window.ENGLISH = {
       note,
       path,
     })),
+    // Term 2: files in grade-4/term-2/english/
+    ...[
+      [
+        "Deer",
+        "Classwork booklet · Unit 2 Week 5",
+        "story-deer.html",
+        "6 stanzas · 9 questions",
+      ],
+      [
+        "The Nautilus",
+        "Classwork booklet · Unit 2 Week 5",
+        "story-nautilus.html",
+        "2 stanzas · 7 questions",
+      ],
+      [
+        "The Beauty of Nature",
+        "Homework booklet · Unit 2 Week 5 · haiku",
+        "story-beauty-nature.html",
+        "1 haiku · 6 questions",
+      ],
+      [
+        "The Magic of Rain",
+        "Homework booklet · Unit 2 Week 5",
+        "story-magic-rain.html",
+        "3 stanzas · 7 questions",
+      ],
+    ].map(([title, words, path, note]) => ({
+      kind: "Story",
+      title,
+      sound: "Poetry",
+      words,
+      note,
+      path: "../../term-2/english/" + path,
+      term: 2,
+    })),
   ],
 };

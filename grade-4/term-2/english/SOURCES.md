@@ -21,9 +21,9 @@ Source folder: `~/Documents/2026-2027/Alex/!booklets/`. Page = the PDF page numb
 | 7 | Grammar · Test: combining sentences (113) | `unit2-week5` | planned |
 | 8 | Phonics · Suffixes (sheet) | `unit2-week5` | planned |
 | 9 | Spelling · Proofreading (117) | `unit2-week5` | planned |
-| 10 | Poetry · "Deer" (O1) | `story-deer` | planned |
-| 11 | Poetry · "Deer" questions (O2); fluency chart | `story-deer` | planned; fluency chart skipped (read with a partner) |
-| 12 | Poetry · "The Nautilus" + questions (O3) | `story-nautilus` | planned |
+| 10 | Poetry · "Deer" (O1) | `story-deer` · pages 1–6 (one per stanza), picture `img/deer/deer.jpg` | built |
+| 11 | Poetry · "Deer" questions (O2); fluency chart | `story-deer` · questions 7–9 (Text evidence) | built; fluency chart skipped (read with a partner) |
+| 12 | Poetry · "The Nautilus" + questions (O3) | `story-nautilus` · pages 1–2, questions 5–7, picture `img/nautilus/nautilus.jpg` | built |
 | 13 | Vocabulary strategy · Figurative language, "Deer" (120) | `unit2-week5` | planned |
 | 14 | Vocabulary strategy · Similes and metaphors (sheet) | `unit2-week5` | planned |
 | 15 | Unit 3 Week 2 · divider | — | skipped (title page) |
@@ -70,8 +70,8 @@ Source folder: `~/Documents/2026-2027/Alex/!booklets/`. Page = the PDF page numb
 | 10 | Grammar · Combining sentences (sheet) | `unit2-week5` | planned |
 | 11 | Grammar · Introductory phrases, appositives, interjections (sheet) | `unit2-week5` | planned |
 | 12 | Vocabulary strategy · Metaphors and similes (sheet) | `unit2-week5` | planned |
-| 13 | Poetry · "The Beauty of Nature" (haiku) + questions | `story-beauty-nature` | planned |
-| 14–15 | Poetry · "The Magic of Rain" + questions | `story-magic-rain` | planned |
+| 13 | Poetry · "The Beauty of Nature" (haiku) + questions | `story-beauty-nature` · page 1, Questions 1–3, picture `img/beauty-nature/leaves.jpg` | built |
+| 14–15 | Poetry · "The Magic of Rain" + questions | `story-magic-rain` · pages 1–3, Questions 1–4, picture `img/magic-rain/raindrops.jpg` (watermark removed) | built |
 | 16 | Creative writing · a rhyming poem | `unit2-week5` | planned (open task with a model) |
 | 17 | Unit 3 Week 2 · divider | — | skipped (title page) |
 | 18 | Phonics · Silent letters word sort (139) | `unit3-week2` | planned |
