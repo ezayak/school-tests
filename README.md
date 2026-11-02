@@ -232,6 +232,7 @@ window.STORY = {
   key: "en4-dream-team",                     // saves the tab, page and switches on the device
   title, by, kind: "Realistic fiction", cover: "img/dream-team/cover.jpg", question: "the book's Essential Question",
   lesson: {path: "unit1-week3.html", label: "Unit 1 · Week 3"},  // optional: a link back to the English lesson of the story
+  hub: "../../term-1/english/index.html",    // optional: the English page, when the story is not in its folder (later terms); default "index.html"
   gloss: {desperately: "very, very much", …}, // tap-a-word meanings (lowercase word); these words are shown in colour
   pages: [{ch: "Chapter 1 · …", img | emoji | vis, text: ["paragraph", …, {box: "Side box title", p: "…"}], easy: "one easy sentence"}, …],
                                              // text exactly as in the book; *word* = italic

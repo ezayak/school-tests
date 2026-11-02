@@ -269,7 +269,7 @@
   let pg = Math.min(+store.get(KEY + "-page", "0") || 0, S.pages.length - 1);
 
   app.innerHTML = `<section class="card">
-    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="index.html">English</a>${S.lesson ? `<a class="back" href="${esc(S.lesson.path)}">${esc(S.lesson.label)}</a>` : ""}</div></div>
+    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="${esc(S.hub || "index.html")}">English</a>${S.lesson ? `<a class="back" href="${esc(S.lesson.path)}">${esc(S.lesson.label)}</a>` : ""}</div></div>
     <div class="les-head"><span class="les-cov"><img src="${esc(S.cover)}" alt=""></span>
       <div><h1 class="les-title">${esc(S.title)}</h1><div class="les-sub">${esc(S.kind || "Story")}${S.by ? ` · by ${esc(S.by)}` : ""}</div>
       ${S.question ? `<p class="eq">❓ <b>Big question:</b> ${esc(S.question)}</p>` : ""}</div></div>
