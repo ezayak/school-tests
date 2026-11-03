@@ -5,6 +5,7 @@
 // <body data-view="guess"> → guess: the voice says a letter (syllable), tap it among 4.
 // <body data-view="build" data-deck="words"> → build the word from its letters (../letters.js + ../syllables.js).
 // <body data-view="fly"> → catch the letter: tap the floating letters that are the one shown (../letters.js).
+// <body data-view="place" data-deck="positions"> → put the thing where the sentence says (../positions.js + ../places.js).
 // <body data-deck="letters"> (or none) plays window.SPEECH_LETTERS (../letters.js), data-deck="syllables" window.SPEECH_SYLLABLES (../syllables.js),
 // data-deck="words" the picture words of both, data-deck="positions" window.SPEECH_POSITIONS (../positions.js).
 (function () {
@@ -352,7 +353,8 @@
   // picture #hint, mode 0 hides it), the choice of what to play (deck.sets, saved), ▶ Почати, n items a round
   // (a small set comes round again, never twice in a row), the counter with ⭐, and the end screen with stars.
   // o: {title, mk: its name in the saved keys, modes: [label of mode 1, label of mode 0], hint: the start screen's line,
-  // n: items a round, ask(it, api)}; api: {stage, say(text, snd), star(), next(el)}: star() = found at the first try,
+  // n: items a round, ask(it, api), items(chosen): the game's own questions from the ticked groups (default deck.items)};
+  // api: {stage, say(text, snd), pool, mode(), star(), next(el)}: mode() = true in mode 1, star() = found at the first try,
   // next(el) = the next item after a pause (unless el left the page meanwhile).
   function round(o) {
     const KP = "sp-" + deck.lang + "-" + deck.key + o.mk + "-pic";
@@ -443,9 +445,11 @@
     function start() {
       api.pool = deck.sets
         ? deck.sets[set].items
-        : deck.choose
-          ? deck.items.filter((x) => chosen.has(x.g))
-          : deck.items;
+        : o.items
+          ? o.items(chosen)
+          : deck.choose
+            ? deck.items.filter((x) => chosen.has(x.g))
+            : deck.items;
       q = [];
       while (q.length < o.n) {
         let more = Kit.shuf(api.pool);
@@ -468,6 +472,7 @@
       stage,
       say,
       pool: [],
+      mode: () => pic,
       star() {
         score++;
         tally();
@@ -818,5 +823,126 @@
     begin();
   }
 
-  ({ cards, guess, build, fly })[view]();
+  /* ================= put it there ================= */
+  // A drawn scene (window.SPEECH_PLACES, places.js) with dashed spots; «Кіт [під] столом» is read («🔤 Читати»: the sentence shown,
+  // said only with 🔊) or heard («🔊 Слухати»: said, not shown). Drag the thing from the tray onto a spot, or tap the spot.
+  // Right: the thing stands there (behind the front of the furniture where it should), the sentence is said, the next one.
+  // Wrong: the spot shakes red, the sentence is said again. The start screen ticks the positions (as Вгадай положення);
+  // only those are asked, the scene still shows all its spots. 8 a round; a star for each one put right at the first try.
+  function place() {
+    const P = window.SPEECH_PLACES;
+    const C = deck.choose;
+    // the questions: for each ticked position, 5 of its scene × thing pairs (so «на», in 3 scenes, comes as often as «за», in 1)
+    const items = (chosen) => {
+      const out = [];
+      C.t.forEach((t, k) => {
+        if (!chosen.has(k)) return;
+        const all = [];
+        P.scenes.forEach((sc) => {
+          if (sc.say[t])
+            P.things.forEach((th) =>
+              all.push({
+                sc,
+                th,
+                f: C.f[k],
+                name: t,
+                w: `${th.t} [${t}] ${sc.say[t]}`,
+              }),
+            );
+        });
+        out.push(...Kit.shuf(all).slice(0, 5));
+      });
+      return out;
+    };
+    const svg = (cls, inner) =>
+      `<svg class="${cls}" viewBox="0 0 400 300" aria-hidden="true">${inner}</svg>`;
+    // a spot's place and size in the scene (cqw: % of the scene's width)
+    const at = (z) => `left:${z.x / 4}%;top:${z.y / 3}%;--s:${z.s}`;
+    round({
+      title: "Постав",
+      mk: "place",
+      modes: ["🔤 Читати", "🔊 Слухати"],
+      hint: "Прочитай або послухай, де має бути предмет, і постав його туди.",
+      n: 8,
+      items,
+      ask(it, api) {
+        const { stage, say } = api;
+        let miss = false;
+        const zones = it.sc.zones;
+        stage.innerHTML = `<div class="sp-say sp-say-b">${listen}<span class="sp-hintword" id="hint">${deck.word(it)}</span></div>
+        <div class="sp-place">
+          <div class="sp-tray" aria-label="Предмет"><button type="button" class="sp-thing" id="thing" aria-label="${esc(it.th.t)}">${esc(it.th.ic)}</button></div>
+          <div class="sp-scene" id="scene">${svg("sp-lb", '<rect class="fl" x="0" y="275" width="400" height="25"/>' + it.sc.back)}${svg("sp-lf", it.sc.front)}
+            ${zones.map((z, k) => `<button type="button" class="sp-zone" data-z="${k}" style="${at(z)}" aria-label="Сюди"></button>`).join("")}</div>
+        </div>`;
+        const scene = document.getElementById("scene");
+        const thing = document.getElementById("thing");
+        const listenBtn = document.getElementById("listen");
+        listenBtn.onclick = () => say(...said(it));
+        let done = false;
+        async function drop(k) {
+          if (done) return;
+          const z = zones[k];
+          const b = scene.querySelector(`[data-z="${k}"]`);
+          if (z.f !== it.f) {
+            miss = true;
+            b.classList.remove("no");
+            void b.offsetWidth; // the shake again on a second try
+            b.classList.add("no");
+            say(...said(it));
+            return;
+          }
+          done = true;
+          if (!miss) api.star();
+          scene.querySelectorAll(".sp-zone").forEach((x) => x.remove());
+          thing.remove();
+          scene.insertAdjacentHTML(
+            "beforeend",
+            `<span class="sp-put pop" style="${at(z)};z-index:${z.back ? 1 : 3}" aria-hidden="true">${esc(it.th.ic)}</span>`,
+          );
+          document.getElementById("hint").hidden = false; // the sentence, in both modes
+          if (await say(...said(it))) api.next(scene);
+        }
+        scene
+          .querySelectorAll(".sp-zone")
+          .forEach((b) => (b.onclick = () => drop(+b.dataset.z)));
+        // drag the thing: a copy follows the finger; let go over a spot to put it there
+        thing.onpointerdown = (e) => {
+          if (done) return;
+          e.preventDefault();
+          const r = thing.getBoundingClientRect();
+          const ghost = thing.cloneNode(true);
+          ghost.removeAttribute("id");
+          ghost.classList.add("sp-drag");
+          ghost.style.width = r.width + "px";
+          document.body.appendChild(ghost);
+          thing.classList.add("sp-held");
+          const ox = e.clientX - r.left,
+            oy = e.clientY - r.top;
+          const mv = (ev) => {
+            ghost.style.left = ev.clientX - ox + "px";
+            ghost.style.top = ev.clientY - oy + "px";
+          };
+          mv(e);
+          const up = (ev) => {
+            removeEventListener("pointermove", mv);
+            removeEventListener("pointerup", up);
+            removeEventListener("pointercancel", up);
+            ghost.remove();
+            thing.classList.remove("sp-held");
+            const z = document
+              .elementsFromPoint(ev.clientX, ev.clientY)
+              .find((x) => x.classList && x.classList.contains("sp-zone"));
+            if (z) drop(+z.dataset.z);
+          };
+          addEventListener("pointermove", mv);
+          addEventListener("pointerup", up);
+          addEventListener("pointercancel", up);
+        };
+        if (!api.mode()) say(...said(it)); // «Слухати»: said at once; «Читати»: only with 🔊
+      },
+    });
+  }
+
+  ({ cards, guess, build, fly, place })[view]();
 })();

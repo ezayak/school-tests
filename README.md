@@ -50,10 +50,10 @@ optima/                    ← the Ukrainian school (school: "optima" in games.j
   grade-3/
     ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js
 speech/                    ← Мовлення: speech games (school: "speech" in games.js), one folder per language
-  uk/                      ← letters.js (the ABC), syllables.js, positions.js, one folder per group of games
+  uk/                      ← letters.js (the ABC), syllables.js, positions.js, places.js, one folder per group of games
     abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html, build.html, fly.html
     syllables/             ← Склади: the same pages, with data-deck="syllables"
-    sentences/             ← Речення: positions.html (cards), positions-guess.html, with data-deck="positions"
+    sentences/             ← Речення: positions.html (cards), positions-guess.html, positions-place.html, with data-deck="positions"
     img/positions/         ← the position pictures, cut from the parent's posters (no labels, no frame), <name>-1.jpg / -2.jpg
 ```
 
@@ -184,7 +184,11 @@ Games:
 - **Вгадай положення**: the start screen ticks the positions being learnt (saved), at least 3 of different meaning (біля = поруч,
   всередині = у); the voice says a position, the answers are pictures of the other ticked positions, one per meaning; a right tap shows
   and says the sentence. Modes «🔤 Зі словом» (the position written next to 🔊) / «🔊 Тільки звук».
-- The guessing and building games share `round()` in `speech.js`: the mode switch, the choice of set, the round, the counter and the end screen.
+- **Постав** (`data-view="place" data-deck="positions"`, data `../positions.js` + `../places.js`): a drawn scene (table, box, open box,
+  chair, two boxes) with dashed spots; «Кіт [під] столом» is read («🔤 Читати»: shown, said only with 🔊) or heard («🔊 Слухати»: said, not shown);
+  drag the thing from the tray onto a spot, or tap the spot. Right: it stands there (between the scene's back and front layers when `back`),
+  the sentence is said; wrong: the spot shakes red. The positions are ticked as in Вгадай положення; each ticked one gets 5 questions in the pool.
+- The guessing, building and placing games share `round()` in `speech.js`: the mode switch, the choice of set (or of several groups), the round, the counter and the end screen.
 
 `letters.js` format (`window.SPEECH_LETTERS = {lang, items}`), one item per letter:
 `{up: "Б", lo: "б", name: "бе", w: "[б]анан", ic: "🍌"}`: `name` = what the voice says, `w` = the word with its letter in `[ ]` (shown in colour),
@@ -200,6 +204,12 @@ Games:
 one for всередині and у), `w` = the sentence with the position in `[ ]`, `pic` = the picture in `img/positions/`. «зліва від» / «справа від» are left out
 (the pictures do not show whose left). Pictures: find the 7×3 grid by the white gaps, then each card's label edge (the first light row)
 and frame (a thin coloured line with background inside it), crop inside them, save as JPEG (~210px).
+
+`places.js` format (`window.SPEECH_PLACES = {things, scenes}`): `things: [{t: "Кіт", ic: "🐱"}]`; a scene is drawn in a 400×300 box (floor at 275):
+`{name, back: "<svg shapes behind a placed thing>", front: "<shapes in front>", zones: [{f: "under", x, y, s, back: 1}], say: {під: "столом", …}}`.
+Shapes use the classes `w` / `w2` (wood, dark wood), `b` / `b2` / `b3` (box, its side, its inside); `f` = the meaning as in `positions.js`,
+`x, y` = the spot's middle, `s` = the thing's size in % of the scene's width; `say` = the end of the sentence for each position the scene has.
+Only spots that read clearly in a flat drawing (no «перед» or «за» for a table or a chair).
 
 ## Player name
 

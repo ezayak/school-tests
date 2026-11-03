@@ -628,8 +628,127 @@
 .sp-hintword {
   font-family: "Nunito", var(--body);
   font-weight: 800;
-  font-size: clamp(1.8rem, 8dvh, 3rem);
+  font-size: clamp(1.6rem, min(8dvh, 7vw), 3rem);
   line-height: 1.1;
+}
+
+/* Put it there: the tray with the thing, the drawn scene (400×300, two SVG layers: the back, then the front of the furniture),
+   dashed spots; a thing put behind the front parts sits between the layers (z-index 1, the front is 2, spots 4) */
+.sp-place {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.sp-tray {
+  flex: none;
+  padding: 10px;
+  border: 2.5px dashed var(--ink);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--hl) 15%, var(--card));
+}
+.sp-thing {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--emoji);
+  font-size: clamp(2.6rem, 11dvh, 4.2rem);
+  line-height: 1;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+.sp-thing.sp-held {
+  opacity: 0.25;
+}
+.sp-thing.sp-drag {
+  position: fixed;
+  z-index: 50;
+  pointer-events: none;
+  transform: scale(1.1);
+}
+.sp-scene {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 4 / 3;
+  height: min(52dvh, 420px);
+  max-width: 100%;
+  overflow: hidden;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--cool) 10%, var(--card));
+}
+.sp-scene svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.sp-lb {
+  z-index: 0;
+}
+.sp-lf {
+  z-index: 2;
+}
+.sp-scene svg * {
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+.sp-scene .fl {
+  fill: color-mix(in srgb, var(--wood) 30%, var(--card));
+  stroke: none;
+}
+.sp-scene .w {
+  fill: var(--wood);
+}
+.sp-scene .w2 {
+  fill: color-mix(in srgb, var(--wood) 70%, var(--ink));
+}
+.sp-scene .b {
+  fill: var(--sand);
+}
+.sp-scene .b2 {
+  fill: var(--sand2);
+}
+.sp-scene .b3 {
+  fill: color-mix(in srgb, var(--sand2) 55%, var(--ink));
+}
+.sp-zone,
+.sp-put {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+.sp-zone {
+  z-index: 4;
+  width: calc(var(--s) * 1.1cqw);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 3px dashed var(--ink);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--hl) 30%, transparent);
+}
+.sp-zone.no {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 30%, transparent);
+  animation: sp-shake 0.4s;
+}
+.sp-put {
+  font-family: var(--emoji);
+  font-size: calc(var(--s) * 0.85cqw);
+  line-height: 1;
+}
+@media (orientation: portrait) {
+  .sp-place {
+    flex-direction: column;
+  }
+  .sp-scene {
+    width: 100%;
+    height: auto;
+  }
 }
 
 /* last, so it wins over the rules above: a phone held sideways: a smaller title, the letter to catch and the sky, so the game fits the screen */
@@ -649,5 +768,11 @@
   }
   .sp-sky {
     min-height: 150px;
+  }
+  .sp-say {
+    height: 52px;
+  }
+  .sp-scene {
+    height: max(150px, calc(100dvh - 215px));
   }
 }
