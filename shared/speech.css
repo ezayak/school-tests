@@ -663,6 +663,23 @@
 .sp-choice.sp-photo.no img {
   opacity: 0.5;
 }
+/* an emoji instead of a picture (verbs): on the card, in the panel, as an answer */
+.sp-emo {
+  font-family: var(--emoji);
+  line-height: 1;
+}
+.sp-photos .sp-emo {
+  font-size: min(36cqh, 28cqw);
+}
+.sp-thumbs .sp-emo {
+  font-size: 3.2rem;
+}
+.sp-photo .sp-emo {
+  font-size: clamp(3rem, 13dvh, 5.5rem);
+}
+.sp-choice.sp-photo.no .sp-emo {
+  opacity: 0.5;
+}
 .sp-hintword {
   font-family: "Nunito", var(--body);
   font-weight: 800;

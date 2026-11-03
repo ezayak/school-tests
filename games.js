@@ -2028,4 +2028,24 @@ window.GAMES = [
       "speech/uk/img/positions/under-table-2.jpg",
     ],
   },
+  {
+    school: "speech",
+    grade: 4,
+    period: "Subjects",
+    subject: "Дії",
+    title: "Дії",
+    hub: true,
+    lesson: "Дії · картки, вгадай дію",
+    topics:
+      "їсти, пити, спати, митися, одягатися, ходити, бігати, сидіти, читати, писати, малювати, грати…: дія і як про неї сказати (Я їм)",
+    path: "speech/uk/verbs/index.html",
+    countLabel: "2 гри",
+    year: "2026–2027",
+    also: [
+      "speech/uk/verbs.js",
+      "speech/uk/verbs/list.js",
+      "speech/uk/verbs/cards.html",
+      "speech/uk/verbs/guess.html",
+    ],
+  },
 ];

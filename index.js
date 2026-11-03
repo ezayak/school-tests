@@ -41,6 +41,7 @@
     Абетка: "var(--speech)",
     Склади: "var(--speech)",
     Речення: "var(--speech)",
+    Дії: "var(--speech)",
   };
   const ALL = window.GAMES || [];
   const esc = (s) =>

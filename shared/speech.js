@@ -46,7 +46,7 @@
 
   /* ---------- the deck: letters, syllables or words (<body data-deck>) ---------- */
   const deck = (
-    { letters, syllables, words, positions, phrases }[
+    { letters, syllables, words, positions, phrases, verbs }[
       document.body.dataset.deck
     ] || letters
   )();
@@ -213,20 +213,25 @@
   // Picture sentences: one card per picture, with the sentence it shows (w, its key part in [ ]), in groups (t: shown big
   // on the card and said first). The panel has the groups and the pictures of the chosen one.
   // The guessing game says the group; its answers are pictures of other chosen groups (one per family f).
-  // o: {key, dir: the pictures' folder in ../img/, other, what, label: the panel's group list, hd: the card top's class,
-  // choose: the guessing game's start screen, or none}.
+  // A card's own t (a verb) is shown and said instead of its group's; a card has pic (a picture file) or ic (an emoji).
+  // o: {key, dir: the pictures' folder in ../img/, group (default Речення), other, what, label: the panel's group list,
+  // hd: the card top's class, choose: the guessing game's start screen, or none; sets: «Усі» and each group with at least
+  // 4 cards; mix: the wrong answers are any other pictures, of the same group first}.
   function pictures(D, o) {
-    const img = (p) => `<img src="../img/${o.dir}/${p}.jpg" alt="">`;
+    const img = (x) =>
+      x.pic
+        ? `<img src="../img/${o.dir}/${x.pic}.jpg" alt="">`
+        : `<span class="sp-emo">${esc(x.ic)}</span>`;
     const items = [];
     D.groups.forEach((g, gi) =>
       g.cards.forEach((x) =>
-        items.push({ ...x, name: g.t, f: g.f || gi, g: gi }),
+        items.push({ ...x, name: x.t || g.t, f: g.f || gi, g: gi }),
       ),
     );
-    return {
+    const d = {
       lang: D.lang,
       key: o.key,
-      group: "Речення",
+      group: o.group || "Речення",
       other: o.other,
       what: o.what,
       nav: ["Попередня картка", "Наступна картка"],
@@ -234,17 +239,17 @@
       cardCls: "sp-sent",
       items,
       head: (it) => ({ c: o.hd, html: esc(it.name) }),
-      pic: (it) => img(it.pic),
+      pic: (it) => img(it),
       picCls: "sp-photos",
       word: (it) => esc(it.w).replace(/\[(.+?)\]/, `<b class="sp-posw">$1</b>`),
       hint: (it) => esc(it.name),
-      tile: (it) => ({ c: "sp-photo", html: img(it.pic) }),
+      tile: (it) => ({ c: "sp-photo", html: img(it) }),
       page: (i) => items[i].g,
       // the groups, then the pictures of the chosen one
       panel: (i) => {
         const g = items[i].g;
         return `<div class="sp-plist" role="group" aria-label="${o.label}">${D.groups.map((x, k) => `<button type="button" class="abtn" data-g="${k}" aria-pressed="${k === g}">${esc(x.t)}</button>`).join("")}</div>
-          <div class="sp-thumbs" role="group" aria-label="Картки">${items.map((x, k) => (x.g === g ? `<button type="button" data-i="${k}" aria-label="${esc(x.w.replace(/[[\]]/g, ""))}">${img(x.pic)}</button>` : "")).join("")}</div>`;
+          <div class="sp-thumbs" role="group" aria-label="Картки">${items.map((x, k) => (x.g === g ? `<button type="button" data-i="${k}" aria-label="${esc(x.w.replace(/[[\]]/g, ""))}">${img(x)}</button>` : "")).join("")}</div>`;
       },
       first: (gi) => items.findIndex((x) => x.g === gi),
       // one picture of each of 3 other groups from the pool, none of the same family
@@ -260,6 +265,30 @@
       },
       choose: o.choose,
     };
+    if (o.sets)
+      d.sets = [{ t: "Усі", items }].concat(
+        D.groups
+          .map((g, gi) => ({ t: g.t, items: items.filter((x) => x.g === gi) }))
+          .filter((x) => x.items.length >= 4),
+      );
+    // never the same picture twice
+    const same = (x) => x.pic || x.ic;
+    if (o.mix)
+      d.others = (it, pool) => {
+        const seen = new Set([same(it)]);
+        const out = [];
+        for (const x of [
+          ...Kit.shuf(pool.filter((x) => x.g === it.g)),
+          ...Kit.shuf(pool),
+          ...Kit.shuf(items),
+        ])
+          if (out.length < 3 && !seen.has(same(x))) {
+            out.push(x);
+            seen.add(same(x));
+          }
+        return out;
+      };
+    return d;
   }
 
   // Positions (window.SPEECH_POSITIONS, positions.js): the position big, a poster picture, the sentence that says who is where.
@@ -293,33 +322,16 @@
       what: ["речення", "картинку"],
       label: "Початок речення",
       hd: "sp-frame",
+      // the building and guessing games: everything, or one start of a sentence; the wrong pictures are of the same
+      // start first («Дай мені ручку»: олівець, зошит…), so the thing is what tells them apart
+      sets: true,
+      mix: true,
     });
-    // the building and guessing games: everything, or one start of a sentence (one with at least 4 cards)
-    d.sets = [{ t: "Усі", items: d.items }].concat(
-      window.SPEECH_PHRASES.groups
-        .map((g, gi) => ({ t: g.t, items: d.items.filter((x) => x.g === gi) }))
-        .filter((x) => x.items.length >= 4),
-    );
-    // the guessing game: the voice says the whole sentence (written in mode 1); the wrong pictures are of the same
-    // start first («Дай мені ручку»: олівець, зошит…), so the thing is what tells them apart; never the same picture twice
+    // the guessing game: the voice says the whole sentence (written in mode 1)
     d.q = (it) => said(it); // said is defined after the deck is made
     d.modes = ["🔤 З реченням", "🔊 Тільки звук"];
     d.hint = d.word;
     d.hintCls = "sp-hints";
-    d.others = (it, pool) => {
-      const seen = new Set([it.pic]);
-      const out = [];
-      for (const x of [
-        ...Kit.shuf(pool.filter((x) => x.g === it.g)),
-        ...Kit.shuf(pool),
-        ...Kit.shuf(d.items),
-      ])
-        if (out.length < 3 && !seen.has(x.pic)) {
-          out.push(x);
-          seen.add(x.pic);
-        }
-      return out;
-    };
     d.build = {
       title: "Склади речення",
       modes: ["🔤 Зі зразком", "🖼️ Тільки картинка"],
@@ -328,6 +340,21 @@
       help: "Допомога: наступне слово",
     };
     return d;
+  }
+
+  // Verbs (window.SPEECH_VERBS, verbs.js): the verb big («їсти»), its picture, «Я [їм]»; the guessing game says the verb.
+  function verbs() {
+    return pictures(window.SPEECH_VERBS, {
+      key: "verb-",
+      dir: "things",
+      group: "Дії",
+      other: "Інші дії",
+      what: ["дію", "картинку"],
+      label: "Дії",
+      hd: "sp-frame",
+      sets: true,
+      mix: true,
+    });
   }
 
   /* ================= cards ================= */
