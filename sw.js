@@ -33,6 +33,8 @@ const CORE = [
   "./shared/drag-words.css",
   "./shared/reading.css",
   "./shared/reading.js",
+  "./shared/speech.css",
+  "./shared/speech.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",

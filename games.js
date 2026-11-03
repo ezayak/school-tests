@@ -1894,4 +1894,22 @@ window.GAMES = [
       "optima/grade-3/ukr-lit/bohdanchyk.js",
     ],
   },
+  {
+    school: "speech",
+    grade: 4,
+    period: "Subjects",
+    subject: "Абетка",
+    title: "Абетка",
+    hub: true,
+    lesson: "Літери · картки: літера, пауза, слово",
+    topics: "33 літери української абетки з картинками",
+    path: "speech/uk/abc/index.html",
+    countLabel: "1 гра",
+    year: "2026–2027",
+    also: [
+      "speech/uk/letters.js",
+      "speech/uk/abc/list.js",
+      "speech/uk/abc/cards.html",
+    ],
+  },
 ];

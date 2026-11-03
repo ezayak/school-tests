@@ -1,0 +1,42 @@
+// Українська абетка: one card per letter, from the parent's cards «Українська абетка» (claude.ai canvas, page Абетка).
+// up / lo: the letter (no up for ь); name: what the voice says for the letter; w: the word, its letter in [ ];
+// ic: the picture (emoji); k: v = vowel (red), s = sign (green), none = consonant (blue).
+// snd / wsnd: a recording of the letter / the word ("audio/b.mp3", from this folder) instead of the device voice.
+window.SPEECH_LETTERS = {
+  lang: "uk-UA",
+  items: [
+    { up: "А", lo: "а", name: "а", w: "[а]втобус", ic: "🚌", k: "v" },
+    { up: "Б", lo: "б", name: "бе", w: "[б]анан", ic: "🍌" },
+    { up: "В", lo: "в", name: "ве", w: "[в]ода", ic: "💧" },
+    { up: "Г", lo: "г", name: "ге", w: "[г]риб", ic: "🍄" },
+    { up: "Ґ", lo: "ґ", name: "ґе", w: "[ґ]ава", ic: "🐦‍⬛" },
+    { up: "Д", lo: "д", name: "де", w: "[д]ім", ic: "🏠" },
+    { up: "Е", lo: "е", name: "е", w: "м[е]д", ic: "🍯", k: "v" },
+    { up: "Є", lo: "є", name: "є", w: "[є]нот", ic: "🦝", k: "v" },
+    { up: "Ж", lo: "ж", name: "же", w: "[ж]ираф", ic: "🦒" },
+    { up: "З", lo: "з", name: "зе", w: "[з]ебра", ic: "🦓" },
+    { up: "И", lo: "и", name: "и", w: "к[и]т", ic: "🐳", k: "v" },
+    { up: "І", lo: "і", name: "і", w: "[і]грашка", ic: "🧸", k: "v" },
+    { up: "Ї", lo: "ї", name: "ї", w: "[ї]жак", ic: "🦔", k: "v" },
+    { up: "Й", lo: "й", name: "йот", w: "ча[й]", ic: "☕" },
+    { up: "К", lo: "к", name: "ка", w: "[к]іт", ic: "🐱" },
+    { up: "Л", lo: "л", name: "ел", w: "[л]ев", ic: "🦁" },
+    { up: "М", lo: "м", name: "ем", w: "[м]’яч", ic: "⚽" },
+    { up: "Н", lo: "н", name: "ен", w: "[н]іс", ic: "👃" },
+    { up: "О", lo: "о", name: "о", w: "[о]ко", ic: "👁️", k: "v" },
+    { up: "П", lo: "п", name: "пе", w: "[п]іца", ic: "🍕" },
+    { up: "Р", lo: "р", name: "ер", w: "[р]иба", ic: "🐟" },
+    { up: "С", lo: "с", name: "ес", w: "[с]онце", ic: "☀️" },
+    { up: "Т", lo: "т", name: "те", w: "[т]орт", ic: "🎂" },
+    { up: "У", lo: "у", name: "у", w: "[у]смішка", ic: "😄", k: "v" },
+    { up: "Ф", lo: "ф", name: "еф", w: "[ф]утболка", ic: "👕" },
+    { up: "Х", lo: "х", name: "ха", w: "[х]ліб", ic: "🍞" },
+    { up: "Ц", lo: "ц", name: "це", w: "[ц]укерка", ic: "🍬" },
+    { up: "Ч", lo: "ч", name: "че", w: "[ч]ерепаха", ic: "🐢" },
+    { up: "Ш", lo: "ш", name: "ша", w: "[ш]ахи", ic: "♟️" },
+    { up: "Щ", lo: "щ", name: "ща", w: "[щ]ітка", ic: "🪥" },
+    { lo: "ь", name: "м’який знак", w: "кін[ь]", ic: "🐴", k: "s" },
+    { up: "Ю", lo: "ю", name: "ю", w: "кл[ю]ч", ic: "🔑", k: "v" },
+    { up: "Я", lo: "я", name: "я", w: "[я]блуко", ic: "🍎", k: "v" },
+  ],
+};

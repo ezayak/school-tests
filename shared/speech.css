@@ -1,0 +1,194 @@
+/* Speech games (shared/speech.js): Мовлення. Loads after shared/theme.css and shared/lesson.css (page, cards, game list come from there).
+   Letters keep the colours of the parent's cards: vowels red, consonants blue, ь green. */
+:root {
+  --accent: var(--speech);
+  --accent2: var(--ke);
+}
+.sp-v {
+  color: var(--red);
+}
+.sp-c {
+  color: var(--blue);
+}
+.sp-s {
+  color: var(--green);
+}
+
+/* ABC cards: the parent's layout «A · Card + letter panel». Landscape: the card on the left with ‹ › on its sides
+   and 🔊 in its corner, every letter in a panel on the right, both as high as the screen (at most 560px).
+   Portrait: the card above the panel. The card sizes its letter, picture and word from its own box (cq units), so it always fits. */
+[data-view="cards"] .wrap {
+  max-width: 1100px;
+}
+.sp-split {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.sp-side {
+  position: relative;
+  display: flex;
+  height: min(62dvh, 520px);
+}
+@media (orientation: landscape) {
+  body[data-view="cards"] {
+    padding-block: 12px;
+  }
+  .sp-split {
+    flex-direction: row;
+    height: min(calc(100dvh - 30px), 560px);
+    min-height: 280px;
+  }
+  .sp-side {
+    flex: 1.3 1 0;
+    min-width: 0;
+    height: auto;
+  }
+  .sp-panel {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow-y: auto;
+  }
+}
+.sp-lcard {
+  --tint: var(--cool);
+  container-type: size;
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: 27% 1fr auto;
+  padding: 0;
+  overflow: hidden;
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.sp-p1 {
+  --tint: var(--pe);
+}
+.sp-p2 {
+  --tint: var(--green);
+}
+.sp-p3 {
+  --tint: var(--other);
+}
+.sp-p4 {
+  --tint: var(--ke);
+}
+.sp-p5 {
+  --tint: var(--sci);
+}
+.sp-p6 {
+  --tint: var(--ssa);
+}
+.sp-hd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+  background: color-mix(in srgb, var(--tint) 22%, var(--card));
+  border-bottom: 2.5px solid var(--ink);
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: min(21cqh, 24cqw);
+  line-height: 1;
+}
+.sp-pic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  font-family: var(--emoji);
+  font-size: min(36cqh, 42cqw);
+  line-height: 1;
+}
+.sp-wd {
+  padding: 0 12px 4cqh;
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: min(13cqh, 11cqw);
+  line-height: 1.1;
+}
+.sp-wd b {
+  font-weight: 800;
+}
+.sp-nav,
+.sp-snd {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  width: 56px;
+  height: 56px;
+}
+.sp-nav {
+  top: 50%;
+  margin-top: -28px;
+}
+.sp-nav svg,
+.sp-snd svg {
+  width: 28px;
+  height: 28px;
+}
+.sp-prev {
+  left: 12px;
+}
+.sp-next {
+  right: 18px;
+}
+.sp-snd {
+  top: 12px;
+  right: 18px;
+}
+.sp-nav:active,
+.sp-snd:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+.sp-count {
+  color: var(--muted);
+  font-weight: 700;
+}
+.sp-warn {
+  margin: 0;
+  color: var(--bad);
+  font-size: 0.9rem;
+}
+
+/* all the letters: tap one to jump to its card */
+.sp-abc {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+  align-content: start;
+  gap: 8px;
+}
+@media (orientation: landscape) {
+  .sp-abc {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+.sp-abc button {
+  height: clamp(40px, 8dvh, 52px);
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.sp-abc button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+.sp-abc button[aria-pressed="true"] {
+  background: var(--hl);
+}

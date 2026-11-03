@@ -12,6 +12,7 @@
       wide: true,
       revisions: false,
     },
+    { k: "speech", name: "Мовлення", ic: "🗣️", revisions: false },
   ];
   const PERIODS = [
     "Mid-term exam",
@@ -37,6 +38,7 @@
     Computer: "var(--comp)",
     Math: "var(--math)",
     "Українська література": "var(--ulit)",
+    Абетка: "var(--speech)",
   };
   const ALL = window.GAMES || [];
   const esc = (s) =>
