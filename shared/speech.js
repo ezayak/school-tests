@@ -286,7 +286,7 @@
   // Phrases (window.SPEECH_PHRASES, phrases.js): the start of the sentence big («Я хочу їсти…»), a collage picture,
   // the whole sentence (the thing in colour).
   function phrases() {
-    return pictures(window.SPEECH_PHRASES, {
+    const d = pictures(window.SPEECH_PHRASES, {
       key: "say-",
       dir: "things",
       other: "Інші речення",
@@ -294,6 +294,20 @@
       label: "Початок речення",
       hd: "sp-frame",
     });
+    // the building game: everything, or one start of a sentence (one with at least 3 cards)
+    d.sets = [{ t: "Усі", items: d.items }].concat(
+      window.SPEECH_PHRASES.groups
+        .map((g, gi) => ({ t: g.t, items: d.items.filter((x) => x.g === gi) }))
+        .filter((x) => x.items.length >= 3),
+    );
+    d.build = {
+      title: "Склади речення",
+      modes: ["🔤 Зі зразком", "🖼️ Тільки картинка"],
+      hint: "Подивись на картинку і склади речення зі слів.",
+      what: "Речення",
+      help: "Допомога: наступне слово",
+    };
+    return d;
   }
 
   /* ================= cards ================= */
@@ -596,34 +610,47 @@
   // Each letter is said as it goes onto the line. A full line is checked: right → green, the word is said, the next word;
   // wrong → the wrong letters turn red and go back to the bank. 💡 (next to 🔊) puts the next right letter in place.
   // 8 words a round; a star for each word built with no mistake and no help.
+  // A deck with build (phrases) builds a sentence from its words instead: the picture always shows, mode 1 shows the
+  // written sentence, each word is said as it lands. build: {title, modes, hint, what: the line's label, help: 💡's label}.
   function build() {
-    const names = new Map(window.SPEECH_LETTERS.items.map((x) => [x.lo, x]));
+    const names = new Map(
+      (window.SPEECH_LETTERS ? window.SPEECH_LETTERS.items : []).map((x) => [
+        x.lo,
+        x,
+      ]),
+    );
+    const B = deck.build;
     round({
-      title: "Склади слово",
+      title: B ? B.title : "Склади слово",
       mk: "build",
-      modes: ["🖼️ Картинка і слово", "🔤 Тільки слово"],
-      hint: "Подивись на слово і склади його з літер.",
+      modes: B ? B.modes : ["🖼️ Картинка і слово", "🔤 Тільки слово"],
+      hint: B ? B.hint : "Подивись на слово і склади його з літер.",
       n: 8,
       ask(it, api) {
         const { stage, say } = api;
-        const target = [...it.name];
+        const [whole, wsnd] = said(it);
+        const target = B ? whole.split(" ") : [...whole];
         let miss = false,
           done = false,
           saying = Promise.resolve(); // the letter being said
-        // a letter's name as it goes onto the line
+        // a letter's name (a sentence's word) as it goes onto the line
         const letter = (t) => {
+          if (B) return (saying = say(t));
           const x = names.get(t);
           if (x) saying = say(x.name, x.snd);
         };
-        stage.innerHTML = `<div class="sp-say sp-say-b">${hintPic(it)}<span class="sp-model">${esc(it.name)}</span>${listen}<button type="button" class="sp-snd sp-listen sp-help" id="help" aria-label="Допомога: наступна літера">💡</button></div>
-        <div class="line sp-line" id="line" aria-label="Слово"></div>
+        const model = B
+          ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span><span class="sp-model sp-msent" id="hint">${esc(whole)}</span>`
+          : `${hintPic(it)}<span class="sp-model">${esc(whole)}</span>`;
+        stage.innerHTML = `<div class="sp-say sp-say-b${B ? " sp-say-s" : ""}">${model}${listen}<button type="button" class="sp-snd sp-listen sp-help" id="help" aria-label="${B ? B.help : "Допомога: наступна літера"}">💡</button></div>
+        <div class="line sp-line" id="line" aria-label="${B ? B.what : "Слово"}"></div>
         <div class="bank sp-bank" id="bank" aria-label="Літери"></div>`;
         const L = document.getElementById("line");
         let bank = Kit.shuf(target.map((t, i) => ({ t, i })));
-        for (let k = 0; k < 8 && bank.map((x) => x.t).join("") === it.name; k++)
-          bank = Kit.shuf(bank);
+        const same = (a) => a.map((x) => x.t).join(" ") === target.join(" ");
+        for (let k = 0; k < 8 && same(bank); k++) bank = Kit.shuf(bank);
         const T = Kit.dragTiles(L, document.getElementById("bank"), [], {
-          cls: "sp-tile",
+          cls: B ? "sp-tile sp-wtile" : "sp-tile",
           mark: (w, k) => (done ? (w.t === target[k] ? "ok" : "no") : ""),
           onPlace: (w) => letter(w.t),
           // after onPlace (it comes after the drawing), so the letter is said before the word
@@ -636,13 +663,13 @@
           if (done) return;
           done = true;
           T.lock();
-          if (T.line.map((w) => w.t).join("") === it.name) {
+          if (same(T.line)) {
             L.classList.add("ok");
             document.getElementById("help").disabled = true;
             if (!miss) api.star();
             await saying; // the last letter's name first
             if (!stage.contains(L)) return;
-            await say(it.name, it.wsnd);
+            await say(whole, wsnd);
             api.next(L);
             return;
           }
@@ -672,8 +699,8 @@
           }
           T.draw();
         };
-        document.getElementById("listen").onclick = () => say(it.name, it.wsnd);
-        say(it.name, it.wsnd);
+        document.getElementById("listen").onclick = () => say(whole, wsnd);
+        say(whole, wsnd);
       },
     });
   }

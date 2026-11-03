@@ -1942,11 +1942,12 @@ window.GAMES = [
     subject: "Речення",
     title: "Речення",
     hub: true,
-    lesson: "Речення · положення предметів, вгадай положення, постав, я хочу…",
+    lesson:
+      "Речення · положення предметів, вгадай положення, постав, я хочу…, склади речення",
     topics:
       "на, під, біля, поруч, всередині, у, перед, за, між, над: хто де, у реченнях з картинками; Я хочу їсти…, Дай мені…, Я не хочу…, Мені потрібно…",
     path: "speech/uk/sentences/index.html",
-    countLabel: "4 гри",
+    countLabel: "5 ігор",
     year: "2026–2027",
     also: [
       "speech/uk/positions.js",
@@ -1957,6 +1958,7 @@ window.GAMES = [
       "speech/uk/places.js",
       "speech/uk/phrases.js",
       "speech/uk/sentences/phrases.html",
+      "speech/uk/sentences/phrases-build.html",
       "speech/uk/img/things/apple.jpg",
       "speech/uk/img/things/backpack.jpg",
       "speech/uk/img/things/ball.jpg",
