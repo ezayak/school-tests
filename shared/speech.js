@@ -2,6 +2,7 @@
 // Everything is said aloud with the device voice (Kit.voice); a recording (snd) replaces the voice for one item.
 // <body data-view="list">  → a group page (window.SPEECH_LIST from list.js: one card per game),
 // <body data-view="cards"> → the ABC cards (window.SPEECH_LETTERS from ../letters.js): tap a card → the letter, a pause, the word.
+// <body data-view="guess"> → guess the letter (../letters.js): the voice says a letter, tap it among 4.
 (function () {
   "use strict";
   const { esc } = Kit;
@@ -139,5 +140,116 @@
     show(); // no sound before the first tap: the browser would block it
   }
 
-  ({ cards })[view]();
+  /* ================= guess the letter ================= */
+  // The voice says a letter; tap it among 4. A right tap shows the letter's picture and word and says the word,
+  // then the next letter comes. 10 letters a round; a star for each letter found at the first tap.
+  // Two modes, switched at any time (saved on the device): «З картинкою» shows the letter's picture next to 🔊 as a hint,
+  // «Без картинки» gives only the sound.
+  function guess() {
+    const ROUND = 10;
+    const KP = "sp-" + D.lang + "-guess-pic";
+    let pic = store.get(KP, "1") === "1";
+    let q = [],
+      n = 0,
+      score = 0,
+      miss = false,
+      run = 0; // a newer sound stops what an older one was saying
+    app.innerHTML = `<section class="card sp-game">
+      ${top('<span class="sp-count" id="count"></span>')}
+      <div class="sp-head"><h1 class="les-title">Вгадай літеру</h1>
+        <div class="seg" role="group" aria-label="Підказка"><button type="button" id="pic-1" data-pic="1">🖼️ З картинкою</button><button type="button" id="pic-0" data-pic="0">🔊 Без картинки</button></div></div>
+      <div class="sp-stage" id="stage"></div>
+      ${WARN}
+    </section>`;
+    const stage = document.getElementById("stage");
+    const count = document.getElementById("count");
+    const tally = () =>
+      (count.textContent = `${n + 1} / ${q.length} · ⭐ ${score}`);
+    document.title = "Вгадай літеру · Абетка";
+    function mode() {
+      app
+        .querySelectorAll("[data-pic]")
+        .forEach((b) =>
+          b.setAttribute("aria-pressed", b.dataset.pic === (pic ? "1" : "0")),
+        );
+      const h = document.getElementById("hint");
+      if (h) h.hidden = !pic;
+    }
+    app.querySelectorAll("[data-pic]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          pic = b.dataset.pic === "1";
+          store.set(KP, pic ? "1" : "0");
+          mode();
+        }),
+    );
+    mode();
+    function begin() {
+      stage.innerHTML = `<p class="sp-hint">Послухай літеру і натисни на неї.</p>
+        <button type="button" class="btn big" id="go">▶ Почати</button>`;
+      document.getElementById("go").onclick = start; // the first tap also lets the browser speak
+    }
+    function start() {
+      q = Kit.shuf(D.items).slice(0, ROUND);
+      n = score = 0;
+      ask();
+    }
+    async function say(text, snd) {
+      const my = ++run;
+      hush();
+      warn();
+      await sound(text, snd);
+      return my === run;
+    }
+    function ask() {
+      if (n >= q.length) return end();
+      miss = false;
+      const it = q[n];
+      const opts = Kit.shuf([
+        it,
+        ...Kit.shuf(D.items.filter((x) => x !== it)).slice(0, 3),
+      ]);
+      tally();
+      stage.innerHTML = `<div class="sp-say" id="say"><button type="button" class="sp-snd sp-listen" id="listen" aria-label="Послухати ще раз">${SPEAKER}</button><span class="sp-fpic sp-hintpic" id="hint" aria-hidden="true"${pic ? "" : " hidden"}>${esc(it.ic)}</span></div>
+        <div class="sp-choices">${opts.map((o, k) => `<button type="button" class="sp-choice ${kind(o)}" data-k="${k}">${esc(o.up || o.lo)}</button>`).join("")}</div>`;
+      document.getElementById("listen").onclick = () => say(it.name, it.snd);
+      stage.querySelectorAll("[data-k]").forEach(
+        (b) =>
+          (b.onclick = async () => {
+            if (opts[+b.dataset.k] !== it) {
+              miss = true;
+              b.disabled = true;
+              b.classList.add("no");
+              say(it.name, it.snd);
+              return;
+            }
+            stage
+              .querySelectorAll("[data-k]")
+              .forEach((x) => (x.disabled = true));
+            b.classList.add("ok");
+            if (!miss) score++;
+            tally();
+            document.getElementById("say").innerHTML =
+              `<span class="sp-found pop"><span class="sp-fpic" aria-hidden="true">${esc(it.ic)}</span><span>${wordHTML(it)}</span></span>`;
+            if (!(await say(plain(it.w), it.wsnd))) return;
+            await wait(900);
+            if (!stage.contains(b)) return; // the page moved on meanwhile
+            n++;
+            ask();
+          }),
+      );
+      say(it.name, it.snd);
+    }
+    function end() {
+      const stars = Math.round((score / q.length) * 3);
+      count.textContent = "";
+      stage.innerHTML = `<div class="sp-stars">${[0, 1, 2].map((k) => Kit.star(k < stars)).join("")}</div>
+        <p class="sp-result">${score === q.length ? "Молодець! " : ""}З першого разу: <b>${score}</b> з ${q.length}</p>
+        <div class="sp-row"><button type="button" class="btn" id="again">🔁 Ще раз</button><a class="btn ghost" href="index.html">Абетка</a></div>`;
+      document.getElementById("again").onclick = start;
+    }
+    begin();
+  }
+
+  ({ cards, guess })[view]();
 })();

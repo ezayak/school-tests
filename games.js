@@ -1901,15 +1901,16 @@ window.GAMES = [
     subject: "Абетка",
     title: "Абетка",
     hub: true,
-    lesson: "Літери · картки: літера, пауза, слово",
+    lesson: "Літери · картки, вгадай літеру",
     topics: "33 літери української абетки з картинками",
     path: "speech/uk/abc/index.html",
-    countLabel: "1 гра",
+    countLabel: "2 гри",
     year: "2026–2027",
     also: [
       "speech/uk/letters.js",
       "speech/uk/abc/list.js",
       "speech/uk/abc/cards.html",
+      "speech/uk/abc/guess.html",
     ],
   },
 ];

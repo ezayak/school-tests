@@ -51,7 +51,7 @@ optima/                    ← the Ukrainian school (school: "optima" in games.j
     ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js
 speech/                    ← Мовлення: speech games (school: "speech" in games.js), one folder per language
   uk/                      ← letters.js (the ABC), one folder per group of games
-    abc/                   ← Абетка: index.html (list of games), list.js, cards.html
+    abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -157,6 +157,10 @@ Games:
 
 - **Картки** (`data-view="cards"`, data `../letters.js`): the parent's layout «A · Card + letter panel». Tap the card (or 🔊, ‹ ›, a letter):
   the letter's name, a pause, the word. The card sizes its letter, picture and word from its own box, so it fits a phone held sideways too.
+- **Вгадай літеру** (`data-view="guess"`, data `../letters.js`): ▶ Почати, then 10 letters: the voice says a letter, tap it among 4.
+  Right: it turns green, the letter's picture and word appear and the word is said, then the next letter. Wrong: it shakes, turns red, the letter is said again.
+  ⭐ = letters found at the first tap; the end screen shows 3 stars and 🔁 Ще раз.
+  Two modes, switched at any time in the game (saved on the device): «🖼️ З картинкою» shows the letter's picture next to 🔊 as a hint, «🔊 Без картинки» only the sound.
 
 `letters.js` format (`window.SPEECH_LETTERS = {lang, items}`), one item per letter:
 `{up: "Б", lo: "б", name: "бе", w: "[б]анан", ic: "🍌"}`: `name` = what the voice says, `w` = the word with its letter in `[ ]` (shown in colour),
