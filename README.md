@@ -51,7 +51,7 @@ optima/                    ← the Ukrainian school (school: "optima" in games.j
     ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js
 speech/                    ← Мовлення: speech games (school: "speech" in games.js), one folder per language
   uk/                      ← letters.js (the ABC), syllables.js, one folder per group of games
-    abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html
+    abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html, build.html
     syllables/             ← Склади: the same pages, with data-deck="syllables"
 ```
 
@@ -153,7 +153,8 @@ Engine `shared/speech.js` + `shared/speech.css`; a game is only a data file. Voi
 - A group (Абетка, …) is one card on the home page (`subject` = the group, colour `--speech`), opening `index.html` with its games from `list.js`
   (`items: [{n, title, en, path, ic, note}]`, `en` = the line under the title, in Ukrainian here).
 - A game page is `<body data-view="…" data-school="speech">`, loading `shared/common.js`, its data, then `shared/speech.js`.
-- Each game works on a deck: `data-deck="letters"` (or none, data `../letters.js`) or `data-deck="syllables"` (`../syllables.js`).
+- Each game works on a deck: `data-deck="letters"` (or none, data `../letters.js`), `data-deck="syllables"` (`../syllables.js`)
+  or `data-deck="words"` (both files: every picture word of the cards and sheets, without ’, in sets by length).
   The deck (`letters()` / `syllables()` in `speech.js`) says what the cards show and say, the panel, and the wrong answers in the guessing game.
 
 Games:
@@ -166,6 +167,11 @@ Games:
   Right: it turns green, the letter's picture and word appear and the word is said, then the next letter. Wrong: it shakes, turns red, the letter is said again.
   ⭐ = letters found at the first tap; the end screen shows 3 stars and 🔁 Ще раз.
   Two modes, switched at any time in the game (saved on the device): «🖼️ З картинкою» shows the letter's picture next to 🔊 as a hint, «🔊 Без картинки» only the sound.
+- **Склади слово** (`data-view="build" data-deck="words"`, loads `drag-words.css`): the word (and its picture in mode «🖼️ Картинка і слово»;
+  «🔤 Тільки слово» hides it) is shown and said; its letters are put in order on the line with `Kit.dragTiles` (tap or drag), each letter said as it lands.
+  A full line is checked: right → green, the word is said, the next word; wrong → red, the letters from the first wrong one go back. 💡 (next to 🔊) puts the next right letter.
+  Sets «3 літери», «4 літери», «5 літер», «6+ літер», «Усі»; 8 words a round, ⭐ = no mistake and no help.
+- The guessing and building games share `round()` in `speech.js`: the mode switch, the choice of set, the round, the counter and the end screen.
 
 `letters.js` format (`window.SPEECH_LETTERS = {lang, items}`), one item per letter:
 `{up: "Б", lo: "б", name: "бе", w: "[б]анан", ic: "🍌"}`: `name` = what the voice says, `w` = the word with its letter in `[ ]` (shown in colour),

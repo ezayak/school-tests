@@ -395,3 +395,72 @@
   font-size: 1.15rem;
   min-width: 48px;
 }
+
+/* Build the word (with Kit.dragTiles, styles from drag-words.css): the word to copy, the line, the letters */
+.sp-model {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: clamp(1.8rem, min(9dvh, 8vw), 3.4rem);
+  line-height: 1;
+  letter-spacing: 0.06em;
+}
+.sp-line,
+.sp-bank {
+  width: 100%;
+  max-width: 760px;
+  justify-content: center;
+}
+.sp-line {
+  min-height: clamp(54px, 14dvh, 92px);
+}
+/* portrait: the word on its own line, the picture and the buttons under it */
+@media (orientation: portrait) {
+  .sp-say-b {
+    height: auto;
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .sp-say-b .sp-model {
+    order: -1;
+    flex: 1 0 100%;
+    text-align: center;
+  }
+  .sp-say-b .sp-listen {
+    width: 64px;
+    height: 64px;
+  }
+  .sp-say-b .sp-hintpic {
+    font-size: 4rem;
+  }
+}
+.sp-help {
+  font-family: var(--emoji);
+  font-size: clamp(1.5rem, 5dvh, 2rem);
+}
+.sp-tile {
+  min-width: 1.5em;
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 6dvh, 2.6rem);
+  line-height: 1.1;
+  padding: 6px 12px;
+}
+.sp-tile.ok {
+  background: color-mix(in srgb, var(--good) 25%, var(--card));
+  border-color: var(--good);
+}
+.sp-tile.no {
+  background: color-mix(in srgb, var(--bad) 18%, var(--card));
+  border-color: var(--bad);
+}
+/* a phone held sideways: a smaller title, so the game fits the screen */
+@media (orientation: landscape) and (max-height: 500px) {
+  .sp-game {
+    gap: 8px;
+  }
+  .sp-game .les-title {
+    font-size: 1.7rem;
+  }
+}

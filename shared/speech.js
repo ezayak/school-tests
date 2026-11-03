@@ -3,7 +3,9 @@
 // <body data-view="list">  → a group page (window.SPEECH_LIST from list.js: one card per game),
 // <body data-view="cards"> → cards: tap a card → the letter (syllable), a pause, the word.
 // <body data-view="guess"> → guess: the voice says a letter (syllable), tap it among 4.
-// <body data-deck="letters"> (or none) plays window.SPEECH_LETTERS (../letters.js), data-deck="syllables" window.SPEECH_SYLLABLES (../syllables.js).
+// <body data-view="build" data-deck="words"> → build the word from its letters (../letters.js + ../syllables.js).
+// <body data-deck="letters"> (or none) plays window.SPEECH_LETTERS (../letters.js), data-deck="syllables" window.SPEECH_SYLLABLES (../syllables.js),
+// data-deck="words" the picture words of both.
 (function () {
   "use strict";
   const { esc } = Kit;
@@ -40,9 +42,9 @@
     return;
   }
 
-  /* ---------- the deck: letters or syllables (<body data-deck>) ---------- */
+  /* ---------- the deck: letters, syllables or words (<body data-deck>) ---------- */
   const deck = (
-    document.body.dataset.deck === "syllables" ? syllables : letters
+    { letters, syllables, words }[document.body.dataset.deck] || letters
   )();
   const V = Kit.voice(deck.lang);
 
@@ -131,6 +133,7 @@
       lang: D.lang,
       key: "syl-",
       group: "Склади",
+      other: "Інші склади",
       what: ["склад", "нього"],
       nav: ["Попередній склад", "Наступний склад"],
       items,
@@ -165,6 +168,35 @@
           items: items.filter((x) => x.g === gi),
         })),
       ),
+    };
+  }
+
+  // Words (letters.js + syllables.js): every picture word of the cards and sheets (none with ’), once; sets by length.
+  function words() {
+    const seen = new Map();
+    window.SPEECH_LETTERS.items
+      .concat(...window.SPEECH_SYLLABLES.groups.map((g) => g.syl))
+      .forEach((x) => {
+        const w = x.w.replace(/[[\]]/g, "");
+        if (!/[’ ]/.test(w) && !seen.has(w))
+          seen.set(w, { name: w, w: x.w, wsnd: x.wsnd, ic: x.ic });
+      });
+    const items = [...seen.values()];
+    const len = (a, b) =>
+      items.filter((x) => x.name.length >= a && x.name.length <= b);
+    return {
+      lang: window.SPEECH_LETTERS.lang,
+      key: "words-",
+      group: "Абетка",
+      other: "Інші слова",
+      items,
+      sets: [
+        { t: "Усі", items },
+        { t: "3 літери", items: len(3, 3) },
+        { t: "4 літери", items: len(4, 4) },
+        { t: "5 літер", items: len(5, 5) },
+        { t: "6+ літер", items: len(6, 99) },
+      ],
     };
   }
 
@@ -252,28 +284,27 @@
     show(); // no sound before the first tap: the browser would block it
   }
 
-  /* ================= guess ================= */
-  // The voice says a letter (syllable); tap it among 4. A right tap shows its picture and word and says the word,
-  // then the next one comes. 10 a round; a star for each one found at the first tap.
-  // Two modes, switched at any time (saved on the device): «З картинкою» shows the picture next to 🔊 as a hint,
-  // «Без картинки» gives only the sound. A deck with sets (syllables) first asks what to play: everything or one consonant.
-  function guess() {
-    const ROUND = 10;
-    const KP = "sp-" + deck.lang + "-" + deck.key + "guess-pic";
-    const KS = "sp-" + deck.lang + "-" + deck.key + "guess-set";
-    const title = "Вгадай " + deck.what[0];
+  /* ================= a round of a game ================= */
+  // What the guessing and building games share: the title with a two-mode switch (saved on the device; mode 1 shows the
+  // picture #hint, mode 0 hides it), the choice of what to play (deck.sets, saved), ▶ Почати, n items a round
+  // (a small set comes round again, never twice in a row), the counter with ⭐, and the end screen with stars.
+  // o: {title, mk: its name in the saved keys, modes: [label of mode 1, label of mode 0], hint: the start screen's line,
+  // n: items a round, ask(it, api)}; api: {stage, say(text, snd), star(), next(el)}: star() = found at the first try,
+  // next(el) = the next item after a pause (unless el left the page meanwhile).
+  function round(o) {
+    const KP = "sp-" + deck.lang + "-" + deck.key + o.mk + "-pic";
+    const KS = "sp-" + deck.lang + "-" + deck.key + o.mk + "-set";
     let pic = store.get(KP, "1") === "1";
     let set = deck.sets ? +store.get(KS, 0) || 0 : 0;
     if (deck.sets && !deck.sets[set]) set = 0;
     let q = [],
       n = 0,
       score = 0,
-      miss = false,
       run = 0; // a newer sound stops what an older one was saying
     app.innerHTML = `<section class="card sp-game">
       ${top('<span class="sp-count" id="count"></span>')}
-      <div class="sp-head"><h1 class="les-title">${esc(title)}</h1>
-        <div class="seg" role="group" aria-label="Підказка"><button type="button" id="pic-1" data-pic="1">🖼️ З картинкою</button><button type="button" id="pic-0" data-pic="0">🔊 Без картинки</button></div></div>
+      <div class="sp-head"><h1 class="les-title">${esc(o.title)}</h1>
+        <div class="seg" role="group" aria-label="Підказка"><button type="button" id="pic-1" data-pic="1">${o.modes[0]}</button><button type="button" id="pic-0" data-pic="0">${o.modes[1]}</button></div></div>
       <div class="sp-stage" id="stage"></div>
       ${WARN}
     </section>`;
@@ -281,7 +312,7 @@
     const count = document.getElementById("count");
     const tally = () =>
       (count.textContent = `${n + 1} / ${q.length} · ⭐ ${score}`);
-    document.title = `${title} · ${deck.group}`;
+    document.title = `${o.title} · ${deck.group}`;
     function mode() {
       app
         .querySelectorAll("[data-pic]")
@@ -303,7 +334,7 @@
     function begin() {
       count.textContent = "";
       stage.innerHTML = `${deck.sets ? `<div class="seg sp-sets" role="group" aria-label="Що грати">${deck.sets.map((x, k) => `<button type="button" data-set="${k}" aria-pressed="${k === set}">${esc(x.t)}</button>`).join("")}</div>` : ""}
-        <p class="sp-hint">Послухай ${deck.what[0]} і натисни на ${deck.what[1]}.</p>
+        <p class="sp-hint">${o.hint}</p>
         <button type="button" class="btn big" id="go">▶ Почати</button>`;
       stage.querySelectorAll("[data-set]").forEach(
         (b) =>
@@ -319,17 +350,17 @@
     }
     function start() {
       const pool = deck.sets ? deck.sets[set].items : deck.items;
-      // a small set (one consonant) comes round again, never twice in a row
       q = [];
-      while (q.length < ROUND) {
+      while (q.length < o.n) {
         let more = Kit.shuf(pool);
         if (q.length && more[0] === q[q.length - 1]) more.push(more.shift());
         q = q.concat(more);
       }
-      q = q.slice(0, ROUND);
+      q = q.slice(0, o.n);
       n = score = 0;
       ask();
     }
+    // says a text; true when it was not cut off by a newer one
     async function say(text, snd) {
       const my = ++run;
       hush();
@@ -337,58 +368,177 @@
       await sound(text, snd);
       return my === run;
     }
+    const api = {
+      stage,
+      say,
+      star() {
+        score++;
+        tally();
+      },
+      async next(el) {
+        await wait(900);
+        if (!stage.contains(el)) return; // the page moved on meanwhile
+        n++;
+        ask();
+      },
+    };
     function ask() {
       if (n >= q.length) return end();
-      miss = false;
-      const it = q[n];
-      const opts = Kit.shuf([it, ...deck.others(it)]);
       tally();
-      stage.innerHTML = `<div class="sp-say" id="say"><button type="button" class="sp-snd sp-listen" id="listen" aria-label="Послухати ще раз">${SPEAKER}</button><span class="sp-fpic sp-hintpic" id="hint" aria-hidden="true"${pic ? "" : " hidden"}>${esc(it.ic)}</span></div>
-        <div class="sp-choices">${opts
-          .map((o, k) => {
-            const t = deck.tile(o);
-            return `<button type="button" class="sp-choice${cls(t.c)}" data-k="${k}">${t.html}</button>`;
-          })
-          .join("")}</div>`;
-      document.getElementById("listen").onclick = () => say(it.name, it.snd);
-      stage.querySelectorAll("[data-k]").forEach(
-        (b) =>
-          (b.onclick = async () => {
-            if (opts[+b.dataset.k] !== it) {
-              miss = true;
-              b.disabled = true;
-              b.classList.add("no");
-              say(it.name, it.snd);
-              return;
-            }
-            stage
-              .querySelectorAll("[data-k]")
-              .forEach((x) => (x.disabled = true));
-            b.classList.add("ok");
-            if (!miss) score++;
-            tally();
-            document.getElementById("say").innerHTML =
-              `<span class="sp-found pop"><span class="sp-fpic" aria-hidden="true">${esc(it.ic)}</span><span>${deck.word(it)}</span></span>`;
-            if (!(await say(plain(it.w), it.wsnd))) return;
-            await wait(900);
-            if (!stage.contains(b)) return; // the page moved on meanwhile
-            n++;
-            ask();
-          }),
-      );
-      say(it.name, it.snd);
+      o.ask(q[n], api);
+      mode();
     }
     function end() {
       const stars = Math.round((score / q.length) * 3);
       count.textContent = "";
       stage.innerHTML = `<div class="sp-stars">${[0, 1, 2].map((k) => Kit.star(k < stars)).join("")}</div>
         <p class="sp-result">${score === q.length ? "Молодець! " : ""}З першого разу: <b>${score}</b> з ${q.length}</p>
-        <div class="sp-row"><button type="button" class="btn" id="again">🔁 Ще раз</button>${deck.sets ? `<button type="button" class="btn ghost" id="other">Інші ${deck.group.toLowerCase()}</button>` : ""}<a class="btn ghost" href="index.html">${esc(deck.group)}</a></div>`;
+        <div class="sp-row"><button type="button" class="btn" id="again">🔁 Ще раз</button>${deck.sets ? `<button type="button" class="btn ghost" id="other">${esc(deck.other)}</button>` : ""}<a class="btn ghost" href="index.html">${esc(deck.group)}</a></div>`;
       document.getElementById("again").onclick = start;
       if (deck.sets) document.getElementById("other").onclick = begin;
     }
     begin();
   }
+  // the picture shown in mode 1 (id="hint")
+  const hintPic = (it) =>
+    `<span class="sp-fpic sp-hintpic" id="hint" aria-hidden="true">${esc(it.ic)}</span>`;
+  const listen = `<button type="button" class="sp-snd sp-listen" id="listen" aria-label="Послухати ще раз">${SPEAKER}</button>`;
 
-  ({ cards, guess })[view]();
+  /* ================= guess ================= */
+  // The voice says a letter (syllable); tap it among 4. A right tap shows its picture and word and says the word,
+  // then the next one comes. 10 a round; a star for each one found at the first tap.
+  // «З картинкою» shows the picture next to 🔊 as a hint, «Без картинки» gives only the sound.
+  // A deck with sets (syllables) first asks what to play: everything or one consonant.
+  function guess() {
+    round({
+      title: "Вгадай " + deck.what[0],
+      mk: "guess",
+      modes: ["🖼️ З картинкою", "🔊 Без картинки"],
+      hint: `Послухай ${deck.what[0]} і натисни на ${deck.what[1]}.`,
+      n: 10,
+      ask(it, api) {
+        const { stage, say } = api;
+        let miss = false;
+        const opts = Kit.shuf([it, ...deck.others(it)]);
+        stage.innerHTML = `<div class="sp-say" id="say">${listen}${hintPic(it)}</div>
+        <div class="sp-choices">${opts
+          .map((o, k) => {
+            const t = deck.tile(o);
+            return `<button type="button" class="sp-choice${cls(t.c)}" data-k="${k}">${t.html}</button>`;
+          })
+          .join("")}</div>`;
+        document.getElementById("listen").onclick = () => say(it.name, it.snd);
+        stage.querySelectorAll("[data-k]").forEach(
+          (b) =>
+            (b.onclick = async () => {
+              if (opts[+b.dataset.k] !== it) {
+                miss = true;
+                b.disabled = true;
+                b.classList.add("no");
+                say(it.name, it.snd);
+                return;
+              }
+              stage
+                .querySelectorAll("[data-k]")
+                .forEach((x) => (x.disabled = true));
+              b.classList.add("ok");
+              if (!miss) api.star();
+              document.getElementById("say").innerHTML =
+                `<span class="sp-found pop"><span class="sp-fpic" aria-hidden="true">${esc(it.ic)}</span><span>${deck.word(it)}</span></span>`;
+              if (await say(plain(it.w), it.wsnd)) api.next(b);
+            }),
+        );
+        say(it.name, it.snd);
+      },
+    });
+  }
+
+  /* ================= build the word ================= */
+  // The word (and its picture in mode 1) is shown and said; put its letters in order on the line (tap or drag, Kit.dragTiles).
+  // Each letter is said as it goes onto the line. A full line is checked: right → green, the word is said, the next word;
+  // wrong → the wrong letters turn red and go back to the bank. 💡 (next to 🔊) puts the next right letter in place.
+  // 8 words a round; a star for each word built with no mistake and no help.
+  function build() {
+    const names = new Map(window.SPEECH_LETTERS.items.map((x) => [x.lo, x]));
+    round({
+      title: "Склади слово",
+      mk: "build",
+      modes: ["🖼️ Картинка і слово", "🔤 Тільки слово"],
+      hint: "Подивись на слово і склади його з літер.",
+      n: 8,
+      ask(it, api) {
+        const { stage, say } = api;
+        const target = [...it.name];
+        let miss = false,
+          done = false,
+          saying = Promise.resolve(); // the letter being said
+        // a letter's name as it goes onto the line
+        const letter = (t) => {
+          const x = names.get(t);
+          if (x) saying = say(x.name, x.snd);
+        };
+        stage.innerHTML = `<div class="sp-say sp-say-b">${hintPic(it)}<span class="sp-model">${esc(it.name)}</span>${listen}<button type="button" class="sp-snd sp-listen sp-help" id="help" aria-label="Допомога: наступна літера">💡</button></div>
+        <div class="line sp-line" id="line" aria-label="Слово"></div>
+        <div class="bank sp-bank" id="bank" aria-label="Літери"></div>`;
+        const L = document.getElementById("line");
+        let bank = Kit.shuf(target.map((t, i) => ({ t, i })));
+        for (let k = 0; k < 8 && bank.map((x) => x.t).join("") === it.name; k++)
+          bank = Kit.shuf(bank);
+        const T = Kit.dragTiles(L, document.getElementById("bank"), [], {
+          cls: "sp-tile",
+          mark: (w, k) => (done ? (w.t === target[k] ? "ok" : "no") : ""),
+          onPlace: (w) => letter(w.t),
+          // after onPlace (it comes after the drawing), so the letter is said before the word
+          onChange: (line) => {
+            if (line.length === target.length) setTimeout(check);
+          },
+        });
+        T.use([], bank);
+        async function check() {
+          if (done) return;
+          done = true;
+          T.lock();
+          if (T.line.map((w) => w.t).join("") === it.name) {
+            L.classList.add("ok");
+            document.getElementById("help").disabled = true;
+            if (!miss) api.star();
+            await saying; // the last letter's name first
+            if (!stage.contains(L)) return;
+            await say(it.name, it.wsnd);
+            api.next(L);
+            return;
+          }
+          miss = true;
+          L.classList.add("no");
+          await wait(1200);
+          if (!stage.contains(L)) return;
+          // the letters from the first wrong one on go back to the bank
+          let k = 0;
+          while (k < T.line.length && T.line[k].t === target[k]) k++;
+          while (T.line.length > k) T.bank.push(T.line.pop());
+          done = false;
+          L.classList.remove("no");
+          T.unlock();
+        }
+        document.getElementById("help").onclick = () => {
+          if (done) return;
+          miss = true;
+          let k = 0;
+          while (k < T.line.length && T.line[k].t === target[k]) k++;
+          while (T.line.length > k) T.bank.push(T.line.pop());
+          const j = T.bank.findIndex((w) => w.t === target[k]);
+          if (j >= 0) {
+            const [w] = T.bank.splice(j, 1);
+            T.line.push(w);
+            letter(w.t);
+          }
+          T.draw();
+        };
+        document.getElementById("listen").onclick = () => say(it.name, it.wsnd);
+        say(it.name, it.wsnd);
+      },
+    });
+  }
+
+  ({ cards, guess, build })[view]();
 })();
