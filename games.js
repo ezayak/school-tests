@@ -2192,4 +2192,24 @@ window.GAMES = [
       "speech/ar/verbs/build.html",
     ],
   },
+  {
+    school: "speech",
+    lang: "ar",
+    period: "Subjects",
+    subject: "Syllables",
+    title: "الْمَقَاطِع · Arabic syllables",
+    hub: true,
+    lesson: "Syllables · cards, reading short words, guess the syllable",
+    topics:
+      "م ب ت د ر س ف ك ل ن ق ج with fatha, damma, kasra and the long vowels (بَ بُ بِ · بَا بُو بِي): 63 syllables with pictures, 36 short words to read",
+    path: "speech/ar/syllables/index.html",
+    countLabel: "2 games",
+    year: "2026–2027",
+    also: [
+      "speech/ar/syllables.js",
+      "speech/ar/syllables/list.js",
+      "speech/ar/syllables/cards.html",
+      "speech/ar/syllables/guess.html",
+    ],
+  },
 ];

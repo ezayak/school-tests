@@ -891,13 +891,24 @@ body[data-lang="ar"]
     .sp-tgt,
     .sp-plist,
     .sp-sets,
-    .sp-hintword
+    .sp-hintword,
+    .sp-cons,
+    .sp-words
   ) {
   font-family: "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting", serif;
   line-height: 1.4;
 }
 body[data-lang="ar"]
-  :is(.sp-abc, .sp-line, .sp-bank, .sp-plist, .sp-sets, .sp-thumbs) {
+  :is(
+    .sp-abc,
+    .sp-line,
+    .sp-bank,
+    .sp-plist,
+    .sp-sets,
+    .sp-thumbs,
+    .sp-cons,
+    .sp-words
+  ) {
   direction: rtl;
 }
 /* Arabic build the word: the placed letters joined (as .preview in the Arabic lessons) */

@@ -73,6 +73,12 @@
         "Прочитай або послухай, де має бути предмет, і постав його туди.",
       thing: "Предмет",
       here: "Сюди",
+      syl: "Склади",
+      sylOther: "Інші склади",
+      sylWhat: ["склад", "нього"],
+      sylNav: ["Попередній склад", "Наступний склад"],
+      consonants: "Приголосні",
+      wordsLabel: "Слова",
       phrOther: "Інші речення",
       phrWhat: ["речення", "картинку"],
       phrLabel: "Початок речення",
@@ -146,6 +152,12 @@
       placeHint: "Read or listen where the thing goes, and put it there.",
       thing: "Thing",
       here: "Here",
+      syl: "Syllables",
+      sylOther: "Other syllables",
+      sylWhat: ["syllable", "it"],
+      sylNav: ["Previous syllable", "Next syllable"],
+      consonants: "Consonants",
+      wordsLabel: "Words",
       phrOther: "Other sentences",
       phrWhat: ["sentence", "the picture"],
       phrLabel: "Start of the sentence",
@@ -300,14 +312,16 @@
   }
 
   // Syllables (window.SPEECH_SYLLABLES, syllables.js): every letter in colour (consonant blue, vowel red).
+  // Arabic: a letter keeps its haraka (one colour), the long vowels ا و ي red; one form of the syllable (no capitals).
   function syllables() {
     const D = window.SPEECH_SYLLABLES;
-    const VOW = "аеєиіїоуюя";
+    const ar = /^ar/.test(D.lang);
+    const VOW = ar ? "اوي" : "аеєиіїоуюя";
     const paint = (t) =>
-      [...t]
+      (ar ? chars(t) : [...t])
         .map(
           (ch) =>
-            `<span class="${VOW.includes(ch.toLowerCase()) ? "sp-v" : "sp-c"}">${esc(ch)}</span>`,
+            `<span class="${VOW.includes(ch[0].toLowerCase()) ? "sp-v" : "sp-c"}">${esc(ch)}</span>`,
         )
         .join("");
     const items = [];
@@ -318,14 +332,16 @@
     return {
       lang: D.lang,
       key: "syl-",
-      group: "Склади",
-      other: "Інші склади",
-      what: ["склад", "нього"],
-      nav: ["Попередній склад", "Наступний склад"],
+      group: T.syl,
+      other: T.sylOther,
+      what: T.sylWhat,
+      nav: T.sylNav,
       items,
       head: (it) => ({
         c: "sp-long",
-        html: `<span>${paint(it.s.toUpperCase())}</span><span>${paint(it.s)}</span>`,
+        html: ar
+          ? `<span>${paint(it.s)}</span>`
+          : `<span>${paint(it.s.toUpperCase())}</span><span>${paint(it.s)}</span>`,
       }),
       tile: (it) => ({ c: "sp-long", html: paint(it.s.toUpperCase()) }),
       word: (it) =>
@@ -334,9 +350,9 @@
       // the consonants, the syllables of this one, the sheet's words
       panel: (i) => {
         const g = items[i].g;
-        return `<div class="sp-cons" role="group" aria-label="Приголосні">${D.groups.map((x, k) => `<button type="button" class="sp-c" data-g="${k}" aria-pressed="${k === g}">${esc(x.c.toUpperCase())}</button>`).join("")}</div>
-          <div class="sp-abc sp-syls" role="group" aria-label="Склади">${items.map((x, k) => (x.g === g ? `<button type="button" data-i="${k}">${paint(x.s.toUpperCase())}</button>` : "")).join("")}</div>
-          <div class="sp-words" role="group" aria-label="Слова">${D.groups[g].words.map((w, k) => `<button type="button" class="abtn" data-w="${k}">🔊 <span>${w.split("-").map(paint).join("-")}</span></button>`).join("")}</div>`;
+        return `<div class="sp-cons" role="group" aria-label="${T.consonants}">${D.groups.map((x, k) => `<button type="button" class="sp-c" data-g="${k}" aria-pressed="${k === g}">${esc(x.c.toUpperCase())}</button>`).join("")}</div>
+          <div class="sp-abc sp-syls" role="group" aria-label="${T.syl}">${items.map((x, k) => (x.g === g ? `<button type="button" data-i="${k}">${paint(x.s.toUpperCase())}</button>` : "")).join("")}</div>
+          <div class="sp-words" role="group" aria-label="${T.wordsLabel}">${D.groups[g].words.map((w, k) => `<button type="button" class="abtn" data-w="${k}">🔊 <span>${w.split("-").map(paint).join("-")}</span></button>`).join("")}</div>`;
       },
       first,
       words: (i) => D.groups[items[i].g].words,
@@ -348,7 +364,7 @@
         );
         return [...same.slice(0, 2), ...vow.slice(0, 1)];
       },
-      sets: [{ t: "Усі", items }].concat(
+      sets: [{ t: T.all, items }].concat(
         D.groups.map((g, gi) => ({
           t: g.c.toUpperCase(),
           items: items.filter((x) => x.g === gi),

@@ -71,6 +71,8 @@ speech/                    ← Мовлення: speech games (school: "speech" 
     sentences/             ← Arabic sentences: positions.html, positions-guess.html, positions-place.html (as in en/sentences);
                               positions.js (its own `note` about the families), places.js (Arabic words for the same scenes);
                               phrases.html, phrases-build.html, phrases-guess.html (phrases.js, the uk collage pictures)
+    syllables/             ← Arabic syllables: cards.html, guess.html (syllables.js: 12 consonants with fatha, damma, kasra and the
+                              long vowels, a word each, 3 short words to read per consonant; a syllable is coloured whole, ا و ي red)
     verbs/                 ← Arabic verbs: cards.html, guess.html, build.html (verbs.js: no infinitive in Arabic, so t is
                               the verb as he says it, «آكُلُ», and w «أَنَا [آكُلُ]»)
 ```
