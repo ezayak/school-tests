@@ -2144,4 +2144,26 @@ window.GAMES = [
       "speech/ar/abc/fly.html",
     ],
   },
+  {
+    school: "speech",
+    lang: "ar",
+    period: "Subjects",
+    subject: "Sentences",
+    title: "الْجُمَل · Arabic sentences",
+    hub: true,
+    lesson: "Sentences · positions, guess the position, put it there",
+    topics:
+      "عَلَى، تَحْتَ، قُرْبَ، بِجَانِبِ، دَاخِلَ، فِي، أَمَامَ، خَلْفَ، بَيْنَ، فَوْقَ: where things are, in sentences with pictures",
+    path: "speech/ar/sentences/index.html",
+    countLabel: "3 games",
+    year: "2026–2027",
+    also: [
+      "speech/ar/positions.js",
+      "speech/ar/places.js",
+      "speech/ar/sentences/list.js",
+      "speech/ar/sentences/positions.html",
+      "speech/ar/sentences/positions-guess.html",
+      "speech/ar/sentences/positions-place.html",
+    ],
+  },
 ];

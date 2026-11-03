@@ -877,7 +877,7 @@
 }
 
 /* Arabic (body[data-lang="ar"]): the letters and words in the Arabic lessons' Naskh font, a little more line height for the harakat,
-   and the letter panel, the line and the bank from right to left */
+   and the letter panel, the line, the bank, the position buttons and pictures from right to left */
 body[data-lang="ar"]
   :is(
     .sp-hd,
@@ -888,11 +888,15 @@ body[data-lang="ar"]
     .sp-model,
     .sp-found,
     .sp-bal,
-    .sp-tgt
+    .sp-tgt,
+    .sp-plist,
+    .sp-sets,
+    .sp-hintword
   ) {
   font-family: "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting", serif;
   line-height: 1.4;
 }
-body[data-lang="ar"] :is(.sp-abc, .sp-line, .sp-bank) {
+body[data-lang="ar"]
+  :is(.sp-abc, .sp-line, .sp-bank, .sp-plist, .sp-sets, .sp-thumbs) {
   direction: rtl;
 }

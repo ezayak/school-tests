@@ -489,7 +489,7 @@
         t: D.groups.map((g) => g.t),
         f: D.groups.map((g) => g.f),
         min: 3,
-        note: T.posNote,
+        note: D.note || T.posNote, // the data's own note (Arabic: its words)
       },
     });
   }
