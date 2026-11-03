@@ -2,7 +2,7 @@
 window.SPEECH_LIST = {
   title: "Sentences",
   intro:
-    "Choose a game. Positions: look where things are and listen to the sentence. Guess the position: listen to the word and find the picture. Put it there: read or listen, and put the thing in its place.",
+    "Choose a game. Positions: look where things are and listen to the sentence. Guess the position: listen to the word and find the picture. Put it there: read or listen, and put the thing in its place. I want: say what you want, what to give you, what you need. Build the sentence: put the words in order. Guess the sentence: listen and find the picture.",
   items: [
     {
       n: 1,
@@ -27,6 +27,30 @@ window.SPEECH_LIST = {
       path: "positions-place.html",
       ic: "🫳",
       note: "Choose what we learn · 8 a game",
+    },
+    {
+      n: 4,
+      title: "I want…",
+      en: "I want to eat…, Give me…, I don’t want to…, I need to…",
+      path: "phrases.html",
+      ic: "🙋",
+      note: "6 starts · 31 cards",
+    },
+    {
+      n: 5,
+      title: "Build the sentence",
+      en: "Look at the picture and build the sentence from the words",
+      path: "phrases-build.html",
+      ic: "🧩",
+      note: "All or one start · 8 a game",
+    },
+    {
+      n: 6,
+      title: "Guess the sentence",
+      en: "Listen to the sentence and tap the picture",
+      path: "phrases-guess.html",
+      ic: "🙉",
+      note: "All or one start · 10 a game",
     },
   ],
 };

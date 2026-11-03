@@ -2080,11 +2080,12 @@ window.GAMES = [
     subject: "Sentences",
     title: "Sentences",
     hub: true,
-    lesson: "Sentences · positions, guess the position, put it there",
+    lesson:
+      "Sentences · positions, guess the position, put it there, I want…, build the sentence, guess the sentence",
     topics:
-      "on, under, near, next to, inside, in, in front of, behind, between, above: where things are, in sentences with pictures",
+      "on, under, near, next to, inside, in, in front of, behind, between, above: where things are, in sentences with pictures; I want to eat…, Give me…, I don’t want to…, I need to…",
     path: "speech/en/sentences/index.html",
-    countLabel: "3 games",
+    countLabel: "6 games",
     year: "2026–2027",
     also: [
       "speech/en/positions.js",
@@ -2093,6 +2094,10 @@ window.GAMES = [
       "speech/en/sentences/positions.html",
       "speech/en/sentences/positions-guess.html",
       "speech/en/sentences/positions-place.html",
+      "speech/en/phrases.js",
+      "speech/en/sentences/phrases.html",
+      "speech/en/sentences/phrases-build.html",
+      "speech/en/sentences/phrases-guess.html",
     ],
   },
 ];

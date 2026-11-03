@@ -72,6 +72,20 @@
         "Прочитай або послухай, де має бути предмет, і постав його туди.",
       thing: "Предмет",
       here: "Сюди",
+      phrOther: "Інші речення",
+      phrWhat: ["речення", "картинку"],
+      phrLabel: "Початок речення",
+      phrModes: ["🔤 З реченням", "🔊 Тільки звук"],
+      phrBuild: "Склади речення",
+      phrBuildModes: ["🔤 Зі зразком", "🖼️ Тільки картинка"],
+      phrBuildHint: "Подивись на картинку і склади речення зі слів.",
+      sentence: "Речення",
+      helpWord: "Допомога: наступне слово",
+      verbs: "Дії",
+      verbOther: "Інші дії",
+      verbWhat: ["дію", "картинку"],
+      forms: "Як сказати?",
+      formsHint: "Послухай дію і вибери, як сказати про себе: «Я …».",
     },
     en: {
       home: "← All games",
@@ -129,6 +143,21 @@
       placeHint: "Read or listen where the thing goes, and put it there.",
       thing: "Thing",
       here: "Here",
+      phrOther: "Other sentences",
+      phrWhat: ["sentence", "the picture"],
+      phrLabel: "Start of the sentence",
+      phrModes: ["🔤 With the sentence", "🔊 Sound only"],
+      phrBuild: "Build the sentence",
+      phrBuildModes: ["🔤 With the model", "🖼️ Picture only"],
+      phrBuildHint:
+        "Look at the picture and build the sentence from the words.",
+      sentence: "Sentence",
+      helpWord: "Help: the next word",
+      verbs: "Verbs",
+      verbOther: "Other verbs",
+      verbWhat: ["verb", "the picture"],
+      forms: "How to say it?",
+      formsHint: "Listen to the verb and choose how to say it: «I …».",
     },
   };
   const T = TEXTS[document.documentElement.lang] || TEXTS.uk;
@@ -447,9 +476,9 @@
     const d = pictures(window.SPEECH_PHRASES, {
       key: "say-",
       dir: "things",
-      other: "Інші речення",
-      what: ["речення", "картинку"],
-      label: "Початок речення",
+      other: T.phrOther,
+      what: T.phrWhat,
+      label: T.phrLabel,
       hd: "sp-frame",
       // the building and guessing games: everything, or one start of a sentence; the wrong pictures are of the same
       // start first («Дай мені ручку»: олівець, зошит…), so the thing is what tells them apart
@@ -458,15 +487,15 @@
     });
     // the guessing game: the voice says the whole sentence (written in mode 1)
     d.q = (it) => said(it); // said is defined after the deck is made
-    d.modes = ["🔤 З реченням", "🔊 Тільки звук"];
+    d.modes = T.phrModes;
     d.hint = d.word;
     d.hintCls = "sp-hints";
     d.build = {
-      title: "Склади речення",
-      modes: ["🔤 Зі зразком", "🖼️ Тільки картинка"],
-      hint: "Подивись на картинку і склади речення зі слів.",
-      what: "Речення",
-      help: "Допомога: наступне слово",
+      title: T.phrBuild,
+      modes: T.phrBuildModes,
+      hint: T.phrBuildHint,
+      what: T.sentence,
+      help: T.helpWord,
     };
     return d;
   }
@@ -476,10 +505,10 @@
     return pictures(window.SPEECH_VERBS, {
       key: "verb-",
       dir: "things",
-      group: "Дії",
-      other: "Інші дії",
-      what: ["дію", "картинку"],
-      label: "Дії",
+      group: T.verbs,
+      other: T.verbOther,
+      what: T.verbWhat,
+      label: T.verbs,
       hd: "sp-frame",
       sets: true,
       mix: true,
@@ -505,10 +534,10 @@
     const form = (it) => it.w.match(/\[(.+?)\]/)[1];
     d.key = "verbf-";
     d.gq = {
-      title: "Як сказати?",
-      hint: "Послухай дію і вибери, як сказати про себе: «Я …».",
+      title: T.forms,
+      hint: T.formsHint,
     };
-    d.modes = ["🖼️ З картинкою", "🔊 Без картинки"];
+    d.modes = T.guessModes;
     d.hint = (it) => d.pic(it);
     d.hintCls = "sp-hpic";
     d.prompt = (it) => esc(it.w).replace(/\[.+?\]/, `<b class="sp-posw">…</b>`);

@@ -62,7 +62,8 @@ speech/                    ← Мовлення: speech games (school: "speech" 
     abc/                   ← ABC: the same pages as uk/abc, with lang="en" (build.html loads only letters.js)
     sentences/             ← Sentences: positions.html, positions-guess.html, positions-place.html (as in uk/sentences);
                               positions.js has the English sentences and img: "../../uk/img/positions/" (the same pictures),
-                              places.js loads after ../uk/places.js and puts English words into the same scenes
+                              places.js loads after ../uk/places.js and puts English words into the same scenes;
+                              phrases.html, phrases-build.html, phrases-guess.html (phrases.js, img: the uk collage pictures)
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -165,7 +166,8 @@ Engine `shared/speech.js` + `shared/speech.css`; a game is only a data file. Voi
   (`items: [{n, title, en, path, ic, note}]`, `en` = the line under the title, in Ukrainian here).
 - A game page is `<body data-view="…" data-school="speech">`, loading `shared/common.js`, its data, then `shared/speech.js`.
   The interface texts (buttons, titles, hints) come from `TEXTS` in `speech.js` by the page's `<html lang>` (`uk`, `en`);
-  a new language adds its table there. The phrases and verbs decks still have their Ukrainian texts in their deck.
+  a new language adds its table there (only the syllables deck is Ukrainian-only). A data file's `img` points to another
+  language's pictures (`"../../uk/img/things/"`), so the pictures are not copied.
 - Each game works on a deck: `data-deck="letters"` (or none, data `../letters.js`), `data-deck="syllables"` (`../syllables.js`),
   `data-deck="words"` (both files: every picture word of the cards and sheets, without ’, in sets by length)
   `data-deck="positions"` (`../positions.js`), `data-deck="phrases"` (`../phrases.js`) or `data-deck="verbs"` (`../verbs.js`).
