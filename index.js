@@ -56,6 +56,7 @@
     Дії: "var(--speech)",
     ABC: "var(--speech)",
     Sentences: "var(--speech)",
+    Verbs: "var(--speech)",
   };
   const ALL = window.GAMES || [];
   const esc = (s) =>

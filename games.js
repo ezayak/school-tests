@@ -2100,4 +2100,25 @@ window.GAMES = [
       "speech/en/sentences/phrases-guess.html",
     ],
   },
+  {
+    school: "speech",
+    lang: "en",
+    period: "Subjects",
+    subject: "Verbs",
+    title: "Verbs",
+    hub: true,
+    lesson: "Verbs · cards, guess the verb, build the word",
+    topics:
+      "eat, drink, sleep, wash, get dressed, walk, run, sit, read, write, draw, play…: the verb and how to say it (I eat)",
+    path: "speech/en/verbs/index.html",
+    countLabel: "3 games",
+    year: "2026–2027",
+    also: [
+      "speech/en/verbs.js",
+      "speech/en/verbs/list.js",
+      "speech/en/verbs/cards.html",
+      "speech/en/verbs/guess.html",
+      "speech/en/verbs/build.html",
+    ],
+  },
 ];

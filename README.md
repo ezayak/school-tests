@@ -64,6 +64,8 @@ speech/                    ← Мовлення: speech games (school: "speech" 
                               positions.js has the English sentences and img: "../../uk/img/positions/" (the same pictures),
                               places.js loads after ../uk/places.js and puts English words into the same scenes;
                               phrases.html, phrases-build.html, phrases-guess.html (phrases.js, img: the uk collage pictures)
+    verbs/                 ← Verbs: cards.html, guess.html, build.html (verbs.js, img: the uk collage pictures); no «How to say it?»
+                              (in English «I eat» is the same form as «eat»)
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
