@@ -191,6 +191,15 @@ Then:
 - Check with a script: every item has a picture, every `img` / `src` exists, every picture file is used and in `also`, every `path` and `hub` link opens.
 - Check in the browser: the English page (the tag), each tab and section of the lesson, every story page, one exercise of each type, the back links.
 
+## Speech games (Мовлення)
+
+Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a game is only a data file). Format in README: "Speech games (Мовлення)".
+
+- Arabic voice: Google's online voice first, the device voice only offline (`Kit.voice(lang, {online: true})`, set by the engine for `lang: "ar"`).
+  The Arabic voice installed on the parent's tablet does not speak, so never prefer it.
+- Every Arabic page (speech games, lessons, revisions) has `<meta name="referrer" content="no-referrer" />` in `<head>`: Google refuses the online voice with a referrer.
+- Arabic text is classical Arabic with full tashkeel (the online voice does not read Egyptian dialect correctly).
+
 ## Checking changes
 
 - Local server: `python3 -m http.server 8765 --bind 127.0.0.1` from the repo root; open the hubs:

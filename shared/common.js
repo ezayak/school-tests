@@ -245,8 +245,9 @@ window.Kit = (function () {
   // The device voice for one language (lang: "uk-UA", "en-US", "ar"): {ok, has(), say(text, rate), hush()}.
   // ok: the device can speak; has(): a voice of that language is installed; say() ends when the text has been said
   // (or could not be said, at most 3.5 s); punctuation is not read.
-  // opt.online: with no voice of that language on the device, Google's online voice says it (as the Arabic lessons do);
-  // has() is then true while the device is online.
+  // opt.online (Arabic): Google's online voice says it while the device is online, the device voice only offline
+  // (the Arabic voice installed on the tablet does not speak); has() is then true while online. The page needs
+  // <meta name="referrer" content="no-referrer">: Google refuses requests with a referrer.
   function voice(lang, opt) {
     const online = !!(opt && opt.online);
     const URL = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${lang.split("-")[0]}&q=`;
@@ -274,7 +275,7 @@ window.Kit = (function () {
         } catch (e) {}
       if (player) player.pause();
     }
-    const net = () => online && !v && navigator.onLine;
+    const net = () => online && navigator.onLine;
     // the online voice: ends with the sound (at most 8 s)
     function sayOnline(text) {
       return new Promise((res) => {
