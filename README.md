@@ -50,11 +50,13 @@ optima/                    ← the Ukrainian school (school: "optima" in games.j
   grade-3/
     ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js
 speech/                    ← Мовлення: speech games (school: "speech" in games.js), one folder per language
-  uk/                      ← letters.js (the ABC), syllables.js, positions.js, places.js, one folder per group of games
+  uk/                      ← letters.js (the ABC), syllables.js, positions.js, places.js, phrases.js, one folder per group of games
     abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html, build.html, fly.html
     syllables/             ← Склади: the same pages, with data-deck="syllables"
-    sentences/             ← Речення: positions.html (cards), positions-guess.html, positions-place.html, with data-deck="positions"
+    sentences/             ← Речення: positions.html (cards), positions-guess.html, positions-place.html, with data-deck="positions";
+                              phrases.html (cards, data-deck="phrases")
     img/positions/         ← the position pictures, cut from the parent's posters (no labels, no frame), <name>-1.jpg / -2.jpg
+    img/things/            ← the pictures of the parent's collage of cards (no labels), 300×300
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -157,8 +159,8 @@ Engine `shared/speech.js` + `shared/speech.css`; a game is only a data file. Voi
 - A game page is `<body data-view="…" data-school="speech">`, loading `shared/common.js`, its data, then `shared/speech.js`.
 - Each game works on a deck: `data-deck="letters"` (or none, data `../letters.js`), `data-deck="syllables"` (`../syllables.js`),
   `data-deck="words"` (both files: every picture word of the cards and sheets, without ’, in sets by length)
-  or `data-deck="positions"` (`../positions.js`).
-  The deck (`letters()` / `syllables()` in `speech.js`) says what the cards show and say, the panel, and the wrong answers in the guessing game.
+  `data-deck="positions"` (`../positions.js`) or `data-deck="phrases"` (`../phrases.js`).
+  The deck (`letters()` / `syllables()` / … in `speech.js`; positions and phrases share `pictures()`) says what the cards show and say, the panel, and the wrong answers in the guessing game.
 
 Games:
 
@@ -188,6 +190,8 @@ Games:
   chair, two boxes) with dashed spots; «Кіт [під] столом» is read («🔤 Читати»: shown, said only with 🔊) or heard («🔊 Слухати»: said, not shown);
   drag the thing from the tray onto a spot, or tap the spot. Right: it stands there (between the scene's back and front layers when `back`),
   the sentence is said; wrong: the spot shakes red. The positions are ticked as in Вгадай положення; each ticked one gets 5 questions in the pool.
+- **Я хочу…** (`data-deck="phrases"`): one card per collage picture: the start of the sentence big on top («Дай мені…»), the picture,
+  the whole sentence (the thing in colour); tap: the start, a pause, the sentence. The panel has the 6 starts and the pictures of the chosen one.
 - The guessing, building and placing games share `round()` in `speech.js`: the mode switch, the choice of set (or of several groups), the round, the counter and the end screen.
 
 `letters.js` format (`window.SPEECH_LETTERS = {lang, items}`), one item per letter:
@@ -210,6 +214,11 @@ and frame (a thin coloured line with background inside it), crop inside them, sa
 Shapes use the classes `w` / `w2` (wood, dark wood), `b` / `b2` / `b3` (box, its side, its inside); `f` = the meaning as in `positions.js`,
 `x, y` = the spot's middle, `s` = the thing's size in % of the scene's width; `say` = the end of the sentence for each position the scene has.
 Only spots that read clearly in a flat drawing (no «перед» or «за» for a table or a chair).
+
+`phrases.js` format (`window.SPEECH_PHRASES = {lang, groups}`), one group per start of a sentence, from the parent's list («Я хочу їсти…»,
+«Дай мені…», «Я не хочу…», «Мені потрібно…»): `{t: "Дай мені…", cards: [{w: "Дай мені [ручку]", pic: "pen"}, …]}`: `w` = the whole sentence
+with the thing in `[ ]`, `pic` = the picture in `img/things/` (one picture can serve several sentences). Pictures: each card of the collage
+cropped above its label (thin tile edges dropped, the tile background made white), on a white 300×300 square.
 
 ## Player name
 

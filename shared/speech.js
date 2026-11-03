@@ -46,8 +46,9 @@
 
   /* ---------- the deck: letters, syllables or words (<body data-deck>) ---------- */
   const deck = (
-    { letters, syllables, words, positions }[document.body.dataset.deck] ||
-    letters
+    { letters, syllables, words, positions, phrases }[
+      document.body.dataset.deck
+    ] || letters
   )();
   const V = Kit.voice(deck.lang);
 
@@ -209,41 +210,44 @@
     };
   }
 
-  // Positions (window.SPEECH_POSITIONS, positions.js): one card per poster picture, with the sentence that says who is where.
-  // The cards show the position big, the picture, the sentence; the panel has the positions and the pictures of the chosen one.
-  // The guessing game says the position; its answers are pictures of other chosen positions (never «біля» with «поруч»).
-  function positions() {
-    const D = window.SPEECH_POSITIONS;
-    const img = (p) => `<img src="../img/positions/${p}.jpg" alt="">`;
+  // Picture sentences: one card per picture, with the sentence it shows (w, its key part in [ ]), in groups (t: shown big
+  // on the card and said first). The panel has the groups and the pictures of the chosen one.
+  // The guessing game says the group; its answers are pictures of other chosen groups (one per family f).
+  // o: {key, dir: the pictures' folder in ../img/, other, what, label: the panel's group list, hd: the card top's class,
+  // choose: the guessing game's start screen, or none}.
+  function pictures(D, o) {
+    const img = (p) => `<img src="../img/${o.dir}/${p}.jpg" alt="">`;
     const items = [];
     D.groups.forEach((g, gi) =>
-      g.cards.forEach((x) => items.push({ ...x, name: g.t, f: g.f, g: gi })),
+      g.cards.forEach((x) =>
+        items.push({ ...x, name: g.t, f: g.f || gi, g: gi }),
+      ),
     );
     return {
       lang: D.lang,
-      key: "pos-",
+      key: o.key,
       group: "Речення",
-      other: "Інші положення",
-      what: ["положення", "картинку"],
+      other: o.other,
+      what: o.what,
       nav: ["Попередня картка", "Наступна картка"],
       modes: ["🔤 Зі словом", "🔊 Тільки звук"],
       cardCls: "sp-sent",
       items,
-      head: (it) => ({ c: "sp-pos", html: esc(it.name) }),
+      head: (it) => ({ c: o.hd, html: esc(it.name) }),
       pic: (it) => img(it.pic),
       picCls: "sp-photos",
       word: (it) => esc(it.w).replace(/\[(.+?)\]/, `<b class="sp-posw">$1</b>`),
       hint: (it) => esc(it.name),
       tile: (it) => ({ c: "sp-photo", html: img(it.pic) }),
       page: (i) => items[i].g,
-      // the positions, then the pictures of the chosen one
+      // the groups, then the pictures of the chosen one
       panel: (i) => {
         const g = items[i].g;
-        return `<div class="sp-plist" role="group" aria-label="Положення">${D.groups.map((x, k) => `<button type="button" class="abtn" data-g="${k}" aria-pressed="${k === g}">${esc(x.t)}</button>`).join("")}</div>
+        return `<div class="sp-plist" role="group" aria-label="${o.label}">${D.groups.map((x, k) => `<button type="button" class="abtn" data-g="${k}" aria-pressed="${k === g}">${esc(x.t)}</button>`).join("")}</div>
           <div class="sp-thumbs" role="group" aria-label="Картки">${items.map((x, k) => (x.g === g ? `<button type="button" data-i="${k}" aria-label="${esc(x.w.replace(/[[\]]/g, ""))}">${img(x.pic)}</button>` : "")).join("")}</div>`;
       },
       first: (gi) => items.findIndex((x) => x.g === gi),
-      // one picture of each of 3 other positions from the pool, none of the same family
+      // one picture of each of 3 other groups from the pool, none of the same family
       others: (it, pool) => {
         const fam = new Set([it.f]);
         const out = [];
@@ -254,6 +258,21 @@
           }
         return out;
       },
+      choose: o.choose,
+    };
+  }
+
+  // Positions (window.SPEECH_POSITIONS, positions.js): the position big, a poster picture, the sentence that says who is where.
+  // The guessing game ticks the positions being learnt (never «біля» with «поруч»).
+  function positions() {
+    const D = window.SPEECH_POSITIONS;
+    return pictures(D, {
+      key: "pos-",
+      dir: "positions",
+      other: "Інші положення",
+      what: ["положення", "картинку"],
+      label: "Положення",
+      hd: "sp-pos",
       // the guessing game's start screen: the positions being learnt (at least min)
       choose: {
         t: D.groups.map((g) => g.t),
@@ -261,7 +280,20 @@
         min: 3,
         note: "«біля» і «поруч», «всередині» і «у» — це одне.",
       },
-    };
+    });
+  }
+
+  // Phrases (window.SPEECH_PHRASES, phrases.js): the start of the sentence big («Я хочу їсти…»), a collage picture,
+  // the whole sentence (the thing in colour).
+  function phrases() {
+    return pictures(window.SPEECH_PHRASES, {
+      key: "say-",
+      dir: "things",
+      other: "Інші речення",
+      what: ["речення", "картинку"],
+      label: "Початок речення",
+      hd: "sp-frame",
+    });
   }
 
   /* ================= cards ================= */

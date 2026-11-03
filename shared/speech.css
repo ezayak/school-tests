@@ -547,6 +547,11 @@
   padding: 0 76px;
   font-size: min(15cqh, 12cqw);
 }
+/* Phrases: the start of the sentence on top («Мені потрібно…»), smaller than a position */
+.sp-hd.sp-frame {
+  padding: 0 76px;
+  font-size: min(11cqh, 7cqw);
+}
 /* the picture between ‹ and › (56px buttons, 12–18px from the edge) */
 .sp-photos {
   padding: 3% 80px;
