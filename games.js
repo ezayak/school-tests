@@ -2171,4 +2171,25 @@ window.GAMES = [
       "speech/ar/sentences/phrases-guess.html",
     ],
   },
+  {
+    school: "speech",
+    lang: "ar",
+    period: "Subjects",
+    subject: "Verbs",
+    title: "الْأَفْعَال · Arabic verbs",
+    hub: true,
+    lesson: "Verbs · cards, guess the verb, build the word",
+    topics:
+      "آكُلُ، أَشْرَبُ، أَنَامُ، أَمْشِي، أَجْرِي، أَجْلِسُ، أَقْرَأُ، أَكْتُبُ، أَرْسُمُ، أَلْعَبُ…: the verb and how to say it (أَنَا آكُلُ)",
+    path: "speech/ar/verbs/index.html",
+    countLabel: "3 games",
+    year: "2026–2027",
+    also: [
+      "speech/ar/verbs.js",
+      "speech/ar/verbs/list.js",
+      "speech/ar/verbs/cards.html",
+      "speech/ar/verbs/guess.html",
+      "speech/ar/verbs/build.html",
+    ],
+  },
 ];
