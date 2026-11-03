@@ -3,6 +3,8 @@
   // One button per school in the switch. A game belongs to the school in its school: field (no field = SJAS).
   // logo: a picture in icons/ (wide: true for a logo with the name in it), or ic: an emoji shown with the name.
   // revisions: false → only the Subjects cards, no Revisions part.
+  // by: the first filter and the sections group the games by this field instead of grade
+  // ({f: the field, all: the "all" button, names: {value: its name}, in this order}).
   const SCHOOLS = [
     { k: "sjas", name: "SJAS", logo: "icons/sjas.png", revisions: true },
     {
@@ -12,7 +14,17 @@
       wide: true,
       revisions: false,
     },
-    { k: "speech", name: "Мовлення", ic: "🗣️", revisions: false },
+    {
+      k: "speech",
+      name: "Мовлення",
+      ic: "🗣️",
+      revisions: false,
+      by: {
+        f: "lang",
+        all: "All languages",
+        names: { uk: "Українська", en: "English", ar: "العربية" },
+      },
+    },
   ];
   const PERIODS = [
     "Mid-term exam",
@@ -70,14 +82,20 @@
   // (SJAS keeps the old keys st-grade / st-subject, the other schools add their name)
   let SCH, games, grades, subjects, grade, subject;
   const key = (k) => (school === "sjas" ? k : `${k}-${school}`);
+  // a game's grade (or the school's by field), and its name on the filter and the section
+  const lv = (g) => (SCH.by ? g[SCH.by.f] : g.grade);
+  const lvName = (v) => (SCH.by ? SCH.by.names[v] || v : "Grade " + v);
   function useSchool() {
     SCH = SCHOOLS.find((s) => s.k === school);
     games = ALL.filter((g) => (g.school || "sjas") === school);
-    grades = [...new Set(games.map((g) => g.grade))].sort((a, b) => a - b);
+    const order = SCH.by ? Object.keys(SCH.by.names) : [];
+    grades = [...new Set(games.map(lv))].sort((a, b) =>
+      SCH.by ? order.indexOf(a) - order.indexOf(b) : a - b,
+    );
     subjects = [...new Set(games.map((g) => g.subject))].sort();
     grade = store.get(key("st-grade")) || "all";
     subject = store.get(key("st-subject")) || "all";
-    if (grade !== "all" && !grades.includes(+grade)) grade = "all";
+    if (grade !== "all" && !grades.map(String).includes(grade)) grade = "all";
     if (subject !== "all" && !subjects.includes(subject)) subject = "all";
     document.body.dataset.school = school; // its own paper colour (shared/theme.css)
   }
@@ -146,10 +164,8 @@
     document.getElementById("filters").innerHTML = ["all", ...grades]
       .map((v) => {
         const n =
-          v === "all"
-            ? games.length
-            : games.filter((g) => g.grade === v).length;
-        return `<button type="button" id="f-${v}" data-g="${v}" aria-pressed="${String(v) === String(grade)}"><b>${v === "all" ? "All grades" : "Grade " + v}</b><small>${n} game${n === 1 ? "" : "s"}</small></button>`;
+          v === "all" ? games.length : games.filter((g) => lv(g) === v).length;
+        return `<button type="button" id="f-${v}" data-g="${v}" aria-pressed="${String(v) === String(grade)}"><b>${v === "all" ? (SCH.by ? SCH.by.all : "All grades") : esc(lvName(v))}</b><small>${n} game${n === 1 ? "" : "s"}</small></button>`;
       })
       .join("");
     document.querySelectorAll("[data-g]").forEach(
@@ -189,13 +205,13 @@
     const show = grades.filter(
       (g) =>
         (grade === "all" || String(g) === String(grade)) &&
-        pool.some((x) => x.grade === g),
+        pool.some((x) => lv(x) === g),
     );
     document.getElementById("list").innerHTML = show.length
       ? show
           .map((gr) => {
-            const gs = pool.filter((g) => g.grade === gr);
-            return `<section class="grade"><h2>Grade ${gr}<small>${gs.length} game${gs.length > 1 ? "s" : ""}</small></h2>${subjectCards(gs)}${SCH.revisions ? revisions(gs) : ""}</section>`;
+            const gs = pool.filter((g) => lv(g) === gr);
+            return `<section class="grade"><h2>${esc(lvName(gr))}<small>${gs.length} game${gs.length > 1 ? "s" : ""}</small></h2>${subjectCards(gs)}${SCH.revisions ? revisions(gs) : ""}</section>`;
           })
           .join("")
       : '<p class="empty">No games for this choice yet.</p>';

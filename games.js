@@ -1896,7 +1896,7 @@ window.GAMES = [
   },
   {
     school: "speech",
-    grade: 4,
+    lang: "uk",
     period: "Subjects",
     subject: "Абетка",
     title: "Абетка",
@@ -1917,7 +1917,7 @@ window.GAMES = [
   },
   {
     school: "speech",
-    grade: 4,
+    lang: "uk",
     period: "Subjects",
     subject: "Склади",
     title: "Склади",
@@ -1937,7 +1937,7 @@ window.GAMES = [
   },
   {
     school: "speech",
-    grade: 4,
+    lang: "uk",
     period: "Subjects",
     subject: "Речення",
     title: "Речення",
@@ -2030,7 +2030,7 @@ window.GAMES = [
   },
   {
     school: "speech",
-    grade: 4,
+    lang: "uk",
     period: "Subjects",
     subject: "Дії",
     title: "Дії",

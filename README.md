@@ -155,7 +155,8 @@ The pictures and words come from the parent's cards «Українська аб�
 Engine `shared/speech.js` + `shared/speech.css`; a game is only a data file. Voice: `Kit.voice(lang)` (`shared/common.js`), the device voice of the data's `lang`.
 
 - Folders: `speech/<lang>/<group>/` (three deep, like every game). `uk` now; `en` and `ar` later get their own data files with `lang: "en-US"` / `"ar"`.
-- A group (Абетка, …) is one card on the home page (`subject` = the group, colour `--speech`), opening `index.html` with its games from `list.js`
+- A group (Абетка, …) is one card on the home page (`subject` = the group, colour `--speech`, `lang: "uk"` instead of a grade:
+  the home page's first filter and sections are the languages, `by` in `SCHOOLS` in `index.js`), opening `index.html` with its games from `list.js`
   (`items: [{n, title, en, path, ic, note}]`, `en` = the line under the title, in Ukrainian here).
 - A game page is `<body data-view="…" data-school="speech">`, loading `shared/common.js`, its data, then `shared/speech.js`.
 - Each game works on a deck: `data-deck="letters"` (or none, data `../letters.js`), `data-deck="syllables"` (`../syllables.js`),
