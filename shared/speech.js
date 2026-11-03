@@ -58,6 +58,20 @@
       otherWords: "Інші слова",
       all: "Усі",
       lens: ["3 літери", "4 літери", "5 літер", "6+ літер"],
+      sentences: "Речення",
+      cardNav: ["Попередня картка", "Наступна картка"],
+      cardsLabel: "Картки",
+      picModes: ["🔤 Зі словом", "🔊 Тільки звук"],
+      posOther: "Інші положення",
+      posWhat: ["положення", "картинку"],
+      posLabel: "Положення",
+      posNote: "«біля» і «поруч», «всередині» і «у» — це одне.",
+      place: "Постав",
+      placeModes: ["🔤 Читати", "🔊 Слухати"],
+      placeHint:
+        "Прочитай або послухай, де має бути предмет, і постав його туди.",
+      thing: "Предмет",
+      here: "Сюди",
     },
     en: {
       home: "← All games",
@@ -102,6 +116,19 @@
       otherWords: "Other words",
       all: "All",
       lens: ["3 letters", "4 letters", "5 letters", "6+ letters"],
+      sentences: "Sentences",
+      cardNav: ["Previous card", "Next card"],
+      cardsLabel: "Cards",
+      picModes: ["🔤 With the word", "🔊 Sound only"],
+      posOther: "Other positions",
+      posWhat: ["position", "the picture"],
+      posLabel: "Positions",
+      posNote: "«near» and «next to», «inside» and «in» mean the same.",
+      place: "Put it there",
+      placeModes: ["🔤 Read", "🔊 Listen"],
+      placeHint: "Read or listen where the thing goes, and put it there.",
+      thing: "Thing",
+      here: "Here",
     },
   };
   const T = TEXTS[document.documentElement.lang] || TEXTS.uk;
@@ -316,13 +343,13 @@
   // on the card and said first). The panel has the groups and the pictures of the chosen one.
   // The guessing game says the group; its answers are pictures of other chosen groups (one per family f).
   // A card's own t (a verb) is shown and said instead of its group's; a card has pic (a picture file) or ic (an emoji).
-  // o: {key, dir: the pictures' folder in ../img/, group (default Речення), other, what, label: the panel's group list,
+  // o: {key, dir: the pictures' folder in ../img/ (D.img: another folder, e.g. the Ukrainian pictures), group (default T.sentences), other, what, label: the panel's group list,
   // hd: the card top's class, choose: the guessing game's start screen, or none; sets: «Усі» and each group with at least
   // 4 cards; mix: the wrong answers are any other pictures, of the same group first}.
   function pictures(D, o) {
     const img = (x) =>
       x.pic
-        ? `<img src="../img/${o.dir}/${x.pic}.jpg" alt="">`
+        ? `<img src="${D.img || `../img/${o.dir}/`}${x.pic}.jpg" alt="">`
         : `<span class="sp-emo">${esc(x.ic)}</span>`;
     const items = [];
     D.groups.forEach((g, gi) =>
@@ -333,11 +360,11 @@
     const d = {
       lang: D.lang,
       key: o.key,
-      group: o.group || "Речення",
+      group: o.group || T.sentences,
       other: o.other,
       what: o.what,
-      nav: ["Попередня картка", "Наступна картка"],
-      modes: ["🔤 Зі словом", "🔊 Тільки звук"],
+      nav: T.cardNav,
+      modes: T.picModes,
       cardCls: "sp-sent",
       items,
       head: (it) => ({ c: o.hd, html: esc(it.name) }),
@@ -351,7 +378,7 @@
       panel: (i) => {
         const g = items[i].g;
         return `<div class="sp-plist" role="group" aria-label="${o.label}">${D.groups.map((x, k) => `<button type="button" class="abtn" data-g="${k}" aria-pressed="${k === g}">${esc(x.t)}</button>`).join("")}</div>
-          <div class="sp-thumbs" role="group" aria-label="Картки">${items.map((x, k) => (x.g === g ? `<button type="button" data-i="${k}" aria-label="${esc(x.w.replace(/[[\]]/g, ""))}">${img(x)}</button>` : "")).join("")}</div>`;
+          <div class="sp-thumbs" role="group" aria-label="${T.cardsLabel}">${items.map((x, k) => (x.g === g ? `<button type="button" data-i="${k}" aria-label="${esc(x.w.replace(/[[\]]/g, ""))}">${img(x)}</button>` : "")).join("")}</div>`;
       },
       first: (gi) => items.findIndex((x) => x.g === gi),
       // one picture of each of 3 other groups from the pool, none of the same family
@@ -368,7 +395,7 @@
       choose: o.choose,
     };
     if (o.sets)
-      d.sets = [{ t: "Усі", items }].concat(
+      d.sets = [{ t: T.all, items }].concat(
         D.groups
           .map((g, gi) => ({ t: g.t, items: items.filter((x) => x.g === gi) }))
           .filter((x) => x.items.length >= 4),
@@ -400,16 +427,16 @@
     return pictures(D, {
       key: "pos-",
       dir: "positions",
-      other: "Інші положення",
-      what: ["положення", "картинку"],
-      label: "Положення",
+      other: T.posOther,
+      what: T.posWhat,
+      label: T.posLabel,
       hd: "sp-pos",
       // the guessing game's start screen: the positions being learnt (at least min)
       choose: {
         t: D.groups.map((g) => g.t),
         f: D.groups.map((g) => g.f),
         min: 3,
-        note: "«біля» і «поруч», «всередині» і «у» — це одне.",
+        note: T.posNote,
       },
     });
   }
@@ -1101,10 +1128,10 @@
     // a spot's place and size in the scene (cqw: % of the scene's width)
     const at = (z) => `left:${z.x / 4}%;top:${z.y / 3}%;--s:${z.s}`;
     round({
-      title: "Постав",
+      title: T.place,
       mk: "place",
-      modes: ["🔤 Читати", "🔊 Слухати"],
-      hint: "Прочитай або послухай, де має бути предмет, і постав його туди.",
+      modes: T.placeModes,
+      hint: T.placeHint,
       n: 8,
       items,
       ask(it, api) {
@@ -1113,9 +1140,9 @@
         const zones = it.sc.zones;
         stage.innerHTML = `<div class="sp-say sp-say-b">${listen}<span class="sp-hintword" id="hint">${deck.word(it)}</span></div>
         <div class="sp-place">
-          <div class="sp-tray" aria-label="Предмет"><button type="button" class="sp-thing" id="thing" aria-label="${esc(it.th.t)}">${esc(it.th.ic)}</button></div>
+          <div class="sp-tray" aria-label="${T.thing}"><button type="button" class="sp-thing" id="thing" aria-label="${esc(it.th.t)}">${esc(it.th.ic)}</button></div>
           <div class="sp-scene" id="scene">${svg("sp-lb", '<rect class="fl" x="0" y="275" width="400" height="25"/>' + it.sc.back)}${svg("sp-lf", it.sc.front)}
-            ${zones.map((z, k) => `<button type="button" class="sp-zone" data-z="${k}" style="${at(z)}" aria-label="Сюди"></button>`).join("")}</div>
+            ${zones.map((z, k) => `<button type="button" class="sp-zone" data-z="${k}" style="${at(z)}" aria-label="${T.here}"></button>`).join("")}</div>
         </div>`;
         const scene = document.getElementById("scene");
         const thing = document.getElementById("thing");

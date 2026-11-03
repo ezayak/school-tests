@@ -2073,4 +2073,26 @@ window.GAMES = [
       "speech/en/abc/fly.html",
     ],
   },
+  {
+    school: "speech",
+    lang: "en",
+    period: "Subjects",
+    subject: "Sentences",
+    title: "Sentences",
+    hub: true,
+    lesson: "Sentences · positions, guess the position, put it there",
+    topics:
+      "on, under, near, next to, inside, in, in front of, behind, between, above: where things are, in sentences with pictures",
+    path: "speech/en/sentences/index.html",
+    countLabel: "3 games",
+    year: "2026–2027",
+    also: [
+      "speech/en/positions.js",
+      "speech/en/places.js",
+      "speech/en/sentences/list.js",
+      "speech/en/sentences/positions.html",
+      "speech/en/sentences/positions-guess.html",
+      "speech/en/sentences/positions-place.html",
+    ],
+  },
 ];

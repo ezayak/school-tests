@@ -55,6 +55,7 @@
     Речення: "var(--speech)",
     Дії: "var(--speech)",
     ABC: "var(--speech)",
+    Sentences: "var(--speech)",
   };
   const ALL = window.GAMES || [];
   const esc = (s) =>
