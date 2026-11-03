@@ -5,6 +5,7 @@
   // revisions: false → only the Subjects cards, no Revisions part.
   // by: the first filter and the sections group the games by this field instead of grade
   // ({f: the field, all: the "all" button, names: {value: its name}, in this order}).
+  // allSubjects / subjectsTitle: the "all" subject button and the heading above the cards (default All subjects / Subjects).
   const SCHOOLS = [
     { k: "sjas", name: "SJAS", logo: "icons/sjas.png", revisions: true },
     {
@@ -19,6 +20,8 @@
       name: "Мовлення",
       ic: "🗣️",
       revisions: false,
+      allSubjects: "All topics",
+      subjectsTitle: "Topics",
       by: {
         f: "lang",
         all: "All languages",
@@ -50,11 +53,8 @@
     Computer: "var(--comp)",
     Math: "var(--math)",
     "Українська література": "var(--ulit)",
-    Абетка: "var(--speech)",
-    Склади: "var(--speech)",
-    Речення: "var(--speech)",
-    Дії: "var(--speech)",
     ABC: "var(--speech)",
+    Syllables: "var(--speech)",
     Sentences: "var(--speech)",
     Verbs: "var(--speech)",
   };
@@ -187,7 +187,7 @@
     document.getElementById("subjects").innerHTML = ["all", ...subjects]
       .map(
         (v, i) =>
-          `<button type="button" id="s-${i}" data-s="${esc(v)}" aria-pressed="${v === subject}"${v === "all" ? "" : ` style="--c:${SUBJ[v] || "var(--other)"}"`}>${v === "all" ? "All subjects" : esc(v)}</button>`,
+          `<button type="button" id="s-${i}" data-s="${esc(v)}" aria-pressed="${v === subject}"${v === "all" ? "" : ` style="--c:${SUBJ[v] || "var(--other)"}"`}>${v === "all" ? SCH.allSubjects || "All subjects" : esc(v)}</button>`,
       )
       .join("");
     document.querySelectorAll("[data-s]").forEach(
@@ -286,7 +286,7 @@
   function subjectCards(gs) {
     const items = gs.filter((g) => g.period === "Subjects").sort(bySubject);
     if (!items.length) return "";
-    return `<div class="part"><h3>Subjects</h3><div class="cards">${items.map(card).join("")}</div></div>`;
+    return `<div class="part"><h3>${SCH.subjectsTitle || "Subjects"}</h3><div class="cards">${items.map(card).join("")}</div></div>`;
   }
   // Install button (Android / Chrome / Edge). iPad: Share → Add to Home Screen.
   let deferred = null;
