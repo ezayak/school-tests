@@ -2151,11 +2151,12 @@ window.GAMES = [
     subject: "Sentences",
     title: "الْجُمَل · Arabic sentences",
     hub: true,
-    lesson: "Sentences · positions, guess the position, put it there",
+    lesson:
+      "Sentences · positions, guess the position, put it there, I want…, build the sentence, guess the sentence",
     topics:
-      "عَلَى، تَحْتَ، قُرْبَ، بِجَانِبِ، دَاخِلَ، فِي، أَمَامَ، خَلْفَ، بَيْنَ، فَوْقَ: where things are, in sentences with pictures",
+      "عَلَى، تَحْتَ، قُرْبَ، بِجَانِبِ، دَاخِلَ، فِي، أَمَامَ، خَلْفَ، بَيْنَ، فَوْقَ: where things are, in sentences with pictures; أُرِيدُ أَنْ آكُلَ…، أَعْطِنِي…، لَا أُرِيدُ أَنْ…، أَحْتَاجُ أَنْ…",
     path: "speech/ar/sentences/index.html",
-    countLabel: "3 games",
+    countLabel: "6 games",
     year: "2026–2027",
     also: [
       "speech/ar/positions.js",
@@ -2164,6 +2165,10 @@ window.GAMES = [
       "speech/ar/sentences/positions.html",
       "speech/ar/sentences/positions-guess.html",
       "speech/ar/sentences/positions-place.html",
+      "speech/ar/phrases.js",
+      "speech/ar/sentences/phrases.html",
+      "speech/ar/sentences/phrases-build.html",
+      "speech/ar/sentences/phrases-guess.html",
     ],
   },
 ];

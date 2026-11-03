@@ -69,7 +69,8 @@ speech/                    ← Мовлення: speech games (school: "speech" 
   ar/                      ← Arabic: letters.js (28 letters, their names, a word each)
     abc/                   ← Arabic ABC: the same pages as en/abc, with the Naskh font
     sentences/             ← Arabic sentences: positions.html, positions-guess.html, positions-place.html (as in en/sentences);
-                              positions.js (its own `note` about the families), places.js (Arabic words for the same scenes)
+                              positions.js (its own `note` about the families), places.js (Arabic words for the same scenes);
+                              phrases.html, phrases-build.html, phrases-guess.html (phrases.js, the uk collage pictures)
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
