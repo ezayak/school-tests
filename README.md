@@ -50,8 +50,9 @@ optima/                    ← the Ukrainian school (school: "optima" in games.j
   grade-3/
     ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js
 speech/                    ← Мовлення: speech games (school: "speech" in games.js), one folder per language
-  uk/                      ← letters.js (the ABC), one folder per group of games
+  uk/                      ← letters.js (the ABC), syllables.js, one folder per group of games
     abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html
+    syllables/             ← Склади: the same pages, with data-deck="syllables"
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -152,12 +153,16 @@ Engine `shared/speech.js` + `shared/speech.css`; a game is only a data file. Voi
 - A group (Абетка, …) is one card on the home page (`subject` = the group, colour `--speech`), opening `index.html` with its games from `list.js`
   (`items: [{n, title, en, path, ic, note}]`, `en` = the line under the title, in Ukrainian here).
 - A game page is `<body data-view="…" data-school="speech">`, loading `shared/common.js`, its data, then `shared/speech.js`.
+- Each game works on a deck: `data-deck="letters"` (or none, data `../letters.js`) or `data-deck="syllables"` (`../syllables.js`).
+  The deck (`letters()` / `syllables()` in `speech.js`) says what the cards show and say, the panel, and the wrong answers in the guessing game.
 
 Games:
 
-- **Картки** (`data-view="cards"`, data `../letters.js`): the parent's layout «A · Card + letter panel». Tap the card (or 🔊, ‹ ›, a letter):
-  the letter's name, a pause, the word. The card sizes its letter, picture and word from its own box, so it fits a phone held sideways too.
-- **Вгадай літеру** (`data-view="guess"`, data `../letters.js`): ▶ Почати, then 10 letters: the voice says a letter, tap it among 4.
+- **Картки** (`data-view="cards"`): the parent's layout «A · Card + letter panel». Tap the card (or 🔊, ‹ ›, a letter):
+  the letter's name (the syllable), a pause, the word. Syllables: the panel has the 12 consonants, the 6 syllables of the chosen one
+  and the sheet's words (🔊 ма-ма: each syllable, then the word). The card sizes its letter, picture and word from its own box, so it fits a phone held sideways too.
+- **Вгадай літеру / Вгадай склад** (`data-view="guess"`): ▶ Почати, then 10 letters (syllables): the voice says one, tap it among 4.
+  Syllables: the start screen chooses Усі or one consonant (saved); the wrong answers are 2 with the same consonant (МА – МО) and 1 with the same vowel (МА – НА).
   Right: it turns green, the letter's picture and word appear and the word is said, then the next letter. Wrong: it shakes, turns red, the letter is said again.
   ⭐ = letters found at the first tap; the end screen shows 3 stars and 🔁 Ще раз.
   Two modes, switched at any time in the game (saved on the device): «🖼️ З картинкою» shows the letter's picture next to 🔊 as a hint, «🔊 Без картинки» only the sound.
@@ -166,6 +171,10 @@ Games:
 `{up: "Б", lo: "б", name: "бе", w: "[б]анан", ic: "🍌"}`: `name` = what the voice says, `w` = the word with its letter in `[ ]` (shown in colour),
 `ic` = the picture (emoji), `k: "v"` vowel (red) / `"s"` sign (green) / none consonant (blue). `snd` / `wsnd`: a recording of the letter / the word
 (a file path from the data's folder) used instead of the device voice.
+
+`syllables.js` format (`window.SPEECH_SYLLABLES = {lang, groups}`), one group per consonant, from the parent's sheets «Склади»:
+`{c: "м", syl: [{s: "ма", w: "[ма]шина", ic: "🚗"}, …], words: ["ма-ма", "ми-ло", "му-ха"]}`: `syl` = the 6 syllables in the sheets' order
+(а о у и і е), `w` = a word that starts with the syllable (in `[ ]`), `words` = the sheet's words to read, `-` between syllables. `snd` / `wsnd` as for letters.
 
 ## Player name
 

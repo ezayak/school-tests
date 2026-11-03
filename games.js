@@ -1913,4 +1913,24 @@ window.GAMES = [
       "speech/uk/abc/guess.html",
     ],
   },
+  {
+    school: "speech",
+    grade: 4,
+    period: "Subjects",
+    subject: "Склади",
+    title: "Склади",
+    hub: true,
+    lesson: "Склади · картки, вгадай склад",
+    topics:
+      "М Н Л С П Т Д Б В К Р Г: 72 склади з картинками і слова для читання",
+    path: "speech/uk/syllables/index.html",
+    countLabel: "2 гри",
+    year: "2026–2027",
+    also: [
+      "speech/uk/syllables.js",
+      "speech/uk/syllables/list.js",
+      "speech/uk/syllables/cards.html",
+      "speech/uk/syllables/guess.html",
+    ],
+  },
 ];

@@ -94,6 +94,11 @@
   font-size: min(21cqh, 24cqw);
   line-height: 1;
 }
+/* a syllable («МА ма») is twice as wide as a letter: smaller, and centred in the space left of 🔊 */
+.sp-hd.sp-long {
+  font-size: min(20cqh, 16cqw);
+  padding-right: 76px;
+}
 .sp-pic {
   display: flex;
   align-items: center;
@@ -291,6 +296,18 @@
   font-size: clamp(3rem, 19dvh, 7rem);
   line-height: 1;
 }
+/* a syllable on a button: at most 40% of the button's width (4 buttons a row, 2 in portrait) */
+.sp-choices {
+  container-type: inline-size;
+}
+.sp-choice.sp-long {
+  font-size: min(19dvh, 7rem, calc((100cqw - 42px) / 4 * 0.4));
+}
+@media (orientation: portrait) {
+  .sp-choice.sp-long {
+    font-size: min(19dvh, 7rem, calc((100cqw - 14px) / 2 * 0.4));
+  }
+}
 .sp-choice:active {
   transform: translate(3px, 3px);
   box-shadow: 1px 1px 0 var(--ink);
@@ -328,4 +345,53 @@
 .sp-hintpic {
   font-size: clamp(3.4rem, 14dvh, 5.4rem);
   line-height: 1;
+}
+
+/* the cards' panel content (drawn again when the syllable panel changes consonant) */
+.sp-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* syllables: the 12 consonants, the 6 syllables of the chosen one (bigger), the sheet's words */
+.sp-cons {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+.sp-cons button {
+  height: clamp(36px, 7dvh, 46px);
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: 2px 2px 0 var(--ink);
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.sp-cons button[aria-pressed="true"] {
+  background: var(--hl);
+}
+.sp-abc.sp-syls {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.sp-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.sp-words .abtn {
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+}
+/* the start screen's choice: all syllables or one consonant */
+.sp-sets {
+  justify-content: center;
+}
+.sp-sets button {
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: 1.15rem;
+  min-width: 48px;
 }

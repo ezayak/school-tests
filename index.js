@@ -39,6 +39,7 @@
     Math: "var(--math)",
     "Українська література": "var(--ulit)",
     Абетка: "var(--speech)",
+    Склади: "var(--speech)",
   };
   const ALL = window.GAMES || [];
   const esc = (s) =>
