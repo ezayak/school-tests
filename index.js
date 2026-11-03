@@ -40,6 +40,7 @@
     "Українська література": "var(--ulit)",
     Абетка: "var(--speech)",
     Склади: "var(--speech)",
+    Речення: "var(--speech)",
   };
   const ALL = window.GAMES || [];
   const esc = (s) =>

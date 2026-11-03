@@ -50,9 +50,11 @@ optima/                    ← the Ukrainian school (school: "optima" in games.j
   grade-3/
     ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js
 speech/                    ← Мовлення: speech games (school: "speech" in games.js), one folder per language
-  uk/                      ← letters.js (the ABC), syllables.js, one folder per group of games
+  uk/                      ← letters.js (the ABC), syllables.js, positions.js, one folder per group of games
     abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html, build.html, fly.html
     syllables/             ← Склади: the same pages, with data-deck="syllables"
+    sentences/             ← Речення: positions.html (cards), positions-guess.html, with data-deck="positions"
+    img/positions/         ← the position pictures, cut from the parent's posters (no labels, no frame), <name>-1.jpg / -2.jpg
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -153,8 +155,9 @@ Engine `shared/speech.js` + `shared/speech.css`; a game is only a data file. Voi
 - A group (Абетка, …) is one card on the home page (`subject` = the group, colour `--speech`), opening `index.html` with its games from `list.js`
   (`items: [{n, title, en, path, ic, note}]`, `en` = the line under the title, in Ukrainian here).
 - A game page is `<body data-view="…" data-school="speech">`, loading `shared/common.js`, its data, then `shared/speech.js`.
-- Each game works on a deck: `data-deck="letters"` (or none, data `../letters.js`), `data-deck="syllables"` (`../syllables.js`)
-  or `data-deck="words"` (both files: every picture word of the cards and sheets, without ’, in sets by length).
+- Each game works on a deck: `data-deck="letters"` (or none, data `../letters.js`), `data-deck="syllables"` (`../syllables.js`),
+  `data-deck="words"` (both files: every picture word of the cards and sheets, without ’, in sets by length)
+  or `data-deck="positions"` (`../positions.js`).
   The deck (`letters()` / `syllables()` in `speech.js`) says what the cards show and say, the panel, and the wrong answers in the guessing game.
 
 Games:
@@ -175,6 +178,12 @@ Games:
   (about 4 in 10 are the one shown on top); tap them: right → pops, ⭐, the letter is said; wrong → shakes red, the letter on top is said again.
   🐢 Повільно / 🐇 Швидше at any time (saved). 10 caught letters end the round; stars by wrong taps (none 3, up to 2 → 2, more 1).
   Headless Chrome hardly runs `requestAnimationFrame` under `--virtual-time-budget`: a test harness replaces it with a 16 ms timer.
+- **Речення · Положення** (`data-deck="positions"`): one card per poster picture: the position big on top, the picture, the sentence
+  that says who is where («Кіт [за] дверима», the position in colour); tap: the position, a pause, the sentence. The panel has the 10 positions
+  and the pictures of the chosen one.
+- **Вгадай положення**: the start screen ticks the positions being learnt (saved), at least 3 of different meaning (біля = поруч,
+  всередині = у); the voice says a position, the answers are pictures of the other ticked positions, one per meaning; a right tap shows
+  and says the sentence. Modes «🔤 Зі словом» (the position written next to 🔊) / «🔊 Тільки звук».
 - The guessing and building games share `round()` in `speech.js`: the mode switch, the choice of set, the round, the counter and the end screen.
 
 `letters.js` format (`window.SPEECH_LETTERS = {lang, items}`), one item per letter:
@@ -185,6 +194,12 @@ Games:
 `syllables.js` format (`window.SPEECH_SYLLABLES = {lang, groups}`), one group per consonant, from the parent's sheets «Склади»:
 `{c: "м", syl: [{s: "ма", w: "[ма]шина", ic: "🚗"}, …], words: ["ма-ма", "ми-ло", "му-ха"]}`: `syl` = the 6 syllables in the sheets' order
 (а о у и і е), `w` = a word that starts with the syllable (in `[ ]`), `words` = the sheet's words to read, `-` between syllables. `snd` / `wsnd` as for letters.
+
+`positions.js` format (`window.SPEECH_POSITIONS = {lang, groups}`), one group per position, from the parent's posters «Положення предметів»:
+`{t: "за", f: "behind", cards: [{w: "Собака [за] дверима", pic: "behind-door-1"}, …]}`: `f` = the meaning (one for біля and поруч,
+one for всередині and у), `w` = the sentence with the position in `[ ]`, `pic` = the picture in `img/positions/`. «зліва від» / «справа від» are left out
+(the pictures do not show whose left). Pictures: find the 7×3 grid by the white gaps, then each card's label edge (the first light row)
+and frame (a thin coloured line with background inside it), crop inside them, save as JPEG (~210px).
 
 ## Player name
 

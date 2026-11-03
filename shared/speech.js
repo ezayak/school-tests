@@ -6,7 +6,7 @@
 // <body data-view="build" data-deck="words"> → build the word from its letters (../letters.js + ../syllables.js).
 // <body data-view="fly"> → catch the letter: tap the floating letters that are the one shown (../letters.js).
 // <body data-deck="letters"> (or none) plays window.SPEECH_LETTERS (../letters.js), data-deck="syllables" window.SPEECH_SYLLABLES (../syllables.js),
-// data-deck="words" the picture words of both.
+// data-deck="words" the picture words of both, data-deck="positions" window.SPEECH_POSITIONS (../positions.js).
 (function () {
   "use strict";
   const { esc } = Kit;
@@ -45,7 +45,8 @@
 
   /* ---------- the deck: letters, syllables or words (<body data-deck>) ---------- */
   const deck = (
-    { letters, syllables, words }[document.body.dataset.deck] || letters
+    { letters, syllables, words, positions }[document.body.dataset.deck] ||
+    letters
   )();
   const V = Kit.voice(deck.lang);
 
@@ -68,6 +69,8 @@
   const sound = (text, snd) => (snd ? play(snd) : V.say(text));
 
   const plain = (w) => w.replace(/[[\]-]/g, "");
+  // what is said after the item: its word (letters, syllables), or the item again (positions)
+  const said = (it) => (it.w ? [plain(it.w), it.wsnd] : [it.name, it.snd]);
   const icon = (d) =>
     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
   const SPEAKER = icon(
@@ -87,6 +90,10 @@
   // wsnd, ic: the picture}]; head(it) / tile(it): {c: a class, html} for the card's top and a guess button;
   // word(it): the word with its part in colour; page(i) + panel(i): the cards view's right panel (drawn again when page(i) changes);
   // others(it): 3 wrong answers; sets: the choice of what to play (none = everything).
+  // Optional: pic(it) + picCls: the card's picture (default the emoji ic); cardCls: a class on the card;
+  // choose: {t: names, f: their families, min, note}: the guessing game ticks several of deck.items' groups (x.g) instead of one set,
+  // at least min of different families (a family gives one answer per question); others(it, pool);
+  // hint(it): the guessing game's mode-1 hint (default the picture); modes: its two mode labels.
 
   // Letters (window.SPEECH_LETTERS, letters.js): vowels red, consonants blue, ь green (k).
   function letters() {
@@ -201,6 +208,61 @@
     };
   }
 
+  // Positions (window.SPEECH_POSITIONS, positions.js): one card per poster picture, with the sentence that says who is where.
+  // The cards show the position big, the picture, the sentence; the panel has the positions and the pictures of the chosen one.
+  // The guessing game says the position; its answers are pictures of other chosen positions (never «біля» with «поруч»).
+  function positions() {
+    const D = window.SPEECH_POSITIONS;
+    const img = (p) => `<img src="../img/positions/${p}.jpg" alt="">`;
+    const items = [];
+    D.groups.forEach((g, gi) =>
+      g.cards.forEach((x) => items.push({ ...x, name: g.t, f: g.f, g: gi })),
+    );
+    return {
+      lang: D.lang,
+      key: "pos-",
+      group: "Речення",
+      other: "Інші положення",
+      what: ["положення", "картинку"],
+      nav: ["Попередня картка", "Наступна картка"],
+      modes: ["🔤 Зі словом", "🔊 Тільки звук"],
+      cardCls: "sp-sent",
+      items,
+      head: (it) => ({ c: "sp-pos", html: esc(it.name) }),
+      pic: (it) => img(it.pic),
+      picCls: "sp-photos",
+      word: (it) => esc(it.w).replace(/\[(.+?)\]/, `<b class="sp-posw">$1</b>`),
+      hint: (it) => esc(it.name),
+      tile: (it) => ({ c: "sp-photo", html: img(it.pic) }),
+      page: (i) => items[i].g,
+      // the positions, then the pictures of the chosen one
+      panel: (i) => {
+        const g = items[i].g;
+        return `<div class="sp-plist" role="group" aria-label="Положення">${D.groups.map((x, k) => `<button type="button" class="abtn" data-g="${k}" aria-pressed="${k === g}">${esc(x.t)}</button>`).join("")}</div>
+          <div class="sp-thumbs" role="group" aria-label="Картки">${items.map((x, k) => (x.g === g ? `<button type="button" data-i="${k}" aria-label="${esc(x.w.replace(/[[\]]/g, ""))}">${img(x.pic)}</button>` : "")).join("")}</div>`;
+      },
+      first: (gi) => items.findIndex((x) => x.g === gi),
+      // one picture of each of 3 other positions from the pool, none of the same family
+      others: (it, pool) => {
+        const fam = new Set([it.f]);
+        const out = [];
+        for (const x of Kit.shuf(pool))
+          if (out.length < 3 && !fam.has(x.f)) {
+            out.push(x);
+            fam.add(x.f);
+          }
+        return out;
+      },
+      // the guessing game's start screen: the positions being learnt (at least min)
+      choose: {
+        t: D.groups.map((g) => g.t),
+        f: D.groups.map((g) => g.f),
+        min: 3,
+        note: "«біля» і «поруч», «всередині» і «у» — це одне.",
+      },
+    };
+  }
+
   /* ================= cards ================= */
   // The parent's layout «A · Card + letter panel»: the card on the left, the panel on the right.
   // Tap the card (or 🔊, ‹ ›, a button in the panel): the letter or syllable, a pause, the word.
@@ -234,9 +296,12 @@
         pane.innerHTML = deck.panel(i);
       }
       const h = deck.head(it);
-      lcard.className = `sp-lcard sp-p${i % 7}`;
-      lcard.innerHTML = `<span class="sp-hd${cls(h.c)}">${h.html}</span><span class="sp-pic" aria-hidden="true">${esc(it.ic)}</span><span class="sp-wd">${deck.word(it)}</span>`;
-      lcard.setAttribute("aria-label", `${it.name}, ${plain(it.w)}`);
+      lcard.className = `sp-lcard sp-p${i % 7}${cls(deck.cardCls)}`;
+      lcard.innerHTML = `<span class="sp-hd${cls(h.c)}">${h.html}</span><span class="sp-pic${cls(deck.picCls)}" aria-hidden="true">${deck.pic ? deck.pic(it) : esc(it.ic)}</span><span class="sp-wd">${deck.word(it)}</span>`;
+      lcard.setAttribute(
+        "aria-label",
+        it.w ? `${it.name}, ${plain(it.w)}` : it.name,
+      );
       document.getElementById("count").textContent = `${i + 1} / ${N}`;
       pane
         .querySelectorAll("[data-i]")
@@ -257,10 +322,7 @@
     }
     const speak = () => {
       const it = deck.items[i];
-      say([
-        [it.name, it.snd, 900],
-        [plain(it.w), it.wsnd],
-      ]);
+      say(it.w ? [[it.name, it.snd, 900], said(it)] : [said(it)]);
     };
     function go(k) {
       i = (k + N) % N;
@@ -298,6 +360,17 @@
     let pic = store.get(KP, "1") === "1";
     let set = deck.sets ? +store.get(KS, 0) || 0 : 0;
     if (deck.sets && !deck.sets[set]) set = 0;
+    // deck.choose: several things ticked (saved), at least choose.min
+    const KC = "sp-" + deck.lang + "-" + deck.key + o.mk + "-chosen";
+    let chosen = new Set();
+    if (deck.choose) {
+      let saved = null;
+      try {
+        saved = JSON.parse(store.get(KC, "null"));
+      } catch (e) {}
+      if (!Array.isArray(saved)) saved = deck.choose.t.map((x, k) => k);
+      chosen = new Set(saved.filter((k) => k >= 0 && k < deck.choose.t.length));
+    }
     let q = [],
       n = 0,
       score = 0,
@@ -335,8 +408,26 @@
     function begin() {
       count.textContent = "";
       stage.innerHTML = `${deck.sets ? `<div class="seg sp-sets" role="group" aria-label="Що грати">${deck.sets.map((x, k) => `<button type="button" data-set="${k}" aria-pressed="${k === set}">${esc(x.t)}</button>`).join("")}</div>` : ""}
+        ${deck.choose ? `<p class="sp-hint">Що вчимо? Обери щонайменше ${deck.choose.min} різні.</p><div class="seg sp-sets" role="group" aria-label="Що вчимо">${deck.choose.t.map((t, k) => `<button type="button" data-ch="${k}" aria-pressed="${chosen.has(k)}">${esc(t)}</button>`).join("")}</div><p class="sp-note">${esc(deck.choose.note)}</p>` : ""}
         <p class="sp-hint">${o.hint}</p>
         <button type="button" class="btn big" id="go">▶ Почати</button>`;
+      const go = document.getElementById("go");
+      // enough ticked: at least min different families
+      const enough = () =>
+        new Set([...chosen].map((k) => deck.choose.f[k])).size >=
+        deck.choose.min;
+      if (deck.choose) go.disabled = !enough();
+      stage.querySelectorAll("[data-ch]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            const k = +b.dataset.ch;
+            if (chosen.has(k)) chosen.delete(k);
+            else chosen.add(k);
+            b.setAttribute("aria-pressed", chosen.has(k));
+            store.set(KC, JSON.stringify([...chosen]));
+            go.disabled = !enough();
+          }),
+      );
       stage.querySelectorAll("[data-set]").forEach(
         (b) =>
           (b.onclick = () => {
@@ -350,10 +441,14 @@
       document.getElementById("go").onclick = start; // the first tap also lets the browser speak
     }
     function start() {
-      const pool = deck.sets ? deck.sets[set].items : deck.items;
+      api.pool = deck.sets
+        ? deck.sets[set].items
+        : deck.choose
+          ? deck.items.filter((x) => chosen.has(x.g))
+          : deck.items;
       q = [];
       while (q.length < o.n) {
-        let more = Kit.shuf(pool);
+        let more = Kit.shuf(api.pool);
         if (q.length && more[0] === q[q.length - 1]) more.push(more.shift());
         q = q.concat(more);
       }
@@ -372,6 +467,7 @@
     const api = {
       stage,
       say,
+      pool: [],
       star() {
         score++;
         tally();
@@ -394,15 +490,19 @@
       count.textContent = "";
       stage.innerHTML = `<div class="sp-stars">${[0, 1, 2].map((k) => Kit.star(k < stars)).join("")}</div>
         <p class="sp-result">${score === q.length ? "Молодець! " : ""}З першого разу: <b>${score}</b> з ${q.length}</p>
-        <div class="sp-row"><button type="button" class="btn" id="again">🔁 Ще раз</button>${deck.sets ? `<button type="button" class="btn ghost" id="other">${esc(deck.other)}</button>` : ""}<a class="btn ghost" href="index.html">${esc(deck.group)}</a></div>`;
+        <div class="sp-row"><button type="button" class="btn" id="again">🔁 Ще раз</button>${deck.sets || deck.choose ? `<button type="button" class="btn ghost" id="other">${esc(deck.other)}</button>` : ""}<a class="btn ghost" href="index.html">${esc(deck.group)}</a></div>`;
       document.getElementById("again").onclick = start;
-      if (deck.sets) document.getElementById("other").onclick = begin;
+      if (deck.sets || deck.choose)
+        document.getElementById("other").onclick = begin;
     }
     begin();
   }
   // the picture shown in mode 1 (id="hint")
+  // the hint shown in mode 1 (id="hint"): the picture, or the deck's own (the written position)
   const hintPic = (it) =>
-    `<span class="sp-fpic sp-hintpic" id="hint" aria-hidden="true">${esc(it.ic)}</span>`;
+    deck.hint
+      ? `<span class="sp-hintword" id="hint">${deck.hint(it)}</span>`
+      : `<span class="sp-fpic sp-hintpic" id="hint" aria-hidden="true">${esc(it.ic)}</span>`;
   const listen = `<button type="button" class="sp-snd sp-listen" id="listen" aria-label="Послухати ще раз">${SPEAKER}</button>`;
 
   /* ================= guess ================= */
@@ -414,13 +514,13 @@
     round({
       title: "Вгадай " + deck.what[0],
       mk: "guess",
-      modes: ["🖼️ З картинкою", "🔊 Без картинки"],
+      modes: deck.modes || ["🖼️ З картинкою", "🔊 Без картинки"],
       hint: `Послухай ${deck.what[0]} і натисни на ${deck.what[1]}.`,
       n: 10,
       ask(it, api) {
         const { stage, say } = api;
         let miss = false;
-        const opts = Kit.shuf([it, ...deck.others(it)]);
+        const opts = Kit.shuf([it, ...deck.others(it, api.pool)]);
         stage.innerHTML = `<div class="sp-say" id="say">${listen}${hintPic(it)}</div>
         <div class="sp-choices">${opts
           .map((o, k) => {
@@ -445,8 +545,8 @@
               b.classList.add("ok");
               if (!miss) api.star();
               document.getElementById("say").innerHTML =
-                `<span class="sp-found pop"><span class="sp-fpic" aria-hidden="true">${esc(it.ic)}</span><span>${deck.word(it)}</span></span>`;
-              if (await say(plain(it.w), it.wsnd)) api.next(b);
+                `<span class="sp-found pop">${it.ic ? `<span class="sp-fpic" aria-hidden="true">${esc(it.ic)}</span>` : ""}<span>${deck.word(it)}</span></span>`;
+              if (await say(...said(it))) api.next(b);
             }),
         );
         say(it.name, it.snd);
