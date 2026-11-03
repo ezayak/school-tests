@@ -872,6 +872,7 @@
   // Each letter is said as it goes onto the line. A full line is checked: right → green, the word is said, the next word;
   // wrong → the wrong letters turn red and go back to the bank. 💡 (next to 🔊) puts the next right letter in place.
   // 8 words a round; a star for each word built with no mistake and no help.
+  // Arabic: above the line, the placed letters joined into the word (#prev), as in the Arabic lessons' word game.
   // A deck with build (phrases) builds a sentence from its words instead (the collage picture, mode 1 shows the
   // written sentence), each word is said as it lands. build: {title, modes, hint, what: the line's label, help: 💡's label}.
   // deck.spell(it): the word to build (default the item's word; verbs: the verb), deck.pic(it): its picture (default the emoji).
@@ -906,7 +907,7 @@
           ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span><span class="sp-model sp-msent" id="hint">${esc(whole)}</span>`
           : `${deck.pic ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span>` : `<span class="sp-fpic sp-hintpic" aria-hidden="true">${esc(it.ic)}</span>`}<span class="sp-model" id="hint">${esc(whole)}</span>`;
         stage.innerHTML = `<div class="sp-say sp-say-b${B ? " sp-say-s" : ""}">${model}${listen}<button type="button" class="sp-snd sp-listen sp-help" id="help" aria-label="${B ? B.help : T.helpLetter}">💡</button></div>
-        <div class="line sp-line" id="line" aria-label="${B ? B.what : T.word}"></div>
+        ${AR && !B ? '<div class="sp-preview" dir="rtl" id="prev" aria-hidden="true"></div>' : ""}<div class="line sp-line" id="line" aria-label="${B ? B.what : T.word}"></div>
         <div class="bank sp-bank" id="bank" aria-label="${T.letters}"></div>`;
         const L = document.getElementById("line");
         let bank = Kit.shuf(target.map((t, i) => ({ t, i })));
@@ -918,6 +919,9 @@
           onPlace: (w) => letter(w.t),
           // after onPlace (it comes after the drawing), so the letter is said before the word
           onChange: (line) => {
+            // Arabic: the letters on the line joined, so he sees how they connect (as in the Arabic lessons' word game)
+            const prev = document.getElementById("prev");
+            if (prev) prev.textContent = line.map((w) => w.t).join("");
             if (line.length === target.length) setTimeout(check);
           },
         });

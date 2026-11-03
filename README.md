@@ -172,6 +172,7 @@ Engine `shared/speech.js` + `shared/speech.css`; a game is only a data file. Voi
   `<html lang="en">` (English interface, like the Arabic lessons) and load the Noto Naskh Arabic font; the engine sets `body[data-lang="ar"]`
   (the Naskh font, right-to-left letter panel, line and bank) and asks `Kit.voice(lang, {online: true})`: Google's online voice while online
   (the tablet's own Arabic voice does not speak), the device voice only offline; the pages have `<meta name="referrer" content="no-referrer" />`. A letter keeps its haraka on its tile («بَ»); أ إ آ, ئ, ؤ and ة say the name of ا, ي, و and ت.
+  Build the word shows the placed letters joined above the line (`#prev`, as the Arabic lessons' word game), so he sees how they connect.
 - A group (Абетка, …) is one card on the home page (`subject` = its topic in English, the same for every language: ABC, Syllables,
   Sentences, Verbs; the home page's «All topics» filter and «Topics» heading, each topic with the cards of all languages; colour `--speech`, `lang: "uk"` instead of a grade:
   the home page's first filter and sections are the languages, `by` in `SCHOOLS` in `index.js`), opening `index.html` with its games from `list.js`
