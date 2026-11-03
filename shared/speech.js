@@ -65,65 +65,79 @@
   const plain = (w) => w.replace(/[[\]]/g, "");
   const letter = (it) => (it.up ? `${it.up} ${it.lo}` : it.lo);
 
-  /* ================= ABC cards ================= */
-  const K = "sp-" + D.lang + "-cards"; // the last card seen
-  const N = D.items.length;
-  let i = Math.min(N - 1, Math.max(0, +store.get(K, 0) || 0));
-  let run = 0; // a newer tap stops what an older one was saying
-  // the parent's layout «A · Card + letter panel»: the card on the left, all the letters on the right
   const icon = (d) =>
     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-  app.innerHTML = `<div class="sp-split">
-    <div class="sp-side">
-      <button type="button" class="sp-lcard" id="lcard"></button>
-      <button type="button" class="sp-nav sp-prev" id="prev" aria-label="Попередня літера">${icon('<path d="M15 18l-6-6 6-6"/>')}</button>
-      <button type="button" class="sp-nav sp-next" id="next" aria-label="Наступна літера">${icon('<path d="M9 6l6 6-6 6"/>')}</button>
-      <button type="button" class="sp-snd" id="again" aria-label="Послухати ще раз">${icon('<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/>')}</button>
-    </div>
-    <section class="card sp-panel">
-      <div class="toprow"><div class="toplinks"><a class="back" href="${HOME}">← Усі ігри</a><a class="back" href="index.html">Абетка</a></div><span class="sp-count" id="count"></span></div>
-      <h1 class="les-title">Абетка</h1>
-      <div class="sp-abc" role="group" aria-label="Літери">${D.items.map((it, k) => `<button type="button" class="${kind(it)}" data-i="${k}">${esc(it.up || it.lo)}</button>`).join("")}</div>
-      <p class="sp-warn" id="warn" hidden>На цьому пристрої може не бути українського голосу.</p>
-    </section>
-  </div>`;
-  const lcard = document.getElementById("lcard");
-  function show() {
-    const it = D.items[i];
-    lcard.className = `sp-lcard sp-p${i % 7}`;
-    lcard.innerHTML = `<span class="sp-hd ${kind(it)}">${esc(letter(it))}</span><span class="sp-pic" aria-hidden="true">${esc(it.ic)}</span><span class="sp-wd">${wordHTML(it)}</span>`;
-    lcard.setAttribute("aria-label", `${it.name}, ${plain(it.w)}`);
-    document.getElementById("count").textContent = `${i + 1} / ${N}`;
+  const SPEAKER = icon(
+    '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/>',
+  );
+  // the links back (home, the ABC games), with something on the right (a counter)
+  const top = (right) =>
+    `<div class="toprow"><div class="toplinks"><a class="back" href="${HOME}">← Усі ігри</a><a class="back" href="index.html">Абетка</a></div>${right || ""}</div>`;
+  const WARN = `<p class="sp-warn" id="warn" hidden>На цьому пристрої може не бути українського голосу.</p>`;
+  // checked at a tap: the device lists its voices a moment after the page opens
+  const warn = () =>
+    (document.getElementById("warn").hidden = !V.ok || V.has());
+
+  /* ================= ABC cards ================= */
+  function cards() {
+    const K = "sp-" + D.lang + "-cards"; // the last card seen
+    const N = D.items.length;
+    let i = Math.min(N - 1, Math.max(0, +store.get(K, 0) || 0));
+    let run = 0; // a newer tap stops what an older one was saying
+    // the parent's layout «A · Card + letter panel»: the card on the left, all the letters on the right
+    app.innerHTML = `<div class="sp-split">
+      <div class="sp-side">
+        <button type="button" class="sp-lcard" id="lcard"></button>
+        <button type="button" class="sp-nav sp-prev" id="prev" aria-label="Попередня літера">${icon('<path d="M15 18l-6-6 6-6"/>')}</button>
+        <button type="button" class="sp-nav sp-next" id="next" aria-label="Наступна літера">${icon('<path d="M9 6l6 6-6 6"/>')}</button>
+        <button type="button" class="sp-snd" id="again" aria-label="Послухати ще раз">${SPEAKER}</button>
+      </div>
+      <section class="card sp-panel">
+        ${top('<span class="sp-count" id="count"></span>')}
+        <h1 class="les-title">Абетка</h1>
+        <div class="sp-abc" role="group" aria-label="Літери">${D.items.map((it, k) => `<button type="button" class="${kind(it)}" data-i="${k}">${esc(it.up || it.lo)}</button>`).join("")}</div>
+        ${WARN}
+      </section>
+    </div>`;
+    const lcard = document.getElementById("lcard");
+    function show() {
+      const it = D.items[i];
+      lcard.className = `sp-lcard sp-p${i % 7}`;
+      lcard.innerHTML = `<span class="sp-hd ${kind(it)}">${esc(letter(it))}</span><span class="sp-pic" aria-hidden="true">${esc(it.ic)}</span><span class="sp-wd">${wordHTML(it)}</span>`;
+      lcard.setAttribute("aria-label", `${it.name}, ${plain(it.w)}`);
+      document.getElementById("count").textContent = `${i + 1} / ${N}`;
+      app
+        .querySelectorAll("[data-i]")
+        .forEach((b) => b.setAttribute("aria-pressed", +b.dataset.i === i));
+      store.set(K, i);
+    }
+    // the letter, a pause, then the word
+    async function speak() {
+      const my = ++run;
+      hush();
+      warn();
+      const it = D.items[i];
+      await sound(it.name, it.snd);
+      if (my !== run) return;
+      await wait(900);
+      if (my !== run) return;
+      await sound(plain(it.w), it.wsnd);
+    }
+    function go(k) {
+      i = (k + N) % N;
+      show();
+      speak();
+    }
+    document.getElementById("prev").onclick = () => go(i - 1);
+    document.getElementById("next").onclick = () => go(i + 1);
+    lcard.onclick = speak;
+    document.getElementById("again").onclick = speak;
     app
       .querySelectorAll("[data-i]")
-      .forEach((b) => b.setAttribute("aria-pressed", +b.dataset.i === i));
-    store.set(K, i);
+      .forEach((b) => (b.onclick = () => go(+b.dataset.i)));
+    document.title = `Картки · Абетка`;
+    show(); // no sound before the first tap: the browser would block it
   }
-  // the letter, a pause, then the word
-  async function speak() {
-    const my = ++run;
-    hush();
-    // checked at a tap: the device lists its voices a moment after the page opens
-    document.getElementById("warn").hidden = !V.ok || V.has();
-    const it = D.items[i];
-    await sound(it.name, it.snd);
-    if (my !== run) return;
-    await wait(900);
-    if (my !== run) return;
-    await sound(plain(it.w), it.wsnd);
-  }
-  function go(k) {
-    i = (k + N) % N;
-    show();
-    speak();
-  }
-  document.getElementById("prev").onclick = () => go(i - 1);
-  document.getElementById("next").onclick = () => go(i + 1);
-  lcard.onclick = speak;
-  document.getElementById("again").onclick = speak;
-  app
-    .querySelectorAll("[data-i]")
-    .forEach((b) => (b.onclick = () => go(+b.dataset.i)));
-  document.title = `Картки · Абетка`;
-  show(); // no sound before the first tap: the browser would block it
+
+  ({ cards })[view]();
 })();
