@@ -1901,10 +1901,10 @@ window.GAMES = [
     subject: "Абетка",
     title: "Абетка",
     hub: true,
-    lesson: "Літери · картки, вгадай літеру, склади слово",
+    lesson: "Літери · картки, вгадай літеру, склади слово, лови літеру",
     topics: "33 літери української абетки з картинками · 97 слів з літер",
     path: "speech/uk/abc/index.html",
-    countLabel: "3 гри",
+    countLabel: "4 гри",
     year: "2026–2027",
     also: [
       "speech/uk/letters.js",
@@ -1912,6 +1912,7 @@ window.GAMES = [
       "speech/uk/abc/cards.html",
       "speech/uk/abc/guess.html",
       "speech/uk/abc/build.html",
+      "speech/uk/abc/fly.html",
     ],
   },
   {

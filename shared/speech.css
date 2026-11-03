@@ -455,12 +455,102 @@
   background: color-mix(in srgb, var(--bad) 18%, var(--card));
   border-color: var(--bad);
 }
-/* a phone held sideways: a smaller title, so the game fits the screen */
+
+/* Catch the letter: the letter to catch on top, the letters floating up through the sky */
+.sp-pick {
+  width: 100%;
+  max-width: 760px;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+}
+.sp-pick button {
+  height: 48px;
+  font-size: 1.4rem;
+}
+.sp-target {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.sp-tgt {
+  height: clamp(56px, 13dvh, 88px);
+  padding: 0 20px;
+  border: 2.5px solid var(--ink);
+  border-radius: 18px;
+  background: var(--hl);
+  box-shadow: 4px 4px 0 var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 9dvh, 3.8rem);
+  line-height: 1;
+}
+.sp-sky {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: clamp(200px, 48dvh, 440px);
+  overflow: hidden;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--cool) 10%, var(--card));
+}
+.sp-bal {
+  --tint: var(--cool);
+  --s: clamp(54px, 13dvh, 84px);
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  padding: 0;
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tint) 25%, var(--card));
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: calc(var(--s) * 0.5);
+  line-height: 1;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.sp-bal.no {
+  background: color-mix(in srgb, var(--bad) 25%, var(--card));
+  animation: sp-shake 0.4s;
+}
+.sp-bal.pop {
+  pointer-events: none;
+  animation: sp-pop 0.3s ease-out forwards;
+}
+@keyframes sp-pop {
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-bal.no {
+    animation: none;
+  }
+}
+
+/* last, so it wins over the rules above: a phone held sideways: a smaller title, the letter to catch and the sky, so the game fits the screen */
 @media (orientation: landscape) and (max-height: 500px) {
   .sp-game {
     gap: 8px;
   }
   .sp-game .les-title {
     font-size: 1.7rem;
+  }
+  .sp-stage:has(.sp-sky) {
+    gap: 8px;
+  }
+  .sp-tgt {
+    height: 48px;
+    font-size: 2rem;
+  }
+  .sp-sky {
+    min-height: 150px;
   }
 }

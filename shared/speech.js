@@ -4,6 +4,7 @@
 // <body data-view="cards"> → cards: tap a card → the letter (syllable), a pause, the word.
 // <body data-view="guess"> → guess: the voice says a letter (syllable), tap it among 4.
 // <body data-view="build" data-deck="words"> → build the word from its letters (../letters.js + ../syllables.js).
+// <body data-view="fly"> → catch the letter: tap the floating letters that are the one shown (../letters.js).
 // <body data-deck="letters"> (or none) plays window.SPEECH_LETTERS (../letters.js), data-deck="syllables" window.SPEECH_SYLLABLES (../syllables.js),
 // data-deck="words" the picture words of both.
 (function () {
@@ -540,5 +541,182 @@
     });
   }
 
-  ({ cards, guess, build })[view]();
+  /* ================= catch the letter ================= */
+  // Letters float up from the bottom of the sky; tap the ones that are the letter shown on top (about 4 in 10 are).
+  // Right: it pops, ⭐, the letter is said. Wrong: it shakes red, the letter on top is said again.
+  // The start screen picks the letter (or 🎲 any, saved); 🐢 / 🐇 sets the speed at any time (saved).
+  // 10 caught letters end the round; the stars count the wrong taps (none = 3, up to 2 = 2, more = 1).
+  function fly() {
+    const GOAL = 10;
+    const KS = "sp-" + deck.lang + "-fly-fast";
+    const KT = "sp-" + deck.lang + "-fly-letter";
+    const items = deck.items;
+    let fast = store.get(KS, "0") === "1";
+    let pick = +store.get(KT, -1);
+    if (!(pick >= -1 && pick < items.length)) pick = -1;
+    let target = null,
+      got = 0,
+      bad = 0,
+      raf = 0,
+      last = 0,
+      due = 0,
+      live = [],
+      run = 0;
+    app.innerHTML = `<section class="card sp-game">
+      ${top('<span class="sp-count" id="count"></span>')}
+      <div class="sp-head"><h1 class="les-title">Лови літеру</h1>
+        <div class="seg" role="group" aria-label="Швидкість"><button type="button" id="fast-0" data-fast="0">🐢 Повільно</button><button type="button" id="fast-1" data-fast="1">🐇 Швидше</button></div></div>
+      <div class="sp-stage" id="stage"></div>
+      ${WARN}
+    </section>`;
+    const stage = document.getElementById("stage");
+    const count = document.getElementById("count");
+    const tally = () => (count.textContent = `⭐ ${got} / ${GOAL}`);
+    document.title = `Лови літеру · ${deck.group}`;
+    const speed = () =>
+      app
+        .querySelectorAll("[data-fast]")
+        .forEach((b) =>
+          b.setAttribute("aria-pressed", b.dataset.fast === (fast ? "1" : "0")),
+        );
+    app.querySelectorAll("[data-fast]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          fast = b.dataset.fast === "1";
+          store.set(KS, fast ? "1" : "0");
+          speed();
+        }),
+    );
+    speed();
+    async function say(it) {
+      const my = ++run;
+      hush();
+      warn();
+      await sound(it.name, it.snd);
+      return my === run;
+    }
+    function stop() {
+      cancelAnimationFrame(raf);
+      live = [];
+    }
+    function begin() {
+      stop();
+      count.textContent = "";
+      stage.innerHTML = `<p class="sp-hint">Обери літеру, яку будемо ловити.</p>
+        <div class="sp-abc sp-pick" role="group" aria-label="Літера">
+          <button type="button" data-t="-1" aria-pressed="${pick < 0}" aria-label="Будь-яка">🎲</button>${items.map((it, k) => `<button type="button" class="${deck.tile(it).c}" data-t="${k}" aria-pressed="${k === pick}">${deck.tile(it).html}</button>`).join("")}</div>
+        <button type="button" class="btn big" id="go">▶ Почати</button>`;
+      stage.querySelectorAll("[data-t]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            pick = +b.dataset.t;
+            store.set(KT, pick);
+            stage
+              .querySelectorAll("[data-t]")
+              .forEach((x) => x.setAttribute("aria-pressed", x === b));
+          }),
+      );
+      document.getElementById("go").onclick = start; // the first tap also lets the browser speak
+    }
+    function start() {
+      stop();
+      target = pick < 0 ? Kit.pick(items) : items[pick];
+      got = bad = 0;
+      tally();
+      const h = deck.head(target);
+      stage.innerHTML = `<div class="sp-target"><span class="sp-hint">Лови:</span>
+          <button type="button" class="sp-tgt${cls(h.c)}" id="tgt" aria-label="Послухати літеру">${h.html}</button></div>
+        <div class="sp-sky" id="sky"></div>`;
+      document.getElementById("tgt").onclick = () => say(target);
+      say(target);
+      last = performance.now();
+      due = last + 300;
+      raf = requestAnimationFrame(frame);
+    }
+    // one letter from the bottom of the sky, at a random place
+    function launch(sky) {
+      const it =
+        Math.random() < 0.4
+          ? target
+          : Kit.pick(items.filter((x) => x !== target));
+      const t = deck.tile(it);
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = `sp-bal sp-p${Math.floor(Math.random() * 7)}${cls(t.c)}`;
+      el.innerHTML = t.html;
+      sky.appendChild(el);
+      const b = { el, it, x: 0, y: sky.clientHeight, done: false };
+      // not on top of the letter launched just before
+      const room = Math.max(0, sky.clientWidth - el.offsetWidth);
+      const prev = live[live.length - 1];
+      for (let k = 0; k < 5; k++) {
+        b.x = Math.random() * room;
+        if (!prev || Math.abs(b.x - prev.x) > el.offsetWidth) break;
+      }
+      el.style.left = b.x + "px";
+      el.style.top = b.y + "px";
+      el.onpointerdown = (e) => {
+        e.preventDefault();
+        tap(b);
+      };
+      live.push(b);
+    }
+    function tap(b) {
+      if (b.done) return;
+      if (b.it !== target) {
+        bad++;
+        b.el.classList.remove("no");
+        void b.el.offsetWidth; // the shake again on a second tap
+        b.el.classList.add("no");
+        say(target);
+        return;
+      }
+      b.done = true;
+      b.el.classList.add("pop");
+      setTimeout(() => b.el.remove(), 300);
+      got++;
+      tally();
+      say(target);
+      if (got >= GOAL) setTimeout(end, 500);
+    }
+    function frame(now) {
+      const sky = document.getElementById("sky");
+      if (!sky) return;
+      const dt = Math.min(50, now - last); // a hidden page does not make the letters jump
+      last = now;
+      // the sky's height in 9 s (slow) or 5 s (fast)
+      const v = sky.clientHeight / (fast ? 5000 : 9000);
+      live = live.filter((b) => {
+        if (b.done) return false;
+        b.y -= v * dt;
+        if (b.y < -b.el.offsetHeight) {
+          b.el.remove();
+          return false;
+        }
+        b.el.style.top = b.y + "px";
+        // the sky got narrower (the tablet turned): back inside
+        const room = Math.max(0, sky.clientWidth - b.el.offsetWidth);
+        if (b.x > room) b.el.style.left = (b.x = room) + "px";
+        return true;
+      });
+      if (now >= due && live.length < 7) {
+        launch(sky);
+        due = now + (fast ? 650 : 1000);
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function end() {
+      stop();
+      const stars = bad === 0 ? 3 : bad <= 2 ? 2 : 1;
+      count.textContent = "";
+      stage.innerHTML = `<div class="sp-stars">${[0, 1, 2].map((k) => Kit.star(k < stars)).join("")}</div>
+        <p class="sp-result">${bad === 0 ? "Молодець! " : ""}Спіймано: <b>${GOAL}</b> · помилок: <b>${bad}</b></p>
+        <div class="sp-row"><button type="button" class="btn" id="again">🔁 Ще раз</button><button type="button" class="btn ghost" id="other">Інша літера</button><a class="btn ghost" href="index.html">${esc(deck.group)}</a></div>`;
+      document.getElementById("again").onclick = start;
+      document.getElementById("other").onclick = begin;
+    }
+    begin();
+  }
+
+  ({ cards, guess, build, fly })[view]();
 })();

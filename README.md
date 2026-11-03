@@ -51,7 +51,7 @@ optima/                    ← the Ukrainian school (school: "optima" in games.j
     ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js
 speech/                    ← Мовлення: speech games (school: "speech" in games.js), one folder per language
   uk/                      ← letters.js (the ABC), syllables.js, one folder per group of games
-    abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html, build.html
+    abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html, build.html, fly.html
     syllables/             ← Склади: the same pages, with data-deck="syllables"
 ```
 
@@ -171,6 +171,10 @@ Games:
   «🔤 Тільки слово» hides it) is shown and said; its letters are put in order on the line with `Kit.dragTiles` (tap or drag), each letter said as it lands.
   A full line is checked: right → green, the word is said, the next word; wrong → red, the letters from the first wrong one go back. 💡 (next to 🔊) puts the next right letter.
   Sets «3 літери», «4 літери», «5 літер», «6+ літер», «Усі»; 8 words a round, ⭐ = no mistake and no help.
+- **Лови літеру** (`data-view="fly"`, data `../letters.js`): the start screen picks the letter (or 🎲 any; saved). Letters float up through the sky
+  (about 4 in 10 are the one shown on top); tap them: right → pops, ⭐, the letter is said; wrong → shakes red, the letter on top is said again.
+  🐢 Повільно / 🐇 Швидше at any time (saved). 10 caught letters end the round; stars by wrong taps (none 3, up to 2 → 2, more 1).
+  Headless Chrome hardly runs `requestAnimationFrame` under `--virtual-time-budget`: a test harness replaces it with a 16 ms timer.
 - The guessing and building games share `round()` in `speech.js`: the mode switch, the choice of set, the round, the counter and the end screen.
 
 `letters.js` format (`window.SPEECH_LETTERS = {lang, items}`), one item per letter:
