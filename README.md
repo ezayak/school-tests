@@ -172,8 +172,8 @@ Games:
   Right: it turns green, the letter's picture and word appear and the word is said, then the next letter. Wrong: it shakes, turns red, the letter is said again.
   ⭐ = letters found at the first tap; the end screen shows 3 stars and 🔁 Ще раз.
   Two modes, switched at any time in the game (saved on the device): «🖼️ З картинкою» shows the letter's picture next to 🔊 as a hint, «🔊 Без картинки» only the sound.
-- **Склади слово** (`data-view="build" data-deck="words"`, loads `drag-words.css`): the word (and its picture in mode «🖼️ Картинка і слово»;
-  «🔤 Тільки слово» hides it) is shown and said; its letters are put in order on the line with `Kit.dragTiles` (tap or drag), each letter said as it lands.
+- **Склади слово** (`data-view="build" data-deck="words"`, loads `drag-words.css`): the picture is shown and the word said (mode «🔤 Картинка і слово»
+  also shows the word written, «🖼️ Тільки картинка» hides it); its letters are put in order on the line with `Kit.dragTiles` (tap or drag), each letter said as it lands.
   A full line is checked: right → green, the word is said, the next word; wrong → red, the letters from the first wrong one go back. 💡 (next to 🔊) puts the next right letter.
   Sets «3 літери», «4 літери», «5 літер», «6+ літер», «Усі»; 8 words a round, ⭐ = no mistake and no help.
 - **Лови літеру** (`data-view="fly"`, data `../letters.js`): the start screen picks the letter (or 🎲 any; saved). Letters float up through the sky

@@ -606,12 +606,12 @@
   }
 
   /* ================= build the word ================= */
-  // The word (and its picture in mode 1) is shown and said; put its letters in order on the line (tap or drag, Kit.dragTiles).
+  // The picture (and the word in mode 1) is shown and the word said; put its letters in order on the line (tap or drag, Kit.dragTiles).
   // Each letter is said as it goes onto the line. A full line is checked: right → green, the word is said, the next word;
   // wrong → the wrong letters turn red and go back to the bank. 💡 (next to 🔊) puts the next right letter in place.
   // 8 words a round; a star for each word built with no mistake and no help.
-  // A deck with build (phrases) builds a sentence from its words instead: the picture always shows, mode 1 shows the
-  // written sentence, each word is said as it lands. build: {title, modes, hint, what: the line's label, help: 💡's label}.
+  // A deck with build (phrases) builds a sentence from its words instead (the collage picture, mode 1 shows the
+  // written sentence), each word is said as it lands. build: {title, modes, hint, what: the line's label, help: 💡's label}.
   function build() {
     const names = new Map(
       (window.SPEECH_LETTERS ? window.SPEECH_LETTERS.items : []).map((x) => [
@@ -623,8 +623,10 @@
     round({
       title: B ? B.title : "Склади слово",
       mk: "build",
-      modes: B ? B.modes : ["🖼️ Картинка і слово", "🔤 Тільки слово"],
-      hint: B ? B.hint : "Подивись на слово і склади його з літер.",
+      modes: B ? B.modes : ["🔤 Картинка і слово", "🖼️ Тільки картинка"],
+      hint: B
+        ? B.hint
+        : "Подивись на картинку, послухай слово і склади його з літер.",
       n: 8,
       ask(it, api) {
         const { stage, say } = api;
@@ -641,7 +643,7 @@
         };
         const model = B
           ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span><span class="sp-model sp-msent" id="hint">${esc(whole)}</span>`
-          : `${hintPic(it)}<span class="sp-model">${esc(whole)}</span>`;
+          : `<span class="sp-fpic sp-hintpic" aria-hidden="true">${esc(it.ic)}</span><span class="sp-model" id="hint">${esc(whole)}</span>`;
         stage.innerHTML = `<div class="sp-say sp-say-b${B ? " sp-say-s" : ""}">${model}${listen}<button type="button" class="sp-snd sp-listen sp-help" id="help" aria-label="${B ? B.help : "Допомога: наступна літера"}">💡</button></div>
         <div class="line sp-line" id="line" aria-label="${B ? B.what : "Слово"}"></div>
         <div class="bank sp-bank" id="bank" aria-label="Літери"></div>`;
