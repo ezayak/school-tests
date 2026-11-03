@@ -46,9 +46,15 @@
 
   /* ---------- the deck: letters, syllables or words (<body data-deck>) ---------- */
   const deck = (
-    { letters, syllables, words, positions, phrases, verbs }[
-      document.body.dataset.deck
-    ] || letters
+    {
+      letters,
+      syllables,
+      words,
+      positions,
+      phrases,
+      verbs,
+      verbWords,
+    }[document.body.dataset.deck] || letters
   )();
   const V = Kit.voice(deck.lang);
 
@@ -357,6 +363,18 @@
     });
   }
 
+  // Verb words (verbs.js): the verbs of one word, to build from letters (the building game); sets «Усі» and each group.
+  function verbWords() {
+    const d = verbs();
+    const one = (x) => !x.name.includes(" ");
+    d.items = d.items.filter(one);
+    d.sets = d.sets
+      .map((x) => ({ t: x.t, items: x.items.filter(one) }))
+      .filter((x) => x.items.length >= 4);
+    d.spell = (it) => [it.name, it.snd];
+    return d;
+  }
+
   /* ================= cards ================= */
   // The parent's layout «A · Card + letter panel»: the card on the left, the panel on the right.
   // Tap the card (or 🔊, ‹ ›, a button in the panel): the letter or syllable, a pause, the word.
@@ -661,6 +679,7 @@
   // 8 words a round; a star for each word built with no mistake and no help.
   // A deck with build (phrases) builds a sentence from its words instead (the collage picture, mode 1 shows the
   // written sentence), each word is said as it lands. build: {title, modes, hint, what: the line's label, help: 💡's label}.
+  // deck.spell(it): the word to build (default the item's word; verbs: the verb), deck.pic(it): its picture (default the emoji).
   function build() {
     const names = new Map(
       (window.SPEECH_LETTERS ? window.SPEECH_LETTERS.items : []).map((x) => [
@@ -679,7 +698,7 @@
       n: 8,
       ask(it, api) {
         const { stage, say } = api;
-        const [whole, wsnd] = said(it);
+        const [whole, wsnd] = deck.spell ? deck.spell(it) : said(it);
         const target = B ? whole.split(" ") : [...whole];
         let miss = false,
           done = false,
@@ -692,7 +711,7 @@
         };
         const model = B
           ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span><span class="sp-model sp-msent" id="hint">${esc(whole)}</span>`
-          : `<span class="sp-fpic sp-hintpic" aria-hidden="true">${esc(it.ic)}</span><span class="sp-model" id="hint">${esc(whole)}</span>`;
+          : `${deck.pic ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span>` : `<span class="sp-fpic sp-hintpic" aria-hidden="true">${esc(it.ic)}</span>`}<span class="sp-model" id="hint">${esc(whole)}</span>`;
         stage.innerHTML = `<div class="sp-say sp-say-b${B ? " sp-say-s" : ""}">${model}${listen}<button type="button" class="sp-snd sp-listen sp-help" id="help" aria-label="${B ? B.help : "Допомога: наступна літера"}">💡</button></div>
         <div class="line sp-line" id="line" aria-label="${B ? B.what : "Слово"}"></div>
         <div class="bank sp-bank" id="bank" aria-label="Літери"></div>`;

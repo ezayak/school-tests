@@ -55,7 +55,7 @@ speech/                    ← Мовлення: speech games (school: "speech" 
     syllables/             ← Склади: the same pages, with data-deck="syllables"
     sentences/             ← Речення: positions.html (cards), positions-guess.html, positions-place.html, with data-deck="positions";
                               phrases.html (cards), phrases-build.html, phrases-guess.html, with data-deck="phrases"
-    verbs/                 ← Дії: index.html, list.js, cards.html, guess.html, with data-deck="verbs"
+    verbs/                 ← Дії: index.html, list.js, cards.html, guess.html, with data-deck="verbs"; build.html (data-deck="verbWords")
     img/positions/         ← the position pictures, cut from the parent's posters (no labels, no frame), <name>-1.jpg / -2.jpg
     img/things/            ← the pictures of the parent's collage of cards (no labels), 300×300
 ```
@@ -200,6 +200,8 @@ Games:
   the wrong pictures are of the same start first, so the thing tells them apart. «🔤 З реченням» writes the sentence next to 🔊, «🔊 Тільки звук» does not.
 - **Дії · Картки / Вгадай дію** (`data-deck="verbs"`): the verb big («їсти»), its picture, «Я [їм]»; tap: the verb, a pause, the sentence.
   The guessing game says the verb, its answers are other verbs' pictures (of the same group first); sets «Усі» and each group.
+- **Дії · Склади слово** (`data-view="build" data-deck="verbWords"`, loads `letters.js` for the letter names): the word game with the verbs
+  of one word (not «чистити зуби»): the verb's picture (`deck.pic`), the verb (`deck.spell`) said and built from letters.
 - The guessing, building and placing games share `round()` in `speech.js`: the mode switch, the choice of set (or of several groups), the round, the counter and the end screen.
 
 `letters.js` format (`window.SPEECH_LETTERS = {lang, items}`), one item per letter:

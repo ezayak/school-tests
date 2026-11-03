@@ -463,6 +463,12 @@
   aspect-ratio: 1;
   flex: none;
 }
+.sp-bpic .sp-emo {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: clamp(3.4rem, 14dvh, 5.4rem);
+}
 .sp-bpic img {
   width: 100%;
   height: 100%;
@@ -479,7 +485,7 @@
   .sp-say-s {
     height: auto;
   }
-  .sp-say-s .sp-bpic {
+  .sp-say-b .sp-bpic {
     height: clamp(80px, 14dvh, 110px);
   }
 }
