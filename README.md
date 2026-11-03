@@ -118,6 +118,8 @@ The Computer lesson lists (`grade-N/computer/index.html`) are two folders deep a
 ## Schools
 
 The home page shows one school at a time. The switch (top right) has one logo per school; the chosen school is remembered on the device, SJAS when nothing is saved.
+Anchors open a school and its filter directly: `index.html#sjas`, `#optima`, `#speech`, with a grade or language `#sjas/grade-3`, `#speech/en`
+(no filter = all; an unknown school or grade falls back). The address follows the switch and the filter, so the link can be copied at any time.
 The schools are listed in `SCHOOLS` at the top of `index.js`:
 
 ```js

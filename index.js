@@ -88,6 +88,20 @@
   // a game's grade (or the school's by field), and its name on the filter and the section
   const lv = (g) => (SCH.by ? g[SCH.by.f] : g.grade);
   const lvName = (v) => (SCH.by ? SCH.by.names[v] || v : "Grade " + v);
+  // Anchors: #sjas, #optima/grade-4, #speech/en open that school and its grade (or language) filter; no filter = all.
+  // The address follows the switch and the filter (replaceState: no extra Back steps), so a link can be copied at any time.
+  function fromHash() {
+    const [sc, f] = decodeURIComponent(location.hash.slice(1)).split("/");
+    if (!SCHOOLS.some((s) => s.k === sc)) return false;
+    school = sc;
+    store.set("st-school", school);
+    store.set(key("st-grade"), (f || "all").replace(/^grade-/, ""));
+    return true;
+  }
+  function toHash() {
+    const f = grade === "all" ? "" : "/" + (SCH.by ? grade : "grade-" + grade);
+    history.replaceState(null, "", "#" + school + f);
+  }
   function useSchool() {
     SCH = SCHOOLS.find((s) => s.k === school);
     games = ALL.filter((g) => (g.school || "sjas") === school);
@@ -164,6 +178,7 @@
       }),
   );
   function draw() {
+    toHash();
     document.getElementById("filters").innerHTML = ["all", ...grades]
       .map((v) => {
         const n =
@@ -322,7 +337,14 @@
       document.querySelector("header").appendChild(t);
     }
   }
+  fromHash();
   useSchool();
   moveThumb();
   draw();
+  addEventListener("hashchange", () => {
+    if (!fromHash()) return;
+    useSchool();
+    moveThumb();
+    draw();
+  });
 })();
