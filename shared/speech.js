@@ -14,6 +14,97 @@
   const app = document.getElementById("app");
   const view = document.body.dataset.view || "list";
   const HOME = "../../../index.html";
+  // The interface texts in the page's language (<html lang>: uk, en); the words to learn are in the data files.
+  const TEXTS = {
+    uk: {
+      home: "← Усі ігри",
+      school: "Мовлення",
+      game: "Гра",
+      soon: "Нові ігри з’являться тут.",
+      warn: "На цьому пристрої може не бути українського голосу.",
+      again: "Послухати ще раз",
+      cards: "Картки",
+      hintGroup: "Підказка",
+      setGroup: "Що грати",
+      chooseAsk: (n) => `Що вчимо? Обери щонайменше ${n} різні.`,
+      chooseGroup: "Що вчимо",
+      start: "▶ Почати",
+      well: "Молодець! ",
+      first: (s, n) => `З першого разу: <b>${s}</b> з ${n}`,
+      more: "🔁 Ще раз",
+      guess: (w) => "Вгадай " + w,
+      guessHint: (w) => `Послухай ${w[0]} і натисни на ${w[1]}.`,
+      guessModes: ["🖼️ З картинкою", "🔊 Без картинки"],
+      build: "Склади слово",
+      buildModes: ["🔤 Картинка і слово", "🖼️ Тільки картинка"],
+      buildHint: "Подивись на картинку, послухай слово і склади його з літер.",
+      helpLetter: "Допомога: наступна літера",
+      word: "Слово",
+      letters: "Літери",
+      fly: "Лови літеру",
+      speed: "Швидкість",
+      slow: "🐢 Повільно",
+      fast: "🐇 Швидше",
+      flyHint: "Обери літеру, яку будемо ловити.",
+      letter: "Літера",
+      any: "Будь-яка",
+      catch: "Лови:",
+      hearLetter: "Послухати літеру",
+      caught: (g, b) => `Спіймано: <b>${g}</b> · помилок: <b>${b}</b>`,
+      otherLetter: "Інша літера",
+      abc: "Абетка",
+      abcWhat: ["літеру", "неї"],
+      abcNav: ["Попередня літера", "Наступна літера"],
+      otherWords: "Інші слова",
+      all: "Усі",
+      lens: ["3 літери", "4 літери", "5 літер", "6+ літер"],
+    },
+    en: {
+      home: "← All games",
+      school: "Speech",
+      game: "Game",
+      soon: "New games will appear here.",
+      warn: "This device may not have an English voice.",
+      again: "Listen again",
+      cards: "Cards",
+      hintGroup: "Hint",
+      setGroup: "What to play",
+      chooseAsk: (n) => `What are we learning? Choose at least ${n}.`,
+      chooseGroup: "What we learn",
+      start: "▶ Start",
+      well: "Well done! ",
+      first: (s, n) => `First try: <b>${s}</b> of ${n}`,
+      more: "🔁 Again",
+      guess: (w) => "Guess the " + w,
+      guessHint: (w) => `Listen to the ${w[0]} and tap ${w[1]}.`,
+      guessModes: ["🖼️ With picture", "🔊 Sound only"],
+      build: "Build the word",
+      buildModes: ["🔤 Picture and word", "🖼️ Picture only"],
+      buildHint:
+        "Look at the picture, listen to the word and build it from letters.",
+      helpLetter: "Help: the next letter",
+      word: "Word",
+      letters: "Letters",
+      fly: "Catch the letter",
+      speed: "Speed",
+      slow: "🐢 Slow",
+      fast: "🐇 Fast",
+      flyHint: "Choose the letter to catch.",
+      letter: "Letter",
+      any: "Any",
+      catch: "Catch:",
+      hearLetter: "Listen to the letter",
+      caught: (g, b) => `Caught: <b>${g}</b> · mistakes: <b>${b}</b>`,
+      otherLetter: "Another letter",
+      abc: "ABC",
+      abcWhat: ["letter", "it"],
+      abcNav: ["Previous letter", "Next letter"],
+      otherWords: "Other words",
+      all: "All",
+      lens: ["3 letters", "4 letters", "5 letters", "6+ letters"],
+    },
+  };
+  const T = TEXTS[document.documentElement.lang] || TEXTS.uk;
   const store = {
     get(k, d) {
       try {
@@ -34,13 +125,13 @@
   if (view === "list") {
     const L = window.SPEECH_LIST;
     app.innerHTML = `<section class="card">
-    <div class="topbar"><a class="back" href="${HOME}">← Усі ігри</a><span class="eyebrow">Мовлення</span></div>
+    <div class="topbar"><a class="back" href="${HOME}">${T.home}</a><span class="eyebrow">${T.school}</span></div>
     <h1 class="hero-title"><span class="p">${esc(L.title)}</span></h1>
     <p class="howto">${esc(L.intro || "")}</p>
   </section>
-  <div class="items">${L.items.map((it) => Kit.lessonCard(it, "Гра")).join("")}</div>
-  <div class="soon">Нові ігри з’являться тут.</div>`;
-    document.title = `${L.title} · Мовлення`;
+  <div class="items">${L.items.map((it) => Kit.lessonCard(it, T.game)).join("")}</div>
+  <div class="soon">${T.soon}</div>`;
+    document.title = `${L.title} · ${T.school}`;
     return;
   }
 
@@ -87,8 +178,8 @@
   );
   // the links back (home, the group's games), with something on the right (a counter)
   const top = (right) =>
-    `<div class="toprow"><div class="toplinks"><a class="back" href="${HOME}">← Усі ігри</a><a class="back" href="index.html">${esc(deck.group)}</a></div>${right || ""}</div>`;
-  const WARN = `<p class="sp-warn" id="warn" hidden>На цьому пристрої може не бути українського голосу.</p>`;
+    `<div class="toprow"><div class="toplinks"><a class="back" href="${HOME}">${T.home}</a><a class="back" href="index.html">${esc(deck.group)}</a></div>${right || ""}</div>`;
+  const WARN = `<p class="sp-warn" id="warn" hidden>${T.warn}</p>`;
   // checked at a tap: the device lists its voices a moment after the page opens
   const warn = () =>
     (document.getElementById("warn").hidden = !V.ok || V.has());
@@ -112,9 +203,9 @@
     return {
       lang: D.lang,
       key: "",
-      group: "Абетка",
-      what: ["літеру", "неї"],
-      nav: ["Попередня літера", "Наступна літера"],
+      group: T.abc,
+      what: T.abcWhat,
+      nav: T.abcNav,
       items,
       head: (it) => ({
         c: kind(it),
@@ -125,7 +216,7 @@
         esc(it.w).replace(/\[(.+?)\]/, `<b class="${kind(it)}">$1</b>`),
       page: () => 0,
       panel: () =>
-        `<div class="sp-abc" role="group" aria-label="Літери">${items.map((it, k) => `<button type="button" class="${kind(it)}" data-i="${k}">${esc(it.up || it.lo)}</button>`).join("")}</div>`,
+        `<div class="sp-abc" role="group" aria-label="${T.letters}">${items.map((it, k) => `<button type="button" class="${kind(it)}" data-i="${k}">${esc(it.up || it.lo)}</button>`).join("")}</div>`,
       others: (it) => Kit.shuf(items.filter((x) => x !== it)).slice(0, 3),
     };
   }
@@ -192,7 +283,11 @@
   function words() {
     const seen = new Map();
     window.SPEECH_LETTERS.items
-      .concat(...window.SPEECH_SYLLABLES.groups.map((g) => g.syl))
+      .concat(
+        ...(window.SPEECH_SYLLABLES
+          ? window.SPEECH_SYLLABLES.groups.map((g) => g.syl)
+          : []),
+      )
       .forEach((x) => {
         const w = x.w.replace(/[[\]]/g, "");
         if (!/[’ ]/.test(w) && !seen.has(w))
@@ -204,15 +299,15 @@
     return {
       lang: window.SPEECH_LETTERS.lang,
       key: "words-",
-      group: "Абетка",
-      other: "Інші слова",
+      group: T.abc,
+      other: T.otherWords,
       items,
       sets: [
-        { t: "Усі", items },
-        { t: "3 літери", items: len(3, 3) },
-        { t: "4 літери", items: len(4, 4) },
-        { t: "5 літер", items: len(5, 5) },
-        { t: "6+ літер", items: len(6, 99) },
+        { t: T.all, items },
+        { t: T.lens[0], items: len(3, 3) },
+        { t: T.lens[1], items: len(4, 4) },
+        { t: T.lens[2], items: len(5, 5) },
+        { t: T.lens[3], items: len(6, 99) },
       ],
     };
   }
@@ -409,7 +504,7 @@
         <button type="button" class="sp-lcard" id="lcard"></button>
         <button type="button" class="sp-nav sp-prev" id="prev" aria-label="${deck.nav[0]}">${icon('<path d="M15 18l-6-6 6-6"/>')}</button>
         <button type="button" class="sp-nav sp-next" id="next" aria-label="${deck.nav[1]}">${icon('<path d="M9 6l6 6-6 6"/>')}</button>
-        <button type="button" class="sp-snd" id="again" aria-label="Послухати ще раз">${SPEAKER}</button>
+        <button type="button" class="sp-snd" id="again" aria-label="${T.again}">${SPEAKER}</button>
       </div>
       <section class="card sp-panel">
         ${top('<span class="sp-count" id="count"></span>')}
@@ -474,7 +569,7 @@
         say([...w.split("-").map((x) => [x, null, 350]), [plain(w)]]);
       }
     };
-    document.title = `Картки · ${deck.group}`;
+    document.title = `${T.cards} · ${deck.group}`;
     show(); // no sound before the first tap: the browser would block it
   }
 
@@ -510,7 +605,7 @@
     app.innerHTML = `<section class="card sp-game">
       ${top('<span class="sp-count" id="count"></span>')}
       <div class="sp-head"><h1 class="les-title">${esc(o.title)}</h1>
-        <div class="seg" role="group" aria-label="Підказка"><button type="button" id="pic-1" data-pic="1">${o.modes[0]}</button><button type="button" id="pic-0" data-pic="0">${o.modes[1]}</button></div></div>
+        <div class="seg" role="group" aria-label="${T.hintGroup}"><button type="button" id="pic-1" data-pic="1">${o.modes[0]}</button><button type="button" id="pic-0" data-pic="0">${o.modes[1]}</button></div></div>
       <div class="sp-stage" id="stage"></div>
       ${WARN}
     </section>`;
@@ -539,10 +634,10 @@
     mode();
     function begin() {
       count.textContent = "";
-      stage.innerHTML = `${deck.sets ? `<div class="seg sp-sets" role="group" aria-label="Що грати">${deck.sets.map((x, k) => `<button type="button" data-set="${k}" aria-pressed="${k === set}">${esc(x.t)}</button>`).join("")}</div>` : ""}
-        ${deck.choose ? `<p class="sp-hint">Що вчимо? Обери щонайменше ${deck.choose.min} різні.</p><div class="seg sp-sets" role="group" aria-label="Що вчимо">${deck.choose.t.map((t, k) => `<button type="button" data-ch="${k}" aria-pressed="${chosen.has(k)}">${esc(t)}</button>`).join("")}</div><p class="sp-note">${esc(deck.choose.note)}</p>` : ""}
+      stage.innerHTML = `${deck.sets ? `<div class="seg sp-sets" role="group" aria-label="${T.setGroup}">${deck.sets.map((x, k) => `<button type="button" data-set="${k}" aria-pressed="${k === set}">${esc(x.t)}</button>`).join("")}</div>` : ""}
+        ${deck.choose ? `<p class="sp-hint">${T.chooseAsk(deck.choose.min)}</p><div class="seg sp-sets" role="group" aria-label="${T.chooseGroup}">${deck.choose.t.map((t, k) => `<button type="button" data-ch="${k}" aria-pressed="${chosen.has(k)}">${esc(t)}</button>`).join("")}</div><p class="sp-note">${esc(deck.choose.note)}</p>` : ""}
         <p class="sp-hint">${o.hint}</p>
-        <button type="button" class="btn big" id="go">▶ Почати</button>`;
+        <button type="button" class="btn big" id="go">${T.start}</button>`;
       const go = document.getElementById("go");
       // enough ticked: at least min different families
       const enough = () =>
@@ -624,8 +719,8 @@
       const stars = Math.round((score / q.length) * 3);
       count.textContent = "";
       stage.innerHTML = `<div class="sp-stars">${[0, 1, 2].map((k) => Kit.star(k < stars)).join("")}</div>
-        <p class="sp-result">${score === q.length ? "Молодець! " : ""}З першого разу: <b>${score}</b> з ${q.length}</p>
-        <div class="sp-row"><button type="button" class="btn" id="again">🔁 Ще раз</button>${deck.sets || deck.choose ? `<button type="button" class="btn ghost" id="other">${esc(deck.other)}</button>` : ""}<a class="btn ghost" href="index.html">${esc(deck.group)}</a></div>`;
+        <p class="sp-result">${score === q.length ? T.well : ""}${T.first(score, q.length)}</p>
+        <div class="sp-row"><button type="button" class="btn" id="again">${T.more}</button>${deck.sets || deck.choose ? `<button type="button" class="btn ghost" id="other">${esc(deck.other)}</button>` : ""}<a class="btn ghost" href="index.html">${esc(deck.group)}</a></div>`;
       document.getElementById("again").onclick = start;
       if (deck.sets || deck.choose)
         document.getElementById("other").onclick = begin;
@@ -638,7 +733,7 @@
     deck.hint
       ? `<span class="sp-hintword${cls(deck.hintCls)}" id="hint">${deck.hint(it)}</span>`
       : `<span class="sp-fpic sp-hintpic" id="hint" aria-hidden="true">${esc(it.ic)}</span>`;
-  const listen = `<button type="button" class="sp-snd sp-listen" id="listen" aria-label="Послухати ще раз">${SPEAKER}</button>`;
+  const listen = `<button type="button" class="sp-snd sp-listen" id="listen" aria-label="${T.again}">${SPEAKER}</button>`;
 
   /* ================= guess ================= */
   // The voice says a letter (syllable); tap it among 4. A right tap shows its picture and word and says the word,
@@ -650,12 +745,10 @@
   function guess() {
     const q = deck.q || ((it) => [it.name, it.snd]);
     round({
-      title: deck.gq ? deck.gq.title : "Вгадай " + deck.what[0],
+      title: deck.gq ? deck.gq.title : T.guess(deck.what[0]),
       mk: "guess",
-      modes: deck.modes || ["🖼️ З картинкою", "🔊 Без картинки"],
-      hint: deck.gq
-        ? deck.gq.hint
-        : `Послухай ${deck.what[0]} і натисни на ${deck.what[1]}.`,
+      modes: deck.modes || T.guessModes,
+      hint: deck.gq ? deck.gq.hint : T.guessHint(deck.what),
       n: 10,
       ask(it, api) {
         const { stage, say } = api;
@@ -711,12 +804,10 @@
     );
     const B = deck.build;
     round({
-      title: B ? B.title : "Склади слово",
+      title: B ? B.title : T.build,
       mk: "build",
-      modes: B ? B.modes : ["🔤 Картинка і слово", "🖼️ Тільки картинка"],
-      hint: B
-        ? B.hint
-        : "Подивись на картинку, послухай слово і склади його з літер.",
+      modes: B ? B.modes : T.buildModes,
+      hint: B ? B.hint : T.buildHint,
       n: 8,
       ask(it, api) {
         const { stage, say } = api;
@@ -734,14 +825,14 @@
         const model = B
           ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span><span class="sp-model sp-msent" id="hint">${esc(whole)}</span>`
           : `${deck.pic ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span>` : `<span class="sp-fpic sp-hintpic" aria-hidden="true">${esc(it.ic)}</span>`}<span class="sp-model" id="hint">${esc(whole)}</span>`;
-        stage.innerHTML = `<div class="sp-say sp-say-b${B ? " sp-say-s" : ""}">${model}${listen}<button type="button" class="sp-snd sp-listen sp-help" id="help" aria-label="${B ? B.help : "Допомога: наступна літера"}">💡</button></div>
-        <div class="line sp-line" id="line" aria-label="${B ? B.what : "Слово"}"></div>
-        <div class="bank sp-bank" id="bank" aria-label="Літери"></div>`;
+        stage.innerHTML = `<div class="sp-say sp-say-b${B ? " sp-say-s" : ""}">${model}${listen}<button type="button" class="sp-snd sp-listen sp-help" id="help" aria-label="${B ? B.help : T.helpLetter}">💡</button></div>
+        <div class="line sp-line" id="line" aria-label="${B ? B.what : T.word}"></div>
+        <div class="bank sp-bank" id="bank" aria-label="${T.letters}"></div>`;
         const L = document.getElementById("line");
         let bank = Kit.shuf(target.map((t, i) => ({ t, i })));
         const same = (a) => a.map((x) => x.t).join(" ") === target.join(" ");
         for (let k = 0; k < 8 && same(bank); k++) bank = Kit.shuf(bank);
-        const T = Kit.dragTiles(L, document.getElementById("bank"), [], {
+        const tiles = Kit.dragTiles(L, document.getElementById("bank"), [], {
           cls: B ? "sp-tile sp-wtile" : "sp-tile",
           mark: (w, k) => (done ? (w.t === target[k] ? "ok" : "no") : ""),
           onPlace: (w) => letter(w.t),
@@ -750,12 +841,12 @@
             if (line.length === target.length) setTimeout(check);
           },
         });
-        T.use([], bank);
+        tiles.use([], bank);
         async function check() {
           if (done) return;
           done = true;
-          T.lock();
-          if (same(T.line)) {
+          tiles.lock();
+          if (same(tiles.line)) {
             L.classList.add("ok");
             document.getElementById("help").disabled = true;
             if (!miss) api.star();
@@ -771,25 +862,25 @@
           if (!stage.contains(L)) return;
           // the letters from the first wrong one on go back to the bank
           let k = 0;
-          while (k < T.line.length && T.line[k].t === target[k]) k++;
-          while (T.line.length > k) T.bank.push(T.line.pop());
+          while (k < tiles.line.length && tiles.line[k].t === target[k]) k++;
+          while (tiles.line.length > k) tiles.bank.push(tiles.line.pop());
           done = false;
           L.classList.remove("no");
-          T.unlock();
+          tiles.unlock();
         }
         document.getElementById("help").onclick = () => {
           if (done) return;
           miss = true;
           let k = 0;
-          while (k < T.line.length && T.line[k].t === target[k]) k++;
-          while (T.line.length > k) T.bank.push(T.line.pop());
-          const j = T.bank.findIndex((w) => w.t === target[k]);
+          while (k < tiles.line.length && tiles.line[k].t === target[k]) k++;
+          while (tiles.line.length > k) tiles.bank.push(tiles.line.pop());
+          const j = tiles.bank.findIndex((w) => w.t === target[k]);
           if (j >= 0) {
-            const [w] = T.bank.splice(j, 1);
-            T.line.push(w);
+            const [w] = tiles.bank.splice(j, 1);
+            tiles.line.push(w);
             letter(w.t);
           }
-          T.draw();
+          tiles.draw();
         };
         document.getElementById("listen").onclick = () => say(whole, wsnd);
         say(whole, wsnd);
@@ -820,15 +911,15 @@
       run = 0;
     app.innerHTML = `<section class="card sp-game">
       ${top('<span class="sp-count" id="count"></span>')}
-      <div class="sp-head"><h1 class="les-title">Лови літеру</h1>
-        <div class="seg" role="group" aria-label="Швидкість"><button type="button" id="fast-0" data-fast="0">🐢 Повільно</button><button type="button" id="fast-1" data-fast="1">🐇 Швидше</button></div></div>
+      <div class="sp-head"><h1 class="les-title">${T.fly}</h1>
+        <div class="seg" role="group" aria-label="${T.speed}"><button type="button" id="fast-0" data-fast="0">${T.slow}</button><button type="button" id="fast-1" data-fast="1">${T.fast}</button></div></div>
       <div class="sp-stage" id="stage"></div>
       ${WARN}
     </section>`;
     const stage = document.getElementById("stage");
     const count = document.getElementById("count");
     const tally = () => (count.textContent = `⭐ ${got} / ${GOAL}`);
-    document.title = `Лови літеру · ${deck.group}`;
+    document.title = `${T.fly} · ${deck.group}`;
     const speed = () =>
       app
         .querySelectorAll("[data-fast]")
@@ -858,10 +949,10 @@
     function begin() {
       stop();
       count.textContent = "";
-      stage.innerHTML = `<p class="sp-hint">Обери літеру, яку будемо ловити.</p>
-        <div class="sp-abc sp-pick" role="group" aria-label="Літера">
-          <button type="button" data-t="-1" aria-pressed="${pick < 0}" aria-label="Будь-яка">🎲</button>${items.map((it, k) => `<button type="button" class="${deck.tile(it).c}" data-t="${k}" aria-pressed="${k === pick}">${deck.tile(it).html}</button>`).join("")}</div>
-        <button type="button" class="btn big" id="go">▶ Почати</button>`;
+      stage.innerHTML = `<p class="sp-hint">${T.flyHint}</p>
+        <div class="sp-abc sp-pick" role="group" aria-label="${T.letter}">
+          <button type="button" data-t="-1" aria-pressed="${pick < 0}" aria-label="${T.any}">🎲</button>${items.map((it, k) => `<button type="button" class="${deck.tile(it).c}" data-t="${k}" aria-pressed="${k === pick}">${deck.tile(it).html}</button>`).join("")}</div>
+        <button type="button" class="btn big" id="go">${T.start}</button>`;
       stage.querySelectorAll("[data-t]").forEach(
         (b) =>
           (b.onclick = () => {
@@ -880,8 +971,8 @@
       got = bad = 0;
       tally();
       const h = deck.head(target);
-      stage.innerHTML = `<div class="sp-target"><span class="sp-hint">Лови:</span>
-          <button type="button" class="sp-tgt${cls(h.c)}" id="tgt" aria-label="Послухати літеру">${h.html}</button></div>
+      stage.innerHTML = `<div class="sp-target"><span class="sp-hint">${T.catch}</span>
+          <button type="button" class="sp-tgt${cls(h.c)}" id="tgt" aria-label="${T.hearLetter}">${h.html}</button></div>
         <div class="sp-sky" id="sky"></div>`;
       document.getElementById("tgt").onclick = () => say(target);
       say(target);
@@ -966,8 +1057,8 @@
       const stars = bad === 0 ? 3 : bad <= 2 ? 2 : 1;
       count.textContent = "";
       stage.innerHTML = `<div class="sp-stars">${[0, 1, 2].map((k) => Kit.star(k < stars)).join("")}</div>
-        <p class="sp-result">${bad === 0 ? "Молодець! " : ""}Спіймано: <b>${GOAL}</b> · помилок: <b>${bad}</b></p>
-        <div class="sp-row"><button type="button" class="btn" id="again">🔁 Ще раз</button><button type="button" class="btn ghost" id="other">Інша літера</button><a class="btn ghost" href="index.html">${esc(deck.group)}</a></div>`;
+        <p class="sp-result">${bad === 0 ? T.well : ""}${T.caught(GOAL, bad)}</p>
+        <div class="sp-row"><button type="button" class="btn" id="again">${T.more}</button><button type="button" class="btn ghost" id="other">${T.otherLetter}</button><a class="btn ghost" href="index.html">${esc(deck.group)}</a></div>`;
       document.getElementById("again").onclick = start;
       document.getElementById("other").onclick = begin;
     }

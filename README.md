@@ -159,6 +159,8 @@ Engine `shared/speech.js` + `shared/speech.css`; a game is only a data file. Voi
   the home page's first filter and sections are the languages, `by` in `SCHOOLS` in `index.js`), opening `index.html` with its games from `list.js`
   (`items: [{n, title, en, path, ic, note}]`, `en` = the line under the title, in Ukrainian here).
 - A game page is `<body data-view="…" data-school="speech">`, loading `shared/common.js`, its data, then `shared/speech.js`.
+  The interface texts (buttons, titles, hints) come from `TEXTS` in `speech.js` by the page's `<html lang>` (`uk`, `en`);
+  a new language adds its table there. The positions, phrases and verbs decks still have their Ukrainian texts in their deck.
 - Each game works on a deck: `data-deck="letters"` (or none, data `../letters.js`), `data-deck="syllables"` (`../syllables.js`),
   `data-deck="words"` (both files: every picture word of the cards and sheets, without ’, in sets by length)
   `data-deck="positions"` (`../positions.js`), `data-deck="phrases"` (`../phrases.js`) or `data-deck="verbs"` (`../verbs.js`).
