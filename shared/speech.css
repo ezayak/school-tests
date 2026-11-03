@@ -875,3 +875,24 @@
     height: max(150px, calc(100dvh - 215px));
   }
 }
+
+/* Arabic (body[data-lang="ar"]): the letters and words in the Arabic lessons' Naskh font, a little more line height for the harakat,
+   and the letter panel, the line and the bank from right to left */
+body[data-lang="ar"]
+  :is(
+    .sp-hd,
+    .sp-wd,
+    .sp-abc,
+    .sp-choice,
+    .sp-tile,
+    .sp-model,
+    .sp-found,
+    .sp-bal,
+    .sp-tgt
+  ) {
+  font-family: "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting", serif;
+  line-height: 1.4;
+}
+body[data-lang="ar"] :is(.sp-abc, .sp-line, .sp-bank) {
+  direction: rtl;
+}

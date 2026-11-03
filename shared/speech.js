@@ -14,7 +14,8 @@
   const app = document.getElementById("app");
   const view = document.body.dataset.view || "list";
   const HOME = "../../../index.html";
-  // The interface texts in the page's language (<html lang>: uk, en); the words to learn are in the data files.
+  // The interface texts in the page's language (<html lang>: uk, en; the Arabic pages are in English, like the Arabic
+  // lessons); the words to learn are in the data files.
   const TEXTS = {
     uk: {
       home: "← Усі ігри",
@@ -93,6 +94,8 @@
       game: "Game",
       soon: "New games will appear here.",
       warn: "This device may not have an English voice.",
+      warnAr:
+        "No Arabic voice on this device and no internet, so listening is not available right now.",
       again: "Listen again",
       cards: "Cards",
       hintGroup: "Hint",
@@ -191,6 +194,22 @@
     return;
   }
 
+  // the letters of a word, each with its marks (an Arabic haraka stays on its letter), and a letter without its marks
+  // (أ إ آ as ا, ئ as ي, ؤ as و, ة as ت: the letter whose name is said)
+  const seg =
+    window.Intl && Intl.Segmenter
+      ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
+      : null;
+  const chars = (w) =>
+    seg ? [...seg.segment(w)].map((x) => x.segment) : [...w];
+  const bare = (t) =>
+    t
+      .replace(/[\u064B-\u0652\u0670]/g, "")
+      .replace(/[أإآ]/g, "ا")
+      .replace(/ئ/g, "ي")
+      .replace(/ؤ/g, "و")
+      .replace(/ة/g, "ت");
+
   /* ---------- the deck: letters, syllables or words (<body data-deck>) ---------- */
   const deck = (
     {
@@ -204,7 +223,10 @@
       verbForms,
     }[document.body.dataset.deck] || letters
   )();
-  const V = Kit.voice(deck.lang);
+  // Arabic: Google's online voice when the device has none (as in the Arabic lessons); body[data-lang] for the Arabic font
+  const AR = /^ar/.test(deck.lang);
+  const V = Kit.voice(deck.lang, { online: AR });
+  if (AR) document.body.dataset.lang = "ar";
 
   /* ---------- voice: the device voice, or a recording ---------- */
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -235,7 +257,7 @@
   // the links back (home, the group's games), with something on the right (a counter)
   const top = (right) =>
     `<div class="toprow"><div class="toplinks"><a class="back" href="${HOME}">${T.home}</a><a class="back" href="index.html">${esc(deck.group)}</a></div>${right || ""}</div>`;
-  const WARN = `<p class="sp-warn" id="warn" hidden>${T.warn}</p>`;
+  const WARN = `<p class="sp-warn" id="warn" hidden>${AR ? T.warnAr : T.warn}</p>`;
   // checked at a tap: the device lists its voices a moment after the page opens
   const warn = () =>
     (document.getElementById("warn").hidden = !V.ok || V.has());
@@ -351,7 +373,9 @@
       });
     const items = [...seen.values()];
     const len = (a, b) =>
-      items.filter((x) => x.name.length >= a && x.name.length <= b);
+      items.filter(
+        (x) => chars(x.name).length >= a && chars(x.name).length <= b,
+      );
     return {
       lang: window.SPEECH_LETTERS.lang,
       key: "words-",
@@ -868,14 +892,14 @@
       ask(it, api) {
         const { stage, say } = api;
         const [whole, wsnd] = deck.spell ? deck.spell(it) : said(it);
-        const target = B ? whole.split(" ") : [...whole];
+        const target = B ? whole.split(" ") : chars(whole);
         let miss = false,
           done = false,
           saying = Promise.resolve(); // the letter being said
         // a letter's name (a sentence's word) as it goes onto the line
         const letter = (t) => {
           if (B) return (saying = say(t));
-          const x = names.get(t);
+          const x = names.get(bare(t));
           if (x) saying = say(x.name, x.snd);
         };
         const model = B

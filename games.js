@@ -2121,4 +2121,27 @@ window.GAMES = [
       "speech/en/verbs/build.html",
     ],
   },
+  {
+    school: "speech",
+    lang: "ar",
+    period: "Subjects",
+    subject: "ABC",
+    title: "الْحُرُوف · Arabic ABC",
+    hub: true,
+    lesson:
+      "Letters · cards, guess the letter, build the word, catch the letter",
+    topics:
+      "The 28 letters of the Arabic alphabet with their names and pictures · classical Arabic, full tashkeel",
+    path: "speech/ar/abc/index.html",
+    countLabel: "4 games",
+    year: "2026–2027",
+    also: [
+      "speech/ar/letters.js",
+      "speech/ar/abc/list.js",
+      "speech/ar/abc/cards.html",
+      "speech/ar/abc/guess.html",
+      "speech/ar/abc/build.html",
+      "speech/ar/abc/fly.html",
+    ],
+  },
 ];

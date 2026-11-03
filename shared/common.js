@@ -245,8 +245,13 @@ window.Kit = (function () {
   // The device voice for one language (lang: "uk-UA", "en-US", "ar"): {ok, has(), say(text, rate), hush()}.
   // ok: the device can speak; has(): a voice of that language is installed; say() ends when the text has been said
   // (or could not be said, at most 3.5 s); punctuation is not read.
-  function voice(lang) {
-    const ok = "speechSynthesis" in window;
+  // opt.online: with no voice of that language on the device, Google's online voice says it (as the Arabic lessons do);
+  // has() is then true while the device is online.
+  function voice(lang, opt) {
+    const online = !!(opt && opt.online);
+    const URL = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${lang.split("-")[0]}&q=`;
+    let player = null;
+    const ok = "speechSynthesis" in window || online;
     const re = new RegExp("^" + lang.split("-")[0], "i");
     let v = null;
     function pickVoice() {
@@ -254,7 +259,7 @@ window.Kit = (function () {
         v = speechSynthesis.getVoices().find((x) => re.test(x.lang)) || null;
       } catch (e) {}
     }
-    if (ok) {
+    if ("speechSynthesis" in window) {
       pickVoice();
       try {
         speechSynthesis.addEventListener("voiceschanged", pickVoice);
@@ -263,14 +268,40 @@ window.Kit = (function () {
       }
     }
     function hush() {
-      if (ok)
+      if ("speechSynthesis" in window)
         try {
           speechSynthesis.cancel();
         } catch (e) {}
+      if (player) player.pause();
+    }
+    const net = () => online && !v && navigator.onLine;
+    // the online voice: ends with the sound (at most 8 s)
+    function sayOnline(text) {
+      return new Promise((res) => {
+        let done = false;
+        const fin = () => {
+          if (!done) {
+            done = true;
+            res();
+          }
+        };
+        try {
+          player = player || new Audio();
+          player.onended = fin;
+          player.onerror = fin;
+          player.src = URL + encodeURIComponent(text);
+          player.playbackRate = 0.85;
+          player.play().catch(fin);
+        } catch (e) {
+          fin();
+        }
+        setTimeout(fin, 8000);
+      });
     }
     function say(text, rate) {
+      if (net()) return sayOnline(text);
       return new Promise((res) => {
-        if (!ok) return res();
+        if (!("speechSynthesis" in window)) return res();
         try {
           const u = new SpeechSynthesisUtterance(text.replace(/[.,!?:;]/g, ""));
           u.lang = lang;
@@ -292,7 +323,7 @@ window.Kit = (function () {
         }
       });
     }
-    return { ok, has: () => !!v, say, hush };
+    return { ok, has: () => !!v || net(), say, hush };
   }
   // tap an animated picture to see it again from the start
   document.addEventListener("click", (e) => {
