@@ -2035,11 +2035,11 @@ window.GAMES = [
     subject: "Дії",
     title: "Дії",
     hub: true,
-    lesson: "Дії · картки, вгадай дію, склади слово",
+    lesson: "Дії · картки, вгадай дію, склади слово, як сказати?",
     topics:
       "їсти, пити, спати, митися, одягатися, ходити, бігати, сидіти, читати, писати, малювати, грати…: дія і як про неї сказати (Я їм)",
     path: "speech/uk/verbs/index.html",
-    countLabel: "3 гри",
+    countLabel: "4 гри",
     year: "2026–2027",
     also: [
       "speech/uk/verbs.js",
@@ -2047,6 +2047,7 @@ window.GAMES = [
       "speech/uk/verbs/cards.html",
       "speech/uk/verbs/guess.html",
       "speech/uk/verbs/build.html",
+      "speech/uk/verbs/forms.html",
     ],
   },
 ];

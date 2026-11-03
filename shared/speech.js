@@ -54,6 +54,7 @@
       phrases,
       verbs,
       verbWords,
+      verbForms,
     }[document.body.dataset.deck] || letters
   )();
   const V = Kit.voice(deck.lang);
@@ -375,6 +376,24 @@
     return d;
   }
 
+  // Verb forms (verbs.js): the voice says the verb («їсти»), the picture (mode 1) and «Я …» show; choose the form he says
+  // about himself among 4 (їм / п’ю / сплю / граю); a right tap shows and says «Я їм».
+  function verbForms() {
+    const d = verbs();
+    const form = (it) => it.w.match(/\[(.+?)\]/)[1];
+    d.key = "verbf-";
+    d.gq = {
+      title: "Як сказати?",
+      hint: "Послухай дію і вибери, як сказати про себе: «Я …».",
+    };
+    d.modes = ["🖼️ З картинкою", "🔊 Без картинки"];
+    d.hint = (it) => d.pic(it);
+    d.hintCls = "sp-hpic";
+    d.prompt = (it) => esc(it.w).replace(/\[.+?\]/, `<b class="sp-posw">…</b>`);
+    d.tile = (it) => ({ c: "sp-form", html: esc(form(it)) });
+    return d;
+  }
+
   /* ================= cards ================= */
   // The parent's layout «A · Card + letter panel»: the card on the left, the panel on the right.
   // Tap the card (or 🔊, ‹ ›, a button in the panel): the letter or syllable, a pause, the word.
@@ -626,20 +645,23 @@
   // then the next one comes. 10 a round; a star for each one found at the first tap.
   // «З картинкою» shows the picture next to 🔊 as a hint, «Без картинки» gives only the sound.
   // A deck with sets (syllables) first asks what to play: everything or one consonant.
-  // deck.q(it): what the voice asks (default the item's name; phrases: the whole sentence).
+  // deck.q(it): what the voice asks (default the item's name; phrases: the whole sentence); deck.prompt(it): a line
+  // always shown after the hint («Я …»); deck.gq: {title, hint} instead of «Вгадай …».
   function guess() {
     const q = deck.q || ((it) => [it.name, it.snd]);
     round({
-      title: "Вгадай " + deck.what[0],
+      title: deck.gq ? deck.gq.title : "Вгадай " + deck.what[0],
       mk: "guess",
       modes: deck.modes || ["🖼️ З картинкою", "🔊 Без картинки"],
-      hint: `Послухай ${deck.what[0]} і натисни на ${deck.what[1]}.`,
+      hint: deck.gq
+        ? deck.gq.hint
+        : `Послухай ${deck.what[0]} і натисни на ${deck.what[1]}.`,
       n: 10,
       ask(it, api) {
         const { stage, say } = api;
         let miss = false;
         const opts = Kit.shuf([it, ...deck.others(it, api.pool)]);
-        stage.innerHTML = `<div class="sp-say" id="say">${listen}${hintPic(it)}</div>
+        stage.innerHTML = `<div class="sp-say" id="say">${listen}${hintPic(it)}${deck.prompt ? `<span class="sp-hintword sp-hints">${deck.prompt(it)}</span>` : ""}</div>
         <div class="sp-choices">${opts
           .map((o, k) => {
             const t = deck.tile(o);

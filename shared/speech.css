@@ -692,6 +692,35 @@
   font-size: clamp(1.6rem, min(8dvh, 7vw), 3rem);
   line-height: 1.1;
 }
+/* a picture as the hint (verb forms) */
+.sp-hintword.sp-hpic {
+  height: 100%;
+  aspect-ratio: 1;
+  flex: none;
+}
+.sp-hpic img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+}
+.sp-hpic .sp-emo {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: clamp(3rem, 12dvh, 5rem);
+}
+/* a word on a button (verb forms, up to 8 letters): lower buttons, a letter at most 0.16 of the button's width */
+.sp-choice.sp-form {
+  height: clamp(64px, 18dvh, 120px);
+  padding: 4px;
+  font-size: min(10dvh, 3rem, calc((100cqw - 42px) / 4 * 0.16));
+}
+@media (orientation: portrait) {
+  .sp-choice.sp-form {
+    font-size: min(10dvh, 3rem, calc((100cqw - 14px) / 2 * 0.16));
+  }
+}
 /* a whole sentence as the hint (phrases): smaller, it may wrap */
 .sp-hintword.sp-hints {
   min-width: 0;
