@@ -58,6 +58,8 @@ speech/                    ← Мовлення: speech games (school: "speech" 
     verbs/                 ← Дії: index.html, list.js, cards.html, guess.html, with data-deck="verbs"; build.html (data-deck="verbWords"), forms.html (data-deck="verbForms")
     img/positions/         ← the position pictures, cut from the parent's posters (no labels, no frame), <name>-1.jpg / -2.jpg
     img/things/            ← the pictures of the parent's collage of cards (no labels), 300×300
+  en/                      ← English (<html lang="en">, a US voice, English interface): letters.js (26 letters, the voice says their names)
+    abc/                   ← ABC: the same pages as uk/abc, with lang="en" (build.html loads only letters.js)
 ```
 
 Folder names: `grade-N`, `term-N`, and the period as `mid-term-1`, `final-term-1`, `mid-term-2`, `final-term-2`, …
@@ -154,7 +156,7 @@ The third button in the school switch (🗣️ Мовлення). Games for a ch
 The pictures and words come from the parent's cards «Українська абетка» (a claude.ai canvas: pages Абетка, Літери, Склади, and Застосунок with the app layouts).
 Engine `shared/speech.js` + `shared/speech.css`; a game is only a data file. Voice: `Kit.voice(lang)` (`shared/common.js`), the device voice of the data's `lang`.
 
-- Folders: `speech/<lang>/<group>/` (three deep, like every game). `uk` now; `en` and `ar` later get their own data files with `lang: "en-US"` / `"ar"`.
+- Folders: `speech/<lang>/<group>/` (three deep, like every game). `uk`, `en` (data `lang: "en-US"`); `ar` later with `"ar"`.
 - A group (Абетка, …) is one card on the home page (`subject` = the group, colour `--speech`, `lang: "uk"` instead of a grade:
   the home page's first filter and sections are the languages, `by` in `SCHOOLS` in `index.js`), opening `index.html` with its games from `list.js`
   (`items: [{n, title, en, path, ic, note}]`, `en` = the line under the title, in Ukrainian here).

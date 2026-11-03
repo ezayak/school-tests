@@ -2050,4 +2050,27 @@ window.GAMES = [
       "speech/uk/verbs/forms.html",
     ],
   },
+  {
+    school: "speech",
+    lang: "en",
+    period: "Subjects",
+    subject: "ABC",
+    title: "ABC",
+    hub: true,
+    lesson:
+      "Letters · cards, guess the letter, build the word, catch the letter",
+    topics:
+      "The 26 letters of the English alphabet with pictures · 26 words from letters",
+    path: "speech/en/abc/index.html",
+    countLabel: "4 games",
+    year: "2026–2027",
+    also: [
+      "speech/en/letters.js",
+      "speech/en/abc/list.js",
+      "speech/en/abc/cards.html",
+      "speech/en/abc/guess.html",
+      "speech/en/abc/build.html",
+      "speech/en/abc/fly.html",
+    ],
+  },
 ];
