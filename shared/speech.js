@@ -294,12 +294,32 @@
       label: "Початок речення",
       hd: "sp-frame",
     });
-    // the building game: everything, or one start of a sentence (one with at least 3 cards)
+    // the building and guessing games: everything, or one start of a sentence (one with at least 4 cards)
     d.sets = [{ t: "Усі", items: d.items }].concat(
       window.SPEECH_PHRASES.groups
         .map((g, gi) => ({ t: g.t, items: d.items.filter((x) => x.g === gi) }))
-        .filter((x) => x.items.length >= 3),
+        .filter((x) => x.items.length >= 4),
     );
+    // the guessing game: the voice says the whole sentence (written in mode 1); the wrong pictures are of the same
+    // start first («Дай мені ручку»: олівець, зошит…), so the thing is what tells them apart; never the same picture twice
+    d.q = (it) => said(it); // said is defined after the deck is made
+    d.modes = ["🔤 З реченням", "🔊 Тільки звук"];
+    d.hint = d.word;
+    d.hintCls = "sp-hints";
+    d.others = (it, pool) => {
+      const seen = new Set([it.pic]);
+      const out = [];
+      for (const x of [
+        ...Kit.shuf(pool.filter((x) => x.g === it.g)),
+        ...Kit.shuf(pool),
+        ...Kit.shuf(d.items),
+      ])
+        if (out.length < 3 && !seen.has(x.pic)) {
+          out.push(x);
+          seen.add(x.pic);
+        }
+      return out;
+    };
     d.build = {
       title: "Склади речення",
       modes: ["🔤 Зі зразком", "🖼️ Тільки картинка"],
@@ -552,7 +572,7 @@
   // the hint shown in mode 1 (id="hint"): the picture, or the deck's own (the written position)
   const hintPic = (it) =>
     deck.hint
-      ? `<span class="sp-hintword" id="hint">${deck.hint(it)}</span>`
+      ? `<span class="sp-hintword${cls(deck.hintCls)}" id="hint">${deck.hint(it)}</span>`
       : `<span class="sp-fpic sp-hintpic" id="hint" aria-hidden="true">${esc(it.ic)}</span>`;
   const listen = `<button type="button" class="sp-snd sp-listen" id="listen" aria-label="Послухати ще раз">${SPEAKER}</button>`;
 
@@ -561,7 +581,9 @@
   // then the next one comes. 10 a round; a star for each one found at the first tap.
   // «З картинкою» shows the picture next to 🔊 as a hint, «Без картинки» gives only the sound.
   // A deck with sets (syllables) first asks what to play: everything or one consonant.
+  // deck.q(it): what the voice asks (default the item's name; phrases: the whole sentence).
   function guess() {
+    const q = deck.q || ((it) => [it.name, it.snd]);
     round({
       title: "Вгадай " + deck.what[0],
       mk: "guess",
@@ -579,7 +601,7 @@
             return `<button type="button" class="sp-choice${cls(t.c)}" data-k="${k}">${t.html}</button>`;
           })
           .join("")}</div>`;
-        document.getElementById("listen").onclick = () => say(it.name, it.snd);
+        document.getElementById("listen").onclick = () => say(...q(it));
         stage.querySelectorAll("[data-k]").forEach(
           (b) =>
             (b.onclick = async () => {
@@ -587,7 +609,7 @@
                 miss = true;
                 b.disabled = true;
                 b.classList.add("no");
-                say(it.name, it.snd);
+                say(...q(it));
                 return;
               }
               stage
@@ -600,7 +622,7 @@
               if (await say(...said(it))) api.next(b);
             }),
         );
-        say(it.name, it.snd);
+        say(...q(it));
       },
     });
   }

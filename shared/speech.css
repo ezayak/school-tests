@@ -259,6 +259,7 @@
 }
 .sp-snd.sp-listen {
   position: static;
+  flex: none;
   width: clamp(56px, 14dvh, 84px);
   height: clamp(56px, 14dvh, 84px);
 }
@@ -667,6 +668,12 @@
   font-weight: 800;
   font-size: clamp(1.6rem, min(8dvh, 7vw), 3rem);
   line-height: 1.1;
+}
+/* a whole sentence as the hint (phrases): smaller, it may wrap */
+.sp-hintword.sp-hints {
+  min-width: 0;
+  text-align: center;
+  font-size: clamp(1.3rem, min(6dvh, 4.5vw), 2.3rem);
 }
 
 /* Put it there: the tray with the thing, the drawn scene (400×300, two SVG layers: the back, then the front of the furniture),

@@ -54,7 +54,7 @@ speech/                    ← Мовлення: speech games (school: "speech" 
     abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html, build.html, fly.html
     syllables/             ← Склади: the same pages, with data-deck="syllables"
     sentences/             ← Речення: positions.html (cards), positions-guess.html, positions-place.html, with data-deck="positions";
-                              phrases.html (cards), phrases-build.html, with data-deck="phrases"
+                              phrases.html (cards), phrases-build.html, phrases-guess.html, with data-deck="phrases"
     img/positions/         ← the position pictures, cut from the parent's posters (no labels, no frame), <name>-1.jpg / -2.jpg
     img/things/            ← the pictures of the parent's collage of cards (no labels), 300×300
 ```
@@ -194,7 +194,9 @@ Games:
   the whole sentence (the thing in colour); tap: the start, a pause, the sentence. The panel has the 6 starts and the pictures of the chosen one.
 - **Склади речення** (`data-view="build" data-deck="phrases"`, loads `drag-words.css`): the build game with the deck's `build`
   (title, modes, labels): the collage picture always shows, its sentence is said, and its words are put in order (each word said as it lands);
-  «🔤 Зі зразком» shows the written sentence, «🖼️ Тільки картинка» hides it. Sets «Усі» and each start with at least 3 cards.
+  «🔤 Зі зразком» shows the written sentence, «🖼️ Тільки картинка» hides it. Sets «Усі» and each start with at least 4 cards.
+- **Вгадай речення** (`data-view="guess" data-deck="phrases"`): the voice says the whole sentence (the deck's `q`), tap its picture among 4;
+  the wrong pictures are of the same start first, so the thing tells them apart. «🔤 З реченням» writes the sentence next to 🔊, «🔊 Тільки звук» does not.
 - The guessing, building and placing games share `round()` in `speech.js`: the mode switch, the choice of set (or of several groups), the round, the counter and the end screen.
 
 `letters.js` format (`window.SPEECH_LETTERS = {lang, items}`), one item per letter:
