@@ -1,4 +1,4 @@
-// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard,dragTiles}=Kit;
+// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard,dragTiles,voice}=Kit;
 window.Kit = (function () {
   const esc = (s) =>
     String(s ?? "").replace(
@@ -242,6 +242,58 @@ window.Kit = (function () {
       },
     };
   }
+  // The device voice for one language (lang: "uk-UA", "en-US", "ar"): {ok, has(), say(text, rate), hush()}.
+  // ok: the device can speak; has(): a voice of that language is installed; say() ends when the text has been said
+  // (or could not be said, at most 3.5 s); punctuation is not read.
+  function voice(lang) {
+    const ok = "speechSynthesis" in window;
+    const re = new RegExp("^" + lang.split("-")[0], "i");
+    let v = null;
+    function pickVoice() {
+      try {
+        v = speechSynthesis.getVoices().find((x) => re.test(x.lang)) || null;
+      } catch (e) {}
+    }
+    if (ok) {
+      pickVoice();
+      try {
+        speechSynthesis.addEventListener("voiceschanged", pickVoice);
+      } catch (e) {
+        speechSynthesis.onvoiceschanged = pickVoice;
+      }
+    }
+    function hush() {
+      if (ok)
+        try {
+          speechSynthesis.cancel();
+        } catch (e) {}
+    }
+    function say(text, rate) {
+      return new Promise((res) => {
+        if (!ok) return res();
+        try {
+          const u = new SpeechSynthesisUtterance(text.replace(/[.,!?:;]/g, ""));
+          u.lang = lang;
+          if (v) u.voice = v;
+          u.rate = rate || 0.7;
+          let done = false;
+          const fin = () => {
+            if (!done) {
+              done = true;
+              res();
+            }
+          };
+          u.onend = fin;
+          u.onerror = fin;
+          setTimeout(fin, 3500);
+          speechSynthesis.speak(u);
+        } catch (e) {
+          res();
+        }
+      });
+    }
+    return { ok, has: () => !!v, say, hush };
+  }
   // tap an animated picture to see it again from the start
   document.addEventListener("click", (e) => {
     const s = e.target.closest && e.target.closest(".scene, .vis-blk");
@@ -251,5 +303,16 @@ window.Kit = (function () {
         a.play();
       });
   });
-  return { esc, shuf, pick, star, lessonCard, scene, idiom, blocks, dragTiles };
+  return {
+    esc,
+    shuf,
+    pick,
+    star,
+    lessonCard,
+    scene,
+    idiom,
+    blocks,
+    dragTiles,
+    voice,
+  };
 })();

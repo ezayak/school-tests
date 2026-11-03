@@ -71,54 +71,10 @@
   const fmt = (ms) => (ms / 1000).toFixed(1).replace(".", ",") + " с";
 
   /* ---------- voice (device voices, Ukrainian) ---------- */
-  const TTS = "speechSynthesis" in window;
-  let voice = null;
-  function pickVoice() {
-    try {
-      voice =
-        speechSynthesis.getVoices().find((v) => /^uk/i.test(v.lang)) || null;
-    } catch (e) {}
-  }
-  if (TTS) {
-    pickVoice();
-    try {
-      speechSynthesis.addEventListener("voiceschanged", pickVoice);
-    } catch (e) {
-      speechSynthesis.onvoiceschanged = pickVoice;
-    }
-  }
-  function hush() {
-    if (TTS)
-      try {
-        speechSynthesis.cancel();
-      } catch (e) {}
-  }
+  const V = Kit.voice("uk-UA");
+  const TTS = V.ok;
+  const { say, hush } = V;
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-  // ends when the text has been said (or could not be said)
-  function say(text, rate) {
-    return new Promise((res) => {
-      if (!TTS) return res();
-      try {
-        const u = new SpeechSynthesisUtterance(text.replace(/[.,!?:;]/g, ""));
-        u.lang = "uk-UA";
-        if (voice) u.voice = voice;
-        u.rate = rate || 0.7;
-        let done = false;
-        const fin = () => {
-          if (!done) {
-            done = true;
-            res();
-          }
-        };
-        u.onend = fin;
-        u.onerror = fin;
-        setTimeout(fin, 3500);
-        speechSynthesis.speak(u);
-      } catch (e) {
-        res();
-      }
-    });
-  }
 
   /* ---------- page ---------- */
   const TABS = [
@@ -198,7 +154,7 @@
       const parts = parse(w);
       stage.innerHTML = `<div class="rd-top"><span class="rd-count">${i + 1} / ${L.length}</span>
         ${TTS ? `<label class="rd-switch"><input type="checkbox" id="along"${along ? " checked" : ""}> 🔊 Читати разом</label>` : ""}</div>
-        ${along && TTS && !voice ? `<p class="rd-warn">На цьому пристрої може не бути українського голосу.</p>` : ""}
+        ${along && TTS && !V.has() ? `<p class="rd-warn">На цьому пристрої може не бути українського голосу.</p>` : ""}
         <p class="rd-hint">${along ? "Торкайся складу, слухай і читай разом 👆🔊" : "Читай уголос кожен склад і торкайся його 👆"}</p>
         <div class="rd-tiles" id="tiles">${parts.map((x, j) => `<button type="button" class="rd-tile${x.s ? " st" : ""}${j === 0 ? " next" : ""}" data-i="${j}">${esc(x.t)}</button>`).join("")}</div>
         <p class="rd-hint" id="after" hidden>А тепер прочитай слово цілком!</p>
