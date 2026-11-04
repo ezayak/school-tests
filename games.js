@@ -1905,9 +1905,9 @@ window.GAMES = [
     hub: true,
     lesson: "Уроки за підручником: пояснення, вправи, задачі зі схемою",
     topics:
-      "Додавання і віднімання в межах сотні · Іменовані числа, буквені вирази",
+      "Додавання і віднімання в межах сотні · Іменовані числа, буквені вирази · Перевірка дій, годинник",
     path: "optima/grade-3/math/index.html",
-    countLabel: "2 уроки",
+    countLabel: "3 уроки",
     year: "2026–2027",
     also: [
       "optima/grade-3/math/lessons.js",
@@ -1918,6 +1918,10 @@ window.GAMES = [
       "optima/grade-3/math/lesson-2.html",
       "optima/grade-3/math/lesson-2.js",
       "optima/grade-3/math/img/lesson-2/volleyball.jpg",
+      "optima/grade-3/math/lesson-3.html",
+      "optima/grade-3/math/lesson-3.js",
+      "optima/grade-3/math/img/lesson-3/clock.jpg",
+      "optima/grade-3/math/img/lesson-3/weights.jpg",
     ],
   },
   {
