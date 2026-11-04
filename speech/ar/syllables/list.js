@@ -1,7 +1,7 @@
 // Syllables (Speech, Arabic): the games of this group, one card each (path: a page in this folder). The interface is in English,
 // as in the Arabic lessons; the syllables and words are classical Arabic.
 window.SPEECH_LIST = {
-  title: "Arabic syllables · الْمَقَاطِع",
+  title: "الْمَقَاطِع · Syllables",
   intro:
     "Choose a game. Cards: first the syllable, then the word; under the syllables, short words to read (each syllable, then the word). Guess the syllable: listen and find it.",
   items: [

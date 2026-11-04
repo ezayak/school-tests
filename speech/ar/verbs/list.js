@@ -1,7 +1,7 @@
 // Verbs (Speech, Arabic): the games of this group, one card each (path: a page in this folder). The interface is in English,
 // as in the Arabic lessons; the verbs are classical Arabic.
 window.SPEECH_LIST = {
-  title: "Arabic verbs · الْأَفْعَال",
+  title: "الْأَفْعَال · Verbs",
   intro:
     "Choose a game. Cards: look at what we do and listen to how to say it. Guess the verb: listen to the word and find the picture. Build the word: build the verb from letters.",
   items: [

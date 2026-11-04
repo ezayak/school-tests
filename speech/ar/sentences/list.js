@@ -1,7 +1,7 @@
 // Sentences (Speech, Arabic): the games of this group, one card each (path: a page in this folder). The interface is in English,
 // as in the Arabic lessons; the sentences are classical Arabic.
 window.SPEECH_LIST = {
-  title: "Arabic sentences · الْجُمَل",
+  title: "الْجُمَل · Sentences",
   intro:
     "Choose a game. Positions: look where things are and listen to the sentence. Guess the position: listen to the word and find the picture. Put it there: read or listen, and put the thing in its place. I want: say what you want, what to give you, what you need. Build the sentence: put the words in order. Guess the sentence: listen and find the picture.",
   items: [

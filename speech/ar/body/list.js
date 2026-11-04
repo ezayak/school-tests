@@ -1,6 +1,6 @@
 // Body (Speech, Arabic; the interface is in English, as in the Arabic lessons): the games of this group, one card each (path: a page in this folder).
 window.SPEECH_LIST = {
-  title: "Arabic body · الْجِسْم",
+  title: "الْجِسْم · Body",
   intro:
     "Choose a game. Cards: look and listen to what the part of the body is called. Show me: listen to or read the word and find the picture. Build the word: build it from letters. Sentences: what hurts, what to wash, how to take care of yourself.",
   items: [
