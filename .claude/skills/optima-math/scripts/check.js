@@ -174,7 +174,11 @@ L.groups.forEach((g) => {
         if (!it[k]) err(w, `word problem without ${k}`);
       if (it.schema && !isWordSchema(it.schema)) err(w, "schema is not a bar");
       const last = (it.steps || []).slice(-1)[0] || "";
-      const ans = (it.rows || []).flatMap((r) => r.a || []).map(String);
+      // the number answers (a word problem can also have a choice row: «Чого більше?»)
+      const ans = (it.rows || [])
+        .filter((r) => !r.ch && !r.cmp && !r.ops && r.e === undefined)
+        .flatMap((r) => r.a || [])
+        .map(String);
       ans.forEach((a) => {
         if (!new RegExp(`= ${a}\\b`).test(last))
           err(w, `answer ${a} is not the result of the last step «${last}»`);
