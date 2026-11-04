@@ -76,6 +76,8 @@ function checkClause(where, line, clause) {
     .replace(/[✓→…]/g, " ");
   // "1 м 6 дм = 16 дм": units outside brackets, not arithmetic
   if (/\d\s*[а-яіїєґ]/i.test(s)) return;
+  // "□ : 5 = 3": an equation with an unknown, not a step
+  if (s.includes("□")) return;
   const parts = s.split("=");
   if (parts.length < 2) return;
   const vals = parts.map((p) => {
@@ -142,6 +144,15 @@ L.groups.forEach((g) => {
             if (!/^[<>=]$/.test(r.a)) err(rw, "a must be > < =");
           } else r.cmp.forEach((x) => calc(x));
           if (r.a && !/^[<>=]$/.test(r.a)) err(rw, "a must be > < =");
+        } else if (r.ops) {
+          const parts = r.ops.split("●");
+          if (!Array.isArray(r.a) || r.a.length !== parts.length - 1)
+            err(rw, "ops: a needs one sign per ●");
+          else {
+            const v = calc(parts.map((x, j) => x + (r.a[j] || "")).join(""));
+            if (v !== r.eq)
+              err(rw, `ops: ${r.a.join(" ")} gives ${v}, not ${r.eq}`);
+          }
         } else if (r.ch) {
           [].concat(r.a).forEach((a) => {
             if (!r.ch.includes(a)) err(rw, `answer «${a}» is not a choice`);

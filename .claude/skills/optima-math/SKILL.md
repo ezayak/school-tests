@@ -24,16 +24,18 @@ Book: `~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Козак М. Ма
 
 ## 2. Sort the exercises
 
-| In the book                                      | Group (`t`, `ic`)            | Row kind                                                                                                             |
-| ------------------------------------------------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Обчисли, a column of expressions                 | Обчисли 🧮                   | `{e: "34 − (18 − 9)"}`; a label: `{q: "b = 8:", e: "43 − 8"}`                                                        |
-| chains, pyramids (answer starts the next one)    | Обчисли 🧮                   | `{h: "Ліва сторона"}`, then `{e: "■ + (11 − 5)"}` (■ = the row before)                                               |
-| >, <, =                                          | Порівняй ⚖️                  | `{cmp: ["78 − 24", "64"]}` (sign worked out); with units `{cmp: ["1 м 6 дм", "6 м 1 дм"], a: "<", why: "…"}`         |
-| word problem                                     | Задачі 📖                    | `{q: "Відповідь:", a: [33]}` + `help`, `schema`, `steps`, `answer` (the box goes into the answer sentence by itself) |
-| pairs, choose one / several                      | by topic (Рівні вирази 🔗 …) | `{q, ch: [...], a: "x"}` or `a: ["x", "y"]`                                                                          |
-| several numbers to write                         | by topic (Календар 📅 …)     | `{q, a: [2, 9, 16], any: true}` (any order)                                                                          |
-| a number with two right forms (22 or 10 o’clock) | by topic                     | `{q, a: [22], alt: [10], post: "год"}`                                                                               |
-| a table of × or :                                | —                            | lesson field `drill: {mul: [4]}` / `{div: [4]}` → the 🎲 Таблиця врозкид and 🚀 Ракети games (n · 2 … n · 9)         |
+| In the book                                        | Group (`t`, `ic`)            | Row kind                                                                                                             |
+| -------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Обчисли, a column of expressions                   | Обчисли 🧮                   | `{e: "34 − (18 − 9)"}`; a label: `{q: "b = 8:", e: "43 − 8"}`                                                        |
+| chains, pyramids (answer starts the next one)      | Обчисли 🧮                   | `{h: "Ліва сторона"}`, then `{e: "■ + (11 − 5)"}` (■ = the row before)                                               |
+| >, <, =                                            | Порівняй ⚖️                  | `{cmp: ["78 − 24", "64"]}` (sign worked out); with units `{cmp: ["1 м 6 дм", "6 м 1 дм"], a: "<", why: "…"}`         |
+| word problem                                       | Задачі 📖                    | `{q: "Відповідь:", a: [33]}` + `help`, `schema`, `steps`, `answer` (the box goes into the answer sentence by itself) |
+| pairs, choose one / several                        | by topic (Рівні вирази 🔗 …) | `{q, ch: [...], a: "x"}` or `a: ["x", "y"]`                                                                          |
+| several numbers to write                           | by topic (Календар 📅 …)     | `{q, a: [2, 9, 16], any: true}` (any order)                                                                          |
+| a number with two right forms (22 or 10 o’clock)   | by topic                     | `{q, a: [22], alt: [10], post: "год"}`                                                                               |
+| put signs between numbers (14 ● 2 ● 8 = 15)        | by topic                     | `{ops: "14 ● 2 ● 8", eq: 15, a: [":", "+"]}` (any signs that give eq are right)                                      |
+| an unknown number (□ : 7 = 2, a table of unknowns) | Невідомі числа ❓            | `{pre: "□ : 7 = 2,  □ =", a: [14]}`                                                                                  |
+| a table of × or :                                  | —                            | lesson field `drill: {mul: [4]}` / `{div: [4]}` → the 🎲 Таблиця врозкид and 🚀 Ракети games (n · 2 … n · 9)         |
 
 Leave out what has nothing to check (Пофантазуй, drawing, stick puzzles, «Прочитай таблицю»), and list it in the file comment and for the user.
 A table lesson («Таблиця множення числа N», «Таблиця ділення на N», «Закріплення …») always gets `drill` with the tables it practises.
@@ -70,13 +72,15 @@ Check at least: the tiles, every slide, one exercise of each group with 📝 Р�
 
 ## 5. Register and show
 
-- `games.js`, Математика entry: the new `.html`, `.js` and pictures in `also`, `countLabel` ("N уроків"), `topics`.
-- Show the user: what was built (slides, groups), what was left out and why, anything unsure. Wait for approval.
-- After approval, commit the lesson (one commit per lesson). Bump `VERSION` in `sw.js` once, last, in its own commit, when the user stops for the day.
+- `node .claude/skills/optima-math/scripts/add.js N "ic" "card line" ["New part title"]` writes `lesson-N.html`, the card in `lessons.js`
+  (note = pages, exercise count, the table games), the files and pictures in `also` of the Математика entry in `games.js` and its `countLabel`.
+  Run it again after changing the lesson (it replaces, never doubles). Then `prettier --write` those files and run `check.js`. Update `topics` by hand when a book section starts.
+- Show the user: what was built (slides, groups), what was left out and why, anything unsure. Wait for approval (or, when the user asked for a batch, commit each lesson and show them together).
+- Commit each lesson on its own; engine changes in their own commit before it. Bump `VERSION` in `sw.js` once, last, in its own commit.
 
 ## Lessons learned
 
 - Atkinson Hyperlegible draws 0 as Ø: math-uk.css puts Nunito first. Don't change `--body`.
 - The book writes × as `·` (4 · 3 = 12); write `·` in the data, the engine shows `·` in the steps.
-- check.js skips clauses with units next to numbers ("1 м 6 дм = 16 дм"), so check those by hand; write substitutions as "якщо b = 15, то 43 − 15 = 28".
+- check.js skips clauses with units next to numbers or with □ ("1 м 6 дм = 16 дм"), so check those by hand; write substitutions as "якщо b = 15, то 43 − 15 = 28".
 - An answer sentence with the answer number twice can't hold a box: the row then shows the bare box; reword the sentence.

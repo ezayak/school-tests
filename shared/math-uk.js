@@ -161,7 +161,8 @@
   let keyFn = null;
   document.addEventListener("keydown", (e) => {
     if (!keyFn) return;
-    if (/^[0-9<>=]$/.test(e.key)) keyFn(e.key);
+    const k = { "-": "−", "*": "·", "/": ":" }[e.key] || e.key;
+    if (/^[0-9<>=+−·:]$/.test(k)) keyFn(k);
     else if (e.key === "Backspace" || e.key === "Delete") keyFn("del");
     else if (e.key === "Enter" || e.key === "Tab") keyFn("next");
     else return;
@@ -300,8 +301,8 @@
         "",
       )}<button type="button" data-k="del" class="del" aria-label="Стерти">⌫</button><button type="button" data-k="0">0</button><button type="button" data-k="next" class="nx" aria-label="Наступне віконце">↵</button></div>`;
   // one block of signs under all the comparisons: tap a box, then a sign
-  const signsHTML = () =>
-    `<div class="mu-spad" role="group" aria-label="Знаки">${[">", "<", "="].map((s) => `<button type="button" data-k="${s}">${s}</button>`).join("")}<button type="button" data-k="del" class="del" aria-label="Стерти">⌫</button></div>`;
+  const signsHTML = (set) =>
+    `<div class="mu-spad" role="group" aria-label="Знаки" style="--n:${set.length + 1}">${set.map((s) => `<button type="button" data-k="${s}">${s}</button>`).join("")}<button type="button" data-k="del" class="del" aria-label="Стерти">⌫</button></div>`;
 
   // the rows of an exercise, worked out: expressions get their value and steps, ■ = the row before
   function prep(it) {
@@ -326,6 +327,13 @@
         return { ...r, kind: "cmp", want: [sign], l, r: rr };
       }
       if (r.ch) return { ...r, kind: "ch", want: [].concat(r.a) };
+      // the signs between numbers: "14 ● 2 ● 8" = 15; any signs that give eq are right, a = one answer
+      if (r.ops) {
+        const parts = r.ops.split("●");
+        const fill = (signs) =>
+          parts.map((x, j) => x + (signs[j] || "")).join("");
+        return { ...r, kind: "ops", parts, fill, want: r.a };
+      }
       // a word problem's answer: the box goes inside the answer sentence ("Артем пройшов [  ] м до зустрічі з товаришем.")
       const m =
         (it.schema || it.help) &&
@@ -362,7 +370,8 @@
     const field = (ri, j, sign) =>
       `<button type="button" class="mu-f${sign ? " sg" : ""}" data-f="${fid(ri, j)}" aria-label="${sign ? "Знак" : "Відповідь"}">${esc(saved[fid(ri, j)] ?? "")}</button>`;
     const hasNum = rows.some((r) => r.kind === "e" || r.kind === "num");
-    const hasSign = rows.some((r) => r.kind === "cmp");
+    const hasOps = rows.some((r) => r.kind === "ops");
+    const hasSign = hasOps || rows.some((r) => r.kind === "cmp");
     const isWord = !!(it.schema || it.help);
     const chips = () =>
       items
@@ -378,6 +387,8 @@
         return `<div class="mu-row">${r.q ? `<span class="mu-rq">${esc(r.q)}</span>` : ""}<span class="mu-expr">${esc(show(r.e))} =</span>${field(ri, 0)}</div>`;
       if (r.kind === "cmp")
         return `<div class="mu-row mu-cmp"><span class="mu-expr l">${esc(show(r.cmp[0]))}</span>${field(ri, 0, true)}<span class="mu-expr">${esc(show(r.cmp[1]))}</span></div>`;
+      if (r.kind === "ops")
+        return `<div class="mu-row">${r.parts.map((x, j) => `<span class="mu-expr">${esc(show(x))}${j === r.parts.length - 1 ? ` = ${esc(r.eq)}` : ""}</span>${j < r.parts.length - 1 ? field(ri, j, true) : ""}`).join("")}</div>`;
       if (r.kind === "ch") {
         const sel = saved[fid(ri, 0)] || [];
         return `<div class="mu-row mu-qrow"><span class="mu-rq">${esc(r.q)}</span><span class="mu-chs">${r.ch.map((c) => `<button type="button" class="mu-ch${sel.includes(c) ? " on" : ""}" data-c="${fid(ri, 0)}" data-v="${esc(c)}" data-multi="${r.want.length > 1}">${esc(c)}</button>`).join("")}</span></div>`;
@@ -399,6 +410,8 @@
             );
             return `<div class="mu-sol"><b>${esc(r.sub || show(r.e))} = ${r.want[0]}</b>${r.sub ? `<small> (■ = ${r.box})</small>` : ""}${r.steps.length > 1 || overTen(r.steps[0] || {}) ? lines.join("") : ""}</div>`;
           }
+          if (r.kind === "ops")
+            return `<div class="mu-sol"><b>${esc(show(r.fill(r.a)))} = ${esc(r.eq)}</b></div>`;
           if (r.kind === "cmp" && r.why)
             return `<div class="mu-sol"><b>${esc(r.cmp[0])} ${r.want[0]} ${esc(r.cmp[1])}</b><div>${esc(r.why)}</div></div>`;
           if (r.kind === "cmp") {
@@ -426,7 +439,9 @@
                 ? (r.q ? r.q + ": " : "") + show(r.e) + " ="
                 : r.kind === "cmp"
                   ? `${show(r.cmp[0])} ● ${show(r.cmp[1])}`
-                  : r.q || "",
+                  : r.kind === "ops"
+                    ? `${r.parts.map(show).join(" віконце ")} = ${r.eq}`
+                    : r.q || "",
           ),
         ].join(". "),
       );
@@ -444,7 +459,7 @@
       </div>
       <div class="mu-main">
         <div class="mu-rows">${rows.map(rowHTML).join("")}</div>
-        ${hasSign ? signsHTML() : ""}
+        ${hasSign ? signsHTML(hasOps ? ["+", "−", "·", ":"] : [">", "<", "="]) : ""}
         ${hasNum ? padHTML() : ""}
         <div class="mu-acts">
           ${isWord ? '<button type="button" class="btn ghost" id="helpBtn">💡 Підказка</button>' : ""}
@@ -509,7 +524,7 @@
             const i = fs.indexOf(on);
             return focus(fs[(i + 1) % fs.length]);
           }
-          if (key !== "del" && sign !== /[<>=]/.test(key)) return; // a digit in a sign box, a sign in a number box
+          if (key !== "del" && sign !== /[<>=+−·:]/.test(key)) return; // a digit in a sign box, a sign in a number box
           on.classList.remove("ok", "no");
           if (key === "del") on.textContent = on.textContent.slice(0, -1);
           else if (sign) on.textContent = key;
@@ -569,6 +584,16 @@
         }
         const got = r.want.map((_, j) => saved[fid(ri, j)] || "");
         if (got.some((x) => x === "")) return empty++;
+        if (r.kind === "ops") {
+          const ok = calc(r.fill(got)).v === r.eq;
+          if (!ok) wrong++;
+          got.forEach((_, j) =>
+            app
+              .querySelector(`[data-f="${fid(ri, j)}"]`)
+              .classList.add(ok ? "ok" : "no"),
+          );
+          return;
+        }
         // any: the numbers in any order (all the Saturdays …)
         const left = r.want.map(String);
         got.forEach((x, j) => {

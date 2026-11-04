@@ -197,13 +197,12 @@ window.MATH_LESSON = {
 ```
 
 Rows: `{e: "34 − (18 − 9)"}` (worked out; `q` = a label; `■` = the answer of the row before, `{h}` = a heading that resets it);
-`{cmp: ["78 − 24", "64"]}` (the sign worked out) or with units `{cmp, a: "<", why}`; `{q, ch: [...], a}` (choose; `a: [..]` = several);
+`{cmp: ["78 − 24", "64"]}` (the sign worked out) or with units `{cmp, a: "<", why}`; `{q, ch: [...], a}` (choose; `a: [..]` = several); `{ops: "14 ● 2 ● 8", eq: 15, a: [":", "+"]}` (signs between numbers, any that give `eq`);
 `{q, a: [numbers], pre, post, any, alt}` (boxes; `any` = in any order; `alt` = other right answers of one box). A word problem has `help`, `schema` (`kind: "bar"`, see `shared/math.js`), `steps`, `answer`.
 Expressions are text with `+ − · :` and brackets (`×` and `-` are read too). `img` names a `.jpg` in the lesson's `img` folder.
 
-New lesson: the `optima-math` skill (`.claude/skills/optima-math/SKILL.md`): copy `lesson-2.html` (change the `.js` and the title), write `lesson-N.js`, add a card to `lessons.js`,
-run `node .claude/skills/optima-math/scripts/check.js optima/grade-3/math/lesson-N.js`, add the files and pictures to `also` of the Математика entry in `games.js`
-(and its `countLabel` / `topics`), and bump `VERSION` in `sw.js`.
+New lesson: the `optima-math` skill (`.claude/skills/optima-math/SKILL.md`): write `lesson-N.js`, run `scripts/add.js` (the html, the card in `lessons.js`,
+`also` and `countLabel` in `games.js`), run `scripts/check.js`, and bump `VERSION` in `sw.js`.
 
 ## Speech games (Мовлення)
 

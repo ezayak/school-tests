@@ -319,9 +319,12 @@
 /* the block of signs under the comparisons */
 .mu-spad {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(
+    var(--n, 4),
+    1fr
+  ); /* the signs and ⌫ in one line */
   gap: 7px;
-  width: min(290px, 100%);
+  width: min(calc(var(--n, 4) * 72px), 100%);
 }
 .mu-spad button {
   min-height: clamp(48px, 8vh, 62px);
