@@ -163,7 +163,11 @@ window.READING = {
 };
 ```
 
-`-` goes between syllables and `*` before the stressed syllable (shown in colour).
+`-` goes between syllables and `*` before the stressed syllable (shown in colour), also before an opening quote (`"*«Ма-буть,"`).
+A real hyphen inside a word is `‑` (non-breaking hyphen) at the end of its syllable: `"*мо-ря‑-о-ке-*а-ни"`.
+A long text has `pages: [[lines of page 1], [lines of page 2], …]` instead of `text` (`litachky.js`): Читання shows one page at a time,
+«Далі» after its last line turns the page, the rocket starts again from the ground; one stopwatch and one record for the whole text.
+«↺ скинути» next to the record clears it (after a question).
 New text: copy `bohdanchyk.html` (change `bohdanchyk.js`), write its `.js`, add it to `texts.js`, add both files to the `also: [...]` list of the
 Українська література entry in `games.js`, update its `countLabel` / `topics`, and bump `VERSION` in `sw.js`.
 

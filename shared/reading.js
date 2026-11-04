@@ -5,7 +5,10 @@
 //   1. Склади – tap the syllables of a long word in order; the word joins up and is read whole.
 //      «Читати разом» reads each syllable aloud as it is tapped, then the word (device voice, Ukrainian).
 //   2. Слова – the long words flash one at a time for 15…2 seconds; «Ще раз» sends a word to the end of the line.
-//   3. Читання – the whole text line by line with a stopwatch; the rocket climbs; the best time is saved on the device.
+//   3. Читання – the whole text line by line with a stopwatch; the rocket climbs; the best time is saved on the device
+//      («↺ скинути» clears it, after a question).
+//      A long text has pages (READING.pages instead of text): Читання shows one page at a time, «Далі» after its last line
+//      turns to the next one and the rocket starts again from the ground; one stopwatch and one record for the whole text.
 // Words are written with "-" between syllables and "*" before the stressed syllable: "Бог-*дан-чик".
 (function () {
   "use strict";
@@ -47,6 +50,9 @@
   /* ================= one text ================= */
   const T = window.READING;
   const K = "rd-" + T.key; // saved tab, voice switch, speed and best times
+  // the lines of the timed reading, page by page; AT[n] = [page, line on it] of the n-th line of the text
+  const PAGES = T.pages || [T.text];
+  const AT = PAGES.flatMap((pl, p) => pl.map((_, i) => [p, i]));
   // "Бог-*дан-чик" → [{t: "Бог", s: false}, {t: "дан", s: true}, {t: "чик", s: false}]
   const parse = (w) =>
     w.split("-").map((x) => ({ t: x.replace("*", ""), s: x.startsWith("*") }));
@@ -55,14 +61,16 @@
       .map((x) => x.t)
       .join("");
   // a word with its stressed syllable in colour; split = keep the "-" between syllables
+  // A real hyphen inside a word is "‑" (non-breaking hyphen) at the end of a syllable: "*мо-ря‑-о-ке-*а-ни".
   const wordHTML = (w, split) =>
     parse(w)
       .map((x) => {
         if (!x.s) return esc(x.t);
-        const [, t, p] = x.t.match(/^(.*?)([.,!?:;…]*)$/); // the colour stops before a full stop or comma
-        return `<b class="rd-st">${esc(t)}</b>${esc(p)}`;
+        const [, q, t, p] = x.t.match(/^([«"(]*)(.*?)([.,!?:;…»")‑]*)$/); // the colour stops at quotes, a full stop or comma
+        return `${esc(q)}<b class="rd-st">${esc(t)}</b>${esc(p)}`;
       })
-      .join(split ? "-" : "");
+      .join(split ? "-" : "")
+      .replace(/‑-/g, "‑");
   const lineHTML = (l, split) =>
     l
       .split(" ")
@@ -303,14 +311,37 @@
     stop();
     const bk = K + (split ? "-best-split" : "-best"); // reading with syllables shown has its own record
     const best = +store.get(bk, "0");
-    let n = -1,
+    let n = -1, // the line being read, counted through all the pages
       t0 = 0;
     lift(0);
     stage.innerHTML = `<div class="rd-top"><label class="rd-switch"><input type="checkbox" id="split"${split ? " checked" : ""}> показати склади</label>
-        <span class="rd-clock" id="clock">0,0 с</span><span class="rd-count">Рекорд: <b>${best ? fmt(best) : "—"}</b></span></div>
-      <div class="rd-text" id="text">${T.text.map((l, i) => `<p class="rd-line" id="l${i}">${lineHTML(l, split)}</p>`).join("")}</div>
+        ${PAGES.length > 1 ? `<span class="rd-count" id="pgl"></span>` : ""}<span class="rd-clock" id="clock">0,0 с</span><span class="rd-count">Рекорд: <b>${best ? fmt(best) : "—"}</b>${best ? ` <button type="button" class="rd-reset" id="reset">↺ скинути</button>` : ""}</span></div>
+      <div class="rd-text" id="text"></div>
       <div class="rd-row" id="act"><button type="button" class="btn big" id="btn">Старт! 🚀</button></div>`;
     const sp = document.getElementById("split");
+    const reset = document.getElementById("reset");
+    // clears both records (with and without syllables), after a question
+    if (reset)
+      reset.onclick = () => {
+        if (!confirm("Скинути рекорд?")) return;
+        store.set(K + "-best", "0");
+        store.set(K + "-best-split", "0");
+        read();
+      };
+    const text = document.getElementById("text");
+    function showPage(p) {
+      const first = AT.findIndex(([q]) => q === p);
+      text.innerHTML = PAGES[p]
+        .map(
+          (l, i) =>
+            `<p class="rd-line" id="l${first + i}">${lineHTML(l, split)}</p>`,
+        )
+        .join("");
+      text.scrollTop = 0;
+      const pgl = document.getElementById("pgl");
+      if (pgl) pgl.textContent = `Сторінка ${p + 1} з ${PAGES.length}`;
+    }
+    showPage(0);
     sp.onchange = () => {
       split = sp.checked;
       read();
@@ -322,22 +353,24 @@
         t0 = performance.now();
         every(() => (clock.textContent = fmt(performance.now() - t0)), 100);
         sp.disabled = true;
+        if (reset) reset.hidden = true;
       }
       if (n >= 0)
         document.getElementById("l" + n).classList.replace("cur", "was");
       n++;
-      if (n >= T.text.length) return finish();
+      if (n >= AT.length) return finish();
+      const [p, i] = AT[n];
+      if (i === 0 && p > 0) showPage(p); // the last line of a page was read: the next page
       const line = document.getElementById("l" + n);
       line.classList.add("cur");
       // a long text scrolls in its box: the line being read stays in the middle
-      const box = document.getElementById("text");
-      box.scrollTo({
-        top: line.offsetTop - (box.clientHeight - line.offsetHeight) / 2,
+      text.scrollTo({
+        top: line.offsetTop - (text.clientHeight - line.offsetHeight) / 2,
         behavior: "smooth",
       });
-      lift((n / T.text.length) * 0.8);
+      lift((i / PAGES[p].length) * 0.8); // the rocket starts from the ground on each page
       btn.classList.remove("big");
-      btn.textContent = n === T.text.length - 1 ? "Фініш 🏁" : "Далі ▶";
+      btn.textContent = n === AT.length - 1 ? "Фініш 🏁" : "Далі ▶";
     }
     function finish() {
       stop();
@@ -356,8 +389,8 @@
     }
     btn.onclick = step;
     // tapping the text also turns to the next line
-    document.getElementById("text").onclick = () => {
-      if (n >= 0 && n < T.text.length) step();
+    text.onclick = () => {
+      if (n >= 0 && n < AT.length) step();
     };
   }
 
