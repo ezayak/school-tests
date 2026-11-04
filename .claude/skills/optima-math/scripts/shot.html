@@ -35,17 +35,17 @@
         else if (cmd === "answer")
           // the table games: one letter per example, r = the right answer, w = a wrong one
           for (const c of arg) {
-            const [x, op, y] = q(".mu-rk-t, .mu-gq .mu-expr")
+            const [x, op, y] = q(".tg-rk-t, .tg-gq .tg-expr")
               .textContent.replace("=", "")
               .trim()
               .split(" ");
             const v = op === "·" ? x * y : x / y;
-            const opts = [...d.querySelectorAll(".mu-opt")];
+            const opts = [...d.querySelectorAll(".tg-opt")];
             if (opts.length)
               opts.find((o) => (c === "r") === (+o.dataset.v === v)).click();
             else {
               for (const k of String(c === "r" ? v : v + 1))
-                q(`.mu-pad [data-k="${k}"]`).click();
+                q(`.mx-pad [data-k="${k}"]`).click();
               q("#okBtn").click();
               if (c !== "r") q("#okBtn").click();
             }

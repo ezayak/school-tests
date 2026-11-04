@@ -1,0 +1,345 @@
+/* Times-table games (shared/times-games.js): 🎲 mixed up, 🚀 rockets and the result screen.
+   Pages: the Optima math lessons and the Grade 4 Math "Multiplication games". Loads after shared/theme.css,
+   shared/lesson.css (card, hud, btn, fb) and shared/math.css (the number pad .mx-pad). */
+.tg-expr {
+  font-family: var(--display);
+  font-size: 1.45rem;
+  white-space: nowrap;
+}
+/* the answer box */
+.tg-f {
+  min-width: 2.6em;
+  height: 1.75em;
+  padding: 0 6px;
+  font-family: var(--display);
+  font-size: 1.45rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+.tg-f.on {
+  outline: 3px solid var(--hl);
+  outline-offset: 1px;
+  background: color-mix(in srgb, var(--hl) 25%, var(--card));
+}
+.tg-f.ok {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 22%, var(--card));
+}
+.tg-f.no {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 18%, var(--card));
+}
+.tg-pad .nx {
+  background: color-mix(in srgb, var(--cool) 15%, var(--card));
+}
+.tg-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 2.5px dashed var(--accent);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+.tg-box > b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.2rem;
+}
+.tg-box p {
+  margin: 0;
+}
+.tg-acts,
+.tg-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.tg-fb {
+  width: 100%;
+}
+.tg-nav {
+  width: 100%;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+.tg-nav .btn {
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .tg-expr,
+  .tg-f {
+    font-size: 1.25rem;
+  }
+}
+
+.tg-game,
+.tg-res {
+  align-items: center;
+  gap: 14px;
+}
+.tg-gq {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tg-gq .tg-expr,
+.tg-gq .tg-f {
+  font-size: 2.4rem;
+}
+.tg-gq .tg-f {
+  min-width: 2.2em;
+}
+/* the sky the rocket crosses */
+.tg-sky {
+  position: relative;
+  width: 100%;
+  height: 130px;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 2px solid var(--ink);
+  background: linear-gradient(#bfe3ff, #eaf6ff);
+}
+.tg-rk {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transform: translate(-100%, -50%);
+  animation: tg-fly var(--dur, 12s) linear forwards;
+}
+.tg-intro .tg-rk {
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: none;
+}
+@keyframes tg-fly {
+  to {
+    left: 100%;
+    transform: translate(0, -50%);
+  }
+}
+.tg-rk-ic {
+  font-family: var(--emoji);
+  font-size: 3rem;
+  transform: rotate(45deg); /* 🚀 points up-right: turn it to the right */
+}
+.tg-rk-t {
+  order: -1; /* the example trails behind the rocket */
+  font-family: var(--display);
+  font-size: 1.9rem;
+  background: var(--card);
+  color: var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  padding: 0 10px;
+}
+/* a wrong answer: the rocket speeds away */
+.tg-rk.away {
+  animation-duration: 1.2s;
+}
+.tg-rk.gone {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.tg-boom {
+  position: absolute;
+  top: 50%;
+  font-family: var(--emoji);
+  font-size: 5rem;
+  transform: translate(-50%, -50%);
+  animation: tg-boom 0.9s ease-out forwards;
+}
+.tg-boom[hidden] {
+  display: none;
+}
+@keyframes tg-boom {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 0;
+  }
+}
+.tg-opts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: min(560px, 100%);
+}
+.tg-opt {
+  min-height: 72px;
+  font-family: var(--display);
+  font-size: 2.2rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+}
+.tg-opt:disabled {
+  cursor: default;
+}
+.tg-opt.ok {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 25%, var(--card));
+}
+.tg-opt.no {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 20%, var(--card));
+}
+.tg-speed {
+  display: flex;
+  gap: 8px;
+}
+.tg-speed [aria-pressed="true"] {
+  background: color-mix(in srgb, var(--hl) 45%, var(--card));
+}
+/* the result */
+.tg-res {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.tg-mood {
+  font-family: var(--emoji);
+  font-size: 6rem;
+  line-height: 1.1;
+}
+.tg-mood.fw {
+  animation: tg-pop 0.6s ease-out;
+}
+.tg-mood.up {
+  animation: tg-nod 1s ease-in-out 3;
+}
+.tg-mood.cry {
+  animation: tg-sob 0.5s ease-in-out 6;
+}
+@keyframes tg-pop {
+  from {
+    transform: scale(0.2);
+  }
+}
+@keyframes tg-nod {
+  50% {
+    transform: translateY(-14px) rotate(-8deg);
+  }
+}
+@keyframes tg-sob {
+  25% {
+    transform: rotate(-6deg);
+  }
+  75% {
+    transform: rotate(6deg);
+  }
+}
+.tg-score {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 2.6rem;
+  margin: 0;
+  color: var(--accent);
+}
+.tg-rt {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.tg-wrong {
+  width: min(460px, 100%);
+  text-align: left;
+}
+.tg-wrong small {
+  color: var(--muted);
+}
+/* fireworks: bursts of 12 sparks, again and again */
+.tg-fws {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.tg-fw {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+.tg-fw i {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin: -5px;
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0;
+  animation: tg-spark 1.6s ease-out infinite;
+  animation-delay: var(--d);
+}
+.tg-fw.f0 {
+  left: 18%;
+  top: 22%;
+  --c: #ff5a5f;
+  --d: 0s;
+}
+.tg-fw.f1 {
+  left: 80%;
+  top: 18%;
+  --c: #ffc93c;
+  --d: 0.4s;
+}
+.tg-fw.f2 {
+  left: 50%;
+  top: 12%;
+  --c: #3db8ff;
+  --d: 0.8s;
+}
+.tg-fw.f3 {
+  left: 25%;
+  top: 60%;
+  --c: #7bd389;
+  --d: 1.1s;
+}
+.tg-fw.f4 {
+  left: 76%;
+  top: 58%;
+  --c: #c77dff;
+  --d: 0.6s;
+}
+@keyframes tg-spark {
+  0% {
+    transform: rotate(var(--a)) translateY(0) scale(1);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--a)) translateY(-70px) scale(0.4);
+    opacity: 0;
+  }
+}
+@media (max-width: 480px) {
+  .tg-opts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tg-rk-t {
+    font-size: 1.5rem;
+  }
+  .tg-gq .tg-expr,
+  .tg-gq .tg-f {
+    font-size: 2rem;
+  }
+}
+.tg-say {
+  padding: 6px 12px;
+  margin-left: auto;
+}

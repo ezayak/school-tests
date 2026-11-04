@@ -221,7 +221,7 @@
             })
             .concat(
               GAMES.filter(() => FACTS.length).map((g) => {
-                const b = best[g.k];
+                const b = TG.best(g.k);
                 return tile(
                   {
                     ic: g.ic,
@@ -650,229 +650,30 @@
 
   /* ================= games of the table (lessons with drill) ================= */
   // drill: {mul: [4]} → 4 · 2 … 4 · 9; {div: [4]} → 8 : 4 … 36 : 4 (the book's tables go from 2 to 9).
-  // 🎲 Врозкид: every example once, in random order, typed on the number pad.
-  // 🚀 Ракети: a rocket flies across with an example; tap the right answer of 4 before it is gone → it explodes.
-  // Both end with the score, a reaction (90 % and more 🎆 fireworks, 70 % and more 👍, less 😢: 9–10 / 7–8 of 10) and the mistakes.
+  // The two games (🎲 Таблиця врозкид, 🚀 Ракети) are shared/times-games.js; their tiles come after the groups.
   const D = L.drill || {};
-  const FACTS = [];
-  (D.mul || []).forEach((n) => {
-    for (let k = 2; k <= 9; k++) FACTS.push({ t: `${n} · ${k}`, v: n * k });
-  });
-  (D.div || []).forEach((n) => {
-    for (let k = 2; k <= 9; k++) FACTS.push({ t: `${n * k} : ${n}`, v: k });
-  });
+  const FACTS = [
+    ...(D.mul || []).flatMap((n) => TimesGames.table(n, 2, 9)),
+    ...(D.div || []).flatMap((n) => TimesGames.divTable(n, 2, 9)),
+  ];
   const GAMES = [
     { k: "mix", ic: "🎲", t: "Таблиця врозкид" },
     { k: "rocket", ic: "🚀", t: "Ракети" },
   ];
-  const best = store.get(K + "-best", {});
-  const shuffle = (a) => {
-    a = a.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
+  const TG = FACTS.length
+    ? TimesGames({
+        app,
+        lang: "uk",
+        key: K,
+        onBack: home,
+        home: "До уроку",
+        back: "← До вправ",
+      })
+    : null;
+  const GAME = {
+    mix: () => TG.mix({ ...GAMES[0], id: "mix", facts: FACTS }),
+    rocket: () => TG.rocket({ ...GAMES[1], id: "rocket", facts: FACTS }),
   };
-  // 3 wrong answers close to the right one: a neighbour of the table, ±1, ±2
-  function options(f) {
-    const n = (D.mul || D.div || [2])[0];
-    const near = shuffle(
-      [f.v + n, f.v - n, f.v + 1, f.v - 1, f.v + 2, f.v - 2, f.v + 10].filter(
-        (x) => x > 0 && x !== f.v,
-      ),
-    );
-    return shuffle([f.v, ...[...new Set(near)].slice(0, 3)]);
-  }
-
-  // the end of a game: the score, a reaction, the mistakes
-  function result(g, right, wrong) {
-    leave();
-    if (best[g.k] === undefined || right > best[g.k]) {
-      best[g.k] = right;
-      store.set(K + "-best", best);
-    }
-    const share = right / FACTS.length;
-    const mood =
-      share >= 0.9
-        ? { ic: "🎆", t: "Чудово!", c: "fw" }
-        : share >= 0.7
-          ? { ic: "👍", t: "Добре! Ще трохи — і буде відмінно.", c: "up" }
-          : { ic: "😢", t: "Не засмучуйся, спробуй ще раз!", c: "cry" };
-    app.innerHTML = `${hud(`${g.ic} ${g.t}`, "")}<section class="card pop mu-res">
-    ${mood.c === "fw" ? `<div class="mu-fws" aria-hidden="true">${[0, 1, 2, 3, 4].map((i) => `<div class="mu-fw f${i}">${Array.from({ length: 12 }, (_, j) => `<i style="--a:${j * 30}deg"></i>`).join("")}</div>`).join("")}</div>` : ""}
-    <div class="mu-mood ${mood.c}" aria-hidden="true">${mood.ic}</div>
-    <h2 class="mu-score">${right} з ${FACTS.length}</h2>
-    <p class="mu-rt">${esc(mood.t)}</p>
-    ${
-      wrong.length
-        ? `<div class="mu-box mu-wrong"><b>Помилки</b>${wrong.map((w) => `<p><span class="mu-expr">${esc(w.t)} = ${w.v}</span> <small>${w.got === null ? "ракета відлетіла" : `твоя відповідь: ${esc(w.got)}`}</small></p>`).join("")}</div>`
-        : `<p class="mu-rt">Жодної помилки! 🎉</p>`
-    }
-    <div class="mu-nav"><button type="button" class="btn ghost" id="backBtn">← До вправ</button><button type="button" class="btn" id="againBtn">🔁 Ще раз</button></div>
-  </section>`;
-    bindHome();
-    document.getElementById("backBtn").onclick = home;
-    document.getElementById("againBtn").onclick = GAME[g.k];
-    top0();
-  }
-
-  // 🎲 every example once, in random order: type the answer, ✓ Перевірити
-  function mix() {
-    const g = GAMES[0];
-    const list = shuffle(FACTS);
-    const wrong = [];
-    let right = 0;
-    function show1(i) {
-      leave();
-      if (i >= list.length) return result(g, right, wrong);
-      const f = list[i];
-      let typed = "",
-        checked = false;
-      app.innerHTML = `${hud(`${g.ic} ${g.t}`, `${i + 1} / ${list.length}`)}<section class="card pop mu-game">
-      <div class="mu-gq"><span class="mu-expr">${esc(f.t)} =</span><button type="button" class="mu-f on" id="ans" aria-label="Відповідь"></button>${sayBtn("sq")}</div>
-      ${padHTML()}
-      <div id="fb" class="mu-fb" aria-live="polite"></div>
-      <div class="mu-acts"><button type="button" class="btn" id="okBtn">✓ Перевірити</button></div>
-    </section>`;
-      bindHome();
-      const ans = document.getElementById("ans");
-      const fb = document.getElementById("fb");
-      const ok = document.getElementById("okBtn");
-      const sq = document.getElementById("sq");
-      if (sq) sq.onclick = () => V.say(spoken(f.t + " ="));
-      function check() {
-        if (checked) return show1(i + 1);
-        if (!typed) {
-          fb.innerHTML = `<div class="fb no"><span>Впиши відповідь.</span></div>`;
-          return;
-        }
-        checked = true;
-        ans.classList.remove("on");
-        if (Number(typed) === f.v) {
-          right++;
-          ans.classList.add("ok");
-          fb.innerHTML = `<div class="fb ok"><b>✓ Правильно!</b></div>`;
-          setTimeout(() => ans.isConnected && show1(i + 1), 700);
-        } else {
-          wrong.push({ ...f, got: typed });
-          ans.classList.add("no");
-          fb.innerHTML = `<div class="fb no"><b>Ні: ${esc(f.t)} = ${f.v}</b></div>`;
-          ok.textContent = "Далі →";
-        }
-      }
-      keyFn = (key) => {
-        if (key === "next") return check();
-        if (checked) return;
-        if (key === "del") typed = typed.slice(0, -1);
-        else if (/^\d$/.test(key) && typed.length < 3) typed += key;
-        ans.textContent = typed;
-      };
-      app
-        .querySelectorAll(".mu-pad [data-k]")
-        .forEach((b) => (b.onclick = () => keyFn(b.dataset.k)));
-      ok.onclick = check;
-      top0();
-    }
-    show1(0);
-  }
-
-  // 🚀 a rocket flies from left to right with an example; the right answer → it explodes
-  const SPEED = { slow: 12, fast: 7 }; // seconds to cross
-  function rocket() {
-    leave();
-    const g = GAMES[1];
-    let speed = store.get(K + "-speed", "slow");
-    if (!SPEED[speed]) speed = "slow";
-    app.innerHTML = `${hud(`${g.ic} ${g.t}`, "")}<section class="card pop mu-game">
-    <div class="mu-sky mu-intro"><span class="mu-rk"><span class="mu-rk-ic">🚀</span><span class="mu-rk-t">${esc(FACTS[0].t)}</span></span></div>
-    <p class="mu-rt">Ракета летить із прикладом. Натисни правильну відповідь, поки вона не відлетіла, — і ракета вибухне!</p>
-    <div class="mu-speed" role="group" aria-label="Швидкість">${[
-      ["slow", "🐢 Повільно"],
-      ["fast", "🐇 Швидко"],
-    ]
-      .map(
-        ([k, t]) =>
-          `<button type="button" class="btn ghost" data-sp="${k}" aria-pressed="${speed === k}">${t}</button>`,
-      )
-      .join("")}</div>
-    <div class="mu-acts"><button type="button" class="btn" id="goBtn">🚀 Старт</button></div>
-  </section>`;
-    bindHome();
-    app.querySelectorAll("[data-sp]").forEach(
-      (b) =>
-        (b.onclick = () => {
-          speed = b.dataset.sp;
-          store.set(K + "-speed", speed);
-          app
-            .querySelectorAll("[data-sp]")
-            .forEach((x) => x.setAttribute("aria-pressed", x === b));
-        }),
-    );
-    document.getElementById("goBtn").onclick = () =>
-      fly(shuffle(FACTS), 0, 0, []);
-    top0();
-
-    function fly(list, i, right, wrong) {
-      leave();
-      if (i >= list.length) return result(g, right, wrong);
-      const f = list[i];
-      const opts = options(f);
-      app.innerHTML = `${hud(`${g.ic} ${g.t}`, `${i + 1} / ${list.length}`)}<section class="card pop mu-game">
-      <div class="mu-sky"><span class="mu-rk" id="rk" style="--dur:${SPEED[speed]}s"><span class="mu-rk-ic">🚀</span><span class="mu-rk-t">${esc(f.t)}</span></span><span class="mu-boom" id="boom" hidden>💥</span></div>
-      <div class="mu-opts">${opts.map((o) => `<button type="button" class="mu-opt" data-v="${o}">${o}</button>`).join("")}</div>
-      <div id="fb" class="mu-fb" aria-live="polite"></div>
-    </section>`;
-      bindHome();
-      const rk = document.getElementById("rk");
-      const fb = document.getElementById("fb");
-      let over = false;
-      const next = (ms) =>
-        setTimeout(() => rk.isConnected && fly(list, i + 1, right, wrong), ms);
-      const mark = () =>
-        app.querySelectorAll(".mu-opt").forEach((b) => {
-          b.disabled = true;
-          if (+b.dataset.v === f.v) b.classList.add("ok");
-        });
-      rk.addEventListener("animationend", () => {
-        if (over) return;
-        over = true;
-        wrong.push({ ...f, got: null });
-        mark();
-        fb.innerHTML = `<div class="fb no"><b>Ракета відлетіла: ${esc(f.t)} = ${f.v}</b></div>`;
-        next(1600);
-      });
-      app.querySelectorAll(".mu-opt").forEach(
-        (b) =>
-          (b.onclick = () => {
-            if (over) return;
-            over = true;
-            const v = +b.dataset.v;
-            mark();
-            if (v === f.v) {
-              right++;
-              // stop the rocket where it is and blow it up
-              const sky = rk.parentElement.getBoundingClientRect();
-              const r = rk.getBoundingClientRect();
-              const boom = document.getElementById("boom");
-              boom.style.left = `${r.left - sky.left + r.width / 2}px`;
-              rk.style.animationPlayState = "paused";
-              rk.classList.add("gone");
-              boom.hidden = false;
-              fb.innerHTML = `<div class="fb ok"><b>💥 Влучив! ${esc(f.t)} = ${f.v}</b></div>`;
-              next(1100);
-            } else {
-              b.classList.add("no");
-              wrong.push({ ...f, got: String(v) });
-              rk.classList.add("away");
-              fb.innerHTML = `<div class="fb no"><b>Ні: ${esc(f.t)} = ${f.v}</b></div>`;
-              next(1600);
-            }
-          }),
-      );
-    }
-  }
-  const GAME = { mix, rocket };
 
   home();
 })();

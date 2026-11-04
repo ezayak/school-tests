@@ -175,7 +175,8 @@ New text: copy `bohdanchyk.html` (change `bohdanchyk.js`), write its `.js`, add 
 
 Folder: `optima/grade-3/math/`. One card on the Optima home page ("Математика", colour `--math`) opens `index.html`, which lists the lessons from `lessons.js`
 (`parts: [{t, items: [{n, title, en, path, ic, note}]}]`, a part = a section of the book). Book: М. Козак, О. Корчевська «Математика. Частина 1» (2020); a lesson = one green title in the book.
-The engine is `shared/math-uk.js` + `shared/math-uk.css` (`<body data-view="list|lesson">`); a lesson page loads `shared/common.js`, `shared/math.js` (the bar schema), its `lesson-N.js`, then the engine.
+The engine is `shared/math-uk.js` + `shared/math-uk.css` (`<body data-view="list|lesson">`); a lesson page loads `shared/common.js`, `shared/math.js` (the bar schema), its `lesson-N.js`,
+`shared/times-games.js` (the two table games, also used by the Grade 4 Multiplication games; styles `shared/times-games.css`), then the engine.
 Everything on screen is in Ukrainian. A lesson has two tabs of tiles:
 
 - **📘 Урок** – one tile per slide; the slides explain the topic with the book's examples (← →, 🔊).

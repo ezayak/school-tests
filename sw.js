@@ -37,6 +37,8 @@ const CORE = [
   "./shared/speech.js",
   "./shared/math-uk.css",
   "./shared/math-uk.js",
+  "./shared/times-games.css",
+  "./shared/times-games.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",
