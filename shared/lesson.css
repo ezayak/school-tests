@@ -284,6 +284,23 @@ a:focus-visible {
   color: var(--muted);
   font-size: 0.85rem;
 }
+/* a tile with a done tick */
+.mode {
+  position: relative;
+}
+.mode .tick {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--good);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+}
 @media (max-width: 420px) {
   .modes {
     grid-template-columns: 1fr 1fr;

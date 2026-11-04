@@ -781,11 +781,7 @@ body.popopen {
   flex: none;
 }
 
-/* tiles with a done tick, Mini Windows missions */
-.mode {
-  position: relative;
-}
-.mode .tick,
+/* Mini Windows missions (the done tick on tiles is in lesson.css) */
 .mission b {
   position: absolute;
   top: 8px;
