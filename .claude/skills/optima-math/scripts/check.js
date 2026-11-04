@@ -78,6 +78,8 @@ function checkClause(where, line, clause) {
   if (/\d\s*[а-яіїєґ]/i.test(s)) return;
   // "□ : 5 = 3": an equation with an unknown, not a step
   if (s.includes("□")) return;
+  // "x + 6 = 14", "AB = 16": letters are unknowns or names, not a step
+  if (/[a-z]/i.test(s)) return;
   const parts = s.split("=");
   if (parts.length < 2) return;
   const vals = parts.map((p) => {
