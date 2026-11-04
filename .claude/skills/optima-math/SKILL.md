@@ -41,6 +41,7 @@ Book: `~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Козак М. Ма
 | a table of × or :                                                                 | —                            | lesson field `drill: {mul: [4]}` / `{div: [4]}` → the 🎲 Таблиця врозкид and 🚀 Ракети games (n · 2 … n · 9)         |
 
 Leave out what has nothing to check (Пофантазуй, drawing, stick puzzles, «Прочитай таблицю»), and list it in the file comment and for the user.
+Every exercise that goes in must be solvable on the pad or with choices: a lesson is «✓ Пройдено» in the list only when all its exercises are done.
 A table lesson («Таблиця множення числа N», «Таблиця ділення на N», «Закріплення …») always gets `drill` with the tables it practises.
 
 ## 3. Write the lesson
