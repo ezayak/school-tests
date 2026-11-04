@@ -1884,14 +1884,16 @@ window.GAMES = [
     title: "Українська література",
     hub: true,
     lesson: "Читання · по складах, слова, весь текст на швидкість",
-    topics: "Богданчик",
+    topics: "Богданчик · Щасливі літачки",
     path: "optima/grade-3/ukr-lit/index.html",
-    countLabel: "1 текст",
+    countLabel: "2 тексти",
     year: "2026–2027",
     also: [
       "optima/grade-3/ukr-lit/texts.js",
       "optima/grade-3/ukr-lit/bohdanchyk.html",
       "optima/grade-3/ukr-lit/bohdanchyk.js",
+      "optima/grade-3/ukr-lit/litachky.html",
+      "optima/grade-3/ukr-lit/litachky.js",
     ],
   },
   {
