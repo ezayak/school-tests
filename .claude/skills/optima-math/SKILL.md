@@ -24,18 +24,21 @@ Book: `~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Козак М. Ма
 
 ## 2. Sort the exercises
 
-| In the book                                        | Group (`t`, `ic`)            | Row kind                                                                                                             |
-| -------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Обчисли, a column of expressions                   | Обчисли 🧮                   | `{e: "34 − (18 − 9)"}`; a label: `{q: "b = 8:", e: "43 − 8"}`                                                        |
-| chains, pyramids (answer starts the next one)      | Обчисли 🧮                   | `{h: "Ліва сторона"}`, then `{e: "■ + (11 − 5)"}` (■ = the row before)                                               |
-| >, <, =                                            | Порівняй ⚖️                  | `{cmp: ["78 − 24", "64"]}` (sign worked out); with units `{cmp: ["1 м 6 дм", "6 м 1 дм"], a: "<", why: "…"}`         |
-| word problem                                       | Задачі 📖                    | `{q: "Відповідь:", a: [33]}` + `help`, `schema`, `steps`, `answer` (the box goes into the answer sentence by itself) |
-| pairs, choose one / several                        | by topic (Рівні вирази 🔗 …) | `{q, ch: [...], a: "x"}` or `a: ["x", "y"]`                                                                          |
-| several numbers to write                           | by topic (Календар 📅 …)     | `{q, a: [2, 9, 16], any: true}` (any order)                                                                          |
-| a number with two right forms (22 or 10 o’clock)   | by topic                     | `{q, a: [22], alt: [10], post: "год"}`                                                                               |
-| put signs between numbers (14 ● 2 ● 8 = 15)        | by topic                     | `{ops: "14 ● 2 ● 8", eq: 15, a: [":", "+"]}` (any signs that give eq are right)                                      |
-| an unknown number (□ : 7 = 2, a table of unknowns) | Невідомі числа ❓            | `{pre: "□ : 7 = 2,  □ =", a: [14]}`                                                                                  |
-| a table of × or :                                  | —                            | lesson field `drill: {mul: [4]}` / `{div: [4]}` → the 🎲 Таблиця врозкид and 🚀 Ракети games (n · 2 … n · 9)         |
+| In the book                                                                       | Group (`t`, `ic`)            | Row kind                                                                                                             |
+| --------------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Обчисли, a column of expressions                                                  | Обчисли 🧮                   | `{e: "34 − (18 − 9)"}`; a label: `{q: "b = 8:", e: "43 − 8"}`                                                        |
+| chains, pyramids (answer starts the next one)                                     | Обчисли 🧮                   | `{h: "Ліва сторона"}`, then `{e: "■ + (11 − 5)"}` (■ = the row before)                                               |
+| >, <, =                                                                           | Порівняй ⚖️                  | `{cmp: ["78 − 24", "64"]}` (sign worked out); with units `{cmp: ["1 м 6 дм", "6 м 1 дм"], a: "<", why: "…"}`         |
+| word problem                                                                      | Задачі 📖                    | `{q: "Відповідь:", a: [33]}` + `help`, `schema`, `steps`, `answer` (the box goes into the answer sentence by itself) |
+| pairs, choose one / several                                                       | by topic (Рівні вирази 🔗 …) | `{q, ch: [...], a: "x"}` or `a: ["x", "y"]`                                                                          |
+| several numbers to write                                                          | by topic (Календар 📅 …)     | `{q, a: [2, 9, 16], any: true}` (any order)                                                                          |
+| a number with two right forms (22 or 10 o’clock)                                  | by topic                     | `{q, a: [22], alt: [10], post: "год"}`                                                                               |
+| a quantity in two units (□ м □ дм)                                                | Мірки 📏                     | `{pre: "75 дм =", a: [7, 5], mid: ["м"], post: "дм"}`                                                                |
+| a chain / «по колу» (the answer starts the next one)                              | Обчисли 🧮                   | `{e: "27 + 38"}`, then `{e: "■ − 14"}` …                                                                             |
+| two answers that are lines of text (exercises with «Поясни, що означають вирази») | by topic                     | one `{q: "9 + 3 — це …", ch: [the meanings], a}` per expression                                                      |
+| put signs between numbers (14 ● 2 ● 8 = 15)                                       | by topic                     | `{ops: "14 ● 2 ● 8", eq: 15, a: [":", "+"]}` (any signs that give eq are right)                                      |
+| an unknown number (□ : 7 = 2, a table of unknowns)                                | Невідомі числа ❓            | `{pre: "□ : 7 = 2,  □ =", a: [14]}`                                                                                  |
+| a table of × or :                                                                 | —                            | lesson field `drill: {mul: [4]}` / `{div: [4]}` → the 🎲 Таблиця врозкид and 🚀 Ракети games (n · 2 … n · 9)         |
 
 Leave out what has nothing to check (Пофантазуй, drawing, stick puzzles, «Прочитай таблицю»), and list it in the file comment and for the user.
 A table lesson («Таблиця множення числа N», «Таблиця ділення на N», «Закріплення …») always gets `drill` with the tables it practises.
@@ -79,6 +82,12 @@ Check at least: the tiles, every slide, one exercise of each group with 📝 Р�
 - Commit each lesson on its own; engine changes in their own commit before it. Bump `VERSION` in `sw.js` once, last, in its own commit.
 
 ## Lessons learned
+
+- check.js reads every «a op b = c» in the steps and slides. Keep one equation per clause: split with «;» or «,», and put words in brackets
+  or before the equation («7 · 5 = 35; підходить …», not «7 · 5 = 35: потрібно більше за 5 — 6»), or it compares the wrong numbers.
+- A word problem may also have choice rows («Чого більше?»); its number rows are the answers checked against the last step and the sentence.
+- «Обернена задача» to a word problem = its own item `n: "121 об."` (rows with labels, no schema).
+- Measure lengths on the page when the book says «виміряй»: the PDF is the real size (20.5 cm wide), 200 dpi → px / 200 · 2.54 cm.
 
 - Atkinson Hyperlegible draws 0 as Ø: math-uk.css puts Nunito first. Don't change `--body`.
 - The book writes × as `·` (4 · 3 = 12); write `·` in the data, the engine shows `·` in the steps.
