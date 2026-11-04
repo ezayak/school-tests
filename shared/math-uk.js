@@ -115,6 +115,16 @@
 
   /* ================= voice ================= */
   const V = Kit.voice("uk-UA");
+  // Kit.voice drops the punctuation, so a long task would be read without a stop:
+  // say it sentence by sentence (one utterance each, queued by the browser) — the voice pauses between them
+  const sayAll = (t) => {
+    V.hush();
+    String(t)
+      .split(/(?<=[.!?…:;])\s+/)
+      .map((x) => x.trim())
+      .filter((x) => /[\p{L}\d]/u.test(x))
+      .forEach((x) => V.say(x));
+  };
   // what the voice reads: signs as words
   const spoken = (t) =>
     plain(t)
@@ -293,7 +303,7 @@
     const sq = document.getElementById("sq");
     if (sq)
       sq.onclick = () =>
-        V.say(
+        sayAll(
           spoken([c.t, ...c.lines, c.text || "", ...(c.ex || [])].join(". ")),
         );
     app
@@ -501,7 +511,7 @@
     document.getElementById("nextBtn").onclick = () =>
       last ? home() : go(k + 1);
     const sq = document.getElementById("sq");
-    if (sq) sq.onclick = () => V.say(readText());
+    if (sq) sq.onclick = () => sayAll(readText());
     const toggle = (btn, box) => {
       const b = document.getElementById(btn),
         x = document.getElementById(box);
