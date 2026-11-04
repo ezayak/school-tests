@@ -211,6 +211,17 @@ Book: `~/Documents/2026-2027/Lucas/Optima/Літературне читання 
 - Check with `node .claude/scripts/ukr-reading-check.js <text.js> "<book.pdf>" <page>` (syllables, stress, the word lists, the text against the book page).
 - Check in the browser at a phone width (360–390px upright, sideways) and a landscape tablet: the longest Склади word, Читання to the end, the page turn.
 
+## Ukrainian math (Optima, Grade 3)
+
+Folder `optima/grade-3/math/`, engine `shared/math-uk.js` + `.css` (don't copy them; a lesson is only a data file). Format in README: "Ukrainian math (Optima, Grade 3)".
+Procedure, check script and screenshots: the `optima-math` skill. Book: `~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Козак М. Математика. Частина 1. … 2020.pdf` (read the pages as pictures, the text layer is noisy).
+
+- A lesson = one green title in the book (the star line to the next one). Build one lesson at a time and show it before the next.
+- Every book exercise goes in, in a group of its type; what has nothing to check (Пофантазуй, drawing, stick puzzles) is left out and listed.
+- Word problems: `help`, a bar `schema`, `steps` with units, `answer` with the answer number once. Table lessons get `drill` (the two table games).
+- The book's wording and signs (`·` for ×). Every answer worked out and passed by `check.js`; unit conversions checked by hand.
+- Then: card in `lessons.js`; files and pictures in `also` of the Математика entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+
 ## Speech games (Мовлення)
 
 Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a game is only a data file). Format in README: "Speech games (Мовлення)".

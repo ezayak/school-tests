@@ -171,6 +171,40 @@ A long text has `pages: [[lines of page 1], [lines of page 2], …]` instead of 
 New text: copy `bohdanchyk.html` (change `bohdanchyk.js`), write its `.js`, add it to `texts.js`, add both files to the `also: [...]` list of the
 Українська література entry in `games.js`, update its `countLabel` / `topics`, and bump `VERSION` in `sw.js`.
 
+## Ukrainian math (Optima, Grade 3)
+
+Folder: `optima/grade-3/math/`. One card on the Optima home page ("Математика", colour `--math`) opens `index.html`, which lists the lessons from `lessons.js`
+(`parts: [{t, items: [{n, title, en, path, ic, note}]}]`, a part = a section of the book). Book: М. Козак, О. Корчевська «Математика. Частина 1» (2020); a lesson = one green title in the book.
+The engine is `shared/math-uk.js` + `shared/math-uk.css` (`<body data-view="list|lesson">`); a lesson page loads `shared/common.js`, `shared/math.js` (the bar schema), its `lesson-N.js`, then the engine.
+Everything on screen is in Ukrainian. A lesson has two tabs of tiles:
+
+- **📘 Урок** – one tile per slide; the slides explain the topic with the book's examples (← →, 🔊).
+- **✏️ Задачі** – one tile per group (a type of exercise); a group shows its exercises one at a time, with a strip of them on top (green ✓ = done).
+  The child solves on paper and types the answer (number pad; a block of > < = under comparisons). ✓ Готово checks; all right → done, saved on the device.
+  💡 Підказка = the schema of a word problem, 📝 Розв’язання = the steps; «Далі →» always works. The answer box of a word problem sits inside the answer sentence.
+- A lesson with `drill` adds two game tiles: **🎲 Таблиця врозкид** (every example of the table once, typed) and **🚀 Ракети** (a rocket flies across with an example,
+  tap the right one of 4 answers before it is gone; 🐢 / 🐇 speed). Both end with the score, 🎆 / 👍 / 😢 (90 % / 70 %) and the list of mistakes; the best score is saved.
+
+### `lesson-N.js` format
+
+```js
+window.MATH_LESSON = {
+  key: "om3-l2", n: 2, title: "…", part: "Повторення за 2 клас", pages: "с. 5", img: "img/lesson-2/",
+  drill: { mul: [4] },          // optional: n · 2 … n · 9 (div: [4] → 8 : 4 … 36 : 4)
+  learn: [{ t, ic, lines: ["text with [key words]"], text, ex: ["worked lines"], img, schema, from: "№ 7, с. 5" }],
+  groups: [{ t: "Обчисли", ic: "🧮", items: [{ n: "9", p: 5, hw, q, tip, img, rows: [...], help, schema, steps, answer }] }],
+};
+```
+
+Rows: `{e: "34 − (18 − 9)"}` (worked out; `q` = a label; `■` = the answer of the row before, `{h}` = a heading that resets it);
+`{cmp: ["78 − 24", "64"]}` (the sign worked out) or with units `{cmp, a: "<", why}`; `{q, ch: [...], a}` (choose; `a: [..]` = several);
+`{q, a: [numbers], pre, post, any}` (boxes; `any` = in any order). A word problem has `help`, `schema` (`kind: "bar"`, see `shared/math.js`), `steps`, `answer`.
+Expressions are text with `+ − · :` and brackets (`×` and `-` are read too). `img` names a `.jpg` in the lesson's `img` folder.
+
+New lesson: the `optima-math` skill (`.claude/skills/optima-math/SKILL.md`): copy `lesson-2.html` (change the `.js` and the title), write `lesson-N.js`, add a card to `lessons.js`,
+run `node .claude/skills/optima-math/scripts/check.js optima/grade-3/math/lesson-N.js`, add the files and pictures to `also` of the Математика entry in `games.js`
+(and its `countLabel` / `topics`), and bump `VERSION` in `sw.js`.
+
 ## Speech games (Мовлення)
 
 The third button in the school switch (🗣️ Мовлення). Games for a child with aphasia: everything is said aloud, a picture on every item.

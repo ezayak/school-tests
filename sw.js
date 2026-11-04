@@ -35,6 +35,8 @@ const CORE = [
   "./shared/reading.js",
   "./shared/speech.css",
   "./shared/speech.js",
+  "./shared/math-uk.css",
+  "./shared/math-uk.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",

@@ -1,0 +1,58 @@
+<!doctype html><meta charset="utf-8" />
+<body style="margin: 0">
+  <iframe id="f" style="border: 0"></iframe>
+  <script>
+    // ?p=lesson-1.html&w=1280&h=900&do=<steps>   steps separated by ";":
+    //   tab:tasks | go:3 (slide or exercise 4 of the open group) | click:<css selector> | type:123 (on the pad) | reset (clears the saved progress)
+    //   wait:3000 | answer:rrrw (the table games: right, right, right, wrong)
+    const P = new URLSearchParams(location.search),
+      f = document.getElementById("f");
+    f.style.width = (P.get("w") || 1280) + "px";
+    f.style.height = (P.get("h") || 900) + "px";
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    const steps = (P.get("do") || "").split(";").filter(Boolean);
+    if (steps[0] === "reset") {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("mu-"))
+        .forEach((k) => localStorage.removeItem(k));
+      steps.shift();
+    }
+    f.src = P.get("p") + "?t=" + Math.random();
+    f.onload = async () => {
+      const d = f.contentDocument,
+        q = (s) => d.querySelector(s);
+      await wait(200);
+      for (const s of steps) {
+        const [cmd, ...rest] = s.split(":");
+        const arg = rest.join(":");
+        if (cmd === "tab") q(`[data-tab="${arg}"]`).click();
+        else if (cmd === "go") q(`[data-go="${arg}"]`).click();
+        else if (cmd === "click") q(arg).click();
+        else if (cmd === "type")
+          for (const c of arg)
+            q(`.mu-pad [data-k="${c}"], .mu-spad [data-k="${c}"]`).click();
+        else if (cmd === "wait") await wait(+arg);
+        else if (cmd === "answer")
+          // the table games: one letter per example, r = the right answer, w = a wrong one
+          for (const c of arg) {
+            const [x, op, y] = q(".mu-rk-t, .mu-gq .mu-expr")
+              .textContent.replace("=", "")
+              .trim()
+              .split(" ");
+            const v = op === "·" ? x * y : x / y;
+            const opts = [...d.querySelectorAll(".mu-opt")];
+            if (opts.length)
+              opts.find((o) => (c === "r") === (+o.dataset.v === v)).click();
+            else {
+              for (const k of String(c === "r" ? v : v + 1))
+                q(`.mu-pad [data-k="${k}"]`).click();
+              q("#okBtn").click();
+              if (c !== "r") q("#okBtn").click();
+            }
+            await wait(1800);
+          }
+        await wait(120);
+      }
+    };
+  </script>
+</body>

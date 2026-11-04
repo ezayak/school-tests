@@ -1,0 +1,723 @@
+/* Ukrainian math lessons (shared/math-uk.js): Optima, Математика.
+   Loads after shared/theme.css, shared/lesson.css (page, cards, tabs, lesson list) and shared/math.css (number pad, schema). */
+:root {
+  --accent: var(--math-ink);
+  --accent2: var(--ulit);
+  /* Nunito first: Atkinson Hyperlegible writes 0 with a slash, which looks like Ø in a sum */
+  --body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.mu-kw {
+  color: var(--accent);
+  font-weight: 800;
+}
+.mu-part {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  margin: 8px 4px 0;
+}
+.mu-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+}
+.mu-head .les-title {
+  font-size: clamp(1.7rem, 5vw, 2.6rem);
+}
+.ftabs.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.mu-say {
+  padding: 6px 12px;
+  margin-left: auto;
+}
+.mu-pic {
+  display: block;
+  max-width: 100%;
+  max-height: 300px;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 2px solid var(--ink);
+}
+.mu-schema {
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 18px 8px 8px;
+}
+/* Ukrainian labels are longer than the English ones */
+.mu-schema .mb-row {
+  grid-template-columns: 6.5em 1fr;
+}
+/* worked steps: big, one per line */
+.mu-ex {
+  font-family: var(--display);
+  font-size: 1.35rem;
+  line-height: 1.5;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 8px 14px;
+}
+.mu-ex small {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.mu-ans {
+  margin-top: 4px;
+  color: var(--good);
+}
+.mu-from,
+.mu-pg {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* ---------- 📘 Урок: one slide at a time ---------- */
+.mu-slide {
+  gap: 12px;
+}
+.mu-lh {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mu-lh h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin: 0;
+}
+.mu-ic {
+  font-family: var(--emoji);
+  font-size: 1.8rem;
+}
+.mu-lb {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px 22px;
+  align-items: start;
+}
+.mu-lb.one {
+  grid-template-columns: minmax(0, 1fr);
+}
+.mu-lt p {
+  margin: 0 0 10px;
+  font-size: 1.35rem;
+  line-height: 1.45;
+}
+.mu-slide .mu-lh h2 {
+  font-size: 1.8rem;
+}
+.mu-lv {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mu-text {
+  font-style: italic;
+  border-left: 4px solid var(--accent);
+  padding-left: 10px;
+}
+
+/* ---------- ✏️ Задачі ---------- */
+/* the strip at the top: the exercises of the group; done = green ✓ */
+.mu-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.mu-chip {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  padding: 3px 11px;
+  cursor: pointer;
+}
+.mu-chip.done {
+  background: var(--good);
+  border-color: var(--good);
+  color: #fff;
+}
+.mu-chip.cur {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.mu-hw {
+  font-family: var(--emoji);
+  font-size: 0.8rem;
+  margin-left: 3px;
+}
+.mu-task {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 16px 22px;
+  align-items: start;
+}
+.mu-taskcard.is-done {
+  border-color: var(--good);
+  box-shadow:
+    inset 0 0 0 2px var(--good),
+    5px 5px 0 var(--good);
+}
+.mu-side,
+.mu-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.mu-main {
+  align-items: center;
+}
+.mu-qh {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+.mu-num {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  color: var(--accent);
+}
+.mu-hwtag {
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1.5px solid var(--muted);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.mu-q {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+.mu-tip {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+.mu-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 2.5px dashed var(--accent);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+.mu-box[hidden] {
+  display: none;
+}
+.mu-box > b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.2rem;
+}
+.mu-box p {
+  margin: 0;
+}
+.mu-sol + .mu-sol,
+.mu-ex .mu-rh {
+  margin-top: 6px;
+}
+.mu-sol > b {
+  font-weight: 400;
+}
+.mu-sol > div {
+  font-size: 1.1rem;
+  padding-left: 14px;
+}
+
+/* the answer rows */
+.mu-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.mu-rh {
+  font-weight: 800;
+  color: var(--accent);
+  margin-top: 4px;
+}
+.mu-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+.mu-qrow {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.mu-rq {
+  font-size: 1.1rem;
+}
+.mu-fs,
+.mu-chs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.mu-expr {
+  font-family: var(--display);
+  font-size: 1.45rem;
+  white-space: nowrap;
+}
+.mu-post,
+.mu-comma {
+  font-family: var(--display);
+  font-size: 1.3rem;
+}
+.mu-f {
+  min-width: 2.6em;
+  height: 1.75em;
+  padding: 0 6px;
+  font-family: var(--display);
+  font-size: 1.45rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+.mu-f.on {
+  outline: 3px solid var(--hl);
+  outline-offset: 1px;
+  background: color-mix(in srgb, var(--hl) 25%, var(--card));
+}
+.mu-f.ok,
+.mu-ch.ok {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 22%, var(--card));
+}
+.mu-f.no,
+.mu-ch.no {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 18%, var(--card));
+}
+/* comparisons: the boxes under each other, the expressions on both sides */
+.mu-cmp {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+.mu-cmp .mu-expr.l {
+  text-align: right;
+}
+.mu-f.sg {
+  min-width: 2em;
+}
+/* the block of signs under the comparisons */
+.mu-spad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  width: min(290px, 100%);
+}
+.mu-spad button {
+  min-height: clamp(48px, 8vh, 62px);
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 2rem;
+  box-shadow: 2px 2px 0 var(--ink);
+  cursor: pointer;
+}
+.mu-spad button:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+.mu-spad .del {
+  font-size: 1.5rem;
+  background: color-mix(in srgb, var(--bad) 12%, var(--card));
+}
+.mu-ch {
+  font-family: var(--body);
+  font-size: 1.05rem;
+  font-weight: 700;
+  min-width: 2em;
+  padding: 2px 8px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+.mu-ch.on {
+  background: color-mix(in srgb, var(--hl) 45%, var(--card));
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.mu-pad .nx {
+  background: color-mix(in srgb, var(--cool) 15%, var(--card));
+}
+.mu-acts,
+.mu-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.mu-acts .btn.on {
+  background: color-mix(in srgb, var(--hl) 40%, var(--card));
+}
+.mu-fb {
+  width: 100%;
+}
+.mu-nav .btn {
+  white-space: nowrap;
+}
+.mu-nav {
+  width: 100%;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+/* a phone, or a tablet held upright: one column; the answer boxes come before the hint and the solution */
+@media (max-width: 760px) {
+  .mu-lb,
+  .mu-task {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mu-task {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .mu-side,
+  .mu-main {
+    display: contents;
+  }
+  .mu-rows,
+  .mu-spad,
+  .mu-pad,
+  .mu-acts {
+    order: 1;
+  }
+  .mu-pad {
+    align-self: center;
+  }
+  .mu-box {
+    order: 2;
+  }
+  .mu-fb,
+  .mu-nav {
+    order: 3;
+  }
+}
+@media (max-width: 480px) {
+  .mu-q {
+    font-size: 1.1rem;
+  }
+  .mu-expr,
+  .mu-f {
+    font-size: 1.25rem;
+  }
+  /* the schema: each label above its bar, a narrower bracket for the total */
+  .mu-schema .mb-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .mu-schema .mb-l {
+    text-align: left;
+    padding-bottom: 0;
+  }
+  .mu-schema .mb-l .e {
+    display: inline;
+    font-size: 1.1rem;
+    margin-right: 4px;
+  }
+  .mu-schema .vis-mbar.has-total .mb-rows {
+    padding-right: 78px;
+  }
+  .mu-schema .mb-total {
+    width: 74px;
+  }
+  .mu-schema .mb-total b {
+    max-width: 54px;
+    font-size: 1rem;
+  }
+  .mu-schema .mb-seg {
+    font-size: 0.95rem;
+  }
+}
+/* a word problem's answer sentence around its box: wraps like text */
+.mu-sent {
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+/* ---------- games of the table: 🎲 Врозкид, 🚀 Ракети, the result ---------- */
+.mu-game,
+.mu-res {
+  align-items: center;
+  gap: 14px;
+}
+.mu-gq {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mu-gq .mu-expr,
+.mu-gq .mu-f {
+  font-size: 2.4rem;
+}
+.mu-gq .mu-f {
+  min-width: 2.2em;
+}
+/* the sky the rocket crosses */
+.mu-sky {
+  position: relative;
+  width: 100%;
+  height: 130px;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 2px solid var(--ink);
+  background: linear-gradient(#bfe3ff, #eaf6ff);
+}
+.mu-rk {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transform: translate(-100%, -50%);
+  animation: mu-fly var(--dur, 12s) linear forwards;
+}
+.mu-intro .mu-rk {
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: none;
+}
+@keyframes mu-fly {
+  to {
+    left: 100%;
+    transform: translate(0, -50%);
+  }
+}
+.mu-rk-ic {
+  font-family: var(--emoji);
+  font-size: 3rem;
+  transform: rotate(45deg); /* 🚀 points up-right: turn it to the right */
+}
+.mu-rk-t {
+  order: -1; /* the example trails behind the rocket */
+  font-family: var(--display);
+  font-size: 1.9rem;
+  background: var(--card);
+  color: var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  padding: 0 10px;
+}
+/* a wrong answer: the rocket speeds away */
+.mu-rk.away {
+  animation-duration: 1.2s;
+}
+.mu-rk.gone {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.mu-boom {
+  position: absolute;
+  top: 50%;
+  font-family: var(--emoji);
+  font-size: 5rem;
+  transform: translate(-50%, -50%);
+  animation: mu-boom 0.9s ease-out forwards;
+}
+.mu-boom[hidden] {
+  display: none;
+}
+@keyframes mu-boom {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 0;
+  }
+}
+.mu-opts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: min(560px, 100%);
+}
+.mu-opt {
+  min-height: 72px;
+  font-family: var(--display);
+  font-size: 2.2rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+}
+.mu-opt:disabled {
+  cursor: default;
+}
+.mu-opt.ok {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 25%, var(--card));
+}
+.mu-opt.no {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 20%, var(--card));
+}
+.mu-speed {
+  display: flex;
+  gap: 8px;
+}
+.mu-speed [aria-pressed="true"] {
+  background: color-mix(in srgb, var(--hl) 45%, var(--card));
+}
+/* the result */
+.mu-res {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.mu-mood {
+  font-family: var(--emoji);
+  font-size: 6rem;
+  line-height: 1.1;
+}
+.mu-mood.fw {
+  animation: mu-pop 0.6s ease-out;
+}
+.mu-mood.up {
+  animation: mu-nod 1s ease-in-out 3;
+}
+.mu-mood.cry {
+  animation: mu-sob 0.5s ease-in-out 6;
+}
+@keyframes mu-pop {
+  from {
+    transform: scale(0.2);
+  }
+}
+@keyframes mu-nod {
+  50% {
+    transform: translateY(-14px) rotate(-8deg);
+  }
+}
+@keyframes mu-sob {
+  25% {
+    transform: rotate(-6deg);
+  }
+  75% {
+    transform: rotate(6deg);
+  }
+}
+.mu-score {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 2.6rem;
+  margin: 0;
+  color: var(--accent);
+}
+.mu-rt {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.mu-wrong {
+  width: min(460px, 100%);
+  text-align: left;
+}
+.mu-wrong small {
+  color: var(--muted);
+}
+/* fireworks: bursts of 12 sparks, again and again */
+.mu-fws {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.mu-fw {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+.mu-fw i {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin: -5px;
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0;
+  animation: mu-spark 1.6s ease-out infinite;
+  animation-delay: var(--d);
+}
+.mu-fw.f0 {
+  left: 18%;
+  top: 22%;
+  --c: #ff5a5f;
+  --d: 0s;
+}
+.mu-fw.f1 {
+  left: 80%;
+  top: 18%;
+  --c: #ffc93c;
+  --d: 0.4s;
+}
+.mu-fw.f2 {
+  left: 50%;
+  top: 12%;
+  --c: #3db8ff;
+  --d: 0.8s;
+}
+.mu-fw.f3 {
+  left: 25%;
+  top: 60%;
+  --c: #7bd389;
+  --d: 1.1s;
+}
+.mu-fw.f4 {
+  left: 76%;
+  top: 58%;
+  --c: #c77dff;
+  --d: 0.6s;
+}
+@keyframes mu-spark {
+  0% {
+    transform: rotate(var(--a)) translateY(0) scale(1);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--a)) translateY(-70px) scale(0.4);
+    opacity: 0;
+  }
+}
+@media (max-width: 480px) {
+  .mu-opts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mu-rk-t {
+    font-size: 1.5rem;
+  }
+  .mu-gq .mu-expr,
+  .mu-gq .mu-f {
+    font-size: 2rem;
+  }
+}
