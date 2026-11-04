@@ -19,8 +19,12 @@ window.Kit = (function () {
   }
   // One card on a lesson hub (French, Computer, Ukrainian reading); label is "Lesson" / "Leçon" / "Текст".
   // The cover is a picture (cover), or a big emoji (ic) when the lesson has no picture.
-  const lessonCard = (it, label) => `<a class="item" href="${esc(it.path)}">
-    <span class="cov">${it.cover ? `<img src="${esc(it.cover)}" alt="" loading="lazy">` : `<span class="ic" aria-hidden="true">${esc(it.ic || "📖")}</span>`}</span>
+  // done: the lesson is finished on this device → a green tag on the cover with that text ("✓ Пройдено").
+  const lessonCard = (
+    it,
+    label,
+  ) => `<a class="item${it.done ? " done" : ""}" href="${esc(it.path)}">
+    <span class="cov">${it.cover ? `<img src="${esc(it.cover)}" alt="" loading="lazy">` : `<span class="ic" aria-hidden="true">${esc(it.ic || "📖")}</span>`}${it.done ? `<span class="done-tag">${esc(it.done)}</span>` : ""}</span>
     <span class="in"><span class="n">${label} ${esc(it.n)}</span><span class="t">${esc(it.title)}</span><span class="w">${esc(it.en || "")}</span>
     <span class="meta"><span>${esc(it.note || "")}</span><span class="go play-arrow">Open →</span></span></span></a>`;
   // An animated picture made of emoji (English words and idioms). v = {bg, items: [...], cap}.

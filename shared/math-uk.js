@@ -32,12 +32,16 @@
     },
   };
   // [word] → a highlighted word
+  // finished lessons on this device: {"/optima/grade-3/math/lesson-3.html": true} (every exercise done; the games don't count)
+  const COMPLETE = "mu-complete";
+  const pageKey = (path) => new URL(path, location.href).pathname;
   const kw = (t) => esc(t).replace(/\[([^\]]+)\]/g, '<b class="mu-kw">$1</b>');
   const plain = (t) => String(t ?? "").replace(/[[\]]/g, "");
 
   /* ================= list of lessons ================= */
   if (view === "list") {
     const M = window.MATH_LESSONS || { grade: 3, parts: [] };
+    const complete = store.get(COMPLETE, {});
     app.innerHTML = `<section class="card">
     <div class="topbar"><a class="back" href="${HOME}">← Усі ігри</a><span class="eyebrow">${esc(M.grade)} клас · ${SUBJ}</span></div>
     <h1 class="hero-title"><span class="p">Мате</span><span class="k">матика</span></h1>
@@ -46,7 +50,7 @@
   ${M.parts
     .map(
       (p) =>
-        `<h2 class="mu-part">${esc(p.t)}</h2><div class="items">${p.items.map((it) => Kit.lessonCard(it, "Урок")).join("")}</div>`,
+        `<h2 class="mu-part">${esc(p.t)}</h2><div class="items">${p.items.map((it) => Kit.lessonCard({ ...it, done: complete[pageKey(it.path)] && "✓ Пройдено" }, "Урок")).join("")}</div>`,
     )
     .join("")}
   <div class="soon">Нові уроки з’являться тут.</div>`;
@@ -141,6 +145,16 @@
   const bar = (v) => (window.CS_EXT && CS_EXT.vis.bar ? CS_EXT.vis.bar(v) : "");
   const done = store.get(K + "-done", {});
   const vals = store.get(K + "-vals", {});
+  // all the exercises done → the lesson is finished (saved for the list of lessons)
+  const finished = () =>
+    L.groups.every((g) => g.items.every((it) => done[it.n]));
+  const saveFinished = () => {
+    if (!finished()) return false;
+    const c = store.get(COMPLETE, {});
+    c[pageKey(location.href)] = true;
+    store.set(COMPLETE, c);
+    return true;
+  };
   const TABS = [
     { k: "learn", ic: "📘", t: "Урок", sub: "пояснення" },
     { k: "tasks", ic: "✏️", t: "Задачі", sub: "вправи з підручника" },
@@ -225,7 +239,7 @@
             .join("");
     app.innerHTML = `<section class="card pop mu-card">
     <div class="toprow"><div class="toplinks"><a class="back" href="${HOME}">← Усі ігри</a><a class="back" href="index.html">${SUBJ}</a></div></div>
-    <div class="mu-head"><h1 class="les-title">${esc(L.title)}</h1><span class="les-sub">Урок ${esc(L.n)} · ${esc(L.pages)}</span></div>
+    <div class="mu-head"><h1 class="les-title">${esc(L.title)}</h1><span class="les-sub">Урок ${esc(L.n)} · ${esc(L.pages)}</span>${saveFinished() ? '<span class="mu-fin">✓ Урок пройдено</span>' : ""}</div>
     <div class="tabbox"><div class="ftabs two" role="group" aria-label="Розділ">${TABS.map((t) => `<button type="button" id="tab-${t.k}" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span>${esc(t.t)}<span class="sub">${esc(t.sub)}</span></button>`).join("")}</div>
       <div class="panel"><div class="modes">${tiles}</div></div></div>
   </section>`;
@@ -628,7 +642,7 @@
       app.querySelector(".mu-strip").innerHTML = chips();
       bindChips();
       const left = items.filter((x) => !done[x.n]).length;
-      fb.innerHTML = `<div class="fb ok"><b>✓ Молодець! Усе правильно.</b>${it.answer ? `<span>Відповідь: ${esc(it.answer)}</span>` : ""}<span>${left ? `Тут залишилось: ${left} ${vpr(left)}.` : "🎉 Усі вправи цього розділу зроблено!"}</span></div>`;
+      fb.innerHTML = `<div class="fb ok"><b>✓ Молодець! Усе правильно.</b>${it.answer ? `<span>Відповідь: ${esc(it.answer)}</span>` : ""}<span>${left ? `Тут залишилось: ${left} ${vpr(left)}.` : saveFinished() ? "🎉 Усі вправи уроку зроблено — урок пройдено!" : "🎉 Усі вправи цього розділу зроблено!"}</span></div>`;
       document.getElementById("nextBtn").focus();
     };
     top0();

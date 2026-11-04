@@ -724,3 +724,12 @@
     font-size: 2rem;
   }
 }
+
+/* the lesson's title row: «✓ Урок пройдено» when every exercise is done */
+.mu-fin {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--good);
+  color: #fff;
+  font-weight: 800;
+}
