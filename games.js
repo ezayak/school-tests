@@ -2251,7 +2251,7 @@ window.GAMES = [
     lang: "ar",
     period: "Subjects",
     subject: "ABC",
-    title: "الْحُرُوف · Arabic ABC",
+    title: "الْحُرُوف · ABC",
     hub: true,
     lesson:
       "Letters · cards, guess the letter, build the word, catch the letter",
@@ -2274,7 +2274,7 @@ window.GAMES = [
     lang: "ar",
     period: "Subjects",
     subject: "Sentences",
-    title: "الْجُمَل · Arabic sentences",
+    title: "الْجُمَل · Sentences",
     hub: true,
     lesson:
       "Sentences · positions, guess the position, put it there, I want…, build the sentence, guess the sentence",
@@ -2301,7 +2301,7 @@ window.GAMES = [
     lang: "ar",
     period: "Subjects",
     subject: "Verbs",
-    title: "الْأَفْعَال · Arabic verbs",
+    title: "الْأَفْعَال · Verbs",
     hub: true,
     lesson: "Verbs · cards, guess the verb, build the word",
     topics:
@@ -2322,7 +2322,7 @@ window.GAMES = [
     lang: "ar",
     period: "Subjects",
     subject: "Syllables",
-    title: "الْمَقَاطِع · Arabic syllables",
+    title: "الْمَقَاطِع · Syllables",
     hub: true,
     lesson: "Syllables · cards, reading short words, guess the syllable",
     topics:
@@ -2421,7 +2421,7 @@ window.GAMES = [
     lang: "ar",
     period: "Subjects",
     subject: "Body",
-    title: "الْجِسْم · Arabic body",
+    title: "الْجِسْم · Body",
     hub: true,
     lesson: "Body · cards, show me, build the word, sentences",
     topics:
