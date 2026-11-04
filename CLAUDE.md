@@ -193,6 +193,24 @@ Then:
 - Check with a script: every item has a picture, every `img` / `src` exists, every picture file is used and in `also`, every `path` and `hub` link opens.
 - Check in the browser: the English page (the tag), each tab and section of the lesson, every story page, one exercise of each type, the back links.
 
+## Ukrainian reading (Optima, Grade 3)
+
+Folder `optima/grade-3/ukr-lit/`, engine `shared/reading.js` + `shared/reading.css` (don't copy them; a text is only a data file). Format in README: "Ukrainian reading".
+Book: `~/Documents/2026-2027/Lucas/Optima/Літературне читання 3.pdf` (text layer: `pdftotext -f N -l N`; the words are split by zero-width spaces). Lucas reads slowly and has aphasia.
+
+- A text = `<name>.js` + `<name>.html` (copy bohdanchyk.html, change the `.js`), a card in `texts.js`, both files in `also` of the Українська література entry in `games.js`
+  plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+- The text exactly as the book prints it (’ apostrophes, « » quotes, – dashes). Lines of a phrase or a short sentence (≤ 7 words).
+  More than about 100 words: `pages: [[lines], …]` of about 100 words each, cut at a paragraph or sentence; no separate cards, no page buttons.
+- Syllables: `-` between them, split between two consonants (ос-то-ронь, крис-ла-ту), a word-initial cluster stays (зга-, тре-, хви-),
+  `ь` and `й` stay with the syllable before (лень-кий, дій-ка), `дж` / `дз` as one sound stay together (на-ро-джен-ня).
+  `*` before the stressed syllable of every word of two syllables or more, before « when the word starts with one (`*«Ма-буть,`).
+  A real hyphen is `‑` (U+2011) at the end of its syllable (`*мо-ря‑-о-ке-*а-ни`, one `*` per part).
+  Stress the way a dictionary gives it; list the less obvious ones for the user (Сашка́, одна́ одну́, ранко́ву).
+- `launch` (Склади): the longest words, 10 per ~100 words; `fuel` (Слова): 20 per ~100 words, none twice. Spelled exactly as in the text.
+- Check with `node .claude/scripts/ukr-reading-check.js <text.js> "<book.pdf>" <page>` (syllables, stress, the word lists, the text against the book page).
+- Check in the browser at a phone width (360–390px upright, sideways) and a landscape tablet: the longest Склади word, Читання to the end, the page turn.
+
 ## Speech games (Мовлення)
 
 Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a game is only a data file). Format in README: "Speech games (Мовлення)".
