@@ -393,7 +393,7 @@
         const sel = saved[fid(ri, 0)] || [];
         return `<div class="mu-row mu-qrow"><span class="mu-rq">${esc(r.q)}</span><span class="mu-chs">${r.ch.map((c) => `<button type="button" class="mu-ch${sel.includes(c) ? " on" : ""}" data-c="${fid(ri, 0)}" data-v="${esc(c)}" data-multi="${r.want.length > 1}">${esc(c)}</button>`).join("")}</span></div>`;
       }
-      return `<div class="mu-row mu-qrow">${r.q ? `<span class="mu-rq">${esc(r.q)}</span>` : ""}<span class="mu-fs">${r.pre ? `<span class="${r.sent ? "mu-sent" : "mu-expr"}">${esc(r.pre)}</span>` : ""}${r.want.map((_, j) => field(ri, j)).join('<span class="mu-comma">,</span>')}${r.post ? `<span class="${r.sent ? "mu-sent" : "mu-post"}">${esc(r.post)}</span>` : ""}</span></div>`;
+      return `<div class="mu-row mu-qrow">${r.q ? `<span class="mu-rq">${esc(r.q)}</span>` : ""}<span class="mu-fs">${r.pre ? `<span class="${r.sent ? "mu-sent" : "mu-expr"}">${esc(r.pre)}</span>` : ""}${r.want.map((_, j) => (j ? (r.mid ? `<span class="mu-post">${esc(r.mid[j - 1])}</span>` : '<span class="mu-comma">,</span>') : "") + field(ri, j)).join("")}${r.post ? `<span class="${r.sent ? "mu-sent" : "mu-post"}">${esc(r.post)}</span>` : ""}</span></div>`;
     };
 
     // 📝 the solution: the book's steps (word problems) or the steps of each expression
