@@ -1909,7 +1909,7 @@ window.GAMES = [
     topics:
       "Повторення за 2 клас · Табличне множення і ділення: таблиці 2–9, рівняння, частини, задачі · Нумерація трицифрових чисел",
     path: "optima/grade-3/math/index.html",
-    countLabel: "57 уроків",
+    countLabel: "62 уроки",
     year: "2026–2027",
     also: [
       "optima/grade-3/math/lessons.js",
@@ -2074,6 +2074,18 @@ window.GAMES = [
       "optima/grade-3/math/lesson-57.html",
       "optima/grade-3/math/lesson-57.js",
       "optima/grade-3/math/img/lesson-57/sticks.jpg",
+      "optima/grade-3/math/lesson-58.html",
+      "optima/grade-3/math/lesson-58.js",
+      "optima/grade-3/math/lesson-59.html",
+      "optima/grade-3/math/lesson-59.js",
+      "optima/grade-3/math/img/lesson-59/ruler.jpg",
+      "optima/grade-3/math/lesson-60.html",
+      "optima/grade-3/math/lesson-60.js",
+      "optima/grade-3/math/img/lesson-60/segments.jpg",
+      "optima/grade-3/math/lesson-61.html",
+      "optima/grade-3/math/lesson-61.js",
+      "optima/grade-3/math/lesson-62.html",
+      "optima/grade-3/math/lesson-62.js",
     ],
   },
   {
