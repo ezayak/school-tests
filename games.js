@@ -1907,7 +1907,7 @@ window.GAMES = [
     topics:
       "Додавання і віднімання в межах сотні · Іменовані числа, буквені вирази · Перевірка дій, годинник · Множення: 1 і 0, таблиця на 3",
     path: "optima/grade-3/math/index.html",
-    countLabel: "15 уроків",
+    countLabel: "16 уроків",
     year: "2026–2027",
     also: [
       "optima/grade-3/math/lessons.js",
@@ -1955,6 +1955,9 @@ window.GAMES = [
       "optima/grade-3/math/img/lesson-14/gnomes.jpg",
       "optima/grade-3/math/lesson-15.html",
       "optima/grade-3/math/lesson-15.js",
+      "optima/grade-3/math/lesson-16.html",
+      "optima/grade-3/math/lesson-16.js",
+      "optima/grade-3/math/img/lesson-16/sticks.jpg",
     ],
   },
   {
