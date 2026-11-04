@@ -602,7 +602,7 @@
     // a long word (щиколотка, підборіддя) gets smaller to fit between the card's edges and 🔊 (sp-fit, --n letters)
     d.head = (it) => ({
       c: "sp-pos",
-      html: `<span class="sp-fit" style="--n:${[...it.name].length}">${esc(it.name)}</span>`,
+      html: `<span class="sp-fit" style="--n:${chars(it.name).length}">${esc(it.name)}</span>`, // letters, not harakat
     });
     d.gq = { title: T.bodyGuess, hint: T.bodyGuessHint };
     d.modes = T.placeModes;

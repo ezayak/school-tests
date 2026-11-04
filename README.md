@@ -316,6 +316,9 @@ about himself, `pic` = a picture in `img/things/` (precached through the Реч�
 pic: "head", f: "head"}, …]}`: `t` = the word, `w` = the card's sentence, `pic` = a picture in `img/body/`, `f` = its family (every card has one;
 pictures that look alike share it: рука / зап’ястя / кисть, нога / щиколотка / стопа, очі / вії, рот / зуби / губи, волосся / лоб / скроні, щоки / підборіддя).
 `body-phrases.js` is a phrases file (`window.SPEECH_PHRASES`) with `img: "../img/body/"`, `key: "body-say-"`, `group: "Частини тіла"`.
+English and Arabic (`speech/en/body/`, `speech/ar/body/`, the same pages): `body.js` and `body-phrases.js` with `img: "../../uk/img/body/"`
+(the same pictures). English «This is my [head]», «I have a [headache]», «My [leg] hurts»; Arabic «هَذَا [رَأْسِي]», «أَشْعُرُ بِأَلَمٍ فِي [رَأْسِي]»
+(right for every gender), «أَحْتَاجُ أَنْ أَغْسِلَ [يَدَيَّ]»; a long word on the card shrinks to fit (`sp-fit`, counting letters, not harakat).
 
 ## Player name
 
