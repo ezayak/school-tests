@@ -108,12 +108,38 @@
     timers = [];
     hush();
   }
-  // where the rocket is: 0 = on the ground, 1 = at the top; win = a new record (a bigger rocket)
+  // where the rocket is: 0 = on the ground, 1 = at the top; win = a new record (a bigger rocket).
+  // On a phone held upright the sky is a strip above the game (wider than tall): the rocket flies to the right.
+  let at = [0, false];
   function lift(f, win) {
-    const h = sky.clientHeight - 64;
-    rocket.style.bottom = 6 + h * Math.max(0, Math.min(1, f)) + "px";
+    at = [f, win];
+    f = Math.max(0, Math.min(1, f));
+    const flat = sky.clientWidth > sky.clientHeight;
+    rocket.style.bottom = flat ? "" : 6 + (sky.clientHeight - 64) * f + "px";
+    rocket.style.left = flat ? 6 + (sky.clientWidth - 56) * f + "px" : "";
     rocket.classList.toggle("rd-win", !!win);
   }
+  // a big word (syllable tiles, a flashing word) shrinks until it fits the width of the game;
+  // tiles stop at 28px and go onto two rows instead (a long word on a phone held upright)
+  function fit(el) {
+    if (!el) return;
+    const tiles = el.id === "tiles",
+      min = tiles ? 28 : 20;
+    el.style.fontSize = "";
+    el.classList.remove("rd-wrap");
+    const room = stage.clientWidth - 12; // the tiles' shadow and pulse
+    let px = parseFloat(getComputedStyle(el).fontSize);
+    while (el.scrollWidth > room && px > min) {
+      px -= 2;
+      el.style.fontSize = px + "px";
+    }
+    if (tiles && el.scrollWidth > room) el.classList.add("rd-wrap");
+  }
+  addEventListener("resize", () => {
+    fit(document.getElementById("tiles"));
+    fit(document.getElementById("flash"));
+    lift(...at);
+  });
   function go(k) {
     stop();
     tab = k;
@@ -160,6 +186,7 @@
         <p class="rd-hint" id="after" hidden>А тепер прочитай слово цілком!</p>
         <div class="rd-row"><button type="button" class="btn ghost" id="listen"${along && TTS ? "" : " hidden"}>▶ Послухати</button>
           <button type="button" class="btn" id="nextw" hidden>Далі ▶</button></div>`;
+      fit(document.getElementById("tiles"));
       let cur = 0,
         joined = false,
         busy = false;
@@ -245,6 +272,7 @@
             show();
           }),
       );
+      fit(document.getElementById("flash"));
       const fill = document.getElementById("fill"),
         t0 = performance.now();
       every(() => {
@@ -299,7 +327,14 @@
         document.getElementById("l" + n).classList.replace("cur", "was");
       n++;
       if (n >= T.text.length) return finish();
-      document.getElementById("l" + n).classList.add("cur");
+      const line = document.getElementById("l" + n);
+      line.classList.add("cur");
+      // a long text scrolls in its box: the line being read stays in the middle
+      const box = document.getElementById("text");
+      box.scrollTo({
+        top: line.offsetTop - (box.clientHeight - line.offsetHeight) / 2,
+        behavior: "smooth",
+      });
       lift((n / T.text.length) * 0.8);
       btn.classList.remove("big");
       btn.textContent = n === T.text.length - 1 ? "Фініш 🏁" : "Далі ▶";
