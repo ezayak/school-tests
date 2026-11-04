@@ -61,6 +61,9 @@ node .claude/skills/optima-math/scripts/check.js optima/grade-3/math/lesson-N.js
 
 It checks every expression (whole numbers, not negative, ■ only after a row), every written step `a op b = c` in slides and solutions, word problems (help, schema, steps, answer; the answer is the result of the last step and is in the sentence), pictures (exist, used, in `games.js` `also`), the html and the `lessons.js` card. Fix until it prints `OK`.
 
+Then click through everything in a headless browser: `bash .claude/skills/optima-math/scripts/all.sh FROM TO` (every slide, every exercise with
+💡 📝 ✓ Готово, both table games) prints one line per lesson, «ok» or the JS errors and empty solutions.
+
 Screenshots (headless Chromium, run from the repo root, the page path is relative to `optima/grade-3/math/`):
 
 ```sh
@@ -93,4 +96,5 @@ Check at least: the tiles, every slide, one exercise of each group with 📝 Р�
 - Atkinson Hyperlegible draws 0 as Ø: math-uk.css puts Nunito first. Don't change `--body`.
 - The book writes × as `·` (4 · 3 = 12); write `·` in the data, the engine shows `·` in the steps.
 - check.js skips clauses with units next to numbers or with □ ("1 м 6 дм = 16 дм"), so check those by hand; write substitutions as "якщо b = 15, то 43 − 15 = 28".
+- «Find the wrong ones and fix them» (Радик помилився): ask for all the values, not only the wrong ones, or the boxes give the answer away.
 - An answer sentence with the answer number twice can't hold a box: the row then shows the bare box; reword the sentence.

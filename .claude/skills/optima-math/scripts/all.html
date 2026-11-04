@@ -1,0 +1,78 @@
+<!doctype html><meta charset="utf-8" />
+<body>
+  <iframe id="f" style="width: 1280px; height: 900px"></iframe>
+  <pre id="out">running</pre>
+  <script>
+    // ?from=38&to=42 : opens each lesson, goes through every slide, every exercise (💡, 📝, ✓ Готово, Далі) and opens both
+    // table games; reports JS errors and exercises whose 📝 Розв’язання is empty. Run by all.sh.
+    const P = new URLSearchParams(location.search),
+      out = [],
+      f = document.getElementById("f");
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    async function one(n) {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("mu-"))
+        .forEach((k) => localStorage.removeItem(k));
+      const errs = [];
+      await new Promise((r) => {
+        f.onload = r;
+        f.src = `lesson-${n}.html?t=${Math.random()}`;
+      });
+      const w = f.contentWindow,
+        d = f.contentDocument,
+        q = (s) => d.querySelector(s);
+      w.onerror = (m) => errs.push(String(m));
+      let slides = 0,
+        ex = 0;
+      try {
+        q("#i-0").click();
+        await wait(20);
+        while (q("#nextBtn")) {
+          slides++;
+          const last = q("#nextBtn").textContent.includes("✓");
+          q("#nextBtn").click();
+          await wait(10);
+          if (last) break;
+        }
+        q('[data-tab="tasks"]').click();
+        await wait(10);
+        const groups = d.querySelectorAll("[data-g]").length;
+        for (let g = 0; g < groups; g++) {
+          q(`#g-${g}`).click();
+          await wait(10);
+          for (let k = 0; k < 40; k++) {
+            ex++;
+            q("#helpBtn")?.click();
+            q("#solBtn")?.click();
+            q("#okBtn").click();
+            await wait(5);
+            if (!q("#solBox").textContent.replace("📝 Розв’язання", "").trim())
+              errs.push(`empty solution: group ${g + 1}, exercise ${k + 1}`);
+            const last = q("#nextBtn").textContent.includes("До вправ");
+            q("#nextBtn").click();
+            await wait(10);
+            if (last) break;
+          }
+        }
+        for (const gk of ["mix", "rocket"])
+          if (q(`#game-${gk}`)) {
+            q(`#game-${gk}`).click();
+            await wait(10);
+            q("#goBtn")?.click();
+            await wait(10);
+            q("#homeBtn").click();
+            await wait(10);
+          }
+      } catch (e) {
+        errs.push("harness: " + e.message);
+      }
+      out.push(
+        `${n}: ${slides} slides, ${ex} exercises${errs.length ? " ERR " + errs.join(" | ") : " ok"}`,
+      );
+    }
+    (async () => {
+      for (let n = +P.get("from"); n <= +P.get("to"); n++) await one(n);
+      document.getElementById("out").textContent = out.join("\n") + "\nDONE";
+    })();
+  </script>
+</body>
