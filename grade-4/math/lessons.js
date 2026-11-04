@@ -54,5 +54,21 @@ window.CS_LESSONS = {
         },
       ],
     },
+    {
+      n: "",
+      dir: "times",
+      title: "Multiplication games",
+      items: [
+        {
+          n: "",
+          label: "Games",
+          title: "Multiplication games",
+          en: "Times tables 2–12 or random: mixed-up sums to type and rockets to blow up",
+          path: "index.html",
+          ic: "🚀",
+          note: "2–12 · 🎲 random",
+        },
+      ],
+    },
   ],
 };

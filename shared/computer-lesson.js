@@ -52,7 +52,8 @@
   if (view === "list") {
     const LS = window.CS_LESSONS || { grade: 4, chapters: [] };
     // one block per chapter; a lesson's path and cover are relative to its chapter folder
-    // label: the word on the cards ("Lesson"); flat: all the cards together, no chapter headings (Math: one lesson per unit)
+    // label: the word on the cards ("Lesson"), or an item's own label; flat: all the cards together, no chapter headings (Math: one lesson per unit)
+    // an item without a cover shows its emoji (ic)
     const cards = (ch) =>
       ch.items
         .map((it) =>
@@ -60,9 +61,9 @@
             {
               ...it,
               path: `${ch.dir}/${it.path}`,
-              cover: `${ch.dir}/${it.cover}`,
+              cover: it.cover && `${ch.dir}/${it.cover}`,
             },
-            LS.label || "Lesson",
+            it.label || LS.label || "Lesson",
           ),
         )
         .join("");

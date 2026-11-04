@@ -1749,12 +1749,14 @@ window.GAMES = [
     hub: true,
     lesson: "Lessons · pictures, number pad, schemas, games & exercises",
     topics:
-      "Place value · Add and subtract in columns · Word problems with a schema · Multiplication and times tables",
+      "Place value · Add and subtract in columns · Word problems with a schema · Multiplication and times tables · Times-table games 2–12",
     path: "grade-4/math/index.html",
-    countLabel: "3 lessons · Units 2–4",
+    countLabel: "3 lessons · Units 2–4 · Multiplication games",
     year: "2026–2027",
     also: [
       "grade-4/math/lessons.js",
+      "grade-4/math/times/index.html",
+      "grade-4/math/times/times.js",
       "grade-4/math/unit-2/place-value.html",
       "grade-4/math/unit-2/place-value.js",
       "grade-4/math/unit-2/img/cover.jpg",

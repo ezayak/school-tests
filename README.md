@@ -837,5 +837,10 @@ start screen with parts and length, matching rounds, score and review) that also
 lessons' question types, run through a small adapter object (`E`) that gives them the quiz look instead of the lesson look (`<body class="mx-rev">`,
 rules at the end of `shared/math.css`). Every word problem has its schema (`vis`).
 
+**Multiplication games**: `grade-4/math/times/index.html` + `times.js` (a card in `lessons.js` with its own `label: "Games"` and no cover, so the hub shows its emoji).
+Pick a times table 2–12 (n × 1 … n × 12) or 🎲 Random, then a game from `shared/times-games.js` (the Optima lessons' games, in English):
+🎲 Mixed up (type each answer; Random: 10, 20 or 30 sums picked from 2 × 2 … 12 × 12) and 🚀 Rockets (Random: all 121 sums, until they are done or 5 mistakes).
+Best scores, the number picked and the rocket speed are saved on the device (`tg-math4-*`).
+
 After adding a lesson: add it to its unit in `lessons.js` (a new unit: a new `unit-N/` folder and a new entry in `chapters`), add its files to the `also: [...]` list of the Math entry in `games.js`,
 and bump `VERSION` in `sw.js`.

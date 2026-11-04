@@ -343,3 +343,38 @@
   padding: 6px 12px;
   margin-left: auto;
 }
+
+/* ---------- the Grade 4 "Multiplication games" page: pick a number, then a game ---------- */
+.tg-pick {
+  gap: 12px;
+}
+.tg-h {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  margin: 0;
+}
+.tg-nums {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 10px;
+}
+.tg-num {
+  min-height: 64px;
+  font-family: var(--display);
+  font-size: 2rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+}
+.tg-num[aria-pressed="true"] {
+  background: var(--accent);
+  color: #fff;
+}
+.tg-num.tg-rand {
+  grid-column: span 2;
+  font-size: 1.4rem;
+}
