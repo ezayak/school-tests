@@ -57,7 +57,10 @@ speech/                    ← Мовлення: speech games (school: "speech" 
                               phrases.html (cards), phrases-build.html, phrases-guess.html, with data-deck="phrases"
     verbs/                 ← Дії: index.html, list.js, cards.html, guess.html, with data-deck="verbs"; build.html (data-deck="verbWords"), forms.html (data-deck="verbForms")
     img/positions/         ← the position pictures, cut from the parent's posters (no labels, no frame), <name>-1.jpg / -2.jpg
+    body/                  ← Частини тіла: cards.html, guess.html (data-deck="body"), build.html (data-deck="bodyWords"),
+                              phrases.html, phrases-build.html, phrases-guess.html (data-deck="phrases" with ../body-phrases.js)
     img/things/            ← the pictures of the parent's collage of cards (no labels), 300×300
+    img/body/              ← the pictures of the parent's poster «Частини тіла й обличчя» (below the labels), 320px high; face = its big face
   en/                      ← English (<html lang="en">, a US voice, English interface): letters.js (26 letters, the voice says their names)
     abc/                   ← ABC: the same pages as uk/abc, with lang="en" (build.html loads only letters.js)
     sentences/             ← Sentences: positions.html, positions-guess.html, positions-place.html (as in uk/sentences);
@@ -273,6 +276,10 @@ Games:
   of one word (not «чистити зуби»): the verb's picture (`deck.pic`), the verb (`deck.spell`) said and built from letters.
 - **Дії · Як сказати?** (`data-view="guess" data-deck="verbForms"`): the voice says the verb («їсти»), the picture (mode «🖼️ З картинкою»)
   and «Я …» (`deck.prompt`) show; tap the form among 4 words (їм / п’ю / сплю / граю); a right tap shows and says «Я їм».
+- **Частини тіла** (topic Body): Картки (`data-deck="body"`: the word big, the poster picture, «Це моя [голова]»); Покажи (`data-view="guess"`:
+  «🔊 Слухати» says the word, «🔤 Читати» shows it and says it only with 🔊 (`deck.read`); pictures that look alike share a family `f`
+  and never come together); Склади слово (`data-deck="bodyWords"`: the one-word parts, no ’); Речення, Склади речення, Вгадай речення
+  (the phrases pages with `../body-phrases.js`: «У мене болить…», «Мені треба помити…», «Я чищу зуби»; its own `key` and `group`).
 - The guessing, building and placing games share `round()` in `speech.js`: the mode switch, the choice of set (or of several groups), the round, the counter and the end screen.
 
 `letters.js` format (`window.SPEECH_LETTERS = {lang, items}`), one item per letter:
@@ -304,6 +311,11 @@ cropped above its label (thin tile edges dropped, the tile background made white
 `verbs.js` format (`window.SPEECH_VERBS = {lang, groups}`), groups of everyday verbs (Вдома, Рухаюся, Вчуся і граю):
 `{t: "Вдома", cards: [{t: "їсти", w: "Я [їм]", pic: "eat"}, {t: "митися", w: "Я [миюся]", ic: "🛁"}, …]}`: `t` = the verb, `w` = how he says it
 about himself, `pic` = a picture in `img/things/` (precached through the Речення entry) or `ic` = an emoji when the collage has none.
+
+`body.js` format (`window.SPEECH_BODY = {lang, groups}`), groups Тіло and Обличчя: `{t: "Тіло", cards: [{t: "голова", w: "Це моя [голова]",
+pic: "head", f: "head"}, …]}`: `t` = the word, `w` = the card's sentence, `pic` = a picture in `img/body/`, `f` = its family (every card has one;
+pictures that look alike share it: рука / зап’ястя / кисть, нога / щиколотка / стопа, очі / вії, рот / зуби / губи, волосся / лоб / скроні, щоки / підборіддя).
+`body-phrases.js` is a phrases file (`window.SPEECH_PHRASES`) with `img: "../img/body/"`, `key: "body-say-"`, `group: "Частини тіла"`.
 
 ## Player name
 

@@ -591,6 +591,10 @@
   padding: 0 76px;
   font-size: min(11cqh, 7cqw);
 }
+/* a word that fits the card's top whatever its length (--n letters; Nunito's letters are about 0.62em wide, 0.68 leaves a margin; 160px = the padding and 🔊) */
+.sp-fit {
+  font-size: min(1em, calc((100cqw - 160px) / var(--n) / 0.68));
+}
 /* the picture between ‹ and › (56px buttons, 12–18px from the edge) */
 .sp-photos {
   padding: 3% 80px;

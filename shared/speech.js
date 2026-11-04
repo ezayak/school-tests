@@ -73,6 +73,11 @@
         "Прочитай або послухай, де має бути предмет, і постав його туди.",
       thing: "Предмет",
       here: "Сюди",
+      body: "Частини тіла",
+      bodyOther: "Інші частини тіла",
+      bodyWhat: ["частину тіла", "картинку"],
+      bodyGuess: "Покажи",
+      bodyGuessHint: "Послухай або прочитай слово і натисни на картинку.",
       syl: "Склади",
       sylOther: "Інші склади",
       sylWhat: ["склад", "нього"],
@@ -152,6 +157,11 @@
       placeHint: "Read or listen where the thing goes, and put it there.",
       thing: "Thing",
       here: "Here",
+      body: "Body",
+      bodyOther: "Other parts",
+      bodyWhat: ["part of the body", "the picture"],
+      bodyGuess: "Show me",
+      bodyGuessHint: "Listen to or read the word and tap the picture.",
       syl: "Syllables",
       sylOther: "Other syllables",
       sylWhat: ["syllable", "it"],
@@ -233,6 +243,8 @@
       verbs,
       verbWords,
       verbForms,
+      body,
+      bodyWords,
     }[document.body.dataset.deck] || letters
   )();
   // Arabic: Google's online voice when the device has none (as in the Arabic lessons); body[data-lang] for the Arabic font
@@ -411,7 +423,9 @@
   // Picture sentences: one card per picture, with the sentence it shows (w, its key part in [ ]), in groups (t: shown big
   // on the card and said first). The panel has the groups and the pictures of the chosen one.
   // The guessing game says the group; its answers are pictures of other chosen groups (one per family f).
-  // A card's own t (a verb) is shown and said instead of its group's; a card has pic (a picture file) or ic (an emoji).
+  // A card's own t (a verb) is shown and said instead of its group's; a card has pic (a picture file) or ic (an emoji);
+  // a card's own f: pictures that look alike share one, so they never come together in the guessing game.
+  // D.key / D.group: the data's own saved-key and group name (body sentences on the phrases pages).
   // o: {key, dir: the pictures' folder in ../img/ (D.img: another folder, e.g. the Ukrainian pictures), group (default T.sentences), other, what, label: the panel's group list,
   // hd: the card top's class, choose: the guessing game's start screen, or none; sets: «Усі» and each group with at least
   // 4 cards; mix: the wrong answers are any other pictures, of the same group first}.
@@ -423,13 +437,13 @@
     const items = [];
     D.groups.forEach((g, gi) =>
       g.cards.forEach((x) =>
-        items.push({ ...x, name: x.t || g.t, f: g.f || gi, g: gi }),
+        items.push({ ...x, name: x.t || g.t, f: x.f || g.f || gi, g: gi }),
       ),
     );
     const d = {
       lang: D.lang,
-      key: o.key,
-      group: o.group || T.sentences,
+      key: D.key || o.key,
+      group: D.group || o.group || T.sentences,
       other: o.other,
       what: o.what,
       nav: T.cardNav,
@@ -555,16 +569,49 @@
     });
   }
 
-  // Verb words (verbs.js): the verbs of one word, to build from letters (the building game); sets «Усі» and each group.
-  function verbWords() {
-    const d = verbs();
-    const one = (x) => !x.name.includes(" ");
+  // The building game's words of a picture deck: its cards of one word (no space, no ’), built from letters; sets «Усі»
+  // and each group with at least 4.
+  function oneWords(d) {
+    const one = (x) => !/[ ’]/.test(x.name);
     d.items = d.items.filter(one);
     d.sets = d.sets
       .map((x) => ({ t: x.t, items: x.items.filter(one) }))
       .filter((x) => x.items.length >= 4);
     d.spell = (it) => [it.name, it.snd];
     return d;
+  }
+  // Verb words (verbs.js): the verbs of one word, to build from letters.
+  function verbWords() {
+    return oneWords(verbs());
+  }
+
+  // Parts of the body (window.SPEECH_BODY, body.js): the word big, a poster picture, «Це моя [голова]».
+  // The guessing game «Покажи»: hear the word («🔊 Слухати») or read it («🔤 Читати», said only with 🔊), tap its picture
+  // among 4; pictures that look alike (очі, вії) share a family and never come together. Sets «Усі», тіло, обличчя.
+  function body() {
+    const d = pictures(window.SPEECH_BODY, {
+      key: "body-",
+      dir: "body",
+      group: T.body,
+      other: T.bodyOther,
+      what: T.bodyWhat,
+      label: T.body,
+      hd: "sp-pos",
+      sets: true,
+    });
+    // a long word (щиколотка, підборіддя) gets smaller to fit between the card's edges and 🔊 (sp-fit, --n letters)
+    d.head = (it) => ({
+      c: "sp-pos",
+      html: `<span class="sp-fit" style="--n:${[...it.name].length}">${esc(it.name)}</span>`,
+    });
+    d.gq = { title: T.bodyGuess, hint: T.bodyGuessHint };
+    d.modes = T.placeModes;
+    d.read = true;
+    return d;
+  }
+  // Body words (body.js): the parts of one word, to build from letters.
+  function bodyWords() {
+    return oneWords(body());
   }
 
   // Verb forms (verbs.js): the voice says the verb («їсти»), the picture (mode 1) and «Я …» show; choose the form he says
@@ -837,7 +884,8 @@
   // «З картинкою» shows the picture next to 🔊 as a hint, «Без картинки» gives only the sound.
   // A deck with sets (syllables) first asks what to play: everything or one consonant.
   // deck.q(it): what the voice asks (default the item's name; phrases: the whole sentence); deck.prompt(it): a line
-  // always shown after the hint («Я …»); deck.gq: {title, hint} instead of «Вгадай …».
+  // always shown after the hint («Я …»); deck.gq: {title, hint} instead of «Вгадай …»; deck.read: mode 1 is reading
+  // (the word shown, not said until 🔊).
   function guess() {
     const q = deck.q || ((it) => [it.name, it.snd]);
     round({
@@ -878,7 +926,7 @@
               if (await say(...said(it))) api.next(b);
             }),
         );
-        say(...q(it));
+        if (!deck.read || !api.mode()) say(...q(it)); // deck.read: «Читати» (mode 1) says it only with 🔊
       },
     });
   }
