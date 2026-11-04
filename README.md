@@ -182,6 +182,8 @@ Everything on screen is in Ukrainian. A lesson has two tabs of tiles:
 - **✏️ Задачі** – one tile per group (a type of exercise); a group shows its exercises one at a time, with a strip of them on top (green ✓ = done).
   The child solves on paper and types the answer (number pad; a block of > < = under comparisons). ✓ Готово checks; all right → done, saved on the device.
   💡 Підказка = the schema of a word problem, 📝 Розв’язання = the steps; «Далі →» always works. The answer box of a word problem sits inside the answer sentence.
+- A lesson with every exercise done is finished: «✓ Урок пройдено» next to its title and a green «✓ Пройдено» tag on its card in the list
+  (saved on the device in `mu-complete`, by page path; the games don't count). `Kit.lessonCard` shows the tag for any card given `done: "text"`.
 - A lesson with `drill` adds two game tiles: **🎲 Таблиця врозкид** (every example of the table once, typed) and **🚀 Ракети** (a rocket flies across with an example,
   tap the right one of 4 answers before it is gone; 🐢 / 🐇 speed). Both end with the score, 🎆 / 👍 / 😢 (90 % / 70 %) and the list of mistakes; the best score is saved.
 
