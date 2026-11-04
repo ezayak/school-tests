@@ -148,6 +148,8 @@ L.groups.forEach((g) => {
           });
         } else if (!Array.isArray(r.a) || !r.a.every(Number.isFinite))
           err(rw, "a must be a list of numbers");
+        else if (r.alt && !(r.a.length === 1 && r.alt.every(Number.isFinite)))
+          err(rw, "alt (other right answers) needs one box and numbers");
       } catch (e) {
         err(rw, e.message);
       }

@@ -198,7 +198,7 @@ window.MATH_LESSON = {
 
 Rows: `{e: "34 − (18 − 9)"}` (worked out; `q` = a label; `■` = the answer of the row before, `{h}` = a heading that resets it);
 `{cmp: ["78 − 24", "64"]}` (the sign worked out) or with units `{cmp, a: "<", why}`; `{q, ch: [...], a}` (choose; `a: [..]` = several);
-`{q, a: [numbers], pre, post, any}` (boxes; `any` = in any order). A word problem has `help`, `schema` (`kind: "bar"`, see `shared/math.js`), `steps`, `answer`.
+`{q, a: [numbers], pre, post, any, alt}` (boxes; `any` = in any order; `alt` = other right answers of one box). A word problem has `help`, `schema` (`kind: "bar"`, see `shared/math.js`), `steps`, `answer`.
 Expressions are text with `+ − · :` and brackets (`×` and `-` are read too). `img` names a `.jpg` in the lesson's `img` folder.
 
 New lesson: the `optima-math` skill (`.claude/skills/optima-math/SKILL.md`): copy `lesson-2.html` (change the `.js` and the title), write `lesson-N.js`, add a card to `lessons.js`,

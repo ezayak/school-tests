@@ -24,15 +24,16 @@ Book: `~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Козак М. Ма
 
 ## 2. Sort the exercises
 
-| In the book                                   | Group (`t`, `ic`)            | Row kind                                                                                                             |
-| --------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Обчисли, a column of expressions              | Обчисли 🧮                   | `{e: "34 − (18 − 9)"}`; a label: `{q: "b = 8:", e: "43 − 8"}`                                                        |
-| chains, pyramids (answer starts the next one) | Обчисли 🧮                   | `{h: "Ліва сторона"}`, then `{e: "■ + (11 − 5)"}` (■ = the row before)                                               |
-| >, <, =                                       | Порівняй ⚖️                  | `{cmp: ["78 − 24", "64"]}` (sign worked out); with units `{cmp: ["1 м 6 дм", "6 м 1 дм"], a: "<", why: "…"}`         |
-| word problem                                  | Задачі 📖                    | `{q: "Відповідь:", a: [33]}` + `help`, `schema`, `steps`, `answer` (the box goes into the answer sentence by itself) |
-| pairs, choose one / several                   | by topic (Рівні вирази 🔗 …) | `{q, ch: [...], a: "x"}` or `a: ["x", "y"]`                                                                          |
-| several numbers to write                      | by topic (Календар 📅 …)     | `{q, a: [2, 9, 16], any: true}` (any order)                                                                          |
-| a table of × or :                             | —                            | lesson field `drill: {mul: [4]}` / `{div: [4]}` → the 🎲 Таблиця врозкид and 🚀 Ракети games (n · 2 … n · 9)         |
+| In the book                                      | Group (`t`, `ic`)            | Row kind                                                                                                             |
+| ------------------------------------------------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Обчисли, a column of expressions                 | Обчисли 🧮                   | `{e: "34 − (18 − 9)"}`; a label: `{q: "b = 8:", e: "43 − 8"}`                                                        |
+| chains, pyramids (answer starts the next one)    | Обчисли 🧮                   | `{h: "Ліва сторона"}`, then `{e: "■ + (11 − 5)"}` (■ = the row before)                                               |
+| >, <, =                                          | Порівняй ⚖️                  | `{cmp: ["78 − 24", "64"]}` (sign worked out); with units `{cmp: ["1 м 6 дм", "6 м 1 дм"], a: "<", why: "…"}`         |
+| word problem                                     | Задачі 📖                    | `{q: "Відповідь:", a: [33]}` + `help`, `schema`, `steps`, `answer` (the box goes into the answer sentence by itself) |
+| pairs, choose one / several                      | by topic (Рівні вирази 🔗 …) | `{q, ch: [...], a: "x"}` or `a: ["x", "y"]`                                                                          |
+| several numbers to write                         | by topic (Календар 📅 …)     | `{q, a: [2, 9, 16], any: true}` (any order)                                                                          |
+| a number with two right forms (22 or 10 o’clock) | by topic                     | `{q, a: [22], alt: [10], post: "год"}`                                                                               |
+| a table of × or :                                | —                            | lesson field `drill: {mul: [4]}` / `{div: [4]}` → the 🎲 Таблиця врозкид and 🚀 Ракети games (n · 2 … n · 9)         |
 
 Leave out what has nothing to check (Пофантазуй, drawing, stick puzzles, «Прочитай таблицю»), and list it in the file comment and for the user.
 A table lesson («Таблиця множення числа N», «Таблиця ділення на N», «Закріплення …») always gets `drill` with the tables it practises.

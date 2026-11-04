@@ -582,7 +582,9 @@
             ok =
               r.kind === "cmp"
                 ? x === r.want[j]
-                : Number(x) === Number(r.want[j]);
+                : Number(x) === Number(r.want[j]) ||
+                  // alt: other right answers ("22" or "10" for 10 o'clock in the evening)
+                  (r.alt || []).map(Number).includes(Number(x));
           if (!ok) wrong++;
           el.classList.add(ok ? "ok" : "no");
         });
