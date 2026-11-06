@@ -465,9 +465,13 @@
                   ? `${show(r.cmp[0])} ● ${show(r.cmp[1])}`
                   : r.kind === "ops"
                     ? `${r.parts.map(show).join(" віконце ")} = ${r.eq}`
-                    : r.q || "",
+                    : isWord && r.kind === "num"
+                      ? "" // a word problem's answer box («Відповідь:») is not read
+                      : r.q || "",
           ),
-        ].join(". "),
+        ]
+          .filter(Boolean)
+          .join(". "),
       );
 
     app.innerHTML = `${hud(`${G.ic} ${G.t}`, `${k + 1} / ${items.length}`)}<section class="card pop mu-taskcard${done[it.n] ? " is-done" : ""}">
