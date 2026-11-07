@@ -95,6 +95,15 @@ window.TESTS = [
     note: "Groups A · B · C · 18 questions · text «رسمة هبة» (workbook p. 12)",
   },
   {
+    n: 3,
+    nAr: "الثَّالِثُ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · The hidden hero",
+    path: "test-3.html",
+    cover: "img/lesson-3/w-teacher.jpg",
+    note: "Groups A · B · C · 24 questions · text «البطل الخفي» (workbook p. 16–17)",
+  },
+  {
     n: 6,
     nAr: "السَّادِسُ",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
