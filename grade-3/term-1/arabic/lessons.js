@@ -77,22 +77,22 @@ window.LESSONS = [
 // Tests (the weekly تقييم sheets): one page per sheet, one tab per group. Listed under "Tests" on the same page.
 window.TESTS = [
   {
-    n: 1,
-    nAr: "الْأَوَّلُ",
+    n: 6,
+    nAr: "السَّادِسُ",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
     en: "Weekly test · Period 4",
-    path: "test-1.html",
+    path: "test-6.html",
     cover: "img/lesson-2/teacher.jpg",
-    note: "Groups A · B · C · 15 questions · text from Lesson 2",
+    note: "Groups A · B · C · 15 questions · text from Lesson 2 (workbook p. 33)",
   },
   {
-    n: 2,
-    nAr: "الثَّانِي",
+    n: 7,
+    nAr: "السَّابِعُ",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
     en: "Weekly test · The first to raise a hand",
-    path: "test-2.html",
+    path: "test-7.html",
     cover: "img/lesson-3/teacher.jpg",
-    note: "Groups A · B · C · 21 questions · text from Lesson 3",
+    note: "Groups A · B · C · 21 questions · text from Lesson 3 (workbook p. 37–38)",
   },
 ];
 

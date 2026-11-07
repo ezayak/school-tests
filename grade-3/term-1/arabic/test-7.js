@@ -1,7 +1,7 @@
-/* Test 2 · التَّقْيِيمُ الْأُسْبُوعِيُّ · الْفَتْرَةُ الرَّابِعَةُ (book p. 37–38, the text is from Lesson 3)
+/* Test 7 · التَّقْيِيمُ الْأُسْبُوعِيُّ · الْفَتْرَةُ الرَّابِعَةُ (book p. 37–38, the text is from Lesson 3)
    Data for arabic-lesson.js: one tab per group (tabs), tap-a-word in the tasks (tapq). Format: see README ("Arabic tests"). */
 window.LESSON = {
-  n: "t2",
+  n: "t7",
   title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
   en: "Weekly test · Period 4 · The first to raise a hand",
   uk: "Щотижнева перевірка · Період 4 · Перша, хто підняв руку",
