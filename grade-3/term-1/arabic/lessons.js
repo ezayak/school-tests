@@ -77,6 +77,15 @@ window.LESSONS = [
 // Tests (the weekly تقييم sheets): one page per sheet, one tab per group. Listed under "Tests" on the same page.
 window.TESTS = [
   {
+    n: 1,
+    nAr: "الْأَوَّلُ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · Heba’s drawing",
+    path: "test-1.html",
+    cover: "img/lesson-2/happy.jpg",
+    note: "Groups A · B · C · 18 questions · text «رسمة هبة» (workbook p. 7–8)",
+  },
+  {
     n: 6,
     nAr: "السَّادِسُ",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
