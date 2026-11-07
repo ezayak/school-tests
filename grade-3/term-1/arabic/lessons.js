@@ -148,6 +148,15 @@ window.TESTS = [
     cover: "img/lesson-4/cover.jpg",
     note: "Groups A · B · C · 21 questions · the poem «أخلاقنا» from Lesson 4 (workbook p. 42–43)",
   },
+  {
+    n: 9,
+    nAr: "التَّاسِعُ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · The first to raise a hand (Unit 2 review)",
+    path: "test-9.html",
+    cover: "img/lesson-3/teacher.jpg",
+    note: "Groups A · B · C · 21 questions · text from Lesson 3 (workbook p. 47–48)",
+  },
 ];
 
 // Homework (the الأداءات المنزلية parts of the book pages): hw-N = Lesson N, one tab per book page. Listed under "Homework".
