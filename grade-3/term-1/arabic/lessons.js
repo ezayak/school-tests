@@ -36,6 +36,15 @@ window.LESSONS = [
     cover: "img/lesson-4/cover.jpg",
     note: "10 texts · 58 words · 184 exercises · November review",
   },
+  {
+    n: 5,
+    nAr: "الْخَامِسُ",
+    title: "الْعُصْفُورُ الْجَرِيءُ",
+    en: "The Brave Sparrow",
+    path: "lesson-5.html",
+    cover: "img/lesson-5/cover.jpg",
+    note: "Listening text in 6 parts · 23 words · 74 exercises · Unit 3",
+  },
 ];
 
 // Tests (the weekly تقييم sheets): one page per sheet, one tab per group. Listed under "Tests" on the same page.
