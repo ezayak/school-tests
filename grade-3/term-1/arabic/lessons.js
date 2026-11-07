@@ -45,6 +45,15 @@ window.LESSONS = [
     cover: "img/lesson-5/cover.jpg",
     note: "Listening text in 6 parts · 23 words · 74 exercises · Unit 3",
   },
+  {
+    n: 6,
+    nAr: "السَّادِسُ",
+    title: "صُنْدُوقُ الِابْتِكَارِ",
+    en: "The Idea Box",
+    path: "lesson-6.html",
+    cover: "img/lesson-6/cover.jpg",
+    note: "3 texts · 37 words · 194 exercises · عن / على, ت ة ه",
+  },
 ];
 
 // Tests (the weekly تقييم sheets): one page per sheet, one tab per group. Listed under "Tests" on the same page.
