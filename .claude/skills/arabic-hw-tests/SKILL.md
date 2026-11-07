@@ -34,6 +34,7 @@ Keep a notes file in the scratchpad (`<scratchpad>/hw/notes.md`) and write each 
 - Tests: the paragraph is printed once per group, often the same text in all groups. Take tashkeel from the lesson text (`lesson-N.js`) when the paragraph is from a lesson.
 - Answers the sheet does not give (no key): give the likely one, add a `// unverified` comment above the item, and list it in the report.
 - Words missing or unreadable: never guess. List them and ask.
+- A sheet that asks about a text it does not print (a poem to complete, «اذكر ما جاء في النشيد»): look for the text in the other files first (`grep -rl` in `grade-3/`; the mid-term revision `mid-term-1/arabic-revision.js` has the early-term texts, the poem «الناجح» among them). Not found anywhere: ask.
 - Dictation (السُّؤَالُ الثَّانِي: اكْتُبْ مَا يُمْلَى عَلَيْكَ) and copying lines (اكْتُبْ بِخَطِّ النَّسْخِ) in tests: dictation is left out; a copy line becomes an `open` item with `plain: true` and the sentence as the answer.
 
 ## 3. Build
@@ -42,6 +43,8 @@ Copy, don't write from scratch:
 
 - **Test**: `test-N.html` = copy of `test-1.html` (change the `.js` and the title). `test-N.js` like `test-1.js`: `n: "tN"`, `tapq: true`, `exSub`, `tabs` = one per group with `story: 0` (or the group's own text index when the groups have different paragraphs), `stories` = the paragraph(s), one part each, `para: "السُّؤَالُ الْأَوَّلُ: اقْرَأِ الْفِقْرَةَ التَّالِيَةَ ثُمَّ أَجِبْ"`, `img` from the lesson's pictures. Sections `k: "a1"`, `"a2"`, … with `tab: "a"`, one per lettered part, `t` as printed.
 - **Homework**: `hw-N.html` = copy of `hw-3.html` (it loads `drag-words.css` and `shared/common.js` for `build`). `hw-N.js` like `hw-3.js`: `n: "hN"`, one tab per book page (`{k: "p41", ic, t: "Page 41", short: "p.41", ar: "صَفْحَةُ ٤١"}`), a tab with a text to read gets `story: i`. Every homework item has a picture (`img` from `img/lesson-N/`, or an emoji `ic`, at most 2 emoji).
+- A sheet with no paragraph (only tasks): tabs without `story`, an emoji `ic` on every item (test-5).
+- Items repeated in several groups: write them once as a `const` and copy them into each section (`items.map((it) => ({ ...it }))`, see test-3.js).
 - Item types (CLAUDE.md): one word → `word` with every accepted answer; choices in brackets → `mc` (right one first); رَتِّبْ → `build` (homework); sentences, writing, copying → `open` with a model answer; syllables → `open` with `plain: true` (“اَلْ / عَا / مِ”); a writing task gets a `help` question with `[ar, en, uk]` options.
 - `en` / `uk` on every text, section and item: a plain translation of the question, not a transliteration.
 - Pictures: reuse `img/lesson-N/` (the lesson the text comes from). New pictures only when the sheet has its own: `pdftoppm -r 400 -f N -l N`, crop with PIL (coordinates from the 200 dpi page × 2), check a contact sheet for cut edges, answer circles and neighbouring panels.
@@ -58,6 +61,8 @@ node $K/gloss-reuse.js $S/miss.txt $S/gl-reused.txt $A/*.js       # copies gloss
 node $K/gloss-insert.js $A/test-N.js $S/gl-reused.txt $S/gl-new.txt
 npx --no-install prettier --write $A/test-N.js && node $K/check.js $A/test-N.js --missing
 ```
+
+Several sheets at once: collect the missing words of all of them into one `miss.txt`, but insert into each file only its own words (filter the lists by that file's `--missing` output); `gloss-insert.js` inserts every line it is given.
 
 Read `gl-reused.txt` before inserting it: a gloss copied from another file can carry that file's meaning (مِنْ came over as “who”, كُنْتُ as “you were”, أَسْعَدِ as “made happy”). Fix the lines that do not fit this text.
 
