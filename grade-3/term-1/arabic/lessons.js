@@ -233,4 +233,13 @@ window.HOMEWORK = [
     cover: "img/lesson-6/cover.jpg",
     note: "p. 50 · 51 · 53 · 54 · 55 · 21 questions",
   },
+  {
+    n: 7,
+    nAr: "السَّابِعُ",
+    title: "وَرَقَةٌ مِنَ التَّارِيخِ",
+    en: "Homework · A Page from History",
+    path: "hw-7.html",
+    cover: "img/lesson-7/cover.jpg",
+    note: "p. 57 · 58 · 59–60 · 15 questions",
+  },
 ];
