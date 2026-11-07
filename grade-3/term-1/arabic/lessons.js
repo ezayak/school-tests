@@ -157,6 +157,33 @@ window.TESTS = [
     cover: "img/lesson-3/teacher.jpg",
     note: "Groups A · B · C · 21 questions · text from Lesson 3 (workbook p. 47–48)",
   },
+  {
+    n: 10,
+    nAr: "الْعَاشِرُ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · Salma’s pencil case",
+    path: "test-10.html",
+    cover: "img/lesson-6/s1.jpg",
+    note: "Groups A · B · C · 18 questions · text from Lesson 6 (workbook p. 52)",
+  },
+  {
+    n: 11,
+    nAr: "الْحَادِيَ عَشَرَ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · The Box of Ideas",
+    path: "test-11.html",
+    cover: "img/lesson-6/s2.jpg",
+    note: "Groups A · B · C · 18 questions · text from Lesson 6 (workbook p. 56)",
+  },
+  {
+    n: 12,
+    nAr: "الثَّانِيَ عَشَرَ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · The Box of Ideas: the classmates’ decision",
+    path: "test-12.html",
+    cover: "img/lesson-6/s3.jpg",
+    note: "Groups A · B · C · 21 questions · text from Lesson 6 (workbook p. 60–61)",
+  },
 ];
 
 // Homework (the الأداءات المنزلية parts of the book pages): hw-N = Lesson N, one tab per book page. Listed under "Homework".
@@ -196,5 +223,14 @@ window.HOMEWORK = [
     path: "hw-5.html",
     cover: "img/lesson-5/cover.jpg",
     note: "p. 49 · 4 questions",
+  },
+  {
+    n: 6,
+    nAr: "السَّادِسُ",
+    title: "صُنْدُوقُ الِابْتِكَارِ",
+    en: "Homework · The Box of Ideas",
+    path: "hw-6.html",
+    cover: "img/lesson-6/cover.jpg",
+    note: "p. 50 · 51 · 53 · 54 · 55 · 21 questions",
   },
 ];
