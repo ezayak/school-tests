@@ -138,6 +138,12 @@ window.ENGLISH = {
     },
     ...[
       [
+        "Animal Poems",
+        "Book Shared Read · Dog, The Eagle, Chimpanzee, Rat · Unit 2 Week 5",
+        "story-animal-poems.html",
+        "4 poems · 20 questions",
+      ],
+      [
         "Deer",
         "Classwork booklet · Unit 2 Week 5",
         "story-deer.html",

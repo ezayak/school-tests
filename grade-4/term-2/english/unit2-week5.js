@@ -103,6 +103,12 @@
 
     stories: [
       {
+        t: "Animal Poems",
+        en: "Shared Read · Dog, The Eagle, Chimpanzee, Rat",
+        path: "story-animal-poems.html",
+        cover: { src: "img/animal-poems/dog.jpg" },
+      },
+      {
         t: "Deer",
         en: "Classwork booklet · simile and metaphor",
         path: "story-deer.html",
