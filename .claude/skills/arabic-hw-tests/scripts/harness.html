@@ -1,0 +1,105 @@
+<!doctype html>
+<meta charset="utf-8" />
+<body>
+  <pre id="out"></pre>
+  <iframe id="f" style="width: 1200px; height: 900px"></iframe>
+  <script>
+    // ?p=test-3.html&tab=a&s=a1 : open the page, the tab (tests / homework) and the section, play it to the score screen
+    // (every answer: first option / ✓ / show the answer / "I got it"), print one line.
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const sp = new URLSearchParams(location.search);
+    const out = [];
+    (async () => {
+      try {
+        const f = document.getElementById("f");
+        f.src = sp.get("p");
+        await new Promise((r) => (f.onload = r));
+        await sleep(300);
+        const w = f.contentWindow,
+          d = w.document,
+          q = (s) => d.querySelector(s),
+          qa = (s) => [...d.querySelectorAll(s)];
+        w.onerror = (m) => out.push("JSERR " + m);
+        if (sp.get("tab")) {
+          q("#tab-" + sp.get("tab")).click();
+          await sleep(100);
+        }
+        const id = "sec-" + sp.get("s");
+        if (!q("#" + id))
+          throw new Error(
+            "no section " +
+              id +
+              " (have: " +
+              qa("[id^=sec-]")
+                .map((b) => b.id)
+                .join(", ") +
+              ")",
+          );
+        q("#" + id).click();
+        await sleep(50);
+        let steps = 0,
+          stuck = "";
+        for (; steps < 80; steps++) {
+          if (q(".big-score") || q(".qacard")) break;
+          if (q("#ansIn")) {
+            q("#showA").click();
+            await sleep(20);
+          } else if (q("#bLine")) {
+            const tiles = qa("#bBank .tile, #bBank button");
+            for (const t of tiles) {
+              t.click();
+              await sleep(5);
+            }
+            q("#checkBtn") && q("#checkBtn").click();
+            await sleep(20);
+          } else if (q("#showA")) {
+            q("#showA").click();
+            await sleep(20);
+            if (q('[data-g="1"]')) {
+              q('[data-g="1"]').click();
+              await sleep(20);
+            }
+          } else if (q("#tf-1")) {
+            q("#tf-1").click();
+            await sleep(20);
+          } else if (q("[data-j]")) {
+            q("[data-j]").click();
+            await sleep(20);
+          } else if (q("[id^=ml-]")) {
+            const n = qa("[id^=ml-]").length;
+            for (let k = 0; k < n; k++) {
+              q("#ml-" + k).click();
+              await sleep(5);
+              q("#mr-" + k).click();
+              await sleep(5);
+            }
+            q("#checkBtn").click();
+            await sleep(20);
+          }
+          const nb = q("#nextBtn");
+          if (!nb) {
+            stuck = (d.querySelector("main") || d.body).innerText
+              .slice(0, 160)
+              .replace(/\s+/g, " ");
+            break;
+          }
+          nb.click();
+          await sleep(30);
+        }
+        out.push(
+          [
+            sp.get("tab") || "",
+            id,
+            q(".qacard") ? "cards" : "",
+            q(".big-score") ? "score " + q(".big-score").textContent : "",
+            stuck ? "STUCK: " + stuck : "",
+            "steps " + steps,
+          ].join(" "),
+        );
+      } catch (e) {
+        out.push("ERR " + e.message);
+      }
+      document.getElementById("out").textContent = out.join("\n");
+    })();
+  </script>
+</body>

@@ -44,7 +44,7 @@ What to build:
 
 - **Lesson** `lesson-N.js` + `lesson-N.html` + `lesson-N-exercises.html` (copy lesson-1's), pictures cropped from the book into `img/lesson-N/` (~700px).
   Story texts, words, opposites / plurals / meanings (the book's قاموس), every book exercise as a section; every item has a picture.
-- **Test** `test-N.js` + `test-N.html` (copy test-2.html): one tab per group, the sheet's paragraph with a picture above the tasks, items without pictures. See "Arabic tests" below.
+- **Test** `test-N.js` + `test-N.html` (copy test-1.html): one tab per group, the sheet's paragraph with a picture above the tasks, items without pictures. See "Arabic tests" below.
 - **Homework** `hw-N.js` + `hw-N.html` for Lesson N (copy hw-2.html): one tab per book page, only the homework tasks, a picture (`img` or emoji `ic`) on every item.
   More homework for a lesson that already has `hw-N` = new tabs in it.
 - Item type: one word to write → `word` (list every accepted answer); choices given in brackets → `mc` (right one first); words to put in order (رَتِّبْ) → `build` with `a` = the sentence (word tiles, `Kit.dragTiles`; the page loads drag-words.css and shared/common.js); sentence, writing, copying → `open` with a model answer.
@@ -61,7 +61,7 @@ Rules for every Arabic file:
 
 ### Arabic tests
 
-- A test is one التَّقْيِيمُ الْأُسْبُوعِيُّ sheet (الْفَتْرَةُ الرَّابِعَةُ, after the lesson's homework pages). Numbered in the order the sheets come: `test-1`, `test-2`, … Before building, check `TESTS` and the `unit` page numbers: the same sheet may be built already.
+- A test is one التَّقْيِيمُ الْأُسْبُوعِيُّ sheet (الْفَتْرَةُ الرَّابِعَةُ, after the lesson's homework pages). Numbered in the order of the workbook pages, not the order they are built: `test-1` is p. 7–8 and a sheet that comes between two built tests takes its place in the numbering (the later tests are renamed). Before building, check `TESTS` and the `unit` page numbers: the same sheet may be built already.
 - Head: `n: "tN"`, `title: "التَّقْيِيمُ الْأُسْبُوعِيُّ"`, `en: "Weekly test · <story in English>"`, `unit: "الْفَتْرَةُ الرَّابِعَةُ · p. X–Y"`, `cover` = a picture of that text from `img/lesson-N/`,
   `tapq: true`, `exSub: ["Answer the questions", "أَجِبْ عَنِ الْأَسْئِلَةِ التَّالِيَةِ"]`.
 - Tabs: one per group, `{k: "a", ic: "📝", t: "Group A", short: "A", ar: "الْمَجْمُوعَةُ (أ)", story: 0}`; the groups share the one paragraph.
