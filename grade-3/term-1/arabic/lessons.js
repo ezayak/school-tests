@@ -86,6 +86,15 @@ window.TESTS = [
     note: "Groups A · B · C · 18 questions · text «رسمة هبة» (workbook p. 7–8)",
   },
   {
+    n: 2,
+    nAr: "الثَّانِي",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · Heba’s drawing: the father’s advice",
+    path: "test-2.html",
+    cover: "img/lesson-2/happy.jpg",
+    note: "Groups A · B · C · 18 questions · text «رسمة هبة» (workbook p. 12)",
+  },
+  {
     n: 6,
     nAr: "السَّادِسُ",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
