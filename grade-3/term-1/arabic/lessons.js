@@ -184,6 +184,15 @@ window.TESTS = [
     cover: "img/lesson-6/s3.jpg",
     note: "Groups A · B · C · 21 questions · text from Lesson 6 (workbook p. 60–61)",
   },
+  {
+    n: 13,
+    nAr: "الثَّالِثَ عَشَرَ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · The Box of Ideas and “My Homeland”",
+    path: "test-13.html",
+    cover: "img/lesson-8/cover.jpg",
+    note: "Groups A · B · C · 23 questions · Lesson 6 and the poem «وطني» from Lesson 8 (workbook p. 65–66)",
+  },
 ];
 
 // Homework (the الأداءات المنزلية parts of the book pages): hw-N = Lesson N, one tab per book page. Listed under "Homework".
@@ -241,5 +250,14 @@ window.HOMEWORK = [
     path: "hw-7.html",
     cover: "img/lesson-7/cover.jpg",
     note: "p. 57 · 58 · 59–60 · 15 questions",
+  },
+  {
+    n: 8,
+    nAr: "الثَّامِنُ",
+    title: "وَطَنِي",
+    en: "Homework · My Homeland",
+    path: "hw-8.html",
+    cover: "img/lesson-8/cover.jpg",
+    note: "p. 62 · 63 · 64 · 16 questions",
   },
 ];
