@@ -551,9 +551,9 @@ window.GAMES = [
     lesson:
       "Lessons · stories read aloud, words & idioms with moving pictures, booklet exercises · Dictations · Stories",
     topics:
-      "Unit 1 Week 3 (compound sentences, long e) · Week 4 (complex sentences, long i, idioms) · Week 5 (run-on sentences, long o, suffixes) · Term 2: Unit 2 Week 5 (combining sentences, suffixes, similes & metaphors, poetry) · Unit 3 Week 2 (verb tenses, silent letters, context clues) · Week 5 (irregular verbs, compound words, Greek roots) · 18 stories",
+      "Unit 1 Week 3 (compound sentences, long e) · Week 4 (complex sentences, long i, idioms) · Week 5 (run-on sentences, long o, suffixes) · Term 2: Unit 2 Week 5 (combining sentences, suffixes, similes & metaphors, poetry) · Unit 3 Week 2 (verb tenses, silent letters, context clues) · Week 5 (irregular verbs, compound words, Greek roots) · 19 stories",
     path: "grade-4/term-1/english/index.html",
-    countLabel: "6 lessons · 2 dictations · 18 stories",
+    countLabel: "6 lessons · 2 dictations · 19 stories",
     year: "2026–2027",
     also: [
       "grade-4/term-1/english/dictations.js",
@@ -638,6 +638,12 @@ window.GAMES = [
       "grade-4/term-2/english/unit2-week5.html",
       "grade-4/term-2/english/unit2-week5.js",
       "grade-4/term-2/english/img/unit2-week5/cover.jpg",
+      "grade-4/term-2/english/story-animal-poems.html",
+      "grade-4/term-2/english/story-animal-poems.js",
+      "grade-4/term-2/english/img/animal-poems/dog.jpg",
+      "grade-4/term-2/english/img/animal-poems/eagle.jpg",
+      "grade-4/term-2/english/img/animal-poems/chimp.jpg",
+      "grade-4/term-2/english/img/animal-poems/rat.jpg",
       "grade-4/term-2/english/story-deer.html",
       "grade-4/term-2/english/story-deer.js",
       "grade-4/term-2/english/img/deer/deer.jpg",
