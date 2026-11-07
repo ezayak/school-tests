@@ -139,6 +139,15 @@ window.TESTS = [
     cover: "img/lesson-3/teacher.jpg",
     note: "Groups A · B · C · 21 questions · text from Lesson 3 (workbook p. 37–38)",
   },
+  {
+    n: 8,
+    nAr: "الثَّامِنُ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · The poem “Our Manners”",
+    path: "test-8.html",
+    cover: "img/lesson-4/cover.jpg",
+    note: "Groups A · B · C · 21 questions · the poem «أخلاقنا» from Lesson 4 (workbook p. 42–43)",
+  },
 ];
 
 // Homework (the الأداءات المنزلية parts of the book pages): hw-N = Lesson N, one tab per book page. Listed under "Homework".
@@ -160,5 +169,14 @@ window.HOMEWORK = [
     path: "hw-3.html",
     cover: "img/lesson-3/cover.jpg",
     note: "p. 34 · 35 · 36–37 · 11 questions",
+  },
+  {
+    n: 4,
+    nAr: "الرَّابِعُ",
+    title: "أَخْلَاقُنَا",
+    en: "Homework · Our Manners",
+    path: "hw-4.html",
+    cover: "img/lesson-4/cover.jpg",
+    note: "p. 39 · 40 · 42 · 18 questions",
   },
 ];
