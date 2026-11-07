@@ -17,6 +17,8 @@ Alex is learning to read again: everything is read aloud, and every item needs a
 
 ## 2. Read the pages
 
+Page numbers: the user's book pages ("the story on p. 174") are the numbers printed in the book, not PDF pages; find the offset by rendering a few pages and reading the printed number (it changes through the book), and log book pages by the printed number. Booklet pages are the PDF page (= the bottom-centre number). Huge scanned pages: render with `-scale-to 1100` instead of `-r`.
+
 The booklet scans have no text layer (`pdftotext` returns only page numbers). Render and look at them:
 
 ```bash
