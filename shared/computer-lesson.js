@@ -2471,7 +2471,9 @@
   }
 
   /* --- sort words into boxes (English sounds and patterns) ---
-     {type: "sort", q, cols: [{k, t, ex, e}], words: [{w, k: "ee" | ["ea", "y"], e}]}: tap a word, then tap its box */
+     {type: "sort", q, cols: [{k, t, ex, e}], words: [{w, k: "ee" | ["ea", "y"], e, vis, x}], mark: ["like", "as"]}: tap a word, then tap its box.
+     A word with vis (or src) and x shows its picture explanation under the boxes when it is tapped;
+     mark colours those words in the chips and the box examples (signal words). */
   function itSort(it) {
     const bank = shuf(it.words.map((w, i) => ({ ...w, i })));
     const okFor = (w, k) => (Array.isArray(w.k) ? w.k : [w.k]).includes(k);
@@ -2479,6 +2481,17 @@
       fin = false;
     const tries = {};
     let pts = 0;
+    const marked = (t) =>
+      it.mark
+        ? String(t)
+            .split(/(\s+)/)
+            .map((p) =>
+              it.mark.includes(p.replace(/[^A-Za-z']/g, "").toLowerCase())
+                ? `<span class="sig">${esc(p)}</span>`
+                : esc(p),
+            )
+            .join("")
+        : esc(t);
     app.innerHTML = `${hud()}<section class="card pop">
     <div class="row center">${fromTag()}</div>
     ${qHTML(it.q)}
@@ -2487,20 +2500,28 @@
     <div class="sort-cols n${it.cols.length}" id="scols">${it.cols
       .map(
         (c) =>
-          `<button type="button" class="scol" data-c="${esc(c.k)}"><span class="sh">${c.e ? `<span class="se">${esc(c.e)}</span>` : ""}<b>${esc(c.t)}</b>${c.ex ? `<small>${tx(c.ex)}</small>` : ""}</span><span class="sin"></span></button>`,
+          `<button type="button" class="scol" data-c="${esc(c.k)}"><span class="sh">${c.e ? `<span class="se">${esc(c.e)}</span>` : ""}<b>${esc(c.t)}</b>${c.ex ? `<small>${it.mark ? marked(c.ex) : tx(c.ex)}</small>` : ""}</span><span class="sin"></span></button>`,
       )
       .join("")}</div>
+    <div class="sort-pic" id="spic" hidden></div>
     <div id="fbx" class="fbx"></div></section>`;
     bindHome();
     const qs = plain(it.q);
     document.getElementById("sq").onclick = () => sayQ(qs);
     const chip = (w, cls) =>
-      `<span class="schip ${cls || ""}" data-i="${w.i}">${w.e ? `<span class="se">${esc(w.e)}</span>` : ""}${esc(w.w)}</span>`;
+      `<span class="schip ${cls || ""}" data-i="${w.i}">${w.e ? `<span class="se">${esc(w.e)}</span>` : ""}${marked(w.w)}</span>`;
+    // the picture explanation of a word, under the boxes
+    function explain(w) {
+      const box = document.getElementById("spic");
+      if (!(w.vis || w.src) || !w.x) return;
+      box.hidden = false;
+      box.innerHTML = `${pic(w, "pic card")}<div class="spx"><p class="spw">${marked(w.w)}</p><p>${tx(w.x)}</p></div>`;
+    }
     function draw() {
       document.getElementById("sbank").innerHTML = bank
         .map(
           (w) =>
-            `<button type="button" class="schip${sel === w.i ? " sel" : ""}" data-w="${w.i}">${w.e ? `<span class="se">${esc(w.e)}</span>` : ""}${esc(w.w)}</button>`,
+            `<button type="button" class="schip${sel === w.i ? " sel" : ""}" data-w="${w.i}">${w.e ? `<span class="se">${esc(w.e)}</span>` : ""}${marked(w.w)}</button>`,
         )
         .join("");
       app.querySelectorAll("[data-w]").forEach(
@@ -2510,6 +2531,7 @@
             const i = +b.dataset.w;
             sel = sel === i ? null : i;
             say(it.words[i].w, true);
+            if (sel !== null) explain(it.words[i]);
             draw();
           }),
       );

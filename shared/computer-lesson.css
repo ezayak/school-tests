@@ -1561,6 +1561,52 @@ body.popopen {
   border-color: var(--bad);
   animation: shake 0.35s;
 }
+/* signal words in sort chips (like, as, is …): a colour of their own */
+.schip .sig,
+.scol .sig,
+.sort-pic .sig {
+  color: #c2255c;
+  font-weight: 800;
+  text-decoration: underline 3px;
+  text-underline-offset: 3px;
+}
+/* the picture explanation of the tapped word, under the boxes */
+.sort-pic {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+  padding: 10px;
+  border: 2.5px dashed var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+}
+.sort-pic .spx {
+  flex: 1 1 220px;
+}
+@media (max-width: 640px) {
+  .sort-pic {
+    flex-wrap: wrap;
+  }
+  .sort-pic .pic {
+    flex-basis: 100%;
+  }
+}
+.sort-pic[hidden] {
+  display: none;
+}
+.sort-pic .pic {
+  flex: 0 0 min(420px, 50%);
+  height: clamp(170px, 30vh, 260px);
+}
+.sort-pic .spx p {
+  margin: 4px 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+}
+.sort-pic .spw {
+  font-family: var(--display);
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+}
 /* sentence cards and word cards: bigger, easier to read */
 [data-subject="English"] .tile.stp {
   font-size: clamp(1.15rem, 2.2vw, 1.4rem);

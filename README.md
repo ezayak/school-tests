@@ -464,7 +464,7 @@ Booklet texts are **story pages** (`story-*.html/.js`, the story engine) with `l
   - `vis: {kind: "blocks", rows: [[text, kind], …], title, note, join, legend}` – a sentence as coloured blocks:
     `i` independent clause, `d` dependent clause, `c` conjunction, `p` punctuation, `f` fragment, `x` a mistake, `l` a plain label
 - more item types: `{type: "tapw", q, s: "text", ans: {word: "label"}, fix: true}` (tap the words: long e words, conjunctions, or spelling mistakes with `fix`),
-  `{type: "sort", q, cols: [{k, t, ex, e}], words: [{w, k, e}]}` (tap a word, then its box; `k` can be a list), `mc` with `keep: [...]` (answers always in this order),
+  `{type: "sort", q, cols: [{k, t, ex, e}], words: [{w, k, e, vis, x}], mark}` (tap a word, then its box; `k` can be a list; a word with `vis` and `x` shows its picture and meaning under the boxes when tapped; `mark: ["like", "as"]` colours those signal words), `mc` with `keep: [...]` (answers always in this order),
   `order` with a picture (build a sentence from cards); an exercise with `keep: true` keeps its items in order (a summary frame)
 
 New week: copy a week's `.html` (change the `.js`), write its `.js`, add it to `english/dictations.js` (`kind: "Lesson"`),
