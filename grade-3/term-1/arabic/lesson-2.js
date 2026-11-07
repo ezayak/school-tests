@@ -804,6 +804,9 @@ window.LESSON = {
       set: "plural",
     },
     { ar: "أَوْقَات", en: "times", uk: "часи", ic: "⏰⏰", set: "plural" },
+    /* pictures for the first word of a pair card */
+    { ar: "أُسَاعِدُ", en: "I help", uk: "допомагаю", ic: "🤝", set: "opp" },
+    { ar: "شَخْص", en: "person", uk: "особа", ic: "🧍", set: "plural" },
   ],
 
   /* ---------- قاموس الأضواء: opposites, plurals, meanings ---------- */
