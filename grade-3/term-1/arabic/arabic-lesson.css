@@ -305,6 +305,51 @@ body {
   color: var(--muted);
   display: block;
 }
+/* opposites / plurals: a pair on one card, the word on the right */
+.pcard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+.pside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 10px 6px;
+}
+.pside .bigpic {
+  font-size: min(10vw, 4.5rem);
+  white-space: nowrap;
+}
+.pside .bigpic img {
+  max-width: 100%;
+  max-height: 24vh;
+}
+.plab {
+  font-family: var(--display);
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.pword {
+  font-size: clamp(1.7rem, 6vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.pside .meaning {
+  font-size: 1.1rem;
+}
+.parrow {
+  align-self: center;
+  font-family: var(--display);
+  font-size: 2rem;
+}
 .hiddenw {
   font-family: var(--display);
   font-size: 1.3rem;
@@ -682,14 +727,6 @@ body {
 .sttitle {
   font-size: 1.35rem;
   font-weight: 700;
-}
-.wsets {
-  align-self: flex-start;
-  flex-wrap: wrap;
-}
-.wsets .ar {
-  font-size: 0.95em;
-  opacity: 0.8;
 }
 
 .rule .ar {

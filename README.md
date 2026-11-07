@@ -506,10 +506,13 @@ window.LESSON = {
                                              // img is optional: a text without pictures sets ic: "🧩" for its tile in the list
     …],                                      // (lesson 1 uses the older story: {parts} + intro, which still works)
   gloss: {"كَلِمَةٌ": ["word", "слово"], …},  // tap-a-word translations; matched with tashkeel first, then without
-  words: [{ar, en, uk, ic: "🌼"}, …,        // vocabulary cards + games
-          {ar, en, uk, ic, set: "opp"}, {ar, en, uk, ic, set: "plural"}],  // words from the opposites / plurals games (filter buttons)
-  opposites: [[ar, ar2, "en a ↔ b", "uk a ↔ b"], …],
+  words: [{ar, en, uk, ic: "🌼"}, …,        // the Words tab: story words (cards + games)
+          {ar, en, uk, ic, set: "opp"}, {ar, en, uk, ic, set: "plural"}],  // not in the Words tab: the picture and meaning of a pair word
+  opposites: [[ar, ar2, "en a ↔ b", "uk a ↔ b"], …],  // "الْغَدْر – الْخِيَانَة": two accepted words (the first one for Letters)
   plurals:   [[singular, plural, "en", "uk"], …],
+  // Opposites & plurals tab: pair cards (both words side by side, each with the picture of the words entry
+  // with the same letters, any set), match games, Write it (type the opposite / plural, or build it from letters), quiz.
+  // Every word of every pair needs a words entry (set "opp" / "plural" when it is not a story word).
   meanings:  [[word, meaning, "en = …", "uk = …"], …],
   exercises: [{k, t: "Arabic section title", en, uk, ic: "📝", items: [ … ]}, …]   // one menu tile per section; add cards: true for Q&A flash cards
                                              // a section can have rule: {img, ar, en, uk} (shown as "The rule"; t: "📝 The words · …" for another label), or rule: "<k of another section>"

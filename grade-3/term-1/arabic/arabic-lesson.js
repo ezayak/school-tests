@@ -56,6 +56,16 @@
   if (!["off", "en", "uk"].includes(tr)) tr = "en";
   const HARAKAT = /[ً-ٰٟـ]/g; // tashkeel + tatweel
   const bare = (s) => String(s).replace(HARAKAT, "");
+  // a typed answer is checked without tashkeel, alef forms or a leading ال
+  const normAr = (w) =>
+    bare(w)
+      .replace(/[أإآٱ]/g, "ا")
+      .replace(/ى/g, "ي")
+      .replace(/ة/g, "ه")
+      .replace(/[^ء-ي]/g, "")
+      .replace(/^ال/, "");
+  // "الْغَدْر – الْخِيَانَة": a dictionary entry with two accepted words
+  const alts = (s) => String(s).split(/\s+[–-]\s+/);
   const PUNCT = /^([«»"“”(]*)(.*?)([«»"“”)،,.؛;:؟?!]*)$/;
   const bolt =
     '<svg viewBox="0 0 16 16" aria-hidden="true" width="16" height="16"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
@@ -602,22 +612,111 @@
       closePop();
   });
 
-  /* ---------- words ---------- */
-  const WSETS = [
-    ["all", "All", "الكل"],
-    ["story", "Story", "القصة"],
-    ["opp", "Opposites", "المضاد"],
-    ["plural", "Plurals", "الجمع"],
-  ].filter(
-    ([k]) =>
-      k === "all" || (L.words || []).some((w) => (w.set || "story") === k),
-  );
-  let wset = store.get(KEY + "wset", "all");
-  if (!WSETS.some((x) => x[0] === wset)) wset = "all";
-  const W = () =>
-    (L.words || []).filter(
-      (w) => wset === "all" || (w.set || "story") === wset,
+  // build a word from its letters, right to left: the letters, line and Check button are added to P;
+  // onCheck(ok, mine) once the line is checked (the caller fills #fbx)
+  function lettersUI(P, word, onCheck) {
+    const target = [...bare(word)];
+    let bank = shuf(target.map((c, i) => ({ c, i })));
+    for (
+      let k = 0;
+      k < 6 && bank.map((b) => b.c).join("") === target.join("");
+      k++
+    )
+      bank = shuf(bank);
+    let line = [],
+      done = false;
+    P.insertAdjacentHTML(
+      "beforeend",
+      `
+      <div class="preview ar" dir="rtl" id="prev"></div>
+      <div class="slots" dir="rtl" id="line"></div><div class="letters" dir="rtl" id="bank"></div>
+      <p class="hint">Tap the letters in order, from right to left. Tap a placed letter to take it back.</p>
+      <div id="fbx"><div class="row" style="justify-content:center"><button class="btn" id="checkBtn" type="button" disabled>Check my word</button></div></div>`,
     );
+    const Ln = P.querySelector("#line"),
+      B = P.querySelector("#bank"),
+      prev = P.querySelector("#prev");
+    const draw = () => {
+      prev.textContent = line.map((x) => x.c).join("");
+      Ln.innerHTML = line.length
+        ? line
+            .map(
+              (x, k) =>
+                `<button type="button" class="lt" id="tl-${k}" data-k="${k}">${esc(x.c)}</button>`,
+            )
+            .join("")
+        : '<span class="ph">Letters go here</span>';
+      B.innerHTML = bank
+        .map(
+          (x, k) =>
+            `<button type="button" class="lt" id="tb-${k}" data-k="${k}">${esc(x.c)}</button>`,
+        )
+        .join("");
+      if (!done) {
+        Ln.querySelectorAll(".lt").forEach(
+          (b) =>
+            (b.onclick = () => {
+              bank.push(...line.splice(+b.dataset.k, 1));
+              draw();
+            }),
+        );
+        B.querySelectorAll(".lt").forEach(
+          (b) =>
+            (b.onclick = () => {
+              line.push(...bank.splice(+b.dataset.k, 1));
+              draw();
+            }),
+        );
+      }
+      const cb = P.querySelector("#checkBtn");
+      if (cb) cb.disabled = bank.length > 0;
+    };
+    draw();
+    P.querySelector("#checkBtn").onclick = () => {
+      done = true;
+      const mine = line.map((x) => x.c).join(""),
+        ok = mine === target.join("");
+      Ln.classList.add(ok ? "ok" : "no");
+      draw();
+      onCheck(ok, mine);
+    };
+  }
+
+  // a typed answer: input, Check (try again when wrong) and Show the answer, put in A;
+  // done(ok, typed) once the word is right or the answer is shown (checked with normAr)
+  function typeUI(A, answers, done) {
+    A.innerHTML = `<div class="ansrow"><input type="text" class="ansin ar" id="ansIn" dir="rtl" lang="ar" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer"><button type="button" class="btn" id="checkBtn">Check</button></div>
+      <p class="note" id="tryNote"></p><div class="row"><button type="button" class="btn ghost" id="showA">Show the answer</button></div>`;
+    const inp = A.querySelector("#ansIn"),
+      fin = (ok) => {
+        inp.disabled = true;
+        inp.classList.add(ok ? "right" : "wrong");
+        A.querySelector(".row").remove();
+        A.querySelector("#checkBtn").remove();
+        A.querySelector("#tryNote").remove();
+        done(ok, inp.value);
+      };
+    const check = () => {
+      const v = normAr(inp.value);
+      if (!v) return inp.focus();
+      if (answers.some((w) => normAr(w) === v)) return fin(true);
+      inp.classList.remove("wrong");
+      void inp.offsetWidth;
+      inp.classList.add("wrong");
+      A.querySelector("#tryNote").textContent =
+        "Not quite. Try again, or show the answer.";
+    };
+    A.querySelector("#checkBtn").onclick = check;
+    inp.onkeydown = (e) => {
+      if (e.key === "Enter") check();
+    };
+    inp.oninput = () => inp.classList.remove("wrong");
+    A.querySelector("#showA").onclick = () => fin(false);
+  }
+
+  /* ---------- words ---------- */
+  // only the story words: words with set "opp" / "plural" give the pictures of the pair cards (Opposites & plurals tab)
+  const W = () => (L.words || []).filter((w) => (w.set || "story") === "story");
   let wstate = null;
   const picHTML = (w) =>
     w.img ? `<img src="${esc(w.img)}" alt="">` : esc(w.ic || "❓");
@@ -654,16 +753,7 @@
       },
     ];
     P.innerHTML = `<p class="tab-sub">${W().length} words from the lesson · <span class="ar">كَلِمَاتُ الدَّرْسِ</span></p>
-    ${WSETS.length > 2 ? `<div class="seg wsets" role="group" aria-label="Which words">${WSETS.map(([k, n, a]) => `<button type="button" id="ws-${k}" data-ws="${k}" aria-pressed="${wset === k}">${n} <span class="ar">${a}</span></button>`).join("")}</div>` : ""}
     <div class="modes">${MODES.map((m) => `<button type="button" class="mode" id="wm-${m.k}" data-m="${m.k}"><span class="mi-ic">${m.ic}</span><b>${m.t}</b><small>${m.d}</small></button>`).join("")}</div>${noVoiceNote()}`;
-    P.querySelectorAll("[data-ws]").forEach(
-      (b) =>
-        (b.onclick = () => {
-          wset = b.dataset.ws;
-          store.set(KEY + "wset", wset);
-          wordsPanel(P);
-        }),
-    );
     P.querySelectorAll("[data-m]").forEach(
       (b) =>
         (b.onclick = () => {
@@ -803,74 +893,16 @@
     }
     if (m === "build") {
       const w = wstate.list[wstate.i];
-      const target = [...bare(w.ar)];
-      let bank = shuf(target.map((c, i) => ({ c, i })));
-      for (
-        let k = 0;
-        k < 6 && bank.map((b) => b.c).join("") === target.join("");
-        k++
-      )
-        bank = shuf(bank);
-      let line = [],
-        done = false;
       P.innerHTML = `${wHud(`Word ${wstate.i + 1} of ${wstate.list.length}`)}<div class="wcard"><div class="bigpic">${picHTML(w)}</div>${meaningHTML(w)}
-      <div class="audio"><button type="button" class="abtn" id="s1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="s2"><span class="e">🐢</span> Slowly</button></div></div>
-      <div class="preview ar" dir="rtl" id="prev"></div>
-      <div class="slots" dir="rtl" id="line"></div><div class="letters" dir="rtl" id="bank"></div>
-      <p class="hint">Tap the letters in order, from right to left. Tap a placed letter to take it back.</p>
-      <div id="fbx"><div class="row" style="justify-content:center"><button class="btn" id="checkBtn" type="button" disabled>Check my word</button></div></div>`;
+      <div class="audio"><button type="button" class="abtn" id="s1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="s2"><span class="e">🐢</span> Slowly</button></div></div>`;
       P.querySelector("#wBack").onclick = back;
       P.querySelector("#s1").onclick = () => say(w.ar);
       P.querySelector("#s2").onclick = () => say(w.ar, true);
-      const Ln = P.querySelector("#line"),
-        B = P.querySelector("#bank"),
-        prev = P.querySelector("#prev");
-      const draw = () => {
-        prev.textContent = line.map((x) => x.c).join("");
-        Ln.innerHTML = line.length
-          ? line
-              .map(
-                (x, k) =>
-                  `<button type="button" class="lt" id="tl-${k}" data-k="${k}">${esc(x.c)}</button>`,
-              )
-              .join("")
-          : '<span class="ph">Letters go here</span>';
-        B.innerHTML = bank
-          .map(
-            (x, k) =>
-              `<button type="button" class="lt" id="tb-${k}" data-k="${k}">${esc(x.c)}</button>`,
-          )
-          .join("");
-        if (!done) {
-          Ln.querySelectorAll(".lt").forEach(
-            (b) =>
-              (b.onclick = () => {
-                bank.push(...line.splice(+b.dataset.k, 1));
-                draw();
-              }),
-          );
-          B.querySelectorAll(".lt").forEach(
-            (b) =>
-              (b.onclick = () => {
-                line.push(...bank.splice(+b.dataset.k, 1));
-                draw();
-              }),
-          );
-        }
-        const cb = P.querySelector("#checkBtn");
-        if (cb) cb.disabled = bank.length > 0;
-      };
-      draw();
-      P.querySelector("#checkBtn").onclick = () => {
-        done = true;
-        const mine = line.map((x) => x.c).join(""),
-          ok = mine === target.join("");
+      lettersUI(P, w.ar, (ok, mine) => {
         if (ok) wstate.score++;
         else
           wstate.miss.push({ q: w.en + " · " + w.uk, your: mine, right: w.ar });
         P.querySelector("#pts").textContent = wstate.score;
-        Ln.classList.add(ok ? "ok" : "no");
-        draw();
         if (ok) say(w.ar);
         P.querySelector("#fbx").innerHTML = fbHTML(
           ok,
@@ -878,7 +910,7 @@
           wstate.i + 1 >= wstate.list.length,
         );
         P.querySelector("#nextBtn").onclick = nextW;
-      };
+      });
       return;
     }
     if (m === "listen") {
@@ -918,11 +950,42 @@
 
   /* ---------- opposites, plurals, meanings ---------- */
   let ostate = null;
+  // the lesson word (L.words) with the same letters as one word of a pair: its picture and meaning
+  const keyAr = (s) => normAr(s).replace(/ا$/, "");
+  function pairWord(s) {
+    const ks = alts(s).map(keyAr);
+    return (L.words || []).find((w) =>
+      alts(w.ar).some((a) => ks.includes(keyAr(a))),
+    );
+  }
+  function pairMeaning(p, j) {
+    const w = pairWord(p[j]);
+    if (w) return tr === "uk" ? w.uk : w.en;
+    const s2 = ((tr === "uk" ? p[3] : p[2]) || "").split("↔");
+    return (s2[j] ?? s2[0]).trim();
+  }
   function oppPanel(P) {
     if (ostate) return oppGame(P);
     const SETS = [
       {
+        k: "oppCards",
+        src: "opposites",
+        ic: "📇",
+        t: "Opposite cards",
+        ar: "بِطَاقَاتُ الْمُضَادِّ",
+        d: "A word and its opposite, side by side",
+      },
+      {
+        k: "plCards",
+        src: "plurals",
+        ic: "📇",
+        t: "One & many cards",
+        ar: "بِطَاقَاتُ الْجَمْعِ",
+        d: "One and many, side by side",
+      },
+      {
         k: "opposites",
+        src: "opposites",
         ic: "🔄",
         t: "Opposites",
         ar: "الْمُضَادُّ",
@@ -930,6 +993,7 @@
       },
       {
         k: "plurals",
+        src: "plurals",
         ic: "👥",
         t: "One & many",
         ar: "الْمُفْرَدُ وَالْجَمْعُ",
@@ -937,10 +1001,18 @@
       },
       {
         k: "meanings",
+        src: "meanings",
         ic: "🟰",
         t: "Same meaning",
         ar: "الْمَعْنَى",
         d: "Match words that mean the same",
+      },
+      {
+        k: "write",
+        ic: "✍️",
+        t: "Write it",
+        ar: "اكْتُبِ الْمُضَادَّ أَوِ الْجَمْعَ",
+        d: "Write the opposite or the plural: type it or build it from letters",
       },
       {
         k: "quiz",
@@ -951,8 +1023,11 @@
       },
     ];
     P.innerHTML = `<p class="tab-sub">From the lesson dictionary · <span class="ar">قَامُوسُ الْأَضْوَاءِ</span></p>
-    <div class="modes">${SETS.filter(
-      (s) => s.k === "quiz" || (L[s.k] || []).length,
+    <div class="modes">${SETS.filter((s) =>
+      s.src
+        ? (L[s.src] || []).length
+        : s.k !== "write" ||
+          (L.opposites || []).length + (L.plurals || []).length,
     )
       .map(
         (s) =>
@@ -964,7 +1039,16 @@
         (b.onclick = () => {
           const k = b.dataset.m;
           ostate = { k, i: 0, score: 0, miss: [] };
-          if (k === "quiz") {
+          if (k === "oppCards" || k === "plCards") {
+            ostate.list = (k === "oppCards" ? L.opposites : L.plurals).slice();
+          } else if (k === "write") {
+            const Q = [
+              ...(L.opposites || []).map((p) => ({ opp: true, p })),
+              ...(L.plurals || []).map((p) => ({ opp: false, p })),
+            ];
+            ostate.list = shuf(Q).slice(0, 12);
+            ostate.max = ostate.list.length;
+          } else if (k === "quiz") {
             const Q = [];
             (L.opposites || []).forEach((p) =>
               Q.push({
@@ -1014,9 +1098,10 @@
       ostate = null;
       oppPanel(P);
     };
-    const n = k === "quiz" ? ostate.list.length : ostate.rounds.length;
+    const cards = k === "oppCards" || k === "plCards";
+    const n = ostate.rounds ? ostate.rounds.length : ostate.list.length;
     const hud = (label) =>
-      `<div class="hud"><button type="button" class="abtn" id="oBack" aria-label="Back">←</button><span class="qnum">${label}</span><div class="meter"><i style="width:${Math.round((ostate.i / n) * 100)}%"></i></div><span class="score">${bolt}<b id="pts">${ostate.score}</b></span></div>`;
+      `<div class="hud"><button type="button" class="abtn" id="oBack" aria-label="Back">←</button><span class="qnum">${label}</span><div class="meter"><i style="width:${Math.round((ostate.i / n) * 100)}%"></i></div>${cards ? "" : `<span class="score">${bolt}<b id="pts">${ostate.score}</b></span>`}</div>`;
     const nextO = () => {
       ostate.i++;
       if (ostate.i >= n) {
@@ -1038,6 +1123,108 @@
       }
       oppGame(P);
     };
+    if (cards) {
+      // a pair on one card: the word (right) and its opposite / plural (left), each with its picture
+      if (ostate.i < 0) ostate.i = n - 1;
+      if (ostate.i >= n) ostate.i = 0;
+      const p = ostate.list[ostate.i],
+        opp = k === "oppCards";
+      const show =
+        store.get("ar3-pshow", "1") === "1" || ostate.open === ostate.i;
+      const side = (j) => {
+        const w = pairWord(p[j]),
+          hide = j === 1 && !show;
+        const lab = opp
+          ? j
+            ? "opposite · الْمُضَادُّ"
+            : "word · الْكَلِمَةُ"
+          : j
+            ? "many · الْجَمْعُ"
+            : "one · الْمُفْرَدُ";
+        return `<div class="pside"><span class="plab">${lab}</span>${w ? `<div class="bigpic">${picHTML(w)}</div>` : ""}${
+          hide
+            ? `<button type="button" class="hiddenw" id="reveal">Tap to see</button>`
+            : `<div class="pword ar" dir="rtl">${esc(p[j])}</div>${tr === "off" ? "" : `<div class="meaning">${esc(pairMeaning(p, j))}</div>`}<button type="button" class="abtn" id="ps${j}" aria-label="Listen"><span class="e">🔊</span></button>`
+        }</div>`;
+      };
+      P.innerHTML = `${hud(`Card ${ostate.i + 1} of ${n}`)}
+      <div class="seg" role="group" aria-label="Show the second word" style="align-self:center"><button type="button" id="pw-1" data-pw="1" aria-pressed="${store.get("ar3-pshow", "1") === "1"}">Both words</button><button type="button" id="pw-0" data-pw="0" aria-pressed="${store.get("ar3-pshow", "1") !== "1"}">Guess the second</button></div>
+      <div class="pcard" dir="rtl">${side(0)}<div class="parrow" aria-hidden="true">${opp ? "↔" : "←"}</div>${side(1)}</div>
+      <div class="audio"><button type="button" class="abtn big" id="s1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="s2"><span class="e">🐢</span> Slowly</button></div>
+      <div class="nav" dir="rtl"><button type="button" class="btn ghost" id="pv"><span class="na">→ السابق</span> <small>Back</small></button><button type="button" class="btn" id="nx"><span class="na">التالي ←</span> <small>Next</small></button></div>`;
+      const both = `${p[0]}، ${p[1]}`;
+      P.querySelector("#oBack").onclick = back;
+      P.querySelectorAll("[data-pw]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            store.set("ar3-pshow", b.dataset.pw);
+            ostate.open = null;
+            oppGame(P);
+          }),
+      );
+      const rv = P.querySelector("#reveal");
+      if (rv)
+        rv.onclick = () => {
+          ostate.open = ostate.i;
+          oppGame(P);
+          say(p[1]);
+        };
+      [0, 1].forEach((j) => {
+        const b = P.querySelector("#ps" + j);
+        if (b) b.onclick = () => say(p[j]);
+      });
+      P.querySelector("#s1").onclick = () => say(show ? both : p[0]);
+      P.querySelector("#s2").onclick = () => say(show ? both : p[0], true);
+      P.querySelector("#pv").onclick = () => {
+        ostate.i--;
+        ostate.open = null;
+        oppGame(P);
+      };
+      P.querySelector("#nx").onclick = () => {
+        ostate.i++;
+        ostate.open = null;
+        oppGame(P);
+      };
+      return;
+    }
+    if (k === "write") {
+      // a word with its picture: write its opposite / plural, typed (any accepted word) or from letters (the first word)
+      const { p, opp } = ostate.list[ostate.i];
+      const w = pairWord(p[0]),
+        ans = alts(p[1]);
+      const typing = store.get("ar3-wtype", "type") === "type";
+      const q = opp ? `مَا مُضَادُّ «${p[0]}»؟` : `مَا جَمْعُ «${p[0]}»؟`;
+      P.innerHTML = `${hud(`Word ${ostate.i + 1} of ${n}`)}<span class="qtype mt">${opp ? "Write the opposite · اكْتُبِ الْمُضَادَّ" : "Write the plural · اكْتُبِ الْجَمْعَ"}</span>
+      <div class="seg" role="group" aria-label="How to write" style="align-self:center"><button type="button" id="wt-type" data-wt="type" aria-pressed="${typing}">⌨️ Type</button><button type="button" id="wt-letters" data-wt="letters" aria-pressed="${!typing}">🔤 Letters</button></div>
+      <div class="wcard">${w ? `<div class="bigpic">${picHTML(w)}</div>` : ""}<p class="sent ar" dir="rtl">${esc(q)}</p>${tr === "off" ? "" : `<div class="meaning">${esc(pairMeaning(p, 0))}</div>`}
+      <div class="audio"><button type="button" class="abtn" id="s1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="s2"><span class="e">🐢</span> Slowly</button></div></div>${typing ? `<div id="tbox"></div><div id="fbx"></div>` : ""}`;
+      P.querySelector("#oBack").onclick = back;
+      P.querySelector("#s1").onclick = () => say(speakable(q));
+      P.querySelector("#s2").onclick = () => say(speakable(q), true);
+      P.querySelectorAll("[data-wt]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            store.set("ar3-wtype", b.dataset.wt);
+            oppGame(P);
+          }),
+      );
+      const fin = (ok, your) => {
+        if (ok) ostate.score++;
+        else ostate.miss.push({ q, your, right: p[1] });
+        P.querySelector("#pts").textContent = ostate.score;
+        P.querySelectorAll("[data-wt]").forEach((b) => (b.disabled = true));
+        say(p[1]);
+        P.querySelector("#fbx").innerHTML = fbHTML(
+          ok,
+          `<span class="ar" style="font-size:1.6rem">${esc(p[1])}</span>`,
+          ostate.i + 1 >= n,
+        );
+        P.querySelector("#nextBtn").onclick = nextO;
+      };
+      if (typing) typeUI(P.querySelector("#tbox"), ans, fin);
+      else lettersUI(P, ans[0], fin);
+      return;
+    }
     if (k === "quiz") {
       const it = ostate.list[ostate.i];
       const opts = shuf([
@@ -1543,53 +1730,22 @@
         );
       };
     } else if (it.type === "word") {
-      // a: the accepted words; checked without tashkeel, alef forms or a leading ال
-      const norm = (w) =>
-        bare(w)
-          .replace(/[أإآٱ]/g, "ا")
-          .replace(/ى/g, "ي")
-          .replace(/ة/g, "ه")
-          .replace(/[^ء-ي]/g, "")
-          .replace(/^ال/, "");
+      // a: the accepted words
       const model = it.a.join(" ، ");
-      A.innerHTML = `<div class="ansrow"><input type="text" class="ansin ar" id="ansIn" dir="rtl" lang="ar" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer"><button type="button" class="btn" id="checkBtn">Check</button></div>
-      <p class="note" id="tryNote"></p><div class="row"><button type="button" class="btn ghost" id="showA">Show the answer</button></div>`;
-      const inp = document.getElementById("ansIn"),
-        done = (ok) => {
-          inp.disabled = true;
-          inp.classList.add(ok ? "right" : "wrong");
-          A.querySelector(".row").remove();
-          document.getElementById("checkBtn").remove();
-          document.getElementById("tryNote").remove();
-          A.insertAdjacentHTML(
-            "beforeend",
-            `<div class="model"><span class="lab">Model answer · الْإِجَابَةُ</span><p class="ar tapw" dir="rtl" style="margin:4px 0">${tapHTML(model)}</p><button type="button" class="abtn" id="aSay"><span class="e">🔊</span> Listen</button></div>`,
-          );
-          document.getElementById("aSay").onclick = () => say(model);
-          bindTap(A);
-          if (ok) xs.score++;
-          else xs.miss.push({ q: it.q, your: inp.value, right: model });
-          after(
-            ok,
-            ok ? "That's the word!" : "Read the answer and try to remember it.",
-          );
-        };
-      const check = () => {
-        const v = norm(inp.value);
-        if (!v) return inp.focus();
-        if (it.a.some((w) => norm(w) === v)) return done(true);
-        inp.classList.remove("wrong");
-        void inp.offsetWidth;
-        inp.classList.add("wrong");
-        document.getElementById("tryNote").textContent =
-          "Not quite. Try again, or show the answer.";
-      };
-      document.getElementById("checkBtn").onclick = check;
-      inp.onkeydown = (e) => {
-        if (e.key === "Enter") check();
-      };
-      inp.oninput = () => inp.classList.remove("wrong");
-      document.getElementById("showA").onclick = () => done(false);
+      typeUI(A, it.a, (ok, your) => {
+        A.insertAdjacentHTML(
+          "beforeend",
+          `<div class="model"><span class="lab">Model answer · الْإِجَابَةُ</span><p class="ar tapw" dir="rtl" style="margin:4px 0">${tapHTML(model)}</p><button type="button" class="abtn" id="aSay"><span class="e">🔊</span> Listen</button></div>`,
+        );
+        document.getElementById("aSay").onclick = () => say(model);
+        bindTap(A);
+        if (ok) xs.score++;
+        else xs.miss.push({ q: it.q, your, right: model });
+        after(
+          ok,
+          ok ? "That's the word!" : "Read the answer and try to remember it.",
+        );
+      });
     } else if (it.type === "build") {
       // a: the sentence; its words are tiles to drag or tap into order (Kit.dragTiles), end punctuation stays
       const [, body, end] = it.a.match(/^(.*?)([.،؟!]*)$/);
