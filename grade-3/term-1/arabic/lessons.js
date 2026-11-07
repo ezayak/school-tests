@@ -63,6 +63,15 @@ window.LESSONS = [
     cover: "img/lesson-7/cover.jpg",
     note: "3 texts · 33 words · 188 exercises · ثم / فـ, ت ة ه",
   },
+  {
+    n: 8,
+    nAr: "الثَّامِنُ",
+    title: "وَطَنِي",
+    en: "My Homeland",
+    path: "lesson-8.html",
+    cover: "img/lesson-8/cover.jpg",
+    note: "5 texts · 18 words · 152 exercises · December review",
+  },
 ];
 
 // Tests (the weekly تقييم sheets): one page per sheet, one tab per group. Listed under "Tests" on the same page.
