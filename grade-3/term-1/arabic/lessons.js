@@ -104,6 +104,15 @@ window.TESTS = [
     note: "Groups A · B · C · 24 questions · text «البطل الخفي» (workbook p. 16–17)",
   },
   {
+    n: 4,
+    nAr: "الرَّابِعُ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · The hidden hero: Uncle Amin",
+    path: "test-4.html",
+    cover: "img/lesson-3/kids.jpg",
+    note: "Groups A · B · C · 18 questions · text «البطل الخفي» (workbook p. 20–21)",
+  },
+  {
     n: 6,
     nAr: "السَّادِسُ",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
