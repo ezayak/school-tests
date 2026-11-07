@@ -24,7 +24,7 @@ Lucas has aphasia: the parent explains each question by pointing at the picture,
 - The user decides the order. Old sheets (the earlier weeks) may be wanted first.
 - Tests are numbered by workbook page, not by build order (the user's wish). Known so far (hw-tests.pdf, Nov 2026):
   test-1 p. 7–8 «بعد إعلان نتيجة المسابقة» · test-2 p. 12 «جلس والدي بجواري» · test-3 p. 16–17 «في بداية حصة اللغة العربية» ·
-  test-4 p. 20–21 «فكرنا جميعًا» · test-5 p. 25–26 the نشيد «الناجح» · test-6 p. 33 (Lesson 2) · test-7 p. 37–38 (Lesson 3); later sheets follow from test-8.
+  test-4 p. 20–21 «فكرنا جميعًا» · test-5 p. 25–26 the نشيد «الناجح» · test-6 p. 33 (Lesson 2) · test-7 p. 37–38 (Lesson 3); test-8 p. 42–43 (Lesson 4) · test-9 p. 47–48 (Unit 2 review, Lesson 3 text) · test-10 p. 52, test-11 p. 56, test-12 p. 60–61 (Lesson 6) · test-13 p. 65–66 (Lessons 6 and 8). Homework hw-4 … hw-8 = workbook p. 39–64. Not built: the reviews p. 44–46 and p. 67–71.
   A sheet found between two built tests: rename the later tests (`git mv`, `n`, the title in the `.html`, the header comment, `TESTS`, `also`) and tell the user that saved progress follows the number (`ar3-lt<N>-`).
 
 ## 2. Read the sheet and keep notes
@@ -83,5 +83,6 @@ npx --no-install prettier --check $A games.js
 
 - Entry in `TESTS` / `HOMEWORK` (`lessons.js`): `{n, nAr, title, en, path, cover, note}`; the note says the groups / pages and the number of questions.
 - `games.js`, the Arabic entry: the new `.html` / `.js` (and new pictures) in `also`, and its `countLabel` / `topics` (“Tests 1–N”).
+- Both in one go: `python3 .claude/skills/arabic-hw-tests/scripts/register.py test N nAr en cover note` (or `hw N nAr title en cover note`) adds the entry in number order, the two files to `also`, and updates `countLabel` / “Tests 1–N”. New pictures: `scripts/add-pictures.py lesson-N hw-a.jpg …`. Then check that the question count in the note matches the file's items.
 - Report: what was built (pages, groups, number of items), pages skipped and why, the unverified answers, words that could not be read. Wait for approval, then commit (one commit per sheet), and bump `VERSION` in `sw.js` in a separate last commit after the batch.
 - Git has no identity configured on this machine: commit with `git -c user.name=Olena -c user.email=ezayak@gmail.com commit …` (the author of the earlier commits). No Co-Authored-By line.
