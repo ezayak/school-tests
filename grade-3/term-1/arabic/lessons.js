@@ -113,6 +113,15 @@ window.TESTS = [
     note: "Groups A · B · C · 18 questions · text «البطل الخفي» (workbook p. 20–21)",
   },
   {
+    n: 5,
+    nAr: "الْخَامِسُ",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · Poem: The successful one",
+    path: "test-5.html",
+    cover: "img/lesson-3/w-boy.jpg",
+    note: "Groups A · B · C · 30 questions · the poem «الناجح» (workbook p. 25–26)",
+  },
+  {
     n: 6,
     nAr: "السَّادِسُ",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
