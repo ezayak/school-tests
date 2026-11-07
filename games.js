@@ -687,7 +687,7 @@ window.GAMES = [
     topics:
       "Lesson 1 · الزَّهْرَةُ وَالصَّبَّارُ · Lesson 2 · السَّعَادَةُ فِي الْمُسَاعَدَةِ · Lesson 3 · أَوَّلُ مَنْ رَفَعَ يَدَهُ · Lesson 4 · أَخْلَاقُنَا · Lesson 5 · الْعُصْفُورُ الْجَرِيءُ · Lesson 6 · صُنْدُوقُ الِابْتِكَارِ · Lesson 7 · وَرَقَةٌ مِنَ التَّارِيخِ · Lesson 8 · وَطَنِي, December review: stories with pictures, audio & translation, words, opposites & plurals, exercises · Tests 1–9 · التَّقْيِيمُ الْأُسْبُوعِيُّ · Homework · الْأَدَاءَاتُ الْمَنْزِلِيَّةُ",
     path: "grade-3/term-1/arabic/index.html",
-    countLabel: "8 lessons · 9 tests · 3 homework",
+    countLabel: "8 lessons · 9 tests · 4 homework",
     year: "2026–2027",
     also: [
       "grade-3/term-1/arabic/arabic-lesson.css",
@@ -717,6 +717,8 @@ window.GAMES = [
       "grade-3/term-1/arabic/hw-3.js",
       "grade-3/term-1/arabic/hw-4.html",
       "grade-3/term-1/arabic/hw-4.js",
+      "grade-3/term-1/arabic/hw-5.html",
+      "grade-3/term-1/arabic/hw-5.js",
       "grade-3/term-1/arabic/lesson-1.html",
       "grade-3/term-1/arabic/lesson-1-exercises.html",
       "grade-3/term-1/arabic/lesson-1.js",

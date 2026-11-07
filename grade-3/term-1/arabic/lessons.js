@@ -188,4 +188,13 @@ window.HOMEWORK = [
     cover: "img/lesson-4/cover.jpg",
     note: "p. 39 · 40 · 42 · 18 questions",
   },
+  {
+    n: 5,
+    nAr: "الْخَامِسُ",
+    title: "الْعُصْفُورُ الْجَرِيءُ",
+    en: "Homework · The Brave Sparrow",
+    path: "hw-5.html",
+    cover: "img/lesson-5/cover.jpg",
+    note: "p. 49 · 4 questions",
+  },
 ];
