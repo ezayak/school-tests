@@ -303,5 +303,49 @@ window.STORY = {
       q: "How does the last line of the poem show you what the speaker wonders about the deer?",
       a: "The last line is a question: “where do they go when it gets light?” It shows that the speaker wonders where the deer hide in the daytime.",
     },
+    // the easier (E) question sheet, teacher's file of 7 Nov (E2); unverified
+    {
+      tag: "Simile",
+      img: "img/deer/deer.jpg",
+      q: "In the first stanza, how does the author use simile to help the reader picture the deer? The author compares the deer to …",
+      o: ["a photo of a family", "six white arrows", "the headlights"],
+      x: "“like a photo of a family”",
+    },
+    {
+      tag: "Rhyme",
+      vis: {
+        kind: "scene",
+        bg: "night",
+        items: [
+          { e: "🦌", x: 34, y: 64, s: 28 },
+          { e: "⬆️", x: 66, y: 34, s: 20 },
+        ],
+      },
+      q: "Which words rhyme in the second stanza of the poem?",
+      o: [
+        "high, sky and goodbye",
+        "away, tails and arrows",
+        "night, yard and family",
+      ],
+      x: "Then they dart away, their tails held high, six white arrows point at the sky. We don’t even get to say goodbye.",
+    },
+    {
+      tag: "Speaker",
+      vis: {
+        kind: "scene",
+        bg: "sky",
+        items: [
+          { e: "🌅", x: 40, y: 60, s: 32 },
+          { e: "❓", x: 70, y: 28, s: 18, a: "pulse" },
+        ],
+      },
+      q: "In the last two lines, what does the speaker think about the deer?",
+      o: [
+        "The deer are a mystery: the speaker wonders where they go in the daytime.",
+        "The deer are dangerous.",
+        "The deer are boring.",
+      ],
+      x: "“But the question never sat quite right — where do they go when it gets light?”",
+    },
   ],
 };

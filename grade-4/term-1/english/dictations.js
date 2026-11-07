@@ -147,7 +147,7 @@ window.ENGLISH = {
         "Deer",
         "Classwork booklet · Unit 2 Week 5",
         "story-deer.html",
-        "6 stanzas · 9 questions",
+        "6 stanzas · 12 questions",
       ],
       [
         "The Nautilus",
