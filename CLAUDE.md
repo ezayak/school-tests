@@ -206,6 +206,18 @@ Sources: `~/Documents/2026-2027/Alex/Science/` (booklets, slides, sheets) and `b
 - `term: N` in `lessons.js` on a lesson with Term N booklet sheets (a "Term N" tag after "Lesson M"). One commit per lesson.
 - Then: files and pictures in `also` of the Science entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
+## Social Studies (Grade 4): lessons and stories
+
+Folder `grade-4/social-studies/chapter-N/`, engines `shared/computer-lesson.js` (`<body data-subject="Social Studies">`) and `shared/story.js` for stories (don't copy them; a lesson or a story is only a data file).
+Format in README: "Social Studies lessons (Grade 4)". Procedure, picture scripts and checks: the `social-studies-lesson` skill; `chapter-1/lesson-4.js` + `story-douglas.js` are the model.
+Sources: `~/Documents/2026-2027/Alex/S.S.English/` (term booklets, `Term N/` sheets) and `book/` (myWorld Interactive 4, two-page spreads as PNG). Alex has aphasia: the parent explains each question by pointing at the pictures.
+
+- A lesson = one book lesson + the booklet's exercise sheet for it. The book's text is retold in easy words on picture cards (short sentences, key words in `[brackets]`); the booklet's questions stay as printed.
+- Stories to know (Citizenship pages, history stories the booklet asks about) = story pages with the text exactly as printed, an easy sentence per page, a summary, and no questions.
+- Every question has a picture, every answer a picture or an emoji, every sentence answer an explanation (`x`). Colouring is left out.
+- Logs in `grade-4/social-studies/`: `SOURCES.md` (every book page and booklet page → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (the booklets have no key). Update them with every lesson, in the same commit.
+- Words missing or unreadable: never guess; ask. Then: `lessons.js` (`term: N`), files and pictures in `also` of the Social Studies entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+
 ## Ukrainian reading (Optima, Grade 3)
 
 Folder `optima/grade-3/ukr-lit/`, engine `shared/reading.js` + `shared/reading.css` (don't copy them; a text is only a data file). Format in README: "Ukrainian reading".
