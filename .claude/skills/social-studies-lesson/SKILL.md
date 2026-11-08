@@ -18,8 +18,8 @@ The user reads the code and reviews every lesson: build one lesson, show it, wai
 ## 2. Read the sources
 
 - **Booklets** have a text layer: `pdftotext -layout <pdf> -` gives the questions; render the pages too (`pdftoppm -r 70 -png`) to see pictures, colouring pages and word searches. Each exercise sheet says "Lesson (N) <title>" at the top; the contents page (p. 2) says which chapter. Booklet page = PDF page = the number at the bottom right.
-- **The book** (`book/NNN.png`, myWorld Interactive 4) is two-page spreads, readable at full size: Read the PNG. The table of contents is on spreads 004–006 (Chapter 1 on 004, Chapters 2–3 on 005). In Chapter 1, spread `n` = pages 2(n−27) and 2(n−27)+1; the scan repeats some spreads, so always read the printed page number. Log book pages by the printed number.
-- A lesson = the book lesson (its opener page to the Lesson Check), plus the booklet's exercise sheet for it, plus any school sheet for it. The book's Literacy / Map Skills pages after a lesson are reading skills: skip them unless the booklet asks about them.
+- **The book** (`book/NNN.png`, myWorld Interactive 4) is two-page spreads, readable at full size: Read the PNG. The table of contents is on spreads 004–006 (Chapter 1 on 004, Chapters 2–3 on 005). Spread `n` = pages 2(n−27) and 2(n−27)+1 in Chapter 1, 2(n−28) and 2(n−28)+1 in Chapter 2; the scan repeats some spreads (047 = 048), so always read the printed page number. Log book pages by the printed number.
+- A lesson = the book lesson (its opener page to the Lesson Check), plus the booklet's exercise sheet for it, plus any school sheet for it. A book lesson the booklet skips but a later lesson needs (Ch2 L1) is built from the book only, with `term: "2*"` (its card says "Term 2*": not in the booklet); its Exercises tab has only the book questions. The book's Literacy / Map Skills pages after a lesson are reading skills: skip them unless the booklet asks about them.
 - **Stories to know**: the Citizenship pages (a person who changed things), Primary Source pages that tell a story, and history narratives the booklet asks about (people, events). They become story pages (§4b), linked from their lesson. Their "Find Out More" questions are left out.
 - Words missing or unreadable: never guess; list them and ask.
 
@@ -42,7 +42,7 @@ Copy `lesson-4.js`: the helpers at the top (`mc`, `two` for the booklet's two-ch
 - `n`, `key: "ss4-c<chapter>-l<lesson>"`, `unit: "Chapter N · Lesson M"`, `book: "Book pp. X–Y"`, `cover`, `question` (the book's "Unlock the Big Question" sentence turned into a question, with an easy answer).
 - `words`: the book's Vocabulary and Academic Vocabulary (opener page), plus the words the booklet asks about; short easy meanings.
 - `ideas`: the book's text in order, one card per idea, in easy words (short sentences, simple verbs, numbers as digits, no idioms). Keep the facts and names the booklet asks about (dates, people, places). A comment with the book page above each group.
-- `stories: [{t, en, path, cover: {src}}]`: the lesson's story pages (a tile after the picture cards).
+- `stories: [{t, en, path, cover: {src}}]`: the lesson's story pages (a tile after the picture cards). A story may use the lesson's pictures (`img/lesson-M/…`); its own pictures go in `img/<name>/`.
 - `games`: 3–4 games on the lesson's main points (two-way sorts as `mc` with `two: true`, "what does the job" with picture answers, word ↔ picture `match`).
 - `exercises`, in this order, each with `from` and `keep: true` when the booklet order matters:
   - `bk-choose`, `bk-fill`, `bk-tf`, `bk-match`, `bk-answer` …: one per lettered part of the booklet sheet, items as printed (keep the booklet's wording; fix nothing but plain typos, and list them).
@@ -76,7 +76,7 @@ The machine is a Raspberry Pi: run one browser at a time; if Chromium cannot ope
 ## 6. Logs, list, report
 
 - `SOURCES.md`: every book page and booklet page → `file · exercise key` and **built** / skipped (why) / planned / waiting. `TODO.md`: what waits for a scan or a decision. `UNVERIFIED.md`: every answer without a school key and every stand-in question.
-- `lessons.js`: the lesson in its chapter (a new chapter: a `chapter-N/` folder and an entry in `chapters`), with `term: N` and a `note` ("17 picture cards · 1 story · 4 games · 4 exercises").
+- `lessons.js`: the lesson in its chapter (a new chapter: a `chapter-N/` folder and an entry in `chapters`), with `term: N` (`"N*"` when it is not in the booklet) and a `note` ("17 picture cards · 1 story · 4 games · 4 exercises").
 - Report to the user: what was built (by book and booklet page), what was checked, the decisions (stand-ins, wording kept as printed, unclear answers), then wait for approval.
 - One commit per lesson (lesson, stories, pictures, picture script, log rows, `lessons.js`). An engine change goes in its own commit first. No Co-Authored-By line.
 

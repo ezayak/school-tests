@@ -833,7 +833,7 @@ Folder: `grade-4/social-studies/`. One card on the home page ("Social Studies", 
 one heading per chapter (`chapters: [{n, dir: "chapter-1", title, items}]`, the same format as the Computer lessons).
 Lessons 1–3 (Term 1) come from the teacher's slides, the term booklet and the graded homework. From Term 2 on, a lesson follows the book
 (myWorld Interactive 4, scanned as two-page spreads in `~/Documents/2026-2027/Alex/S.S.English/book/`) retold in easy words, with the booklet's exercise sheet and the book's questions;
-its sources are logged in `SOURCES.md` (with `TODO.md` and `UNVERIFIED.md`), and `term: 2` in `lessons.js` puts a "Term 2" tag on its card.
+its sources are logged in `SOURCES.md` (with `TODO.md` and `UNVERIFIED.md`), and `term: 2` in `lessons.js` puts a "Term 2" tag on its card (`term: "2*"`: a lesson built from the book only, not in the booklet).
 Like Science, the lessons use the **Computer lesson engine** (`shared/computer-lesson.js`, no Mini Windows) with `<body data-subject="Social Studies">`,
 which changes the subject name and the colour (`--ss-ink`, a darker red for text on white).
 

@@ -95,7 +95,7 @@ for (const file of files) {
     if (!games.includes(`"${path.join(imgDir, f)}"`))
       bad.push(`not in games.js also: ${path.join(imgDir, f)}`);
   }
-  for (const st of L.stories || []) story(st, dir, bad);
+  for (const st of L.stories || []) story(st, dir, imgDir, bad);
   const html = file.replace(/\.js$/, ".html");
   if (!fs.existsSync(html)) bad.push("no " + html);
   if (!listed.includes(html)) bad.push("not in lessons.js");
@@ -111,7 +111,7 @@ for (const file of files) {
 console.log(problems ? `${problems} problems` : "all checks passed");
 
 // a story page of the lesson (shared/story.js): window.STORY in the .js next to its .html
-function story(st, dir, bad) {
+function story(st, dir, imgDir, bad) {
   const html = path.join(dir, st.path);
   const js = html.replace(/\.html$/, ".js");
   if (!fs.existsSync(html) || !fs.existsSync(js))
@@ -159,8 +159,9 @@ function story(st, dir, bad) {
       bad.push(`${id}: gloss key "${k}" is not one lower-case word`);
     else if (!words.has(k)) bad.push(`${id}: gloss "${k}" is not in the text`);
   }
-  // the story's own picture folder(s): every picture used and offline
+  // the story's own picture folder(s): every picture used and offline (the lesson's folder is checked with the lesson)
   const dirs = new Set([...used].map((p) => path.dirname(p)));
+  dirs.delete(path.normalize(imgDir));
   for (const d of dirs)
     for (const f of fs.readdirSync(d)) {
       const p = path.join(d, f);
