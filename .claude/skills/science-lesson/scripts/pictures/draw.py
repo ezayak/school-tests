@@ -37,3 +37,36 @@ def label(d, xy, t, col=RED, size=40, anchor="mm"):
 def save(im, out, name):
     im.save(os.path.join(out, name + ".jpg"), quality=88)
     print(name)
+
+
+EMOJI = "/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf"
+
+
+def emoji(im, xy, t, size=120):
+    """Colour emoji t centred at xy, about size px high (Noto Color Emoji is drawn at 109 px, then scaled)."""
+    f = ImageFont.truetype(EMOJI, 109)
+    w = round(f.getlength(t)) + 20
+    e = Image.new("RGBA", (w, 140), (0, 0, 0, 0))
+    ImageDraw.Draw(e).text((10, 10), t, font=f, embedded_color=True)
+    e = e.crop(e.getbbox())
+    e = e.resize((round(e.width * size / e.height), size), Image.LANCZOS)
+    im.paste(e, (xy[0] - e.width // 2, xy[1] - e.height // 2), e)
+
+
+def two_pictures(left, right, labels, cols=(INK, INK)):
+    """Two pictures side by side (a PIL image or an emoji string each), a label above each: 'then / now' cards."""
+    im, d = canvas()
+    for k, (p, t, c) in enumerate(zip((left, right), labels, cols)):
+        cx = 180 + k * 360
+        if isinstance(p, str):
+            emoji(im, (cx, 250), p, 150)
+        else:
+            p = p.copy()
+            p.thumbnail((340, 340), Image.LANCZOS)
+            if p.height < 300:  # small book photos: enlarge to fill the half
+                s = min(340 / p.width, 340 / p.height)
+                p = p.resize((round(p.width * s), round(p.height * s)), Image.LANCZOS)
+            im.paste(p, (cx - p.width // 2, 250 - p.height // 2 + 15))
+        label(d, (cx, 40), t, col=c, size=30)
+    d.line([(360, 80), (360, 420)], fill=GRAY, width=4)
+    return im

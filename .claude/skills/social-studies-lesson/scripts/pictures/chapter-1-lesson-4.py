@@ -12,7 +12,7 @@ sys.dont_write_bytecode = True
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "../../../science-lesson/scripts/pictures"))
 from PIL import Image  # noqa: E402
-from draw import BLUE, GRAY, H, INK, RED, W, arrow, canvas, label, save  # noqa: E402
+from draw import BLUE, GRAY, H, INK, RED, W, arrow, canvas, label, save, two_pictures  # noqa: E402
 
 DOCS = os.path.expanduser("~/Documents/2026-2027/Alex/S.S.English")
 BOOK = os.path.join(DOCS, "book")
@@ -177,3 +177,6 @@ label(d, (245, 105), "clean", col=BLUE, size=22)
 label(d, (475, 105), "dirty", col=BROWN, size=22)
 label(d, (360, 30), "water is cleaned before and after we use it", col=INK, size=22)
 sv(im, "e-treatment")
+
+# then and now: cutting trees by hand in the 1800s, big machines today (a picture strip shows a book photo too small)
+sv(two_pictures("🪚🪓", Image.open(os.path.join(OUT, "bulldozer.jpg")), ("1800s: by hand", "Today: machines")), "then-now")

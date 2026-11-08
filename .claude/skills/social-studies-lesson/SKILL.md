@@ -30,7 +30,8 @@ One script per lesson writes all its pictures: `scripts/pictures/chapter-N-lesso
 1. **Book crops**: `crop(spread, (x0, y0, x1, y1), OUT, name)` on the 1368×858 PNG. Leave out the page footer ("28 Chapter 1 • …", y ≳ 812), the vertical copyright line next to the fold, and captions. Book photos are small (200–650 px): use them as they are, don't enlarge.
 2. **Booklet pictures** (Irrigation, the First Continental Congress): render the page with `pdftoppm -r 150` inside the script and crop.
 3. **Explanation drawings** (`e-*.jpg`, 720×440) for an idea the book has no picture of (a steep roof, a skyway, an aquifer, a scrubber, water treatment): one idea, the part that matters in red, a short label, thick lines (an answer button shows it 180 px wide).
-4. **Emoji**: 1–2 on an answer (`icons`), a strip of emoji on a card (`vis: {kind: "strip", items: [{e, label}]}`), or an animated scene in a story (`vis: {kind: "scene", …}`, animation names in `Kit.scene`'s comment in `shared/common.js`).
+4. **Never a book photo in a picture strip**: a strip shows its pictures tiny (about 60 px). Two things side by side (then / now, two places, two directions) = one 720×440 picture made with `two_pictures(left, right, labels)` from `draw.py` (a photo or an emoji string each) or drawn like `exchange.jpg`. `emoji(im, xy, "🪚🪓", size)` draws colour emoji into a picture.
+5. **Emoji**: 1–2 on an answer (`icons`), a strip of emoji only on a card (`vis: {kind: "strip", items: [{e, label}]}`), or an animated scene in a story (`vis: {kind: "scene", …}`, animation names in `Kit.scene`'s comment in `shared/common.js`).
 
 Check every new picture on a contact sheet (PIL, 4 per row) before using it: cut text, footers, labels running off the edge.
 

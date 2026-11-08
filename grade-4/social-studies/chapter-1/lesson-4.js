@@ -167,13 +167,7 @@ window.LESSON = {
         "In the 1800s, people cut down trees [by hand], with saws and axes.",
         "Today [big machines] clear the land quickly, for homes, shops and farms.",
       ],
-      vis: {
-        kind: "strip",
-        items: [
-          { e: "🪚🪓", label: "1800s: by hand" },
-          { img: "bulldozer", label: "Today: machines" },
-        ],
-      },
+      img: "then-now",
     },
     {
       t: "Building big",

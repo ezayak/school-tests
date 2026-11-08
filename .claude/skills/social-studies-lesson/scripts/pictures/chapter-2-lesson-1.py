@@ -9,7 +9,7 @@ sys.dont_write_bytecode = True
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "../../../science-lesson/scripts/pictures"))
 from PIL import Image, ImageDraw  # noqa: E402
-from draw import BLUE, INK, RED, arrow, canvas, font, label, save  # noqa: E402
+from draw import BLUE, INK, RED, arrow, canvas, font, label, save, two_pictures  # noqa: E402
 
 BOOK = os.path.expanduser("~/Documents/2026-2027/Alex/S.S.English/book")
 OUT = "grade-4/social-studies/chapter-2/img/lesson-1"
@@ -57,3 +57,6 @@ arrow(d, (415, 290), (305, 290), col=BLUE, w=9)
 label(d, (150, 35), "Americas → Europe", col=RED, size=24)
 label(d, (570, 35), "Europe → Americas", col=BLUE, size=24)
 sv(im, "exchange")
+
+# Jamestown 1607 and Plymouth 1620 (a picture strip shows a book photo too small)
+sv(two_pictures(Image.open(os.path.join(OUT, "jamestown.jpg")), "⛵🙏", ("1607: Jamestown", "1620: Plymouth")), "jamestown-plymouth")

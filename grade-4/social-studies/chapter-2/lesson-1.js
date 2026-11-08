@@ -194,13 +194,7 @@ window.LESSON = {
         "[1607]: [Jamestown], in Virginia, the first English colony that lasted.",
         "[1620]: the [Pilgrims] came to [Plymouth]. They wanted [religious freedom].",
       ],
-      vis: {
-        kind: "strip",
-        items: [
-          { img: "jamestown", label: "1607 Jamestown" },
-          { e: "⛵🙏", label: "1620 Plymouth" },
-        ],
-      },
+      img: "jamestown-plymouth",
     },
     {
       t: "13 English colonies",
