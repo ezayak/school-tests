@@ -786,7 +786,7 @@
       .forEach((b) => (b.onclick = () => startExercise(+b.dataset.x)));
     document.title = RA
       ? `${L.title} · ${L.unit}`
-      : `${L.title} · ${SUBJ} Lesson ${L.n}`;
+      : `${L.title} · ${SUBJ} ${L.label || "Lesson"} ${L.n}`; // label: a revision ("Chapter 1" + n "Review")
   }
 
   /* ================= LEARN: the lesson question ================= */
