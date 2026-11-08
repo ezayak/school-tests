@@ -7,6 +7,16 @@
   --ou: #d6336c;
   --pic: #ffffff;
 } /* --accent defaults to the theme's French colour, --accent2 to the theme orange */
+/* a page of another subject: <body data-subject="…"> (lessons of shared/computer-lesson.js, Social Studies stories) */
+[data-subject="Science"] {
+  --accent: var(--sci-ink);
+}
+[data-subject="Social Studies"] {
+  --accent: var(--ss-ink);
+}
+[data-subject="English"] {
+  --accent: var(--en);
+}
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --ou: #ff6b9a;

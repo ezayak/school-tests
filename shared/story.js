@@ -1,6 +1,7 @@
 // English story engine (reading books). The page loads shared/common.js, its story-*.js (window.STORY), then this file.
 // Made for a child with aphasia: the story reads itself (🔊 sentence by sentence, 🐢 word by word) and the word being read
 // lights up; every page has one easy sentence; the vocabulary words show their meaning; every question has a picture and can be heard.
+// Other subjects (Social Studies) set STORY.subject (the back link and the tab title) and may have no questions (no Questions tab).
 (function () {
   "use strict";
   const { esc, shuf, star } = Kit;
@@ -22,6 +23,8 @@
     },
   };
   const KEY = S.key || "story";
+  const SUBJ = S.subject || "English";
+  const QUIZ = !!(S.questions && S.questions.length);
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   /* ---------- voice (device voices, English) ---------- */
@@ -257,26 +260,30 @@
   const TABS = [
     { k: "read", ic: "📖", t: "Read", sub: `${S.pages.length} pages` },
     { k: "sum", ic: "🗺️", t: "Summary", sub: `${S.summary.length} cards` },
-    {
-      k: "quiz",
-      ic: "❓",
-      t: "Questions",
-      sub: `${S.questions.length} questions`,
-    },
+    ...(QUIZ
+      ? [
+          {
+            k: "quiz",
+            ic: "❓",
+            t: "Questions",
+            sub: `${S.questions.length} questions`,
+          },
+        ]
+      : []),
   ];
   let tab = store.get(KEY + "-tab", "read");
   if (!TABS.some((t) => t.k === tab)) tab = "read";
   let pg = Math.min(+store.get(KEY + "-page", "0") || 0, S.pages.length - 1);
 
   app.innerHTML = `<section class="card">
-    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="${esc(S.hub || "index.html")}">English</a>${S.lesson ? `<a class="back" href="${esc(S.lesson.path)}">${esc(S.lesson.label)}</a>` : ""}</div></div>
+    <div class="toprow"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="${esc(S.hub || "index.html")}">${esc(SUBJ)}</a>${S.lesson ? `<a class="back" href="${esc(S.lesson.path)}">${esc(S.lesson.label)}</a>` : ""}</div></div>
     <div class="les-head"><span class="les-cov"><img src="${esc(S.cover)}" alt=""></span>
       <div><h1 class="les-title">${esc(S.title)}</h1><div class="les-sub">${esc(S.kind || "Story")}${S.by ? ` · by ${esc(S.by)}` : ""}</div>
       ${S.question ? `<p class="eq">❓ <b>Big question:</b> ${esc(S.question)}</p>` : ""}</div></div>
     <div class="tabbox"><div class="ftabs" role="group" aria-label="Story part">${TABS.map((t) => `<button type="button" data-tab="${t.k}" aria-pressed="${tab === t.k}"><span class="ti">${t.ic} </span>${esc(t.t)}<span class="sub">${esc(t.sub)}</span></button>`).join("")}</div>
       <div class="panel" id="panel"></div></div>
   </section>`;
-  document.title = `${S.title} · English`;
+  document.title = `${S.title} · ${SUBJ}`;
   const panel = document.getElementById("panel");
   app
     .querySelectorAll("[data-tab]")
@@ -369,7 +376,7 @@
       )
       .join("")}</div>
     <div class="gloss" hidden></div>
-    <div class="row center"><button type="button" class="btn big" data-quiz>Questions →</button></div>`;
+    ${QUIZ ? `<div class="row center"><button type="button" class="btn big" data-quiz>Questions →</button></div>` : ""}`;
     bindWords(panel, panel.querySelector(".gloss"));
     const lines = [...panel.querySelectorAll(".sum .line")];
     panel
@@ -390,7 +397,7 @@
           (b.onclick = () =>
             read([...lines[+b.dataset.one].querySelectorAll(".s")], false)),
       );
-    panel.querySelector("[data-quiz]").onclick = () => show("quiz");
+    if (QUIZ) panel.querySelector("[data-quiz]").onclick = () => show("quiz");
   }
 
   /* ---------- Questions: one at a time, try again until right ---------- */

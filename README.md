@@ -448,6 +448,7 @@ window.STORY = {
   summary: [{t: "Characters", img | emoji | vis, text}, …],      // vis: an animated emoji picture (see English lessons)
   questions: [{tag: "Stop and check", img | emoji | vis, q, o: [right, wrong, wrong], x: "why (optional)"},   // first option is right; shuffled on screen
               {type: "open", tag, img | emoji, q, a: "model answer"}, …],
+  subject: "Social Studies",                 // optional: the subject of the back link and the tab title (default "English"); no questions = no Questions tab
 };
 ```
 
@@ -830,7 +831,9 @@ into `final-term-1/img/science/` (`p` is the file name) and listed in the card's
 
 Folder: `grade-4/social-studies/`. One card on the home page ("Social Studies", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`,
 one heading per chapter (`chapters: [{n, dir: "chapter-1", title, items}]`, the same format as the Computer lessons).
-There is no textbook: the lessons come from the teacher's slides, the term booklet and the graded homework.
+Lessons 1–3 (Term 1) come from the teacher's slides, the term booklet and the graded homework. From Term 2 on, a lesson follows the book
+(myWorld Interactive 4, scanned as two-page spreads in `~/Documents/2026-2027/Alex/S.S.English/book/`) retold in easy words, with the booklet's exercise sheet and the book's questions;
+its sources are logged in `SOURCES.md` (with `TODO.md` and `UNVERIFIED.md`), and `term: 2` in `lessons.js` puts a "Term 2" tag on its card.
 Like Science, the lessons use the **Computer lesson engine** (`shared/computer-lesson.js`, no Mini Windows) with `<body data-subject="Social Studies">`,
 which changes the subject name and the colour (`--ss-ink`, a darker red for text on white).
 
@@ -838,6 +841,10 @@ A lesson has the same format as a Science lesson: `words` (the slides' "Importan
 `games` and `exercises` (`from:` names the booklet sheet or the homework). Every question has a picture.
 Lessons save their ticks under their own `key` (`ss4-c<chapter>-l<lesson>`).
 A picture card can show a row of pictures with `vis: {kind: "strip", items: [{img | e, label}]}`; its tile then uses the first picture.
+
+**Stories** (a Citizenship page, a history story to know): `chapter-N/story-<name>.html/.js`, the English story engine (`shared/story.js`, format in "English stories")
+with `subject: "Social Studies"` (the back link and the tab title), `hub: "../index.html"`, `lesson: {path, label}`, and `<body data-view="story" data-subject="Social Studies">` (the colour).
+Without `questions` the story page has only Read and Summary. The lesson shows it as a tile after its picture cards: `stories: [{t, en, path, cover: {src}}]`.
 
 After adding a lesson: add it to its chapter in `lessons.js`, add its files to the `also: [...]` list of the Social Studies entry in `games.js`,
 and bump `VERSION` in `sw.js`.

@@ -645,6 +645,20 @@
                 ),
               )
               .join("")) +
+        // a story to know (Social Studies): its own page (shared/story.js)
+        (L.stories || [])
+          .map((st, i) =>
+            tileHTML(
+              {
+                t: st.t,
+                en: st.en || "Story · read along",
+                pic: st.cover,
+                ic: "📖",
+              },
+              `data-st="${i}" id="st-${i}"`,
+            ),
+          )
+          .join("") +
         (L.videos || [])
           .map((v, i) =>
             tileHTML(
