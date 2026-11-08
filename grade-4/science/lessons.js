@@ -97,7 +97,7 @@ window.CS_LESSONS = {
           path: "lesson-1.html",
           cover: "img/lesson-1/surfer.jpg",
           term: 2,
-          note: "12 picture cards · 4 games · book questions",
+          note: "12 picture cards · 4 games · 5 exercises",
         },
         {
           n: 2,
