@@ -38,13 +38,6 @@ const FL = ["Florida", "🌴"],
   WI = ["Wisconsin", "❄️"];
 const where = (q, emoji, inFlorida) =>
   two(q, emoji, inFlorida ? [FL, WI] : [WI, FL]);
-// a word and its picture, for match pairs
-const word = (w, pic) => ({
-  vis: {
-    kind: "strip",
-    items: [/^[a-z]/.test(pic) ? { img: pic, label: w } : { e: pic, label: w }],
-  },
-});
 
 window.LESSON = {
   n: 4,
@@ -552,20 +545,21 @@ window.LESSON = {
       en: "Booklet · Exercise sheet B",
       ic: "🔗",
       from: "Booklet · Lesson 4 exercise sheet · B (p. 5)",
+      // word cards w-*.jpg: the picture and the word (made by the picture script)
       items: [
         {
           type: "match",
           pairs: [
             {
-              ...word("A skyway system", "e-skyway"),
+              img: "w-skyway",
               label: "connects different buildings across a large city.",
             },
             {
-              ...word("Adapting", "🧥❄️"),
+              img: "w-adapting",
               label: "means changing to fit the new conditions",
             },
             {
-              ...word("An aquifer", "e-aquifer"),
+              img: "w-aquifer",
               label: "is an underground layer of rocks that holds water",
             },
           ],
@@ -574,15 +568,15 @@ window.LESSON = {
           type: "match",
           pairs: [
             {
-              ...word("Irrigation", "irrigation-drawing"),
+              img: "w-irrigation",
               label: "is using technology to bring water to crops.",
             },
             {
-              ...word("Technology", "bulldozer"),
+              img: "w-technology",
               label: "is the use of tools and scientific knowledge to do work",
             },
             {
-              ...word("Treatment plants", "e-treatment"),
+              img: "w-treatment",
               label:
                 "provide clean water to the houses and treat the water to return it to the river",
             },

@@ -70,3 +70,18 @@ def two_pictures(left, right, labels, cols=(INK, INK)):
         label(d, (cx, 40), t, col=c, size=30)
     d.line([(360, 80), (360, 420)], fill=GRAY, width=4)
     return im
+
+
+def word_card(p, word):
+    """A match card: the picture (a PIL image or an emoji string) big on top, the word in big letters under it
+    (a picture strip in a match shows the picture too small)."""
+    im, d = canvas()
+    if isinstance(p, str):
+        emoji(im, (W // 2, 170), p, 220)
+    else:
+        p = p.convert("RGB")
+        s = min(700 / p.width, 330 / p.height)
+        p = p.resize((round(p.width * s), round(p.height * s)), Image.LANCZOS)
+        im.paste(p, ((W - p.width) // 2, 10 + (330 - p.height) // 2))
+    d.text((W // 2, 392), word, fill=INK, font=font(56), anchor="mm")
+    return im

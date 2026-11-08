@@ -180,3 +180,16 @@ sv(im, "e-treatment")
 
 # then and now: cutting trees by hand in the 1800s, big machines today (a picture strip shows a book photo too small)
 sv(two_pictures("🪚🪓", Image.open(os.path.join(OUT, "bulldozer.jpg")), ("1800s: by hand", "Today: machines")), "then-now")
+
+# word cards for the booklet's match (B): the picture and the word
+from draw import word_card  # noqa: E402
+
+for name, src, w in [
+    ("w-skyway", "e-skyway", "A skyway system"),
+    ("w-adapting", "🧥❄️", "Adapting"),
+    ("w-aquifer", "e-aquifer", "An aquifer"),
+    ("w-irrigation", "irrigation-drawing", "Irrigation"),
+    ("w-technology", "bulldozer", "Technology"),
+    ("w-treatment", "e-treatment", "Treatment plants"),
+]:
+    sv(word_card(src if not src[0].isascii() else Image.open(os.path.join(OUT, src + ".jpg")), w), name)
