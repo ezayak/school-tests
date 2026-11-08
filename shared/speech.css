@@ -591,6 +591,35 @@
   padding: 0 76px;
   font-size: min(11cqh, 7cqw);
 }
+/* «Де я?»: the hidden answer (he says it first; the whole card is the Перевір button), the places done */
+.sp-try {
+  display: inline-flex;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em 0.6em;
+  padding: 0.25em 0.6em;
+  border: 2.5px dashed var(--muted);
+  border-radius: 16px;
+  color: var(--muted);
+  font-size: 0.8em;
+}
+.sp-check {
+  padding: 0.15em 0.7em;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--hl);
+  box-shadow: 2px 2px 0 var(--ink);
+  color: var(--ink);
+}
+.sp-snd[hidden] {
+  display: none;
+}
+.sp-thumbs button.sp-done {
+  background: color-mix(in srgb, var(--good) 22%, var(--card));
+}
 /* a word that fits the card's top whatever its length (--n letters; Nunito's letters are about 0.62em wide, 0.68 leaves a margin; 160px = the padding and 🔊) */
 .sp-fit {
   font-size: min(1em, calc((100cqw - 160px) / var(--n) / 0.68));
@@ -677,15 +706,27 @@
 .sp-emo {
   font-family: var(--emoji);
   line-height: 1;
+  white-space: nowrap; /* two emoji (⚽🛝) stay on one line */
 }
 .sp-photos .sp-emo {
   font-size: min(36cqh, 28cqw);
+}
+/* two emoji side by side: no wider than the space between ‹ and › (170px) */
+.sp-photos .sp-emo2 {
+  font-size: min(36cqh, 28cqw, calc((100cqw - 170px) / 2.1));
 }
 .sp-thumbs .sp-emo {
   font-size: 3.2rem;
 }
 .sp-photo .sp-emo {
   font-size: clamp(3rem, 13dvh, 5.5rem);
+}
+/* two emoji (⚽🛝) share the square: half the size each */
+.sp-thumbs .sp-emo2 {
+  font-size: 2.1rem;
+}
+.sp-photo .sp-emo2 {
+  font-size: clamp(1.6rem, 6.5dvh, 2.8rem);
 }
 .sp-choice.sp-photo.no .sp-emo {
   opacity: 0.5;

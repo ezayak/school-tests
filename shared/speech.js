@@ -73,6 +73,9 @@
         "Прочитай або послухай, де має бути предмет, і постав його туди.",
       thing: "Предмет",
       here: "Сюди",
+      places: "Місця",
+      sayIt: "Скажи сам!",
+      check: "Перевір",
       body: "Частини тіла",
       bodyOther: "Інші частини тіла",
       bodyWhat: ["частину тіла", "картинку"],
@@ -157,6 +160,9 @@
       placeHint: "Read or listen where the thing goes, and put it there.",
       thing: "Thing",
       here: "Here",
+      places: "Places",
+      sayIt: "Say it yourself!",
+      check: "Check",
       body: "Body",
       bodyOther: "Other parts",
       bodyWhat: ["part of the body", "the picture"],
@@ -245,6 +251,7 @@
       verbForms,
       body,
       bodyWords,
+      where,
     }[document.body.dataset.deck] || letters
   )();
   // Arabic: Google's online voice when the device has none (as in the Arabic lessons); body[data-lang] for the Arabic font
@@ -433,7 +440,7 @@
     const img = (x) =>
       x.pic
         ? `<img src="${D.img || `../img/${o.dir}/`}${x.pic}.jpg" alt="">`
-        : `<span class="sp-emo">${esc(x.ic)}</span>`;
+        : `<span class="sp-emo${chars(x.ic).length > 1 ? " sp-emo2" : ""}">${esc(x.ic)}</span>`; // sp-emo2: two emoji (⚽🛝)
     const items = [];
     D.groups.forEach((g, gi) =>
       g.cards.forEach((x) =>
@@ -599,16 +606,39 @@
       hd: "sp-pos",
       sets: true,
     });
-    // a long word (щиколотка, підборіддя) gets smaller to fit between the card's edges and 🔊 (sp-fit, --n letters)
-    d.head = (it) => ({
-      c: "sp-pos",
-      html: `<span class="sp-fit" style="--n:${chars(it.name).length}">${esc(it.name)}</span>`, // letters, not harakat
-    });
+    d.head = fitHead;
     d.gq = { title: T.bodyGuess, hint: T.bodyGuessHint };
     d.modes = T.placeModes;
     d.read = true;
     return d;
   }
+  // a card's word big on top; a long word (щиколотка, підборіддя) gets smaller to fit between the card's edges and 🔊
+  // (sp-fit, --n letters, not harakat)
+  function fitHead(it) {
+    return {
+      c: "sp-pos",
+      html: `<span class="sp-fit" style="--n:${chars(it.name).length}">${esc(it.name)}</span>`,
+    };
+  }
+
+  // Places (window.SPEECH_WHERE, where.js): the place big («школа»), its picture, «Я [у школі]». Played on the cards page
+  // and on «Де я?» (data-view="say"): the card asks D.ask («Де ти?»), he answers himself, Перевір shows and says the answer.
+  function where() {
+    const D = window.SPEECH_WHERE;
+    const d = pictures(D, {
+      key: "where-",
+      dir: "",
+      other: "",
+      what: T.posWhat,
+      label: T.places,
+      hd: "sp-pos",
+    });
+    d.head = fitHead;
+    d.ask = D.ask;
+    d.game = D.game;
+    return d;
+  }
+
   // Body words (body.js): the parts of one word, to build from letters.
   function bodyWords() {
     return oneWords(body());
@@ -636,9 +666,15 @@
   // The parent's layout «A · Card + letter panel»: the card on the left, the panel on the right.
   // Tap the card (or 🔊, ‹ ›, a button in the panel): the letter or syllable, a pause, the word.
   // A word of the sheet (syllables): each syllable, then the whole word.
+  // data-view="say" («Де я?»): the card asks deck.ask over the picture and hides the answer («🎤 Скажи сам!»); a tap on the
+  // card (Перевір) shows and says it («Я у лікарні», without the place's name); another card hides it again and stays silent;
+  // the places done turn green in the panel.
   function cards() {
-    const K = "sp-" + deck.lang + "-" + deck.key + "cards"; // the last card seen
+    const SAY = view === "say";
+    const K = "sp-" + deck.lang + "-" + deck.key + (SAY ? "say" : "cards"); // the last card seen
     const N = deck.items.length;
+    let open = !SAY; // the answer is shown
+    const done = new Set();
     let i = Math.min(N - 1, Math.max(0, +store.get(K, 0) || 0));
     let run = 0; // a newer tap stops what an older one was saying
     let page = null;
@@ -651,7 +687,7 @@
       </div>
       <section class="card sp-panel">
         ${top('<span class="sp-count" id="count"></span>')}
-        <h1 class="les-title">${esc(deck.group)}</h1>
+        <h1 class="les-title">${esc(SAY ? deck.game : deck.group)}</h1>
         <div class="sp-pane" id="pane"></div>
         ${WARN}
       </section>
@@ -664,13 +700,23 @@
         page = deck.page(i);
         pane.innerHTML = deck.panel(i);
       }
-      const h = deck.head(it);
+      const h = SAY ? { c: "sp-pos", html: esc(deck.ask) } : deck.head(it);
+      const wd = open
+        ? deck.word(it)
+        : `<span class="sp-try">🎤 ${T.sayIt} <span class="sp-check">🔊 ${T.check}</span></span>`;
       lcard.className = `sp-lcard sp-p${i % 7}${cls(deck.cardCls)}`;
-      lcard.innerHTML = `<span class="sp-hd${cls(h.c)}">${h.html}</span><span class="sp-pic${cls(deck.picCls)}" aria-hidden="true">${deck.pic ? deck.pic(it) : esc(it.ic)}</span><span class="sp-wd">${deck.word(it)}</span>`;
+      lcard.innerHTML = `<span class="sp-hd${cls(h.c)}">${h.html}</span><span class="sp-pic${cls(deck.picCls)}" aria-hidden="true">${deck.pic ? deck.pic(it) : esc(it.ic)}</span><span class="sp-wd">${wd}</span>`;
       lcard.setAttribute(
         "aria-label",
-        it.w ? `${it.name}, ${plain(it.w)}` : it.name,
+        !open ? T.check : it.w ? `${it.name}, ${plain(it.w)}` : it.name,
       );
+      document.getElementById("again").hidden = !open;
+      if (SAY)
+        pane
+          .querySelectorAll("[data-i]")
+          .forEach((b) =>
+            b.classList.toggle("sp-done", done.has(+b.dataset.i)),
+          );
       document.getElementById("count").textContent = `${i + 1} / ${N}`;
       pane
         .querySelectorAll("[data-i]")
@@ -691,12 +737,19 @@
     }
     const speak = () => {
       const it = deck.items[i];
-      say(it.w ? [[it.name, it.snd, 900], said(it)] : [said(it)]);
+      if (!open) {
+        open = true;
+        done.add(i);
+        show();
+      }
+      // «Де я?»: only the answer («Я у лікарні»), not the place's name before it
+      say(it.w && !SAY ? [[it.name, it.snd, 900], said(it)] : [said(it)]);
     };
     function go(k) {
       i = (k + N) % N;
+      open = !SAY;
       show();
-      speak();
+      if (!SAY) speak(); // «Де я?»: he speaks first
     }
     document.getElementById("prev").onclick = () => go(i - 1);
     document.getElementById("next").onclick = () => go(i + 1);
@@ -712,7 +765,7 @@
         say([...w.split("-").map((x) => [x, null, 350]), [plain(w)]]);
       }
     };
-    document.title = `${T.cards} · ${deck.group}`;
+    document.title = `${SAY ? deck.game : T.cards} · ${deck.group}`;
     show(); // no sound before the first tap: the browser would block it
   }
 
@@ -1334,5 +1387,5 @@
     });
   }
 
-  ({ cards, guess, build, fly, place })[view]();
+  ({ cards, say: cards, guess, build, fly, place })[view]();
 })();

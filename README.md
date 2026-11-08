@@ -54,7 +54,8 @@ speech/                    ← Мовлення: speech games (school: "speech" 
     abc/                   ← Абетка: index.html (list of games), list.js, cards.html, guess.html, build.html, fly.html
     syllables/             ← Склади: the same pages, with data-deck="syllables"
     sentences/             ← Речення: positions.html (cards), positions-guess.html, positions-place.html, with data-deck="positions";
-                              phrases.html (cards), phrases-build.html, phrases-guess.html, with data-deck="phrases"
+                              phrases.html (cards), phrases-build.html, phrases-guess.html, with data-deck="phrases";
+                              where.html (cards), where-say.html (data-view="say"), with data-deck="where" (../where.js)
     verbs/                 ← Дії: index.html, list.js, cards.html, guess.html, with data-deck="verbs"; build.html (data-deck="verbWords"), forms.html (data-deck="verbForms")
     img/positions/         ← the position pictures, cut from the parent's posters (no labels, no frame), <name>-1.jpg / -2.jpg
     body/                  ← Частини тіла: cards.html, guess.html (data-deck="body"), build.html (data-deck="bodyWords"),
@@ -276,6 +277,9 @@ Games:
   of one word (not «чистити зуби»): the verb's picture (`deck.pic`), the verb (`deck.spell`) said and built from letters.
 - **Дії · Як сказати?** (`data-view="guess" data-deck="verbForms"`): the voice says the verb («їсти»), the picture (mode «🖼️ З картинкою»)
   and «Я …» (`deck.prompt`) show; tap the form among 4 words (їм / п’ю / сплю / граю); a right tap shows and says «Я їм».
+- **Речення · Місця / Де я?** (`data-deck="where"`, the parent's board «Місця»): cards with the place big, its emoji and «Я [у школі]»;
+  «Де я?» (`data-view="say"`, the cards view): the card asks «Де ти?» over the picture and hides the answer («🎤 Скажи сам!»); he says it,
+  a tap on the card (Перевір) shows and says «Я у школі» (the answer only); another card hides it again and stays silent; the places done turn green.
 - **Частини тіла** (topic Body): Картки (`data-deck="body"`: the word big, the poster picture, «Це моя [голова]»); Покажи (`data-view="guess"`:
   «🔊 Слухати» says the word, «🔤 Читати» shows it and says it only with 🔊 (`deck.read`); pictures that look alike share a family `f`
   and never come together); Склади слово (`data-deck="bodyWords"`: the one-word parts, no ’); Речення, Склади речення, Вгадай речення
@@ -311,6 +315,9 @@ cropped above its label (thin tile edges dropped, the tile background made white
 `verbs.js` format (`window.SPEECH_VERBS = {lang, groups}`), groups of everyday verbs (Вдома, Рухаюся, Вчуся і граю):
 `{t: "Вдома", cards: [{t: "їсти", w: "Я [їм]", pic: "eat"}, {t: "митися", w: "Я [миюся]", ic: "🛁"}, …]}`: `t` = the verb, `w` = how he says it
 about himself, `pic` = a picture in `img/things/` (precached through the Речення entry) or `ic` = an emoji when the collage has none.
+
+`where.js` format (`window.SPEECH_WHERE = {lang, ask, game, groups}`): `ask` = the question («Де ти?»), `game` = the game's title («Де я?»),
+`groups: [{t: "Місця", cards: [{t: "школа", w: "Я [у школі]", ic: "🏫"}, …]}]`.
 
 `body.js` format (`window.SPEECH_BODY = {lang, groups}`), groups Тіло and Обличчя: `{t: "Тіло", cards: [{t: "голова", w: "Це моя [голова]",
 pic: "head", f: "head"}, …]}`: `t` = the word, `w` = the card's sentence, `pic` = a picture in `img/body/`, `f` = its family (every card has one;
