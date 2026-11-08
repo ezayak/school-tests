@@ -1839,17 +1839,27 @@
         );
       };
     } else if (it.type === "match") {
+      // a pair is [left, right, gloss of right] or {l, r, en: [left, right], uk: [left, right]}
+      const P = it.pairs.map((p) =>
+        Array.isArray(p)
+          ? { l: p[0], r: p[1], en: ["", p[2]], uk: ["", p[2]] }
+          : p,
+      );
+      const gl = (p, k) => {
+        const t = tr === "off" ? "" : (tr === "uk" ? p.uk : p.en)[k];
+        return t ? `<span class="gl">${esc(t)}</span>` : "";
+      };
       const left = shuf(
-        it.pairs.map((p, i) => ({
+        P.map((p, i) => ({
           i,
-          html: `<span class="ar" style="font-size:1.15rem;line-height:1.8">${esc(p[0])}</span>`,
+          html: `<span class="ar" style="font-size:1.15rem;line-height:1.8">${esc(p.l)}</span>${gl(p, 0)}`,
         })),
       );
       const right = shuf(
-        it.pairs.map((p, i) => ({
+        P.map((p, i) => ({
           i,
-          html: `<span class="ar">${esc(p[1])}</span>${tr === "off" ? "" : `<span class="gl">${esc(p[2])}</span>`}`,
-          plain: esc(p[1]),
+          html: `<span class="ar">${esc(p.r)}</span>${gl(p, 1)}`,
+          plain: esc(p.r),
         })),
       );
       matchUI(
@@ -1858,21 +1868,23 @@
         right,
         (got, pair) => {
           xs.score += got;
-          it.pairs.forEach((p, i) => {
+          P.forEach((p, i) => {
             if (pair[i] !== i)
               xs.miss.push({
-                q: p[0],
-                your: it.pairs[pair[i]] ? it.pairs[pair[i]][1] : "",
-                right: p[1],
+                q: p.l,
+                your: P[pair[i]] ? P[pair[i]].r : "",
+                right: p.r,
               });
           });
           A.querySelector("#fbx").remove();
-          after(
-            got === it.pairs.length,
-            `${got} of ${it.pairs.length} correct.`,
-          );
+          after(got === P.length, `${got} of ${P.length} correct.`);
         },
-        { lcls: "long", rcls: "arw" },
+        {
+          lcls: "long",
+          rcls: "arw",
+          sayL: (li) => say(P[li].l),
+          sayR: (ri) => say(P[ri].r),
+        },
       );
     }
   }
