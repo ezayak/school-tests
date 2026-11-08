@@ -41,7 +41,7 @@ for (const file of files) {
   const hasPic = (o) => o.img || o.emoji || o.vis || o.e || o.pics || o.icons;
   img(L.cover, "cover");
   if (L.question) img(L.question.img, "question");
-  if (!L.key || !/^(sci4-t|ss4-c)\d+-l\d+$/.test(L.key))
+  if (!L.key || !/^(sci4-t|ss4-c)\d+-(l\d+|review)$/.test(L.key))
     bad.push("key " + L.key);
   (L.ideas || []).forEach((c, i) => {
     img(c.img, "idea " + i);

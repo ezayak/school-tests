@@ -44,6 +44,17 @@ window.CS_LESSONS = {
           note: "17 picture cards · 1 story · 4 games · 4 exercises",
           term: 2,
         },
+        {
+          n: "Review",
+          label: "Chapter 1",
+          title: "Geography and the United States",
+          en: "The book's Visual Review and Chapter 1 Assessment: landforms, regions, climate, resources, people and the land",
+          path: "review.html",
+          cover: "img/review/vr-land.jpg",
+          note: "4 picture cards · 3 games · 1 assessment (15 questions)",
+          // the book's chapter pages, not in the booklet
+          term: "2*",
+        },
       ],
     },
     {
