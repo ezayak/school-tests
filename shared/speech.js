@@ -73,6 +73,16 @@
         "Прочитай або послухай, де має бути предмет, і постав його туди.",
       thing: "Предмет",
       here: "Сюди",
+      grammar: "Граматика",
+      pronouns: "Займенники",
+      verbTable: "Як змінюється дієслово",
+      tableNote:
+        "Кольорове закінчення підказує, хто це робить. Натисни на слово, щоб послухати.",
+      whoGame: "Хто що робить?",
+      who: "Хто?",
+      doing: "Що робить?",
+      saySent: "Скажи речення!",
+      another: "🎲 Інша картка",
       places: "Місця",
       sayIt: "Скажи сам!",
       check: "Перевір",
@@ -160,6 +170,16 @@
       placeHint: "Read or listen where the thing goes, and put it there.",
       thing: "Thing",
       here: "Here",
+      grammar: "Grammar",
+      pronouns: "Pronouns",
+      verbTable: "How the verb changes",
+      tableNote:
+        "The coloured ending shows who does it. Tap a word to hear it.",
+      whoGame: "Who is doing what?",
+      who: "Who?",
+      doing: "Doing what?",
+      saySent: "Say the sentence!",
+      another: "🎲 Another card",
       places: "Places",
       sayIt: "Say it yourself!",
       check: "Check",
@@ -252,6 +272,8 @@
       body,
       bodyWords,
       where,
+      pronouns,
+      grammar,
     }[document.body.dataset.deck] || letters
   )();
   // Arabic: Google's online voice when the device has none (as in the Arabic lessons); body[data-lang] for the Arabic font
@@ -637,6 +659,46 @@
     d.ask = D.ask;
     d.game = D.game;
     return d;
+  }
+
+  // a word with a capital letter (the start of a sentence: «він» → «Він»)
+  function cap(w) {
+    return w.charAt(0).toUpperCase() + w.slice(1);
+  }
+
+  // Grammar (window.SPEECH_GRAMMAR, grammar.js): the pronouns and the verb forms. pronouns: a card per pronoun (я, ти, він…),
+  // its picture and «Він гра[є]» (the example verb); grammar: the data for the table and «Хто що робить?» (deck.D).
+  function pronouns() {
+    const D = window.SPEECH_GRAMMAR;
+    const v = D.verbs[D.example];
+    return pictures(
+      {
+        lang: D.lang,
+        groups: [
+          {
+            t: T.pronouns,
+            cards: D.who.map((p, k) => ({
+              t: p.w,
+              w: `${cap(p.w)} ${v.stem}[${v.end[k]}]`,
+              ic: p.ic,
+            })),
+          },
+        ],
+      },
+      {
+        key: "pron-",
+        dir: "",
+        group: T.grammar,
+        other: "",
+        what: ["", ""],
+        label: T.pronouns,
+        hd: "sp-pos",
+      },
+    );
+  }
+  function grammar() {
+    const D = window.SPEECH_GRAMMAR;
+    return { lang: D.lang, key: "gram-", group: T.grammar, items: [], D };
   }
 
   // Body words (body.js): the parts of one word, to build from letters.
@@ -1387,5 +1449,126 @@
     });
   }
 
-  ({ cards, say: cards, guess, build, fly, place })[view]();
+  /* ================= how the verb changes ================= */
+  // The parent's table «Хто що робить?»: the pronouns on top (their colours), a row per verb, each cell the verb's form
+  // with its ending in the pronoun's colour (sp-k0…). A tap says it: a cell «Він грає», a verb «грати», a pronoun «він».
+  function table() {
+    const { who: P, verbs: VB } = deck.D;
+    const pb = (x, k) =>
+      `<button type="button" class="sp-pb sp-k${k}" data-p="${k}"><span class="sp-emo${chars(x.ic).length > 1 ? " sp-emo2" : ""}" aria-hidden="true">${esc(x.ic)}</span>${esc(x.w)}</button>`;
+    app.innerHTML = `<section class="card sp-tablecard">
+      ${top()}
+      <h1 class="les-title">${esc(T.verbTable)}</h1>
+      <p class="sp-note">${esc(T.tableNote)}</p>
+      <div class="sp-tablewrap"><table class="sp-table">
+        <thead><tr><th></th>${P.map((x, k) => `<th>${pb(x, k)}</th>`).join("")}</tr></thead>
+        <tbody>${VB.map(
+          (v, i) =>
+            `<tr><th><button type="button" class="sp-vb" data-v="${i}"><span class="sp-emo" aria-hidden="true">${esc(v.ic)}</span>${esc(v.t)}</button></th>${v.end
+              .map(
+                (e, k) =>
+                  `<td><button type="button" class="sp-cell" data-v="${i}" data-p="${k}" aria-label="${esc(cap(P[k].w))} ${esc(v.stem + e)}">${esc(v.stem)}<b class="sp-e sp-k${k}">${esc(e)}</b></button></td>`,
+              )
+              .join("")}</tr>`,
+        ).join("")}</tbody>
+      </table></div>
+      ${WARN}
+    </section>`;
+    app.onclick = (e) => {
+      const b = e.target.closest("button[data-p], button[data-v]");
+      if (!b) return;
+      const { p, v } = b.dataset;
+      hush();
+      warn();
+      app
+        .querySelectorAll(".sp-cell")
+        .forEach((x) => x.setAttribute("aria-pressed", x === b));
+      if (p != null && v != null)
+        sound(`${cap(P[p].w)} ${VB[v].stem}${VB[v].end[p]}`);
+      else if (v != null) sound(VB[v].t);
+      else sound(P[p].w);
+    };
+    document.title = `${T.verbTable} · ${deck.group}`;
+  }
+
+  /* ================= who is doing what ================= */
+  // The parent's game «Хто що робить?»: choose who (Хто?) and the verb (Що робить?) in the panel, or 🎲 another card.
+  // The card shows «👦 він + 🧸 грати» and both pictures; he says the sentence; a tap on the card (Перевір) shows and says
+  // «Він грає» (the ending in the pronoun's colour); another choice hides it again.
+  function who() {
+    const { who: P, verbs: VB } = deck.D;
+    let p = Math.floor(Math.random() * P.length),
+      v = Math.floor(Math.random() * VB.length),
+      open = false;
+    const emo = (ic) =>
+      `<span class="sp-emo${chars(ic).length > 1 ? " sp-emo2" : ""}" aria-hidden="true">${esc(ic)}</span>`;
+    app.innerHTML = `<div class="sp-split">
+      <div class="sp-side">
+        <button type="button" class="sp-lcard sp-whocard" id="lcard"></button>
+        <button type="button" class="sp-snd" id="again" aria-label="${T.again}">${SPEAKER}</button>
+      </div>
+      <section class="card sp-panel">
+        ${top()}
+        <h1 class="les-title">${esc(T.whoGame)}</h1>
+        <div class="sp-pane">
+          <p class="sp-lbl">${esc(T.who)}</p>
+          <div class="sp-whos" role="group" aria-label="${esc(T.who)}">${P.map((x, k) => `<button type="button" class="sp-pb sp-k${k}" data-p="${k}">${emo(x.ic)}${esc(x.w)}</button>`).join("")}</div>
+          <p class="sp-lbl">${esc(T.doing)}</p>
+          <div class="sp-verbs" role="group" aria-label="${esc(T.doing)}">${VB.map((x, k) => `<button type="button" class="sp-vb" data-v="${k}">${emo(x.ic)}${esc(x.t)}</button>`).join("")}</div>
+          <button type="button" class="btn ghost" id="rnd">${esc(T.another)}</button>
+        </div>
+        ${WARN}
+      </section>
+    </div>`;
+    const lcard = document.getElementById("lcard");
+    const sentence = () => `${cap(P[p].w)} ${VB[v].stem}${VB[v].end[p]}`;
+    function show() {
+      const x = P[p],
+        y = VB[v];
+      const n = chars(x.ic).length + chars(y.ic).length; // emoji in the picture, for its size
+      lcard.className = `sp-lcard sp-whocard sp-p${p}`;
+      lcard.innerHTML = `<span class="sp-hd sp-chips"><span class="sp-chip sp-pb sp-k${p}">${esc(x.ic)} ${esc(x.w)}</span><span aria-hidden="true">+</span><span class="sp-chip sp-vb">${esc(y.ic)} ${esc(y.t)}</span></span>
+        <span class="sp-pic sp-twopic" style="--n:${n}" aria-hidden="true">${esc(x.ic)}${esc(y.ic)}</span>
+        <span class="sp-wd">${open ? `${esc(cap(x.w))} ${esc(y.stem)}<b class="sp-e sp-k${p}">${esc(y.end[p])}</b>` : `<span class="sp-try">🎤 ${T.saySent} <span class="sp-check">🔊 ${T.check}</span></span>`}</span>`;
+      lcard.setAttribute("aria-label", open ? sentence() : T.check);
+      document.getElementById("again").hidden = !open;
+      app
+        .querySelectorAll("[data-p]")
+        .forEach((b) => b.setAttribute("aria-pressed", +b.dataset.p === p));
+      app
+        .querySelectorAll("[data-v]")
+        .forEach((b) => b.setAttribute("aria-pressed", +b.dataset.v === v));
+    }
+    function speak() {
+      if (!open) {
+        open = true;
+        show();
+      }
+      hush();
+      warn();
+      sound(sentence());
+    }
+    lcard.onclick = speak;
+    document.getElementById("again").onclick = speak;
+    app.querySelector(".sp-pane").onclick = (e) => {
+      const b = e.target.closest("button");
+      if (!b) return;
+      if (b.dataset.p != null) p = +b.dataset.p;
+      else if (b.dataset.v != null) v = +b.dataset.v;
+      else if (b.id === "rnd") {
+        const [p0, v0] = [p, v];
+        while (p === p0 && v === v0) {
+          p = Math.floor(Math.random() * P.length);
+          v = Math.floor(Math.random() * VB.length);
+        }
+      } else return;
+      open = false;
+      hush();
+      show();
+    };
+    document.title = `${T.whoGame} · ${deck.group}`;
+    show(); // he speaks first; the voice only with Перевір
+  }
+
+  ({ cards, say: cards, guess, build, fly, place, table, who })[view]();
 })();

@@ -60,6 +60,8 @@ speech/                    ← Мовлення: speech games (school: "speech" 
     img/positions/         ← the position pictures, cut from the parent's posters (no labels, no frame), <name>-1.jpg / -2.jpg
     body/                  ← Частини тіла: cards.html, guess.html (data-deck="body"), build.html (data-deck="bodyWords"),
                               phrases.html, phrases-build.html, phrases-guess.html (data-deck="phrases" with ../body-phrases.js)
+    grammar/               ← Граматика: pronouns.html (cards, data-deck="pronouns"), table.html (data-view="table"),
+                              who.html (data-view="who"), the last two with data-deck="grammar" (../grammar.js)
     img/things/            ← the pictures of the parent's collage of cards (no labels), 300×300
     img/body/              ← the pictures of the parent's poster «Частини тіла й обличчя» (below the labels), 320px high; face = its big face
   en/                      ← English (<html lang="en">, a US voice, English interface): letters.js (26 letters, the voice says their names)
@@ -280,6 +282,11 @@ Games:
 - **Речення · Місця / Де я?** (`data-deck="where"`, the parent's board «Місця»): cards with the place big, its emoji and «Я [у школі]»;
   «Де я?» (`data-view="say"`, the cards view): the card asks «Де ти?» over the picture and hides the answer («🎤 Скажи сам!»); he says it,
   a tap on the card (Перевір) shows and says «Я у школі» (the answer only); another card hides it again and stays silent; the places done turn green.
+- **Граматика** (topic Grammar, the parent's boards «Хто що робить?»): Займенники (`data-deck="pronouns"`: a card per pronoun, its picture,
+  «Він гра[є]» with the example verb); Як змінюється дієслово (`data-view="table"`: the pronouns on top in their colours `sp-k0…sp-k6`,
+  a row per verb, each cell its form with the ending in the pronoun's colour; a tap says «Він грає», a verb or a pronoun alone);
+  Хто що робить? (`data-view="who"`: choose who and the verb, or 🎲; the card shows «👦 він + 🧸 грати» and both pictures,
+  he says the sentence, a tap on the card (Перевір) shows and says «Він грає»; another choice hides it again).
 - **Частини тіла** (topic Body): Картки (`data-deck="body"`: the word big, the poster picture, «Це моя [голова]»); Покажи (`data-view="guess"`:
   «🔊 Слухати» says the word, «🔤 Читати» shows it and says it only with 🔊 (`deck.read`); pictures that look alike share a family `f`
   and never come together); Склади слово (`data-deck="bodyWords"`: the one-word parts, no ’); Речення, Склади речення, Вгадай речення
@@ -315,6 +322,10 @@ cropped above its label (thin tile edges dropped, the tile background made white
 `verbs.js` format (`window.SPEECH_VERBS = {lang, groups}`), groups of everyday verbs (Вдома, Рухаюся, Вчуся і граю):
 `{t: "Вдома", cards: [{t: "їсти", w: "Я [їм]", pic: "eat"}, {t: "митися", w: "Я [миюся]", ic: "🛁"}, …]}`: `t` = the verb, `w` = how he says it
 about himself, `pic` = a picture in `img/things/` (precached through the Речення entry) or `ic` = an emoji when the collage has none.
+
+`grammar.js` format (`window.SPEECH_GRAMMAR = {lang, who, example, verbs}`): `who: [{w: "я", ic: "🙋‍♂️"}, …]` (7 pronouns, the order of
+the endings), `verbs: [{t: "грати", ic: "🧸", stem: "гра", end: ["ю", "єш", "є", "є", "ємо", "єте", "ють"]}, …]` (`stem + end[k]` = the form for
+`who[k]`), `example` = the index of the verb on the pronoun cards.
 
 `where.js` format (`window.SPEECH_WHERE = {lang, ask, game, groups}`): `ask` = the question («Де ти?»), `game` = the game's title («Де я?»),
 `groups: [{t: "Місця", cards: [{t: "школа", w: "Я [у школі]", ic: "🏫"}, …]}]`.

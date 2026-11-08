@@ -892,6 +892,141 @@
   }
 }
 
+/* Grammar: the pronouns' colours (--k, text --kt), the pronoun and verb buttons, the verb table, «Хто що робить?» */
+.sp-k0 {
+  --k: var(--cool);
+}
+.sp-k1 {
+  --k: var(--green);
+}
+.sp-k2 {
+  --k: var(--pe);
+}
+.sp-k3 {
+  --k: var(--ssa);
+}
+.sp-k4 {
+  --k: var(--other);
+}
+.sp-k5 {
+  --k: var(--ke);
+}
+.sp-k6 {
+  --k: var(--sci);
+  --kt: var(--sci-ink);
+}
+.sp-pb,
+.sp-vb,
+.sp-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 2px 2px 0 var(--ink);
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: 1.15rem;
+  line-height: 1.1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.sp-pb {
+  flex-direction: column;
+  gap: 2px;
+  background: color-mix(in srgb, var(--k) 25%, var(--card));
+}
+.sp-pb .sp-emo {
+  font-size: 1.6rem;
+}
+.sp-pb .sp-emo2 {
+  font-size: 1.1rem;
+}
+.sp-vb {
+  justify-content: flex-start;
+  background: color-mix(in srgb, var(--hl) 22%, var(--card));
+}
+.sp-vb .sp-emo {
+  font-size: 1.5rem;
+}
+.sp-cell {
+  display: block; /* the stem and its ending stay one word (no flex gap between them) */
+  text-align: center;
+  background: var(--card);
+  box-shadow: none;
+  border-width: 2px;
+  font-size: 1.25rem;
+}
+:is(.sp-pb, .sp-vb, .sp-cell)[aria-pressed="true"] {
+  outline: 3px solid var(--ink);
+  outline-offset: 1px;
+}
+.sp-vb[aria-pressed="true"] {
+  background: var(--hl);
+}
+/* a verb's ending in its pronoun's colour */
+.sp-e {
+  font-weight: 900;
+  color: var(--kt, color-mix(in srgb, var(--k) 80%, var(--ink)));
+}
+.sp-tablecard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sp-tablewrap {
+  overflow-x: auto;
+}
+.sp-table {
+  width: 100%;
+  min-width: 720px;
+  border-spacing: 6px;
+}
+.sp-table th,
+.sp-table td {
+  padding: 0;
+}
+.sp-table tbody th {
+  width: 150px;
+}
+.sp-lbl {
+  margin: 0;
+  font-family: "Nunito", var(--body);
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+.sp-whos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.sp-verbs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+/* the card: the chips «👦 він + 🧸 грати», both pictures (--n emoji in all), the sentence */
+.sp-hd.sp-chips {
+  gap: 0.4em;
+  font-size: min(8cqh, 5.5cqw);
+}
+.sp-chip {
+  width: auto;
+  flex-direction: row;
+  font-size: 1em;
+  padding: 0.25em 0.55em;
+}
+.sp-twopic {
+  white-space: nowrap;
+  font-size: min(24cqh, calc((100cqw - 40px) / var(--n) / 1.15));
+}
+/* the hidden answer on this card: smaller, so the pictures keep their room */
+.sp-whocard .sp-try {
+  font-size: 0.6em;
+}
 /* last, so it wins over the rules above: a phone held sideways: a smaller title, the letter to catch and the sky, so the game fits the screen */
 @media (orientation: landscape) and (max-height: 500px) {
   .sp-game {

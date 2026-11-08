@@ -59,6 +59,7 @@
     Sentences: "var(--speech)",
     Verbs: "var(--speech)",
     Body: "var(--speech)",
+    Grammar: "var(--speech)",
   };
   const ALL = window.GAMES || [];
   const esc = (s) =>

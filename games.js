@@ -2747,4 +2747,25 @@ window.GAMES = [
       "speech/ar/body/phrases-guess.html",
     ],
   },
+  {
+    school: "speech",
+    lang: "uk",
+    period: "Subjects",
+    subject: "Grammar",
+    title: "Граматика",
+    hub: true,
+    lesson: "Граматика · займенники, як змінюється дієслово, хто що робить?",
+    topics:
+      "я, ти, він, вона, ми, ви, вони; спати, пити, співати, читати, грати, плавати, писати, їсти, стрибати: Я граю, він грає…",
+    path: "speech/uk/grammar/index.html",
+    countLabel: "3 гри",
+    year: "2026–2027",
+    also: [
+      "speech/uk/grammar.js",
+      "speech/uk/grammar/list.js",
+      "speech/uk/grammar/pronouns.html",
+      "speech/uk/grammar/table.html",
+      "speech/uk/grammar/who.html",
+    ],
+  },
 ];
