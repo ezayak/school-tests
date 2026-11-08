@@ -239,7 +239,7 @@ window.CS_LESSONS = {
           path: "lesson-2.html",
           cover: "img/lesson-2/flower-parts.jpg",
           term: 2,
-          note: "10 picture cards · 4 games · book questions",
+          note: "10 picture cards · 4 games · 7 exercises",
         },
         {
           n: 3,

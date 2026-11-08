@@ -28,12 +28,12 @@ Book: `book/NA_Elevate_Gr4_T<topic>.pdf` (the lessons' Learn tab and "Book quest
 | 13   | T3 L3 Lesson Quiz 2–3 (seeing a dog; Noelle's spectrum)                     | `topic-3/lesson-3` · `quiz` 2 (dog steps, order), 3 (picture `spectrum`)                 | built           |
 | 14   | T3 L3 Lesson Quiz 4–5 (Cody's table)                                        | `topic-3/lesson-3` · `quiz` 4–5 (picture `cody-table`, drawn samples Q R S T)            | built           |
 | 15   | T3 L3 Lesson Quiz 6                                                         | `topic-3/lesson-3` · `quiz` 6                                                            | built           |
-| 16   | T7 L2 Practice sheet: Who am I 1–7; T or F 1–7                              | `topic-7/lesson-2`                                                                       | planned         |
-| 17   | T7 L2 Practice sheet: choose 1–7                                            | `topic-7/lesson-2`                                                                       | planned         |
-| 18   | T7 L2 Practice sheet: complete the table; write the external structure      | `topic-7/lesson-2`                                                                       | planned         |
-| 19   | T7 L2 Lesson Quiz 1–2 (cuticle; root systems)                               | `topic-7/lesson-2`                                                                       | planned         |
-| 20   | T7 L2 Lesson Quiz 3–4 (windy tree; botanist)                                | `topic-7/lesson-2`                                                                       | planned         |
-| 21   | T7 L2 Lesson Quiz 5–6 (flower parts; scattering seeds)                      | `topic-7/lesson-2`                                                                       | planned         |
+| 16   | T7 L2 Practice sheet: Who am I 1–7; T or F 1–7                              | `topic-7/lesson-2` · `ps-who` (7), `ps-tf` (7)                                           | built           |
+| 17   | T7 L2 Practice sheet: choose 1–7                                            | `topic-7/lesson-2` · `ps-choose` (7)                                                     | built           |
+| 18   | T7 L2 Practice sheet: complete the table; write the external structure      | `topic-7/lesson-2` · `ps-table` (6 questions: ovary and stamen), `ps-ext` (4)            | built           |
+| 19   | T7 L2 Lesson Quiz 1–2 (cuticle; root systems)                               | `topic-7/lesson-2` · `quiz` 1–2 (root systems cut into A–D: `roots-a` … `roots-d`)       | built           |
+| 20   | T7 L2 Lesson Quiz 3–4 (windy tree; botanist)                                | `topic-7/lesson-2` · `quiz` 3–5 (picture `windy-tree`)                                   | built           |
+| 21   | T7 L2 Lesson Quiz 5–6 (flower parts; scattering seeds)                      | `topic-7/lesson-2` · `quiz` 6–7 (seed pictures cut into A–D: `seed-a` … `seed-d`)        | built           |
 
 ## 20261107-L1-WAVE PROPERTIES.pdf (15 slides, the teacher's presentation for T3 L1, answers filled in)
 
