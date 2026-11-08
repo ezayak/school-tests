@@ -1219,6 +1219,13 @@ details.book[open] .alltext {
   font-size: 0.75rem;
   color: var(--muted);
 }
+/* a "Term 2" tag after "Lesson 4": line-height 1 so the line is as high as on a card without a tag */
+.item .n .term {
+  margin-left: 8px;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+}
 .item .t {
   font-family: var(--display);
   font-size: 1.6rem;

@@ -1,6 +1,6 @@
 // Science lessons for Grade 4 (Elevate Science), all terms. One entry per book topic (a folder topic-N/ with its lessons);
 // add one entry per lesson (and its files to "also" in games.js for offline use).
-// path and cover are relative to the topic folder.
+// path and cover are relative to the topic folder. term: 2 = the lesson has sheets in the Term 2 booklet (a "Term 2" tag on its card).
 window.CS_LESSONS = {
   grade: 4,
   part: "Topic",
@@ -96,6 +96,7 @@ window.CS_LESSONS = {
           en: "Crest, trough, amplitude, wavelength, frequency; transverse and longitudinal waves",
           path: "lesson-1.html",
           cover: "img/lesson-1/surfer.jpg",
+          term: 2,
           note: "12 picture cards · 4 games · book questions",
         },
         {
@@ -112,6 +113,7 @@ window.CS_LESSONS = {
           en: "Reflect, refract, absorb; how the eye sees colors; transparent, translucent, opaque; X-rays",
           path: "lesson-3.html",
           cover: "img/lesson-3/banana-eye.jpg",
+          term: 2,
           note: "11 picture cards · 4 games · book questions",
         },
         {
@@ -236,6 +238,7 @@ window.CS_LESSONS = {
           en: "Cuticle, thorns, bark, the parts of a flower, pollinators, how seeds travel",
           path: "lesson-2.html",
           cover: "img/lesson-2/flower-parts.jpg",
+          term: 2,
           note: "10 picture cards · 4 games · book questions",
         },
         {

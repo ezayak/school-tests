@@ -397,6 +397,18 @@ button:focus-visible {
   align-items: flex-end;
 }
 
+/* "Term 2" tag on a card: the English page (in the band) and the lesson lists (after "Lesson 4") */
+.item .term {
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 1px 10px;
+  background: var(--hl);
+  color: #1b2440;
+}
+
 /* menu tiles and small tool buttons */
 .modes {
   display: grid;
