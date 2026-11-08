@@ -72,6 +72,15 @@ window.CS_LESSONS = {
           // not in the Term 2 booklet: built from the book only
           term: "2*",
         },
+        {
+          n: 2,
+          title: "A New Nation",
+          en: "The American Revolution, the Declaration of Independence, the Constitution, the first president, the Louisiana Purchase, Lewis and Clark",
+          path: "lesson-2.html",
+          cover: "img/lesson-2/washington-army.jpg",
+          note: "21 picture cards · 2 stories · 4 games · 6 exercises",
+          term: 2,
+        },
       ],
     },
   ],
