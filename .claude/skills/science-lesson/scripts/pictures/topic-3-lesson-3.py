@@ -4,6 +4,7 @@
 import os
 import sys
 
+sys.dont_write_bytecode = True  # no __pycache__ next to draw.py
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from draw import BLUE, GRAY, H, INK, RED, W, arrow, canvas, label, save  # noqa: E402
 

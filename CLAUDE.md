@@ -193,6 +193,19 @@ Then:
 - Check with a script: every item has a picture, every `img` / `src` exists, every picture file is used and in `also`, every `path` and `hub` link opens.
 - Check in the browser: the English page (the tag), each tab and section of the lesson, every story page, one exercise of each type, the back links.
 
+## Science (Grade 4): lessons
+
+Folder `grade-4/science/topic-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Science">`, don't copy it; a lesson is only a data file). Format in README: "Science lessons (Grade 4)".
+All 30 book lessons are built; new sources (term booklets, the teacher's slides, school sheets) add exercises to them. Procedure, picture scripts and checks: the `science-lesson` skill.
+Sources: `~/Documents/2026-2027/Alex/Science/` (booklets, slides, sheets) and `book/` (Elevate Science). Alex has aphasia: the parent explains each question by pointing at the pictures.
+
+- Logs (Term 2 on), in `grade-4/science/`: `SOURCES.md` (every page → `file · exercise key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (answers without a school key; the teacher's filled-in slides are a key). Update them with every lesson, in the same commit.
+- Every question has a picture that explains it; every answer has a picture (`pics`) or emoji (`icons`); every sentence answer has an explanation (`x`). Pictures: explanation drawings `e-*.jpg` (PIL scripts in the skill), booklet crops (empty label boxes numbered in red), emoji or animated scenes (the page then loads `shared/common.js`).
+  Only the lessons being built or updated; older lessons stay as they are unless asked.
+- Booklet answers have no key: give the right one from the book, a `// unverified` reason in `UNVERIFIED.md`. Words missing or unreadable: never guess; ask.
+- `term: N` in `lessons.js` on a lesson with Term N booklet sheets (a "Term N" tag after "Lesson M"). One commit per lesson.
+- Then: files and pictures in `also` of the Science entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+
 ## Ukrainian reading (Optima, Grade 3)
 
 Folder `optima/grade-3/ukr-lit/`, engine `shared/reading.js` + `shared/reading.css` (don't copy them; a text is only a data file). Format in README: "Ukrainian reading".

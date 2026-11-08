@@ -51,6 +51,12 @@
           continue;
         }
         const ck = q(d, "#checkBtn");
+        // choose all (multi): tap one answer so Check works; a wrong first try then shows the answer
+        const mo = q(d, ".mopt:not([disabled])");
+        if (mo && ck && ck.disabled) {
+          mo.click();
+          continue;
+        }
         if (ck && !ck.disabled) {
           ck.click();
           continue;

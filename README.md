@@ -786,6 +786,12 @@ Lessons save their ticks under their own `key` (`sci4-t<topic>-l<lesson>`), beca
 Exercises come from the term booklet and the school sheets (`from:` names the sheet). When a lesson has no school sheet,
 its "Book questions" set uses the book's Lesson Check with model answers written from the book.
 
+Term 2 on, every source page is logged in `SOURCES.md` (with `TODO.md` and `UNVERIFIED.md`) in `grade-4/science/`, and a lesson with sheets from the Term N booklet has `term: N`
+in `lessons.js` (a "Term N" tag after "Lesson M" on its card, drawn by `Kit.lessonCard`).
+Lessons built from Term 2 on put a picture on every answer, for Alex (aphasia): an `mc(q, [[answer, picture], …], more)` helper at the top of the file splits the pictures into
+`pics` (file names: `e-*.jpg` explanation drawings made by the PIL scripts in `.claude/skills/science-lesson/scripts/pictures/`, booklet crops, `../lesson-1/…`) and `icons` (emoji),
+and every sentence answer has an explanation `x`. Animated emoji scenes (`vis: {kind: "scene", …}`) need `shared/common.js` loaded by the lesson page.
+
 After adding a lesson: add it to its topic in `lessons.js` (a new topic: a new `topic-N/` folder and a new entry in `chapters`),
 add its files (not the videos) to the `also: [...]` list of the Science entry in `games.js`, and bump `VERSION` in `sw.js`.
 
