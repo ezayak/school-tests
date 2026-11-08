@@ -482,7 +482,8 @@
       head: (it) => ({ c: o.hd, html: esc(it.name) }),
       pic: (it) => img(it),
       picCls: "sp-photos",
-      word: (it) => esc(it.w).replace(/\[(.+?)\]/, `<b class="sp-posw">$1</b>`),
+      word: (it) =>
+        esc(it.w).replace(/\[(.+?)\]/g, `<b class="sp-posw">$1</b>`), // every [ ] (Arabic «[يَ]لْعَبُ[ونَ]»)
       hint: (it) => esc(it.name),
       tile: (it) => ({ c: "sp-photo", html: img(it) }),
       page: (i) => items[i].g,
@@ -665,6 +666,14 @@
   function cap(w) {
     return w.charAt(0).toUpperCase() + w.slice(1);
   }
+  // a verb's form for who[k], the changing parts in [ ]: stem + [end[k]] («гра[є]»; no [ ] for an empty ending: «play»),
+  // or the data's own forms[k] when the start changes too (Arabic «[يَ]لْعَبُ[ونَ]»); formHtml: the parts in the pronoun's colour
+  function form(v, k) {
+    if (v.forms) return v.forms[k];
+    return v.end[k] ? `${v.stem}[${v.end[k]}]` : v.stem;
+  }
+  const formHtml = (v, k) =>
+    esc(form(v, k)).replace(/\[(.+?)\]/g, `<b class="sp-e sp-k${k}">$1</b>`);
 
   // Grammar (window.SPEECH_GRAMMAR, grammar.js): the pronouns and the verb forms. pronouns: a card per pronoun (я, ти, він…),
   // its picture and «Він гра[є]» (the example verb); grammar: the data for the table and «Хто що робить?» (deck.D).
@@ -679,7 +688,7 @@
             t: T.pronouns,
             cards: D.who.map((p, k) => ({
               t: p.w,
-              w: `${cap(p.w)} ${v.stem}[${v.end[k]}]`,
+              w: `${cap(p.w)} ${form(v, k)}`,
               ic: p.ic,
             })),
           },
@@ -1464,12 +1473,10 @@
         <thead><tr><th></th>${P.map((x, k) => `<th>${pb(x, k)}</th>`).join("")}</tr></thead>
         <tbody>${VB.map(
           (v, i) =>
-            `<tr><th><button type="button" class="sp-vb" data-v="${i}"><span class="sp-emo" aria-hidden="true">${esc(v.ic)}</span>${esc(v.t)}</button></th>${v.end
-              .map(
-                (e, k) =>
-                  `<td><button type="button" class="sp-cell" data-v="${i}" data-p="${k}" aria-label="${esc(cap(P[k].w))} ${esc(v.stem + e)}">${esc(v.stem)}<b class="sp-e sp-k${k}">${esc(e)}</b></button></td>`,
-              )
-              .join("")}</tr>`,
+            `<tr><th><button type="button" class="sp-vb" data-v="${i}"><span class="sp-emo" aria-hidden="true">${esc(v.ic)}</span>${esc(v.t)}</button></th>${P.map(
+              (x, k) =>
+                `<td><button type="button" class="sp-cell" data-v="${i}" data-p="${k}" aria-label="${esc(cap(x.w))} ${esc(plain(form(v, k)))}">${formHtml(v, k)}</button></td>`,
+            ).join("")}</tr>`,
         ).join("")}</tbody>
       </table></div>
       ${WARN}
@@ -1484,7 +1491,7 @@
         .querySelectorAll(".sp-cell")
         .forEach((x) => x.setAttribute("aria-pressed", x === b));
       if (p != null && v != null)
-        sound(`${cap(P[p].w)} ${VB[v].stem}${VB[v].end[p]}`);
+        sound(`${cap(P[p].w)} ${plain(form(VB[v], p))}`);
       else if (v != null) sound(VB[v].t);
       else sound(P[p].w);
     };
@@ -1521,15 +1528,16 @@
       </section>
     </div>`;
     const lcard = document.getElementById("lcard");
-    const sentence = () => `${cap(P[p].w)} ${VB[v].stem}${VB[v].end[p]}`;
+    const sentence = () => `${cap(P[p].w)} ${plain(form(VB[v], p))}`;
     function show() {
       const x = P[p],
         y = VB[v];
       const n = chars(x.ic).length + chars(y.ic).length; // emoji in the picture, for its size
       lcard.className = `sp-lcard sp-whocard sp-p${p}`;
-      lcard.innerHTML = `<span class="sp-hd sp-chips"><span class="sp-chip sp-pb sp-k${p}">${esc(x.ic)} ${esc(x.w)}</span><span aria-hidden="true">+</span><span class="sp-chip sp-vb">${esc(y.ic)} ${esc(y.t)}</span></span>
-        <span class="sp-pic sp-twopic" style="--n:${n}" aria-hidden="true">${esc(x.ic)}${esc(y.ic)}</span>
-        <span class="sp-wd">${open ? `${esc(cap(x.w))} ${esc(y.stem)}<b class="sp-e sp-k${p}">${esc(y.end[p])}</b>` : `<span class="sp-try">🎤 ${T.saySent} <span class="sp-check">🔊 ${T.check}</span></span>`}</span>`;
+      // each emoji group in its own span (sp-ltr): a pair (🫵👥) keeps its order on a right-to-left page
+      lcard.innerHTML = `<span class="sp-hd sp-chips"><span class="sp-chip sp-pb sp-k${p}"><span class="sp-ltr">${esc(x.ic)}</span> ${esc(x.w)}</span><span aria-hidden="true">+</span><span class="sp-chip sp-vb"><span class="sp-ltr">${esc(y.ic)}</span> ${esc(y.t)}</span></span>
+        <span class="sp-pic sp-twopic" style="--n:${n}" aria-hidden="true"><span class="sp-ltr">${esc(x.ic)}</span><span class="sp-ltr">${esc(y.ic)}</span></span>
+        <span class="sp-wd">${open ? `${esc(cap(x.w))} ${formHtml(y, p)}` : `<span class="sp-try">🎤 ${T.saySent} <span class="sp-check">🔊 ${T.check}</span></span>`}</span>`;
       lcard.setAttribute("aria-label", open ? sentence() : T.check);
       document.getElementById("again").hidden = !open;
       app

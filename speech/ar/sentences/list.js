@@ -3,7 +3,7 @@
 window.SPEECH_LIST = {
   title: "الْجُمَل · Sentences",
   intro:
-    "Choose a game. Positions: look where things are and listen to the sentence. Guess the position: listen to the word and find the picture. Put it there: read or listen, and put the thing in its place. I want: say what you want, what to give you, what you need. Build the sentence: put the words in order. Guess the sentence: listen and find the picture.",
+    "Choose a game. Positions: look where things are and listen to the sentence. Guess the position: listen to the word and find the picture. Put it there: read or listen, and put the thing in its place. I want: say what you want, what to give you, what you need. Build the sentence: put the words in order. Guess the sentence: listen and find the picture. Places: where am I? Where am I?: say where you are, then check.",
   items: [
     {
       n: 1,
@@ -52,6 +52,22 @@ window.SPEECH_LIST = {
       path: "phrases-guess.html",
       ic: "🙉",
       note: "All or one start · 10 a game",
+    },
+    {
+      n: 7,
+      title: "Places",
+      en: "مَدْرَسَة، بَيْت، حَدِيقَة… أَنَا فِي الْمَدْرَسَةِ",
+      path: "where.html",
+      ic: "🏫",
+      note: "20 places",
+    },
+    {
+      n: 8,
+      title: "Where am I?",
+      en: "أَيْنَ أَنْتَ؟ Say it yourself, then check",
+      path: "where-say.html",
+      ic: "🗺️",
+      note: "20 places",
     },
   ],
 };

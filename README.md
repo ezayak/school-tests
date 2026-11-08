@@ -327,6 +327,11 @@ about himself, `pic` = a picture in `img/things/` (precached through the Реч�
 the endings), `verbs: [{t: "грати", ic: "🧸", stem: "гра", end: ["ю", "єш", "є", "є", "ємо", "єте", "ють"]}, …]` (`stem + end[k]` = the form for
 `who[k]`), `example` = the index of the verb on the pronoun cards.
 
+English and Arabic (`speech/en/…`, `speech/ar/…`, the same pages): `where.js` («I am [at school]», «أَنَا [فِي الْمَدْرَسَةِ]»; ask / game in the
+language) and `grammar.js`. English has 6 pronouns (no separate plural «you») and an ending only for he / she (`end: ["", "", "s", "s", "", ""]`);
+Arabic changes the start of the verb too, so its verbs give `forms` with the changing parts in [ ] («[تَ]لْعَبُ[ونَ]»), each part in the
+pronoun's colour. On a right-to-left page an emoji pair keeps its order (`sp-emo` / `sp-ltr` are isolated left-to-right).
+
 `where.js` format (`window.SPEECH_WHERE = {lang, ask, game, groups}`): `ask` = the question («Де ти?»), `game` = the game's title («Де я?»),
 `groups: [{t: "Місця", cards: [{t: "школа", w: "Я [у школі]", ic: "🏫"}, …]}]`.
 

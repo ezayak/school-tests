@@ -2512,11 +2512,11 @@ window.GAMES = [
     title: "Sentences",
     hub: true,
     lesson:
-      "Sentences · positions, guess the position, put it there, I want…, build the sentence, guess the sentence",
+      "Sentences · positions, guess the position, put it there, I want…, build the sentence, guess the sentence, places, where am I?",
     topics:
       "on, under, near, next to, inside, in, in front of, behind, between, above: where things are, in sentences with pictures; I want to eat…, Give me…, I don’t want to…, I need to…",
     path: "speech/en/sentences/index.html",
-    countLabel: "6 games",
+    countLabel: "8 games",
     year: "2026–2027",
     also: [
       "speech/en/positions.js",
@@ -2529,6 +2529,9 @@ window.GAMES = [
       "speech/en/sentences/phrases.html",
       "speech/en/sentences/phrases-build.html",
       "speech/en/sentences/phrases-guess.html",
+      "speech/en/where.js",
+      "speech/en/sentences/where.html",
+      "speech/en/sentences/where-say.html",
     ],
   },
   {
@@ -2583,11 +2586,11 @@ window.GAMES = [
     title: "الْجُمَل · Sentences",
     hub: true,
     lesson:
-      "Sentences · positions, guess the position, put it there, I want…, build the sentence, guess the sentence",
+      "Sentences · positions, guess the position, put it there, I want…, build the sentence, guess the sentence, places, where am I?",
     topics:
       "عَلَى، تَحْتَ، قُرْبَ، بِجَانِبِ، دَاخِلَ، فِي، أَمَامَ، خَلْفَ، بَيْنَ، فَوْقَ: where things are, in sentences with pictures; أُرِيدُ أَنْ آكُلَ…، أَعْطِنِي…، لَا أُرِيدُ أَنْ…، أَحْتَاجُ أَنْ…",
     path: "speech/ar/sentences/index.html",
-    countLabel: "6 games",
+    countLabel: "8 games",
     year: "2026–2027",
     also: [
       "speech/ar/positions.js",
@@ -2600,6 +2603,9 @@ window.GAMES = [
       "speech/ar/sentences/phrases.html",
       "speech/ar/sentences/phrases-build.html",
       "speech/ar/sentences/phrases-guess.html",
+      "speech/ar/where.js",
+      "speech/ar/sentences/where.html",
+      "speech/ar/sentences/where-say.html",
     ],
   },
   {
@@ -2766,6 +2772,48 @@ window.GAMES = [
       "speech/uk/grammar/pronouns.html",
       "speech/uk/grammar/table.html",
       "speech/uk/grammar/who.html",
+    ],
+  },
+  {
+    school: "speech",
+    lang: "en",
+    period: "Subjects",
+    subject: "Grammar",
+    title: "Grammar",
+    hub: true,
+    lesson: "Grammar · pronouns, how the verb changes, who is doing what?",
+    topics:
+      "I, you, he, she, we, they; sleep, drink, sing, read, play, swim, write, eat, jump: I play, he plays…",
+    path: "speech/en/grammar/index.html",
+    countLabel: "3 games",
+    year: "2026–2027",
+    also: [
+      "speech/en/grammar.js",
+      "speech/en/grammar/list.js",
+      "speech/en/grammar/pronouns.html",
+      "speech/en/grammar/table.html",
+      "speech/en/grammar/who.html",
+    ],
+  },
+  {
+    school: "speech",
+    lang: "ar",
+    period: "Subjects",
+    subject: "Grammar",
+    title: "الْقَوَاعِدُ · Grammar",
+    hub: true,
+    lesson: "Grammar · pronouns, how the verb changes, who is doing what?",
+    topics:
+      "أَنَا، أَنْتَ، هُوَ، هِيَ، نَحْنُ، أَنْتُمْ، هُمْ؛ أَنَامُ، أَشْرَبُ، أَرْسُمُ، أَقْرَأُ، أَلْعَبُ…: أَنَا أَلْعَبُ، هُوَ يَلْعَبُ…",
+    path: "speech/ar/grammar/index.html",
+    countLabel: "3 games",
+    year: "2026–2027",
+    also: [
+      "speech/ar/grammar.js",
+      "speech/ar/grammar/list.js",
+      "speech/ar/grammar/pronouns.html",
+      "speech/ar/grammar/table.html",
+      "speech/ar/grammar/who.html",
     ],
   },
 ];
