@@ -1,0 +1,45 @@
+# Social Studies · Grade 4: sources (Term 2 on)
+
+Every source file used for the Social Studies lessons from Term 2 on, page by page: what the page was built into, or why it was skipped.
+When new files come, compare them with this list and build only what is missing. Then add the file here.
+Term 1 sources (the teacher's slides, the Term 1 booklet, graded homework) are in the `// Sources:` line at the top of `chapter-1/lesson-1.js` … `lesson-3.js`.
+
+Status: **built** (file · exercise key) · **planned** (not built yet) · **skipped** (why) · **waiting** (see [TODO.md](TODO.md)).
+Answers without a school key are listed in [UNVERIFIED.md](UNVERIFIED.md).
+
+Source folder: `~/Documents/2026-2027/Alex/S.S.English/`. Booklet page = the PDF page (= the number printed at the bottom right).
+
+## The book: `book/001.png` … `250.png` (myWorld Interactive 4, Savvas; two-page spreads, 1368×858)
+
+Book pages are the printed numbers. Spread `n` = pages 2(n−27) and 2(n−27)+1 in Chapter 1 (041 = pp. 28–29); check the printed number on every spread,
+the scan repeats some spreads (047 and 048 are both pp. 40–41).
+
+| Pages | Content                                                                       | Goes to                                                                     | Status                                                  |
+| ----- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------- |
+| 28    | Lesson 4 opener: vocabulary, Unlock the Big Question, Jumpstart Activity      | `chapter-1/lesson-4` · words, `question`, card "Where people live"          | built (Jumpstart skipped: a class discussion)           |
+| 29    | People Adapt to the Environment; Quest Connection; Reading Check 1            | `chapter-1/lesson-4` · cards 2–6, `check` 1 (Quest Connection in `check` 6) | built                                                   |
+| 30    | People Change the Environment; Primary Source (A. C. Clarke); Word Wise       | `chapter-1/lesson-4` · cards 7–9                                            | built (the quote and Word Wise skipped: reading skills) |
+| 31    | Irrigation, the Ogallala Aquifer (map); Reading Check 2                       | `chapter-1/lesson-4` · cards 10–13, `check` 2                               | built                                                   |
+| 32–33 | Saving Resources with Technology; Reading Check 3 (chart); Lesson 4 Check 4–6 | `chapter-1/lesson-4` · cards 14–17, `check` 3 (choose all), 4–6 (open)      | built                                                   |
+| 34–35 | Literacy Skills: Summarize (a text on the US regions)                         | —                                                                           | skipped (a reading skill, not Lesson 4 content)         |
+| 36    | Citizenship: Marjory Stoneman Douglas; Find Out More 1–2                      | `chapter-1/story-douglas` (story, no questions), tile in `lesson-4` Learn   | built (Find Out More skipped: no questions in stories)  |
+| 37    | Chapter 1 Visual Review                                                       | —                                                                           | waiting (see TODO.md)                                   |
+| 38–41 | Chapter 1 Assessment, Analyze Primary Sources, Quest Findings                 | —                                                                           | waiting (see TODO.md)                                   |
+
+## 20261105-G4- Social Studies - Term Two.pdf (18 pages, text layer; also in `!booklets/`)
+
+| Page  | Content                                                                         | Goes to                                                                        | Status                       |
+| ----- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ---------------------------- |
+| 1     | Cover                                                                           | —                                                                              | skipped (cover)              |
+| 2     | Contents: Ch1 L4, Ch2 L2, Ch2 L3                                                | —                                                                              | skipped (contents)           |
+| 3–4   | Ch1 L4 exercise sheet A: choose 1–17                                            | `chapter-1/lesson-4` · `bk-choose` (17)                                        | built                        |
+| 5     | Ch1 L4 exercise sheet B: match 1–6; C: answer 1                                 | `chapter-1/lesson-4` · `bk-match` (2 × 3 pairs), `bk-answer` (1)               | built                        |
+| 6     | Irrigation (a drawing)                                                          | `chapter-1/lesson-4` · picture `irrigation-drawing` (card "Irrigation", games) | built                        |
+| 7     | Notes                                                                           | —                                                                              | skipped (empty lines)        |
+| 8–10  | Ch2 L2 A New Nation: A fill the blanks 1–7; B ✓/✗ 1–7; C choose 1–12; D answer  | Chapter 2 Lesson 2                                                             | planned                      |
+| 11    | Notes                                                                           | —                                                                              | skipped (empty lines)        |
+| 12    | The First Continental Congress (a drawing to colour)                            | Chapter 2 Lesson 2 (picture)                                                   | planned                      |
+| 13    | American flag worksheet: colour; shape; stripes; what the colours mean          | Chapter 2 Lesson 2                                                             | planned (colouring left out) |
+| 14–16 | Ch2 L3 Growth and Civil War: A choose 1–10; B fill 1–7; E ✓/✗ 1–7; F answer 1–2 | Chapter 2 Lesson 3                                                             | planned                      |
+| 17    | Notes                                                                           | —                                                                              | skipped (empty lines)        |
+| 18    | Civil War word search                                                           | Chapter 2 Lesson 3                                                             | planned                      |
