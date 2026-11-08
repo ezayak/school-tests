@@ -97,7 +97,7 @@ What to build: `uN-lesson-M.js` + `uN-lesson-M.html` (copy u2-lesson-4.html), pi
   (one part per word, `para` = the word, `ar` = the book's meaning), pictures reused from the lessons the verses come from.
 - Verse: the golden verse (الآية الذهبية) in `verses`, with 3–4 `gaps` (right word first; each right word once in the verse).
 - Item types: "من أنا" / choose → `mc` (with `q: "… أَنَا ___"`); word bank → one `mc` per gap, the bank as the section's `rule` with `t: "📝 The words · الْكَلِمَاتُ"`;
-  ✓ / ✗ → `tf` with `x` (why it is false); write / what would you do / picture-and-event → `open` with a model answer and a `help` question (`[ar, en, uk]` options).
+  ✓ / ✗ → `tf` with `x` (why it is false); صِلْ / match → `match` with `pairs: [{l, r, en: [l, r], uk: [l, r]}]` (a translation for both sides); write / what would you do / picture-and-event → `open` with a model answer and a `help` question (`[ar, en, uk]` options).
   Colouring and drawing activities are left out.
 
 Rules:

@@ -582,6 +582,8 @@ small activity pictures ~300px). Same format as an Arabic lesson (`stories`, `gl
 - Story: the book text in short parts with full tashkeel, a picture on each part, `en` / `uk` for each part; the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.
 - Games: every أنشطة والممارسات activity of the lesson, one section each (who am I → `mc`; writing → `open` with a model answer and a `help` question).
   Each section's `en` / `uk` starts with its book page: `"Activity 2 (p. 8): …"`, `"Завдання 2 (с. 8): …"`.
+- Matching (`type: "match"`, صِلْ / كلمة ومعنى): `pairs: [{l, r, en: [left, right], uk: [left, right]}]`; both sides show the translation of the chosen language and are read aloud when tapped.
+  (The Arabic lessons still use the older `[left, right, English of right]`.)
 - Memory-verse lessons (المحفوظات, `u1-lesson-2`, `u2-lesson-2`, `u3-lesson-2`): tabs verse · story · games; the verses in `verses`, the word list (المفردات) as the story (`t: "Words"`).
 - The lesson's أسئلة الدرس part is a Games section too (fill the gaps from the word bank → one `mc` per gap, the word bank as the section's `rule` with `t: "📝 The words · الْكَلِمَاتُ"`).
 - Homework (`tab: "hw"`): only the page the teacher actually gave (the parent sends a photo). A page from another lesson belongs to that lesson:
