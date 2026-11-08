@@ -12,28 +12,28 @@ Book: `book/NA_Elevate_Gr4_T<topic>.pdf` (the lessons' Learn tab and "Book quest
 
 ## 20261107-G4-Science Term2-Booklet- 2026-2027.pdf (21 pages, text layer)
 
-| Page | Content                                                                     | Goes to                                                                        | Status          |
-| ---- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------- |
-| 1    | Cover                                                                       | —                                                                              | skipped (cover) |
-| 2    | T3 L1 Practice sheet: 1 label the wave; 2 choose a–c                        | `topic-3/lesson-1` · `ps-label` (boxes 1–4, picture `label-wave`), `ps-choose` | built           |
-| 3    | T3 L1 Practice sheet: 2 choose d–g; 3 label the longitudinal wave           | `topic-3/lesson-1` · `ps-choose`, `ps-label` (boxes 1–3 + type, `label-long`)  | built           |
-| 4    | T3 L1 Lesson Quiz 1–2 (Gabriella's wave, perpendicular / parallel)          | `topic-3/lesson-1` · `quiz` (same wave as p. 2: picture `label-wave`)          | built           |
-| 5    | T3 L1 Lesson Quiz 3–5 (Armando's table, pictures 1 and 2)                   | `topic-3/lesson-1` · `quiz` (pictures `wave-table`, `armando-waves`)           | built           |
-| 6    | T3 L1 Lesson Quiz 6 (ocean wave and raft)                                   | `topic-3/lesson-1` · `quiz`                                                    | built           |
-| 7–8  | T3 L3 Practice sheet: 1 choose 1–13; 2 complete the parts of the eye        | `topic-3/lesson-3`                                                             | planned         |
-| 9    | T3 L3 Practice sheet: 3 label the eye; 4 transparent / translucent / opaque | `topic-3/lesson-3`                                                             | planned         |
-| 10   | T3 L3 Practice sheet: 5 choose A–F                                          | `topic-3/lesson-3`                                                             | planned         |
-| 11   | T3 L3 Practice sheet: 5 G (spectrum); 6 order: seeing a lion                | `topic-3/lesson-3`                                                             | planned         |
-| 12   | T3 L3 Lesson Quiz 1 (camera and eye)                                        | `topic-3/lesson-3`                                                             | planned         |
-| 13   | T3 L3 Lesson Quiz 2–3 (seeing a dog; Noelle's spectrum)                     | `topic-3/lesson-3`                                                             | planned         |
-| 14   | T3 L3 Lesson Quiz 4–5 (Cody's table)                                        | `topic-3/lesson-3`                                                             | planned         |
-| 15   | T3 L3 Lesson Quiz 6                                                         | `topic-3/lesson-3`                                                             | planned         |
-| 16   | T7 L2 Practice sheet: Who am I 1–7; T or F 1–7                              | `topic-7/lesson-2`                                                             | planned         |
-| 17   | T7 L2 Practice sheet: choose 1–7                                            | `topic-7/lesson-2`                                                             | planned         |
-| 18   | T7 L2 Practice sheet: complete the table; write the external structure      | `topic-7/lesson-2`                                                             | planned         |
-| 19   | T7 L2 Lesson Quiz 1–2 (cuticle; root systems)                               | `topic-7/lesson-2`                                                             | planned         |
-| 20   | T7 L2 Lesson Quiz 3–4 (windy tree; botanist)                                | `topic-7/lesson-2`                                                             | planned         |
-| 21   | T7 L2 Lesson Quiz 5–6 (flower parts; scattering seeds)                      | `topic-7/lesson-2`                                                             | planned         |
+| Page | Content                                                                     | Goes to                                                                                  | Status          |
+| ---- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------- |
+| 1    | Cover                                                                       | —                                                                                        | skipped (cover) |
+| 2    | T3 L1 Practice sheet: 1 label the wave; 2 choose a–c                        | `topic-3/lesson-1` · `ps-label` (boxes 1–4, picture `label-wave`), `ps-choose`           | built           |
+| 3    | T3 L1 Practice sheet: 2 choose d–g; 3 label the longitudinal wave           | `topic-3/lesson-1` · `ps-choose`, `ps-label` (boxes 1–3 + type, `label-long`)            | built           |
+| 4    | T3 L1 Lesson Quiz 1–2 (Gabriella's wave, perpendicular / parallel)          | `topic-3/lesson-1` · `quiz` (same wave as p. 2: picture `label-wave`)                    | built           |
+| 5    | T3 L1 Lesson Quiz 3–5 (Armando's table, pictures 1 and 2)                   | `topic-3/lesson-1` · `quiz` (pictures `wave-table`, `armando-waves`)                     | built           |
+| 6    | T3 L1 Lesson Quiz 6 (ocean wave and raft)                                   | `topic-3/lesson-1` · `quiz`                                                              | built           |
+| 7–8  | T3 L3 Practice sheet: 1 choose 1–13; 2 complete the parts of the eye        | `topic-3/lesson-3` · `ps-choose` (1–8), `ps-eye` (9–13 and 2: complete the parts)        | built           |
+| 9    | T3 L3 Practice sheet: 3 label the eye; 4 transparent / translucent / opaque | `topic-3/lesson-3` · `ps-label` (boxes 1–4, picture `label-eye`), `ps-sort` (12 objects) | built           |
+| 10   | T3 L3 Practice sheet: 5 choose A–F                                          | `topic-3/lesson-3` · `ps-spectrum` A–F                                                   | built           |
+| 11   | T3 L3 Practice sheet: 5 G (spectrum); 6 order: seeing a lion                | `topic-3/lesson-3` · `ps-spectrum` G (choose all), lion steps (order)                    | built           |
+| 12   | T3 L3 Lesson Quiz 1 (camera and eye)                                        | `topic-3/lesson-3` · `quiz` 1 (3 questions, picture `camera-eye`)                        | built           |
+| 13   | T3 L3 Lesson Quiz 2–3 (seeing a dog; Noelle's spectrum)                     | `topic-3/lesson-3` · `quiz` 2 (dog steps, order), 3 (picture `spectrum`)                 | built           |
+| 14   | T3 L3 Lesson Quiz 4–5 (Cody's table)                                        | `topic-3/lesson-3` · `quiz` 4–5 (picture `cody-table`, drawn samples Q R S T)            | built           |
+| 15   | T3 L3 Lesson Quiz 6                                                         | `topic-3/lesson-3` · `quiz` 6                                                            | built           |
+| 16   | T7 L2 Practice sheet: Who am I 1–7; T or F 1–7                              | `topic-7/lesson-2`                                                                       | planned         |
+| 17   | T7 L2 Practice sheet: choose 1–7                                            | `topic-7/lesson-2`                                                                       | planned         |
+| 18   | T7 L2 Practice sheet: complete the table; write the external structure      | `topic-7/lesson-2`                                                                       | planned         |
+| 19   | T7 L2 Lesson Quiz 1–2 (cuticle; root systems)                               | `topic-7/lesson-2`                                                                       | planned         |
+| 20   | T7 L2 Lesson Quiz 3–4 (windy tree; botanist)                                | `topic-7/lesson-2`                                                                       | planned         |
+| 21   | T7 L2 Lesson Quiz 5–6 (flower parts; scattering seeds)                      | `topic-7/lesson-2`                                                                       | planned         |
 
 ## 20261107-L1-WAVE PROPERTIES.pdf (15 slides, the teacher's presentation for T3 L1, answers filled in)
 

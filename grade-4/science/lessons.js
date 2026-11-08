@@ -114,7 +114,7 @@ window.CS_LESSONS = {
           path: "lesson-3.html",
           cover: "img/lesson-3/banana-eye.jpg",
           term: 2,
-          note: "11 picture cards · 4 games · book questions",
+          note: "11 picture cards · 4 games · 7 exercises",
         },
         {
           n: 4,
