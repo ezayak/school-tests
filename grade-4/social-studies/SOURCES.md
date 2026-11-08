@@ -11,20 +11,28 @@ Source folder: `~/Documents/2026-2027/Alex/S.S.English/`. Booklet page = the PDF
 
 ## The book: `book/001.png` … `250.png` (myWorld Interactive 4, Savvas; two-page spreads, 1368×858)
 
-Book pages are the printed numbers. Spread `n` = pages 2(n−27) and 2(n−27)+1 in Chapter 1 (041 = pp. 28–29); check the printed number on every spread,
-the scan repeats some spreads (047 and 048 are both pp. 40–41).
+Book pages are the printed numbers. Spread `n` = pages 2(n−27) and 2(n−27)+1 in Chapter 1 (041 = pp. 28–29), 2(n−28) and 2(n−28)+1 in Chapter 2 (052 = pp. 48–49):
+the scan repeats some spreads (047 and 048 are both pp. 40–41), so check the printed number on every spread.
 
-| Pages | Content                                                                       | Goes to                                                                     | Status                                                  |
-| ----- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------- |
-| 28    | Lesson 4 opener: vocabulary, Unlock the Big Question, Jumpstart Activity      | `chapter-1/lesson-4` · words, `question`, card "Where people live"          | built (Jumpstart skipped: a class discussion)           |
-| 29    | People Adapt to the Environment; Quest Connection; Reading Check 1            | `chapter-1/lesson-4` · cards 2–6, `check` 1 (Quest Connection in `check` 6) | built                                                   |
-| 30    | People Change the Environment; Primary Source (A. C. Clarke); Word Wise       | `chapter-1/lesson-4` · cards 7–9                                            | built (the quote and Word Wise skipped: reading skills) |
-| 31    | Irrigation, the Ogallala Aquifer (map); Reading Check 2                       | `chapter-1/lesson-4` · cards 10–13, `check` 2                               | built                                                   |
-| 32–33 | Saving Resources with Technology; Reading Check 3 (chart); Lesson 4 Check 4–6 | `chapter-1/lesson-4` · cards 14–17, `check` 3 (choose all), 4–6 (open)      | built                                                   |
-| 34–35 | Literacy Skills: Summarize (a text on the US regions)                         | —                                                                           | skipped (a reading skill, not Lesson 4 content)         |
-| 36    | Citizenship: Marjory Stoneman Douglas; Find Out More 1–2                      | `chapter-1/story-douglas` (story, no questions), tile in `lesson-4` Learn   | built (Find Out More skipped: no questions in stories)  |
-| 37    | Chapter 1 Visual Review                                                       | —                                                                           | waiting (see TODO.md)                                   |
-| 38–41 | Chapter 1 Assessment, Analyze Primary Sources, Quest Findings                 | —                                                                           | waiting (see TODO.md)                                   |
+| Pages | Content                                                                            | Goes to                                                                      | Status                                                      |
+| ----- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| 28    | Lesson 4 opener: vocabulary, Unlock the Big Question, Jumpstart Activity           | `chapter-1/lesson-4` · words, `question`, card "Where people live"           | built (Jumpstart skipped: a class discussion)               |
+| 29    | People Adapt to the Environment; Quest Connection; Reading Check 1                 | `chapter-1/lesson-4` · cards 2–6, `check` 1 (Quest Connection in `check` 6)  | built                                                       |
+| 30    | People Change the Environment; Primary Source (A. C. Clarke); Word Wise            | `chapter-1/lesson-4` · cards 7–9                                             | built (the quote and Word Wise skipped: reading skills)     |
+| 31    | Irrigation, the Ogallala Aquifer (map); Reading Check 2                            | `chapter-1/lesson-4` · cards 10–13, `check` 2                                | built                                                       |
+| 32–33 | Saving Resources with Technology; Reading Check 3 (chart); Lesson 4 Check 4–6      | `chapter-1/lesson-4` · cards 14–17, `check` 3 (choose all), 4–6 (open)       | built                                                       |
+| 34–35 | Literacy Skills: Summarize (a text on the US regions)                              | —                                                                            | skipped (a reading skill, not Lesson 4 content)             |
+| 36    | Citizenship: Marjory Stoneman Douglas; Find Out More 1–2                           | `chapter-1/story-douglas` (story, no questions), tile in `lesson-4` Learn    | built (Find Out More skipped: no questions in stories)      |
+| 37    | Chapter 1 Visual Review                                                            | —                                                                            | waiting (see TODO.md)                                       |
+| 38–41 | Chapter 1 Assessment, Analyze Primary Sources, Quest Findings                      | —                                                                            | waiting (see TODO.md)                                       |
+| 42–47 | Chapter 2 opener (Big Question, Rap About It), Quest Kick Off                      | —                                                                            | skipped (chapter opener and project)                        |
+| 48    | Ch2 Lesson 1 opener: vocabulary, Unlock the Big Question, Jumpstart; Kihn painting | `chapter-2/lesson-1` · words, `question`, card "Historians" (picture `kihn`) | built (not in the booklet: `term: "2*"`; Jumpstart skipped) |
+| 49    | The First Americans; Routes map; Reading Check 1; Word Wise                        | `chapter-2/lesson-1` · cards 2–6, `check` 1                                  | built (Word Wise skipped)                                   |
+| 50    | Europeans Explore; Explorers map; Reading Check 2                                  | `chapter-2/story-columbus` (story), cards 7–8, `check` 2–3                   | built                                                       |
+| 51    | European Colonies (Jamestown, Plymouth, enslaved Africans)                         | `chapter-2/lesson-1` · cards 9–14                                            | built                                                       |
+| 52    | The Columbian Exchange; Reading Check 3                                            | `chapter-2/lesson-1` · cards 15–18, game `exchange`, `check` 4 (sort)        | built                                                       |
+| 53    | Government in the English Colonies; Reading Check 4; Lesson 1 Check 5–7            | `chapter-2/lesson-1` · cards 19–20, `check` 5–8 (5 = order, timeline)        | built                                                       |
+| 54–55 | Literacy Skills: Compare and Contrast (Ice Age animals, hunter-gatherers)          | —                                                                            | skipped (a reading skill)                                   |
 
 ## 20261105-G4- Social Studies - Term Two.pdf (18 pages, text layer; also in `!booklets/`)
 

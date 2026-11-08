@@ -4,7 +4,7 @@
 window.CS_LESSONS = {
   grade: 4,
   intro:
-    "Pick a lesson. Each lesson has big pictures from the teacher's slides, games, and the school exercises. Everything can be read aloud.",
+    "Pick a lesson. Each lesson has big pictures from the book or the teacher's slides, games, and the school exercises. Everything can be read aloud. Term 2* = a lesson that is not in the booklet.",
   chapters: [
     {
       n: 1,
@@ -43,6 +43,23 @@ window.CS_LESSONS = {
           cover: "img/lesson-4/mountain-home.jpg",
           note: "17 picture cards · 1 story · 4 games · 4 exercises",
           term: 2,
+        },
+      ],
+    },
+    {
+      n: 2,
+      dir: "chapter-2",
+      title: "Americans and Their History",
+      items: [
+        {
+          n: 1,
+          title: "America and Europe",
+          en: "The first Americans, Columbus and the explorers, colonies, the Columbian Exchange, the House of Burgesses",
+          path: "lesson-1.html",
+          cover: "img/lesson-1/kihn.jpg",
+          note: "20 picture cards · 1 story · 4 games · 1 exercise",
+          // not in the Term 2 booklet: built from the book only
+          term: "2*",
         },
       ],
     },
