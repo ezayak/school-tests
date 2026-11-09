@@ -8,8 +8,8 @@ const about = (q, ok, no) => ({
   type: "multi",
   q,
   opts: [
-    ...ok.map((n) => ({ t: fmt(n), ok: true, emoji: "✅" })),
-    ...no.map((n) => ({ t: fmt(n), emoji: "🤔" })),
+    ...ok.map((n) => ({ t: fmt(n), ok: true, emoji: "🔢" })),
+    ...no.map((n) => ({ t: fmt(n), emoji: "🔢" })),
   ],
 });
 

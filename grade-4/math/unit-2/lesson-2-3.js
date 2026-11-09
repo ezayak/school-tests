@@ -276,10 +276,10 @@ window.LESSON = {
           type: "multi",
           q: "Rebecca's number is greater than 15,724. She knows it from the tens place. What could her number be? Choose all.",
           opts: [
-            { t: "15,734", ok: true, emoji: "✅" },
-            { t: "15,790", ok: true, emoji: "✅" },
-            { t: "15,714", emoji: "🤔" },
-            { t: "15,624", emoji: "🤔" },
+            { t: "15,734", ok: true, emoji: "🔢" },
+            { t: "15,790", ok: true, emoji: "🔢" },
+            { t: "15,714", emoji: "🔢" },
+            { t: "15,624", emoji: "🔢" },
           ],
         },
         {

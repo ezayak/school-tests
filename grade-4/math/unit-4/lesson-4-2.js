@@ -390,18 +390,18 @@ window.LESSON = {
             {
               t: "Rosa scored 4 times as many points as her brother.",
               ok: true,
-              emoji: "✖️",
+              emoji: "🏆",
             },
             {
               t: "Rosa scored 6 more points than her brother.",
               ok: true,
-              emoji: "➕",
+              emoji: "🏆",
             },
             {
               t: "Her brother scored 4 times as many points as Rosa.",
-              emoji: "🔄",
+              emoji: "🏆",
             },
-            { t: "Rosa scored 10 more points than her brother.", emoji: "🔟" },
+            { t: "Rosa scored 10 more points than her brother.", emoji: "🏆" },
           ],
         },
         prob(

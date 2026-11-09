@@ -107,6 +107,27 @@ for (const file of files) {
           bad.push("col numbers " + id);
         if (it.op === "-" && it.a < it.b) bad.push("col: a < b " + id);
       }
+      // multi shows each option's picture before Check: the right ones must not look different from the wrong ones
+      if (it.type === "multi") {
+        const okE = new Set(
+          it.opts.filter((o) => o.ok).map((o) => o.emoji || o.img),
+        );
+        const noE = new Set(
+          it.opts.filter((o) => !o.ok).map((o) => o.emoji || o.img),
+        );
+        if (
+          [...okE].every((e) => !noE.has(e)) &&
+          okE.size === 1 &&
+          noE.size <= 1
+        )
+          bad.push(
+            `multi ${id}: the right answers have their own picture (${[...okE]}): it gives them away`,
+          );
+        if (it.opts.some((o) => ["✅", "❌", "🤔", "❓"].includes(o.emoji)))
+          bad.push(
+            `multi ${id}: ✅ ❌ 🤔 ❓ on an option give the answer away`,
+          );
+      }
       if (it.type === "multi")
         it.opts.forEach((o, j) => {
           img(o.img, id);
