@@ -260,6 +260,48 @@ window.MathKit = (function () {
     };
   };
 
+  // subtract by decomposing b: 9,856 − 6,298 → − 6,000 − 200 − 90 − 8
+  const decompQ = (a, b, q, more = {}) => {
+    const ps = parts(b);
+    let r = a;
+    const steps = ps.map((p) => {
+      const t = `${fmt(r)} − ${fmt(p)} = ${fmt(r - p)}`;
+      r -= p;
+      return t;
+    });
+    return {
+      type: "num",
+      q:
+        q ||
+        `${fmt(a)} − ${fmt(b)}: break ${fmt(b)} into parts and take them away.`,
+      a: a - b,
+      vis: {
+        kind: "lines",
+        rows: [`${fmt(b)} = ${ps.map(fmt).join(" + ")}`, ...steps.slice(0, 1)],
+      },
+      x: `${steps.join(", ")}. ${fmt(a)} − ${fmt(b)} = [${fmt(a - b)}]`,
+      ...more,
+    };
+  };
+  // subtract by adjusting: add (or take) the same to both numbers so b is round (9,856 − 6,298 → 9,858 − 6,300)
+  const adjustSub = (a, b, j = 2, q, more = {}) => {
+    const r = b % 10 ** j;
+    const d = r <= 10 ** j / 2 ? -r : 10 ** j - r;
+    const sg = (n) => (d < 0 ? `${fmt(n)} − ${-d}` : `${fmt(n)} + ${d}`);
+    return {
+      type: "num",
+      q: q || `Subtract by adjusting: ${fmt(a)} − ${fmt(b)}`,
+      pre: `${fmt(a + d)} − ${fmt(b + d)} =`,
+      a: a - b,
+      vis: {
+        kind: "lines",
+        rows: [`${sg(a)} → ${fmt(a + d)}`, `${sg(b)} → ${fmt(b + d)}`],
+      },
+      x: `${d < 0 ? "Take " + -d + " from" : "Add " + d + " to"} [both] numbers: ${fmt(a + d)} − ${fmt(b + d)} = [${fmt(a - b)}].`,
+      ...more,
+    };
+  };
+
   // bar diagrams (shared/math.js "bar"); the unknown is a yellow "?"
   // lb has m more than la
   const moreBar = (la, a, lb, m) => ({
@@ -350,6 +392,8 @@ window.MathKit = (function () {
     calc,
     partials,
     adjust,
+    decompQ,
+    adjustSub,
     moreBar,
     timesBar,
     partBar,
