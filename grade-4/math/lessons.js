@@ -301,6 +301,22 @@ window.CS_LESSONS = {
           cover: "img/lesson-6-6/curious.jpg",
           note: "4 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "6-7",
+          title: "2-Digit × 2-Digit",
+          en: "Break both factors into tens and ones: an area model with 4 parts, then add the partial products",
+          path: "lesson-6-7.html",
+          cover: "img/lesson-6-7/curious.jpg",
+          note: "4 picture cards · 1 games · 7 exercises",
+        },
+        {
+          n: "6-8",
+          title: "Problems in Steps with ×",
+          en: "Multiply for each part of the problem, then add or subtract to finish",
+          path: "lesson-6-8.html",
+          cover: "img/lesson-6-8/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
