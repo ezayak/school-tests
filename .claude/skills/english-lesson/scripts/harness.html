@@ -50,6 +50,22 @@
           hint.click();
           continue;
         }
+        // Math (shared/math.js): a column sum → Check until the answer is shown; the number pad → type 1 and ✓ (2 wrong tries show the answer)
+        const go = q(d, "#goCol");
+        if (go) {
+          go.click();
+          continue;
+        }
+        const colCk = q(d, "#chkBtn");
+        if (colCk && q(d, ".mx-pad")) {
+          colCk.click();
+          continue;
+        }
+        if (q(d, ".mx-pad") && q(d, "#nv")) {
+          q(d, '.mx-pad [data-k="1"]').click();
+          q(d, '.mx-pad [data-k="ok"]').click();
+          continue;
+        }
         const ck = q(d, "#checkBtn");
         // choose all (multi): tap one answer so Check works; a wrong first try then shows the answer
         const mo = q(d, ".mopt:not([disabled])");
