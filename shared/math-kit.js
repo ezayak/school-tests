@@ -397,6 +397,71 @@ window.MathKit = (function () {
     return qs;
   };
 
+  // compatible numbers for division: multiples of d × 10, d × 100 … (a basic fact with zeros); the closest to n first
+  const compatList = (n, d) => {
+    const out = [];
+    for (let sc = 1; sc <= 10 ** String(n).length; sc *= 10)
+      for (let m = 1; m <= 9; m++) {
+        const c = m * d * sc;
+        if (c >= n / 3 && c <= n * 2 && !out.includes(c)) out.push(c);
+      }
+    return out.sort((a, b) => Math.abs(a - n) - Math.abs(b - n));
+  };
+  const compat = (n, d) => compatList(n, d)[0];
+  // "Which compatible number?" then "Estimate n ÷ d"
+  const estDiv = (n, d, q, post = "") => {
+    const c = compat(n, d);
+    const others = compatList(n, d).filter(
+      (x) => x !== c && Math.abs(x - n) > Math.abs(c - n),
+    );
+    const near = [Math.round(n / 100) * 100, Math.round(n / 10) * 10].find(
+      (x) => x !== c && x % d,
+    );
+    const wrong = [near, others[0]].filter((x) => x !== undefined && x !== c);
+    return [
+      {
+        type: "mc",
+        q: `${q ? q + " " : ""}Estimate ${fmt(n)} ÷ ${d}. Which number is close to ${fmt(n)} and easy to divide by ${d}?`,
+        opts: [fmt(c), ...wrong.slice(0, 2).map(fmt)],
+        vis: { kind: "lines", rows: [`${fmt(n)} ÷ ${d}`] },
+        x: `${fmt(c)} ÷ ${d} = ${fmt(c / d)}: a basic fact with zeros. ${fmt(c)} is the [closest] such number to ${fmt(n)}.`,
+      },
+      {
+        type: "num",
+        q: `About how much is ${fmt(n)} ÷ ${d}?`,
+        pre: `${fmt(c)} ÷ ${d} =`,
+        a: c / d,
+        post,
+        vis: { kind: "lines", rows: [`${fmt(n)} → ${fmt(c)}`] },
+        x: `${fmt(c)} ÷ ${d} = [${fmt(c / d)}]`,
+      },
+    ];
+  };
+  // a range for the quotient: the compatible numbers just below and just above n
+  const rangeDiv = (n, d, q) => {
+    const L = compatList(n, d);
+    const lo = Math.max(...L.filter((x) => x <= n)),
+      hi = Math.min(...L.filter((x) => x >= n));
+    return [
+      {
+        type: "num",
+        q: `${q ? q + " " : ""}${fmt(n)} ÷ ${d}: the low end of the range.`,
+        pre: `${fmt(lo)} ÷ ${d} =`,
+        a: lo / d,
+        vis: { kind: "lines", rows: [`${fmt(lo)} < ${fmt(n)} < ${fmt(hi)}`] },
+        x: `${fmt(lo)} ÷ ${d} = [${fmt(lo / d)}]`,
+      },
+      {
+        type: "num",
+        q: `${fmt(n)} ÷ ${d}: the high end of the range.`,
+        pre: `${fmt(hi)} ÷ ${d} =`,
+        a: hi / d,
+        vis: { kind: "lines", rows: [`${fmt(lo)} < ${fmt(n)} < ${fmt(hi)}`] },
+        x: `${fmt(hi)} ÷ ${d} = [${fmt(hi / d)}]. The quotient is between ${fmt(lo / d)} and ${fmt(hi / d)}.`,
+      },
+    ];
+  };
+
   // factors and primes
   const factors = (n) =>
     Array.from({ length: n }, (_, k) => k + 1).filter((k) => n % k === 0);
@@ -540,6 +605,10 @@ window.MathKit = (function () {
     step,
     distrib,
     areaQ,
+    compat,
+    compatList,
+    estDiv,
+    rangeDiv,
     factors,
     factorPairs,
     isPrime,
