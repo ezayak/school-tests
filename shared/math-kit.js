@@ -356,6 +356,47 @@ window.MathKit = (function () {
     ];
   };
 
+  // an area model with any parts: rows [60, 5] × cols [200, 30, 4]; one question per cell (filled in as you go), then the sum
+  const areaQ = (rowParts, colParts, intro, more = {}) => {
+    const A = rowParts.reduce((x, y) => x + y, 0),
+      B = colParts.reduce((x, y) => x + y, 0);
+    const cells = [];
+    rowParts.forEach((r) => colParts.forEach((c) => cells.push([r, c])));
+    const shown = cells.map(() => "");
+    const vis = () => ({
+      kind: "area",
+      rows: rowParts,
+      cols: colParts,
+      cells: shown.slice(),
+    });
+    const qs = cells.map(([r, c], k) => {
+      shown[k] = "?";
+      const it = {
+        type: "num",
+        q: k
+          ? `${fmt(A)} × ${fmt(B)}, next part:`
+          : `${intro || `${fmt(A)} × ${fmt(B)}: break the factors by place value.`} First part:`,
+        pre: `${fmt(r)} × ${fmt(c)} =`,
+        a: r * c,
+        vis: vis(),
+        x: `${fmt(r)} × ${fmt(c)} = [${fmt(r * c)}]`,
+        ...(k ? {} : more),
+      };
+      shown[k] = r * c;
+      return it;
+    });
+    const ps = cells.map(([r, c]) => fmt(r * c)).join(" + ");
+    qs.push({
+      type: "num",
+      q: `Add the partial products: ${fmt(A)} × ${fmt(B)} = ?`,
+      pre: `${ps} =`,
+      a: A * B,
+      vis: vis(),
+      x: `${ps} = [${fmt(A * B)}]`,
+    });
+    return qs;
+  };
+
   // factors and primes
   const factors = (n) =>
     Array.from({ length: n }, (_, k) => k + 1).filter((k) => n % k === 0);
@@ -498,6 +539,7 @@ window.MathKit = (function () {
     value,
     step,
     distrib,
+    areaQ,
     factors,
     factorPairs,
     isPrime,
