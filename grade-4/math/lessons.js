@@ -160,6 +160,14 @@ window.CS_LESSONS = {
           note: "12 picture cards · 6 games · 3 exercises",
         },
         {
+          n: "4-1",
+          title: "Compare with Multiplication",
+          en: "Times as many, times as much: a multiplicative comparison and its equation",
+          path: "lesson-4-1.html",
+          cover: "img/lesson-4-1/curious.jpg",
+          note: "5 picture cards · 2 games · 6 exercises",
+        },
+        {
           n: "4-2",
           title: "More Than or Times as Many?",
           en: "Add for “more than”, multiply for “times as many”: bar diagrams and equations",
