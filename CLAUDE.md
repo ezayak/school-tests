@@ -193,6 +193,20 @@ Then:
 - Check with a script: every item has a picture, every `img` / `src` exists, every picture file is used and in `also`, every `path` and `hub` link opens.
 - Check in the browser: the English page (the tag), each tab and section of the lesson, every story page, one exercise of each type, the back links.
 
+## Math (Grade 4): book lessons
+
+Folder `grade-4/math/unit-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Math">`) + `shared/math.js` / `.css` (don't copy them; a lesson is only a data file). Format in README: "Math lessons (Grade 4)".
+Procedure, item types and checks: the `math-lesson` skill; `unit-2/lesson-2-1.js` is the model.
+Sources: `~/Documents/2026-2027/Alex/Math/books/` (Reveal Math Student Edition Vol. 1 = Units 1–7, scanned, book page = PDF page − 20; Student Practice Book, text layer) and `Term N/` (class sheets, extra practice, homework, model answers).
+Alex has aphasia: the parent explains each question by pointing at the pictures.
+
+- One page per book lesson (`lesson-2-1`): the Student Edition's 4 pages + its 2 Practice Book pages. The unit pages (`unit-2/place-value` …) hold the Term 1 sheets; keep them.
+  A new school sheet goes into its book lesson as a "🏫 School" section.
+- Every book item in the book's order; every question has a drawing (`vis`), picture or emoji. Numbers are typed on the number pad (`num`), worked out, never from memory.
+  The Be Curious picture is the cover; other pictures are drawn by `shared/math.js` unless the book's own picture explains more. Unit 1 « Math Is… » and drawing tasks are skipped.
+- Logs in `grade-4/math/`: `SOURCES.md` (every book / Practice Book page and sheet → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (answers without a key, `// unverified` in the file). Update them with every lesson, in the same commit.
+- Words or numbers missing or unreadable: never guess; ask. Then: card in `lessons.js` (under its unit), files and pictures in `also` of the Math entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+
 ## Science (Grade 4): lessons
 
 Folder `grade-4/science/topic-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Science">`, don't copy it; a lesson is only a data file). Format in README: "Science lessons (Grade 4)".

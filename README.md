@@ -852,10 +852,15 @@ and bump `VERSION` in `sw.js`.
 ## Math lessons (Grade 4)
 
 Folder: `grade-4/math/`. One card on the home page ("Math", under Subjects, colour `--math`) opens `index.html`, which lists the lessons from `lessons.js`,
-one entry per book unit (`part: "Unit"`, `chapters: [{n, dir: "unit-2", title, items}]`); a unit is one lesson, so `label: "Unit"` puts "Unit 2" on the cards
-and `flat: true` shows all the cards together without unit headings (both options work for any lessons list). Book: Reveal Math, Grade 4.
-Lessons: Unit 2 `place-value.html` (place value, compare, round), Unit 3 `add-subtract.html` (columns with regrouping, word problems),
+one chapter per book unit with a heading (`part: "Unit"`, `chapters: [{n, dir: "unit-2", title, items}]`). Book: Reveal Math, Grade 4 (Student Edition + Student Practice Book).
+In each unit: first the **unit page** (`label: "Unit"` on its card: "Unit 2"), made in Term 1 from the school sheets, then one card per **book lesson** (`n: "2-1"`, "Lesson 2-1").
+A chapter can set its own `part` (`part: ""` = only its title: "Multiplication games"); `flat: true` would show all the cards together without headings (any lessons list).
+Unit pages: Unit 2 `place-value.html` (place value, compare, round), Unit 3 `add-subtract.html` (columns with regrouping, word problems),
 Unit 4 `multiplication.html` (what multiplication is, times tables, times as many).
+Book lessons: `unit-N/lesson-N-M.js` + `.html`, pictures in `unit-N/img/lesson-N-M/` (`curious.jpg` = the Be Curious picture, also the cover). `key: "math4-l2-1"`, `unit: "Unit 2 · Lesson 2-1"`.
+Learn = the book's Be Curious / Learn / Work Together retold on picture cards; Play = games with new numbers; Exercises in two sections (`g`): "📗 Book" (Be Curious, Learn, Work Together,
+On My Own, Reflect, in the book's order, `keep: true`) and "📘 Practice Book" (Additional Practice); a school sheet for the lesson adds a "🏫 School" section.
+Sources log: `grade-4/math/SOURCES.md`, `TODO.md`, `UNVERIFIED.md`. Procedure and checks: the `math-lesson` skill.
 
 The lessons use the **Computer lesson engine** with `<body data-subject="Math">`. The page loads `shared/common.js`, `shared/math.js`, its `<name>.js`, then the engine
 (and `shared/math.css` after `computer-lesson.css`). `shared/math.js` gives the engine new question types and drawings through `window.CS_EXT`
@@ -884,6 +889,7 @@ Drawings (`vis`):
 - `{kind: "groups", n, of, e, cap}`, `{kind: "array", r, c, e, cap}` (no `e` = dots), `{kind: "cubes", rows: [{l, n, times, c}], cap}` – multiplication pictures; `cap: ""` hides the caption.
 - `{kind: "pv", n, hl: [places from the right], val: true, cap}` – place-value chart with periods; `hl` digits are yellow, `val` writes their value.
 - `{kind: "nline", lo, hi, n, hide}` – number line for rounding (`hide`: no answer shown).
+- `{kind: "digits", rows: [{n, hl: [places from the right], t}], cap}` – numbers with some digits marked in yellow (the book's underlined digits); `t` = a note after the number.
 
 A lesson file is like a Science lesson (`words`, `ideas`, `games`, `exercises`, `key: "math4-u<unit>"`), with `imgDir: "img"` and `cover: "cover"`
 (the unit's opening picture from the book). Picture cards can set `ic` (the emoji on their tile).
