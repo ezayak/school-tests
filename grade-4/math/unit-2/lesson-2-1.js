@@ -377,8 +377,8 @@ window.LESSON = {
           q: "Sienna moves the digits of 1,258,072 so that one digit is worth 10 times another. Which number could she write?",
           opts: ["1,580,722", "1,258,072", "1,285,702", "2,158,072"],
           vis: { kind: "digits", rows: [{ n: 1258072, hl: [5, 0] }] },
-          // unverified: the book takes any number with the two 2s side by side
-          x: "Put the two 2s [side by side]: 1,580,722. The 2 in the tens (20) is 10 times the 2 in the ones (2).",
+          // teacher's key (Term 1/20261005-L_2-1.pdf): any number with the two 2s side by side; its sample is 1,228,075
+          x: "Put the two 2s [side by side]: 1,580,722. The 2 in the tens (20) is 10 times the 2 in the ones (2). The teacher's example: 1,[22]8,075.",
         },
         {
           type: "tf",
@@ -398,7 +398,7 @@ window.LESSON = {
           type: "open",
           q: "Reflect: How can place value help you find the value of a digit?",
           vis: { kind: "pv", n: 8888, hl: [3, 2, 1, 0], val: true },
-          // unverified: a model answer, the book gives none
+          // unverified: a model answer (the teacher's key says "answers may vary")
           a: "The place of the digit tells its value: in 8,888 the 8s are worth 8,000, 800, 80 and 8. Each place is 10 times the place on its right.",
         },
       ],
