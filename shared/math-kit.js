@@ -525,6 +525,74 @@ window.MathKit = (function () {
     return qs;
   };
 
+  // a remainder in a story: the division, what to do with the remainder (ignore | use | up | frac), then the answer
+  const L = (...rows) => ({ kind: "lines", rows });
+  const HOW = {
+    ignore: "Ignore the remainder",
+    use: "Use the remainder as the answer",
+    up: "Add one to the quotient",
+    frac: "Write the remainder as a fraction",
+  };
+  const HOWS = Object.values(HOW);
+  const ICON = {
+    [HOW.ignore]: "🚫",
+    [HOW.use]: "🎯",
+    [HOW.up]: "➕",
+    [HOW.frac]: "½",
+  };
+  // q: the problem; how: ignore | use | up | frac; post: the unit of the answer
+  const remQ = (q, n, d, how, post) => {
+    const Q = Math.floor(n / d),
+      R = n % d;
+    const ans = { ignore: Q, use: R, up: Q + 1 }[how];
+    const why = {
+      ignore: `Only ${Q} full groups: the ${R} left over don't make another one.`,
+      use: `The question asks what is left over: the remainder ${R}.`,
+      up: `${Q} groups are not enough: the ${R} left over need one more.`,
+      frac: `The ${R} left over can be cut in ${d} equal parts: ${Q} and ${R}/${d}.`,
+    }[how];
+    const items = [
+      {
+        type: "num",
+        q: `${q} First divide: ${n} ÷ ${d} = ? R ?. What is the quotient?`,
+        pre: `${n} ÷ ${d} =`,
+        post: "R ?",
+        a: Q,
+        vis: L(`${n} ÷ ${d} = ? R ?`, `${d} × ? ≤ ${n}`),
+        x: `${d} × ${Q} = ${d * Q}, ${n} − ${d * Q} = ${R}: ${n} ÷ ${d} = [${Q}] R${R}.`,
+      },
+      {
+        type: "mc",
+        q: `${n} ÷ ${d} = ${Q} R${R}. What do you do with the remainder?`,
+        opts: [HOW[how], ...HOWS.filter((h) => h !== HOW[how])],
+        keep: HOWS,
+        icons: [HOW[how], ...HOWS.filter((h) => h !== HOW[how])].map(
+          (h) => ICON[h],
+        ),
+        vis: L(q),
+        x: why,
+      },
+    ];
+    if (how !== "frac")
+      items.push({
+        type: "num",
+        q: `So what is the answer? ${q}`,
+        a: ans,
+        post,
+        vis: L(`${n} ÷ ${d} = ${Q} R${R}`),
+        x: `${why} [${ans}] ${post}.`,
+      });
+    else
+      items.push({
+        type: "mc",
+        q: `So what is the answer? ${q}`,
+        opts: [`${Q} ${R}/${d} ${post}`, `${Q} ${post}`, `${Q + 1} ${post}`],
+        vis: L(`${n} ÷ ${d} = ${Q} R${R}`),
+        x: why,
+      });
+    return items;
+  };
+
   // factors and primes
   const factors = (n) =>
     Array.from({ length: n }, (_, k) => k + 1).filter((k) => n % k === 0);
@@ -564,7 +632,7 @@ window.MathKit = (function () {
       keep: ["Prime", "Composite"],
       icons: p ? ["1️⃣", "🔢"] : ["🔢", "1️⃣"],
       two: true,
-      vis: { kind: "lines", rows: ps },
+      vis: { kind: "lines", rows: [`${n} = ? × ?`] },
       x: p
         ? `${n} = ${ps[0]} only: one factor pair, [prime].`
         : `${n} = ${ps.join(" = ")}: more than one factor pair, [composite].`,
@@ -674,6 +742,7 @@ window.MathKit = (function () {
     rangeDiv,
     chunksOf,
     partialQ,
+    remQ,
     factors,
     factorPairs,
     isPrime,

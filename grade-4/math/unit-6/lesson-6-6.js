@@ -10,7 +10,7 @@ const tensWay = (A, B, q) => [
     pre: `${A} × ${B} = ${A} ×`,
     post: "tens",
     a: B / 10,
-    vis: { kind: "lines", rows: [`${B} = ${B / 10} tens`] },
+    vis: { kind: "lines", rows: [`${B} = ? tens`] },
     x: `${B} = [${B / 10}] tens`,
   },
   {

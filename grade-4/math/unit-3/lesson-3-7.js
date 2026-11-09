@@ -15,7 +15,7 @@ const borrow = (big, small, j) => ({
     kind: "lines",
     rows: [
       `${big} ${PL[j + 1]} ${small} ${PL[j]}`,
-      `${big - 1} ${PL[j + 1]} ${small + 10} ${PL[j]}`,
+      `${big - 1} ${PL[j + 1]} ? ${PL[j]}`,
     ],
   },
   x: `${small} + 10 = [${small + 10}] ${PL[j]}.`,

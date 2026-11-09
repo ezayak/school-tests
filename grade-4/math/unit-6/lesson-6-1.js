@@ -15,7 +15,7 @@ const viaUnits = (a, d, p) => {
       a: d,
       vis: {
         kind: "lines",
-        rows: [`${(d * p).toLocaleString("en-US")} = ${d} ${u}`],
+        rows: [`${(d * p).toLocaleString("en-US")} = ? ${u}`],
       },
       x: `${(d * p).toLocaleString("en-US")} = [${d}] ${u}`,
     },
@@ -25,7 +25,7 @@ const viaUnits = (a, d, p) => {
       pre: `${a} × ${d} ${u} =`,
       post: u,
       a: a * d,
-      vis: { kind: "lines", rows: [`${a} × ${d} = ${a * d}`] },
+      vis: { kind: "lines", rows: [`${a} × ${d} = ?`] },
       x: `${a} × ${d} = [${a * d}]`,
     },
     step(

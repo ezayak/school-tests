@@ -10,7 +10,7 @@ const unitDiv = (n, d, u) => ({
   pre: `${n} ${u} ÷ ${d} =`,
   post: u,
   a: n / d,
-  vis: lines(`${n} ÷ ${d} = ${n / d}`),
+  vis: lines(`${n} ÷ ${d} = ?`),
   x: `${n} ÷ ${d} = [${n / d}], so ${n} ${u} ÷ ${d} = ${n / d} ${u}.`,
 });
 const unitMC = (q, right, x) => ({

@@ -8,17 +8,7 @@ const rowsTF = (q, n, k, more = {}) => ({
   q,
   a: n % k === 0,
   yes: ["Yes", "No"],
-  vis:
-    n % k === 0
-      ? { kind: "array", r: n / k, c: k }
-      : {
-          kind: "lines",
-          rows: [
-            `${n} = ${factorPairs(n)
-              .map(([a, b]) => `${a} × ${b}`)
-              .join(" = ")}`,
-          ],
-        },
+  vis: { kind: "lines", rows: [`${k} × ? = ${n}`] },
   x:
     n % k === 0
       ? `${n} = ${n / k} × ${k}: [${k}] is a factor of ${n}.`
@@ -154,7 +144,7 @@ window.LESSON = {
         q: `${k} is a factor of ${n}. What is its partner?`,
         pre: `${n} = ${k} ×`,
         a: n / k,
-        vis: { kind: "array", r: k, c: n / k },
+        vis: { kind: "lines", rows: [`${n} = ${k} × ?`] },
         x: `${n} = ${k} × [${n / k}]`,
       })),
     },
