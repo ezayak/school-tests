@@ -25,6 +25,7 @@ const CORE = [
   "./shared/computer-lesson.js",
   "./shared/math.css",
   "./shared/math.js",
+  "./shared/math-kit.js",
   "./shared/wordsim.css",
   "./shared/wordsim.js",
   "./shared/arabic.css",

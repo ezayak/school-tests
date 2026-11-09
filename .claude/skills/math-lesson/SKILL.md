@@ -32,7 +32,9 @@ The user reviews each lesson in the browser: build **one lesson at a time** unle
 
 Files: `unit-N/lesson-N-M.js`, pictures in `unit-N/img/lesson-N-M/`. The `.html`, the card in `lessons.js` (a new unit gets its chapter) and the files in `games.js` come from
 `node .claude/skills/math-lesson/scripts/add.js grade-4/math/unit-N/lesson-N-M.js` (then prettier on `games.js` and `lessons.js`).
-Word problems (Unit 4 on): `unit-4/lesson-4-3.js` is the model (`timesBar`, `partBar`, `howBar`, `moreBar` bar diagrams with the unknown as a yellow "?", `prob(q, a, vis, post, x)`).
+Build questions with `shared/math-kit.js` (`const { fmt, words, expMC, wordMC, cmp, roundQ, prob, timesBar, partBar, howBar, moreBar, sumBar } = MathKit;`, see README):
+it works out the word forms, expanded forms, comparisons, roundings and bar diagrams. A new question shape used by more than one lesson goes into the kit, not into a lesson file.
+`unit-2/lesson-2-2.js` … `2-4.js` and `unit-4/lesson-4-3.js` show it (4-2 … 4-4 still have their own copies of the bar helpers).
 
 - Head: `n: "2-1"`, `key: "math4-l2-1"`, `title` (short, plain words), `en` (one line for the card), `unit: "Unit 2 · Lesson 2-1"`, `book: "Book p. 33–36 · Practice Book p. 1–2"`, `imgDir: "img/lesson-2-1"`, `cover: "curious"`, `question` = the Reflect question with a short answer.
 - Pictures: the **Be Curious** picture is the cover (crop it from the page at `-r 200`, 700px wide, `python3 -I` + PIL). Crop a book picture only when it explains something a drawing can't (Akira's ×10 arrows). Everything else is drawn by `shared/math.js`: `pv`, `digits`, `nline`, `bar`, `groups`, `array`, `cubes`, `colshow`, and the engine's `lines`.

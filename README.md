@@ -861,6 +861,10 @@ Book lessons: `unit-N/lesson-N-M.js` + `.html`, pictures in `unit-N/img/lesson-N
 Learn = the book's Be Curious / Learn / Work Together retold on picture cards; Play = games with new numbers; Exercises in two sections (`g`): "📗 Book" (Be Curious, Learn, Work Together,
 On My Own, Reflect, in the book's order, `keep: true`) and "📘 Practice Book" (Additional Practice); a school sheet for the lesson adds a "🏫 School" section.
 Sources log: `grade-4/math/SOURCES.md`, `TODO.md`, `UNVERIFIED.md`. Procedure and checks: the `math-lesson` skill.
+A book lesson page also loads `shared/math-kit.js` (after `shared/math.js`, before its `lesson-N-M.js`): `window.MathKit` builds the questions so that answers are worked out, not typed:
+`words(n)` / `expanded(n)` (word and expanded form), `wordMC` / `expMC` (choose the form; wrong options from look-alike numbers), `cmp(a, b)` (`<` `=` `>`, the first different digit yellow),
+`roundQ(n, place)` (round with a number line), `prob(q, a, vis, post, x)` (a word problem), and bar diagrams for comparisons `timesBar`, `partBar`, `howBar`, `moreBar`, `sumBar`.
+It has no page code, so `check.js` and `add.js` run it in node too.
 
 The lessons use the **Computer lesson engine** with `<body data-subject="Math">`. The page loads `shared/common.js`, `shared/math.js`, its `<name>.js`, then the engine
 (and `shared/math.css` after `computer-lesson.css`). `shared/math.js` gives the engine new question types and drawings through `window.CS_EXT`

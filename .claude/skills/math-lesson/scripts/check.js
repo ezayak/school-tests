@@ -25,6 +25,8 @@ const VIS = [
   "digits",
 ];
 global.window = {};
+// the lessons build their questions with shared/math-kit.js
+new Function("window", fs.readFileSync("shared/math-kit.js", "utf8"))(window);
 let problems = 0;
 for (const file of files) {
   const bad = [];
@@ -38,7 +40,7 @@ for (const file of files) {
   const src = fs.readFileSync(file, "utf8");
   window.LESSON = null;
   // the lesson's helpers are top-level consts: run it in its own function scope
-  new Function("window", src)(window);
+  new Function("window", "MathKit", src)(window, window.MathKit);
   const L = window.LESSON;
   const m = path.basename(file).match(/^lesson-(\d+-\d+)\.js$/);
   if (!m || L.n !== m[1]) bad.push(`n "${L.n}" does not match the file name`);
@@ -151,28 +153,32 @@ for (const file of files) {
 }
 console.log(problems ? `${problems} problems` : "all checks passed");
 
-// "3 × 40 = 120", "56 = 8 × 7", "50 ÷ 5 = 10", "9 + 6 = 15", "9 − 5 = 4" in a text: each one must be true
+// "3 × 40 = 120", "60,000 + 400 + 8 = 60,408", "56 = 8 × 7", "50 ÷ 5 = 10" in a text: each one must be true (× ÷ before + −)
 function mathErrors(text) {
   const t = text.replace(/[[\]$¢]/g, "");
+  const N = "\\d[\\d,]*";
+  const chain = `${N}(?:\\s*[×÷+−]\\s*${N})+`;
+  const val = (e) =>
+    Function(
+      `return ${e.replace(/,/g, "").replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-")}`,
+    )();
   const n = (s) => Number(s.replace(/,/g, ""));
-  const calc = (a, op, b) =>
-    op === "+"
-      ? a + b
-      : op === "−" || op === "-"
-        ? a - b
-        : op === "×"
-          ? a * b
-          : a / b;
-  const N = "(\\d[\\d,]*)";
   const errs = [];
+  // a chain = a number, not inside a longer chain on either side
   for (const m of t.matchAll(
-    new RegExp(`${N}\\s*([×÷+−])\\s*${N}\\s*=\\s*${N}(?!\\s*[×÷+−])`, "g"),
+    new RegExp(
+      `(?<![\\d,×÷+−]\\s*)(${chain})\\s*=\\s*(${N})(?!\\s*[×÷+−]|[\\d,])`,
+      "g",
+    ),
   ))
-    if (calc(n(m[1]), m[2], n(m[3])) !== n(m[4])) errs.push(`wrong: ${m[0]}`);
+    if (Math.abs(val(m[1]) - n(m[2])) > 1e-9) errs.push(`wrong: ${m[0]}`);
   for (const m of t.matchAll(
-    new RegExp(`(?<![×÷+−]\\s*)${N}\\s*=\\s*${N}\\s*([×÷+−])\\s*${N}`, "g"),
+    new RegExp(
+      `(?<![\\d,×÷+−]\\s*)(${N})\\s*=\\s*(${chain})(?![\\d,]|\\s*[×÷+−])`,
+      "g",
+    ),
   ))
-    if (calc(n(m[2]), m[3], n(m[4])) !== n(m[1])) errs.push(`wrong: ${m[0]}`);
+    if (Math.abs(val(m[2]) - n(m[1])) > 1e-9) errs.push(`wrong: ${m[0]}`);
   return errs;
 }
 process.exit(problems ? 1 : 0);

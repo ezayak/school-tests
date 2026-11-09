@@ -24,6 +24,8 @@ const byLesson = (a, b) => {
 };
 
 global.window = {};
+// the lessons build their questions with shared/math-kit.js
+new Function("window", fs.readFileSync("shared/math-kit.js", "utf8"))(window);
 const lsFile = path.join(ROOT, "lessons.js");
 const lsText = fs.readFileSync(lsFile, "utf8");
 const head = lsText.slice(0, lsText.indexOf("window.CS_LESSONS"));
@@ -36,7 +38,10 @@ const template = fs.readFileSync(
 
 for (const file of process.argv.slice(2)) {
   window.LESSON = null;
-  new Function("window", fs.readFileSync(file, "utf8"))(window);
+  new Function("window", "MathKit", fs.readFileSync(file, "utf8"))(
+    window,
+    window.MathKit,
+  );
   const L = window.LESSON;
   const [u] = num(L.n);
   const dir = `unit-${u}`;
