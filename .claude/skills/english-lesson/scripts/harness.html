@@ -58,6 +58,7 @@
         }
         const colCk = q(d, "#chkBtn");
         if (colCk && q(d, ".mx-pad")) {
+          q(d, '.mx-pad [data-k="1"]').click(); // Check needs a digit in the boxes
           colCk.click();
           continue;
         }
