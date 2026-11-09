@@ -321,6 +321,53 @@ window.MathKit = (function () {
     };
   };
 
+  // factors and primes
+  const factors = (n) =>
+    Array.from({ length: n }, (_, k) => k + 1).filter((k) => n % k === 0);
+  const factorPairs = (n) =>
+    factors(n)
+      .filter((k) => k * k <= n)
+      .map((k) => [k, n / k]);
+  const isPrime = (n) => factors(n).length === 2;
+  // "What are all the factor pairs of 14?" (choose all); wrong pairs are near misses (3 × 5 for 14)
+  const pairsQ = (n, q, more = {}) => {
+    const ok = factorPairs(n).map(([a, b]) => `${a} × ${b}`);
+    const no = [];
+    for (let k = 2; k <= 9 && no.length < 2; k++) {
+      const m = Math.round(n / k);
+      if (n % k && m > 1 && k <= m && !no.includes(`${k} × ${m}`))
+        no.push(`${k} × ${m}`);
+    }
+    return {
+      type: "multi",
+      q: q || `What are all the factor pairs of ${n}? Choose all.`,
+      opts: [
+        ...ok.map((t) => ({ t, ok: true, emoji: "✖️" })),
+        ...no.map((t) => ({ t, emoji: "✖️" })),
+      ],
+      ...more,
+    };
+  };
+
+  // "Is 15 prime or composite?"
+  const primeQ = (n, q, more = {}) => {
+    const p = isPrime(n);
+    const ps = factorPairs(n).map(([a, b]) => `${a} × ${b}`);
+    return {
+      type: "mc",
+      q: q || `Is ${n} prime or composite?`,
+      opts: p ? ["Prime", "Composite"] : ["Composite", "Prime"],
+      keep: ["Prime", "Composite"],
+      icons: p ? ["1️⃣", "🔢"] : ["🔢", "1️⃣"],
+      two: true,
+      vis: { kind: "lines", rows: ps },
+      x: p
+        ? `${n} = ${ps[0]} only: one factor pair, [prime].`
+        : `${n} = ${ps.join(" = ")}: more than one factor pair, [composite].`,
+      ...more,
+    };
+  };
+
   // bar diagrams (shared/math.js "bar"); the unknown is a yellow "?"
   // lb has m more than la
   const moreBar = (la, a, lb, m) => ({
@@ -415,6 +462,11 @@ window.MathKit = (function () {
     adjustSub,
     value,
     step,
+    factors,
+    factorPairs,
+    isPrime,
+    pairsQ,
+    primeQ,
     moreBar,
     timesBar,
     partBar,
