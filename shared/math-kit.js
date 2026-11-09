@@ -191,6 +191,75 @@ window.MathKit = (function () {
     };
   };
 
+  // front-end estimation: keep the first digit, the others become 0 (3,919 → 3,000)
+  const frontEnd = (n) => {
+    const p = 10 ** (String(n).length - 1);
+    return Math.floor(n / p) * p;
+  };
+  // add or subtract in columns (shared/math.js "col"); op "+" or "-"
+  const col = (a, op, b, q, more = {}) => ({
+    type: "col",
+    op,
+    a,
+    b,
+    ...(q ? { q } : {}),
+    ...more,
+  });
+  const calc = (a, op, b) => (op === "+" ? a + b : a - b);
+
+  // partial sums: one question per place ("Add the tens: 10 + 90 ="), then the partial sums added
+  const partials = (a, b) => {
+    const len = Math.max(String(a).length, String(b).length);
+    const sums = [];
+    const qs = [];
+    for (let j = 0; j < len; j++) {
+      const x = digitAt(a, j) * 10 ** j,
+        y = digitAt(b, j) * 10 ** j;
+      sums.push(x + y);
+      qs.push({
+        type: "num",
+        q: `${fmt(a)} + ${fmt(b)}: add the ${PLACE[j]}.`,
+        pre: `${fmt(x)} + ${fmt(y)} =`,
+        a: x + y,
+        vis: {
+          kind: "digits",
+          rows: [
+            { n: a, hl: [j] },
+            { n: b, hl: [j] },
+          ],
+        },
+        x: `${fmt(x)} + ${fmt(y)} = [${fmt(x + y)}]`,
+      });
+    }
+    qs.push({
+      type: "num",
+      q: `Add the partial sums of ${fmt(a)} + ${fmt(b)}.`,
+      pre: `${sums.map(fmt).join(" + ")} =`,
+      a: a + b,
+      vis: { kind: "lines", rows: sums.map(fmt) },
+      x: `${sums.map(fmt).join(" + ")} = [${fmt(a + b)}]`,
+    });
+    return qs;
+  };
+  // adjust the addends: b goes up to a round number, a goes down the same (1,613 + 1,297 → 1,610 + 1,300)
+  const adjust = (a, b, j = 2) => {
+    const d = Math.ceil(b / 10 ** j) * 10 ** j - b;
+    return {
+      type: "num",
+      q: `Add by adjusting: ${fmt(a)} + ${fmt(b)}`,
+      pre: `${fmt(a - d)} + ${fmt(b + d)} =`,
+      a: a + b,
+      vis: {
+        kind: "lines",
+        rows: [
+          `${fmt(a)} − ${d} → ${fmt(a - d)}`,
+          `${fmt(b)} + ${d} → ${fmt(b + d)}`,
+        ],
+      },
+      x: `${fmt(b)} + ${d} = ${fmt(b + d)}, ${fmt(a)} − ${d} = ${fmt(a - d)}. ${fmt(a - d)} + ${fmt(b + d)} = [${fmt(a + b)}]`,
+    };
+  };
+
   // bar diagrams (shared/math.js "bar"); the unknown is a yellow "?"
   // lb has m more than la
   const moreBar = (la, a, lb, m) => ({
@@ -276,6 +345,11 @@ window.MathKit = (function () {
     PLACE1,
     round,
     roundQ,
+    frontEnd,
+    col,
+    calc,
+    partials,
+    adjust,
     moreBar,
     timesBar,
     partBar,
