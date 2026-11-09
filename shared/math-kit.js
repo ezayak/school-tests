@@ -302,6 +302,25 @@ window.MathKit = (function () {
     };
   };
 
+  // one step of a multi-step problem: the equation is shown, the answer is worked out here ("9,200 − 2,700" → 6,500)
+  const value = (expr) =>
+    Function(
+      `return (${expr.replace(/,/g, "").replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-")})`,
+    )();
+  const step = (q, expr, post, more = {}) => {
+    const a = value(expr);
+    return {
+      type: "num",
+      q,
+      pre: `${expr} =`,
+      a,
+      post,
+      vis: { kind: "lines", rows: [expr + " = ?"] },
+      x: `${expr} = [${fmt(a)}]`,
+      ...more,
+    };
+  };
+
   // bar diagrams (shared/math.js "bar"); the unknown is a yellow "?"
   // lb has m more than la
   const moreBar = (la, a, lb, m) => ({
@@ -394,6 +413,8 @@ window.MathKit = (function () {
     adjust,
     decompQ,
     adjustSub,
+    value,
+    step,
     moreBar,
     timesBar,
     partBar,
