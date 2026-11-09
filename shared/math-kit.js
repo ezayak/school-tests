@@ -462,6 +462,69 @@ window.MathKit = (function () {
     ];
   };
 
+  // partial quotients: take away d × chunk until nothing is left, then add the chunks (105 ÷ 5: 20 + 1 = 21)
+  const chunksOf = (n, d) => {
+    const out = [];
+    let r = n;
+    while (r >= d) {
+      let k = 10 ** (String(Math.floor(r / d)).length - 1);
+      const c = Math.floor(r / d / k) * k;
+      out.push(c);
+      r -= c * d;
+    }
+    return out;
+  };
+  // rem: true → a remainder is allowed (235 ÷ 8 = 29 R3): one more question asks for it
+  const partialQ = (n, d, chunks, intro, rem = false) => {
+    const cs = chunks || chunksOf(n, d);
+    const qs = [];
+    let r = n;
+    const done = [];
+    cs.forEach((c, k) => {
+      qs.push({
+        type: "num",
+        q: `${k ? `${fmt(n)} ÷ ${d}, next:` : `${intro || `${fmt(n)} ÷ ${d}: take away groups of ${d}.`}`} Take away ${d} × ${fmt(c)}. What is left?`,
+        pre: `${fmt(r)} − ${fmt(d * c)} =`,
+        a: r - d * c,
+        vis: {
+          kind: "lines",
+          rows: [
+            `${fmt(n)} ÷ ${d}`,
+            ...done,
+            `${fmt(r)} − ${fmt(d * c)} (${d} × ${fmt(c)})`,
+          ],
+        },
+        x: `${fmt(r)} − ${fmt(d * c)} = [${fmt(r - d * c)}]`,
+      });
+      done.push(`${fmt(r)} − ${fmt(d * c)} = ${fmt(r - d * c)} (${fmt(c)})`);
+      r -= d * c;
+    });
+    if (rem ? r >= d : r !== 0)
+      throw new Error(`partialQ ${n} ÷ ${d}: ${r} left`);
+    const Q = (n - r) / d;
+    qs.push({
+      type: "num",
+      q: `Add the partial quotients: ${fmt(n)} ÷ ${d} = ?${rem ? " (without the remainder)" : ""}`,
+      pre: `${cs.map(fmt).join(" + ")} =`,
+      a: Q,
+      vis: { kind: "lines", rows: done },
+      x: `${cs.map(fmt).join(" + ")} = [${fmt(Q)}]`,
+    });
+    if (rem)
+      qs.push({
+        type: "num",
+        q: `${fmt(n)} ÷ ${d} = ${fmt(Q)} R ?. What is the remainder?`,
+        pre: `${fmt(n)} ÷ ${d} = ${fmt(Q)} R`,
+        a: r,
+        vis: {
+          kind: "lines",
+          rows: [...done.slice(-1), `${fmt(Q)} × ${d} = ${fmt(Q * d)}`],
+        },
+        x: `${fmt(n)} − ${fmt(Q * d)} = [${r}]: less than ${d}, so it is left over.`,
+      });
+    return qs;
+  };
+
   // factors and primes
   const factors = (n) =>
     Array.from({ length: n }, (_, k) => k + 1).filter((k) => n % k === 0);
@@ -609,6 +672,8 @@ window.MathKit = (function () {
     compatList,
     estDiv,
     rangeDiv,
+    chunksOf,
+    partialQ,
     factors,
     factorPairs,
     isPrime,

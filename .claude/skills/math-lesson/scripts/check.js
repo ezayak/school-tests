@@ -175,7 +175,7 @@ for (const file of files) {
 }
 console.log(problems ? `${problems} problems` : "all checks passed");
 
-// "3 × 40 = 120", "60,000 + 400 + 8 = 60,408", "56 = 8 × 7", "50 ÷ 5 = 10" in a text: each one must be true (× ÷ before + −)
+// "3 × 40 = 120", "60,000 + 400 + 8 = 60,408", "56 = 8 × 7", "50 ÷ 5 = 10" in a text: each one must be true (× ÷ before + −; "7 ÷ 2 = 3 R1" is skipped)
 function mathErrors(text) {
   const t = text.replace(/[[\]$¢]/g, "");
   const N = "\\d[\\d,]*";
@@ -189,7 +189,7 @@ function mathErrors(text) {
   // a chain = a number, not inside a longer chain on either side
   for (const m of t.matchAll(
     new RegExp(
-      `(?<![\\d,×÷+−]\\s*)(${chain})\\s*=\\s*(${N})(?!\\s*[×÷+−]|[\\d,])`,
+      `(?<![\\d,×÷+−]\\s*)(${chain})\\s*=\\s*(${N})(?!\\s*[×÷+−]|[\\d,]|\\s*R\\s*\\d)`,
       "g",
     ),
   ))
