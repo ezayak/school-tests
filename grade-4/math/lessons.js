@@ -373,6 +373,22 @@ window.CS_LESSONS = {
           cover: "img/lesson-7-6/curious.jpg",
           note: "4 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "7-7",
+          title: "What to Do with a Remainder",
+          en: "Ignore it, use it, add one more, or make it a fraction: the story tells you",
+          path: "lesson-7-7.html",
+          cover: "img/lesson-7-7/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
+        {
+          n: "7-8",
+          title: "Problems in Steps with ÷",
+          en: "Add or subtract first, then divide, and decide what to do with the remainder",
+          path: "lesson-7-8.html",
+          cover: "img/lesson-7-8/roses-bar.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
