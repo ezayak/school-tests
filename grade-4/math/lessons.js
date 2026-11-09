@@ -320,6 +320,38 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 7,
+      dir: "unit-7",
+      title:
+        "Division Strategies with Multi-Digit Dividends and 1-Digit Divisors",
+      items: [
+        {
+          n: "7-1",
+          title: "Divide 10s, 100s, 1,000s",
+          en: "Use a basic fact and place value: 24 ÷ 3 = 8, so 24,000 ÷ 3 = 8,000",
+          path: "lesson-7-1.html",
+          cover: "img/lesson-7-1/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
+        {
+          n: "7-2",
+          title: "Estimate Quotients",
+          en: "Use compatible numbers (a basic fact with zeros) to estimate a quotient or a range",
+          path: "lesson-7-2.html",
+          cover: "img/lesson-7-2/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
+        {
+          n: "7-3",
+          title: "Equal Shares",
+          en: "Divide a 2-digit number by sharing it equally; check with multiplication",
+          path: "lesson-7-3.html",
+          cover: "img/lesson-7-3/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
+      ],
+    },
+    {
       n: "",
       part: "",
       dir: "times",
