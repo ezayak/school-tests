@@ -1,10 +1,11 @@
 // Math lessons for Grade 4 (Reveal Math), all terms. One chapter per book unit (a folder unit-N/):
 // first the unit page (the school sheets, label "Unit"), then one card per book lesson (lesson-N-M.html, label "Lesson").
-// Add the files to "also" in games.js for offline use. path and cover are relative to the unit folder.
+// label "Lesson" on the book lessons' cards; the unit pages have their own label "Unit". path and cover are relative to the unit folder.
+// Book lessons are added with .claude/skills/math-lesson/scripts/add.js (it rewrites this list and the "also" files in games.js).
 window.CS_LESSONS = {
   grade: 4,
   part: "Unit",
-  label: "Lesson", // the book lessons: "Lesson 2-1"; the unit pages have their own label "Unit"
+  label: "Lesson",
   intro:
     "Pick a lesson. Each lesson explains with pictures, has games and the school exercises. Answers are typed on a big number pad, and 💡 Help explains one step at a time.",
   chapters: [
@@ -61,6 +62,30 @@ window.CS_LESSONS = {
           path: "multiplication.html",
           cover: "img/cover.jpg",
           note: "12 picture cards · 6 games · 3 exercises",
+        },
+        {
+          n: "4-2",
+          title: "More Than or Times as Many?",
+          en: "Add for “more than”, multiply for “times as many”: bar diagrams and equations",
+          path: "lesson-4-2.html",
+          cover: "img/lesson-4-2/curious.jpg",
+          note: "6 picture cards · 2 games · 8 exercises",
+        },
+        {
+          n: "4-3",
+          title: "Times as Many: Find the Unknown",
+          en: "Times as many: find the big number, the small number or how many times",
+          path: "lesson-4-3.html",
+          cover: "img/lesson-4-3/learn-bar.jpg",
+          note: "6 picture cards · 2 games · 7 exercises",
+        },
+        {
+          n: "4-4",
+          title: "Times as Many: Divide",
+          en: "Divide to compare: find the small number or how many times as much",
+          path: "lesson-4-4.html",
+          cover: "img/lesson-4-4/curious.jpg",
+          note: "6 picture cards · 2 games · 7 exercises",
         },
       ],
     },

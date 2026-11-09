@@ -66,6 +66,7 @@ window.LESSON = {
   key: "math4-l2-1",
   grade: 4,
   title: "The Structure of Big Numbers",
+  en: "The value of a digit, 10 times the place on its right, the greatest and the least number",
   unit: "Unit 2 · Lesson 2-1",
   book: "Book p. 33–36 · Practice Book p. 1–2",
   imgDir: "img/lesson-2-1",
