@@ -194,6 +194,37 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 5,
+      dir: "unit-5",
+      title: "Numbers and Number Patterns",
+      items: [
+        {
+          n: "5-1",
+          title: "Factors of a Number",
+          en: "Factor pairs: all the ways to make a number by multiplying two whole numbers",
+          path: "lesson-5-1.html",
+          cover: "img/lesson-5-1/curious.jpg",
+          note: "5 picture cards · 2 games · 6 exercises",
+        },
+        {
+          n: "5-2",
+          title: "Prime and Composite Numbers",
+          en: "A prime number has one factor pair; a composite number has more than one",
+          path: "lesson-5-2.html",
+          cover: "img/lesson-5-2/curious.jpg",
+          note: "5 picture cards · 1 games · 7 exercises",
+        },
+        {
+          n: "5-3",
+          title: "Multiples",
+          en: "Multiples: the products of a number and 1, 2, 3 … ; a number is a multiple of its factors",
+          path: "lesson-5-3.html",
+          cover: "img/lesson-5-3/curious.jpg",
+          note: "5 picture cards · 2 games · 6 exercises",
+        },
+      ],
+    },
+    {
       n: "",
       part: "",
       dir: "times",

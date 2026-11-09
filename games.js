@@ -2031,10 +2031,10 @@ window.GAMES = [
     hub: true,
     lesson: "Lessons · pictures, number pad, schemas, games & exercises",
     topics:
-      "Place value · Add and subtract in columns · Word problems with a schema · Multiplication and times tables · Times-table games 2–12 · Book lessons: 2-1–2-4 · 3-1–3-9 · 4-1–4-4",
+      "Place value · Add and subtract in columns · Word problems with a schema · Multiplication and times tables · Times-table games 2–12 · Book lessons: 2-1–2-4 · 3-1–3-9 · 4-1–4-4 · 5-1–5-3",
     path: "grade-4/math/index.html",
     countLabel:
-      "3 unit lessons · 17 book lessons · Units 2–4 · Multiplication games",
+      "3 unit lessons · 20 book lessons · Units 2–5 · Multiplication games",
     year: "2026–2027",
     also: [
       "grade-4/math/lessons.js",
@@ -2108,6 +2108,17 @@ window.GAMES = [
       "grade-4/math/unit-4/lesson-4-4.html",
       "grade-4/math/unit-4/lesson-4-4.js",
       "grade-4/math/unit-4/img/lesson-4-4/curious.jpg",
+      "grade-4/math/unit-5/lesson-5-1.html",
+      "grade-4/math/unit-5/lesson-5-1.js",
+      "grade-4/math/unit-5/img/lesson-5-1/curious.jpg",
+      "grade-4/math/unit-5/lesson-5-2.html",
+      "grade-4/math/unit-5/lesson-5-2.js",
+      "grade-4/math/unit-5/img/lesson-5-2/buttons.jpg",
+      "grade-4/math/unit-5/img/lesson-5-2/curious.jpg",
+      "grade-4/math/unit-5/lesson-5-3.html",
+      "grade-4/math/unit-5/lesson-5-3.js",
+      "grade-4/math/unit-5/img/lesson-5-3/bottles.jpg",
+      "grade-4/math/unit-5/img/lesson-5-3/curious.jpg",
     ],
   },
   {
