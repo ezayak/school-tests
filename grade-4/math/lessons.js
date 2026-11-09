@@ -249,6 +249,37 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 6,
+      dir: "unit-6",
+      title: "Multiplication Strategies with Multi-Digit Numbers",
+      items: [
+        {
+          n: "6-1",
+          title: "Multiply by 10s, 100s, 1,000s",
+          en: "Use a basic fact and place value: 4 × 300 = 4 × 3 hundreds = 12 hundreds = 1,200",
+          path: "lesson-6-1.html",
+          cover: "img/lesson-6-1/curious.jpg",
+          note: "5 picture cards · 1 games · 6 exercises",
+        },
+        {
+          n: "6-2",
+          title: "Estimate Products",
+          en: "Estimate a product with compatible numbers or by rounding",
+          path: "lesson-6-2.html",
+          cover: "img/lesson-6-2/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
+        {
+          n: "6-3",
+          title: "Break Apart to Multiply",
+          en: "The Distributive Property: break one factor into parts and add the partial products",
+          path: "lesson-6-3.html",
+          cover: "img/lesson-6-3/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
+      ],
+    },
+    {
       n: "",
       part: "",
       dir: "times",
