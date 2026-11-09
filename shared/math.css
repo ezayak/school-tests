@@ -685,6 +685,18 @@
   text-align: center;
   font-size: 1.1rem;
 }
+/* numbers with marked digits (vis kind "digits"): the book's underlined digit, in yellow */
+.vis-digits u {
+  background: var(--hl);
+  text-decoration-thickness: 4px;
+  text-underline-offset: 6px;
+  border-radius: 4px;
+  padding: 0 2px;
+}
+.vis-digits small {
+  font-family: var(--body);
+  font-size: 0.6em;
+}
 .pvv .hlb {
   background: var(--hl);
   color: #1b2440;

@@ -688,9 +688,23 @@
     return `<div class="vis-colshow">${gridHTML(v.op, v.a, v.b, true)}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }
 
+  // numbers with some digits marked (the book underlines them): {rows: [{n, hl: [places from the right], t}], cap}
+  function digits(v) {
+    const row = (r) => {
+      let j = String(r.n).length;
+      const ds = [...fmt(r.n)]
+        .map((c) =>
+          c === "," ? c : (r.hl || []).includes(--j) ? `<u>${c}</u>` : c,
+        )
+        .join("");
+      return `<div>${ds}${r.t ? ` <small>${kw(r.t)}</small>` : ""}</div>`;
+    };
+    return `<div class="vis-lines vis-digits">${v.rows.map(row).join("")}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
+  }
+
   window.CS_EXT = {
     items: { col: itCol, num: itNum, flower: itFlower },
     pts: { flower: () => FN },
-    vis: { bar, groups, array, cubes, pv, nline, colshow },
+    vis: { bar, groups, array, cubes, pv, nline, colshow, digits },
   };
 })();

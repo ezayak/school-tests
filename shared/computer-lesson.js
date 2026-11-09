@@ -67,8 +67,9 @@
           ),
         )
         .join("");
+    // a chapter's own part ("" = only its title, e.g. Math's "Multiplication games")
     const chapter = (ch) =>
-      `<h2 class="chapter">${esc(LS.part || "Chapter")} ${esc(ch.n)}${ch.title ? ` · ${esc(ch.title)}` : ""}</h2>
+      `<h2 class="chapter">${ch.part === "" ? "" : `${esc(ch.part || LS.part || "Chapter")} ${esc(ch.n)}${ch.title ? " · " : ""}`}${esc(ch.title || "")}</h2>
   <div class="items">${cards(ch)}</div>`;
     app.innerHTML = `<section class="card">
     <div class="topbar"><a class="back" href="../../index.html">← All games</a><span class="eyebrow">Grade ${esc(LS.grade)} · ${esc(SUBJ)}</span></div>
