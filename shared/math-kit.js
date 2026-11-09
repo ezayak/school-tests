@@ -321,6 +321,47 @@ window.MathKit = (function () {
     };
   };
 
+  // the Distributive Property: a × b = (a × p) + (a × q) with q = b − p: the two partial products, then their sum
+  const distrib = (a, b, p, q0, more = {}) => {
+    const q = b - p;
+    const intro =
+      q0 || `${fmt(a)} × ${fmt(b)} = ${fmt(a)} × (${fmt(p)} + ${fmt(q)}).`;
+    const vis = {
+      kind: "lines",
+      rows: [
+        `${fmt(a)} × ${fmt(b)}`,
+        `= (${fmt(a)} × ${fmt(p)}) + (${fmt(a)} × ${fmt(q)})`,
+      ],
+    };
+    return [
+      {
+        type: "num",
+        q: `${intro} First part:`,
+        pre: `${fmt(a)} × ${fmt(p)} =`,
+        a: a * p,
+        vis,
+        x: `${fmt(a)} × ${fmt(p)} = [${fmt(a * p)}]`,
+        ...more,
+      },
+      {
+        type: "num",
+        q: "Second part:",
+        pre: `${fmt(a)} × ${fmt(q)} =`,
+        a: a * q,
+        vis,
+        x: `${fmt(a)} × ${fmt(q)} = [${fmt(a * q)}]`,
+      },
+      {
+        type: "num",
+        q: `Add the partial products: ${fmt(a)} × ${fmt(b)} = ?`,
+        pre: `${fmt(a * p)} + ${fmt(a * q)} =`,
+        a: a * b,
+        vis,
+        x: `${fmt(a * p)} + ${fmt(a * q)} = [${fmt(a * b)}]`,
+      },
+    ];
+  };
+
   // factors and primes
   const factors = (n) =>
     Array.from({ length: n }, (_, k) => k + 1).filter((k) => n % k === 0);
@@ -462,6 +503,7 @@ window.MathKit = (function () {
     adjustSub,
     value,
     step,
+    distrib,
     factors,
     factorPairs,
     isPrime,
