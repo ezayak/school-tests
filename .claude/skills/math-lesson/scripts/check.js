@@ -23,6 +23,7 @@ const VIS = [
   "nline",
   "colshow",
   "digits",
+  "area",
 ];
 global.window = {};
 // the lessons build their questions with shared/math-kit.js

@@ -1088,7 +1088,8 @@
   function startGame(i) {
     const G = L.games[i];
     S.back = openTab("play");
-    run(G.t, prep(G.items, true), "", "g-" + G.k);
+    // keep: true → the items stay in order (steps of one problem)
+    run(G.t, prep(G.items, !G.keep), "", "g-" + G.k);
   }
   function startExercise(i) {
     const X = L.exercises[i];

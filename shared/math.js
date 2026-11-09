@@ -702,9 +702,33 @@
     return `<div class="vis-lines vis-digits">${v.rows.map(row).join("")}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }
 
+  // area model: {rows: [8], cols: [20, 4], cells: [160, "?"] (row by row; "" = empty), cap}; widths follow the numbers
+  function area(v) {
+    const cells = v.cells || [];
+    const w = (n) => Math.max(Number(n) || 1, Math.max(...v.cols) / 6);
+    const h = (n) => Math.max(Number(n) || 1, Math.max(...v.rows) / 3);
+    const cols = v.cols.map((c) => `${w(c)}fr`).join(" ");
+    const rows = v.rows.map((r) => `${h(r)}fr`).join(" ");
+    let k = 0;
+    const grid = v.rows
+      .map((r, i) =>
+        v.cols
+          .map((c, j) => {
+            const t = cells[k++];
+            return `<span class="ar-c ${t === "?" ? "q" : COL[(i + j) % 4]}">${t === undefined ? "" : esc(typeof t === "number" ? fmt(t) : t)}</span>`;
+          })
+          .join(""),
+      )
+      .join("");
+    return `<div class="vis-area"><div class="ar-wrap" style="--cols:${cols};--rows:${rows}">
+      <span></span><div class="ar-top">${v.cols.map((c) => `<b>${esc(fmt(c))}</b>`).join("")}</div>
+      <div class="ar-side">${v.rows.map((r) => `<b>${esc(fmt(r))}</b>`).join("")}</div><div class="ar-grid">${grid}</div>
+    </div>${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
+  }
+
   window.CS_EXT = {
     items: { col: itCol, num: itNum, flower: itFlower },
     pts: { flower: () => FN },
-    vis: { bar, groups, array, cubes, pv, nline, colshow, digits },
+    vis: { bar, groups, array, cubes, pv, nline, colshow, digits, area },
   };
 })();

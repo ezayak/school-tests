@@ -685,6 +685,55 @@
   text-align: center;
   font-size: 1.1rem;
 }
+/* area model (vis kind "area"): the factors on top and on the left, a partial product in each cell */
+.vis-area {
+  width: 100%;
+  padding: 4px 8px;
+}
+.ar-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 4px;
+  min-height: 150px;
+  font-family: var(--display);
+}
+.ar-top,
+.ar-grid {
+  display: grid;
+  grid-template-columns: var(--cols);
+}
+.ar-side,
+.ar-grid {
+  display: grid;
+  grid-template-rows: var(--rows);
+}
+.ar-top b,
+.ar-side b {
+  display: grid;
+  place-items: center;
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+.ar-side b {
+  padding: 0 6px;
+}
+.ar-c {
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  border: 2.5px solid var(--ink);
+  margin: 0 0 -2.5px -2.5px;
+  background: color-mix(in srgb, var(--sc) 30%, var(--card));
+  font-size: 1.2rem;
+  color: var(--ink);
+  overflow: hidden;
+}
+.ar-c.q {
+  background: var(--hl);
+  border-style: dashed;
+  color: #1b2440;
+}
 /* numbers with marked digits (vis kind "digits"): the book's underlined digit, in yellow */
 .vis-digits u {
   background: var(--hl);
@@ -788,7 +837,8 @@
     > .vis-cubes,
     > .vis-pv,
     > .vis-nline,
-    > .vis-colshow
+    > .vis-colshow,
+    > .vis-area
   ) {
   background: var(--card);
 }

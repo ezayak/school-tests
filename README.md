@@ -894,7 +894,9 @@ Drawings (`vis`):
 - `{kind: "pv", n, hl: [places from the right], val: true, cap}` – place-value chart with periods; `hl` digits are yellow, `val` writes their value.
 - `{kind: "nline", lo, hi, n, hide}` – number line for rounding (`hide`: no answer shown).
 - `{kind: "digits", rows: [{n, hl: [places from the right], t}], cap}` – numbers with some digits marked in yellow (the book's underlined digits); `t` = a note after the number.
+- `{kind: "area", rows: [8], cols: [20, 4], cells: [160, "?"], cap}` – an area model: the factors on top and on the left, a partial product in each cell (row by row; `"?"` = yellow, the one to find; `""` = empty).
 
+A game or exercise with `keep: true` keeps its items in order (the steps of one problem); otherwise they are shuffled.
 A lesson file is like a Science lesson (`words`, `ideas`, `games`, `exercises`, `key: "math4-u<unit>"`), with `imgDir: "img"` and `cover: "cover"`
 (the unit's opening picture from the book). Picture cards can set `ic` (the emoji on their tile).
 
