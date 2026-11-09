@@ -1,11 +1,10 @@
-// Math lessons for Grade 4 (Reveal Math), all terms. One entry per book unit (a folder unit-N/ with its lesson page);
-// add one entry per lesson (and its files to "also" in games.js for offline use).
-// path and cover are relative to the unit folder.
+// Math lessons for Grade 4 (Reveal Math), all terms. One chapter per book unit (a folder unit-N/):
+// first the unit page (the school sheets, label "Unit"), then one card per book lesson (lesson-N-M.html, label "Lesson").
+// Add the files to "also" in games.js for offline use. path and cover are relative to the unit folder.
 window.CS_LESSONS = {
   grade: 4,
   part: "Unit",
-  label: "Unit", // one lesson per book unit: the cards say "Unit 2", "Unit 3" …
-  flat: true, // no unit headings: all the cards together
+  label: "Lesson", // the book lessons: "Lesson 2-1"; the unit pages have their own label "Unit"
   intro:
     "Pick a lesson. Each lesson explains with pictures, has games and the school exercises. Answers are typed on a big number pad, and 💡 Help explains one step at a time.",
   chapters: [
@@ -16,11 +15,20 @@ window.CS_LESSONS = {
       items: [
         {
           n: 2,
+          label: "Unit",
           title: "Place Value: Big Numbers",
           en: "Places and periods, the value of a digit, standard / word / expanded form, compare, round",
           path: "place-value.html",
           cover: "img/cover.jpg",
           note: "9 picture cards · 4 games · 6 exercises",
+        },
+        {
+          n: "2-1",
+          title: "The Structure of Big Numbers",
+          en: "The value of a digit, 10 times the place on its right, the greatest and the least number",
+          path: "lesson-2-1.html",
+          cover: "img/lesson-2-1/curious.jpg",
+          note: "7 picture cards · 3 games · 8 exercises",
         },
       ],
     },
@@ -31,6 +39,7 @@ window.CS_LESSONS = {
       items: [
         {
           n: 3,
+          label: "Unit",
           title: "Add and Subtract Big Numbers",
           en: "Columns with carrying and regrouping, word problems with a schema, estimating",
           path: "add-subtract.html",
@@ -46,6 +55,7 @@ window.CS_LESSONS = {
       items: [
         {
           n: 4,
+          label: "Unit",
           title: "Multiplication",
           en: "What multiplication is: equal groups, arrays, times tables; times as many",
           path: "multiplication.html",
@@ -56,6 +66,7 @@ window.CS_LESSONS = {
     },
     {
       n: "",
+      part: "",
       dir: "times",
       title: "Multiplication games",
       items: [
