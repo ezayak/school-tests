@@ -16,6 +16,9 @@ The user reviews each lesson in the browser: build **one lesson at a time** unle
 - Read `grade-4/math/SOURCES.md`, `TODO.md`, `UNVERIFIED.md`. Build the next **planned** lesson (book order), or the pages of a new school sheet.
 - New file in `Term N/`: find its lesson (the sheet says "Lesson 4-2"), add it to the book lesson's page as exercises (`g: "🏫 School · …"`, `from: "Class sheet 4-2"`), then log it. A sheet for a lesson that is not built yet waits for that lesson (`planned`).
 - The older unit pages (`unit-2/place-value` …) hold the Term 1 sheets; leave them as they are unless asked.
+- **Teacher's keys**: the `Term N/…L_N-M.pdf` scans (2–4 pages, no text layer) are the book's On My Own pages with the answers in pink. Check the lesson against its key
+  (every answer, and the key's sample answers for open questions go into `x` or the model answer); log it as "built (checked)". A key that says "Answers may vary" leaves the item unverified.
+- The user may name the pages ("Lesson 4-2: book pages 111, 112, Practice Book 29, 30"): those are the pages assigned; still build the whole lesson (all 4 book pages), as the others.
 
 ## 2. Read the sources
 
@@ -27,9 +30,11 @@ The user reviews each lesson in the browser: build **one lesson at a time** unle
 
 ## 3. Build the lesson
 
-Files: `unit-N/lesson-N-M.js` + `.html` (copy `unit-2/lesson-2-1.html`, change the `.js` and the `<title>`), pictures in `unit-N/img/lesson-N-M/`. A new unit: a new `unit-N/` folder and a chapter in `lessons.js`.
+Files: `unit-N/lesson-N-M.js`, pictures in `unit-N/img/lesson-N-M/`. The `.html`, the card in `lessons.js` (a new unit gets its chapter) and the files in `games.js` come from
+`node .claude/skills/math-lesson/scripts/add.js grade-4/math/unit-N/lesson-N-M.js` (then prettier on `games.js` and `lessons.js`).
+Word problems (Unit 4 on): `unit-4/lesson-4-3.js` is the model (`timesBar`, `partBar`, `howBar`, `moreBar` bar diagrams with the unknown as a yellow "?", `prob(q, a, vis, post, x)`).
 
-- Head: `n: "2-1"`, `key: "math4-l2-1"`, `title` (short, plain words), `unit: "Unit 2 · Lesson 2-1"`, `book: "Book p. 33–36 · Practice Book p. 1–2"`, `imgDir: "img/lesson-2-1"`, `cover: "curious"`, `question` = the Reflect question with a short answer.
+- Head: `n: "2-1"`, `key: "math4-l2-1"`, `title` (short, plain words), `en` (one line for the card), `unit: "Unit 2 · Lesson 2-1"`, `book: "Book p. 33–36 · Practice Book p. 1–2"`, `imgDir: "img/lesson-2-1"`, `cover: "curious"`, `question` = the Reflect question with a short answer.
 - Pictures: the **Be Curious** picture is the cover (crop it from the page at `-r 200`, 700px wide, `python3 -I` + PIL). Crop a book picture only when it explains something a drawing can't (Akira's ×10 arrows). Everything else is drawn by `shared/math.js`: `pv`, `digits`, `nline`, `bar`, `groups`, `array`, `cubes`, `colshow`, and the engine's `lines`.
 - `words`: the lesson's vocabulary (the Family Letter's terms that belong to it). `ideas` (Learn): 5–8 cards retelling Be Curious, Learn and Work Together in easy words, each with a drawing; the last card the main skill (how to do it).
 - `games`: 2–4 games on the lesson's skill with **new numbers** (not the exercise numbers): a `.map` over a list of numbers, like `value(4695132, j)`.
@@ -45,13 +50,15 @@ Files: `unit-N/lesson-N-M.js` + `.html` (copy `unit-2/lesson-2-1.html`, change t
   - explain / Reflect / "which doesn't belong" → `open` with a model answer; when the book takes many answers but one can be checked, prefer an `mc` of numbers that work / don't work.
   - "write two numbers so that …" → `mc` of pairs.
   - Drawing, colouring, "use base-ten blocks to show" → skipped (log it), unless it can be a picture question.
-- Every answer is worked out (by the helpers in the file where possible: `digitAt`, `greatest`, `least`), never typed from memory. Answers with more than one right form or written without a key get a `// unverified: why` comment and a row in `UNVERIFIED.md`.
+- Every answer is worked out (by the helpers in the file where possible: `digitAt`, `greatest`, `least`), never typed from memory. Write the equation in `x` with the answer in brackets
+  (`3 × 40 = [120]`, `56 = [8] × 7`): `check.js` recomputes every equation in `x` and compares the bracketed number with a `num` answer.
+- A book typo (« as Celeb ») is fixed and noted in a comment and in `SOURCES.md`. Answers with more than one right form or written without a key get a `// unverified: why` comment and a row in `UNVERIFIED.md`.
 
 ## 4. Check
 
 ```bash
 node --check grade-4/math/unit-2/lesson-2-1.js
-node .claude/skills/math-lesson/scripts/check.js grade-4/math/unit-2/lesson-2-1.js     # pictures, drawings, answers, files, lessons.js, offline, unverified rows
+node .claude/skills/math-lesson/scripts/check.js grade-4/math/unit-2/lesson-2-1.js     # pictures, drawings, equations in x, files, lessons.js, offline, unverified rows
 .claude/skills/english-lesson/scripts/play.sh grade-4/math/unit-2 lesson-2-1.html       # plays every game and exercise to its score screen (num, col, mc, tf, open)
 .claude/skills/english-lesson/scripts/shot.sh grade-4/math/unit-2 <out.png> lesson-2-1.html ex 0 x-own3   # screenshot; Read the png
 .claude/skills/english-lesson/scripts/shot.sh grade-4/math <out.png> index.html                            # the hub
@@ -65,6 +72,5 @@ Look at the screenshots: a drawing that gives the answer away (a `pv` with `val:
 ## 5. Logs, list, offline
 
 - `SOURCES.md`: the lesson's book pages and Practice Book pages → `file · exercise key`, **built**; skipped parts with why. `TODO.md`: what waits for a scan. `UNVERIFIED.md`: one row per `// unverified`.
-- `lessons.js`: the card in its unit (`n: "2-1"`, `title`, `en`, `path`, `cover: "img/lesson-2-1/curious.jpg"`, `note: "7 picture cards · 3 games · 8 exercises"`), after the unit page (`label: "Unit"`).
-- `games.js`: the `.js`, `.html` and pictures in `also` of the Math entry, its `countLabel` and `topics`. `node .claude/skills/english-lesson/scripts/offline-check.js grade-4/math` (0 missing, 0 not listed).
+- `lessons.js` and `games.js` (the card, `also`, `countLabel`, `topics`): `add.js` (above). Then `node .claude/skills/english-lesson/scripts/offline-check.js grade-4/math` (0 missing, 0 not listed).
 - Commits: one per lesson (files, pictures, log rows, `lessons.js`, `games.js`); an engine change (`shared/math.js`, `shared/computer-lesson.js`) in its own commit first; `VERSION` bump in `sw.js` last, in its own commit. No Co-Authored-By line. Don't push unless asked.

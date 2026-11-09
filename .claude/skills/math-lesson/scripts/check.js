@@ -111,6 +111,13 @@ for (const file of files) {
           if (!o.img && !o.emoji)
             bad.push(`multi ${id} option ${j} has no picture`);
         });
+      // the equations written in the explanation are right, and the [number] in it is the answer
+      for (const e of mathErrors(it.x || "")) bad.push(`${e} (${id})`);
+      if (it.type === "num" && it.x) {
+        const b = (it.x.match(/(?<![\d,])\[\$?([\d,]+)¢?\](?![\d,])/) || [])[1];
+        if (b && Number(b.replace(/,/g, "")) !== Number(it.a))
+          bad.push(`x says [${b}] but the answer is ${it.a} (${id})`);
+      }
     });
   for (const f of fs.existsSync(imgDir) ? fs.readdirSync(imgDir) : []) {
     const p = path.join(imgDir, f);
@@ -143,4 +150,29 @@ for (const file of files) {
   problems += bad.length;
 }
 console.log(problems ? `${problems} problems` : "all checks passed");
+
+// "3 × 40 = 120", "56 = 8 × 7", "50 ÷ 5 = 10", "9 + 6 = 15", "9 − 5 = 4" in a text: each one must be true
+function mathErrors(text) {
+  const t = text.replace(/[[\]$¢]/g, "");
+  const n = (s) => Number(s.replace(/,/g, ""));
+  const calc = (a, op, b) =>
+    op === "+"
+      ? a + b
+      : op === "−" || op === "-"
+        ? a - b
+        : op === "×"
+          ? a * b
+          : a / b;
+  const N = "(\\d[\\d,]*)";
+  const errs = [];
+  for (const m of t.matchAll(
+    new RegExp(`${N}\\s*([×÷+−])\\s*${N}\\s*=\\s*${N}(?!\\s*[×÷+−])`, "g"),
+  ))
+    if (calc(n(m[1]), m[2], n(m[3])) !== n(m[4])) errs.push(`wrong: ${m[0]}`);
+  for (const m of t.matchAll(
+    new RegExp(`(?<![×÷+−]\\s*)${N}\\s*=\\s*${N}\\s*([×÷+−])\\s*${N}`, "g"),
+  ))
+    if (calc(n(m[2]), m[3], n(m[4])) !== n(m[1])) errs.push(`wrong: ${m[0]}`);
+  return errs;
+}
 process.exit(problems ? 1 : 0);
