@@ -32,9 +32,11 @@ The user reviews each lesson in the browser: build **one lesson at a time** unle
 
 Files: `unit-N/lesson-N-M.js`, pictures in `unit-N/img/lesson-N-M/`. The `.html`, the card in `lessons.js` (a new unit gets its chapter) and the files in `games.js` come from
 `node .claude/skills/math-lesson/scripts/add.js grade-4/math/unit-N/lesson-N-M.js` (then prettier on `games.js` and `lessons.js`).
-Build questions with `shared/math-kit.js` (`const { fmt, words, expMC, wordMC, cmp, roundQ, prob, timesBar, partBar, howBar, moreBar, sumBar } = MathKit;`, see README):
-it works out the word forms, expanded forms, comparisons, roundings and bar diagrams. A new question shape used by more than one lesson goes into the kit, not into a lesson file.
-`unit-2/lesson-2-2.js` … `2-4.js` and `unit-4/lesson-4-3.js` show it (4-2 … 4-4 still have their own copies of the bar helpers).
+Build questions with `shared/math-kit.js` (see README for the list: forms, `cmp`, `roundQ`, `col`, `step`, `distrib`, `areaQ`, `estDiv`, `partialQ`, `remQ`, bar diagrams …):
+it works out every answer. A new question shape used by more than one lesson goes into the kit, not into a lesson file. A problem in several steps (`step`, `partialQ`, `areaQ`, `remQ`)
+is one item per step; when a step uses the answer of the step before, list the chain at the end of the file and check it with `value()` (see `unit-3/lesson-3-8.js`): a wrong number throws on load.
+Models by topic: place value `unit-2/lesson-2-2.js`, column sums `unit-3/lesson-3-4.js`, comparisons `unit-4/lesson-4-3.js`, factors `unit-5/lesson-5-1.js`, area models `unit-6/lesson-6-7.js`, division `unit-7/lesson-7-6.js`.
+(4-2 … 4-4 still have their own copies of the bar helpers.)
 
 - Head: `n: "2-1"`, `key: "math4-l2-1"`, `title` (short, plain words), `en` (one line for the card), `unit: "Unit 2 · Lesson 2-1"`, `book: "Book p. 33–36 · Practice Book p. 1–2"`, `imgDir: "img/lesson-2-1"`, `cover: "curious"`, `question` = the Reflect question with a short answer.
 - Pictures: the **Be Curious** picture is the cover (crop it from the page at `-r 200`, 700px wide, `python3 -I` + PIL). Crop a book picture only when it explains something a drawing can't (Akira's ×10 arrows). Everything else is drawn by `shared/math.js`: `pv`, `digits`, `nline`, `bar`, `groups`, `array`, `cubes`, `colshow`, and the engine's `lines`.
@@ -52,6 +54,9 @@ it works out the word forms, expanded forms, comparisons, roundings and bar diag
   - explain / Reflect / "which doesn't belong" → `open` with a model answer; when the book takes many answers but one can be checked, prefer an `mc` of numbers that work / don't work.
   - "write two numbers so that …" → `mc` of pairs.
   - Drawing, colouring, "use base-ten blocks to show" → skipped (log it), unless it can be a picture question.
+- **The drawing must not show the answer.** A drawing next to "what is 24 ÷ 3?" shows `24 ÷ 3 = ?`, never `3 × 8 = 24`; an area model shows `"?"` in the cell being asked;
+  "choose all" options all get the same emoji (the engine shows it before Check: ✅ / 🤔 would give the answers away; `check.js` catches that).
+- Steps of one problem stay in order: `keep: true` on the exercise **and on the game** (games are shuffled otherwise). Split an exercise of more than ~35 steps in two (`pb`, `pb2`).
 - Every answer is worked out (by the helpers in the file where possible: `digitAt`, `greatest`, `least`), never typed from memory. Write the equation in `x` with the answer in brackets
   (`3 × 40 = [120]`, `56 = [8] × 7`): `check.js` recomputes every equation in `x` and compares the bracketed number with a `num` answer.
 - A book typo (« as Celeb ») is fixed and noted in a comment and in `SOURCES.md`. Answers with more than one right form or written without a key get a `// unverified: why` comment and a row in `UNVERIFIED.md`.

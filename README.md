@@ -863,7 +863,10 @@ On My Own, Reflect, in the book's order, `keep: true`) and "📘 Practice Book" 
 Sources log: `grade-4/math/SOURCES.md`, `TODO.md`, `UNVERIFIED.md`. Procedure and checks: the `math-lesson` skill.
 A book lesson page also loads `shared/math-kit.js` (after `shared/math.js`, before its `lesson-N-M.js`): `window.MathKit` builds the questions so that answers are worked out, not typed:
 `words(n)` / `expanded(n)` (word and expanded form), `wordMC` / `expMC` (choose the form; wrong options from look-alike numbers), `cmp(a, b)` (`<` `=` `>`, the first different digit yellow),
-`roundQ(n, place)` (round with a number line), `prob(q, a, vis, post, x)` (a word problem), and bar diagrams for comparisons `timesBar`, `partBar`, `howBar`, `moreBar`, `sumBar`.
+`roundQ(n, place)` (round with a number line), `frontEnd`, `col(a, op, b)` (a column sum), `partials` / `adjust` (ways to add), `decompQ` / `adjustSub` (ways to subtract),
+`step(q, "9,200 − 2,700")` (one step of a problem: the equation shown, the answer computed), `distrib(a, b, p)` and `areaQ(rowParts, colParts)` (partial products with an area model, cell by cell),
+`factors`, `factorPairs`, `pairsQ`, `primeQ`, `estDiv` / `rangeDiv` (compatible numbers for division), `partialQ(n, d, chunks, intro, rem)` (partial quotients, with a remainder),
+`remQ(q, n, d, how, post)` (a remainder in a story: ignore, use, add one, or a fraction), `prob(q, a, vis, post, x)` (a word problem), and bar diagrams `timesBar`, `partBar`, `howBar`, `moreBar`, `sumBar`.
 It has no page code, so `check.js` and `add.js` run it in node too.
 
 The lessons use the **Computer lesson engine** with `<body data-subject="Math">`. The page loads `shared/common.js`, `shared/math.js`, its `<name>.js`, then the engine
