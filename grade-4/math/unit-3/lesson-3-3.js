@@ -101,6 +101,7 @@ window.LESSON = {
     },
     {
       k: "partial",
+      keep: true,
       t: "Partial sums",
       en: "One place at a time",
       ic: "🧩",

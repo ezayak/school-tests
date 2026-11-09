@@ -106,6 +106,7 @@ window.LESSON = {
   games: [
     {
       k: "round",
+      keep: true,
       t: "Round and multiply",
       en: "To the nearest hundred",
       ic: "🎯",

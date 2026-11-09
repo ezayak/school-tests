@@ -326,29 +326,23 @@ window.MathKit = (function () {
     const q = b - p;
     const intro =
       q0 || `${fmt(a)} × ${fmt(b)} = ${fmt(a)} × (${fmt(p)} + ${fmt(q)}).`;
-    const vis = {
-      kind: "lines",
-      rows: [
-        `${fmt(a)} × ${fmt(b)}`,
-        `= (${fmt(a)} × ${fmt(p)}) + (${fmt(a)} × ${fmt(q)})`,
-      ],
-    };
+    const area = (cells) => ({ kind: "area", rows: [a], cols: [p, q], cells });
     return [
       {
         type: "num",
         q: `${intro} First part:`,
         pre: `${fmt(a)} × ${fmt(p)} =`,
         a: a * p,
-        vis,
+        vis: area(["?", ""]),
         x: `${fmt(a)} × ${fmt(p)} = [${fmt(a * p)}]`,
         ...more,
       },
       {
         type: "num",
-        q: "Second part:",
+        q: `${fmt(a)} × ${fmt(b)}, second part:`,
         pre: `${fmt(a)} × ${fmt(q)} =`,
         a: a * q,
-        vis,
+        vis: area([a * p, "?"]),
         x: `${fmt(a)} × ${fmt(q)} = [${fmt(a * q)}]`,
       },
       {
@@ -356,7 +350,7 @@ window.MathKit = (function () {
         q: `Add the partial products: ${fmt(a)} × ${fmt(b)} = ?`,
         pre: `${fmt(a * p)} + ${fmt(a * q)} =`,
         a: a * b,
-        vis,
+        vis: area([a * p, a * q]),
         x: `${fmt(a * p)} + ${fmt(a * q)} = [${fmt(a * b)}]`,
       },
     ];

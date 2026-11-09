@@ -83,6 +83,7 @@ window.LESSON = {
   games: [
     {
       k: "break",
+      keep: true,
       t: "Break it apart",
       en: "Tens and ones",
       ic: "✂️",

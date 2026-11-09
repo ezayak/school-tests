@@ -116,6 +116,7 @@ window.LESSON = {
   games: [
     {
       k: "steps",
+      keep: true,
       t: "Step by step",
       en: "Two-step problems",
       ic: "🪜",
