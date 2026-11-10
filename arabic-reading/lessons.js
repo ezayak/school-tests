@@ -73,6 +73,15 @@ window.READING = [
     cover: "img/lam/tile.jpg",
     note: "70 words to read · 3 games: moon or sun, join to the sun or the moon, write the word",
   },
+  {
+    n: 9,
+    nAr: "التَّاسِعَةُ",
+    title: "هَمْزَةُ الْقَطْعِ وَالْوَصْلِ · الْأَلِفُ اللَّيِّنَةُ",
+    en: "Hamza and the alif ى",
+    path: "hamza.html",
+    cover: "img/hamza/tile.jpg",
+    note: "26 words to read · 3 games: qat' or wasl, the first letter أ or ا, the last letter ى or ا",
+  },
 ];
 // the folder of this file, so a hub in any folder can link to the cards
 window.READING_BASE = document.currentScript.src.replace(/[^/]*$/, "");
