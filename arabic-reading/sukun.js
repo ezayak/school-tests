@@ -137,7 +137,7 @@
     en: "Sukun and syllables",
     uk: "Сукун і склади",
     unit: "Arabic reading · Step 4 · booklet p. 7",
-    cover: "img/sukun/cover.jpg",
+    cover: "img/sukun/tile.jpg",
     tapq: true,
     links: window.READING_LINKS,
     tabs: [

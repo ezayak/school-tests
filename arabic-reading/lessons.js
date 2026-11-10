@@ -34,8 +34,17 @@ window.READING = [
     title: "الْمَقَاطِعُ السَّاكِنَةُ",
     en: "Sukun and syllables",
     path: "sukun.html",
-    cover: "img/sukun/cover.jpg",
+    cover: "img/sukun/tile.jpg",
     note: "34 words to read · 5 games: hear, where is the sukun, split into syllables, correct the split, the missing syllable",
+  },
+  {
+    n: 5,
+    nAr: "الْخَامِسَةُ",
+    title: "التَّاءُ الْمَفْتُوحَةُ وَالْمَرْبُوطَةُ وَالْهَاءُ",
+    en: "Open ta, round ta and ha",
+    path: "ta.html",
+    cover: "img/ta/tile.jpg",
+    note: "25 words to read · 5 games: ت or ة, ة or ه, the last letter, write the name, a sentence",
   },
 ];
 // the folder of this file, so a hub in any folder can link to the cards
