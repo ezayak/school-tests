@@ -55,6 +55,15 @@ window.READING = [
     cover: "img/shadda/tile.jpg",
     note: "35 words to read · 4 games: with or without shadda, where is the shadda, two letters in one, picture",
   },
+  {
+    n: 7,
+    nAr: "السَّابِعَةُ",
+    title: "التَّنْوِينُ",
+    en: "Tanween",
+    path: "tanween.html",
+    cover: "img/tanween/tile.jpg",
+    note: "65 words to read · 5 games: which tanween, hear it, the alif, is there tanween, the letter",
+  },
 ];
 // the folder of this file, so a hub in any folder can link to the cards
 window.READING_BASE = document.currentScript.src.replace(/[^/]*$/, "");
