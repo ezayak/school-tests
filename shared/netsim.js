@@ -1,4 +1,4 @@
-// Mini Outlook: a pretend Outlook (new Outlook, as in the Grade 4 book Unit 3 « Communicating online ») for the Computer
+// Mini Outlook and Mini Edge: a pretend Outlook (new Outlook) and Edge, as in the Grade 4 book Unit 3 « Communicating online », for the Computer
 // lessons, made the same way as Mini Word (shared/wordsim.js) so the lesson engine (shared/computer-lesson.js) can use it.
 // NetSim.create(box, {start}) draws it inside box. Everything the child can press has data-t="<target>":
 //   taskbar "task:outlook"; left rail "rail:mail" "rail:people";
@@ -14,12 +14,22 @@
 //   "nc:first" "nc:last" "nc:email" "nc:phone" "nc:address" "nc:company" "nc:notes" (inputs) "nc:save" "nc:cancel";
 //   the Open / Save As window "fd:nav:<folder>" (Downloads Documents Pictures Music Videos) "fd:file:<name>" "fd:name" (input)
 //   "fd:open" "fd:save" "fd:cancel"; a preview "pv:close".
+// Mini Edge: taskbar "task:edge"; "e:addr" (input, then key Enter) "e:back" "e:refresh" "e:newtab" "e:tab:<i>" "e:close:<i>",
+//   the New tab search box "e:search" (input); Google "g:images" "g:q" (input, then Enter) "g:go", results "g:tab:All|Images|Videos"
+//   "g:tools" → "g:size" "g:color" "g:rights" (Images) "g:dur" (Videos) → "opt:<choice>" (Large, Medium, Icon, Red …,
+//   Creative Commons licenses, Short (0-4 min) …), a picture "gimg:<i>" (right-click → "cx:saveimg" "cx:copyimg" …), the big
+//   picture "g:big" (right-click too) "g:lens" "g:close", a video "gvid:<i>" → "yt:play"; outlook.live.com: "ms:email" (input)
+//   "ms:next" "ms:pass" (input) "ms:signin" "ms:back", the Save password bubble "pw:never" "pw:save", Outlook on the web
+//   (the same targets as Outlook) and the account picture "acct" → "acct:signout".
 // Steps: {act: "click"|"dbl"|"right"|"type"|"key"|"look", t, say}; type: {act: "type", t: "cm:to", text}; key: {act: "key",
 //   t: "key:Enter", key: "Enter"}. A type in "cm:body" is done when the body holds the text.
 // A start: {me: "stella" | "marco" | "tom", view: "mail" | "people", folder: "Inbox", open: "<mail id>", mails: [ids],
 //   compose: {kind: "new" | "reply" | "forward", of: "<mail id>", to, cc, bcc, subject, body, att: ["apples.png"], cc: true …},
 //   contacts: ["marco", "alex"] (who is in People; default alex, lisa, tom), sel: "Marco" (a selected contact), fav: ["Alex"],
-//   nc: true (the New contact window), files: {Pictures: [{name: "apples", ext: "png", e: "🍎"}]} (more files on the computer)}.
+//   nc: true (the New contact window), files: {Pictures: [{name: "apples", ext: "png", e: "🍎"}]} (more files on the computer),
+//   app: "edge" (Mini Edge in front), page: "newtab" | "google" | "gimages" | "results" | "login" | "outlook", q: "healthy food"
+//   (the search of "results"), itab: "Images" | "Videos", tools: true, signed: true (signed in to outlook.live.com),
+//   askSave: true (Edge asks to save the password after signing in)}.
 (function () {
   "use strict";
   const SW = 960,
@@ -231,6 +241,24 @@
     gear: sv(
       `<circle cx="10" cy="10" r="2.6" ${S}/><path d="M10 2.5v2.4M10 15.1v2.4M2.5 10h2.4M15.1 10h2.4M4.7 4.7l1.7 1.7M13.6 13.6l1.7 1.7M4.7 15.3l1.7-1.7M13.6 6.4l1.7-1.7" ${S}/>`,
     ),
+    edge: sv(
+      '<circle cx="10" cy="10" r="8.5" fill="#1b8fd6"/><path d="M18.4 11.4A8.5 8.5 0 012.2 13c1.3 2 4.6 2.8 7.4 2 2.4-.7 3.6-2.6 3.1-3.7H8.1c-.2-2.3 1.6-4.2 4.6-4.2 3.3 0 5.4 2 5.7 4.3z" fill="#3fd18a"/><path d="M7.2 11.3c0-2.9 2.6-5.3 6-5.3a8.5 8.5 0 00-11 6.9c1 1.3 2.6 2.2 4.4 2.4a5 5 0 01.6-4z" fill="#0c59a4"/>',
+    ),
+    lock: sv(
+      `<rect x="5" y="9" width="10" height="8" rx="1.5" ${S}/><path d="M7 9V6.5a3 3 0 016 0V9" ${S}/>`,
+    ),
+    lens: sv(
+      '<circle cx="10" cy="10" r="8" fill="#fff" stroke="#5f6368" stroke-width="1.2"/><circle cx="10" cy="10.5" r="2.6" fill="none" stroke="#4285f4" stroke-width="1.6"/><path d="M5.5 8V5.5H8M12 5.5h2.5V8M14.5 12.5V15H12M8 15H5.5v-2.5" fill="none" stroke="#5f6368" stroke-width="1.2"/>',
+    ),
+    video: sv(
+      `<rect x="2.5" y="5" width="11" height="10" rx="1.5" ${S}/><path d="M13.5 9l4-2.5v7l-4-2.5" ${S}/>`,
+    ),
+    star2: sv(
+      `<path d="M10 3l2 4.3 4.7.5-3.5 3.2 1 4.6L10 13.3 5.8 15.6l1-4.6L3.3 7.8 8 7.3z" ${S}/>`,
+    ),
+    collections: sv(
+      `<rect x="3" y="5" width="11" height="12" rx="1.5" ${S}/><path d="M6 3h10a1 1 0 011 1v11" ${S}/>`,
+    ),
     bulb: sv(`<path d="M7 13.5a5 5 0 116 0V15H7zM8 17.5h4" ${S}/>`),
   };
   // the file pictures of the book (p. 112): document, image, audio, video, presentation, and a zip folder
@@ -374,6 +402,449 @@
   };
   const FOLDERS = ["Inbox", "Sent Items", "Drafts", "Deleted Items"];
 
+  /* ---------- what Google finds in Mini Edge: emoji "photos" with a size, a colour and usage rights ---------- */
+  const img = (k, e, name, title, site, size, color, cc) => ({
+    k,
+    e,
+    name,
+    title,
+    site,
+    size,
+    color,
+    cc,
+  });
+  const IMGS = [
+    // healthy food (book pp. 113–115)
+    img(
+      "food",
+      "🥗",
+      "healthy-foods",
+      "Healthy Foods for Kids",
+      "EatingWell",
+      "Large",
+      "Green",
+      true,
+    ),
+    img(
+      "food",
+      "🫐",
+      "superfoods",
+      "10 superfoods to boost a healthy diet",
+      "Harvard Health",
+      "Large",
+      "Purple",
+      false,
+    ),
+    img(
+      "food",
+      "🥦",
+      "super-healthy",
+      "50 Foods That Are Super Healthy",
+      "Healthline",
+      "Medium",
+      "Green",
+      true,
+    ),
+    img(
+      "food",
+      "🥑",
+      "heart-healthy",
+      "23 Heart Healthy Foods",
+      "Prevention",
+      "Large",
+      "Green",
+      false,
+    ),
+    img("food", "🍎", "apples", "Apples", "EatingWell", "Medium", "Red", true),
+    img(
+      "food",
+      "🐟",
+      "fish",
+      "Healthy fish for kids",
+      "Kids Health",
+      "Medium",
+      "Blue",
+      false,
+    ),
+    img("food", "🍊", "oranges", "Oranges", "Pixabay", "Icon", "Orange", true),
+    img(
+      "food",
+      "🥛",
+      "milk",
+      "A glass of milk",
+      "Healthline",
+      "Icon",
+      "White",
+      true,
+    ),
+    // yellow fruits (p. 116)
+    img(
+      "fruit",
+      "🍌",
+      "bananas",
+      "Bananas",
+      "Pixabay",
+      "Large",
+      "Yellow",
+      true,
+    ),
+    img(
+      "fruit",
+      "🍋",
+      "lemons",
+      "Lemons",
+      "Wikipedia",
+      "Medium",
+      "Yellow",
+      true,
+    ),
+    img(
+      "fruit",
+      "🍍",
+      "pineapple",
+      "Pineapple",
+      "Fruit World",
+      "Large",
+      "Yellow",
+      false,
+    ),
+    img("fruit", "🥭", "mango", "Mango", "Pixabay", "Medium", "Orange", true),
+    img("fruit", "🍐", "pear", "Pear", "Fruit World", "Medium", "Green", false),
+    img("fruit", "🍈", "melon", "Melon", "Pixabay", "Icon", "Yellow", true),
+    // vegetables (p. 122)
+    img("veg", "🥕", "carrots", "Carrots", "Pixabay", "Large", "Orange", true),
+    img(
+      "veg",
+      "🥦",
+      "broccoli",
+      "Broccoli",
+      "Wikipedia",
+      "Large",
+      "Green",
+      true,
+    ),
+    img(
+      "veg",
+      "🍅",
+      "tomatoes",
+      "Tomatoes",
+      "Garden Fun",
+      "Medium",
+      "Red",
+      true,
+    ),
+    img(
+      "veg",
+      "🥒",
+      "cucumber",
+      "Cucumber",
+      "Veggie Shop",
+      "Medium",
+      "Green",
+      false,
+    ),
+    img("veg", "🌽", "corn", "Corn", "Pixabay", "Medium", "Yellow", true),
+    img(
+      "veg",
+      "🍆",
+      "eggplant",
+      "Eggplant",
+      "Veggie Shop",
+      "Large",
+      "Purple",
+      false,
+    ),
+    img(
+      "veg",
+      "🫑",
+      "pepper",
+      "Green pepper",
+      "Pixabay",
+      "Icon",
+      "Green",
+      true,
+    ),
+    img(
+      "veg",
+      "🥬",
+      "lettuce",
+      "Lettuce",
+      "Garden Fun",
+      "Medium",
+      "Green",
+      false,
+    ),
+  ];
+  // other searches (a favourite food, a pet): six pictures of the same thing
+  const MORE = {
+    pizza: ["🍕", "Red"],
+    pasta: ["🍝", "Red"],
+    spaghetti: ["🍝", "Red"],
+    burger: ["🍔", "Brown"],
+    rice: ["🍚", "White"],
+    soup: ["🍲", "Orange"],
+    cake: ["🍰", "Pink"],
+    "ice cream": ["🍨", "Pink"],
+    sushi: ["🍣", "Orange"],
+    chicken: ["🍗", "Brown"],
+    bread: ["🍞", "Brown"],
+    cheese: ["🧀", "Yellow"],
+    egg: ["🥚", "White"],
+    strawberr: ["🍓", "Red"],
+    grape: ["🍇", "Purple"],
+    watermelon: ["🍉", "Red"],
+    chocolate: ["🍫", "Brown"],
+    cookie: ["🍪", "Brown"],
+    falafel: ["🧆", "Brown"],
+    taco: ["🌮", "Yellow"],
+    sandwich: ["🥪", "Brown"],
+    pancake: ["🥞", "Brown"],
+    dumpling: ["🥟", "White"],
+    noodle: ["🍜", "Yellow"],
+    fries: ["🍟", "Yellow"],
+    banana: ["🍌", "Yellow"],
+    apple: ["🍎", "Red"],
+    orange: ["🍊", "Orange"],
+    cherr: ["🍒", "Red"],
+    peach: ["🍑", "Orange"],
+    cat: ["🐱", "Orange"],
+    dog: ["🐶", "Brown"],
+    horse: ["🐴", "Brown"],
+    fish: ["🐟", "Blue"],
+    bird: ["🐦", "Blue"],
+    flower: ["🌸", "Pink"],
+    car: ["🚗", "Red"],
+    football: ["⚽", "Black and white"],
+    soccer: ["⚽", "Black and white"],
+  };
+  const SITES = [
+    "Pixabay",
+    "Kids Health",
+    "Wikipedia",
+    "Food Network",
+    "Healthline",
+    "EatingWell",
+  ];
+  const SIZES = ["Large", "Medium", "Large", "Icon", "Medium", "Large"];
+  function kindOf(q) {
+    q = String(q || "").toLowerCase();
+    if (/veg/.test(q)) return "veg";
+    if (/fruit|yellow/.test(q)) return "fruit";
+    if (/food|healthy|lunch|diet/.test(q)) return "food";
+    return Object.keys(MORE).find((w) => q.includes(w)) || "";
+  }
+  function imagesFor(q) {
+    const kk = kindOf(q);
+    if (!kk) return [];
+    if (MORE[kk]) {
+      const [e, color] = MORE[kk];
+      const W = kk.replace(/^\w/, (c) => c.toUpperCase());
+      return ["", "Best ", "", "Homemade ", "", "Funny "].map((pre, i) =>
+        img(
+          kk,
+          i % 2 ? e : e + e,
+          `${kk.replace(/\s/g, "-")}-${i + 1}`,
+          `${pre}${W} ${["photo", "for kids", "picture", "idea", "drawing", "clipart"][i]}`,
+          SITES[i],
+          SIZES[i],
+          i === 4 ? "Black and white" : color,
+          i % 2 === 0,
+        ),
+      );
+    }
+    return IMGS.filter((x) => x.k === kk);
+  }
+  const vid = (t, by, dur, e, d) => ({ t, by, dur, e, d });
+  const VIDS = {
+    fruit: [
+      vid(
+        "Learn Yellow Fruits in English! Yellow Fruit Vocabulary List ...",
+        "YouTube · BalyanakTV · Oct 5, 2020",
+        "2:08",
+        "🍌🍋",
+        "Hello, Colorful fruit list is going to be published! For this list, the color is yellow. We like to eat yellow fruits too!",
+      ),
+      vid(
+        "Yellow Fruits Song for Kids",
+        "YouTube · Kids Songs",
+        "3:40",
+        "🍍🍌",
+        "Sing along with the yellow fruits!",
+      ),
+      vid(
+        "How Do Bananas Grow?",
+        "YouTube · Farm Life",
+        "11:25",
+        "🍌🌴",
+        "Visit a banana farm and see how bananas grow.",
+      ),
+      vid(
+        "A Day at the Fruit Market",
+        "YouTube · Food Trips",
+        "24:10",
+        "🍋🥭",
+        "A long walk around a big fruit market.",
+      ),
+    ],
+    food: [
+      vid(
+        "Healthy Food for Kids",
+        "YouTube · Kids Learning",
+        "3:12",
+        "🥗🍎",
+        "Learn which foods help you grow strong.",
+      ),
+      vid(
+        "Make a Healthy Lunch Box",
+        "YouTube · Cooking Kids",
+        "8:45",
+        "🥪🥕",
+        "Step by step: a healthy lunch box for school.",
+      ),
+      vid(
+        "The Food Groups",
+        "YouTube · Science Kids",
+        "15:30",
+        "🥦🥛",
+        "Grains, fruits, vegetables, milk and protein.",
+      ),
+      vid(
+        "Healthy Eating: A Full Day",
+        "YouTube · Family Health",
+        "32:00",
+        "🍳🍲",
+        "Breakfast, lunch and dinner the healthy way.",
+      ),
+    ],
+    veg: [
+      vid(
+        "Vegetables Song for Kids",
+        "YouTube · Kids Songs",
+        "2:55",
+        "🥕🥦",
+        "Carrots, broccoli, peas and more!",
+      ),
+      vid(
+        "Grow Your Own Vegetables",
+        "YouTube · Garden Fun",
+        "12:10",
+        "🍅🌱",
+        "Plant vegetables at home or at school.",
+      ),
+      vid(
+        "A Visit to a Vegetable Farm",
+        "YouTube · Farm Life",
+        "22:40",
+        "🌽🚜",
+        "See how vegetables are picked.",
+      ),
+    ],
+  };
+  function videosFor(q) {
+    const kk = kindOf(q);
+    if (VIDS[kk]) return VIDS[kk];
+    if (!MORE[kk]) return [];
+    const [e] = MORE[kk];
+    const W = kk.replace(/^\w/, (c) => c.toUpperCase());
+    return [
+      vid(
+        `${W} for Kids`,
+        "YouTube · Kids Learning",
+        "3:05",
+        e,
+        `A short video about ${kk}.`,
+      ),
+      vid(
+        `All About ${W}`,
+        "YouTube · Fun Facts",
+        "9:40",
+        e + e,
+        `Fun facts about ${kk}.`,
+      ),
+      vid(
+        `${W}: The Long Story`,
+        "YouTube · Documentaries",
+        "28:15",
+        e,
+        `Everything about ${kk}.`,
+      ),
+    ];
+  }
+  const mins = (d) => {
+    const [m, sec] = d.split(":").map(Number);
+    return m + sec / 60;
+  };
+  const GOPTS = {
+    gsize: ["size", ["Any size", "Large", "Medium", "Icon"]],
+    gcolor: [
+      "color",
+      [
+        "Any color",
+        "Black and white",
+        "Transparent",
+        "Red",
+        "Orange",
+        "Yellow",
+        "Green",
+        "Blue",
+        "Purple",
+        "Pink",
+        "White",
+        "Brown",
+      ],
+    ],
+    grights: [
+      "rights",
+      ["All", "Creative Commons licenses", "Commercial & other licenses"],
+    ],
+    gdur: [
+      "dur",
+      [
+        "Any duration",
+        "Short (0-4 min)",
+        "Medium (4-20 min)",
+        "Long (20+ min)",
+      ],
+    ],
+  };
+  const SWATCH = {
+    Red: "#e53935",
+    Orange: "#fb8c00",
+    Yellow: "#fdd835",
+    Green: "#43a047",
+    Blue: "#1e88e5",
+    Purple: "#8e24aa",
+    Pink: "#ec407a",
+    White: "#fff",
+    Brown: "#795548",
+  };
+  const TINT = {
+    Red: "#fdecea",
+    Orange: "#fff1e0",
+    Yellow: "#fffbe0",
+    Green: "#eaf6ea",
+    Blue: "#e6f1fc",
+    Purple: "#f3e8f8",
+    Pink: "#fde8f0",
+    White: "#f4f4f4",
+    Brown: "#f3ebe6",
+    "Black and white": "#e9e9e9",
+  };
+  const CX = [
+    ["cx:newtab", "Open link in new tab"],
+    ["cx:newwin", "Open link in new window"],
+    ["cx:inprivate", "Open link in InPrivate window"],
+    ["cx:qr", "Create QR Code for this image"],
+    ["cx:copylink", "Copy link"],
+    ["cx:imgtab", "Open image in new tab"],
+    ["cx:saveimg", "Save image as"],
+    ["cx:copyimg", "Copy image"],
+    ["cx:editimg", "Edit image"],
+    ["cx:searchimg", "Search the web for image"],
+    ["cx:collections", "Add to Collections"],
+    ["cx:share", "Share"],
+  ];
+
   // every target a lesson step may use (check.js tests the lessons' steps against these)
   const TARGETS = [
     /^task:outlook$/,
@@ -401,6 +872,19 @@
     /^fd:file:.+$/,
     /^fd:(name|open|save|cancel)$/,
     /^pv:close$/,
+    /^task:edge$/,
+    /^e:(addr|back|refresh|newtab|search)$/,
+    /^e:(tab|close):\d$/,
+    /^g:(images|q|go|tools|size|color|rights|dur|big|lens|close)$/,
+    /^g:tab:(All|Images|Videos)$/,
+    /^opt:.+$/,
+    /^gimg:\d+$/,
+    /^gvid:\d+$/,
+    /^cx:\w+$/,
+    /^yt:play$/,
+    /^ms:(email|next|pass|signin|back)$/,
+    /^pw:(never|save)$/,
+    /^acct(:signout)?$/,
     /^key:\w+$/,
   ];
 
@@ -512,7 +996,20 @@
         files,
         ignored: [],
         drafts: 0,
+        app: start.app === "edge" ? "edge" : "outlook",
+        web: {
+          signed: !!start.signed,
+          email: "",
+          ask: !!start.askSave,
+          bubble: false,
+          card: false,
+          out: false,
+        },
+        tabs: [],
+        tab: 0,
+        lastIn: "",
       };
+      st.tabs.push(newTab(start.page || "newtab", start));
       if (start.sel) {
         const i = st.contacts.findIndex((c) => c.first === start.sel);
         st.sel = i >= 0 ? i : null;
@@ -522,6 +1019,28 @@
       render();
     }
     const meP = () => DIR[st.me];
+    function newTab(page, o) {
+      o = o || {};
+      return {
+        page: page === "outlook" && !st.web.signed ? "login" : page,
+        q: o.q || "",
+        typed: null,
+        qTyped: null,
+        itab: o.itab || "All",
+        tools: !!o.tools,
+        f: {
+          size: "Any size",
+          color: "Any color",
+          rights: "All",
+          dur: "Any duration",
+        },
+        pv: null,
+        vid: null,
+        playing: false,
+        hist: [],
+      };
+    }
+    const T = () => st.tabs[st.tab];
     const cur = () => st.mails.find((m) => m.id === st.open) || null;
     const blankContact = () => ({
       mode: "new",
@@ -580,8 +1099,8 @@
         (a.tagName === "INPUT" || a.tagName === "TEXTAREA")
           ? { t: a.dataset.t, s: a.selectionStart, e: a.selectionEnd }
           : null;
-      scr.innerHTML = `<div class="ns-app">${outlook()}</div>
-      <div class="ns-task">${btn("task:outlook", `<span class="ol-logo">${IC.railmail}</span>`, "tb on", "Outlook")}<span class="clk">12:41 PM<br>10/21/2024</span></div>
+      scr.innerHTML = `<div class="ns-app">${st.app === "edge" ? edge() : outlook()}</div>
+      <div class="ns-task">${btn("task:outlook", `<span class="ol-logo">${IC.railmail}</span>`, "tb" + (st.app === "outlook" ? " on" : ""), "Outlook")}${btn("task:edge", `<span class="ol-logo">${IC.edge}</span>`, "tb" + (st.app === "edge" ? " on" : ""), "Microsoft Edge")}<span class="clk">12:41 PM<br>10/21/2024</span></div>
       ${menu()}${contactDlg()}${fileDlg()}${preview()}
       ${st.toast ? `<div class="ns-toast">${esc(st.toast)}</div>` : ""}
       <div class="ns-cursor${mis && mis.mode === "demo" ? " show" : ""}" aria-hidden="true" style="left:${curPos.x}px;top:${curPos.y}px"><svg viewBox="0 0 24 24"><path d="M3 2l15 11-7 1-3 7z" fill="#fff" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/></svg></div>`;
@@ -597,7 +1116,7 @@
       if (mis && mis.glowing) glow(true);
     }
 
-    function outlook() {
+    function outlook(web) {
       const P = meP();
       const rail = [
         ["rail:mail", "railmail", "Mail", st.view === "mail"],
@@ -612,8 +1131,361 @@
       ]
         .map(([t, i, l, on]) => btn(t, ic(i), "rl" + (on ? " on" : ""), l))
         .join("");
-      return `<div class="ns-top"><b class="brand">Outlook</b><span class="srch">${ic("search")}Search</span><span class="ns-tr">${ic("bell")}${ic("gear")}${ic("bulb")}${avatar(nameOf(P), null)}</span></div>
+      const me = web
+        ? `<span class="meet">${ic("video")} Meet Now</span>${ic("bell")}${ic("gear")}${btn("acct", avatar(nameOf(P), null), "acct", "Account")}`
+        : `${ic("bell")}${ic("gear")}${ic("bulb")}${avatar(nameOf(P), null)}`;
+      return `<div class="ns-top"><b class="brand">Outlook</b><span class="srch">${ic("search")}Search</span><span class="ns-tr">${me}</span></div>
       <div class="ns-olb"><div class="ns-rail">${rail}</div><div class="ns-olm">${st.view === "people" ? peopleView() : mailView()}</div></div>`;
+    }
+
+    /* ----- Mini Edge ----- */
+    const GLOGO = `<span class="g-logo">${[
+      ["G", "#4285f4"],
+      ["o", "#ea4335"],
+      ["o", "#fbbc05"],
+      ["g", "#4285f4"],
+      ["l", "#34a853"],
+      ["e", "#ea4335"],
+    ]
+      .map(([c, col]) => `<b style="color:${col}">${c}</b>`)
+      .join("")}</span>`;
+    const MSLOGO = `<span class="ms-logo"><i style="background:#f25022"></i><i style="background:#7fba00"></i><i style="background:#00a4ef"></i><i style="background:#ffb900"></i></span>`;
+    function urlOf(t) {
+      const q = encodeURIComponent(t.q).replace(/%20/g, "+");
+      return {
+        newtab: "",
+        google: "https://www.google.com",
+        gimages: "https://www.google.com/imghp?hl=en&ogbl",
+        results: `https://www.google.com/search?q=${q}${t.itab === "Images" ? "&udm=2" : t.itab === "Videos" ? "&udm=7" : ""}`,
+        watch:
+          "https://www.youtube.com/watch?v=" +
+          (t.vid ? t.vid.dur.replace(":", "") + "kids" : ""),
+        login: "https://login.live.com/",
+        pass: "https://login.live.com/ppsecure",
+        outlook: "https://outlook.live.com/mail/0/",
+        notfound: "https://" + (t.bad || ""),
+      }[t.page];
+    }
+    function titleOf(t) {
+      return {
+        newtab: "New tab",
+        google: "Google",
+        gimages: "Google Images",
+        results: `${t.q} - Google Search`,
+        watch: t.vid ? t.vid.t : "YouTube",
+        login: "Sign in to your Microsoft account",
+        pass: "Sign in to your Microsoft account",
+        outlook: `Mail - ${nameOf(meP())} - Outlook`,
+        notfound: "Can't reach this page",
+      }[t.page];
+    }
+    function favOf(t) {
+      if (t.page === "newtab") return ic("edge");
+      if (/^(google|gimages|results)$/.test(t.page))
+        return `<b class="g-fav">G</b>`;
+      if (t.page === "outlook") return ic("railmail");
+      if (t.page === "watch") return `<b class="yt-fav">▶</b>`;
+      return MSLOGO;
+    }
+    function edge() {
+      const t = T();
+      const tabs = st.tabs
+        .map(
+          (x, i) =>
+            `<div class="ed-tab${i === st.tab ? " on" : ""}">${btn("e:tab:" + i, `${favOf(x)}<span class="tt">${esc(titleOf(x))}</span>`, "tl", titleOf(x))}${btn("e:close:" + i, ic("close"), "tx", "Close tab")}</div>`,
+        )
+        .join("");
+      const addr = t.typed != null ? t.typed : urlOf(t);
+      return `<div class="ns-edge"><div class="ed-tabs"><span class="prof">${ic("person")}</span>${tabs}${btn("e:newtab", ic("plus"), "tplus", "New tab")}<span class="ed-wc">— ☐ ✕</span></div>
+      <div class="ed-bar">${btn("e:back", ic("back"), "ri0" + (t.hist.length ? "" : " dim"), "Back")}<span class="ns-i dim">${IC.fwd}</span>${btn("e:refresh", ic("refresh"), "ri0", "Refresh")}<label class="ed-addr">${ic(t.page === "newtab" ? "search" : "lock")}<input type="text" data-t="e:addr" value="${esc(addr)}" placeholder="Search or enter web address" autocomplete="off" spellcheck="false" aria-label="Address bar"></label>${ic("star2")}${ic("collections")}${ic("dots")}</div>
+      ${t.page === "newtab" ? `<div class="ed-fav">For quick access, place your favorites here on the favorites bar. <u>Manage favorites now</u></div>` : ""}
+      <div class="ed-page">${edgePage(t)}</div>${st.web.bubble ? pwBubble() : ""}</div>`;
+    }
+    function pwBubble() {
+      return `<div class="ed-pw"><b>Save password for outlook.live.com?</b><span class="em">${esc(st.web.email || meP().email)}</span><span class="dots">••••••••</span><div class="ed-row">${btn("pw:save", "Save", "send")}${btn("pw:never", "Never", "cancel")}</div></div>`;
+    }
+    function edgePage(t) {
+      const q = t.qTyped != null ? t.qTyped : t.q;
+      const box = (cls) =>
+        `<label class="g-box ${cls || ""}">${ic("search")}<input type="text" data-t="g:q" value="${esc(q)}" autocomplete="off" spellcheck="false" aria-label="Search">${q ? `<span class="x">${IC.close}</span>` : ""}<span class="mic">${ic("mic")}</span>${btn("g:go", ic("search"), "ri0 g-go", "Search")}</label>`;
+      const gtop = `<div class="g-top"><span>Gmail</span>${btn("g:images", "Images", "lk", "Images")}${ic("apps")}<span class="g-sign">Sign in</span></div>`;
+      switch (t.page) {
+        case "newtab":
+          return `<div class="ed-new">${ic("apps")}<div class="ed-ms">${MSLOGO}<span>Microsoft</span></div><label class="ed-search">${ic("search")}<input type="text" data-t="e:search" placeholder="Search the web" autocomplete="off" spellcheck="false" aria-label="Search the web"></label><span class="ed-add">${ic("plus")}<small>Add shortcut</small></span></div>`;
+        case "google":
+          return `<div class="g-home">${gtop}<div class="g-mid">${GLOGO}${box()}</div></div>`;
+        case "gimages":
+          return `<div class="g-home">${gtop.replace(/<button[^]*?Images<\/button>/, "")}<div class="g-mid">${GLOGO}<small class="g-sub">images</small>${box()}</div></div>`;
+        case "results":
+          return results(t, box("small"));
+        case "watch":
+          return watch(t);
+        case "login":
+        case "pass":
+          return login(t);
+        case "outlook":
+          return `<div class="ns-web">${outlook(true)}${st.web.card ? acctCard() : ""}</div>`;
+        default:
+          return `<div class="ed-bad"><span class="big">😕</span><b>Hmm… can't reach this page</b><p>Check the address. Mini Edge knows <b>www.google.com</b> and <b>outlook.live.com</b>.</p></div>`;
+      }
+    }
+    function shownImgs(t) {
+      const f = t.f;
+      return imagesFor(t.q)
+        .map((x, i) => ({ ...x, i }))
+        .filter(
+          (x) =>
+            (f.size === "Any size" || x.size === f.size) &&
+            (f.color === "Any color" || x.color === f.color) &&
+            (f.rights === "All" ||
+              (f.rights === "Creative Commons licenses") === x.cc),
+        );
+    }
+    function results(t, box) {
+      const tabs = [
+        "All",
+        "Images",
+        "Videos",
+        "Products",
+        "News",
+        "Books",
+        "Finance",
+      ]
+        .map((x) =>
+          /^(All|Images|Videos)$/.test(x)
+            ? btn("g:tab:" + x, x, "gt" + (t.itab === x ? " on" : ""))
+            : `<span class="gt">${x}</span>`,
+        )
+        .join("");
+      const fb = (key, kk, label) => {
+        const v = t.f[GOPTS[kk][0]];
+        const def = v === GOPTS[kk][1][0];
+        return btn(
+          "g:" + key,
+          `${esc(def ? label : v)} ${ic("chev")}`,
+          "gf" + (def ? "" : " set"),
+          label,
+        );
+      };
+      let row = "",
+        body = "";
+      const all = imagesFor(t.q);
+      if (t.itab === "Images") {
+        row = t.tools
+          ? `<div class="g-tools">${fb("size", "gsize", "Size")}${fb("color", "gcolor", "Color")}${fb("rights", "grights", "Usage rights")}<span class="gf">Type ${ic("chev")}</span><span class="gf">Any time ${ic("chev")}</span><span class="gf">Advanced Search</span></div>`
+          : `<div class="g-chips">${["Clipart", "Lunch", "Drawing", "Breakfast", "Chart", "Animated", "Nutrition", "Plate"].map((c) => `<span class="g-chip">${c}</span>`).join("")}</div>`;
+        const list = shownImgs(t);
+        body = all.length
+          ? list.length
+            ? `<div class="g-grid${t.pv != null ? " narrow" : ""}">${list.map((x) => btn("gimg:" + x.i, `<span class="gpic" style="background:${TINT[x.color] || "#eee"}"><span>${x.e}</span></span><small class="site">${esc(x.site)}</small><small class="ttl">${esc(x.title)}</small>`, "gimg" + (t.pv === x.i ? " on" : ""), x.title)).join("")}</div>`
+            : `<p class="g-none">No pictures match these tools. Try another choice.</p>`
+          : `<p class="g-none">Mini Edge has no pictures for “${esc(t.q)}”. Try <b>healthy food</b>, <b>yellow fruits</b>, <b>vegetables</b> or a food like <b>pizza</b>.</p>`;
+        if (t.pv != null && all[t.pv]) body += sidePreview(all[t.pv]);
+      } else if (t.itab === "Videos") {
+        row = `<div class="g-tools">${fb("dur", "gdur", "Any duration")}<span class="gf">Any time ${ic("chev")}</span><span class="gf">Any quality ${ic("chev")}</span><span class="gf">All videos ${ic("chev")}</span><span class="gf">Any source ${ic("chev")}</span><span class="gf">Advanced Search</span></div>`;
+        const d = t.f.dur;
+        const list = videosFor(t.q)
+          .map((v, i) => ({ ...v, i }))
+          .filter(
+            (v) =>
+              d === "Any duration" ||
+              (d[0] === "S"
+                ? mins(v.dur) <= 4
+                : d[0] === "M"
+                  ? mins(v.dur) > 4 && mins(v.dur) <= 20
+                  : mins(v.dur) > 20),
+          );
+        body = list.length
+          ? `<div class="g-vids">${list.map((v) => `<div class="g-vid"><small class="src">www.youtube.com › watch</small>${btn("gvid:" + v.i, `<span class="vt">${esc(v.t)}</span>`, "vlink", v.t)}<div class="g-vrow">${btn("gvid:" + v.i, `<span class="vth">${v.e}<b>▶</b><i>${v.dur}</i></span>`, "vthb", v.t)}<span class="vd">${esc(v.d)}<br><small>${esc(v.by)}</small></span></div></div>`).join("")}</div>`
+          : `<p class="g-none">No videos here. Try another choice, or search <b>yellow fruits</b>.</p>`;
+      } else {
+        const list = all.slice(0, 3);
+        body = list.length
+          ? `<div class="g-all">${list.map((x) => `<div class="g-res"><small>${esc(x.site)} · https://www.${x.site.toLowerCase().replace(/\s/g, "")}.com</small><b>${esc(x.title)}</b><span>All about ${esc(x.title.toLowerCase())} for kids and families.</span></div>`).join("")}<div class="g-strip"><b>Images</b><span>${all
+              .slice(0, 5)
+              .map(
+                (x) =>
+                  `<span class="gpic sm" style="background:${TINT[x.color] || "#eee"}"><span>${x.e}</span></span>`,
+              )
+              .join("")}</span></div></div>`
+          : `<p class="g-none">Mini Edge has no results for “${esc(t.q)}”. Try <b>healthy food</b> or <b>yellow fruits</b>.</p>`;
+      }
+      return `<div class="g-res-page"><div class="g-head"><span class="g-logo sm">${GLOGO}</span>${box}<span class="g-hr">${ic("gear")}${ic("apps")}<span class="g-sign">Sign in</span></span></div>
+      <div class="g-tabs">${tabs}<span class="gt">⋮ More</span>${t.itab === "Images" ? btn("g:tools", "Tools", "gtools" + (t.tools ? " on" : ""), "Tools") : ""}</div>${row}<div class="g-body">${body}</div></div>`;
+    }
+    function sidePreview(x) {
+      return `<div class="g-side"><div class="gs-h"><b>${esc(x.site)}</b><span>‹ ›</span>${ic("dots")}${btn("g:close", ic("close"), "ri0", "Close")}</div>
+      <div class="gs-pic">${btn("g:big", `<span class="gpic big" style="background:${TINT[x.color] || "#eee"}"><span>${x.e}</span></span>`, "gbig", x.title)}${btn("g:lens", ic("lens"), "glens", "Find more pictures like this one")}</div>
+      <b class="gs-t">${esc(x.title)}</b><small>${esc(x.size)} · ${x.cc ? "Creative Commons license: free to use" : "Commercial license: ask before you use it"}</small><span class="gs-visit">Visit</span><small class="gs-c">Images may be subject to copyright.</small></div>`;
+    }
+    function watch(t) {
+      const v = t.vid;
+      if (!v) return "";
+      return `<div class="yt"><div class="yt-top"><b class="yt-logo"><i>▶</i> YouTube</b><span class="yt-s">${esc(t.q)}</span></div><div class="yt-main"><div class="yt-player${t.playing ? " play" : ""}"><span class="ve">${v.e}</span>${btn("yt:play", t.playing ? "❚❚" : "▶", "ytp", t.playing ? "Pause" : "Play")}<span class="ybar"><i></i></span><small>${t.playing ? "0:01" : "0:00"} / ${v.dur}</small></div><b class="yt-t">${esc(v.t)}</b><small>${esc(v.by)}</small><p>${esc(v.d)}</p></div></div>`;
+    }
+    function login(t) {
+      const w = st.web;
+      const inner =
+        t.page === "login"
+          ? `${w.out ? `<p class="ms-out">✓ You signed out of your account. It's a good idea to close all browser windows.</p>` : ""}<b class="ms-h">Sign in</b><input type="text" data-t="ms:email" value="${esc(w.email)}" placeholder="Email, phone, or Skype" autocomplete="off" spellcheck="false" aria-label="Email"><small>No account? <u>Create one!</u></small><div class="ms-row">${btn("ms:next", "Next", "msb")}</div>`
+          : `${btn("ms:back", "← " + esc(w.email), "ms-who")}<b class="ms-h">Enter password</b><input type="password" data-t="ms:pass" value="" placeholder="Password" autocomplete="off" aria-label="Password"><small><u>Forgot password?</u></small><small><u>Email code to ${esc((w.email || "").replace(/^(.).*@/, "$1*****@"))}</u></small><div class="ms-row">${btn("ms:signin", "Sign in", "msb")}</div>`;
+      return `<div class="ms-page"><div class="ms-card">${MSLOGO}<span class="ms-name">Microsoft</span>${inner}</div>${t.page === "login" ? `<div class="ms-opt">${ic("search")} Sign-in options</div>` : ""}<small class="ms-foot">Terms of use · Privacy & cookies</small></div>`;
+    }
+    function acctCard() {
+      const P = meP();
+      return `<div class="ns-acct"><div class="ah">${MSLOGO}<span>Microsoft</span>${btn("acct:signout", "Sign out", "lk", "Sign out")}</div><div class="ab">${avatar(nameOf(P), null, true)}<span><b>${esc(nameOf(P))}</b><br><small>${esc(P.email)}</small><br><u>My Microsoft account</u><br><u>My profile</u></span></div><div class="af">${ic("person")} Sign in with a different account</div></div>`;
+    }
+    function go(text) {
+      const t = T();
+      const raw = String(text || "").trim();
+      if (!raw) return;
+      const u = raw
+        .toLowerCase()
+        .replace(/^https?:\/\//, "")
+        .replace(/\/$/, "");
+      const was = { page: t.page, q: t.q, itab: t.itab, vid: t.vid };
+      t.typed = null;
+      t.qTyped = null;
+      t.pv = null;
+      if (/^outlook\.(live|office)\.com/.test(u))
+        t.page = st.web.signed ? "outlook" : "login";
+      else if (/^(www\.)?google\.com\/imghp|^images\.google\.com/.test(u))
+        t.page = "gimages";
+      else if (/^(www\.)?google\.com/.test(u)) t.page = "google";
+      else if (/^login\.live\.com/.test(u)) t.page = "login";
+      else if (!/[./]/.test(u)) {
+        t.page = "results";
+        t.q = raw;
+        t.itab = "All";
+      } else {
+        t.page = "notfound";
+        t.bad = raw;
+      }
+      t.hist.push(was);
+    }
+    function search(text) {
+      const t = T();
+      const q = String(text ?? (t.qTyped != null ? t.qTyped : t.q)).trim();
+      if (!q) return;
+      t.hist.push({ page: t.page, q: t.q, itab: t.itab, vid: t.vid });
+      t.itab =
+        t.page === "gimages" ? "Images" : t.page === "results" ? t.itab : "All";
+      t.page = "results";
+      t.q = q;
+      t.qTyped = null;
+      t.tools = false;
+      t.pv = null;
+      t.f = newTab("results").f;
+    }
+    function edgeAct(a, b, kind, wasMenu) {
+      const t = T();
+      if (a === "e") {
+        if (b === "back" && t.hist.length) {
+          Object.assign(t, t.hist.pop(), {
+            pv: null,
+            typed: null,
+            qTyped: null,
+          });
+        } else if (b === "refresh") toast("The page is new again.");
+        else if (b === "newtab") {
+          st.tabs.push(newTab("newtab"));
+          st.tab = st.tabs.length - 1;
+        } else if (b.startsWith("tab:")) st.tab = +b.slice(4);
+        else if (b.startsWith("close:")) {
+          st.tabs.splice(+b.slice(6), 1);
+          if (!st.tabs.length) {
+            st.tabs.push(newTab("newtab"));
+            st.app = "outlook";
+          }
+          st.tab = Math.min(st.tab, st.tabs.length - 1);
+        }
+      }
+      if (a === "g") {
+        if (b === "images") {
+          t.hist.push({ page: t.page, q: t.q, itab: t.itab });
+          t.page = "gimages";
+          t.qTyped = null;
+        } else if (b === "go") search();
+        else if (b.startsWith("tab:")) {
+          t.itab = b.slice(4);
+          t.pv = null;
+          t.tools = false;
+        } else if (b === "tools") t.tools = !t.tools;
+        else if (/^(size|color|rights|dur)$/.test(b))
+          menuAt("g" + b, "", "g:" + b);
+        else if (b === "close") t.pv = null;
+        else if (b === "lens")
+          toast("🔍 Visual search: more pictures like this one.");
+        else if (b === "big" && kind === "right") menuAt("cx", t.pv, "g:big");
+      }
+      if (a === "opt" && wasMenu && GOPTS[wasMenu.kind]) {
+        t.f[GOPTS[wasMenu.kind][0]] = b;
+        t.pv = null;
+      }
+      if (a === "gimg") {
+        if (kind === "right") menuAt("cx", +b, "gimg:" + b);
+        else t.pv = +b;
+      }
+      if (a === "gvid") {
+        t.hist.push({ page: t.page, q: t.q, itab: t.itab });
+        t.vid = videosFor(t.q)[+b];
+        t.page = "watch";
+        t.playing = false;
+      }
+      if (a === "yt") t.playing = !t.playing;
+      if (a === "cx" && wasMenu) {
+        const x = imagesFor(t.q)[wasMenu.arg];
+        if (b === "saveimg" && x)
+          st.fd = {
+            mode: "save",
+            folder: "Pictures",
+            name: x.name,
+            sel: null,
+            file: { name: x.name, ext: "jpg", e: x.e },
+            typeName: "JPEG Image",
+          };
+        else if (b === "copyimg") toast("Picture copied");
+        else toast("Not in Mini Edge. Try Save image as.");
+      }
+      if (a === "ms") {
+        const w = st.web;
+        if (b === "next") {
+          if (!w.email.trim()) return toast("Type your email address.");
+          t.page = "pass";
+          w.out = false;
+        } else if (b === "back") t.page = "login";
+        else if (b === "signin") {
+          if (!w.pass) return toast("Type your password.");
+          const who2 = Object.keys(DIR).find(
+            (x) => DIR[x].email === w.email.trim().toLowerCase(),
+          );
+          if (who2) st.me = who2;
+          w.signed = true;
+          w.pass = "";
+          t.page = "outlook";
+          st.view = "mail";
+          if (w.ask) w.bubble = true;
+        }
+      }
+      if (a === "pw") {
+        st.web.bubble = false;
+        toast(
+          b === "save"
+            ? "⚠️ Saved. On a public computer, never save your password!"
+            : "Good! The password is not saved.",
+        );
+      }
+      if (a === "acct") {
+        if (b === "signout") {
+          Object.assign(st.web, {
+            signed: false,
+            card: false,
+            out: true,
+            email: "",
+          });
+          t.page = "login";
+        } else st.web.card = !st.web.card;
+      }
     }
 
     /* ----- Mail ----- */
@@ -861,19 +1733,42 @@
       const m = st.menu;
       if (!m) return "";
       let items;
-      if (m.kind === "spell")
+      let rows = (MENUS[m.kind] || []).length;
+      if (GOPTS[m.kind]) {
+        const [key, opts] = GOPTS[m.kind];
+        rows = opts.length;
+        items = opts
+          .map((o) =>
+            btn(
+              "opt:" + o,
+              `<span class="ck">${T().f[key] === o ? "✓" : ""}</span>${SWATCH[o] ? `<span class="sw" style="background:${SWATCH[o]}"></span>` : ""}<span>${esc(o)}</span>`,
+              "ns-mi",
+            ),
+          )
+          .join("");
+      } else if (m.kind === "cx") {
+        rows = CX.length * 0.8;
+        items = CX.map(([t, l]) =>
+          btn(t, `<span>${l}</span>`, "ns-mi cx"),
+        ).join("");
+      } else if (m.kind === "spell") {
+        rows = 5;
         items = `<div class="mh">Spelling</div>${MISS[m.arg].map((w) => btn("spg:" + w, `<span class="ns-i"></span>${esc(w)}`, "ns-mi")).join("")}<div class="mfoot">${btn("sp:ignoreall", ic("ignore"), "ri0", "Ignore all")}<span class="ed">${ic("editor")} Editor</span></div>`;
-      else
+      } else
         items = MENUS[m.kind]
           .filter(([t]) => !(t === "cattm:body" && !PIC[m.arg]))
           .map(([t, i, l]) => btn(t, ic(i) + `<span>${l}</span>`, "ns-mi"))
           .join("");
-      const w = m.kind === "catt" ? 250 : 200;
+      const w =
+        m.kind === "catt"
+          ? 250
+          : m.kind === "cx"
+            ? 240
+            : m.kind === "grights"
+              ? 230
+              : 200;
       const x = Math.max(4, Math.min(m.x, SW - w - 4));
-      const y = Math.max(
-        4,
-        Math.min(m.y, SH - 40 - (m.kind === "catt" ? 230 : 170)),
-      );
+      const y = Math.max(4, Math.min(m.y, SH - 40 - rows * 30 - 12));
       return `<div class="ns-menu" style="left:${x}px;top:${y}px;width:${w}px">${items}</div>`;
     }
 
@@ -906,13 +1801,17 @@
       if (!st) return;
       t = ALIAS[t] || t;
       const wasMenu = st.menu;
-      if (!/^(attm|cattm|attach|spg|sp:ignoreall)/.test(t)) st.menu = null;
-      const [a, b] = [t.slice(0, t.indexOf(":")), t.slice(t.indexOf(":") + 1)];
+      if (!/^(attm|cattm|attach|spg|sp:ignoreall|opt|cx)/.test(t))
+        st.menu = null;
+      if (!/^acct/.test(t)) st.web.card = false;
+      const cut = t.includes(":") ? t.indexOf(":") : t.length;
+      const [a, b] = [t.slice(0, cut), t.slice(cut + 1)];
       const c = st.cm;
       if (kind === "right") {
         if (a === "att" || a === "attimg") menuAt("att", b, t);
         else if (a === "catt") menuAt("catt", b, t);
         else if (a === "sp") menuAt("spell", b, t);
+        else if (a === "gimg" || t === "g:big") edgeAct(a, b, kind, wasMenu);
         return render();
       }
       if (kind === "key") {
@@ -920,10 +1819,24 @@
           st.menu = null;
           st.pv = null;
         }
+        if (t === "key:Enter") enter((info && info.field) || st.lastIn);
         return render();
       }
       switch (a) {
         case "task":
+          st.app = b;
+          break;
+        case "e":
+        case "g":
+        case "opt":
+        case "gimg":
+        case "gvid":
+        case "yt":
+        case "cx":
+        case "ms":
+        case "pw":
+        case "acct":
+          edgeAct(a, b, kind, wasMenu);
           break;
         case "rail":
           if (b === "mail" || b === "people") {
@@ -1066,6 +1979,24 @@
           break;
       }
       render();
+    }
+    // Enter in a box: go to the address, search, the next sign-in page, open or save the file
+    function enter(field) {
+      const t = T();
+      if (field === "e:addr" || field === "e:search") {
+        const el = find(field);
+        go(
+          field === "e:addr"
+            ? t.typed != null
+              ? t.typed
+              : el && el.value
+            : el && el.value,
+        );
+      } else if (field === "g:q") search();
+      else if (field === "ms:email") edgeAct("ms", "next");
+      else if (field === "ms:pass") edgeAct("ms", "signin");
+      else if (field === "fd:name" && st.fd)
+        fileAct(st.fd.mode === "open" ? "open" : "save");
     }
     function send() {
       const c = st.cm;
@@ -1284,6 +2215,11 @@
       if (/^cm:/.test(t) && st.cm) st.cm[t.slice(3)] = v;
       if (/^nc:/.test(t) && st.nc) st.nc[t.slice(3)] = v;
       if (t === "fd:name" && st.fd) st.fd.name = v;
+      if (t === "e:addr") T().typed = v;
+      if (t === "g:q") T().qTyped = v;
+      if (t === "ms:email") st.web.email = v;
+      if (t === "ms:pass") st.web.pass = v;
+      st.lastIn = t;
     }
     const norm = (x) =>
       String(x || "")
@@ -1309,6 +2245,7 @@
       if (inScr && a.tagName === "INPUT") {
         if (e.key === "Enter") {
           e.preventDefault();
+          st.lastIn = a.dataset.t || st.lastIn;
           keyFrom("Enter");
         }
         return;
@@ -1632,9 +2569,9 @@
     icon,
     ICONS: IC,
     TARGETS,
-    label: "Mini Outlook",
+    label: "Mini Outlook & Edge",
     ic: "📧",
-    hint: "A pretend Outlook. Write emails, add contacts, attach files. Hold your finger (or right-click) on a file for more. Nothing can break!",
-    about: "Play on a pretend Outlook",
+    hint: "A pretend Outlook and Edge. Write emails, add contacts, attach files, search for pictures. Hold your finger (or right-click) for more. Nothing can break!",
+    about: "Play on a pretend Outlook and Edge",
   };
 })();
