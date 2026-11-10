@@ -28,6 +28,15 @@ window.READING = [
     cover: "img/madd/cover.jpg",
     note: "89 words to read · 5 games: the madd letter, short or long, the missing letter, picture, order",
   },
+  {
+    n: 4,
+    nAr: "الرَّابِعَةُ",
+    title: "الْمَقَاطِعُ السَّاكِنَةُ",
+    en: "Sukun and syllables",
+    path: "sukun.html",
+    cover: "img/sukun/cover.jpg",
+    note: "34 words to read · 5 games: hear, where is the sukun, split into syllables, correct the split, the missing syllable",
+  },
 ];
 // the folder of this file, so a hub in any folder can link to the cards
 window.READING_BASE = document.currentScript.src.replace(/[^/]*$/, "");
