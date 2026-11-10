@@ -10,6 +10,15 @@ window.READING = [
     cover: "img/letters/cover.jpg",
     note: "28 letters to read · 6 games · progress checks 1–4",
   },
+  {
+    n: 2,
+    nAr: "الثَّانِيَةُ",
+    title: "قِرَاءَةُ كَلِمَاتٍ بَسِيطَةٍ",
+    en: "Three-letter words",
+    path: "words.html",
+    cover: "img/words/cover.jpg",
+    note: "65 words to read · 6 games: hear, harakat, picture, blend, order, letter flower",
+  },
 ];
 // the folder of this file, so a hub in any folder can link to the cards
 window.READING_BASE = document.currentScript.src.replace(/[^/]*$/, "");
