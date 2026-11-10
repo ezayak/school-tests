@@ -81,5 +81,20 @@ window.CS_LESSONS = {
         },
       ],
     },
+    {
+      n: 3,
+      dir: "chapter-3",
+      title: "Communicating online",
+      items: [
+        {
+          n: 1,
+          title: "My friends",
+          en: "Send and reply, contacts: add, edit, delete, favorites; email online, sign out",
+          path: "lesson-1.html",
+          cover: "img/lesson-1/cover.jpg",
+          note: "12 picture cards · 8 how-to's in Mini Outlook & Edge · 5 games · 5 exercises",
+        },
+      ],
+    },
   ],
 };

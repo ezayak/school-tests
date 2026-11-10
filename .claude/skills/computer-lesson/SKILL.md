@@ -79,7 +79,7 @@ $S/english-lesson/scripts/shot.sh grade-4/computer/chapter-3 <out.png> lesson-1.
 npx --no-install prettier --write <changed files>; node --check <each .js>
 ```
 
-`check.js` must pass (notes about lessons.js / games.js are fine until the offline stage). `play.sh` must print a step count for every tile and no `STUCK` or `ERRORS`; Mini Outlook / Edge `sim` items are solved by the harness (`#simbox.__sim.solve()`), Mini Word and Mini Windows `sim` items still show `STUCK` there: try those by hand. Then open the page on the local server and do each how-to with ▶ Show me and ✋ Your turn, with real taps (hold = right-click on a tablet). Headless Chromium has no voices: the read-aloud is not tested; say so.
+`check.js` must pass (notes about lessons.js / games.js are fine until the offline stage). `play.sh` must print a step count for every tile and no `STUCK` or `ERRORS`; Mini Outlook / Edge `sim` items are solved by the harness (`#simbox.__sim.solve()`), Mini Word and Mini Windows `sim` items still show `STUCK` there: try those by hand. Then open the page on the local server and do each how-to with ▶ Show me and ✋ Your turn, with real taps (hold = right-click on a tablet). A screenshot with a white block over part of the page is a painting artifact of headless Chromium: check the DOM (`elementFromPoint`) or retake it with a longer `--virtual-time-budget` before looking for a bug. Headless Chromium has no voices: the read-aloud is not tested; say so.
 
 ## 6. Logs, list, report
 
