@@ -19,6 +19,15 @@ window.READING = [
     cover: "img/words/cover.jpg",
     note: "65 words to read · 6 games: hear, harakat, picture, blend, order, letter flower",
   },
+  {
+    n: 3,
+    nAr: "الثَّالِثَةُ",
+    title: "الْمَدُّ: ا – و – ي",
+    en: "Madd: the long vowels ا و ي",
+    path: "madd.html",
+    cover: "img/madd/cover.jpg",
+    note: "89 words to read · 5 games: the madd letter, short or long, the missing letter, picture, order",
+  },
 ];
 // the folder of this file, so a hub in any folder can link to the cards
 window.READING_BASE = document.currentScript.src.replace(/[^/]*$/, "");
