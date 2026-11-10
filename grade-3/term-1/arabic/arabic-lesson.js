@@ -673,70 +673,34 @@
 
   // build a word from its letters, right to left: the letters, line and Check button are added to P;
   // onCheck(ok, mine) once the line is checked (the caller fills #fbx)
+  // build a word: its letters (without harakat) are tiles to drag or tap onto the line (Kit.dragTiles), and the letters
+  // on the line are shown joined above it, so the child sees them connect. onCheck(ok, mine) after Check.
   function lettersUI(P, word, onCheck) {
-    const target = [...bare(word)];
-    let bank = shuf(target.map((c, i) => ({ c, i })));
-    for (
-      let k = 0;
-      k < 6 && bank.map((b) => b.c).join("") === target.join("");
-      k++
-    )
+    const target = bare(word);
+    let bank = shuf([...target].map((t) => ({ t })));
+    for (let k = 0; k < 6 && bank.map((b) => b.t).join("") === target; k++)
       bank = shuf(bank);
-    let line = [],
-      done = false;
     P.insertAdjacentHTML(
       "beforeend",
       `
-      <div class="preview ar" dir="rtl" id="prev"></div>
-      <div class="slots" dir="rtl" id="line"></div><div class="letters" dir="rtl" id="bank"></div>
-      <p class="hint">Tap the letters in order, from right to left. Tap a placed letter to take it back.</p>
+      <div class="joined" dir="rtl" id="prev" aria-hidden="true"></div>
+      <div class="line" dir="rtl" id="line"></div><div class="bank" dir="rtl" id="bank" style="margin-top:12px"></div>
+      <p class="hint">Drag the letters onto the line in order, or tap them. Tap a placed letter to take it back.</p>
       <div id="fbx"><div class="row" style="justify-content:center"><button class="btn" id="checkBtn" type="button" disabled>Check my word</button></div></div>`,
     );
     const Ln = P.querySelector("#line"),
-      B = P.querySelector("#bank"),
-      prev = P.querySelector("#prev");
-    const draw = () => {
-      prev.textContent = line.map((x) => x.c).join("");
-      Ln.innerHTML = line.length
-        ? line
-            .map(
-              (x, k) =>
-                `<button type="button" class="lt" id="tl-${k}" data-k="${k}">${esc(x.c)}</button>`,
-            )
-            .join("")
-        : '<span class="ph">Letters go here</span>';
-      B.innerHTML = bank
-        .map(
-          (x, k) =>
-            `<button type="button" class="lt" id="tb-${k}" data-k="${k}">${esc(x.c)}</button>`,
-        )
-        .join("");
-      if (!done) {
-        Ln.querySelectorAll(".lt").forEach(
-          (b) =>
-            (b.onclick = () => {
-              bank.push(...line.splice(+b.dataset.k, 1));
-              draw();
-            }),
-        );
-        B.querySelectorAll(".lt").forEach(
-          (b) =>
-            (b.onclick = () => {
-              line.push(...bank.splice(+b.dataset.k, 1));
-              draw();
-            }),
-        );
-      }
-      const cb = P.querySelector("#checkBtn");
-      if (cb) cb.disabled = bank.length > 0;
-    };
-    draw();
-    P.querySelector("#checkBtn").onclick = () => {
-      done = true;
-      const mine = line.map((x) => x.c).join(""),
-        ok = mine === target.join("");
+      cb = P.querySelector("#checkBtn");
+    const T = Kit.dragTiles(Ln, P.querySelector("#bank"), bank, {
+      cls: "ar letter",
+      ph: "Letters go here",
+      joined: P.querySelector("#prev"),
+      onChange: (_, b) => (cb.disabled = b.length > 0),
+    });
+    cb.onclick = () => {
+      const mine = T.line.map((w) => w.t).join(""),
+        ok = mine === target;
+      T.lock();
       Ln.classList.add(ok ? "ok" : "no");
-      draw();
       onCheck(ok, mine);
     };
   }
@@ -1885,7 +1849,7 @@
       const cb = A.querySelector("#checkBtn"),
         BL = A.querySelector("#bLine");
       const T = Kit.dragTiles(BL, A.querySelector("#bBank"), bank, {
-        cls: "ar",
+        cls: letters ? "ar letter" : "ar",
         ph: `Drop the ${letters ? "letters" : "words"} here`,
         joined: A.querySelector("#bJoin"),
         onChange: (_, b) => (cb.disabled = b.length > 0),

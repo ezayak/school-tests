@@ -396,64 +396,6 @@ body {
   background: color-mix(in srgb, var(--bad) 18%, var(--card));
   border-color: var(--bad);
 }
-/* build the word (Arabic, right to left) */
-.preview {
-  font-size: clamp(2.4rem, 7vw, 3.2rem);
-  font-weight: 700;
-  min-height: 1.6em;
-  line-height: 1.5;
-  text-align: center;
-}
-.slots {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  min-height: 64px;
-  padding: 10px;
-  border: 2.5px dashed var(--ink);
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--hl) 10%, var(--card));
-}
-.slots.ok {
-  border-style: solid;
-  border-color: var(--good);
-  background: color-mix(in srgb, var(--good) 14%, var(--card));
-}
-.slots.no {
-  border-style: solid;
-  border-color: var(--bad);
-  background: color-mix(in srgb, var(--bad) 10%, var(--card));
-}
-.letters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  min-height: 56px;
-}
-.lt {
-  font-family: "Noto Naskh Arabic", "Geeza Pro", serif;
-  font-weight: 700;
-  font-size: 1.9rem;
-  min-width: 54px;
-  padding: 2px 10px;
-  border: 2.5px solid var(--ink);
-  border-radius: 12px;
-  background: var(--hl);
-  color: #1b2440;
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.slots .lt {
-  background: var(--card);
-  color: var(--ink);
-}
-.slots .ph {
-  color: var(--muted);
-  font-weight: 700;
-  align-self: center;
-}
 /* exercises */
 .qar {
   font-size: clamp(1.45rem, 3.4vw, 1.9rem);

@@ -80,3 +80,11 @@
   line-height: 1.5;
   text-align: center;
 }
+/* a letter tile (Arabic: build a word from its letters) */
+.tile.letter {
+  font-family: "Noto Naskh Arabic", "Geeza Pro", serif;
+  font-weight: 700;
+  font-size: 1.9rem;
+  min-width: 54px;
+  padding: 2px 10px;
+}

@@ -513,7 +513,7 @@ Shared files (no need to touch them for a new lesson):
 Each lesson has four files:
 
 - `lesson-N.js` — all the content (`window.LESSON = {...}`)
-- `lesson-N.html` — story, words, opposites & plurals (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`)
+- `lesson-N.html` — story, words, opposites & plurals (copy `lesson-1.html`, change `lesson-1.js` to `lesson-N.js`); it loads `shared/drag-words.css` and `shared/common.js` for the build-the-word games (letter tiles, `Kit.dragTiles`, with the letters shown joined above the line)
 - `lesson-N-exercises.html` — the book exercises (copy `lesson-1-exercises.html` the same way)
 - `img/lesson-N/` — pictures cropped from the book (about 700px wide)
 
