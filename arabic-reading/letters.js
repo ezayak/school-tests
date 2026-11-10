@@ -327,7 +327,7 @@
     en: "Letters and harakat",
     uk: "Літери та харакати",
     unit: "Arabic reading · Step 1 · booklet p. 2–3",
-    cover: "img/letters/cover.jpg",
+    cover: "img/letters/tile.jpg",
     tapq: true,
     links: window.READING_LINKS,
     tabs: [

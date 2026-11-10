@@ -7,7 +7,7 @@ window.READING = [
     title: "الْحُرُوفُ وَالْحَرَكَاتُ",
     en: "Letters and harakat",
     path: "letters.html",
-    cover: "img/letters/cover.jpg",
+    cover: "img/letters/tile.jpg",
     note: "28 letters to read · 6 games · progress checks 1–4",
   },
   {
@@ -16,7 +16,7 @@ window.READING = [
     title: "قِرَاءَةُ كَلِمَاتٍ بَسِيطَةٍ",
     en: "Three-letter words",
     path: "words.html",
-    cover: "img/words/cover.jpg",
+    cover: "img/words/tile.jpg",
     note: "65 words to read · 6 games: hear, harakat, picture, blend, order, letter flower",
   },
   {
@@ -25,7 +25,7 @@ window.READING = [
     title: "الْمَدُّ: ا – و – ي",
     en: "Madd: the long vowels ا و ي",
     path: "madd.html",
-    cover: "img/madd/cover.jpg",
+    cover: "img/madd/tile.jpg",
     note: "89 words to read · 5 games: the madd letter, short or long, the missing letter, picture, order",
   },
   {

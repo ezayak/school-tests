@@ -184,7 +184,7 @@
     en: "Madd: the long vowels ا و ي",
     uk: "Мадд: довгі голосні ا و ي",
     unit: "Arabic reading · Step 3 · booklet p. 5–6",
-    cover: "img/madd/cover.jpg",
+    cover: "img/madd/tile.jpg",
     tapq: true,
     links: window.READING_LINKS,
     tabs: [

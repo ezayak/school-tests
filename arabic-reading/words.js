@@ -118,7 +118,7 @@
     en: "Three-letter words",
     uk: "Слова з трьох літер",
     unit: "Arabic reading · Step 2 · booklet p. 4",
-    cover: "img/words/cover.jpg",
+    cover: "img/words/tile.jpg",
     tapq: true,
     links: window.READING_LINKS,
     tabs: [
