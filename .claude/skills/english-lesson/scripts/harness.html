@@ -149,6 +149,13 @@
             continue;
           }
         }
+        // before its Help button: a "do it" item in a simulator that can finish its own mission (Mini Outlook/Edge: shared/netsim.js)
+        const sb = q(d, "#simbox");
+        if (sb && sb.__sim && sb.__sim.solve && !sb.__solving) {
+          sb.__solving = true;
+          await sb.__sim.solve();
+          continue;
+        }
         const help = q(d, "#helpBtn");
         if (help && !ws) {
           help.click();
@@ -179,13 +186,6 @@
             tile.dispatchEvent(new W.PointerEvent("pointerdown", o));
             tile.dispatchEvent(new W.PointerEvent("pointerup", o));
           } else tile.click();
-          continue;
-        }
-        // a "do it" item in a simulator that can finish its own mission (Mini Outlook/Edge: shared/netsim.js)
-        const sb = q(d, "#simbox");
-        if (sb && sb.__sim && sb.__sim.solve && !sb.__solving) {
-          sb.__solving = true;
-          await sb.__sim.solve();
           continue;
         }
       }
