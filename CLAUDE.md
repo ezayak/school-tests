@@ -193,6 +193,16 @@ Then:
 - Check with a script: every item has a picture, every `img` / `src` exists, every picture file is used and in `also`, every `path` and `hub` link opens.
 - Check in the browser: the English page (the tag), each tab and section of the lesson, every story page, one exercise of each type, the back links.
 
+## Computer (Grade 4): lessons
+
+Folder `grade-4/computer/chapter-N/` (one per book unit), engine `shared/computer-lesson.js` (don't copy it; a lesson is only a data file). Format in README: "Computer lessons (Grade 4)".
+Procedure, how to read the e-book screenshots and the checks: the `computer-lesson` skill. Sources: `~/Documents/2026-2027/Alex/Computer/` (`unit-N/` e-book screenshots and figure PNGs, `Term N/` videos and CW / HW sheets).
+Alex has aphasia: short sentences, a picture on every card and question, and every computer skill practised on a pretend program (Mini Windows, Mini Word, Mini Outlook + Mini Edge).
+
+- Every blue "N.N.N To …" box = a how-to in the pretend program, every Hands on task = an exercise in the book's order. A skill the program can't do yet = a program change first, in its own stage, and the older lessons must still play.
+- Logs in `grade-4/computer/`: `SOURCES.md` (every screenshot folder, figure, sheet, video → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (Hands on answers have no key in the screenshots). Update them with every lesson, in the same commit.
+- Words missing or unreadable: never guess; ask. Then: card in `lessons.js` (under its chapter), files and pictures (not videos) in `also` of the Computer entry in `games.js`, plus `countLabel` / `topics`; a new shared program file in CORE of `sw.js`; `VERSION` bump in `sw.js` last.
+
 ## Math (Grade 4): book lessons
 
 Folder `grade-4/math/unit-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Math">`) + `shared/math.js` / `.css` (don't copy them; a lesson is only a data file). Format in README: "Math lessons (Grade 4)".
