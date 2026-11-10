@@ -1055,15 +1055,15 @@
   text-align: right;
 }
 
-/* pictures of buttons for the lesson pages (NetSim.icon) */
+/* pictures of buttons for the lesson pages (NetSim.icon): sized in em, so a picture box can make them bigger */
 .ns-bi {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 12px;
+  gap: 0.4em;
+  height: 2.1em;
+  padding: 0 0.8em;
   border: 1.5px solid #8a8a8a;
-  border-radius: 5px;
+  border-radius: 0.33em;
   background: #fff;
   color: #242424;
   font:
@@ -1073,8 +1073,8 @@
   white-space: nowrap;
 }
 .ns-bi .ns-i {
-  width: 20px;
-  height: 20px;
+  width: 1.33em;
+  height: 1.33em;
 }
 .ns-bi.blue {
   background: #0f6cbd;
@@ -1084,25 +1084,34 @@
 .ns-bi.word {
   font-size: 18px;
   font-weight: 500;
-  padding: 0 10px;
+  padding: 0 0.6em;
+}
+.ns-bi.rail,
+.ns-bi.cam {
+  height: 2.9em;
+  padding: 0 0.55em;
 }
 .ns-bi.rail {
-  height: 44px;
-  padding: 0 8px;
-  border-left: 4px solid #0f6cbd;
-}
-.ns-bi.rail .ns-i {
-  width: 28px;
-  height: 28px;
+  border-left: 0.27em solid #0f6cbd;
 }
 .ns-bi.cam {
-  height: 44px;
   background: #6b6b6b;
   border-color: #6b6b6b;
 }
+.ns-bi.rail .ns-i,
 .ns-bi.cam .ns-i {
-  width: 30px;
-  height: 30px;
+  width: 1.9em;
+  height: 1.9em;
+}
+.fi .ns-bi {
+  font-size: calc(var(--fis, 64px) * 0.26);
+}
+.fi .ns-bi.word {
+  font-size: calc(var(--fis, 64px) * 0.32);
+}
+.fi > .ns-ic {
+  width: var(--fis, 64px);
+  height: var(--fis, 64px);
 }
 
 /* missions: the glow, the pretend mouse, a key, a toast */
