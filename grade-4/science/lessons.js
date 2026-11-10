@@ -1,8 +1,10 @@
 // Science lessons for Grade 4 (Elevate Science), all terms. One entry per book topic (a folder topic-N/ with its lessons);
 // add one entry per lesson (and its files to "also" in games.js for offline use).
 // path and cover are relative to the topic folder. term: 2 = the lesson has sheets in the Term 2 booklet (a "Term 2" tag on its card).
+// nav: one side-bar section per chapter (Kit.sideNav), ic = its emoji, tab = its own name on the bar (else "Unit 2").
 window.CS_LESSONS = {
   grade: 4,
+  nav: true,
   part: "Topic",
   intro:
     "Pick a lesson. Each lesson has big pictures from the book, games, and the school exercises. Everything can be read aloud.",
@@ -10,6 +12,7 @@ window.CS_LESSONS = {
     {
       n: 1,
       dir: "topic-1",
+      ic: "🎢",
       title: "Energy and Motion",
       items: [
         {
@@ -49,6 +52,7 @@ window.CS_LESSONS = {
     {
       n: 2,
       dir: "topic-2",
+      ic: "🔋",
       title: "Human Uses of Energy",
       items: [
         {
@@ -88,6 +92,7 @@ window.CS_LESSONS = {
     {
       n: 3,
       dir: "topic-3",
+      ic: "🌊",
       title: "Waves and Information",
       items: [
         {
@@ -129,6 +134,7 @@ window.CS_LESSONS = {
     {
       n: 4,
       dir: "topic-4",
+      ic: "🏔️",
       title: "Earth's Features",
       items: [
         {
@@ -168,6 +174,7 @@ window.CS_LESSONS = {
     {
       n: 5,
       dir: "topic-5",
+      ic: "🌋",
       title: "Earth's Natural Hazards",
       items: [
         {
@@ -199,6 +206,7 @@ window.CS_LESSONS = {
     {
       n: 6,
       dir: "topic-6",
+      ic: "🦖",
       title: "The History of Planet Earth",
       items: [
         {
@@ -222,6 +230,7 @@ window.CS_LESSONS = {
     {
       n: 7,
       dir: "topic-7",
+      ic: "🌱",
       title: "Structures and Functions",
       items: [
         {
@@ -270,6 +279,7 @@ window.CS_LESSONS = {
     {
       n: 8,
       dir: "topic-8",
+      ic: "🫀",
       title: "Human Body Systems",
       items: [
         {

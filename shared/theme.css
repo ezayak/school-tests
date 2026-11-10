@@ -522,11 +522,11 @@ button:focus-visible {
   grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
+/* tabs on top: one row, or more rows when there are many (Science: 8 topics) */
 .snav {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  gap: 14px 10px;
 }
 .snav a {
   position: relative;
@@ -581,7 +581,7 @@ button:focus-visible {
 }
 @media (max-width: 480px) {
   .snav {
-    gap: 8px;
+    gap: 14px 8px;
   }
   .snav a {
     font-size: 0.95rem;
@@ -594,7 +594,8 @@ button:focus-visible {
     align-items: start;
   }
   .snav {
-    grid-auto-flow: row;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
     position: sticky;
     top: 16px;
   }

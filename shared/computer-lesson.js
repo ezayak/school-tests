@@ -76,8 +76,20 @@
     <h1 class="hero-title"><span class="p">${esc(SUBJ)}</span> <span class="k">Lessons</span></h1>
     <p class="howto">${esc(LS.intro || "Pick a lesson. Each lesson has big pictures, a pretend Windows computer to practise on, games, and the school exercises. Everything can be read aloud.")}</p>
   </section>
-  ${LS.flat ? `<div class="items">${LS.chapters.map(cards).join("")}</div>` : LS.chapters.map(chapter).join("")}
+  ${LS.nav ? `<div id="secs"></div>` : LS.flat ? `<div class="items">${LS.chapters.map(cards).join("")}</div>` : LS.chapters.map(chapter).join("")}
   <div class="soon">New lessons will be added here.</div>`;
+    // nav: one section per chapter in the side bar (Kit.sideNav), named by its part and number ("Unit 2") or its own tab name
+    if (LS.nav)
+      Kit.sideNav(
+        document.getElementById("secs"),
+        LS.chapters.map((ch) => ({
+          k: ch.dir,
+          ic: ch.ic,
+          t: ch.tab || `${ch.part ?? LS.part ?? "Chapter"} ${ch.n}`,
+          n: ch.items.length,
+          html: chapter(ch),
+        })),
+      );
     document.title = `${SUBJ} · Grade ${LS.grade}`;
     return;
   }

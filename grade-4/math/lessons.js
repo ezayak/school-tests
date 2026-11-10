@@ -2,8 +2,10 @@
 // first the unit page (the school sheets, label "Unit"), then one card per book lesson (lesson-N-M.html, label "Lesson").
 // label "Lesson" on the book lessons' cards; the unit pages have their own label "Unit". path and cover are relative to the unit folder.
 // Book lessons are added with .claude/skills/math-lesson/scripts/add.js (it rewrites this list and the "also" files in games.js).
+// nav: one side-bar section per chapter (Kit.sideNav), ic = its emoji, tab = its own name on the bar (else "Unit 2").
 window.CS_LESSONS = {
   grade: 4,
+  nav: true,
   part: "Unit",
   label: "Lesson",
   intro:
@@ -12,6 +14,7 @@ window.CS_LESSONS = {
     {
       n: 2,
       dir: "unit-2",
+      ic: "🔢",
       title: "Generalize Place-Value Structure",
       items: [
         {
@@ -60,6 +63,7 @@ window.CS_LESSONS = {
     {
       n: 3,
       dir: "unit-3",
+      ic: "➕",
       title: "Addition and Subtraction Strategies and Algorithms",
       items: [
         {
@@ -148,6 +152,7 @@ window.CS_LESSONS = {
     {
       n: 4,
       dir: "unit-4",
+      ic: "⚖️",
       title: "Multiplication as Comparison",
       items: [
         {
@@ -196,6 +201,7 @@ window.CS_LESSONS = {
     {
       n: 5,
       dir: "unit-5",
+      ic: "🔁",
       title: "Numbers and Number Patterns",
       items: [
         {
@@ -251,6 +257,7 @@ window.CS_LESSONS = {
     {
       n: 6,
       dir: "unit-6",
+      ic: "✖️",
       title: "Multiplication Strategies with Multi-Digit Numbers",
       items: [
         {
@@ -322,6 +329,7 @@ window.CS_LESSONS = {
     {
       n: 7,
       dir: "unit-7",
+      ic: "➗",
       title:
         "Division Strategies with Multi-Digit Dividends and 1-Digit Divisors",
       items: [
@@ -395,6 +403,8 @@ window.CS_LESSONS = {
       n: "",
       part: "",
       dir: "times",
+      ic: "🚀",
+      tab: "Times tables",
       title: "Multiplication games",
       items: [
         {

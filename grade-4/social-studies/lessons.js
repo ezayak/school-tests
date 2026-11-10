@@ -1,14 +1,17 @@
 // Social Studies lessons for Grade 4 (English), all terms. One entry per chapter (a folder chapter-N/ with its lessons);
 // add one entry per lesson (and its files to "also" in games.js for offline use).
 // path and cover are relative to the chapter folder.
+// nav: one side-bar section per chapter (Kit.sideNav), ic = its emoji, tab = its own name on the bar (else "Unit 2").
 window.CS_LESSONS = {
   grade: 4,
+  nav: true,
   intro:
     "Pick a lesson. Each lesson has big pictures from the book or the teacher's slides, games, and the school exercises. Everything can be read aloud. Term 2* = a lesson that is not in the booklet.",
   chapters: [
     {
       n: 1,
       dir: "chapter-1",
+      ic: "🗺️",
       title: "Geography and the United States",
       items: [
         {
@@ -60,6 +63,7 @@ window.CS_LESSONS = {
     {
       n: 2,
       dir: "chapter-2",
+      ic: "🏛️",
       title: "Americans and Their History",
       items: [
         {
