@@ -2422,7 +2422,9 @@
     async function typeInto(s, m, ms) {
       let el = find(s.t);
       if (!el) return;
-      const base = s.t === "cm:body" && !typedOk(s, el.value) ? el.value : "";
+      // the message keeps what is there; a new part starts on a new line
+      let base = s.t === "cm:body" && !typedOk(s, el.value) ? el.value : "";
+      if (base && !/\s$/.test(base)) base += "\n";
       for (let i = 1; i <= s.text.length; i++) {
         el = find(s.t);
         if (!el || mis !== m) return;
