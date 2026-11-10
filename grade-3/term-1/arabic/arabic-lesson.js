@@ -311,12 +311,15 @@
   function listView() {
     const LS = window.LESSONS || [],
       TS = window.TESTS || [],
-      HW = window.HOMEWORK || [];
+      HW = window.HOMEWORK || [],
+      // Arabic reading (arabic-reading/lessons.js), shared by the Grade 3 and Grade 4 hubs
+      RD = window.READING || [];
     const card = (l, label, arLabel) =>
       `<a class="lesson" href="${esc(l.path)}"><img src="${esc(l.cover)}" alt=""><span class="in"><span class="n">${label} ${l.n} · ${arLabel} ${esc(l.nAr || "")}</span><span class="t ar" dir="rtl">${esc(l.title)}</span><span class="e">${esc(l.en)}</span><span class="parts">${esc(l.note || "")}</span></span></a>`;
     // another subject's list page sets window.LIST_HEAD (same keys)
     const LH = window.LIST_HEAD || {
       eyebrow: "Grade 3 · اللغة العربية",
+      grade: 3,
       p: "Arabic",
       k: "Lessons",
       howto:
@@ -365,6 +368,25 @@
         HW.map((l) => card(l, "Homework · Lesson", "وَاجِبُ الدَّرْسِ")).join(
           "",
         ),
+      ),
+      // a reading card opens with ?g=<grade>, so its back link comes back to this hub
+      sec(
+        "reading",
+        "🔤",
+        "Reading",
+        "الْقِرَاءَةُ",
+        RD,
+        RD.map((l) =>
+          card(
+            {
+              ...l,
+              path: window.READING_BASE + l.path + "?g=" + (LH.grade || 3),
+              cover: window.READING_BASE + l.cover,
+            },
+            "Step",
+            "الْخُطْوَةُ",
+          ),
+        ).join(""),
       ),
     ]);
   }
@@ -470,8 +492,8 @@
   const tapHTML = (text) =>
     tokens(text)
       .map((t) =>
-        /^_{3,}$/.test(t.core)
-          ? `${esc(t.pre)}<span class="gap"></span>${esc(t.post)}`
+        /_{3,}/.test(t.core)
+          ? `${esc(t.pre)}${esc(t.core).replace(/_{3,}/, '<span class="gap"></span>')}${esc(t.post)}`
           : /[ء-ي]/.test(t.core)
             ? `${esc(t.pre)}<span class="w">${esc(t.core)}</span>${esc(t.post)}`
             : esc(t.pre + t.core + t.post),
@@ -1632,6 +1654,7 @@
     ${ruleOf(xs.sec) ? ruleHTML(ruleOf(xs.sec)) : ""}
     ${para ? `<details class="readp"><summary>📖 Read / listen to the paragraph</summary><p class="ar" dir="rtl">${esc(para.ar)}</p><button type="button" class="abtn" id="paraSay"><span class="e">🔊</span> Listen</button></details>` : ""}
     ${it.tag ? `<span class="tag ar" dir="rtl">${esc(it.tag)}</span>` : ""}
+    ${it.say ? `<div class="audio" style="justify-content:center"><button type="button" class="abtn big" id="sSay"><span class="e">🔊</span> Listen · اسْتَمِعْ</button><button type="button" class="abtn" id="sSlow"><span class="e">🐢</span> Slowly</button></div>` : ""}
     ${it.type === "match" ? "" : `<p class="qar ar${L.tapq ? " tapw" : ""}" dir="rtl">${L.tapq ? tapHTML(it.q) : qHTML(it.q)}</p>`}
     ${it.type === "match" ? `<p class="qar ar" dir="rtl">${esc(it.q)}</p>` : ""}
     ${trText(it) ? `<p class="qhelp">${esc(trText(it))}</p>` : ""}
@@ -1647,6 +1670,12 @@
     closePop();
     bindTap(H);
     document.getElementById("qSay").onclick = () => say(speakable(it.q));
+    // it.say: what the child hears first (a sound, a word); it plays once when the question opens
+    if (it.say) {
+      document.getElementById("sSay").onclick = () => say(it.say);
+      document.getElementById("sSlow").onclick = () => say(it.say, true);
+      say(it.say);
+    }
     const ps = document.getElementById("paraSay");
     if (ps) ps.onclick = () => say(para.ar);
     const rs = document.getElementById("ruleSay");
@@ -1737,7 +1766,7 @@
               o.ok,
               `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc(full)}</span>`,
             );
-            say(speakable(full));
+            say(it.say || speakable(full));
           }),
       );
     } else if (it.type === "open") {
@@ -1783,24 +1812,87 @@
           ok ? "That's the word!" : "Read the answer and try to remember it.",
         );
       });
+    } else if (it.type === "read") {
+      // a: what to read, in big letters (w: an example word under it); the child reads it aloud,
+      // listens to check, then marks themselves
+      const text = it.w ? it.a + " ، " + it.w : it.a;
+      A.innerHTML = `<p class="readbig ar" dir="rtl">${esc(it.a)}</p>${it.w ? `<p class="readw ar" dir="rtl">${esc(it.w)}</p>` : ""}
+      <div class="audio" style="justify-content:center"><button type="button" class="abtn big" id="rSay"><span class="e">🔊</span> Listen to check</button><button type="button" class="abtn" id="rSlow"><span class="e">🐢</span> Slowly</button></div>
+      <div class="tfrow" style="margin-top:12px"><button type="button" class="tfbtn" id="got-1" data-g="1">✓ I read it</button><button type="button" class="tfbtn" id="got-0" data-g="0">✗ Not yet</button></div>`;
+      document.getElementById("rSay").onclick = () => say(text);
+      document.getElementById("rSlow").onclick = () => say(text, true);
+      A.querySelectorAll("[data-g]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            const ok = b.dataset.g === "1";
+            A.querySelectorAll("[data-g]").forEach((x) => (x.disabled = true));
+            b.classList.add(ok ? "right" : "wrong");
+            if (ok) xs.score++;
+            else xs.miss.push({ q: it.q, right: text });
+            after(
+              ok,
+              ok ? "Great reading!" : "Listen once more and read it again.",
+            );
+            if (!ok) say(text, true);
+          }),
+      );
+    } else if (it.type === "where") {
+      // where is the letter in the word: a = 0 start, 1 middle, 2 end; the buttons keep that order (right to left)
+      const W = [
+        ["فِي أَوَّلِ الْكَلِمَةِ", "at the start", "на початку"],
+        ["فِي وَسَطِ الْكَلِمَةِ", "in the middle", "у середині"],
+        ["فِي آخِرِ الْكَلِمَةِ", "at the end", "у кінці"],
+      ];
+      A.innerHTML = `<div class="opts where" dir="rtl">${W.map((w, j) => `<button type="button" class="opt aro" id="opt-${j}" data-j="${j}"><span class="ow"><span class="ar">${w[0]}</span>${tr !== "off" ? `<small>${tr === "uk" ? w[2] : w[1]}</small>` : ""}</span></button>`).join("")}</div>`;
+      A.querySelectorAll("[data-j]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            const j = +b.dataset.j,
+              ok = j === it.a;
+            A.querySelectorAll("[data-j]").forEach((x, k) => {
+              x.disabled = true;
+              if (k === it.a) x.classList.add("right");
+              else if (x !== b) x.classList.add("dim");
+            });
+            if (!ok) b.classList.add("wrong");
+            if (ok) xs.score++;
+            else xs.miss.push({ q: it.q, your: W[j][0], right: W[it.a][0] });
+            after(
+              ok,
+              `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc(W[it.a][0])}</span>`,
+            );
+            if (it.say) say(it.say);
+          }),
+      );
     } else if (it.type === "build") {
-      // a: the sentence; its words are tiles to drag or tap into order (Kit.dragTiles), end punctuation stays
-      const [, body, end] = it.a.match(/^(.*?)([.،؟!]*)$/);
-      const words = body.split(" ");
+      // a: the sentence; its words are tiles to drag or tap into order (Kit.dragTiles), end punctuation stays.
+      // tiles: "letters": a is one word, its letters (without harakat) are the tiles; also: other words those letters make
+      const letters = it.tiles === "letters";
+      const [, body, end] = letters
+        ? [, bare(it.a), ""]
+        : it.a.match(/^(.*?)([.،؟!]*)$/);
+      const words = letters ? [...body] : body.split(" ");
+      const sep = letters ? "" : " ";
+      const okAll = [body, ...(it.also || []).map(bare)];
       let bank = shuf(words.map((t) => ({ t })));
-      for (let n = 0; n < 6 && bank.map((w) => w.t).join(" ") === body; n++)
+      for (
+        let n = 0;
+        n < 6 && okAll.includes(bank.map((w) => w.t).join(sep));
+        n++
+      )
         bank = shuf(bank);
-      A.innerHTML = `<div class="line" id="bLine" dir="rtl"></div><div class="bank" id="bBank" dir="rtl" style="margin-top:12px"></div><p class="hint">Drag the words onto the line in the right order, or tap them.</p><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" id="checkBtn" type="button" disabled>Check my sentence</button></div>`;
+      A.innerHTML = `${letters ? '<div class="joined" dir="rtl" id="bJoin" aria-hidden="true"></div>' : ""}<div class="line" id="bLine" dir="rtl"></div><div class="bank" id="bBank" dir="rtl" style="margin-top:12px"></div><p class="hint">Drag the ${letters ? "letters" : "words"} onto the line in the right order, or tap them.</p><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" id="checkBtn" type="button" disabled>Check my ${letters ? "word" : "sentence"}</button></div>`;
       const cb = A.querySelector("#checkBtn"),
         BL = A.querySelector("#bLine");
       const T = Kit.dragTiles(BL, A.querySelector("#bBank"), bank, {
         cls: "ar",
-        ph: "Drop the words here",
+        ph: `Drop the ${letters ? "letters" : "words"} here`,
+        joined: A.querySelector("#bJoin"),
         onChange: (_, b) => (cb.disabled = b.length > 0),
       });
       cb.onclick = () => {
-        const mine = T.line.map((w) => w.t).join(" "),
-          ok = mine === body;
+        const mine = T.line.map((w) => w.t).join(sep),
+          ok = okAll.includes(mine);
         T.lock();
         cb.remove();
         BL.classList.add(ok ? "ok" : "no");
@@ -1808,7 +1900,7 @@
         else xs.miss.push({ q: it.q, your: mine + end, right: it.a });
         after(
           ok,
-          `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc(it.a)}</span>`,
+          `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc([it.a, ...(it.also || [])].join(" · "))}</span>`,
         );
         say(it.a);
       };

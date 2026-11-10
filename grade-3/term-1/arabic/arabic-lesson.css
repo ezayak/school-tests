@@ -844,3 +844,21 @@ body {
   border-color: var(--bad);
   background: color-mix(in srgb, var(--bad) 10%, var(--card));
 }
+/* "read" cards (Arabic reading): the letters or word to read aloud, and an example word under them */
+.readbig {
+  font-size: clamp(2.6rem, 9vw, 4rem);
+  line-height: 1.7;
+  text-align: center;
+  word-spacing: 0.4em;
+  margin: 0;
+}
+.readw {
+  font-size: 1.8rem;
+  text-align: center;
+  margin: 0;
+  color: var(--muted);
+}
+/* "where" questions: start · middle · end of the word in one row */
+.opts.where {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
