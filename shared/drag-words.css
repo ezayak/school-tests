@@ -71,3 +71,12 @@
   cursor: grabbing;
   margin: 0;
 }
+/* Kit.dragTiles({joined}): the Arabic letters on the line joined into the word, above the line */
+.joined {
+  min-height: 1.5em;
+  font-family: "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting", serif;
+  font-weight: 700;
+  font-size: clamp(2rem, min(8dvh, 7vw), 3.2rem);
+  line-height: 1.5;
+  text-align: center;
+}

@@ -1095,7 +1095,7 @@
           ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span><span class="sp-model sp-msent" id="hint">${esc(whole)}</span>`
           : `${deck.pic ? `<span class="sp-bpic" aria-hidden="true">${deck.pic(it)}</span>` : `<span class="sp-fpic sp-hintpic" aria-hidden="true">${esc(it.ic)}</span>`}<span class="sp-model" id="hint">${esc(whole)}</span>`;
         stage.innerHTML = `<div class="sp-say sp-say-b${B ? " sp-say-s" : ""}">${model}${listen}<button type="button" class="sp-snd sp-listen sp-help" id="help" aria-label="${B ? B.help : T.helpLetter}">💡</button></div>
-        ${AR && !B ? '<div class="sp-preview" dir="rtl" id="prev" aria-hidden="true"></div>' : ""}<div class="line sp-line" id="line" aria-label="${B ? B.what : T.word}"></div>
+        ${AR && !B ? '<div class="joined sp-preview" dir="rtl" id="prev" aria-hidden="true"></div>' : ""}<div class="line sp-line" id="line" aria-label="${B ? B.what : T.word}"></div>
         <div class="bank sp-bank" id="bank" aria-label="${T.letters}"></div>`;
         const L = document.getElementById("line");
         let bank = Kit.shuf(target.map((t, i) => ({ t, i })));
@@ -1103,13 +1103,12 @@
         for (let k = 0; k < 8 && same(bank); k++) bank = Kit.shuf(bank);
         const tiles = Kit.dragTiles(L, document.getElementById("bank"), [], {
           cls: B ? "sp-tile sp-wtile" : "sp-tile",
+          // Arabic: the letters on the line joined, so he sees how they connect (as in the Arabic lessons' word game)
+          joined: document.getElementById("prev"),
           mark: (w, k) => (done ? (w.t === target[k] ? "ok" : "no") : ""),
           onPlace: (w) => letter(w.t),
           // after onPlace (it comes after the drawing), so the letter is said before the word
           onChange: (line) => {
-            // Arabic: the letters on the line joined, so he sees how they connect (as in the Arabic lessons' word game)
-            const prev = document.getElementById("prev");
-            if (prev) prev.textContent = line.map((w) => w.t).join("");
             if (line.length === target.length) setTimeout(check);
           },
         });

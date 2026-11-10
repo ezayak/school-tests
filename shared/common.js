@@ -109,7 +109,8 @@ window.Kit = (function () {
   }
   // Tiles moved from a bank onto a line by dragging or tapping (letters of a word, words of a sentence). Styles: drag-words.css.
   // L, B: the line and bank elements; tiles: [{t}] in bank order. opts: {cls: extra tile class, ph: line placeholder (text, or a function that returns it),
-  // mark(w, k): extra class of a tile on the line (e.g. "ok" / "no" after a check), onPlace(w): a tile went onto the line, onChange(line, bank)}.
+  // mark(w, k): extra class of a tile on the line (e.g. "ok" / "no" after a check), onPlace(w): a tile went onto the line, onChange(line, bank),
+  // joined: an element (class "joined") that shows the tiles on the line joined into one word, so the child sees the Arabic letters connect}.
   // Returns {line, bank, use(line, bank), draw, lock, unlock}; use() switches to other arrays (one line per word). A dir="rtl" line works too.
   function dragTiles(L, B, tiles, opts = {}) {
     let line = [],
@@ -122,6 +123,7 @@ window.Kit = (function () {
         ? line.map((w, k) => tile(w, k, "line")).join("")
         : `<span class="ph">${esc((typeof opts.ph === "function" ? opts.ph() : opts.ph) || "")}</span>`;
       B.innerHTML = bank.map((w, k) => tile(w, k, "bank")).join("");
+      if (opts.joined) opts.joined.textContent = line.map((w) => w.t).join("");
       if (locked) {
         L.querySelectorAll(".tile").forEach((t) => (t.disabled = true));
         return;
