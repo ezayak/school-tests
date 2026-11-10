@@ -1,4 +1,4 @@
-// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard,dragTiles,voice}=Kit;
+// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard,dragTiles,voice,sideNav}=Kit;
 window.Kit = (function () {
   const esc = (s) =>
     String(s ?? "").replace(
@@ -341,6 +341,70 @@ window.Kit = (function () {
         a.play();
       });
   });
+  // A hub page in sections with a side bar to move between them (Arabic: Lessons · Tests · Homework · Reading).
+  // host: the element to fill; secs: [{k, ic, t, ar, n, html}]: key, emoji, name, Arabic name (optional),
+  // count on the button (optional), the section's content. The open section is remembered on this device for this page
+  // and is in the URL (#tests), so a link to "index.html#tests" opens it and "index.html" opens the last one.
+  // Landscape tablet: a bar on the left; phone or portrait: a row of tabs on top. Only one section: no bar.
+  function sideNav(host, secs) {
+    const key = "snav:" + location.pathname;
+    secs = secs.filter(Boolean);
+    if (secs.length < 2) {
+      host.innerHTML = secs.length ? secs[0].html : "";
+      return;
+    }
+    const mem = {
+      get() {
+        try {
+          return localStorage.getItem(key);
+        } catch (e) {
+          return null;
+        }
+      },
+      set(v) {
+        try {
+          localStorage.setItem(key, v);
+        } catch (e) {}
+      },
+    };
+    const has = (k) => secs.some((s) => s.k === k);
+    const now = () => {
+      const h = decodeURIComponent(location.hash.slice(1));
+      if (has(h)) return h;
+      const m = mem.get();
+      return has(m) ? m : secs[0].k;
+    };
+    host.innerHTML = `<div class="snav-wrap"><nav class="snav" aria-label="Sections">${secs
+      .map(
+        (s) =>
+          `<a href="#${esc(s.k)}" data-sec="${esc(s.k)}"><span class="si" aria-hidden="true">${esc(s.ic || "")}</span><span class="st">${esc(s.t)}${s.ar ? `<span class="sa ar" dir="rtl">${esc(s.ar)}</span>` : ""}</span>${s.n != null ? `<span class="sn">${esc(s.n)}</span>` : ""}</a>`,
+      )
+      .join("")}</nav><div class="snav-panel"></div></div>`;
+    const panel = host.querySelector(".snav-panel");
+    function show() {
+      const k = now();
+      mem.set(k);
+      host
+        .querySelectorAll("[data-sec]")
+        .forEach((a) =>
+          a.dataset.sec === k
+            ? a.setAttribute("aria-current", "page")
+            : a.removeAttribute("aria-current"),
+        );
+      panel.innerHTML = secs.find((s) => s.k === k).html;
+    }
+    // a tap replaces the address instead of adding to the history: the back button leaves the hub
+    host.querySelectorAll("[data-sec]").forEach(
+      (a) =>
+        (a.onclick = (e) => {
+          e.preventDefault();
+          history.replaceState(null, "", "#" + a.dataset.sec);
+          show();
+        }),
+    );
+    addEventListener("hashchange", show);
+    show();
+  }
   return {
     esc,
     shuf,
@@ -352,5 +416,6 @@ window.Kit = (function () {
     blocks,
     dragTiles,
     voice,
+    sideNav,
   };
 })();

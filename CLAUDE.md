@@ -10,6 +10,7 @@ Read README.md first. It has the structure, the lesson/dictation formats and the
   Example: `.play-arrow` (keeps "Play →" / "Open →" on one line) lives only in theme.css, not copied into index.css / lesson.css / english-hub.css.
 - Before adding CSS, check which stylesheets the target pages actually load (`grep -n "<link" .../index.html`). The English hubs load theme.css + english-hub.css only, not lesson.css.
 - Markup shared by several engines goes into `Kit` in `shared/common.js` (e.g. `Kit.lessonCard(it, label)` for French and Computer hub cards). A page that uses Kit must load `shared/common.js` before its own scripts.
+- A hub page with several groups (Lessons · Tests · Homework …) uses `Kit.sideNav(host, sections)`: a bar on the left on a landscape tablet, tabs on top on a phone. Styles in theme.css.
 - Every page has `<html lang="…" translate="no">` and `<meta name="google" content="notranslate" />` after the charset:
   the browser must not offer to translate the app (it would change the words being learnt).
 - Tiles dragged or tapped from a bank onto a line (build a word, put words in order) always use `Kit.dragTiles`; never copy drag code into a page. The page keeps only its own check and feedback.

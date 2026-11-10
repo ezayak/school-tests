@@ -515,3 +515,97 @@ button:focus-visible {
   color: var(--bad);
   text-decoration: underline;
 }
+/* Kit.sideNav: a hub page in sections (Arabic: Lessons · Tests · Homework).
+   Phone or portrait: a row of tabs on top; landscape tablet: a bar on the left. */
+.snav-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+.snav {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+.snav a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  padding: 8px 6px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: var(--display);
+  font-size: 1.1rem;
+  line-height: 1.15;
+}
+.snav a[aria-current] {
+  background: var(--ink);
+  color: var(--card);
+}
+.snav .si {
+  font-family: var(--emoji);
+  font-size: 1.5rem;
+}
+.snav .st {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.snav .sa {
+  font-family: "Noto Naskh Arabic", "Geeza Pro", serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.snav .sn {
+  position: absolute;
+  top: -10px;
+  right: -6px;
+  min-width: 26px;
+  padding: 1px 7px;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--hl);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+}
+@media (max-width: 480px) {
+  .snav {
+    gap: 8px;
+  }
+  .snav a {
+    font-size: 0.95rem;
+    padding-inline: 4px;
+  }
+}
+@media (orientation: landscape) and (min-width: 760px) {
+  .snav-wrap {
+    grid-template-columns: 220px minmax(0, 1fr);
+    align-items: start;
+  }
+  .snav {
+    grid-auto-flow: row;
+    position: sticky;
+    top: 16px;
+  }
+  .snav a {
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px 12px;
+    text-align: left;
+  }
+  .snav .sn {
+    position: static;
+    margin-left: auto;
+  }
+}
