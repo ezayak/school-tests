@@ -46,6 +46,15 @@ window.READING = [
     cover: "img/ta/tile.jpg",
     note: "25 words to read · 5 games: ت or ة, ة or ه, the last letter, write the name, a sentence",
   },
+  {
+    n: 6,
+    nAr: "السَّادِسَةُ",
+    title: "التَّضْعِيفُ (الشَّدَّةُ)",
+    en: "Shadda",
+    path: "shadda.html",
+    cover: "img/shadda/tile.jpg",
+    note: "35 words to read · 4 games: with or without shadda, where is the shadda, two letters in one, picture",
+  },
 ];
 // the folder of this file, so a hub in any folder can link to the cards
 window.READING_BASE = document.currentScript.src.replace(/[^/]*$/, "");
