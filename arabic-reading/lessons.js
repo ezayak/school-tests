@@ -64,6 +64,15 @@ window.READING = [
     cover: "img/tanween/tile.jpg",
     note: "65 words to read · 5 games: which tanween, hear it, the alif, is there tanween, the letter",
   },
+  {
+    n: 8,
+    nAr: "الثَّامِنَةُ",
+    title: "الْ الْقَمَرِيَّةُ وَالْ الشَّمْسِيَّةُ",
+    en: "Moon lam and sun lam",
+    path: "lam.html",
+    cover: "img/lam/tile.jpg",
+    note: "70 words to read · 3 games: moon or sun, join to the sun or the moon, write the word",
+  },
 ];
 // the folder of this file, so a hub in any folder can link to the cards
 window.READING_BASE = document.currentScript.src.replace(/[^/]*$/, "");
