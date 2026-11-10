@@ -82,6 +82,15 @@ window.READING = [
     cover: "img/hamza/tile.jpg",
     note: "26 words to read · 3 games: qat' or wasl, the first letter أ or ا, the last letter ى or ا",
   },
+  {
+    n: 10,
+    nAr: "الْعَاشِرَةُ",
+    title: "قِرَاءَةُ الْجُمَلِ بِالشَّكْلِ",
+    en: "Sentences and short texts",
+    path: "sentences.html",
+    cover: "img/sentences/tile.jpg",
+    note: "4 texts to read · 6 games: fast reading, order the words, dictation, meaning from context, understand the text, describe the picture",
+  },
 ];
 // the folder of this file, so a hub in any folder can link to the cards
 window.READING_BASE = document.currentScript.src.replace(/[^/]*$/, "");
