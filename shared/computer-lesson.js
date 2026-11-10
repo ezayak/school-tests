@@ -86,7 +86,7 @@
   const L = window.LESSON;
   const IMG = (n) => `${L.imgDir || "img/lesson-" + L.n}/${n}.jpg`; // English lessons name their picture folder
   const LK = L.key || L.n; // saved ticks and tab; Science lessons set a key so topics don't share lesson numbers
-  const W = window.WinSim || window.WordSim;
+  const W = window.WinSim || window.WordSim || window.NetSim;
   // a subject can add its own question types and drawings (Math: shared/math.js, loaded before this engine)
   const EXT = window.CS_EXT;
   // the pretend program's name for the free-play tile: Mini Windows unless the program says otherwise
