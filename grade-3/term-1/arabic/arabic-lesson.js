@@ -1759,7 +1759,12 @@
           }),
       );
     } else if (it.type === "mc") {
-      const opts = shuf(it.o.map((t, j) => ({ t, ok: j === 0 })));
+      // keep: ["ت", "ة", "ه"] → the options always in this order (the same buttons every time), not shuffled
+      const opts = it.keep
+        ? it.o
+            .map((t, j) => ({ t, ok: j === 0 }))
+            .sort((x, y) => it.keep.indexOf(x.t) - it.keep.indexOf(y.t))
+        : shuf(it.o.map((t, j) => ({ t, ok: j === 0 })));
       A.innerHTML = `<div class="opts ${opts.some((o) => o.t.length > 18) ? "long" : ""}">${opts.map((o, j) => `<button type="button" class="opt aro" id="opt-${j}" data-j="${j}"><span class="L">${"ABCDEF"[j]}</span><span class="ar">${esc(o.t)}</span></button>`).join("")}</div>`;
       A.querySelectorAll("[data-j]").forEach(
         (b) =>
