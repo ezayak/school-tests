@@ -673,6 +673,52 @@
 
   // build a word from its letters, right to left: the letters, line and Check button are added to P;
   // onCheck(ok, mine) once the line is checked (the caller fills #fbx)
+  // letters to add to a word's tiles so the bank has n: first the ones that look like its letters, then any others
+  const LOOK = {
+    ا: "لأ",
+    أ: "اإ",
+    إ: "أا",
+    ب: "تثني",
+    ت: "بثني",
+    ث: "بتني",
+    ج: "حخ",
+    ح: "جخ",
+    خ: "جح",
+    د: "ذر",
+    ذ: "دز",
+    ر: "زد",
+    ز: "رذ",
+    س: "شص",
+    ش: "سص",
+    ص: "ضس",
+    ض: "صط",
+    ط: "ظض",
+    ظ: "طض",
+    ع: "غ",
+    غ: "عف",
+    ف: "قغ",
+    ق: "فك",
+    ك: "قل",
+    ل: "كا",
+    م: "ن",
+    ن: "بتي",
+    ه: "ةم",
+    ة: "هت",
+    و: "رد",
+    ي: "بنت",
+    ى: "ي",
+  };
+  function fillers(word, n) {
+    const has = new Set(word),
+      out = [];
+    const add = (c) => {
+      if (out.length < n - word.length && !has.has(c) && !out.includes(c))
+        out.push(c);
+    };
+    shuf(word.flatMap((c) => [...(LOOK[c] || "")])).forEach(add);
+    shuf([..."ابتثجحخدذرزسشصضطظعغفقكلمنهوي"]).forEach(add);
+    return out;
+  }
   // build a word: its letters (without harakat) are tiles to drag or tap onto the line (Kit.dragTiles), and the letters
   // on the line are shown joined above it, so the child sees them connect. onCheck(ok, mine) after Check.
   function lettersUI(P, word, onCheck) {
@@ -1609,6 +1655,9 @@
           return { t, tr: trText({ en, uk }), ok: j === 0 };
         }),
       );
+    // it.mute: the word is only heard (it.say); with no voice on the device and no internet it is written after the question instead
+    const heard = !!it.say && (!it.mute || canSpeak());
+    const qText = it.mute && !heard ? it.q + ": " + it.mute : it.q;
     const H = exH();
     exTop(H);
     H.innerHTML = `<div class="hud"><button type="button" class="abtn" id="homeBtn" aria-label="Back to exercise list">←</button><span class="qnum">${esc(tr === "uk" ? xs.sec.uk : xs.sec.en)} · ${xs.i + 1} / ${n}</span><div class="meter"><i style="width:${pct}%"></i></div><span class="score">${bolt}<b id="pts">${xs.score}</b></span></div>
@@ -1618,8 +1667,8 @@
     ${ruleOf(xs.sec) ? ruleHTML(ruleOf(xs.sec)) : ""}
     ${para ? `<details class="readp"><summary>📖 Read / listen to the paragraph</summary><p class="ar" dir="rtl">${esc(para.ar)}</p><button type="button" class="abtn" id="paraSay"><span class="e">🔊</span> Listen</button></details>` : ""}
     ${it.tag ? `<span class="tag ar" dir="rtl">${esc(it.tag)}</span>` : ""}
-    ${it.say ? `<div class="audio" style="justify-content:center"><button type="button" class="abtn big" id="sSay"><span class="e">🔊</span> Listen · اسْتَمِعْ</button><button type="button" class="abtn" id="sSlow"><span class="e">🐢</span> Slowly</button></div>` : ""}
-    ${it.type === "match" ? "" : `<p class="qar ar${L.tapq ? " tapw" : ""}" dir="rtl">${L.tapq ? tapHTML(it.q) : qHTML(it.q)}</p>`}
+    ${heard ? `<div class="audio" style="justify-content:center"><button type="button" class="abtn big" id="sSay"><span class="e">🔊</span> Listen · اسْتَمِعْ</button><button type="button" class="abtn" id="sSlow"><span class="e">🐢</span> Slowly</button></div>` : ""}
+    ${it.type === "match" ? "" : `<p class="qar ar${L.tapq ? " tapw" : ""}" dir="rtl">${L.tapq ? tapHTML(qText) : qHTML(qText)}</p>`}
     ${it.type === "match" ? `<p class="qar ar" dir="rtl">${esc(it.q)}</p>` : ""}
     ${trText(it) ? `<p class="qhelp">${esc(trText(it))}</p>` : ""}
     ${hOpts ? helpHTML(it.help, hOpts) : ""}
@@ -1633,9 +1682,9 @@
     };
     closePop();
     bindTap(H);
-    document.getElementById("qSay").onclick = () => say(speakable(it.q));
+    document.getElementById("qSay").onclick = () => say(speakable(qText));
     // it.say: what the child hears first (a sound, a word); it plays once when the question opens
-    if (it.say) {
+    if (heard) {
       document.getElementById("sSay").onclick = () => say(it.say);
       document.getElementById("sSlow").onclick = () => say(it.say, true);
       say(it.say);
@@ -1830,7 +1879,8 @@
       );
     } else if (it.type === "build") {
       // a: the sentence; its words are tiles to drag or tap into order (Kit.dragTiles), end punctuation stays.
-      // tiles: "letters": a is one word, its letters (without harakat) are the tiles; also: other words those letters make
+      // tiles: "letters": a is one word, its letters (without harakat) are the tiles; also: other words those letters make;
+      // extra: 12 → the bank has 12 letters, the word's own and others (look-alike letters first), and the child picks the right ones
       const letters = it.tiles === "letters";
       const [, body, end] = letters
         ? [, bare(it.a), ""]
@@ -1838,7 +1888,8 @@
       const words = letters ? [...body] : body.split(" ");
       const sep = letters ? "" : " ";
       const okAll = [body, ...(it.also || []).map(bare)];
-      let bank = shuf(words.map((t) => ({ t })));
+      const fill = letters && it.extra ? fillers(words, it.extra) : [];
+      let bank = shuf([...words, ...fill].map((t) => ({ t })));
       for (
         let n = 0;
         n < 6 && okAll.includes(bank.map((w) => w.t).join(sep));
@@ -1852,7 +1903,8 @@
         cls: letters ? "ar letter" : "ar",
         ph: `Drop the ${letters ? "letters" : "words"} here`,
         joined: A.querySelector("#bJoin"),
-        onChange: (_, b) => (cb.disabled = b.length > 0),
+        // the word is complete when the line has as many tiles as it (extra letters can stay in the bank)
+        onChange: (l) => (cb.disabled = l.length !== words.length),
       });
       cb.onclick = () => {
         const mine = T.line.map((w) => w.t).join(sep),
@@ -1864,7 +1916,7 @@
         else xs.miss.push({ q: it.q, your: mine + end, right: it.a });
         after(
           ok,
-          `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc([it.a, ...(it.also || [])].join(" · "))}</span>`,
+          `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc([it.a, ...(it.also || [])].join(" · "))}${letters ? " = " + esc(words.join(" + ")) : ""}</span>`,
         );
         say(it.a);
       };
