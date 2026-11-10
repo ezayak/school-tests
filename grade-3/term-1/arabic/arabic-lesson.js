@@ -327,9 +327,46 @@
     <h1 class="hero-title"><span class="p">${esc(LH.p)}</span> <span class="k">${esc(LH.k)}</span></h1>
     <p class="howto">${esc(LH.howto)}</p>
   </section>
-  <div class="lessons">${LS.map((l) => card(l, "Lesson", "الدرس")).join("")}
-  <div class="soon">More lessons will be added here, one by one.</div></div>
-  ${TS.length ? `<h2 class="lgroup">Tests · <span class="ar">الِاخْتِبَارَاتُ</span></h2><div class="lessons">${TS.map((l) => card(l, "Test", "الاختبار")).join("")}</div>` : ""}${HW.length ? `<h2 class="lgroup">Homework · <span class="ar">الْوَاجِبَاتُ</span></h2><div class="lessons">${HW.map((l) => card(l, "Homework · Lesson", "وَاجِبُ الدَّرْسِ")).join("")}</div>` : ""}`;
+  <div id="secs"></div>`;
+    // the side bar (Kit.sideNav) names the open section; a list that is empty has no button
+    const sec = (k, ic, t, ar, list, html) =>
+      list.length && {
+        k,
+        ic,
+        t,
+        ar,
+        n: list.length,
+        html: `<div class="lessons">${html}</div>`,
+      };
+    Kit.sideNav(document.getElementById("secs"), [
+      sec(
+        "lessons",
+        "📖",
+        LH.k,
+        LH.ar || "الدُّرُوسُ",
+        LS,
+        LS.map((l) => card(l, "Lesson", "الدرس")).join("") +
+          `<div class="soon">More lessons will be added here, one by one.</div>`,
+      ),
+      sec(
+        "tests",
+        "📝",
+        "Tests",
+        "الِاخْتِبَارَاتُ",
+        TS,
+        TS.map((l) => card(l, "Test", "الاختبار")).join(""),
+      ),
+      sec(
+        "homework",
+        "🏠",
+        "Homework",
+        "الْوَاجِبَاتُ",
+        HW,
+        HW.map((l) => card(l, "Homework · Lesson", "وَاجِبُ الدَّرْسِ")).join(
+          "",
+        ),
+      ),
+    ]);
   }
 
   /* =====================================================================

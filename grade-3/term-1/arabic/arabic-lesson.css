@@ -618,11 +618,6 @@ body {
   color: var(--muted);
   font-size: 0.9rem;
 }
-.lgroup {
-  font-family: var(--display);
-  font-size: 1.6rem;
-  margin: 26px 0 12px;
-}
 .soon {
   border: 2.5px dashed var(--muted);
   border-radius: 18px;
