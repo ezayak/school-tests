@@ -1,12 +1,15 @@
 // Computer lessons for Grade 4, all terms. One entry per chapter (a folder chapter-N/ with its lessons);
 // add one entry per lesson (and its files to "also" in games.js for offline use).
 // path and cover are relative to the chapter folder.
+// nav: one side-bar section per chapter (Kit.sideNav), ic = its emoji.
 window.CS_LESSONS = {
   grade: 4,
+  nav: true,
   chapters: [
     {
       n: 1,
       dir: "chapter-1",
+      ic: "🖥️",
       items: [
         {
           n: 1,
@@ -45,6 +48,7 @@ window.CS_LESSONS = {
     {
       n: 2,
       dir: "chapter-2",
+      ic: "📝",
       title: "Working with text",
       items: [
         {
@@ -84,6 +88,7 @@ window.CS_LESSONS = {
     {
       n: 3,
       dir: "chapter-3",
+      ic: "📧",
       title: "Communicating online",
       items: [
         {

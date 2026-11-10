@@ -1,5 +1,6 @@
 // English subject page: renders window.ENGLISH (from the grade's english/dictations.js).
 // Each item: {kind:"Lesson" | "Dictation" | "Story", title, sound, words, date, term, note, path}; one section per kind, in the order they first appear
+// The kinds are sections of the side bar (Kit.sideNav; the page loads shared/common.js first); one kind only: no bar.
 // term: 2 shows a small "Term 2" tag in the card's header (items of the grade's later terms, listed on this same page)
 (function () {
   const E = window.ENGLISH || { items: [] };
@@ -16,15 +17,21 @@
     <h1 class="hero-title"><span class="p">English</span> <span class="k">${esc(E.heading || "Dictations")}</span></h1>
     <p class="howto">${esc(E.intro || "Pick a dictation. Each one has Learn cards, Match, Listen & spell and Build the word, for the words and the sentences.")}</p>
   </section>
-  ${kinds
-    .map(
-      (k) =>
-        `${kinds.length > 1 ? `<h2 class="sec">${esc(k.replace(/y$/, "ie"))}s</h2>` : ""}<div class="items">${E.items
-          .filter((i) => (i.kind || "Dictation") === k)
-          .map(card)
-          .join("")}</div>`,
-    )
-    .join("")}
+  <div id="secs"></div>
   <div class="soon">New dictations will be added here, week by week.</div>`;
+  const IC = { Lesson: "📘", Dictation: "✏️", Story: "📖" };
+  Kit.sideNav(
+    document.getElementById("secs"),
+    kinds.map((k) => {
+      const list = E.items.filter((i) => (i.kind || "Dictation") === k);
+      return {
+        k: k.toLowerCase(),
+        ic: IC[k] || "📄",
+        t: k.replace(/y$/, "ie") + "s",
+        n: list.length,
+        html: `<div class="items">${list.map(card).join("")}</div>`,
+      };
+    }),
+  );
   document.title = `English · Grade ${E.grade}`;
 })();

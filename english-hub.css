@@ -21,16 +21,6 @@ body {
 .hero-title .k {
   color: var(--ke);
 }
-.sec {
-  font-size: 1.2rem;
-  display: inline-flex;
-  align-self: flex-start;
-  padding: 2px 12px;
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  background: var(--hl);
-  color: #1b2440;
-}
 .items {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
