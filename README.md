@@ -608,6 +608,11 @@ Item types for reading (they work in every Arabic page):
 - `{type: "build", tiles: "letters", a: "بَيْتٌ", also: ["…"]}`: the letters of `a` (without harakat) are the tiles; `also` = other words the same letters make
 - a gap inside a word (`"___مَلٌ"`) is shown as a gap before the rest of the word
 
+The ten steps follow the booklet: letters and harakat, three-letter words, madd, sukun and syllables, ت / ة / ه, shadda, tanween, the moon and sun lam,
+hamza and ى, sentences and texts (the last one has a `story` tab with the texts). Each step's cover is a tile drawn by `.claude/scripts/arabic-reading-tiles.py`;
+the emoji scene pictures of the texts come from `.claude/scripts/arabic-reading-scenes.py`. Check a step with `node .claude/scripts/arabic-reading-check.js arabic-reading/<step>.js`
+(every word glossed, a picture on every item and text part, every image exists).
+
 After adding a step: add it to `READING`, add its files and pictures to `also` of the Grade 3 Arabic entry in `games.js` (plus `countLabel` / `topics` of both Arabic entries), and bump `VERSION` in `sw.js`.
 
 ## Religion lessons (Grade 3)
