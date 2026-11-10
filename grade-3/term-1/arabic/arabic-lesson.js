@@ -1774,7 +1774,11 @@
             const right = it.o[0];
             if (o.ok) xs.score++;
             else xs.miss.push({ q: it.q, your: o.t, right });
-            const full = it.q.replace(/_{3,}/, right);
+            // a listen-first question with no gap ("which letter do you hear?") shows the right answer, not the question again
+            const full =
+              it.say && !/_{3,}/.test(it.q)
+                ? right
+                : it.q.replace(/_{3,}/, right);
             after(
               o.ok,
               `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc(full)}</span>`,
