@@ -1880,7 +1880,8 @@
     } else if (it.type === "build") {
       // a: the sentence; its words are tiles to drag or tap into order (Kit.dragTiles), end punctuation stays.
       // tiles: "letters": a is one word, its letters (without harakat) are the tiles; also: other words those letters make;
-      // extra: 12 → the bank has 12 letters, the word's own and others (look-alike letters first), and the child picks the right ones
+      // extra: 12 → the bank has 12 letters, the word's own and others (look-alike letters first), and the child picks the right ones;
+      // pool: "بعمثل" → the bank is the word's letters and the other letters of the pool (a "letter flower")
       const letters = it.tiles === "letters";
       const [, body, end] = letters
         ? [, bare(it.a), ""]
@@ -1888,7 +1889,13 @@
       const words = letters ? [...body] : body.split(" ");
       const sep = letters ? "" : " ";
       const okAll = [body, ...(it.also || []).map(bare)];
-      const fill = letters && it.extra ? fillers(words, it.extra) : [];
+      const fill = !letters
+        ? []
+        : it.pool
+          ? [...new Set(bare(it.pool))].filter((c) => !words.includes(c))
+          : it.extra
+            ? fillers(words, it.extra)
+            : [];
       let bank = shuf([...words, ...fill].map((t) => ({ t })));
       for (
         let n = 0;
