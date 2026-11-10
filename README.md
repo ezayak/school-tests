@@ -603,6 +603,8 @@ Item types for reading (they work in every Arabic page):
 - `{type: "read", q, a: "بَ بِ بُ", w: "بَابٌ", ic}`: `a` in big letters, `w` an example word under it; the child reads aloud, listens to check, and marks ✓ / ✗
 - `{type: "where", q, a: 0 | 1 | 2, say: "the word"}`: is the letter at the start, in the middle or at the end of the word (fixed buttons)
 - `say: "جُ"` on any item: a big 🔊 Listen button that plays it when the question opens (hear-and-choose `mc` items: the options are what was heard)
+- `mute: "فَهْدٌ"` with `say`: the word is only heard; with no Arabic voice and no internet it is written after the question instead (split a heard word into its letters)
+- `{type: "build", tiles: "letters", extra: 12}`: the bank has 12 letters, the word's own and look-alikes, and the child picks the right ones in order
 - `{type: "build", tiles: "letters", a: "بَيْتٌ", also: ["…"]}`: the letters of `a` (without harakat) are the tiles; `also` = other words the same letters make
 - a gap inside a word (`"___مَلٌ"`) is shown as a gap before the rest of the word
 

@@ -288,14 +288,19 @@
     en: `Put the letters in order to make a word: ${en}.`,
     uk: `Розстав літери, щоб вийшло слово: ${uk}.`,
   });
-  const parts = (w, a, ic, en, uk) => ({
-    type: "open",
-    plain: true,
-    q: `حَلِّلِ الْكَلِمَةَ إِلَى حُرُوفٍ: ${w}`,
-    a,
+  // split a word into its letters: the word is said (written only when there is no voice), and the child
+  // picks its letters in order from 12 letter tiles (the word's own and look-alikes)
+  const parts = (w, ic, en, uk) => ({
+    type: "build",
+    tiles: "letters",
+    extra: 12,
+    q: "حَلِّلِ الْكَلِمَةَ إِلَى حُرُوفٍ",
+    say: w,
+    mute: w,
+    a: w,
     ic,
-    en: `Split the word ${w} (${en}) into its letters.`,
-    uk: `Розклади слово ${w} (${uk}) на літери.`,
+    en: `Split the word for the picture (${en}) into its letters: pick them in order.`,
+    uk: `Розклади слово до малюнка (${uk}) на літери: вибери їх по черзі.`,
   });
   const shapes = (q, en, uk, pairs) => ({
     type: "match",
@@ -593,9 +598,9 @@
         en: "Progress check 3 (guide p. 49): split words into letters · put the letters in order",
         uk: "Перевірка 3 (посібник, с. 49): розклади слова на літери · розстав літери",
         items: [
-          parts("حَرَسَ", "ح + ر + س", "💂", "he guarded", "він охороняв"),
-          parts("شَجَرَةٌ", "ش + ج + ر + ة", "🌳", "tree", "дерево"),
-          parts("فَكَّرَ", "ف + ك + ر", "🤔", "he thought", "він подумав"),
+          parts("حَرَسَ", "💂", "he guarded", "він охороняв"),
+          parts("شَجَرَةٌ", "🌳", "tree", "дерево"),
+          parts("فَكَّرَ", "🤔", "he thought", "він подумав"),
           order("أَسَدٌ", "🦁", "lion", "лев"),
           order("عَذْبٌ", "💧", "fresh (water)", "прісна (вода)"),
           order("بَطَّةٌ", "🦆", "duck", "качка"),
@@ -609,9 +614,9 @@
         en: "Progress check 4 (guide p. 63–64): split words into letters · put the letters in order",
         uk: "Перевірка 4 (посібник, с. 63–64): розклади слова на літери · розстав літери",
         items: [
-          parts("فَهْدٌ", "ف + ه + د", "🐆", "cheetah", "гепард"),
-          parts("هِلَالٌ", "ه + ل + ا + ل", "🌙", "crescent", "півмісяць"),
-          parts("بَيْتٌ", "ب + ي + ت", "🏠", "house", "дім"),
+          parts("فَهْدٌ", "🐆", "cheetah", "гепард"),
+          parts("هِلَالٌ", "🌙", "crescent", "півмісяць"),
+          parts("بَيْتٌ", "🏠", "house", "дім"),
           order("لَبَنٌ", "🥛", "milk", "молоко"),
           order("عِنَبٌ", "🍇", "grapes", "виноград", ["نَبْعٌ"]),
           order("حَوْضٌ", "🛁", "basin", "басейн, ванна", ["وَضَحَ"]),
