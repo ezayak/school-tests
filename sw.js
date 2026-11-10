@@ -28,6 +28,8 @@ const CORE = [
   "./shared/math-kit.js",
   "./shared/wordsim.css",
   "./shared/wordsim.js",
+  "./shared/netsim.css",
+  "./shared/netsim.js",
   "./shared/arabic.css",
   "./shared/arabic-revision.css",
   "./shared/spelling.css",

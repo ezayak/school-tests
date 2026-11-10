@@ -790,6 +790,39 @@ Mini Word can also do the Grade 4 skills (the targets are listed at the top of `
 - Pictures of the buttons for games: `oi` / `icon` with `indent-inc`, `linespacing`, `shading`, `borders:outside`, `marks`, `removebg`, `crop`,
   `wraptext`, `piceffects`, `picborder`, `smartart`, `shapes`, `readmode`, `printlayout`, `weblayout`, `portrait`, `landscape`, …
 
+## Computer lessons (Grade 4, chapter 3): Mini Outlook and Mini Edge
+
+Folder: `grade-4/computer/chapter-3/` (book Unit 3 « Communicating online », pages 96–127): 4 lessons, the same page format, with
+**Mini Outlook & Edge** (`shared/netsim.js` / `shared/netsim.css`): a pretend new Outlook and Microsoft Edge on one small screen with a taskbar
+(Outlook, Edge). The pages load it instead of Mini Word (`netsim.css` in the head, `netsim.js` after the lesson file). Sources, procedure and
+checks: the `computer-lesson` skill and the logs `grade-4/computer/SOURCES.md`, `TODO.md`, `UNVERIFIED.md`.
+
+- **Mail**: the left bar (Mail, People), Home ribbon (New mail, Delete, Reply, Reply all, Forward), folders (Inbox, Sent Items, Drafts,
+  Deleted Items), the message list and the reading pane. Writing: To, Cc and Bcc (shown when clicked), Subject, the message (click it to write),
+  the 📎 menu (Browse this computer → the Open window), Send; misspelled words have a red line (Spelling list, Ignore all).
+  An attachment: a click opens a preview, a right-click (hold the finger) the book's menu (Preview, Open, Copy, Save As, Remove Attachment).
+- **People**: Favorites, All contacts, Deleted; New contact (photo, names, email, phone, home address, company, notes), Edit contact, Delete,
+  Restore, Add to favorites.
+- **Edge**: tabs, Back, the address bar (type, then Enter), the New tab page; Google and Google Images with All / Images / Videos and Tools
+  (Size, Color, Usage rights; Any duration for videos), a picture opens a side preview, a right-click opens Edge's menu (Save image as →
+  Save As → Pictures, where Outlook's Attach finds it), a video page; outlook.live.com: Microsoft Sign in (email → Next → password → Sign in),
+  Outlook on the web with Meet Now and the account card (Sign out), and with `askSave` the "Save password?" bubble (Never / Save).
+- The pictures Google finds are emoji "photos" with a size, a colour and usage rights: healthy food, yellow fruits, vegetables (the book's
+  searches) and about 40 more words for "your favourite food".
+- The people, mails and files of the book are built in: Stella, Marco, Alex, Lisa, Tom, Mrs. Smith (teacher@school.com); the mails
+  `school`, `great`, `healthy`, `party`, `apples` (with apples.png); Documents (MyHomework, Animals of my country, Class project), Pictures
+  (apples only on Tom's computer, fruits, salad), Music, Videos.
+
+The targets are listed at the top of `shared/netsim.js` and in `NetSim.TARGETS` (the skill's `check.js` tests every step against them).
+A start: `{me: "stella" | "marco" | "tom", view: "mail" | "people", folder, open: "<mail id>", compose: {kind: "new" | "reply" | "forward",
+of: "<mail id>", to, cc, bcc, subject, body, att: ["apples.png"]}, contacts: ["marco", "alex"], sel: "Marco", fav: ["Alex"], nc: true,
+files: {Pictures: [{name, ext, e}]}, app: "edge", page: "newtab" | "google" | "gimages" | "results" | "login" | "outlook", q, itab: "Images" |
+"Videos", tools: true, signed: true, askSave: true}`.
+Steps: `click`, `dbl`, `right`, `type` (a type in `cm:body` is done when the message holds the text), `key` (`Enter`), `look` (doing the next
+step during a look is fine). Pictures of the book's buttons for games: `oi` / `icon` with `btn:newcontact`, `btn:editcontact`, `btn:deleted`,
+`btn:delete`, `btn:fav`, `btn:newmail`, `btn:forward`, `btn:cc`, `btn:bcc`, `people`, `railmail`, `photo`, `file:docx` (png, mp3, mp4, pptx, zip).
+The play harness (`english-lesson/scripts/play.sh`) finishes Mini Outlook & Edge `sim` items itself (`#simbox.__sim.solve()`).
+
 ## Science lessons (Grade 4)
 
 Folder: `grade-4/science/`. One card on the home page ("Science", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`,
