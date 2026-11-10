@@ -2276,8 +2276,17 @@
     function user(kind, t, info) {
       if (!mis) return perform(kind, t, info);
       if (mis.mode === "demo" || mis.busy) return;
-      const s = mis.steps[mis.i];
+      let s = mis.steps[mis.i];
       if (!s) return perform(kind, t, info);
+      // while the child looks (a "look" step), doing the next step already is fine; anything else waits
+      if (s.act === "look") {
+        const nx = mis.steps[mis.i + 1];
+        if (!nx || !match(nx, kind, t)) return;
+        clearTimeout(mis.idle);
+        mis.i++;
+        s = nx;
+        mis.cb.onStep && mis.cb.onStep(mis.i, s);
+      }
       if (match(s, kind, t)) {
         perform(kind, t, info);
         advance();
@@ -2370,11 +2379,12 @@
       }
       m.busy = false;
       if (s.act === "look") {
+        const at = m.i;
         m.glowing = true;
         glow(true);
         await Promise.race([said || wait(0), wait(5000)]);
         await wait(Math.max(900, s.wait || 0));
-        if (mis !== m) return;
+        if (mis !== m || m.i !== at) return; // the child already did the next step
         m.i++;
         return step();
       }
