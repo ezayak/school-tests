@@ -589,6 +589,25 @@ Same format as a test, with one tab per book page (`{k: "p31", ic, t: "Page 31",
 
 After adding homework: add it to `HOMEWORK` (`n` = the lesson number), add `hw-N.html` / `hw-N.js` and new pictures to `also` in `games.js`, and bump `VERSION` in `sw.js`.
 
+## Arabic reading (Grade 3 and 4)
+
+Folder: `arabic-reading/`, shared by both Arabic hubs: `grade-3/term-1/arabic/index.html` (the 🔤 Reading section of its side bar) and
+`grade-4/term-1/arabic/index.html` (only Reading for now). Both hubs load `arabic-reading/lessons.js` (`window.READING`, one card per step, in the order of the booklet
+«خطة علاجية للقراءة والكتابة»); a card opens with `?g=3` / `?g=4`, and `hub.js` points its back link to that hub.
+Sources: `~/Documents/2026-2027/Alex/Arabic/` (the booklet scan and the teacher's guide «دليل المعلم», worksheets 1–44 and progress checks 1–6).
+
+A step is `<name>.html` (copy `letters.html`, change the `.js`) + `<name>.js` in the Arabic lesson format, with `n: "rdN"`, `tapq: true`,
+`links: window.READING_LINKS`, tabs Read · Games · Check (`tab: "read" | "games" | "check"` on each section), pictures in `img/<name>/`.
+Item types for reading (they work in every Arabic page):
+
+- `{type: "read", q, a: "بَ بِ بُ", w: "بَابٌ", ic}`: `a` in big letters, `w` an example word under it; the child reads aloud, listens to check, and marks ✓ / ✗
+- `{type: "where", q, a: 0 | 1 | 2, say: "the word"}`: is the letter at the start, in the middle or at the end of the word (fixed buttons)
+- `say: "جُ"` on any item: a big 🔊 Listen button that plays it when the question opens (hear-and-choose `mc` items: the options are what was heard)
+- `{type: "build", tiles: "letters", a: "بَيْتٌ", also: ["…"]}`: the letters of `a` (without harakat) are the tiles; `also` = other words the same letters make
+- a gap inside a word (`"___مَلٌ"`) is shown as a gap before the rest of the word
+
+After adding a step: add it to `READING`, add its files and pictures to `also` of the Grade 3 Arabic entry in `games.js` (plus `countLabel` / `topics` of both Arabic entries), and bump `VERSION` in `sw.js`.
+
 ## Religion lessons (Grade 3)
 
 Folder: `grade-3/term-1/religion/`. One card on the home page ("Religion", under Subjects) opens `index.html`, which lists the lessons from `lessons.js`

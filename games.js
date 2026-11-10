@@ -685,9 +685,9 @@ window.GAMES = [
     hub: true,
     lesson: "القراءة · Read, listen & practise each lesson",
     topics:
-      "Lesson 1 · الزَّهْرَةُ وَالصَّبَّارُ · Lesson 2 · السَّعَادَةُ فِي الْمُسَاعَدَةِ · Lesson 3 · أَوَّلُ مَنْ رَفَعَ يَدَهُ · Lesson 4 · أَخْلَاقُنَا · Lesson 5 · الْعُصْفُورُ الْجَرِيءُ · Lesson 6 · صُنْدُوقُ الِابْتِكَارِ · Lesson 7 · وَرَقَةٌ مِنَ التَّارِيخِ · Lesson 8 · وَطَنِي, December review: stories with pictures, audio & translation, words, opposites & plurals, exercises · Tests 1–13 · التَّقْيِيمُ الْأُسْبُوعِيُّ · Homework · الْأَدَاءَاتُ الْمَنْزِلِيَّةُ",
+      "Lesson 1 · الزَّهْرَةُ وَالصَّبَّارُ · Lesson 2 · السَّعَادَةُ فِي الْمُسَاعَدَةِ · Lesson 3 · أَوَّلُ مَنْ رَفَعَ يَدَهُ · Lesson 4 · أَخْلَاقُنَا · Lesson 5 · الْعُصْفُورُ الْجَرِيءُ · Lesson 6 · صُنْدُوقُ الِابْتِكَارِ · Lesson 7 · وَرَقَةٌ مِنَ التَّارِيخِ · Lesson 8 · وَطَنِي, December review: stories with pictures, audio & translation, words, opposites & plurals, exercises · Tests 1–13 · التَّقْيِيمُ الْأُسْبُوعِيُّ · Homework · الْأَدَاءَاتُ الْمَنْزِلِيَّةُ · Reading · الْقِرَاءَةُ: letters and harakat",
     path: "grade-3/term-1/arabic/index.html",
-    countLabel: "8 lessons · 13 tests · 7 homework",
+    countLabel: "8 lessons · 13 tests · 7 homework · 1 reading step",
     year: "2026–2027",
     also: [
       "grade-3/term-1/arabic/arabic-lesson.css",
@@ -901,6 +901,11 @@ window.GAMES = [
       "grade-3/term-1/arabic/img/lesson-8/seed.jpg",
       "grade-3/term-1/arabic/img/lesson-8/sprout.jpg",
       "grade-3/term-1/arabic/img/lesson-8/tree.jpg",
+      "arabic-reading/lessons.js",
+      "arabic-reading/hub.js",
+      "arabic-reading/letters.html",
+      "arabic-reading/letters.js",
+      "arabic-reading/img/letters/cover.jpg",
     ],
   },
   {
@@ -1176,6 +1181,21 @@ window.GAMES = [
       "grade-3/term-1/french/img/lesson-4/menu.jpg",
       "grade-3/term-1/french/img/lesson-4/taxi.jpg",
     ],
+  },
+  {
+    grade: 4,
+    period: "Subjects",
+    subject: "Arabic",
+    title: "Arabic",
+    hub: true,
+    lesson: "الْقِرَاءَةُ · Learn to read step by step",
+    topics:
+      "Reading · الْقِرَاءَةُ: Step 1 · letters and harakat: read each letter, hear the sound, where is the letter, the missing letter, letters that sound alike, letter shapes, put the letters in order, progress checks 1–4",
+    path: "grade-4/term-1/arabic/index.html",
+    countLabel: "1 reading step",
+    year: "2026–2027",
+    // the reading cards are shared with Grade 3: their files are in the also list of the Grade 3 Arabic entry
+    also: ["grade-4/term-1/arabic/lessons.js"],
   },
   {
     grade: 4,
