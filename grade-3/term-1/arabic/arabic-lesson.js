@@ -1886,20 +1886,26 @@
       // tiles: "letters": a is one word, its letters (without harakat) are the tiles; also: other words those letters make;
       // extra: 12 → the bank has 12 letters, the word's own and others (look-alike letters first), and the child picks the right ones;
       // pool: "بعمثل" → the bank is the word's letters and the other letters of the pool (a "letter flower")
+      // syl: ["شَمْ", "سٌ"] → a is a word, its syllables are the tiles (with harakat), more: wrong pieces in the bank
+      const syl = !!it.syl;
       const letters = it.tiles === "letters";
-      const [, body, end] = letters
-        ? [, bare(it.a), ""]
-        : it.a.match(/^(.*?)([.،؟!]*)$/);
-      const words = letters ? [...body] : body.split(" ");
-      const sep = letters ? "" : " ";
+      const [, body, end] = syl
+        ? [, it.syl.join("|"), ""]
+        : letters
+          ? [, bare(it.a), ""]
+          : it.a.match(/^(.*?)([.،؟!]*)$/);
+      const words = syl ? it.syl : letters ? [...body] : body.split(" ");
+      const sep = syl ? "|" : letters ? "" : " ";
       const okAll = [body, ...(it.also || []).map(bare)];
-      const fill = !letters
-        ? []
-        : it.pool
-          ? [...new Set(bare(it.pool))].filter((c) => !words.includes(c))
-          : it.extra
-            ? fillers(words, it.extra)
-            : [];
+      const fill = syl
+        ? it.more || []
+        : !letters
+          ? []
+          : it.pool
+            ? [...new Set(bare(it.pool))].filter((c) => !words.includes(c))
+            : it.extra
+              ? fillers(words, it.extra)
+              : [];
       let bank = shuf([...words, ...fill].map((t) => ({ t })));
       for (
         let n = 0;
@@ -1907,12 +1913,13 @@
         n++
       )
         bank = shuf(bank);
-      A.innerHTML = `${letters ? '<div class="joined" dir="rtl" id="bJoin" aria-hidden="true"></div>' : ""}<div class="line" id="bLine" dir="rtl"></div><div class="bank" id="bBank" dir="rtl" style="margin-top:12px"></div><p class="hint">Drag the ${letters ? "letters" : "words"} onto the line in the right order, or tap them.</p><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" id="checkBtn" type="button" disabled>Check my ${letters ? "word" : "sentence"}</button></div>`;
+      const what = syl ? "syllables" : letters ? "letters" : "words";
+      A.innerHTML = `${letters ? '<div class="joined" dir="rtl" id="bJoin" aria-hidden="true"></div>' : ""}<div class="line" id="bLine" dir="rtl"></div><div class="bank" id="bBank" dir="rtl" style="margin-top:12px"></div><p class="hint">Drag the ${what} onto the line in the right order, or tap them.</p><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" id="checkBtn" type="button" disabled>Check my ${syl || letters ? "word" : "sentence"}</button></div>`;
       const cb = A.querySelector("#checkBtn"),
         BL = A.querySelector("#bLine");
       const T = Kit.dragTiles(BL, A.querySelector("#bBank"), bank, {
-        cls: letters ? "ar letter" : "ar",
-        ph: `Drop the ${letters ? "letters" : "words"} here`,
+        cls: letters || syl ? "ar letter" : "ar",
+        ph: `Drop the ${what} here`,
         joined: A.querySelector("#bJoin"),
         // the word is complete when the line has as many tiles as it (extra letters can stay in the bank)
         onChange: (l) => (cb.disabled = l.length !== words.length),
@@ -1927,7 +1934,7 @@
         else xs.miss.push({ q: it.q, your: mine + end, right: it.a });
         after(
           ok,
-          `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc([it.a, ...(it.also || [])].join(" · "))}${letters ? " = " + esc(words.join(" + ")) : ""}</span>`,
+          `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc([it.a, ...(it.also || [])].join(" · "))}${letters ? " = " + esc(words.join(" + ")) : syl ? " = " + esc(words.join(" / ")) : ""}</span>`,
         );
         say(it.a);
       };
