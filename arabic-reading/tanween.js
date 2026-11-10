@@ -82,6 +82,20 @@
       " ",
     );
   const T3 = ["ـٌ", "ـٍ", "ـً"];
+  const WHICH = [
+    "مُجْتَهِدًا",
+    "كَلِمَاتٍ",
+    "سَمَاءً",
+    "قِطَّةً",
+    "بَحْرٌ",
+    "قَلَمٍ",
+    "بَيْتًا",
+    "خَرُوفٍ",
+    "حُلْوٌ",
+    "عَدَدًا",
+    "شَجَرَةٍ",
+    "مُعَلِّمٌ",
+  ];
   const KIND = { ـٌ: "ٌ", ـٍ: "ٍ", ـً: "ً" };
   const kindOf = (w) => T3.find((t) => w.includes(KIND[t]));
 
@@ -229,20 +243,7 @@
         en: "Which tanween is it: ـٌ, ـٍ or ـً? (guide worksheet 32, task 4, and booklet p. 10–11)",
         uk: "Який це танвін: ـٌ, ـٍ чи ـً? (посібник, аркуш 32, завдання 4, і зошит, с. 10–11)",
         rule: "damm",
-        items: [
-          "مُجْتَهِدًا",
-          "كَلِمَاتٍ",
-          "سَمَاءً",
-          "قِطَّةً",
-          "بَحْرٌ",
-          "قَلَمٍ",
-          "بَيْتًا",
-          "خَرُوفٍ",
-          "حُلْوٌ",
-          "عَدَدًا",
-          "شَجَرَةٍ",
-          "مُعَلِّمٌ",
-        ].map(which),
+        items: WHICH.map(which),
       },
       {
         k: "hear",
@@ -368,6 +369,13 @@
             `✗ ${info(w.replace(/ًا$/, "ً"))[1]}, spelt wrong`,
             `✗ ${info(w.replace(/ًا$/, "ً"))[2]}, неправильне написання`,
           ],
+        ]),
+      ),
+      // the options of "which tanween": the last letter with tanween
+      ...Object.fromEntries(
+        WHICH.flatMap((w) => forms(w)).map((f) => [
+          f,
+          ["(the last letter with tanween)", "(остання літера з танвіном)"],
         ]),
       ),
       التَّنْوِينُ: [
