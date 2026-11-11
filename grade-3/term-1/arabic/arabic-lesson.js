@@ -313,7 +313,8 @@
       TS = window.TESTS || [],
       HW = window.HOMEWORK || [],
       // Arabic reading (arabic-reading/lessons.js), shared by the Grade 3 and Grade 4 hubs
-      RD = window.READING || [];
+      RD = window.READING || [],
+      RG = window.READING_GAMES || [];
     const card = (l, label, arLabel) =>
       `<a class="lesson" href="${esc(l.path)}"><img src="${esc(l.cover)}" alt=""><span class="in"><span class="n">${label} ${l.n} · ${arLabel} ${esc(l.nAr || "")}</span><span class="t ar" dir="rtl">${esc(l.title)}</span><span class="e">${esc(l.en)}</span><span class="parts">${esc(l.note || "")}</span></span></a>`;
     // another subject's list page sets window.LIST_HEAD (same keys)
@@ -331,6 +332,12 @@
     <p class="howto">${esc(LH.howto)}</p>
   </section>
   <div id="secs"></div>`;
+    // a card of arabic-reading/: its path from this hub, with ?g=<grade> so its back link comes back here
+    const readingCard = (l) => ({
+      ...l,
+      path: window.READING_BASE + l.path + "?g=" + (LH.grade || 3),
+      cover: window.READING_BASE + l.cover,
+    });
     // the side bar (Kit.sideNav) names the open section; a list that is empty has no button
     const sec = (k, ic, t, ar, list, html) =>
       list.length && {
@@ -376,17 +383,15 @@
         "Reading",
         "الْقِرَاءَةُ",
         RD,
-        RD.map((l) =>
-          card(
-            {
-              ...l,
-              path: window.READING_BASE + l.path + "?g=" + (LH.grade || 3),
-              cover: window.READING_BASE + l.cover,
-            },
-            "Step",
-            "الْخُطْوَةُ",
-          ),
-        ).join(""),
+        RD.map((l) => card(readingCard(l), "Step", "الْخُطْوَةُ")).join(""),
+      ),
+      sec(
+        "games",
+        "🎮",
+        "Reading games",
+        "أَلْعَابُ الْقِرَاءَةِ",
+        RG,
+        RG.map((l) => card(readingCard(l), "Game", "اللُّعْبَةُ")).join(""),
       ),
     ]);
   }
