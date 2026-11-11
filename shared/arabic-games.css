@@ -1,0 +1,563 @@
+/* Arabic reading games (shared/arabic-games.js): Catch the word, Complete the sentence. Load after theme.css and quiz.css. */
+.ar {
+  font-family:
+    "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting", "Times New Roman",
+    serif;
+}
+.wrap {
+  max-width: 1200px;
+}
+.card.ag-play {
+  gap: 12px;
+  padding: 14px;
+}
+/* start and end screens */
+.ag-start,
+.ag-end {
+  align-items: center;
+  text-align: center;
+}
+.ag-start .toprow,
+.ag-end .toprow {
+  align-self: stretch;
+}
+.ag-hero {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  font-family: var(--emoji);
+  font-size: clamp(3rem, 12vw, 5rem);
+  line-height: 1;
+}
+.ag-hero span {
+  display: inline-block;
+  animation: ag-float 2.6s ease-in-out infinite;
+}
+.ag-hero span:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.ag-hero span:nth-child(3) {
+  animation-delay: 0.8s;
+}
+@keyframes ag-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(4deg);
+  }
+}
+.ag-start .hero-title {
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  line-height: 1.5;
+}
+.ag-sub {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.3rem;
+  color: var(--muted);
+}
+.ag-start .howto {
+  max-width: 640px;
+}
+.ag-levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+.ag-level {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 190px;
+  padding: 12px 18px;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-family: var(--body);
+  cursor: pointer;
+}
+.ag-level .ar {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.ag-level[aria-pressed="true"] {
+  background: var(--hl);
+  color: #1b2440;
+}
+.ag-rec {
+  color: var(--muted);
+}
+.ag-level[aria-pressed="true"] .ag-rec {
+  color: #1b2440;
+}
+.ag-opts-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+}
+.ag-go {
+  min-width: 220px;
+}
+.ag-time {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(2.6rem, 9vw, 4rem);
+}
+/* the bar above the game */
+.ag-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.ag-target {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.ag-clock,
+.ag-done {
+  margin-left: auto;
+  font-family: var(--display);
+  font-size: 1.3rem;
+}
+/* Catch the word: the sky the chips fly across, the bucket on the right */
+.ag-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 132px;
+  gap: 12px;
+}
+.ag-sky {
+  position: relative;
+  height: min(62vh, 560px);
+  min-height: 300px;
+  overflow: hidden;
+  border: 2.5px solid var(--ink);
+  border-radius: 18px;
+  background: linear-gradient(#bfe3ff, #e4f3ff 72%, #c6dbae 72%, #a9cf8a);
+  touch-action: none;
+}
+.ag-cloud {
+  position: absolute;
+  width: 120px;
+  height: 40px;
+  border-radius: 40px;
+  background: #fff;
+  opacity: 0.85;
+  animation: ag-cloud 40s linear infinite;
+}
+.ag-cloud::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  top: -22px;
+  width: 56px;
+  height: 50px;
+  border-radius: 50%;
+  background: #fff;
+}
+.ag-cloud.c1 {
+  top: 8%;
+  left: -130px;
+}
+.ag-cloud.c2 {
+  top: 26%;
+  left: -130px;
+  transform: scale(0.7);
+  animation-duration: 55s;
+  animation-delay: -25s;
+}
+@keyframes ag-cloud {
+  to {
+    left: 110%;
+  }
+}
+.ag-chip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 6px 18px 10px;
+  border: 2.5px solid #1b2440;
+  border-radius: 999px;
+  color: #1b2440;
+  box-shadow: 3px 3px 0 #1b2440;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform;
+}
+.ag-chip.ok {
+  animation: ag-pop 0.45s ease-out forwards;
+  background: #b9f2c9 !important;
+}
+.ag-chip.no {
+  animation: ag-no 0.45s ease-out forwards;
+  background: #ffc2c2 !important;
+}
+.ag-chip.gone {
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+@keyframes ag-pop {
+  60% {
+    scale: 1.3;
+  }
+  100% {
+    scale: 0.2;
+    opacity: 0;
+  }
+}
+@keyframes ag-no {
+  20%,
+  60% {
+    translate: -8px 0;
+  }
+  40%,
+  80% {
+    translate: 8px 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.ag-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.ag-bucket {
+  position: relative;
+  width: 104px;
+  height: 124px;
+  margin-top: 24px;
+  color: var(--ink);
+}
+.ag-pail {
+  position: absolute;
+  inset: 26px 4px 4px;
+  clip-path: polygon(0 0, 100% 0, 87% 100%, 13% 100%);
+  background: color-mix(in srgb, var(--card) 80%, var(--sky));
+}
+.ag-water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0;
+  background: linear-gradient(#5ab0e2, #2f7fb0);
+  transition: height 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.ag-water::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -7px;
+  height: 14px;
+  background: radial-gradient(
+      circle at 10px -2px,
+      transparent 9px,
+      #5ab0e2 10px
+    )
+    0 0 / 20px 14px repeat-x;
+  animation: ag-wave 1.6s linear infinite;
+}
+@keyframes ag-wave {
+  to {
+    background-position-x: 20px;
+  }
+}
+.ag-pail-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.ag-bucket.shake {
+  animation: ag-shake 0.4s;
+}
+@keyframes ag-shake {
+  25% {
+    transform: rotate(-12deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+.ag-bucket.full {
+  animation: ag-full 1.2s ease-in-out;
+}
+@keyframes ag-full {
+  30% {
+    transform: scale(1.18) translateY(-10px);
+  }
+  60% {
+    transform: scale(1.05) rotate(-6deg);
+  }
+}
+.ag-bucket.full::after {
+  content: "💦✨";
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  translate: -50% 0;
+  font-family: var(--emoji);
+  font-size: 2rem;
+  animation: ag-splash 1.2s ease-out forwards;
+}
+@keyframes ag-splash {
+  to {
+    translate: -50% -40px;
+    opacity: 0;
+  }
+}
+.ag-drop {
+  position: absolute;
+  left: 50%;
+  font-family: var(--emoji);
+  font-size: 1.8rem;
+  pointer-events: none;
+}
+.ag-drop.in {
+  top: -20px;
+  animation: ag-in 0.8s ease-in forwards;
+}
+.ag-drop.out {
+  top: 40%;
+  animation: ag-out 0.8s ease-in forwards;
+}
+@keyframes ag-in {
+  from {
+    translate: -50% -30px;
+  }
+  to {
+    translate: -50% 60px;
+    opacity: 0;
+  }
+}
+@keyframes ag-out {
+  to {
+    translate: 30px 90px;
+    rotate: 60deg;
+    opacity: 0;
+  }
+}
+.ag-count {
+  font-family: var(--display);
+  font-size: 1.5rem;
+}
+.ag-row {
+  display: grid;
+  grid-template-columns: repeat(2, 30px);
+  gap: 6px;
+}
+.ag-row i {
+  width: 30px;
+  height: 26px;
+  border: 2px solid var(--ink);
+  border-radius: 4px 4px 10px 10px;
+  background: var(--card);
+}
+.ag-row i.on {
+  background: linear-gradient(#5ab0e2, #2f7fb0);
+  animation: ag-pop-in 0.5s;
+}
+@keyframes ag-pop-in {
+  50% {
+    transform: scale(1.4);
+  }
+}
+@media (max-width: 600px) {
+  .ag-field {
+    grid-template-columns: minmax(0, 1fr) 86px;
+    gap: 8px;
+  }
+  .ag-bucket {
+    width: 76px;
+    height: 92px;
+  }
+  .ag-pail {
+    inset: 19px 3px 3px;
+  }
+  .ag-row {
+    grid-template-columns: repeat(2, 24px);
+  }
+  .ag-row i {
+    width: 24px;
+    height: 20px;
+  }
+}
+@media (orientation: landscape) and (max-height: 600px) {
+  .ag-sky {
+    height: calc(100dvh - 120px);
+    min-height: 220px;
+  }
+}
+/* Complete the sentence */
+.ag-hearts {
+  font-family: var(--emoji);
+  font-size: 1.7rem;
+  display: flex;
+  gap: 4px;
+}
+.ag-hearts i {
+  font-style: normal;
+}
+.ag-hearts i.lost {
+  opacity: 0.45;
+}
+.ag-hearts i.break {
+  animation: ag-break 1s;
+}
+@keyframes ag-break {
+  30% {
+    transform: scale(1.6) rotate(-15deg);
+  }
+}
+.ag-gaps .ag-done {
+  margin-left: auto;
+}
+.ag-timer {
+  height: 14px;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--card);
+}
+.ag-timer i {
+  display: block;
+  height: 100%;
+  background: var(--good);
+  animation: ag-time linear forwards;
+}
+@keyframes ag-time {
+  from {
+    width: 100%;
+    background: var(--good);
+  }
+  60% {
+    background: var(--hl);
+  }
+  to {
+    width: 0;
+    background: var(--bad);
+  }
+}
+.ag-qbox {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 16px;
+  align-items: center;
+}
+.ag-qbox.nopic {
+  grid-template-columns: minmax(0, 1fr);
+}
+.ag-qbox.nopic .ag-pic {
+  display: none;
+}
+.ag-pic {
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+  border: 2.5px solid var(--ink);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--sky);
+}
+.ag-pic img {
+  width: 100%;
+  max-height: 34vh;
+  object-fit: contain;
+  display: block;
+}
+.ag-emo {
+  font-family: var(--emoji);
+  font-size: 5rem;
+}
+.ag-q {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+.ag-sent {
+  margin: 0;
+  align-self: stretch;
+  font-size: clamp(1.7rem, 4.5vw, 2.4rem);
+  line-height: 2;
+}
+.ag-gap {
+  display: inline-block;
+  min-width: 3.2em;
+  padding: 0 10px;
+  border-bottom: 4px dashed var(--ink);
+  text-align: center;
+}
+.ag-gap.ok {
+  border-bottom-style: solid;
+  border-color: var(--good);
+  color: var(--good);
+}
+.ag-gap.late {
+  border-bottom-style: solid;
+  border-color: var(--heat);
+  color: var(--heat);
+}
+.ag-words {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+.ag-word {
+  padding: 8px 12px 12px;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.6;
+  cursor: pointer;
+}
+.ag-word.ok,
+.ag-word.show {
+  background: color-mix(in srgb, var(--good) 25%, var(--card));
+  border-color: var(--good);
+}
+.ag-word.no {
+  background: color-mix(in srgb, var(--bad) 18%, var(--card));
+  border-color: var(--bad);
+  opacity: 0.6;
+  animation: ag-shake 0.4s;
+}
+@media (max-width: 600px) {
+  .ag-qbox {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ag-pic {
+    min-height: 120px;
+  }
+  .ag-pic img {
+    max-height: 22vh;
+  }
+  .ag-words {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}

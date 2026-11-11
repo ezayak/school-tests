@@ -42,6 +42,8 @@ const CORE = [
   "./shared/math-uk.js",
   "./shared/times-games.css",
   "./shared/times-games.js",
+  "./shared/arabic-games.css",
+  "./shared/arabic-games.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",
