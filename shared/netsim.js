@@ -2226,10 +2226,17 @@
         .trim()
         .replace(/\s+/g, " ")
         .toLowerCase();
+    const url = (x) =>
+      norm(x)
+        .replace(/^https?:\/\//, "")
+        .replace(/^www\./, "")
+        .replace(/\/+$/, "");
     const typedOk = (s, v) =>
       s.t === "cm:body"
         ? norm(v).includes(norm(s.text))
-        : norm(v) === norm(s.text);
+        : s.t === "e:addr"
+          ? url(v) === url(s.text)
+          : norm(v) === norm(s.text);
     function onType(el) {
       const t = el.dataset.t;
       setInput(t, el.value);
@@ -2275,7 +2282,12 @@
     }
     function user(kind, t, info) {
       if (!mis) return perform(kind, t, info);
-      if (mis.mode === "demo" || mis.busy) return;
+      if (mis.mode === "demo") return;
+      if (mis.busy) {
+        // Enter pressed right after typing: keep it for the next step
+        if (kind === "key") mis.pendingKey = t;
+        return;
+      }
       let s = mis.steps[mis.i];
       if (!s) return perform(kind, t, info);
       // while the child looks (a "look" step), doing the next step already is fine; anything else waits
@@ -2300,6 +2312,7 @@
       if (s.act === "type" && kind === "click" && tt === want)
         return perform(kind, t, info);
       if (kind === "key" && t === "key:Escape") return;
+      if (kind === "key" && s.act === "type") return wrong(s, "text");
       wrong(
         s,
         (kind !== s.act && tt === want) || (s.act === "right" && tt === want)
@@ -2378,6 +2391,11 @@
         return step();
       }
       m.busy = false;
+      if (m.pendingKey) {
+        const key = m.pendingKey;
+        m.pendingKey = null;
+        if (s.act === "key") return user("key", key, {});
+      }
       if (s.act === "look") {
         const at = m.i;
         m.glowing = true;

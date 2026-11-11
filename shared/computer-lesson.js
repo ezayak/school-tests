@@ -1013,7 +1013,9 @@
                 : s.act === "dbl"
                   ? "Click two times, fast."
                   : "Try again."
-              : "Not there. Look for the yellow light.";
+              : why === "text"
+                ? `Check what you typed. Type ${s.text}.`
+                : "Not there. Look for the yellow light.";
           caption(cur, `<div class="fb no"><b>💡 ${esc(msg)}</b></div>`);
           say(msg + " " + plain(s.say));
         },
@@ -1794,7 +1796,9 @@
               : s.act === "dbl"
                 ? "Click two times, fast."
                 : "Try again."
-            : "Not there. Try again!";
+            : why === "text"
+              ? `Check what you typed. Type ${s.text}.`
+              : "Not there. Try again!";
         caption(cur, `<div class="fb no"><b>💡 ${esc(msg)}</b></div>`);
         say(msg);
       },
