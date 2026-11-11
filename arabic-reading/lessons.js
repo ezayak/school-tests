@@ -1,5 +1,5 @@
 // Arabic reading (Grade 3 and Grade 4): one card per step, in the order of the booklet «خطة علاجية للقراءة والكتابة».
-// Both Arabic hubs load this file and show it as their Reading section; paths are from this folder.
+// Both Arabic hubs load this file and show it as their Reading and Reading games sections; paths are from this folder.
 window.READING = [
   {
     n: 1,
@@ -90,6 +90,27 @@ window.READING = [
     path: "sentences.html",
     cover: "img/sentences/tile.jpg",
     note: "4 texts to read · 6 games: fast reading, order the words, dictation, meaning from context, understand the text, describe the picture",
+  },
+];
+// The reading games: their own section of the hubs, "Reading games".
+window.READING_GAMES = [
+  {
+    n: 1,
+    nAr: "الْأُولَى",
+    title: "اِلْتَقِطِ الْكَلِمَةَ",
+    en: "Catch the word",
+    path: "catch.html",
+    cover: "img/catch/tile.jpg",
+    note: "Hear a word, catch its flying chip, fill 10 buckets · 2–3 letters or long words · best time kept",
+  },
+  {
+    n: 2,
+    nAr: "الثَّانِيَةُ",
+    title: "أَكْمِلِ الْجُمْلَةَ",
+    en: "Complete the sentence",
+    path: "gaps.html",
+    cover: "img/gaps/tile.jpg",
+    note: "Read a sentence, choose the missing word from 5 · 3 hearts, a clock, pictures on or off",
   },
 ];
 // the folder of this file, so a hub in any folder can link to the cards

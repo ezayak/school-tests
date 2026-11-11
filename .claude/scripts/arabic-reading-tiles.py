@@ -124,3 +124,52 @@ text(d, (350, 440), "لُعْبَةٌ جَدِيدَةٌ.", 96)
 for y in (352, 492):
     d.line([(130, y), (570, y)], fill=PUR, width=6)
 im.save(out + "/sentences-tile.jpg", quality=88)
+
+EMO = ImageFont.truetype("/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf", 109)
+def emoji(im, xy, e, size):
+    """paste a colour emoji, its middle at xy, size px wide"""
+    t = Image.new("RGBA", (160, 160), (0, 0, 0, 0))
+    ImageDraw.Draw(t).text((10, 10), e, font=EMO, embedded_color=True)
+    t = t.crop(t.getbbox())
+    r = size / max(t.size)
+    t = t.resize((int(t.width * r), int(t.height * r)), Image.LANCZOS)
+    im.paste(t, (int(xy[0] - t.width / 2), int(xy[1] - t.height / 2)), t)
+
+def chip(d, xy, w, fill, size=64):
+    f = ImageFont.truetype(FONT, size, layout_engine=ImageFont.Layout.RAQM)
+    x0, y0, x1, y1 = d.textbbox(xy, w, font=f, anchor="mm", direction="rtl")
+    box = (x0 - 26, xy[1] - 46, x1 + 26, xy[1] + 46)
+    d.rounded_rectangle((box[0] + 7, box[1] + 7, box[2] + 7, box[3] + 7), 46, fill=INK)
+    d.rounded_rectangle(box, 46, fill=fill, outline=INK, width=5)
+    d.text(xy, w, font=f, fill=INK, anchor="mm", direction="rtl")
+
+# game 1: Catch the word · a bucket with water and flying word chips
+im, d = base((191, 227, 255), (170, 210, 245))
+d.rectangle((0, 520, 700, 700), fill=(169, 207, 138))
+WATER, DEEP = (90, 176, 226), (47, 127, 176)
+pail = [(470, 330), (650, 330), (625, 560), (495, 560)]
+d.polygon(pail, fill=(245, 248, 252))
+d.polygon([(484, 430), (636, 430), (625, 560), (495, 560)], fill=WATER)
+d.polygon([(489, 490), (631, 490), (625, 560), (495, 560)], fill=DEEP)
+d.line(pail + [pail[0]], fill=INK, width=9, joint="curve")
+d.arc((470, 230, 650, 430), 200, 340, fill=INK, width=9)
+emoji(im, (560, 280), "💧", 70)
+chip(d, (230, 150), "قَمَرٌ", (255, 225, 77))
+chip(d, (190, 330), "بَيْتٌ", (248, 200, 220))
+chip(d, (290, 480), "كَتَبَ", (155, 231, 255))
+for x, y in ((370, 150), (330, 330)):
+    d.line([(x, y), (x + 50, y)], fill=INK, width=6)
+im.save(out + "/catch-tile.jpg", quality=88)
+
+# game 2: Complete the sentence · a sentence with a gap, three hearts, a clock
+im, d = base((255, 236, 225), (246, 216, 196))
+for i in range(3):
+    emoji(im, (230 + i * 120, 120), "❤️", 90)
+card(d, (70, 220, 630, 420), fill=(255, 248, 230))
+f = ImageFont.truetype(FONT, 76, layout_engine=ImageFont.Layout.RAQM)
+d.text((580, 330), "الْقَمَرُ", font=f, fill=INK, anchor="rm", direction="rtl")
+d.line([(140, 360), (330, 360)], fill=ORA, width=8)
+d.rounded_rectangle((90, 470, 610, 500), 15, fill=(255, 255, 255), outline=INK, width=5)
+d.rounded_rectangle((95, 475, 420, 495), 10, fill=(28, 143, 78))
+emoji(im, (350, 600), "⏳", 100)
+im.save(out + "/gaps-tile.jpg", quality=88)

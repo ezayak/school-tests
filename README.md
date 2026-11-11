@@ -591,8 +591,8 @@ After adding homework: add it to `HOMEWORK` (`n` = the lesson number), add `hw-N
 
 ## Arabic reading (Grade 3 and 4)
 
-Folder: `arabic-reading/`, shared by both Arabic hubs: `grade-3/term-1/arabic/index.html` (the 🔤 Reading section of its side bar) and
-`grade-4/term-1/arabic/index.html` (only Reading for now). Both hubs load `arabic-reading/lessons.js` (`window.READING`, one card per step, in the order of the booklet
+Folder: `arabic-reading/`, shared by both Arabic hubs: `grade-3/term-1/arabic/index.html` (the 🔤 Reading and 🎮 Reading games sections of its side bar) and
+`grade-4/term-1/arabic/index.html` (Reading and Reading games for now). Both hubs load `arabic-reading/lessons.js` (`window.READING`, one card per step, in the order of the booklet
 «خطة علاجية للقراءة والكتابة»); a card opens with `?g=3` / `?g=4`, and `hub.js` points its back link to that hub.
 Sources: `~/Documents/2026-2027/Alex/Arabic/` (the booklet scan and the teacher's guide «دليل المعلم», worksheets 1–44 and progress checks 1–6).
 
@@ -612,6 +612,15 @@ The ten steps follow the booklet: letters and harakat, three-letter words, madd,
 hamza and ى, sentences and texts (the last one has a `story` tab with the texts). Each step's cover is a tile drawn by `.claude/scripts/arabic-reading-tiles.py`;
 the emoji scene pictures of the texts come from `.claude/scripts/arabic-reading-scenes.py`. Check a step with `node .claude/scripts/arabic-reading-check.js arabic-reading/<step>.js`
 (every word glossed, a picture on every item and text part, every image exists).
+
+**Reading games** (🎮, a section of its own on both Arabic hubs, `window.READING_GAMES` in `arabic-reading/lessons.js`): one engine `shared/arabic-games.js` + `.css`
+(`<body data-game="catch|gaps">`), a page per game in `arabic-reading/`, a tile in `img/<game>/tile.jpg` (`.claude/scripts/arabic-reading-tiles.py`). A new game is a new entry in `READING_GAMES`:
+
+- `catch.html` «اِلْتَقِطِ الْكَلِمَةَ»: a word is said, word chips fly in from every side, tap the right one (each tapped chip is read aloud); 3 right taps fill a bucket,
+  a wrong tap spills water; a new word starts with 3 chips (the target at a random place) and the target never comes before 2 other chips; 10 buckets end the game and the best time of the level (2–3 letters, long words) is kept on the device. Words: `game-words.js`.
+- `gaps.html` «أَكْمِلِ الْجُمْلَةَ»: a sentence with a missing word, 5 words to choose from, a clock for each sentence (20 / 30 / 45 s, 1 / 2 min); a wrong word or the end of the time costs a heart (3 hearts);
+  10 sentences win. The picture can be turned off (with it on, only the sentences that have a picture are used). Sentences: `game-sentences.js`.
+- Both data files are made by `node .claude/scripts/arabic-reading-game-data.js` from the Grade 3 Arabic lessons (their word lists and gap sentences) and the reading steps; run it again after new lessons.
 
 After adding a step: add it to `READING`, add its files and pictures to `also` of the Grade 3 Arabic entry in `games.js` (plus `countLabel` / `topics` of both Arabic entries), and bump `VERSION` in `sw.js`.
 
