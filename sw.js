@@ -33,6 +33,7 @@ const CORE = [
   "./shared/arabic.css",
   "./shared/arabic-revision.css",
   "./shared/spelling.css",
+  "./shared/spelling.js",
   "./shared/drag-words.css",
   "./shared/reading.css",
   "./shared/reading.js",
