@@ -1,5 +1,6 @@
 // Математика, 3 клас (Optima). М. Козак, О. Корчевська «Математика. Частина 1» (2020).
 // One entry per book lesson (the green title on the right of the page), grouped by the book's sections;
+// a section is a part of the side bar: k (in the address, #table), tab (its short name), ic (emoji), t (the book's title).
 // a lesson is lesson-N.html with its lesson-N.js and img/lesson-N/. Add its files to "also" of the Математика entry in games.js.
 window.MATH_LESSONS = {
   grade: 3,
@@ -7,6 +8,9 @@ window.MATH_LESSONS = {
     "Обери урок. У вкладці «Урок» — пояснення з прикладами з підручника. У вкладці «Задачі» — вправи: розв’язуй у зошиті, а відповідь вписуй тут.",
   parts: [
     {
+      k: "repeat",
+      tab: "Повто\u00ADрення", // \u00AD: a soft hyphen, so the word breaks in a phone tab
+      ic: "🔁",
       t: "Повторення та поглиблення матеріалу за 2 клас",
       items: [
         {
@@ -60,6 +64,9 @@ window.MATH_LESSONS = {
       ],
     },
     {
+      k: "table",
+      tab: "Таблиця множення",
+      ic: "✖️",
       t: "Табличне множення і ділення",
       items: [
         {
@@ -403,6 +410,9 @@ window.MATH_LESSONS = {
       ],
     },
     {
+      k: "hundreds",
+      tab: "Трициф\u00ADрові числа",
+      ic: "💯",
       t: "Нумерація трицифрових чисел",
       items: [
         {
@@ -524,6 +534,9 @@ window.MATH_LESSONS = {
       ],
     },
     {
+      k: "round",
+      tab: "Круглі числа",
+      ic: "➕",
       t: "Усне додавання і віднімання круглих чисел",
       items: [
         {

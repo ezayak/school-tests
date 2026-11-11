@@ -1,5 +1,5 @@
 // Ukrainian math lessons (Optima, Grade 3). Everything on screen is in Ukrainian.
-// <body data-view="list">   → the subject page: window.MATH_LESSONS (lessons.js), one card per lesson.
+// <body data-view="list">   → the subject page: window.MATH_LESSONS (lessons.js), a side bar with the book's sections, one card per lesson.
 // <body data-view="lesson"> → one lesson: window.MATH_LESSON (lesson-N.js). Home = the title and two tabs of tiles:
 //   📘 Урок   – one tile per slide; the slides explain the topic with examples and schemas from the book (← →).
 //   ✏️ Задачі – one tile per group (a type of exercise); a group shows its exercises one at a time, with a strip
@@ -47,13 +47,19 @@
     <h1 class="hero-title"><span class="p">Мате</span><span class="k">матика</span></h1>
     <p class="howto">${esc(M.intro || "")}</p>
   </section>
-  ${M.parts
-    .map(
-      (p) =>
-        `<h2 class="mu-part">${esc(p.t)}</h2><div class="items">${p.items.map((it) => Kit.lessonCard({ ...it, done: complete[pageKey(it.path)] && "✓ Пройдено" }, "Урок")).join("")}</div>`,
-    )
-    .join("")}
+  <div id="secs"></div>
   <div class="soon">Нові уроки з’являться тут.</div>`;
+    // one section of the book per part of the side bar (Kit.sideNav), as on the home page
+    Kit.sideNav(
+      document.getElementById("secs"),
+      M.parts.map((p, i) => ({
+        k: p.k || "part-" + (i + 1),
+        ic: p.ic,
+        t: p.tab || p.t,
+        n: p.items.length,
+        html: `<h2 class="mu-part">${esc(p.t)}</h2><div class="items">${p.items.map((it) => Kit.lessonCard({ ...it, done: complete[pageKey(it.path)] && "✓ Пройдено" }, "Урок")).join("")}</div>`,
+      })),
+    );
     document.title = `${SUBJ} · ${M.grade} клас`;
     return;
   }
