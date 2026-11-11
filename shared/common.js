@@ -276,34 +276,55 @@ window.Kit = (function () {
         speechSynthesis.onvoiceschanged = pickVoice;
       }
     }
+    // a player that is done with: stopped and its sound let go, so the browser frees it
+    function drop(p) {
+      if (!p) return;
+      try {
+        p.onended = p.onerror = p.onplaying = null;
+        p.pause();
+        p.removeAttribute("src");
+        p.load();
+      } catch (e) {}
+    }
     function hush() {
       if ("speechSynthesis" in window)
         try {
           speechSynthesis.cancel();
         } catch (e) {}
-      if (player) player.pause();
+      drop(player);
+      player = null;
     }
     const net = () => online && navigator.onLine;
-    // the online voice: ends with the sound (at most 8 s)
+    // the online voice: ends with the sound (at most 8 s). Each sound gets a new player and the last one is let go:
+    // a phone's player that changes its sound many times a second (a game with taps) can get stuck and never play again.
+    // A sound that has not started after 3 s is given up, so the next one plays.
     function sayOnline(text) {
       return new Promise((res) => {
-        let done = false;
+        let done = false,
+          started = false;
+        const p = new Audio();
         const fin = () => {
-          if (!done) {
-            done = true;
-            res();
+          if (done) return;
+          done = true;
+          if (player === p && !started) {
+            drop(p);
+            player = null;
           }
+          res();
         };
         try {
-          player = player || new Audio();
-          player.onended = fin;
-          player.onerror = fin;
-          player.src = URL + encodeURIComponent(text);
-          player.playbackRate = 0.85;
-          player.play().catch(fin);
+          drop(player);
+          player = p;
+          p.onended = fin;
+          p.onerror = fin;
+          p.onplaying = () => (started = true);
+          p.src = URL + encodeURIComponent(text);
+          p.playbackRate = 0.85;
+          p.play().catch(fin);
         } catch (e) {
           fin();
         }
+        setTimeout(() => started || fin(), 3000);
         setTimeout(fin, 8000);
       });
     }
