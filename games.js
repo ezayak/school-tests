@@ -553,9 +553,9 @@ window.GAMES = [
     lesson:
       "Lessons · stories read aloud, words & idioms with moving pictures, booklet exercises · Dictations · Stories",
     topics:
-      "Unit 1 Week 3 (compound sentences, long e) · Week 4 (complex sentences, long i, idioms) · Week 5 (run-on sentences, long o, suffixes) · Term 2: Unit 2 Week 5 (combining sentences, suffixes, similes & metaphors, poetry) · Unit 3 Week 2 (verb tenses, silent letters, context clues) · Week 5 (irregular verbs, compound words, Greek roots) · 19 stories",
+      "Unit 1 Week 3 (compound sentences, long e) · Week 4 (complex sentences, long i, idioms) · Week 5 (run-on sentences, long o, suffixes) · Term 2: Unit 2 Week 5 (combining sentences, suffixes, similes & metaphors, poetry, suffix dictation) · Unit 3 Week 2 (verb tenses, silent letters, context clues) · Week 5 (irregular verbs, compound words, Greek roots) · 19 stories",
     path: "grade-4/term-1/english/index.html",
-    countLabel: "6 lessons · 2 dictations · 19 stories",
+    countLabel: "6 lessons · 3 dictations · 19 stories",
     year: "2026–2027",
     also: [
       "grade-4/term-1/english/dictations.js",
@@ -565,6 +565,8 @@ window.GAMES = [
       "grade-4/term-1/english/english-dictation-unit1-week3.js",
       "grade-4/term-1/english/english-dictation-unit1-week4.html",
       "grade-4/term-1/english/english-dictation-unit1-week4.js",
+      "grade-4/term-2/english/english-dictation-unit2-week5.html",
+      "grade-4/term-2/english/english-dictation-unit2-week5.js",
       "grade-4/term-1/english/story-dream-team.html",
       "grade-4/term-1/english/story-dream-team.js",
       "grade-4/term-1/english/img/dream-team/cover.jpg",

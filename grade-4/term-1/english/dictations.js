@@ -136,6 +136,17 @@ window.ENGLISH = {
       path: "../../term-2/english/unit2-week5.html",
       term: 2,
     },
+    {
+      kind: "Dictation",
+      title: "Unit 2 · Week 5",
+      sound: "Suffixes",
+      date: "16 Nov",
+      words:
+        "hardly, wonderful, darkness, shapeless, clearest, spoonful, carefully, painless, illness, slowly",
+      note: "10 words & 10 sentences",
+      path: "../../term-2/english/english-dictation-unit2-week5.html",
+      term: 2,
+    },
     ...[
       [
         "Animal Poems",

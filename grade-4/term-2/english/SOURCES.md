@@ -115,3 +115,9 @@ Folder `~/Documents/2026-2027/Alex/English/`. Page = the book page printed at th
 | 20261107-Spelling Proofreading.pdf                                | Spelling · Proofreading (117)                                      | `unit2-week5` · `sspell`                                                     | already built (= Classwork p. 9)                                                                                            |
 | 20261107-Graphic Organizer 23.pdf                                 | blank graphic organizer                                            | —                                                                            | skipped (class tool)                                                                                                        |
 | 20261107-Think Aloud Cloud I wonder ….pdf                         | "I wonder …" sentence starter card                                 | —                                                                            | skipped (class tool)                                                                                                        |
+
+## Teacher's files, 11 Nov (`~/Documents/2026-2027/Alex/English/`)
+
+| File                               | Content                                                                 | Goes to                                                   | Status |
+| ---------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------- | ------ |
+| 20261111-Dictation-Unit2-Week5.pdf | Dictation on 16 Nov: 10 sentences with the week's suffix spelling words | `english-dictation-unit2-week5` (10 words + 10 sentences) | built  |
