@@ -151,7 +151,7 @@ Rules for every French file:
 ## English (Grade 4): lessons and stories
 
 Folders: `grade-4/term-1/english/`, `grade-4/term-2/english/`, … One English page for all terms: `grade-4/term-1/english/index.html` (list in its `dictations.js`).
-Engines: lessons `shared/computer-lesson.js` (`<body data-subject="English">`), stories `shared/story.js` (don't copy them; a lesson or a story is only a data file).
+Engines: lessons `shared/computer-lesson.js` (`<body data-subject="English">`), stories `shared/story.js`, dictations `shared/spelling.js` (don't copy them; a lesson, a story or a dictation is only a data file).
 Format in README: "English stories", "English lessons (Grade 4)", "English revision"; `term-1/english/unit1-week5.js` is the fullest example.
 Step-by-step procedure, lessons learned and the check scripts (data check, play-through, screenshots, offline list): the `english-lesson` skill in `.claude/skills/english-lesson/`.
 Sources: the term booklets in `~/Documents/2026-2027/Alex/!booklets/` (Classwork and Homework Booklet), and `~/Documents/2026-2027/Alex/English/Term N/`
@@ -182,6 +182,8 @@ What to build:
   Play: games for the week's points (sort, match, mc). Exercises: every booklet task, one exercise each, `from: "Classwork p. 3"` (the PDF page number, printed at the bottom centre),
   `g` = the section ("🧩 Grammar · …", "🔊 Phonics · …", "🔤 Vocabulary", "🧱 Vocabulary strategy · …", "📖 Reading · …"); items in the booklet's order.
 - **Story** `story-<name>.js` + `.html` (copy `term-1/english/story-helping-hand.html`, change the `.js`), pictures in `img/<name>/` (`pdftoppm -r 200`, then PIL; ~700px, small pictures ~400px).
+- **Dictation** (a school dictation sheet) `english-dictation-unitN-weekM.js` + `.html` (copy the last one, change the `<title>` and the `.js`); format in README "English dictations".
+  The sheet's words and sentences exactly as printed (a sheet with only sentences: the week's spelling words in them are the words); `mark` the sound or suffix on each word, `key` in each sentence; a picture (`pics` drawing) on every item; `date` in `dictations.js`.
   Text exactly as printed, short pages, one `easy` sentence each, `gloss` for the hard words, the booklet's questions in order; `lesson: {path, label}`, and `hub` (as above) from a later term.
 - Item types: circle / choose / which sentence is right → `mc` (right one first; `keep` for a fixed list like the tense names); underline or circle words in a sentence → `tapw`;
   word sort, "write the words that contain …" → `sort`; match a word to its meaning → `match` or `mc`; complete a verb, fill a gap → `mc` with likely wrong forms;

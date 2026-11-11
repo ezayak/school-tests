@@ -1,6 +1,6 @@
 ---
 name: english-lesson
-description: Build Grade 4 English lessons and stories for the school-tests study games from the term booklets (Classwork / Homework Booklet PDFs in ~/Documents/2026-2027/Alex/!booklets/) and other English sources. Use this whenever the user sends or mentions new English booklet pages, scans, a Wonders week ("Unit N Week M"), a reading text, poem or comprehension sheet for Alex, asks to add, update or check English lessons or stories, or asks what English pages are already built or still missing, even if they don't say "lesson".
+description: Build Grade 4 English lessons and stories for the school-tests study games from the term booklets (Classwork / Homework Booklet PDFs in ~/Documents/2026-2027/Alex/!booklets/) and other English sources. Use this whenever the user sends or mentions new English booklet pages, scans, a Wonders week ("Unit N Week M"), a reading text, poem, comprehension or dictation sheet for Alex, asks to add, update or check English lessons, stories or dictations, or asks what English pages are already built or still missing, even if they don't say "lesson".
 ---
 
 # English lessons and stories (Grade 4)
@@ -74,6 +74,7 @@ npx --no-install prettier --write <changed files>; node --check <each .js>
 
 - `SOURCES.md`: every page row → `file · key` and **built** / skipped (why) / waiting. `TODO.md`: one row per missing thing, starting with "Booklet · page". `UNVERIFIED.md`: a row for every answer without a school key (and stand-ins).
 - `grade-4/term-1/english/dictations.js`: a `kind: "Lesson"` entry and `kind: "Story"` entries, with `term: N` and paths `"../../term-N/english/…"`.
+- A dictation sheet ("Dictation-UnitN-WeekM.pdf") is not a lesson: it is a data file for `shared/spelling.js` (README "English dictations"), a `kind: "Dictation"` entry with its `date`, a `SOURCES.md` row. Check every Learn card in a screenshot (picture, highlighted suffix or sound) and one typed answer.
 - Report to the user: what was built (by booklet page), what was checked, and the decisions they should know about (stand-ins, excerpts, two-answer items, sheet quotes, typos), then wait for approval.
 - Commit the stage when approved: content in one commit (no Co-Authored-By line; `git -c user.name=Olena -c user.email=ezayak@gmail.com commit` if no identity is set). Formatting-only changes go in their own commit.
 
