@@ -1,9 +1,9 @@
 # Study Games
 
 Picture quiz games for school tests. A small switch at the top of the home page picks the school: **SJAS** (opens by default) or **Optima** (the Ukrainian school);
-see "Schools". Home page, per grade: **Subjects** first (one card per subject, opening a list page with the lessons or dictations of every term),
-then **Revisions**: term buttons (one term at a time, the latest by default) and two folding sections, **Mid-term** and **Final**, with the subject cards.
-The chosen term and each section's open / closed state are remembered on the device. Every card has the same height: the lesson line is cut after 2 lines and the topics after 4.
+see "Schools". Home page: the grade tiles, then a side bar (`Kit.sideNav`): **Subjects** (per grade, one card per subject, opening a list page with the lessons or dictations of every term)
+and one **Revision T1**, **Revision T2** … per term with revisions (per grade, two folding sections, **Mid-term** and **Final**, with the subject cards; a new term's part appears with its first revision).
+The open part and each section's open / closed state are remembered on the device. Every card has the same height: the lesson line is cut after 2 lines and the topics after 4.
 Every page is a plain HTML file (no build step), so the repo works as-is on GitHub Pages.
 All styling and the small JS helpers come from `shared/` — pages have no `<style>` blocks of their own.
 
@@ -134,8 +134,8 @@ The schools are listed in `SCHOOLS` at the top of `index.js`:
 
 - `k`: the name used in `games.js` (`school: "optima"`) and on `<body data-school="optima">`. A game without `school:` belongs to SJAS.
 - `logo`: a picture in `icons/` (`wide: true` for a logo with the name in it), or `ic: "🧠"` to show an emoji with the `name` instead.
-- `revisions: false`: only the **Subjects** cards, no Revisions part.
-- Each school keeps its own grade and subject filter.
+- `revisions: false`: only the **Subjects** cards (with a "Subjects" / `subjectsTitle` heading), no side bar.
+- Each school keeps its own grade filter and open side bar part.
 
 Each school has its own graph-paper colour: `[data-school="optima"]` in `shared/theme.css` (light and dark). Optima pages set `data-school="optima"` on `<body>` too.
 New school: add it to `SCHOOLS`, put its logo in `icons/` (and in `CORE` in `sw.js`), give its games `school: "<k>"`, and add its paper colour to `theme.css` if it needs one.

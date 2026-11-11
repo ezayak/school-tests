@@ -1,11 +1,12 @@
-// Main screen: school switch, grade + subject filters, game cards, install button.
+// Main screen: school switch, grade filter, a side bar (Subjects · Revision T1 · Revision T2 …), game cards, install button.
 (function () {
   // One button per school in the switch. A game belongs to the school in its school: field (no field = SJAS).
   // logo: a picture in icons/ (wide: true for a logo with the name in it), or ic: an emoji shown with the name.
-  // revisions: false → only the Subjects cards, no Revisions part.
-  // by: the first filter and the sections group the games by this field instead of grade
+  // revisions: true → a side bar: Subjects, then one Revision part per term that has revisions (Mid-term / Final folds);
+  // false → only the Subjects cards, no side bar.
+  // by: the filter and the sections group the games by this field instead of grade
   // ({f: the field, all: the "all" button, names: {value: its name}, in this order}).
-  // allSubjects / subjectsTitle: the "all" subject button and the heading above the cards (default All subjects / Subjects).
+  // subjectsTitle: the heading above the cards (default Subjects).
   const SCHOOLS = [
     { k: "sjas", name: "SJAS", logo: "icons/sjas.png", revisions: true },
     {
@@ -20,7 +21,6 @@
       name: "Мовлення",
       ic: "🗣️",
       revisions: false,
-      allSubjects: "All topics",
       subjectsTitle: "Topics",
       by: {
         f: "lang",
@@ -83,10 +83,9 @@
   };
   let school = store.get("st-school") || "sjas";
   if (!SCHOOLS.some((s) => s.k === school)) school = "sjas";
-  let term = +store.get("st-term") || 0; // chosen term for Revisions; 0 = the latest term with a revision
-  // the games, grades and subjects of the chosen school, and its saved grade / subject filters
-  // (SJAS keeps the old keys st-grade / st-subject, the other schools add their name)
-  let SCH, games, grades, subjects, grade, subject;
+  // the games, grades and side bar parts of the chosen school, its saved grade filter and open part
+  // (SJAS keeps the old key st-grade, the other schools add their name)
+  let SCH, games, grades, terms, grade, sec;
   const key = (k) => (school === "sjas" ? k : `${k}-${school}`);
   // a game's grade (or the school's by field), and its name on the filter and the section
   const lv = (g) => (SCH.by ? g[SCH.by.f] : g.grade);
@@ -112,11 +111,16 @@
     grades = [...new Set(games.map(lv))].sort((a, b) =>
       SCH.by ? order.indexOf(a) - order.indexOf(b) : a - b,
     );
-    subjects = [...new Set(games.map((g) => g.subject))].sort();
+    terms = SCH.revisions
+      ? [
+          ...new Set(
+            games.filter((g) => g.period !== "Subjects").map((g) => g.term),
+          ),
+        ].sort((a, b) => a - b)
+      : [];
     grade = store.get(key("st-grade")) || "all";
-    subject = store.get(key("st-subject")) || "all";
     if (grade !== "all" && !grades.map(String).includes(grade)) grade = "all";
-    if (subject !== "all" && !subjects.includes(subject)) subject = "all";
+    sec = store.get(key("st-sec")) || "subjects"; // Kit.sideNav opens Subjects when that part is gone
     document.body.dataset.school = school; // its own paper colour (shared/theme.css)
   }
   const pIdx = (p) => {
@@ -199,57 +203,67 @@
           grade = b.dataset.g;
           store.set(key("st-grade"), grade);
           draw();
-          slide([document.getElementById("list")], dir);
+          slide([panel()], dir);
         }),
     );
-    document.getElementById("subjects").innerHTML = ["all", ...subjects]
-      .map(
-        (v, i) =>
-          `<button type="button" id="s-${i}" data-s="${esc(v)}" aria-pressed="${v === subject}"${v === "all" ? "" : ` style="--c:${SUBJ[v] || "var(--other)"}"`}>${v === "all" ? SCH.allSubjects || "All subjects" : esc(v)}</button>`,
-      )
-      .join("");
-    document.querySelectorAll("[data-s]").forEach(
-      (b) =>
-        (b.onclick = () => {
-          if (b.dataset.s === subject) return;
-          const all = ["all", ...subjects];
-          const dir = all.indexOf(b.dataset.s) > all.indexOf(subject) ? 1 : -1;
-          subject = b.dataset.s;
-          store.set(key("st-subject"), subject);
-          draw();
-          slide([document.getElementById("list")], dir);
-        }),
-    );
+    // the side bar: Subjects, then Revision T1, T2 … (only the terms with revisions); the grade filter applies to every part
     const pool = games.filter(
-      (g) => subject === "all" || g.subject === subject,
+      (g) => grade === "all" || String(lv(g)) === String(grade),
     );
-    const show = grades.filter(
-      (g) =>
-        (grade === "all" || String(g) === String(grade)) &&
-        pool.some((x) => lv(x) === g),
-    );
-    document.getElementById("list").innerHTML = show.length
-      ? show
-          .map((gr) => {
-            const gs = pool.filter((g) => lv(g) === gr);
-            return `<section class="grade"><h2>${esc(lvName(gr))}<small>${gs.length} game${gs.length > 1 ? "s" : ""}</small></h2>${subjectCards(gs)}${SCH.revisions ? revisions(gs) : ""}</section>`;
-          })
-          .join("")
-      : '<p class="empty">No games for this choice yet.</p>';
-    document.querySelectorAll("[data-t]").forEach(
-      (b) =>
-        (b.onclick = () => {
-          if (b.getAttribute("aria-pressed") === "true") return;
-          const shown = b.parentElement.querySelector('[aria-pressed="true"]');
-          const dir = +b.dataset.t > +(shown && shown.dataset.t) ? 1 : -1;
-          term = +b.dataset.t;
-          store.set("st-term", term);
-          draw();
-          // only the Mid-term / Final sections of that grade move
-          const part = document.getElementById(b.id).closest(".part");
-          slide(part.querySelectorAll(".period"), dir);
-        }),
-    );
+    const parts = [
+      {
+        k: "subjects",
+        ic: "📚",
+        t: SCH.subjectsTitle || "Subjects",
+        f: (g) => g.period === "Subjects",
+        html: subjectCards,
+      },
+      ...terms.map((t) => ({
+        k: "t" + t,
+        ic: "📝",
+        t: "Revision T" + t,
+        f: (g) => g.period !== "Subjects" && g.term === t,
+        html: (gs, gr) => revisions(gs, gr, t),
+      })),
+    ].map((p) => {
+      const gs = pool.filter(p.f);
+      // a revision part shows every grade that has revisions in any term, so Mid-term / Final say "No revisions yet"
+      const shown = grades.filter((gr) =>
+        (p.k === "subjects"
+          ? gs
+          : pool.filter((g) => g.period !== "Subjects")
+        ).some((g) => lv(g) === gr),
+      );
+      return {
+        k: p.k,
+        ic: p.ic,
+        t: p.t,
+        n: gs.length,
+        html: shown.length
+          ? shown
+              .map((gr) => {
+                const n = gs.filter((g) => lv(g) === gr).length;
+                // no side bar (only Subjects): the heading names the part
+                return `<section class="grade"><h2>${esc(lvName(gr))}<small>${n} game${n === 1 ? "" : "s"}</small></h2>${terms.length ? "" : `<h3>${esc(p.t)}</h3>`}${p.html(
+                  gs.filter((g) => lv(g) === gr),
+                  gr,
+                )}</section>`;
+              })
+              .join("")
+          : '<p class="empty">No games for this choice yet.</p>',
+      };
+    });
+    const all = parts.map((p) => p.k);
+    Kit.sideNav(document.getElementById("list"), parts, {
+      open: sec,
+      pick(k) {
+        const dir = all.indexOf(k) > all.indexOf(sec) ? 1 : -1;
+        sec = k;
+        store.set(key("st-sec"), sec);
+        draw();
+        slide([panel()], dir);
+      },
+    });
     // Mid-term / Final fold: remember open or closed for each grade, term and exam
     document.querySelectorAll("details[data-k]").forEach((d) => {
       // "toggle" also comes when an open section is drawn: the cards slide only after a tap
@@ -261,38 +275,21 @@
       };
     });
   }
+  // what moves when the grade or the side bar changes: the cards, not the bar
+  const panel = () =>
+    document.querySelector("#list .snav-panel") ||
+    document.getElementById("list");
   const bySubject = (a, b) => a.subject.localeCompare(b.subject);
   const card = (g) =>
     `<a class="game${g.subject === "Religion" ? " light-c" : ""}" style="--c:${SUBJ[g.subject] || "var(--other)"}" href="${esc(g.path)}"><span class="subj">${esc(g.subject)}</span><span class="t">${esc(g.title)}</span><span class="l">${esc(g.lesson || "")}</span><p class="tp">${esc(g.topics || "")}</p><span class="meta"><span>${g.countLabel ? esc(g.countLabel) : g.questions ? g.questions + " questions" : ""}${g.year ? " · " + esc(g.year) : ""}</span><span class="go play-arrow">${g.hub ? "Open →" : "Play →"}</span></span></a>`;
-  // Revisions → term buttons (one term at a time) → Mid-term / Final, each a section that folds → subject cards
-  function revisions(gs) {
-    const rev = gs.filter((g) => g.period !== "Subjects");
-    if (!rev.length) return "";
-    const gr = rev[0].grade;
-    const terms = [
-      ...new Set(
-        games
-          .filter((g) => g.grade === gr && g.period !== "Subjects")
-          .map((g) => g.term),
-      ),
-    ].sort((a, b) => a - b);
-    const t = terms.includes(term) ? term : terms[terms.length - 1];
-    const inTerm = rev.filter((g) => g.term === t);
+  // Revision Tn → Mid-term / Final, each a section that folds → subject cards
+  function revisions(gs, gr, t) {
     const periods = [
-      ...new Set([
-        "Mid-term exam",
-        "Final exam",
-        ...inTerm.map((g) => g.period),
-      ]),
+      ...new Set(["Mid-term exam", "Final exam", ...gs.map((g) => g.period)]),
     ].sort((a, b) => pIdx(a) - pIdx(b));
-    return `<div class="part"><div class="part-head"><h3>Revisions</h3><div class="filters terms" role="group" aria-label="Show term">${terms
-      .map(
-        (v) =>
-          `<button type="button" id="t-${gr}-${v}" data-t="${v}" aria-pressed="${v === t}">Term ${esc(v)}</button>`,
-      )
-      .join("")}</div></div>${periods
+    return `<div class="part">${periods
       .map((p) => {
-        const items = inTerm.filter((g) => g.period === p).sort(bySubject);
+        const items = gs.filter((g) => g.period === p).sort(bySubject);
         const k = `${gr}-${t}-${p}`;
         const saved = store.get("st-fold-" + k);
         const open = saved === null ? items.length > 0 : saved === "1";
@@ -302,9 +299,7 @@
   }
   // Subjects → one card per subject, its hub holds the lessons of every term
   function subjectCards(gs) {
-    const items = gs.filter((g) => g.period === "Subjects").sort(bySubject);
-    if (!items.length) return "";
-    return `<div class="part"><h3>${SCH.subjectsTitle || "Subjects"}</h3><div class="cards">${items.map(card).join("")}</div></div>`;
+    return `<div class="part"><div class="cards">${gs.slice().sort(bySubject).map(card).join("")}</div></div>`;
   }
   // Install button (Android / Chrome / Edge). iPad: Share → Add to Home Screen.
   let deferred = null;

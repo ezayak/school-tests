@@ -1,4 +1,4 @@
-/* Home page: school switch, graph-paper page, one section per grade with Subjects (one card per subject) and Revisions (term buttons → Mid-term / Final folding sections → subject cards). Load after shared/theme.css. */
+/* Home page: school switch, graph-paper page, grade tiles, a side bar (Kit.sideNav: Subjects · Revision T1 · …) and one section per grade with the subject cards or the Mid-term / Final folding sections. Load after shared/theme.css. */
 html,
 body {
   margin: 0;
@@ -191,24 +191,6 @@ a:focus-visible {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 var(--ink);
 }
-/* subject chips in their subject colour */
-.filters.subjects {
-  min-width: 0;
-}
-.filters.subjects button {
-  border-width: 2.5px;
-  border-color: color-mix(in srgb, var(--c, var(--ink)) 80%, var(--ink));
-  white-space: nowrap;
-}
-.filters.subjects button[aria-pressed="true"] {
-  background: var(--c, var(--ink));
-  border-color: var(--ink);
-  color: #fff;
-}
-.filters.subjects button[data-s="Religion"][aria-pressed="true"],
-.filters.subjects button[data-s="Science"][aria-pressed="true"] {
-  color: #1b2440;
-}
 @media (max-width: 520px) {
   .filters.grades {
     gap: 8px;
@@ -218,16 +200,6 @@ a:focus-visible {
   }
   .filters.grades button b {
     font-size: 1.15rem;
-  }
-  .filters.subjects {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    margin-inline: -16px;
-    padding: 2px 16px 6px;
-  }
-  .filters.subjects::-webkit-scrollbar {
-    display: none;
   }
   .install {
     font-size: 0.95rem;
@@ -262,20 +234,11 @@ a:focus-visible {
   flex-direction: column;
   gap: 14px;
 }
-.part > h3,
-.part-head {
+/* Subjects / Topics heading when there is no side bar (Optima, Мовлення) */
+.grade > h3 {
+  font-size: 1.5rem;
   padding-bottom: 6px;
   border-bottom: 2.5px solid var(--ink);
-}
-.part h3 {
-  font-size: 1.5rem;
-}
-.part-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 16px;
-  padding-top: 18px;
 }
 /* Mid-term / Final: a yellow pill that folds its cards */
 .period summary {

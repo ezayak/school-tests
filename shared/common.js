@@ -348,7 +348,9 @@ window.Kit = (function () {
   // count on the button (optional), the section's content. The open section is remembered on this device for this page
   // and is in the URL (#tests), so a link to "index.html#tests" opens it and "index.html" opens the last one.
   // Landscape tablet: a bar on the left; phone or portrait: a row of tabs on top. Only one section: no bar.
-  function sideNav(host, secs) {
+  // opt = {open, pick}: the page keeps the open section itself (the home page, whose address holds the school and grade):
+  // open = the key of the open section, a tap calls pick(key); no URL, no memory, no hashchange listener.
+  function sideNav(host, secs, opt) {
     const key = "snav:" + location.pathname;
     secs = secs.filter(Boolean);
     if (secs.length < 2) {
@@ -371,6 +373,7 @@ window.Kit = (function () {
     };
     const has = (k) => secs.some((s) => s.k === k);
     const now = () => {
+      if (opt) return has(opt.open) ? opt.open : secs[0].k;
       const h = decodeURIComponent(location.hash.slice(1));
       if (has(h)) return h;
       const m = mem.get();
@@ -385,7 +388,7 @@ window.Kit = (function () {
     const panel = host.querySelector(".snav-panel");
     function show() {
       const k = now();
-      mem.set(k);
+      if (!opt) mem.set(k);
       host
         .querySelectorAll("[data-sec]")
         .forEach((a) =>
@@ -400,11 +403,12 @@ window.Kit = (function () {
       (a) =>
         (a.onclick = (e) => {
           e.preventDefault();
+          if (opt) return a.dataset.sec === now() || opt.pick(a.dataset.sec);
           history.replaceState(null, "", "#" + a.dataset.sec);
           show();
         }),
     );
-    addEventListener("hashchange", show);
+    if (!opt) addEventListener("hashchange", show);
     show();
   }
   return {
