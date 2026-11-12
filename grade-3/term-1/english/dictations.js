@@ -19,5 +19,16 @@ window.ENGLISH = {
       note: "10 words & 5 sentences",
       path: "english-long-a.html",
     },
+    {
+      kind: "Dictation",
+      title: "Unit 2 · Week 5",
+      sound: "Digraphs",
+      date: "18 Nov",
+      words:
+        "pitch, teacher, cheese, thick, truth, pathway, them, whales, much, lunch",
+      note: "15 words & 5 sentences",
+      path: "english-digraphs.html",
+      term: 2,
+    },
   ],
 };

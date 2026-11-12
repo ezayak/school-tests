@@ -530,9 +530,9 @@ window.GAMES = [
     hub: true,
     lesson: "Dictations · Learn, Match, Listen & spell, Build the word",
     topics:
-      "Long O Words (oa, o_e, ow, old) · Long A Words (ai, ay, a_e, eigh, ey)",
+      "Long O Words (oa, o_e, ow, old) · Long A Words (ai, ay, a_e, eigh, ey) · Term 2: Unit 2 Week 5 (consonant digraphs ch, tch, th, wh, sh)",
     path: "grade-3/term-1/english/index.html",
-    countLabel: "2 dictations",
+    countLabel: "3 dictations",
     year: "2026–2027",
     also: [
       "grade-3/term-1/english/dictations.js",
@@ -542,6 +542,8 @@ window.GAMES = [
       "grade-3/term-1/english/english-long-o.js",
       "grade-3/term-1/english/english-long-a.html",
       "grade-3/term-1/english/english-long-a.js",
+      "grade-3/term-1/english/english-digraphs.html",
+      "grade-3/term-1/english/english-digraphs.js",
     ],
   },
   {
