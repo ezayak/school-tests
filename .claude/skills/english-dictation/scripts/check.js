@@ -61,10 +61,11 @@ for (const it of words) {
   let shown = it.w;
   if (it.mark) {
     const [i, n] = it.mark;
-    if (i < 0 || n < 1 || i + n > it.w.length)
+    if (i < 0 || n < 0 || i + n > it.w.length)
       bad.push(`"${it.w}": mark ${it.mark} is outside the word`);
-    shown =
-      it.w.slice(0, i) + "[" + it.w.slice(i, i + n) + "]" + it.w.slice(i + n);
+    shown = n
+      ? it.w.slice(0, i) + "[" + it.w.slice(i, i + n) + "]" + it.w.slice(i + n)
+      : it.w + "   (mark [0, 0]: nothing highlighted)";
   } else shown += "   (no mark: the long-vowel pattern is found by itself)";
   console.log("  " + shown);
 }
