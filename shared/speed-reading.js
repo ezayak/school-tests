@@ -27,7 +27,10 @@
 //   split  «Роз’єднай слова» (p. 30): tap the last letter of each word of a sentence written without spaces.
 //   hidden «Заховані слова» (p. 30): tap the first and last letter of each word hidden in a row.
 //   lines  «Заплутані лінії» (p. 4): follow each number's tangled line (drawn new each time) to its letter.
-// <body data-game="text"> → a text (window.TEXT from text-<name>.js): 📖 Читаю with a stopwatch and words per minute
+// <body data-game="text"> → a text (window.TEXT from text-<name>.js; the booklet's are text-pN.js, data-sec="texts"):
+//   book: the book's lines one per row; {name} = a picture for a word; ■ = a missing letter; cut: "bottom" / "top" of the letters cut off;
+//   words, page, author, cover from the book; a question with open: true is answered aloud (the adult taps ✓).
+//   📖 Читаю with a stopwatch and words per minute
 //   (the best time on this device, or the times of T.readings: the same text read several times), ❓ Питання, 🔎 Помилки.
 (function () {
   "use strict";
@@ -1875,10 +1878,13 @@
   function textPage(T) {
     const K = "sr-text-" + T.key;
     const lines = T.paras.flat();
-    const words = lines
-      .join(" ")
-      .split(/\s+/)
-      .filter((w) => /[\p{L}\d]/u.test(w)).length;
+    // the book's count when it gives one (a word broken at the end of a line, a picture for a word)
+    const words =
+      T.words ||
+      lines
+        .join(" ")
+        .split(/\s+/)
+        .filter((w) => /[\p{L}\d]/u.test(w)).length;
     const clock = (s) =>
       `${Math.floor(s / 60)}:${String(Math.round(s) % 60).padStart(2, "0")}`;
     const wpm = (s) => Math.round((words * 60) / Math.max(1, s));
@@ -1891,7 +1897,7 @@
     if (!TABS.some((t) => t.k === tab)) tab = "read";
     app.innerHTML = `<section class="card sr-textcard">
       ${links}
-      <div class="sr-thead"><span class="sr-tic" aria-hidden="true">${esc(T.ic || "📖")}</span><h1 class="les-title">${esc(T.title)}</h1><span class="sr-count">${words} слів</span></div>
+      <div class="sr-thead">${T.cover ? `<img class="sr-tcover" src="${esc(T.cover)}" alt="">` : `<span class="sr-tic" aria-hidden="true">${esc(T.ic || "📖")}</span>`}<h1 class="les-title">${esc(T.title)}</h1><span class="sr-count">${T.page ? `с. ${esc(T.page)} · ` : ""}${words} слів${T.author ? `<br><i>${esc(T.author)}</i>` : ""}</span></div>
       <div class="tabbox">${TABS.length > 1 ? `<div class="ftabs sr-n${TABS.length}" role="group" aria-label="Що робимо">${TABS.map((t) => `<button type="button" data-tab="${t.k}" aria-pressed="${t.k === tab}"><span class="ti">${t.ic} </span>${esc(t.t)}</button>`).join("")}</div>` : ""}
       <div class="panel sr-pane" id="pane"></div></div>
     </section>`;
@@ -1913,13 +1919,21 @@
         }),
     );
 
-    // the text: paragraphs of sentences; a dialogue: one line per speaker, in turn
+    // a line: {name} = a picture in place of a word (img/texts/name.jpg), ■ = a missing letter (a blue square)
+    const lineHTML = (l) =>
+      esc(l)
+        .replace(/■/g, '<span class="sr-sq"></span>')
+        .replace(
+          /\{([\w-]+)\}/g,
+          (_, n) => `<img class="sr-iw" src="img/texts/${n}.jpg" alt="">`,
+        );
+    // the text: paragraphs of sentences (or of the book's lines, T.book: one row each); a dialogue: one line per speaker, in turn
     const textHTML = () => {
       let n = 0;
       return T.paras
         .map(
           (p, pi) =>
-            `<p class="sr-para${T.dialog ? ` sr-role r${pi % 2}` : ""}">${T.dialog ? `<span class="sr-who">${esc(T.roles[pi % 2])}</span>` : ""}${p.map((l) => `<span class="sr-line" data-n="${n++}">${esc(l)}</span>`).join(" ")}</p>`,
+            `<p class="sr-para${T.dialog ? ` sr-role r${pi % 2}` : ""}">${T.dialog ? `<span class="sr-who">${esc(T.roles[pi % 2])}</span>` : ""}${p.map((l) => `<span class="sr-line" data-n="${n++}">${lineHTML(l)}</span>`).join(" ")}</p>`,
         )
         .join("");
     };
@@ -1933,13 +1947,13 @@
         R ? JSON.parse(store.get(K + "-times", "[]") || "[]") : [];
       const best = () => +store.get(K + "-best", 0);
       pane.innerHTML = `<div class="opts-row center">
-          <div class="og"><span class="lab">Як читаємо</span><div class="seg" role="group" aria-label="Як читаємо"><button type="button" data-m="all" aria-pressed="${mode === "all"}">Увесь текст</button><button type="button" data-m="line" aria-pressed="${mode === "line"}">По реченню</button></div></div>
+          <div class="og"><span class="lab">Як читаємо</span><div class="seg" role="group" aria-label="Як читаємо"><button type="button" data-m="all" aria-pressed="${mode === "all"}">Увесь текст</button><button type="button" data-m="line" aria-pressed="${mode === "line"}">${T.book ? "По рядку" : "По реченню"}</button></div></div>
           ${R ? `<div class="og"><span class="lab">Читання</span><div class="seg" role="group" aria-label="Читання">${R.map((_, i) => `<button type="button" data-r="${i}" aria-pressed="${i === ri}">${i + 1}</button>`).join("")}</div></div>` : ""}
         </div>
         ${R ? `<p class="sr-tip" id="tip"></p>` : ""}
         <div class="sr-btns sr-stick" id="btns"></div>
         <div class="sr-result" id="res"></div>
-        <div class="sr-text${T.dialog ? " sr-dialog" : ""}" id="txt">${textHTML()}</div>`;
+        <div class="sr-text${T.dialog ? " sr-dialog" : ""}${T.book ? " book" : ""}${T.cut ? " cut-" + T.cut : ""}" id="txt">${textHTML()}</div>`;
       const txt = pane.querySelector("#txt"),
         btns = pane.querySelector("#btns"),
         res = pane.querySelector("#res");
@@ -2055,19 +2069,39 @@
         .map(
           (it, i) => `<div class="sr-qitem" data-i="${i}">
           <p class="sr-qq"><b>${i + 1}.</b> ${esc(it.q)}${V.has() ? ` <button type="button" class="abtn sr-hear" data-say="${esc(it.q)}" aria-label="Послухати">🔊</button>` : ""}</p>
-          <div class="opts two sr-opts">${shuf(it.o.map((o, k) => [...o, k]))
-            .map(
-              ([t, ic, k]) =>
-                `<div class="optrow"><button type="button" class="opt" data-k="${k}"><span class="oic" aria-hidden="true">${esc(ic)}</span>${esc(t)}</button></div>`,
-            )
-            .join("")}</div></div>`,
+          ${
+            it.open
+              ? '<p class="note">Розкажи дорослому.</p><div class="sr-btns"><button type="button" class="btn sr-told">✓ Відповів</button></div>'
+              : `<div class="opts two sr-opts">${shuf(
+                  it.o.map((o, k) => [...o, k]),
+                )
+                  .map(
+                    ([t, ic, k]) =>
+                      `<div class="optrow"><button type="button" class="opt" data-k="${k}"><span class="oic" aria-hidden="true">${esc(ic)}</span>${esc(t)}</button></div>`,
+                  )
+                  .join("")}</div>`
+          }</div>`,
         )
         .join("")}</div><p class="sr-score" id="qscore"></p>`;
       pane
         .querySelectorAll("[data-say]")
         .forEach((b) => (b.onclick = () => say(b.dataset.say)));
+      const over = () => {
+        if (++done === T.q.length)
+          pane.querySelector("#qscore").innerHTML =
+            `<b>${right}</b> з ${T.q.length} з першого разу`;
+      };
       pane.querySelectorAll(".sr-qitem").forEach((box) => {
         let tries = 0;
+        // an open question (no choices): the child answers aloud, the adult taps ✓
+        const told = box.querySelector(".sr-told");
+        if (told)
+          told.onclick = () => {
+            told.disabled = true;
+            told.classList.add("right");
+            right++;
+            over();
+          };
         box.querySelectorAll(".opt").forEach(
           (b) =>
             (b.onclick = () => {
@@ -2078,9 +2112,7 @@
                   .forEach((x) => (x.disabled = true));
                 if (!tries) right++;
                 say(T.q[+box.dataset.i].o[0][0]);
-                if (++done === T.q.length)
-                  pane.querySelector("#qscore").innerHTML =
-                    `<b>${right}</b> з ${T.q.length} з першого разу`;
+                over();
               } else {
                 tries++;
                 b.classList.add("wrong");

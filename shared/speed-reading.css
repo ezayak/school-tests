@@ -971,3 +971,68 @@ body {
   font-weight: 800;
   cursor: pointer;
 }
+
+/* the booklet's texts: the cover, the book's lines one per row, a picture for a word, a missing letter */
+.sr-tcover {
+  width: clamp(64px, 12vw, 110px);
+  max-height: 110px;
+  object-fit: contain;
+}
+.sr-count i {
+  font-weight: 400;
+}
+.sr-text.book .sr-para {
+  margin: 0;
+  text-indent: 0;
+}
+.sr-text.book .sr-line {
+  display: block;
+}
+.sr-text.book .sr-para > .sr-line:first-child {
+  text-indent: 1.5em;
+}
+.sr-iw {
+  height: 1.7em;
+  max-width: 4.5em;
+  object-fit: contain;
+  vertical-align: middle;
+  margin: 0 0.1em;
+  mix-blend-mode: multiply; /* the white around the picture takes the colour of the page */
+}
+.sr-sq {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin: 0 0.04em;
+  background: #3da9e0;
+  vertical-align: 0.05em;
+}
+/* the letters cut off as in the book: each line (1.7em high) keeps only its top (cut-bottom) or its bottom part (cut-top) */
+.sr-text.cut-bottom,
+.sr-text.cut-top {
+  line-height: 1.7;
+}
+.sr-text.cut-bottom {
+  -webkit-mask-image: repeating-linear-gradient(
+    to bottom,
+    #000 0 1.12em,
+    transparent 1.12em 1.7em
+  );
+  mask-image: repeating-linear-gradient(
+    to bottom,
+    #000 0 1.12em,
+    transparent 1.12em 1.7em
+  );
+}
+.sr-text.cut-top {
+  -webkit-mask-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 0.72em,
+    #000 0.72em 1.7em
+  );
+  mask-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 0.72em,
+    #000 0.72em 1.7em
+  );
+}
