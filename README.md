@@ -213,6 +213,29 @@ Expressions are text with `+ − · :` and brackets (`×` and `-` are read too).
 New lesson: the `optima-math` skill (`.claude/skills/optima-math/SKILL.md`): write `lesson-N.js`, run `scripts/add.js` (the html, the card in `lessons.js`,
 `also` and `countLabel` in `games.js`), run `scripts/check.js`, and bump `VERSION` in `sw.js`.
 
+## Speed reading (Optima, Grade 3: Швидкочитання)
+
+Folder: `optima/grade-3/speed-reading/`. One card on the Optima home page ("Швидкочитання", colour `--sread`) opens `index.html`: the cards of `list.js`
+(`items: [{sec, n, label, title, en, path, ic | cover, note}]`) in three side-bar sections (`Kit.sideNav`): **🎯 Щодня** (`sec: "daily"`), **📒 Книжка** (`"book"`), **⏱ Тексти** (`"texts"`).
+Engine: `shared/speed-reading.js` + `.css` (`<body data-view="list">` for the hub, `<body data-game="…" data-sec="daily|book|texts">` for a game; `data-sec` = the hub section the back link opens).
+Everything on screen is Ukrainian (Nunito). Sources and what each part became: `SOURCES.md` in the folder.
+
+- **Щодня** (from the 30-day programme `speed-reading.txt`, grouped by skill, no days): data `daily.js` (`window.DAILY`) and `catch.js` (`window.CATCH`, look-alike groups).
+  Games: `catch` «Ловимо фішки» (`shared/word-games.js` with `data-lang="uk"`: 👀 see / 🔊 hear the word, levels Склади · Слова · Закінчення), `flash` «Склади-блискавки»,
+  `which` «Яке слово?» (uses `catch.js`), `gaps` «Пропущене», `phrases` «Читаємо фразами», `pics` «Яка картинка?» (`Kit.scene` pictures that grow step by step),
+  and four texts `text-garden|forest|library|kitten.js` (`<body data-game="text">`).
+- **Книжка** (eye exercises of «Школа швидкочитання, 1 клас»): data `book.js` (`window.BOOK`, one key per game, the book page in a comment), pictures `img/book/`.
+  Games: `schulte`, `table`, `wedge`, `odd`, `sizes`, `colors`, `cross`, `poem`, `anagram` and `mirror` (tiles: `Kit.dragTiles`, the page loads `drag-words.css`), `circle`, `split`, `hidden`, `lines`.
+- **Тексти**: the booklet's 14 texts, `text-pN.js` (N = the book page) with pictures in `img/texts/`. Kept exactly as printed: syllables, `{name}` = a picture in place of a word,
+  `■` = a missing letter, `cut: "bottom" | "top"` = the letters cut off (the data has the whole words; CSS masks each line).
+
+A text page (`window.TEXT`): `{key, title, ic | cover, page, author, words, book, paras: [[lines]], q: [{q, o: [[answer, emoji], …]} | {q, open: true}], readings, mist, dialog, roles, cut}`.
+Tabs: 📖 Читаю (blurred until ▶, stopwatch, words per minute, record or the times of `readings`; «Увесь текст» or «По реченню / По рядку»), ❓ Питання (first option right), 🔎 Помилки (`mist: [{s, bad, fix}]`).
+Games end with stars and "N з M з першого разу" (or the time and record); the choices of a start screen are kept on the device (`sr-<game>-…`).
+
+New material: add to the data file (or a new `text-*.js` + a copy of `text-garden.html`), a card in `list.js`, the files in `also` of the Швидкочитання entry in `games.js`
+(and `countLabel`), a row in `SOURCES.md`, and bump `VERSION` in `sw.js`.
+
 ## Speech games (Мовлення)
 
 The third button in the school switch (🗣️ Мовлення). Games for a child with aphasia: everything is said aloud, a picture on every item.
@@ -625,6 +648,7 @@ the emoji scene pictures of the texts come from `.claude/scripts/arabic-reading-
 
 - `catch.html` «اِلْتَقِطِ الْكَلِمَةَ»: a word is said, word chips fly in from every side, tap the right one (each tapped chip is read aloud); 3 right taps fill a bucket,
   a wrong tap spills water; a new word starts with 3 chips (the target at a random place) and the target never comes before 2 other chips; 10 buckets end the game and the best time of the level (2–3 letters, long words) is kept on the device. Words: `game-words.js`.
+  The same game runs in Ukrainian with `<body data-lang="uk">` (Optima Швидкочитання, `optima/grade-3/speed-reading/catch.html`): levels from `window.CATCH` (look-alike groups), the word shown or said.
 - `gaps.html` «أَكْمِلِ الْجُمْلَةَ»: a sentence with a missing word, 5 words to choose from, a clock for each sentence (20 / 30 / 45 s, 1 / 2 min); a wrong word or the end of the time costs a heart (3 hearts);
   10 sentences win. The picture can be turned off (with it on, only the sentences that have a picture are used). Sentences: `game-sentences.js`.
 - Both data files are made by `node .claude/scripts/arabic-reading-game-data.js` from the Grade 3 Arabic lessons (their word lists and gap sentences) and the reading steps; run it again after new lessons.

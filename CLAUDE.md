@@ -263,6 +263,16 @@ Book: `~/Documents/2026-2027/Lucas/Optima/Літературне читання 
 - Check with `node .claude/scripts/ukr-reading-check.js <text.js> "<book.pdf>" <page>` (syllables, stress, the word lists, the text against the book page).
 - Check in the browser at a phone width (360–390px upright, sideways) and a landscape tablet: the longest Склади word, Читання to the end, the page turn.
 
+## Speed reading (Optima, Grade 3: Швидкочитання)
+
+Folder `optima/grade-3/speed-reading/`, engine `shared/speed-reading.js` + `.css` (don't copy it; a game or text is data in `daily.js`, `book.js`, `catch.js` or `text-*.js`). Format in README: "Speed reading".
+Sources: `~/Documents/2026-2027/Lucas/Optima/` (`speed-reading.txt` = the 30-day programme → Щодня; `швидкочитання.pdf` = «Школа швидкочитання» → Книжка and Тексти). Log: `SOURCES.md` in the folder.
+
+- No days or weeks: the programme's material is grouped by skill into small games. The hub has three sections (Щодня · Книжка · Тексти).
+- The booklet stays exactly as printed: words run together, missing letters (■), letters cut off (`cut`), even a likely misprint. Never "fix" them; ask only when an answer can't be worked out.
+- Answers the book does not give are worked out (letter colours and sizes measured on the scan) and listed for the user before building; the made-up ones are noted in `SOURCES.md`.
+- Check with real taps in headless Chrome: every game to its end screen, at a phone width and a landscape tablet. Then `also` / `countLabel` in `games.js`; `VERSION` bump in `sw.js` last.
+
 ## Ukrainian math (Optima, Grade 3)
 
 Folder `optima/grade-3/math/`, engine `shared/math-uk.js` + `.css` (don't copy them; a lesson is only a data file). Format in README: "Ukrainian math (Optima, Grade 3)".
