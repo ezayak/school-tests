@@ -1,4 +1,4 @@
-/* Arabic reading games (shared/arabic-games.js): Catch the word, Complete the sentence. Load after theme.css and quiz.css. */
+/* Reading games (shared/word-games.js): Catch the word, Complete the sentence. Load after theme.css and lesson.css. */
 .ar {
   font-family:
     "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting", "Times New Roman",

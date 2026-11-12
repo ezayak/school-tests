@@ -620,7 +620,7 @@ hamza and ى, sentences and texts (the last one has a `story` tab with the texts
 the emoji scene pictures of the texts come from `.claude/scripts/arabic-reading-scenes.py`. Check a step with `node .claude/scripts/arabic-reading-check.js arabic-reading/<step>.js`
 (every word glossed, a picture on every item and text part, every image exists).
 
-**Reading games** (🎮, a section of its own on both Arabic hubs, `window.READING_GAMES` in `arabic-reading/lessons.js`): one engine `shared/arabic-games.js` + `.css`
+**Reading games** (🎮, a section of its own on both Arabic hubs, `window.READING_GAMES` in `arabic-reading/lessons.js`): one engine `shared/word-games.js` + `.css`
 (`<body data-game="catch|gaps">`), a page per game in `arabic-reading/`, a tile in `img/<game>/tile.jpg` (`.claude/scripts/arabic-reading-tiles.py`). A new game is a new entry in `READING_GAMES`:
 
 - `catch.html` «اِلْتَقِطِ الْكَلِمَةَ»: a word is said, word chips fly in from every side, tap the right one (each tapped chip is read aloud); 3 right taps fill a bucket,
