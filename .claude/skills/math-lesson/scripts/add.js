@@ -98,6 +98,7 @@ fs.writeFileSync(
 const files = [
   `${ROOT}/lessons.js`,
   `${ROOT}/times/index.html`,
+  `${ROOT}/times/division.html`,
   `${ROOT}/times/times.js`,
 ];
 const units = fs
@@ -158,7 +159,7 @@ const entry = g.slice(g.lastIndexOf("{", at), a0);
 const fixed = entry
   .replace(
     /countLabel:\s*"[^"]*"/,
-    `countLabel: "${unitPages} unit lessons · ${book.length} book lessons · Units ${num(units[0].slice(5))[0]}–${num(units[units.length - 1].slice(5))[0]} · Multiplication games"`,
+    `countLabel: "${unitPages} unit lessons · ${book.length} book lessons · Units ${num(units[0].slice(5))[0]}–${num(units[units.length - 1].slice(5))[0]} · Multiplication and division games"`,
   )
   .replace(
     /(topics:\s*"[^"]*?)( · Book lessons:[^"]*)?"/,

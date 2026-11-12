@@ -182,7 +182,7 @@ New text: copy `bohdanchyk.html` (change `bohdanchyk.js`), write its `.js`, add 
 Folder: `optima/grade-3/math/`. One card on the Optima home page ("Математика", colour `--math`) opens `index.html`, which lists the lessons from `lessons.js`
 (`parts: [{k, tab, ic, t, items: [{n, title, en, path, ic, note}]}]`, a part = a section of the book and a part of the side bar: `tab` its short name, `t` the book's title). Book: М. Козак, О. Корчевська «Математика. Частина 1» (2020); a lesson = one green title in the book.
 The engine is `shared/math-uk.js` + `shared/math-uk.css` (`<body data-view="list|lesson">`); a lesson page loads `shared/common.js`, `shared/math.js` (the bar schema), its `lesson-N.js`,
-`shared/times-games.js` (the two table games, also used by the Grade 4 Multiplication games; styles `shared/times-games.css`), then the engine.
+`shared/times-games.js` (the table games, also used by the Grade 4 Multiplication and Division games; styles `shared/times-games.css`), then the engine.
 Everything on screen is in Ukrainian. A lesson has two tabs of tiles:
 
 - **📘 Урок** – one tile per slide; the slides explain the topic with the book's examples (← →, 🔊).
@@ -953,7 +953,7 @@ and bump `VERSION` in `sw.js`.
 Folder: `grade-4/math/`. One card on the home page ("Math", under Subjects, colour `--math`) opens `index.html`, which lists the lessons from `lessons.js`,
 one chapter per book unit with a heading (`part: "Unit"`, `chapters: [{n, dir: "unit-2", title, items}]`). Book: Reveal Math, Grade 4 (Student Edition + Student Practice Book).
 In each unit: first the **unit page** (`label: "Unit"` on its card: "Unit 2"), made in Term 1 from the school sheets, then one card per **book lesson** (`n: "2-1"`, "Lesson 2-1").
-A chapter can set its own `part` (`part: ""` = only its title: "Multiplication games"); `flat: true` would show all the cards together without headings (any lessons list).
+A chapter can set its own `part` (`part: ""` = only its title: "Multiplication and division games"); `flat: true` would show all the cards together without headings (any lessons list).
 Unit pages: Unit 2 `place-value.html` (place value, compare, round), Unit 3 `add-subtract.html` (columns with regrouping, word problems),
 Unit 4 `multiplication.html` (what multiplication is, times tables, times as many).
 Book lessons: `unit-N/lesson-N-M.js` + `.html`, pictures in `unit-N/img/lesson-N-M/` (`curious.jpg` = the Be Curious picture, also the cover). `key: "math4-l2-1"`, `unit: "Unit 2 · Lesson 2-1"`.
@@ -1007,10 +1007,14 @@ start screen with parts and length, matching rounds, score and review) that also
 lessons' question types, run through a small adapter object (`E`) that gives them the quiz look instead of the lesson look (`<body class="mx-rev">`,
 rules at the end of `shared/math.css`). Every word problem has its schema (`vis`).
 
-**Multiplication games**: `grade-4/math/times/index.html` + `times.js` (a card in `lessons.js` with its own `label: "Games"` and no cover, so the hub shows its emoji).
-Pick a times table 2–12 (n × 1 … n × 12) or 🎲 Random, then a game from `shared/times-games.js` (the Optima lessons' games, in English):
-🎲 Mixed up (type each answer; Random: 10, 20 or 30 sums picked from 2 × 2 … 12 × 12) and 🚀 Rockets (Random: all 121 sums, until they are done or 5 mistakes).
-Best scores, the number picked and the rocket speed are saved on the device (`tg-math4-*`).
+**Multiplication and division games**: `grade-4/math/times/index.html` (×) and `division.html` (÷, the same page with `<body data-op="div">`), both run by `times.js`
+(two cards in `lessons.js` with their own `label: "Games"` and no cover, so the hub shows their emoji).
+Pick a table 2–12 (n × 1 … n × 12, or n · 1 ÷ n … n · 12 ÷ n) or 🎲 Random, then a game from `shared/times-games.js` (the Optima lessons' games, in English):
+🎲 Mixed up (type each answer; Random: 10, 20 or 30 sums picked from 2 × 2 … 12 × 12 / 4 ÷ 2 … 144 ÷ 12) and 🚀 Rockets (Random: all 121 sums, until they are done or 5 mistakes);
+🧠 Memory (6, 8 or 12 pairs of a sum and its answer face down; only the steps are counted, two cards turned = one step, the fewest are saved);
+🔗 Matching (6, 8 or 12 pairs; two ways: join every sum to an answer, each pair gets a 🍎 mark, then ✓ Check, or a right pair disappears and a wrong one is red for 2 seconds).
+One tile per game; the choices (how many sums or pairs, the Matching way) are on the game's start screen (`G.setup`), the last ones are remembered.
+The pairs are picked at random, different answers first. Best scores and steps, the number picked and the rocket speed are saved on the device (`tg-math4-*`, `tg-div4-*`).
 
 After adding a lesson: add it to its unit in `lessons.js` (a new unit: a new `unit-N/` folder and a new entry in `chapters`), add its files to the `also: [...]` list of the Math entry in `games.js`,
 and bump `VERSION` in `sw.js`.

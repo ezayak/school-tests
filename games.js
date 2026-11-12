@@ -2162,14 +2162,15 @@ window.GAMES = [
     hub: true,
     lesson: "Lessons · pictures, number pad, schemas, games & exercises",
     topics:
-      "Place value · Add and subtract in columns · Word problems with a schema · Multiplication and times tables · Times-table games 2–12 · Book lessons: 2-1–2-4 · 3-1–3-9 · 4-1–4-4 · 5-1–5-6 · 6-1–6-8 · 7-1–7-8",
+      "Place value · Add and subtract in columns · Word problems with a schema · Multiplication and times tables · Times-table games 2–12 (× and ÷: type, rockets, memory, matching) · Book lessons: 2-1–2-4 · 3-1–3-9 · 4-1–4-4 · 5-1–5-6 · 6-1–6-8 · 7-1–7-8",
     path: "grade-4/math/index.html",
     countLabel:
-      "3 unit lessons · 39 book lessons · Units 2–7 · Multiplication games",
+      "3 unit lessons · 39 book lessons · Units 2–7 · Multiplication and division games",
     year: "2026–2027",
     also: [
       "grade-4/math/lessons.js",
       "grade-4/math/times/index.html",
+      "grade-4/math/times/division.html",
       "grade-4/math/times/times.js",
       "grade-4/math/unit-2/place-value.html",
       "grade-4/math/unit-2/place-value.js",
