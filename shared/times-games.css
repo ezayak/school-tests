@@ -1,5 +1,5 @@
-/* Times-table games (shared/times-games.js): 🎲 mixed up, 🚀 rockets and the result screen.
-   Pages: the Optima math lessons and the Grade 4 Math "Multiplication games". Loads after shared/theme.css,
+/* Times-table games (shared/times-games.js): 🎲 mixed up, 🚀 rockets, 🧠 memory, 🔗 match and the result screen.
+   Pages: the Optima math lessons and the Grade 4 Math "Multiplication games" / "Division games". Loads after shared/theme.css,
    shared/lesson.css (card, hud, btn, fb) and shared/math.css (the number pad .mx-pad). */
 .tg-expr {
   font-family: var(--display);
@@ -344,7 +344,153 @@
   margin-left: auto;
 }
 
-/* ---------- the Grade 4 "Multiplication games" page: pick a number, then a game ---------- */
+/* the start screen of a game with choices (pairs, mode) */
+.tg-ask {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.tg-ask .tg-speed {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tg-best {
+  min-height: 1.4em;
+  color: var(--muted);
+}
+/* 🧠 memory: cards face down (❓), turned over (.up), a pair found (.ok), a wrong pair (.no) */
+.tg-mem {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  gap: 10px;
+  width: min(760px, 100%);
+}
+.tg-card {
+  min-height: 80px;
+  padding: 4px;
+  font-family: var(--display);
+  font-size: 1.7rem;
+  white-space: nowrap;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--accent);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+}
+.tg-back {
+  font-family: var(--emoji);
+  font-size: 2rem;
+}
+.tg-card:not(.up) .tg-face,
+.tg-card.up .tg-back {
+  display: none;
+}
+.tg-card.up {
+  background: var(--card);
+  animation: tg-turn 0.25s ease-out;
+}
+@keyframes tg-turn {
+  from {
+    transform: rotateY(90deg);
+  }
+}
+.tg-card.ok,
+.tg-mi.ok {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 25%, var(--card));
+  cursor: default;
+}
+.tg-card.no,
+.tg-mi.no {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 22%, var(--card));
+}
+/* 🔗 match: the examples | their answers */
+.tg-mt {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 18px;
+  width: 100%;
+}
+.tg-mt-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  align-content: start;
+}
+.tg-mt-col.a {
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  padding-left: 18px;
+  border-left: 2.5px dashed var(--accent);
+}
+.tg-mi {
+  position: relative;
+  min-height: 62px;
+  padding: 4px 26px 4px 8px;
+  font-family: var(--display);
+  font-size: 1.6rem;
+  white-space: nowrap;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+.tg-mi:disabled {
+  cursor: default;
+}
+.tg-mi.on {
+  background: color-mix(in srgb, var(--cool) 14%, var(--card));
+}
+.tg-mi.sel {
+  outline: 3px solid var(--hl);
+  outline-offset: 1px;
+  background: color-mix(in srgb, var(--hl) 35%, var(--card));
+}
+.tg-mi.gone {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s,
+    visibility 0s 0.3s;
+}
+.tg-mk {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  font-family: var(--emoji);
+  font-size: 1.1rem;
+}
+@media (max-width: 480px) {
+  .tg-mem {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .tg-card {
+    min-height: 64px;
+    font-size: 1.05rem;
+  }
+  .tg-mt {
+    gap: 10px;
+  }
+  .tg-mt-col,
+  .tg-mt-col.a {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tg-mt-col.a {
+    padding-left: 10px;
+  }
+  .tg-mi {
+    font-size: 1.25rem;
+    padding-right: 22px;
+  }
+}
+
+/* ---------- the Grade 4 "Multiplication games" page: pick a number, then a game (also "Division games") ---------- */
 .tg-pick {
   gap: 12px;
 }
