@@ -408,3 +408,216 @@ body {
   font-size: 1.3rem;
   color: var(--good);
 }
+
+/* Книжка: a stopwatch in the bar */
+.sr-clk {
+  font-weight: 800;
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+.sr-find {
+  margin: 0;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.sr-find b {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0 8px;
+  border-radius: 10px;
+  background: var(--hl);
+  color: #1b2440;
+  font-size: 1.8rem;
+}
+/* Таблиці Шульте: a square of cells; the middle cell in bold (3×3, 5×5) or a red dot where four cells meet (4×4) */
+.sr-schulte {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  width: min(100%, 62vh, 520px);
+  aspect-ratio: 1;
+  align-self: center;
+  border: 3px solid var(--ink);
+}
+.sr-schulte.n3 {
+  --n: 3;
+}
+.sr-schulte.n4 {
+  --n: 4;
+}
+.sr-schulte.n5 {
+  --n: 5;
+}
+.sr-cell {
+  border: 1.5px solid var(--ink);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  /* the cell is the square's side / n: the number takes about 0.4 of it */
+  font-size: calc(min(86vw, 62vh, 520px) / var(--n) * 0.42);
+  padding: 0;
+  font-weight: 400;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.sr-cell.mid {
+  font-weight: 800;
+}
+.sr-cell.ok {
+  background: color-mix(in srgb, var(--good) 14%, var(--card));
+}
+.sr-cell.no {
+  animation: shake 0.35s;
+  background: color-mix(in srgb, var(--bad) 22%, var(--card));
+}
+.sr-focus {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--bad);
+  pointer-events: none;
+}
+/* Складова таблиця: the syllable to read lights up, the ones read go grey */
+.sr-tablewrap {
+  max-height: 62vh;
+  overflow: auto;
+  align-self: center;
+  max-width: 100%;
+}
+.sr-table {
+  border-collapse: collapse;
+  font-size: clamp(1rem, 3.6vw, 2rem);
+  font-weight: 700;
+}
+.sr-table td,
+.sr-table th {
+  min-width: 2.2em;
+  padding: 4px 6px;
+  border: 1.5px solid var(--ulit);
+  text-align: center;
+}
+.sr-table th {
+  border: 0;
+  color: var(--bad);
+  font-size: 1.4em;
+}
+/* a phone: the columns share the width exactly */
+@media (max-width: 600px) {
+  .sr-tablewrap {
+    align-self: stretch;
+  }
+  .sr-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+  .sr-table td,
+  .sr-table th {
+    min-width: 0;
+    padding: 4px 0;
+  }
+}
+.sr-table td.now {
+  background: var(--hl);
+  color: #1b2440;
+}
+.sr-table td.past {
+  color: var(--muted);
+}
+/* Клин: each row is a word in two halves around the dot; --gap grows row by row */
+.sr-wedge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: clamp(1.5rem, 4.2vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.5;
+}
+.sr-wrow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: min(100%, 720px);
+  padding: 0 8px;
+  border-radius: 12px;
+  color: var(--muted);
+}
+.sr-wrow .l {
+  text-align: right;
+  padding-right: var(--gap);
+}
+.sr-wrow .r {
+  padding-left: var(--gap);
+}
+.sr-wrow.now {
+  background: color-mix(in srgb, var(--hl) 55%, transparent);
+  color: var(--ink);
+}
+.sr-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bad);
+}
+/* Зайве слово: the column of words */
+.sr-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(100%, 360px);
+  align-self: center;
+}
+.sr-col .opt {
+  font-weight: 800;
+}
+/* Велика — маленька: the letters in their sizes, and the word they make */
+.sr-letters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  min-height: 7rem;
+}
+.sr-big {
+  padding: 0 4px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: var(--ulit);
+  font: inherit;
+  font-size: calc(var(--z) * clamp(4rem, 12vw, 7rem));
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+.sr-big.used {
+  opacity: 0.2;
+}
+.sr-big.no {
+  animation: shake 0.35s;
+  color: var(--bad);
+}
+.sr-slots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.sr-slots i {
+  display: grid;
+  place-items: center;
+  width: 1.4em;
+  height: 1.6em;
+  border-bottom: 4px solid var(--ink);
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-style: normal;
+  font-weight: 800;
+}
+.sr-slots.done i {
+  border-color: var(--good);
+  color: var(--good);
+}

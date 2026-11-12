@@ -2474,7 +2474,7 @@ window.GAMES = [
     topics:
       "Ловимо фішки · склади · довгі слова · закінчення · таблиці Шульте · тексти з книжки «Школа швидкочитання»",
     path: "optima/grade-3/speed-reading/index.html",
-    countLabel: "6 ігор · 4 тексти",
+    countLabel: "11 ігор · 4 тексти",
     year: "2026–2027",
     also: [
       "optima/grade-3/speed-reading/list.js",
@@ -2494,6 +2494,12 @@ window.GAMES = [
       "optima/grade-3/speed-reading/text-library.js",
       "optima/grade-3/speed-reading/text-kitten.html",
       "optima/grade-3/speed-reading/text-kitten.js",
+      "optima/grade-3/speed-reading/book.js",
+      "optima/grade-3/speed-reading/schulte.html",
+      "optima/grade-3/speed-reading/table.html",
+      "optima/grade-3/speed-reading/wedge.html",
+      "optima/grade-3/speed-reading/odd.html",
+      "optima/grade-3/speed-reading/sizes.html",
     ],
   },
   {

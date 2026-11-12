@@ -13,6 +13,12 @@
 //          the parent taps ✓ Прочитав or ↺ Ще раз. Data: window.DAILY.phrases.
 //   pics   «Яка картинка?»: an instruction and 3 pictures (Kit.scene); the picture grows step by step.
 //          Data: window.DAILY.pics.
+// Книжка (data: window.BOOK from book.js; data-sec="book"):
+//   schulte «Таблиці Шульте»: tap 1 → 9 (16, 25, letters) looking at the middle; time and record per set.
+//   table  «Складова таблиця»: a syllable lights up and moves along the book's arrows (Далі, or at a pace).
+//   wedge  «Клин»: rows of a word cut in two, the halves further apart each row; they light up down, then up faster.
+//   odd    «Зайве слово»: a column of one word 3 times and a look-alike; tap the odd one (look-alikes from catch.js).
+//   sizes  «Велика — маленька»: letters of a word in different sizes; tap them from the biggest (p. 10) or smallest (p. 28).
 // <body data-game="text"> → a text (window.TEXT from text-<name>.js): 📖 Читаю with a stopwatch and words per minute
 //   (the best time on this device, or the times of T.readings: the same text read several times), ❓ Питання, 🔎 Помилки.
 (function () {
@@ -682,7 +688,484 @@
     },
   };
 
-  const GAMES = { flash, which, gaps, phrases, pics };
+  /* ================= Книжка: shared parts ================= */
+  const BOOK = window.BOOK || {};
+  const mmss = (ms) => {
+    const s = Math.max(0, Math.round(ms / 1000));
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  };
+  const PACE = [
+    ["tap", "сам"],
+    ["2", "2 с"],
+    ["1.5", "1,5 с"],
+    ["1", "1 с"],
+    ["0.7", "0,7 с"],
+  ];
+  // a stopwatch in the bar (#clk); returns {ms(), stop()}
+  function stopwatch() {
+    const t0 = Date.now();
+    const id = setInterval(() => {
+      const c = app.querySelector("#clk");
+      if (c) c.textContent = mmss(Date.now() - t0);
+    }, 250);
+    timers.push(id);
+    return { ms: () => Date.now() - t0, stop: () => clearInterval(id) };
+  }
+  // a Ukrainian count: plural(3, ["таблиця", "таблиці", "таблиць"]) → "3 таблиці"
+  const plural = (n, [one, few, many]) => {
+    const t = n % 10,
+      h = n % 100;
+    return `${n} ${t === 1 && h !== 11 ? one : t >= 2 && t <= 4 && (h < 12 || h > 14) ? few : many}`;
+  };
+  const clockHTML = '<span class="sr-clk">⏱ <b id="clk">0:00</b></span>';
+  // the end of a timed game: the time, and the best time of this set on this device (best: false = no record kept)
+  function endTimed(g, set, ms, line, best = true) {
+    stopAll();
+    const K = `sr-${g.key}-best-${set.k}`,
+      b = +store.get(K, 0),
+      rec = best && (!b || ms < b);
+    if (rec) store.set(K, ms);
+    app.innerHTML = `<section class="card pop sr-end">
+      ${links}
+      <div class="sr-hero" aria-hidden="true">${rec ? "🏆" : "🎉"}</div>
+      <h1 class="hero-title">Молодець!</h1>
+      <p class="sr-score">⏱ <b>${mmss(ms)}</b></p>
+      <p class="note">${esc(set.t)}${line ? " · " + esc(line) : ""}</p>
+      ${best ? `<p class="howto">${rec ? "Новий рекорд!" : `Твій рекорд: ${mmss(b)}`}</p>` : ""}
+      <div class="row sr-row"><button class="btn big" id="again" type="button">Грати ще</button><button class="btn ghost" id="sets" type="button">Інший набір</button></div>
+    </section>`;
+    say(rec ? "Новий рекорд!" : "Молодець!");
+    app.querySelector("#again").onclick = () => g.play(set, g.last || {});
+    app.querySelector("#sets").onclick = () => start(g);
+  }
+
+  /* ================= «Таблиці Шульте» ================= */
+  const ABC = "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя".split("");
+  const schulte = {
+    key: "schulte",
+    ic: "🔢",
+    title: "Таблиці Шульте",
+    howto:
+      "Дивись у середину таблиці і не відводь погляду. Знайди очима і торкнись чисел по порядку: 1, 2, 3… Чим швидше, тим краще!",
+    sets: [
+      { k: "book", t: "З книжки · 3×3", sub: "с. 33", n: 3 },
+      { k: "n4", t: "Числа · 4×4", sub: "1 … 16", n: 4 },
+      { k: "n5", t: "Числа · 5×5", sub: "1 … 25", n: 5 },
+      { k: "a4", t: "Літери · 4×4", sub: "а б в … л", n: 4, abc: true },
+    ],
+    play(set, o) {
+      stopAll();
+      schulte.last = o;
+      const N = set.n * set.n;
+      // the tables of a round: 5 of the book's, or 3 made up
+      const tables =
+        set.k === "book"
+          ? shuf(BOOK.schulte || []).slice(0, 5)
+          : Array.from({ length: 3 }, () =>
+              shuf(Array.from({ length: N }, (_, i) => i + 1)),
+            );
+      const label = (v) => (set.abc ? ABC[v - 1] : String(v));
+      let ti = 0,
+        want = 1,
+        miss = 0;
+      app.innerHTML = `<section class="card sr-play">
+        ${bar(set, clockHTML)}
+        <p class="sr-find">Шукай: <b id="want"></b></p>
+        <div class="sr-schulte n${set.n}" id="grid"></div>
+        <div class="sr-dots" id="dots"></div>
+      </section>`;
+      const grid = app.querySelector("#grid");
+      const draw = () => {
+        const t = tables[ti],
+          mid = set.n % 2 ? (N - 1) / 2 : -1;
+        want = 1;
+        app.querySelector("#want").textContent = label(1);
+        app.querySelector("#prog").textContent = `${ti + 1} / ${tables.length}`;
+        app.querySelector("#dots").innerHTML = dots(tables.length, ti, []);
+        grid.innerHTML =
+          t
+            .map(
+              (v, i) =>
+                `<button type="button" class="sr-cell${i === mid ? " mid" : ""}" data-v="${v}">${esc(label(v))}</button>`,
+            )
+            .join("") +
+          (set.n % 2 ? "" : '<i class="sr-focus" aria-hidden="true"></i>');
+        grid.querySelectorAll(".sr-cell").forEach(
+          (b) =>
+            (b.onpointerdown = (e) => {
+              e.preventDefault();
+              if (want > N) return; // the table is done: the next one is coming
+              if (+b.dataset.v === want) {
+                b.classList.add("ok");
+                if (++want > N) {
+                  if (++ti >= tables.length)
+                    return endTimed(
+                      schulte,
+                      set,
+                      sw.ms(),
+                      `${plural(tables.length, ["таблиця", "таблиці", "таблиць"])} · помилок: ${miss}`,
+                    );
+                  return later(draw, 400);
+                }
+                app.querySelector("#want").textContent = label(want);
+              } else {
+                miss++;
+                b.classList.remove("no");
+                void b.offsetWidth;
+                b.classList.add("no");
+              }
+            }),
+        );
+      };
+      const sw = stopwatch();
+      app.querySelector("#quit").onclick = () => start(schulte);
+      draw();
+    },
+  };
+
+  /* ================= «Складова таблиця» ================= */
+  // a set → its rows of syllables, the order they light up in, and the arrows above the columns
+  function tableSet(k) {
+    const T = BOOK.table || {},
+      V = T.vowels || [];
+    const flat = (rows, dirs) => {
+      // dirs: columns read down / up one after another; none: rows left to right
+      if (!dirs) return rows.flatMap((r, i) => r.map((_, j) => [i, j]));
+      return dirs.flatMap((d, j) => {
+        const col = rows.map((_, i) => [i, j]);
+        return d > 0 ? col : col.reverse();
+      });
+    };
+    if (k === "cv") {
+      const rows = shuf(T.consonants || [])
+        .slice(0, 4)
+        .flatMap((c) => [V.map((v) => c + v), V.map((v) => v + c)]);
+      return { rows, path: flat(rows) };
+    }
+    if (k === "r") {
+      const rows = shuf(T.withR || [])
+        .slice(0, 6)
+        .map((c) => V.map((v) => c + "р" + v));
+      return { rows, path: flat(rows) };
+    }
+    const G = T[k] || { rows: [], dirs: [] };
+    return { rows: G.rows, path: flat(G.rows, G.dirs), dirs: G.dirs };
+  }
+  const table = {
+    key: "table",
+    ic: "🔡",
+    title: "Складова таблиця",
+    howto:
+      "Склад світиться: прочитай його вголос і стеж очима, куди світло піде далі. «Сам» — натискай Далі; або вибери темп, і світло піде саме.",
+    sets: [
+      { k: "cv", t: "Таблиця", sub: "ма мо му · ам ом ум" },
+      { k: "r", t: "Приголосний + р", sub: "дра дро дру · с. 14" },
+      { k: "grid12", t: "Стовпчики · с. 12", sub: "↓ ↑ за стрілками" },
+      { k: "grid14", t: "Змійка · с. 14", sub: "↓ ↑ ↓ ↑ ↓" },
+    ],
+    opts: () => [{ k: "pace", lab: "Далі", vals: PACE, def: "tap" }],
+    play(set, o) {
+      stopAll();
+      table.last = o;
+      const { rows, path, dirs } = tableSet(set.k);
+      const auto = o.pace !== "tap" ? +o.pace * 1000 : 0;
+      let at = 0;
+      app.innerHTML = `<section class="card sr-play">
+        ${bar(set, clockHTML)}
+        <div class="sr-tablewrap"><table class="sr-table">${dirs ? `<tr class="sr-arrows">${dirs.map((d) => `<th>${d > 0 ? "↓" : "↑"}</th>`).join("")}</tr>` : ""}${rows
+          .map(
+            (r, i) =>
+              `<tr>${r.map((s, j) => `<td data-at="${i}-${j}">${esc(s)}</td>`).join("")}</tr>`,
+          )
+          .join("")}</table></div>
+        <div class="sr-btns">${auto ? "" : '<button type="button" class="btn big sr-yes" id="nx">Далі →</button>'}</div>
+      </section>`;
+      const cells = path.map(([i, j]) =>
+        app.querySelector(`[data-at="${i}-${j}"]`),
+      );
+      const sw = stopwatch();
+      const light = () => {
+        cells.forEach((c, n) => {
+          c.classList.toggle("now", n === at);
+          c.classList.toggle("past", n < at);
+        });
+        cells[at].scrollIntoView({ block: "nearest", behavior: "smooth" });
+        app.querySelector("#prog").textContent = `${at + 1} / ${cells.length}`;
+      };
+      const step = () => {
+        if (++at >= cells.length)
+          return endTimed(
+            table,
+            set,
+            sw.ms(),
+            plural(cells.length, ["склад", "склади", "складів"]),
+            !auto,
+          );
+        light();
+        if (auto) later(step, auto);
+      };
+      const nx = app.querySelector("#nx");
+      if (nx) nx.onclick = step;
+      app.querySelector("#quit").onclick = () => start(table);
+      light();
+      if (auto) later(step, auto);
+    },
+  };
+
+  /* ================= «Клин» ================= */
+  // the rows of a wedge light up one by one, down and then back up (faster); the halves of a word move apart row by row
+  const wedge = {
+    key: "wedge",
+    ic: "🔺",
+    title: "Клин",
+    howto:
+      "Дивись тільки на крапку посередині! Краєм ока побач обидві половинки і прочитай слово цілим. Спершу згори вниз, потім знизу вгору — швидше.",
+    sets: BOOK.wedge || [],
+    opts: () => [
+      {
+        k: "pace",
+        lab: "Темп",
+        vals: [
+          ["3", "3 с"],
+          ["2", "2 с"],
+          ["1.5", "1,5 с"],
+          ["1", "1 с"],
+        ],
+        def: "2",
+      },
+    ],
+    play(set, o) {
+      stopAll();
+      wedge.last = o;
+      const t = +o.pace * 1000;
+      let wi = 0;
+      const t0 = Date.now();
+      app.innerHTML = `<section class="card sr-play">
+        ${bar(set)}
+        <div class="sr-wedge" id="wg"></div>
+        <p class="sr-tip" id="way"></p>
+        <div class="sr-dots" id="dots"></div>
+      </section>`;
+      const wg = app.querySelector("#wg"),
+        way = app.querySelector("#way");
+      const run = () => {
+        const W = set.wedges[wi];
+        app.querySelector("#prog").textContent =
+          `${wi + 1} / ${set.wedges.length}`;
+        app.querySelector("#dots").innerHTML = dots(set.wedges.length, wi, []);
+        wg.innerHTML = W.map((w, i) => {
+          const [a, b] = w.split("-");
+          return `<div class="sr-wrow" style="--gap:${0.3 + i * 0.55}em"><span class="l">${esc(a)}</span><i class="sr-dot"></i><span class="r">${esc(b)}</span></div>`;
+        }).join("");
+        const rowsEl = [...wg.children];
+        // down at the chosen pace, then up a quarter faster
+        const order = [
+          ...rowsEl.map((r) => [r, t, "↓ Згори вниз"]),
+          ...rowsEl
+            .slice()
+            .reverse()
+            .map((r) => [r, t * 0.75, "↑ Знизу вгору — швидше!"]),
+        ];
+        let n = 0;
+        const go = () => {
+          rowsEl.forEach((r) => r.classList.remove("now"));
+          if (n >= order.length) {
+            if (++wi >= set.wedges.length)
+              return endTimed(
+                wedge,
+                set,
+                Date.now() - t0,
+                plural(set.wedges.length, ["клин", "клини", "клинів"]),
+                false,
+              );
+            return later(run, 600);
+          }
+          const [r, ms, w] = order[n++];
+          r.classList.add("now");
+          way.textContent = w;
+          later(go, ms);
+        };
+        go();
+      };
+      app.querySelector("#quit").onclick = () => start(wedge);
+      run();
+    },
+  };
+
+  /* ================= «Зайве слово» ================= */
+  // a column of 4: the same word 3 times and a look-alike once; tap the one that is different
+  function oddColumns(set) {
+    if (set.k === "book") return shuf(BOOK.odd || []);
+    const L = ((window.CATCH || {}).levels || []).find((l) => l.k === set.k);
+    const cols = [];
+    for (const g of L ? L.groups : [])
+      for (const w of g)
+        if (g.length > 1) {
+          const other = shuf(g.filter((x) => x !== w))[0];
+          const c = [w, w, w];
+          c.splice(Math.floor(Math.random() * 4), 0, other);
+          cols.push(c);
+        }
+    return shuf(cols).slice(0, ROUND);
+  }
+  const odd = {
+    key: "odd",
+    ic: "🕵️",
+    title: "Зайве слово",
+    howto:
+      "Прочитай стовпчик швидко. Одне слово не таке, як інші: торкнись його!",
+    sets: [
+      { k: "book", t: "З книжки · с. 20", sub: "рис · лис · рис · рис" },
+      { k: "words", t: "Схожі слова", sub: "корова · корона" },
+      { k: "end", t: "Закінчення", sub: "книга · книги" },
+    ],
+    play(set, o) {
+      stopAll();
+      odd.last = o;
+      const cols = oddColumns(set);
+      const n = cols.length,
+        marks = [];
+      let k = 0,
+        right = 0;
+      app.innerHTML = `<section class="card sr-play">
+        ${bar(set, clockHTML)}
+        <div class="sr-col" id="col"></div>
+        <div class="sr-dots" id="dots"></div>
+      </section>`;
+      const col = app.querySelector("#col");
+      const sw = stopwatch();
+      const ask = () => {
+        if (k >= n) {
+          sw.stop();
+          return end(odd, set, right, n, `Час: ${mmss(sw.ms())}`);
+        }
+        const c = cols[k],
+          one = c.find((w) => c.filter((x) => x === w).length === 1);
+        let tries = 0;
+        app.querySelector("#prog").textContent = `${marks.length} / ${n}`;
+        app.querySelector("#dots").innerHTML = dots(n, marks.length, marks);
+        col.innerHTML = c
+          .map(
+            (w, i) =>
+              `<button type="button" class="opt big" data-i="${i}">${esc(w)}</button>`,
+          )
+          .join("");
+        col.querySelectorAll(".opt").forEach(
+          (b) =>
+            (b.onclick = () => {
+              if (c[+b.dataset.i] === one) {
+                b.classList.add("right");
+                col
+                  .querySelectorAll(".opt")
+                  .forEach((x) => (x.disabled = true));
+                if (!tries) right++;
+                marks.push(tries ? "late" : "on");
+                say(one);
+                k++;
+                later(ask, 900);
+              } else {
+                tries++;
+                b.classList.add("wrong");
+                b.disabled = true;
+              }
+            }),
+        );
+      };
+      app.querySelector("#quit").onclick = () => start(odd);
+      ask();
+    },
+  };
+
+  /* ================= «Від більшої до меншої» ================= */
+  // the letters as printed, each its size: tap them from the biggest to the smallest (or back); they make the word
+  const sizes = {
+    key: "sizes",
+    ic: "🔠",
+    title: "Велика — маленька",
+    howto:
+      "Літери різного розміру. Торкайся їх по черзі: від найбільшої до найменшої (або навпаки) — і вийде слово!",
+    sets: BOOK.sizes || [],
+    play(set, o) {
+      stopAll();
+      sizes.last = o;
+      const items = shuf(set.items).slice(0, ROUND);
+      const n = items.length,
+        marks = [];
+      let k = 0,
+        right = 0;
+      app.innerHTML = `<section class="card sr-play">
+        ${bar(set)}
+        <p class="sr-tip">${set.dir === "down" ? "Від найбільшої до найменшої" : "Від найменшої до найбільшої"}</p>
+        <div class="sr-letters" id="ls"></div>
+        <div class="sr-slots" id="slots"></div>
+        <div class="sr-dots" id="dots"></div>
+      </section>`;
+      const ls = app.querySelector("#ls"),
+        slots = app.querySelector("#slots");
+      const ask = () => {
+        if (k >= n) return end(sizes, set, right, n);
+        const it = items[k],
+          L = it.w.length;
+        let next = 0,
+          tries = 0;
+        app.querySelector("#prog").textContent = `${marks.length} / ${n}`;
+        app.querySelector("#dots").innerHTML = dots(n, marks.length, marks);
+        // the size of a letter: the one read first is the biggest (p. 10) or the smallest (p. 28)
+        const size = (r) => {
+          const f = L > 1 ? r / (L - 1) : 0;
+          return (set.dir === "down" ? 1 - f * 0.6 : 0.4 + f * 0.6).toFixed(2);
+        };
+        ls.innerHTML = [...it.p]
+          .map(
+            (c, i) =>
+              `<button type="button" class="sr-big" data-r="${it.at[i]}" style="--z:${size(+it.at[i])}">${esc(c)}</button>`,
+          )
+          .join("");
+        slots.innerHTML = "<i></i>".repeat(L);
+        ls.querySelectorAll(".sr-big").forEach(
+          (b) =>
+            (b.onclick = () => {
+              if (+b.dataset.r === next) {
+                b.disabled = true;
+                b.classList.add("used");
+                slots.children[next].textContent = it.w[next];
+                if (++next === L) {
+                  slots.classList.add("done");
+                  if (!tries) right++;
+                  marks.push(tries ? "late" : "on");
+                  say(it.w);
+                  k++;
+                  later(() => {
+                    slots.classList.remove("done");
+                    ask();
+                  }, 1400);
+                }
+              } else {
+                tries++;
+                b.classList.remove("no");
+                void b.offsetWidth;
+                b.classList.add("no");
+              }
+            }),
+        );
+      };
+      app.querySelector("#quit").onclick = () => start(sizes);
+      ask();
+    },
+  };
+
+  const GAMES = {
+    flash,
+    which,
+    gaps,
+    phrases,
+    pics,
+    schulte,
+    table,
+    wedge,
+    odd,
+    sizes,
+  };
   if (GAMES[GAME]) start(GAMES[GAME]);
   if (GAME === "text") textPage(window.TEXT);
 
