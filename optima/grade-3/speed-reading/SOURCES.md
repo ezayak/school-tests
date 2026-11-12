@@ -17,13 +17,13 @@ Status: `planned` until the game is built, then `file · key`.
 | 3     | 10 words with clusters, by syllables                                       | `catch.js · words`; `daily.js · flash words`                                                                          |
 | 4     | Look-alike syllables (стра – стри – стро …)                                | `catch.js · syl`; `daily.js · flash similar`                                                                          |
 | 5     | Missing syllable (\_\_\_на → країна)                                       | `daily.js · gaps syl`                                                                                                 |
-| 6     | 5 phrases                                                                  | planned: Читаємо фразами                                                                                              |
+| 6     | 5 phrases                                                                  | `daily.js · phrases words` (word by word, then the whole phrase)                                                      |
 | 7     | Review                                                                     | skipped: no new material (the games mix all of it)                                                                    |
 | 8–9   | 7 long words by syllables, then whole                                      | `daily.js · flash long` (dashes on / off)                                                                             |
 | 10    | 6 pairs one syllable apart (корова – корона)                               | `catch.js · words`; `which.html` (from catch.js · words)                                                              |
 | 11    | 8 words, "don't skip the middle"                                           | `catch.js · words` (some of the words); `daily.js · flash long`                                                       |
 | 12    | 5 "which word did you read" pairs                                          | `catch.js · words` (without полудниця: not a word); `which.html` (from catch.js · words; АБВ switch for the capitals) |
-| 13    | 5 sentences                                                                | planned: Читаємо фразами                                                                                              |
+| 13    | 5 sentences                                                                | `daily.js · phrases groups` (split into groups here, as Day 22)                                                       |
 | 14    | Review                                                                     | skipped: no new material                                                                                              |
 | 15–16 | Nouns in 3 forms, singular – plural                                        | `catch.js · end`; `which.html` (from catch.js · end)                                                                  |
 | 17    | Choose the ending in a sentence                                            | `daily.js · gaps end`                                                                                                 |
@@ -31,10 +31,10 @@ Status: `planned` until the game is built, then `file · key`.
 | 19    | Complete the ending (читає, читатиме: as corrected at the end of the file) | `daily.js · gaps end`                                                                                                 |
 | 20    | «У шкільному саду» + 4 questions                                           | planned: text                                                                                                         |
 | 21    | Review                                                                     | skipped: no new material                                                                                              |
-| 22    | 4 sentences in phrases                                                     | planned: Читаємо фразами                                                                                              |
+| 22    | 4 sentences in phrases                                                     | `daily.js · phrases groups`                                                                                           |
 | 23–24 | «Мандрівка до лісу», read 3 times + find the mistake                       | planned: text + Знайди помилку                                                                                        |
 | 25    | Dialogue                                                                   | planned: text (two voices)                                                                                            |
-| 26    | 5 drawing instructions                                                     | planned: Яка картинка? (pick the picture that matches)                                                                |
+| 26    | 5 drawing instructions                                                     | `daily.js · pics house` (pick the picture; it grows step by step)                                                     |
 | 27    | «Загублене кошеня» (title as corrected) + 4 questions                      | planned: text                                                                                                         |
 | 28    | Retell                                                                     | skipped (oral)                                                                                                        |
 | 29    | Final word list with 4 marks                                               | skipped (the user decided: no check section); its words are in the games                                              |

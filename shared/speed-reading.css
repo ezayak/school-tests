@@ -96,11 +96,13 @@ body {
   gap: 12px;
 }
 .sr-name {
+  min-width: 0;
   font-weight: 800;
   font-size: 1.2rem;
 }
 .sr-prog {
   margin-left: auto;
+  white-space: nowrap;
   font-weight: 800;
   font-size: 1.2rem;
 }
@@ -193,6 +195,44 @@ body {
 .sr-gap.ok {
   background: color-mix(in srgb, var(--good) 30%, transparent);
   border-color: var(--good);
+}
+/* Читаємо фразами: the part to read lights up, the parts read go grey, at the end the whole sentence lights up */
+.sr-phr {
+  line-height: 1.7;
+}
+.sr-part {
+  padding: 0 6px;
+  border-radius: 10px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.sr-part.past {
+  color: var(--muted);
+}
+.sr-part.now {
+  background: var(--hl);
+  color: #1b2440;
+}
+.sr-part.all {
+  background: color-mix(in srgb, var(--good) 28%, transparent);
+}
+/* Яка картинка?: the instruction and three pictures */
+.sr-instr {
+  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+}
+.choices.sr-pics {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+.sr-pics .scene {
+  min-height: 0;
+  cursor: inherit;
+}
+/* the pictures do not move: no "play again" mark */
+.sr-pics .sc-re {
+  display: none;
 }
 .sr-next {
   display: flex;

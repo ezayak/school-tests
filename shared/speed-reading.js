@@ -9,6 +9,10 @@
 //          Data: the look-alike groups of window.CATCH (catch.js), a set per level.
 //   gaps   «Пропущене»: a word or sentence with a gap and its picture; tap the syllable, word or ending that fits.
 //          Data: window.DAILY.gaps.
+//   phrases «Читаємо фразами»: the parts of a sentence (" / ") light up one by one (Далі, or at a pace), then the whole;
+//          the parent taps ✓ Прочитав or ↺ Ще раз. Data: window.DAILY.phrases.
+//   pics   «Яка картинка?»: an instruction and 3 pictures (Kit.scene); the picture grows step by step.
+//          Data: window.DAILY.pics.
 (function () {
   "use strict";
   const { esc, shuf } = Kit;
@@ -494,6 +498,185 @@
     },
   };
 
-  const GAMES = { flash, which, gaps };
+  /* ================= «Читаємо фразами» ================= */
+  // the parts light up one by one (a tap on Далі, or by themselves at the chosen pace), then the whole sentence;
+  // the parent taps ✓ Прочитав (or ↺ Ще раз: the parts again from the start)
+  const phrases = {
+    key: "phrases",
+    ic: "🐾",
+    title: "Читаємо фразами",
+    howto:
+      "Частина речення світиться: прочитай її одним духом, не зупиняючись після кожного слова. Потім прочитай усе речення разом!",
+    sets: (window.DAILY || {}).phrases || [],
+    opts: () => [
+      {
+        k: "pace",
+        lab: "Далі",
+        vals: [
+          ["tap", "сам"],
+          ["3", "3 с"],
+          ["2", "2 с"],
+          ["1.5", "1,5 с"],
+        ],
+        def: "tap",
+      },
+    ],
+    play(set, o) {
+      stopAll();
+      phrases.last = o;
+      const auto = o.pace !== "tap" ? +o.pace * 1000 : 0;
+      const items = shuf(set.items).slice(0, ROUND);
+      const n = items.length,
+        marks = [];
+      let k = 0,
+        right = 0,
+        tries = 0,
+        at = 0;
+      app.innerHTML = `<section class="card sr-play">
+        ${bar(set)}
+        <div class="sr-qbox"><span class="sr-ic" id="ic" aria-hidden="true"></span><p class="sr-q sr-phr" id="q"></p></div>
+        <div class="sr-btns" id="btns"></div>
+        <div class="sr-dots" id="dots"></div>
+      </section>`;
+      const q = app.querySelector("#q"),
+        btns = app.querySelector("#btns");
+      const parts = () => items[k].s.split(" / ");
+      // at = the part that lights up; at = parts().length: the whole sentence
+      const draw = () => {
+        const p = parts(),
+          whole = at >= p.length;
+        q.innerHTML = p
+          .map(
+            (x, i) =>
+              `<span class="sr-part${whole ? " all" : i === at ? " now" : i < at ? " past" : ""}">${esc(x)}</span>`,
+          )
+          .join(" ");
+        if (whole) {
+          btns.innerHTML = `${V.has() ? '<button type="button" class="btn ghost" id="hear">🔊 Послухати</button>' : ""}<button type="button" class="btn ghost sr-no" id="re">↺ Ще раз</button><button type="button" class="btn big sr-yes" id="ok">✓ Прочитав</button>`;
+          const h = btns.querySelector("#hear");
+          if (h) h.onclick = () => say(p.join(" "));
+          btns.querySelector("#re").onclick = () => {
+            tries++;
+            at = 0;
+            step();
+          };
+          btns.querySelector("#ok").onclick = () => {
+            if (!tries) right++;
+            marks.push(tries ? "late" : "on");
+            k++;
+            ask();
+          };
+        } else
+          btns.innerHTML = auto
+            ? ""
+            : '<button type="button" class="btn big" id="nx">Далі →</button>';
+        const nx = btns.querySelector("#nx");
+        if (nx)
+          nx.onclick = () => {
+            at++;
+            step();
+          };
+      };
+      const step = () => {
+        stopAll();
+        draw();
+        if (auto && at < parts().length)
+          later(() => {
+            at++;
+            step();
+          }, auto);
+      };
+      const ask = () => {
+        if (k >= n) return end(phrases, set, right, n);
+        tries = 0;
+        at = 0;
+        app.querySelector("#prog").textContent = `${marks.length} / ${n}`;
+        app.querySelector("#dots").innerHTML = dots(n, marks.length, marks);
+        app.querySelector("#ic").textContent = items[k].ic || "";
+        step();
+      };
+      app.querySelector("#quit").onclick = () => start(phrases);
+      ask();
+    },
+  };
+
+  /* ================= «Яка картинка?» ================= */
+  // the steps in their order (the picture grows); each step: the instruction and 3 pictures, tap the one that shows it
+  const pics = {
+    key: "pics",
+    ic: "🖼️",
+    title: "Яка картинка?",
+    howto:
+      "Прочитай речення і знайди картинку, яка йому відповідає. З кожним реченням малюнок росте!",
+    sets: (window.DAILY || {}).pics || [],
+    play(set, o) {
+      stopAll();
+      pics.last = o;
+      const n = set.steps.length,
+        marks = [];
+      let k = 0,
+        right = 0,
+        sofar = [];
+      app.innerHTML = `<section class="card sr-play">
+        ${bar(set)}
+        <p class="sr-q sr-instr" id="q"></p>
+        <div class="choices sr-pics" id="opts"></div>
+        <div class="sr-next"><button type="button" class="btn big" id="next" hidden>Далі →</button></div>
+        <div class="sr-dots" id="dots"></div>
+      </section>`;
+      const q = app.querySelector("#q"),
+        box = app.querySelector("#opts"),
+        nextB = app.querySelector("#next");
+      const pic = (add) => Kit.scene({ bg: set.bg, items: [...sofar, ...add] });
+      const ask = () => {
+        if (k >= n) return end(pics, set, right, n);
+        const st = set.steps[k];
+        let tries = 0;
+        app.querySelector("#prog").textContent = `${marks.length} / ${n}`;
+        app.querySelector("#dots").innerHTML = dots(n, marks.length, marks);
+        q.textContent = st.q;
+        nextB.hidden = true;
+        const opts = shuf([
+          { ok: true, add: st.right },
+          ...st.wrong.map((w) => ({ ok: false, add: w })),
+        ]);
+        box.innerHTML = opts
+          .map(
+            (x, i) =>
+              `<button type="button" class="choice" data-i="${i}" aria-label="Картинка ${i + 1}">${pic(x.add)}</button>`,
+          )
+          .join("");
+        box.querySelectorAll(".choice").forEach(
+          (b) =>
+            (b.onclick = () => {
+              const x = opts[+b.dataset.i];
+              if (x.ok) {
+                b.classList.add("right");
+                box
+                  .querySelectorAll(".choice")
+                  .forEach((c) => (c.disabled = true));
+                if (!tries) right++;
+                marks.push(tries ? "late" : "on");
+                sofar = [...sofar, ...st.right];
+                say(st.q);
+                nextB.hidden = false;
+              } else {
+                tries++;
+                b.classList.add("wrong");
+                b.disabled = true;
+              }
+            }),
+        );
+      };
+      nextB.onclick = () => {
+        k++;
+        ask();
+      };
+      app.querySelector("#quit").onclick = () => start(pics);
+      ask();
+    },
+  };
+
+  const GAMES = { flash, which, gaps, phrases, pics };
   if (GAMES[GAME]) start(GAMES[GAME]);
 })();
