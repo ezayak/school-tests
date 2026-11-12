@@ -13,6 +13,8 @@
 //          the parent taps ✓ Прочитав or ↺ Ще раз. Data: window.DAILY.phrases.
 //   pics   «Яка картинка?»: an instruction and 3 pictures (Kit.scene); the picture grows step by step.
 //          Data: window.DAILY.pics.
+// <body data-game="text"> → a text (window.TEXT from text-<name>.js): 📖 Читаю with a stopwatch and words per minute
+//   (the best time on this device, or the times of T.readings: the same text read several times), ❓ Питання, 🔎 Помилки.
 (function () {
   "use strict";
   const { esc, shuf } = Kit;
@@ -100,7 +102,10 @@
   let timers = [];
   const later = (f, ms) => timers.push(setTimeout(f, ms));
   function stopAll() {
-    timers.forEach(clearTimeout);
+    timers.forEach((t) => {
+      clearTimeout(t);
+      clearInterval(t);
+    });
     timers = [];
     V.hush();
   }
@@ -679,4 +684,289 @@
 
   const GAMES = { flash, which, gaps, phrases, pics };
   if (GAMES[GAME]) start(GAMES[GAME]);
+  if (GAME === "text") textPage(window.TEXT);
+
+  /* ================= a text ================= */
+  // Tabs: 📖 Читаю (the text with a stopwatch: words per minute, the best on this device; or the readings of T.readings,
+  // each time kept), ❓ Питання (T.q), 🔎 Помилки (T.mist). «По реченню»: one sentence lights up at a time (Далі).
+  function textPage(T) {
+    const K = "sr-text-" + T.key;
+    const lines = T.paras.flat();
+    const words = lines
+      .join(" ")
+      .split(/\s+/)
+      .filter((w) => /[\p{L}\d]/u.test(w)).length;
+    const clock = (s) =>
+      `${Math.floor(s / 60)}:${String(Math.round(s) % 60).padStart(2, "0")}`;
+    const wpm = (s) => Math.round((words * 60) / Math.max(1, s));
+    const TABS = [
+      { k: "read", ic: "📖", t: "Читаю" },
+      T.q && { k: "q", ic: "❓", t: "Питання" },
+      T.mist && { k: "mist", ic: "🔎", t: "Помилки" },
+    ].filter(Boolean);
+    let tab = store.get(K + "-tab", "read");
+    if (!TABS.some((t) => t.k === tab)) tab = "read";
+    app.innerHTML = `<section class="card sr-textcard">
+      ${links}
+      <div class="sr-thead"><span class="sr-tic" aria-hidden="true">${esc(T.ic || "📖")}</span><h1 class="les-title">${esc(T.title)}</h1><span class="sr-count">${words} слів</span></div>
+      <div class="tabbox">${TABS.length > 1 ? `<div class="ftabs sr-n${TABS.length}" role="group" aria-label="Що робимо">${TABS.map((t) => `<button type="button" data-tab="${t.k}" aria-pressed="${t.k === tab}"><span class="ti">${t.ic} </span>${esc(t.t)}</button>`).join("")}</div>` : ""}
+      <div class="panel sr-pane" id="pane"></div></div>
+    </section>`;
+    document.title = `${T.title} · ${SUBJ}`;
+    const pane = app.querySelector("#pane");
+    const show = () => {
+      stopAll();
+      store.set(K + "-tab", tab);
+      app
+        .querySelectorAll("[data-tab]")
+        .forEach((b) => b.setAttribute("aria-pressed", b.dataset.tab === tab));
+      ({ read, q: questions, mist })[tab]();
+    };
+    app.querySelectorAll("[data-tab]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          tab = b.dataset.tab;
+          show();
+        }),
+    );
+
+    // the text: paragraphs of sentences; a dialogue: one line per speaker, in turn
+    const textHTML = () => {
+      let n = 0;
+      return T.paras
+        .map(
+          (p, pi) =>
+            `<p class="sr-para${T.dialog ? ` sr-role r${pi % 2}` : ""}">${T.dialog ? `<span class="sr-who">${esc(T.roles[pi % 2])}</span>` : ""}${p.map((l) => `<span class="sr-line" data-n="${n++}">${esc(l)}</span>`).join(" ")}</p>`,
+        )
+        .join("");
+    };
+
+    /* 📖 reading with a stopwatch */
+    function read() {
+      const R = T.readings;
+      let mode = store.get(K + "-mode", "all"),
+        ri = Math.min(+store.get(K + "-ri", 0) || 0, R ? R.length - 1 : 0);
+      const times = () =>
+        R ? JSON.parse(store.get(K + "-times", "[]") || "[]") : [];
+      const best = () => +store.get(K + "-best", 0);
+      pane.innerHTML = `<div class="opts-row center">
+          <div class="og"><span class="lab">Як читаємо</span><div class="seg" role="group" aria-label="Як читаємо"><button type="button" data-m="all" aria-pressed="${mode === "all"}">Увесь текст</button><button type="button" data-m="line" aria-pressed="${mode === "line"}">По реченню</button></div></div>
+          ${R ? `<div class="og"><span class="lab">Читання</span><div class="seg" role="group" aria-label="Читання">${R.map((_, i) => `<button type="button" data-r="${i}" aria-pressed="${i === ri}">${i + 1}</button>`).join("")}</div></div>` : ""}
+        </div>
+        ${R ? `<p class="sr-tip" id="tip"></p>` : ""}
+        <div class="sr-btns sr-stick" id="btns"></div>
+        <div class="sr-result" id="res"></div>
+        <div class="sr-text${T.dialog ? " sr-dialog" : ""}" id="txt">${textHTML()}</div>`;
+      const txt = pane.querySelector("#txt"),
+        btns = pane.querySelector("#btns"),
+        res = pane.querySelector("#res");
+      let t0 = 0,
+        at = 0,
+        tick = 0;
+      const results = () => {
+        if (R) {
+          const ts = times();
+          res.innerHTML = `<div class="sr-times">${R.map((_, i) => `<span class="${i === ri ? "now" : ""}"><b>${i + 1}</b> ${ts[i] ? `⏱ ${clock(ts[i])}` : "—"}</span>`).join("")}</div>`;
+          pane.querySelector("#tip").textContent = R[ri];
+        } else
+          res.innerHTML = best()
+            ? `<p class="note">🏆 Рекорд: ${clock(best())} · ${wpm(best())} слів за хвилину</p>`
+            : "";
+      };
+      const light = () =>
+        txt.querySelectorAll(".sr-line").forEach((l) => {
+          const n = +l.dataset.n;
+          l.classList.toggle("now", mode === "line" && t0 > 0 && n === at);
+          l.classList.toggle("past", mode === "line" && t0 > 0 && n < at);
+        });
+      const idle = () => {
+        clearInterval(tick);
+        t0 = 0;
+        at = 0;
+        txt.classList.add("wait"); // the text is blurred until ▶: the stopwatch measures the reading
+        light();
+        btns.innerHTML = `<button type="button" class="btn big sr-yes" id="go">▶ Почати читати</button>`;
+        btns.querySelector("#go").onclick = run;
+        results();
+      };
+      const run = () => {
+        t0 = Date.now();
+        txt.classList.remove("wait");
+        light();
+        btns.innerHTML = `<span class="sr-clock">⏱ <b id="clk">0:00</b></span>${mode === "line" ? '<button type="button" class="btn big" id="nx">Далі →</button>' : ""}<button type="button" class="btn ${mode === "line" ? "ghost" : "big sr-yes"}" id="done">■ Готово</button>`;
+        tick = setInterval(() => {
+          const c = btns.querySelector("#clk");
+          if (c) c.textContent = clock((Date.now() - t0) / 1000);
+        }, 250);
+        timers.push(tick); // stopAll (another tab, leaving the page) stops the stopwatch
+        const nx = btns.querySelector("#nx");
+        if (nx)
+          nx.onclick = () => {
+            if (++at >= lines.length) return finish();
+            light();
+            const cur = txt.querySelector(`.sr-line[data-n="${at}"]`);
+            if (cur)
+              cur.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          };
+        btns.querySelector("#done").onclick = finish;
+      };
+      const finish = () => {
+        const s = (Date.now() - t0) / 1000;
+        clearInterval(tick);
+        let msg;
+        if (R) {
+          const ts = times();
+          ts[ri] = s;
+          store.set(K + "-times", JSON.stringify(ts));
+          msg = `⏱ ${clock(s)} · ${wpm(s)} слів за хвилину`;
+          if (ri < R.length - 1) store.set(K + "-ri", ++ri);
+        } else {
+          const b = best(),
+            rec = !b || s < b;
+          if (rec) store.set(K + "-best", s);
+          msg = `⏱ ${clock(s)} · ${wpm(s)} слів за хвилину${rec ? " · 🏆 Новий рекорд!" : ""}`;
+        }
+        idle();
+        res.insertAdjacentHTML(
+          "afterbegin",
+          `<p class="sr-score sr-wpm">${msg}</p>`,
+        );
+        if (R)
+          pane
+            .querySelectorAll("[data-r]")
+            .forEach((b) =>
+              b.setAttribute("aria-pressed", +b.dataset.r === ri),
+            );
+        say("Молодець!");
+      };
+      pane.querySelectorAll("[data-m]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            mode = b.dataset.m;
+            store.set(K + "-mode", mode);
+            pane
+              .querySelectorAll("[data-m]")
+              .forEach((x) => x.setAttribute("aria-pressed", x === b));
+            idle();
+          }),
+      );
+      pane.querySelectorAll("[data-r]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            ri = +b.dataset.r;
+            store.set(K + "-ri", ri);
+            pane
+              .querySelectorAll("[data-r]")
+              .forEach((x) => x.setAttribute("aria-pressed", x === b));
+            idle();
+          }),
+      );
+      idle();
+    }
+
+    /* ❓ questions: all on one page, the answers are pictures with words */
+    function questions() {
+      let right = 0,
+        done = 0;
+      pane.innerHTML = `<div class="sr-qs">${T.q
+        .map(
+          (it, i) => `<div class="sr-qitem" data-i="${i}">
+          <p class="sr-qq"><b>${i + 1}.</b> ${esc(it.q)}${V.has() ? ` <button type="button" class="abtn sr-hear" data-say="${esc(it.q)}" aria-label="Послухати">🔊</button>` : ""}</p>
+          <div class="opts two sr-opts">${shuf(it.o.map((o, k) => [...o, k]))
+            .map(
+              ([t, ic, k]) =>
+                `<div class="optrow"><button type="button" class="opt" data-k="${k}"><span class="oic" aria-hidden="true">${esc(ic)}</span>${esc(t)}</button></div>`,
+            )
+            .join("")}</div></div>`,
+        )
+        .join("")}</div><p class="sr-score" id="qscore"></p>`;
+      pane
+        .querySelectorAll("[data-say]")
+        .forEach((b) => (b.onclick = () => say(b.dataset.say)));
+      pane.querySelectorAll(".sr-qitem").forEach((box) => {
+        let tries = 0;
+        box.querySelectorAll(".opt").forEach(
+          (b) =>
+            (b.onclick = () => {
+              if (b.dataset.k === "0") {
+                b.classList.add("right");
+                box
+                  .querySelectorAll(".opt")
+                  .forEach((x) => (x.disabled = true));
+                if (!tries) right++;
+                say(T.q[+box.dataset.i].o[0][0]);
+                if (++done === T.q.length)
+                  pane.querySelector("#qscore").innerHTML =
+                    `<b>${right}</b> з ${T.q.length} з першого разу`;
+              } else {
+                tries++;
+                b.classList.add("wrong");
+                b.disabled = true;
+              }
+            }),
+        );
+      });
+    }
+
+    /* 🔎 find the wrong word: tap it, or «Усе правильно» */
+    function mist() {
+      let right = 0,
+        done = 0;
+      pane.innerHTML = `<p class="howto">Порівняй з текстом. Торкнись слова, яке неправильне. Якщо все правильно, натисни ✓.</p>
+        <div class="sr-qs">${T.mist
+          .map(
+            (it, i) => `<div class="sr-qitem sr-mist" data-i="${i}">
+            <p class="sr-msent">${it.s
+              .split(" ")
+              .map(
+                (w) =>
+                  `<button type="button" class="sr-w" data-w="${esc(w.replace(/[.,!?:;…»«"]/g, ""))}">${esc(w)}</button>`,
+              )
+              .join(" ")}</p>
+            <button type="button" class="btn ghost sr-allok">✓ Усе правильно</button>
+            <p class="sr-fix" hidden></p></div>`,
+          )
+          .join("")}</div><p class="sr-score" id="mscore"></p>`;
+      pane.querySelectorAll(".sr-mist").forEach((box) => {
+        const it = T.mist[+box.dataset.i];
+        let tries = 0;
+        const fix = box.querySelector(".sr-fix");
+        const solved = () => {
+          box.querySelectorAll("button").forEach((x) => (x.disabled = true));
+          if (!tries) right++;
+          box.classList.add("ok");
+          if (++done === T.mist.length)
+            pane.querySelector("#mscore").innerHTML =
+              `<b>${right}</b> з ${T.mist.length} з першого разу`;
+        };
+        const miss = (b) => {
+          tries++;
+          b.classList.add("no");
+          later(() => b.classList.remove("no"), 500);
+        };
+        box.querySelectorAll(".sr-w").forEach(
+          (b) =>
+            (b.onclick = () => {
+              if (it.bad && b.dataset.w === it.bad) {
+                b.classList.add("bad");
+                fix.hidden = false;
+                fix.innerHTML = `У тексті: <b>${esc(it.fix)}</b>`;
+                say(it.s.replace(it.bad, it.fix));
+                solved();
+              } else miss(b);
+            }),
+        );
+        box.querySelector(".sr-allok").onclick = (e) => {
+          if (!it.bad) {
+            e.currentTarget.classList.add("right");
+            fix.hidden = false;
+            fix.textContent = "Так, у тексті саме так!";
+            solved();
+          } else miss(e.currentTarget);
+        };
+      });
+    }
+
+    show();
+  }
 })();

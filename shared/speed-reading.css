@@ -4,8 +4,13 @@ body {
   --body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
   --display: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-.hero-title {
+.hero-title,
+.les-title {
   font-weight: 800;
+}
+:root {
+  --accent: var(--sread);
+  --accent2: var(--ulit);
 }
 .wrap {
   max-width: 1100px;
@@ -238,4 +243,168 @@ body {
   display: flex;
   justify-content: center;
   min-height: 56px;
+}
+
+/* a text: the title row, the tabs (2 or 3), the text with its stopwatch */
+.sr-thead {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+.sr-tic {
+  font-family: var(--emoji);
+  font-size: 2.8rem;
+  line-height: 1;
+}
+.sr-count {
+  margin-left: auto;
+  font-weight: 800;
+  color: var(--muted);
+}
+.ftabs.sr-n2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.sr-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sr-text {
+  max-width: 900px;
+  align-self: center;
+  font-size: clamp(1.45rem, 3.6vw, 2rem);
+  font-weight: 700;
+  line-height: 1.7;
+  transition: filter 0.3s;
+}
+.sr-text.wait {
+  filter: blur(7px);
+  user-select: none;
+}
+.sr-para {
+  margin: 0 0 0.5em;
+  text-indent: 1.5em;
+}
+.sr-line {
+  border-radius: 8px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.sr-line.now {
+  background: var(--hl);
+  color: #1b2440;
+}
+.sr-line.past {
+  color: var(--muted);
+}
+/* a dialogue: each speaker has a colour and a name */
+.sr-dialog .sr-para {
+  text-indent: 0;
+  padding: 4px 14px;
+  border-left: 6px solid var(--ulit);
+  border-radius: 8px;
+}
+.sr-dialog .r1 {
+  border-left-color: var(--sread);
+  margin-left: 2em;
+}
+.sr-who {
+  display: block;
+  font-size: 0.65em;
+  color: var(--muted);
+}
+.sr-tip {
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+}
+/* the stopwatch and its buttons stay at the top of the screen while the text scrolls */
+.sr-stick {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 8px 0;
+  background: var(--panel, var(--card));
+}
+.sr-clock {
+  align-self: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.sr-result {
+  text-align: center;
+}
+.sr-wpm {
+  font-size: 1.5rem;
+}
+.sr-times {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.sr-times span {
+  padding: 4px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  font-weight: 700;
+}
+.sr-times span.now {
+  background: var(--hl);
+  color: #1b2440;
+}
+/* questions and «find the mistake» */
+.sr-qs {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.sr-qitem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.sr-qq,
+.sr-msent {
+  margin: 0;
+  font-size: clamp(1.3rem, 3.4vw, 1.7rem);
+  font-weight: 800;
+  text-align: center;
+}
+.sr-hear {
+  vertical-align: middle;
+}
+.sr-w {
+  padding: 0 4px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.sr-w:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--hl) 50%, transparent);
+}
+.sr-w.bad {
+  color: var(--bad);
+  text-decoration: line-through 3px;
+}
+.sr-w.no {
+  animation: shake 0.35s;
+  background: color-mix(in srgb, var(--bad) 18%, transparent);
+}
+.sr-w:disabled {
+  cursor: default;
+}
+.sr-allok.right {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 24%, var(--card));
+}
+.sr-fix {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--good);
 }
