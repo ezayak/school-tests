@@ -1,0 +1,201 @@
+/* Speed reading games (shared/speed-reading.js): Optima, Швидкочитання. Load after theme.css and lesson.css.
+   Lilita One and Atkinson Hyperlegible have no Cyrillic letters, so the whole page is in Nunito. */
+body {
+  --body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.hero-title {
+  font-weight: 800;
+}
+.wrap {
+  max-width: 1100px;
+}
+
+/* start and end screens */
+.sr-start,
+.sr-end {
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+.sr-start .toprow,
+.sr-end .toprow {
+  align-self: stretch;
+}
+.sr-hero {
+  font-family: var(--emoji);
+  font-size: 3.6rem;
+  line-height: 1;
+}
+.sr-start .howto {
+  max-width: 640px;
+  margin: 0;
+}
+.sr-sets {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.sr-set {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 180px;
+  padding: 10px 16px;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-family: var(--body);
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sr-set small {
+  font-weight: 400;
+  color: var(--muted);
+}
+.sr-set[aria-pressed="true"],
+.sr-set[aria-pressed="true"] small {
+  background: var(--hl);
+  color: #1b2440;
+}
+.sr-go {
+  min-width: 220px;
+}
+.sr-stars {
+  display: flex;
+  gap: 8px;
+}
+.sr-stars svg {
+  width: 56px;
+  height: 56px;
+}
+.sr-score {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.6rem;
+}
+.sr-score b {
+  font-size: 3.4rem;
+}
+.sr-row {
+  justify-content: center;
+}
+
+/* a game */
+.card.sr-play {
+  gap: 14px;
+}
+.sr-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sr-name {
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+.sr-prog {
+  margin-left: auto;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+/* the big word (Склади-блискавки, Яке слово?) */
+.sr-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(150px, 30vh, 260px);
+  padding: 12px;
+  border: 2.5px dashed var(--line, var(--muted));
+  border-radius: 20px;
+  overflow: hidden;
+}
+.sr-word {
+  font-size: clamp(3rem, 11vw, 6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+/* hidden: the place stays, the letters go */
+.sr-word.hid {
+  color: transparent;
+  text-shadow: none;
+}
+.sr-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.sr-yes {
+  min-width: 200px;
+}
+.sr-opts {
+  align-self: center;
+}
+.sr-opts .opt {
+  font-weight: 800;
+}
+/* the dots under a game: green = right the first time, yellow = after another try */
+.sr-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.sr-dots i {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+.sr-dots i.on {
+  background: var(--good);
+}
+.sr-dots i.late {
+  background: var(--hl);
+}
+/* Пропущене: the picture and the word or sentence with its gap */
+.sr-qbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.sr-ic {
+  font-family: var(--emoji);
+  font-size: clamp(3rem, 9vw, 4.6rem);
+  line-height: 1;
+}
+.sr-q {
+  margin: 0;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.4;
+  text-align: center;
+}
+.sr-gap {
+  display: inline-block;
+  min-width: 1.4em;
+  padding: 0 3px;
+  border-bottom: 4px solid var(--ink);
+  background: color-mix(in srgb, var(--hl) 45%, transparent);
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+}
+.sr-gap.ok {
+  background: color-mix(in srgb, var(--good) 30%, transparent);
+  border-color: var(--good);
+}
+.sr-next {
+  display: flex;
+  justify-content: center;
+  min-height: 56px;
+}
