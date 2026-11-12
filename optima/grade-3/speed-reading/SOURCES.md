@@ -12,22 +12,22 @@ Status: `planned` until the game is built, then `file · key`.
 
 | Day   | What                                                                       | Built into                                                               |
 | ----- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| 1     | 15 consonant clusters                                                      | planned: Склади-блискавки, Ловимо фішки (Склади)                         |
+| 1     | 15 consonant clusters                                                      | `catch.js · syl`; planned: Склади-блискавки                              |
 | 2     | Find the highlighted syllable                                              | skipped: nothing is highlighted in the file; its words are in Day 3      |
-| 3     | 10 words with clusters, by syllables                                       | planned: Склади-блискавки (words)                                        |
-| 4     | Look-alike syllables (стра – стри – стро …)                                | planned: Ловимо фішки (Склади), Склади-блискавки                         |
+| 3     | 10 words with clusters, by syllables                                       | `catch.js · words`; planned: Склади-блискавки (words)                    |
+| 4     | Look-alike syllables (стра – стри – стро …)                                | `catch.js · syl`; planned: Склади-блискавки                              |
 | 5     | Missing syllable (\_\_\_на → країна)                                       | planned: Пропущений склад                                                |
 | 6     | 5 phrases                                                                  | planned: Читаємо фразами                                                 |
 | 7     | Review                                                                     | skipped: no new material (the games mix all of it)                       |
 | 8–9   | 7 long words by syllables, then whole                                      | planned: Довгі слова                                                     |
-| 10    | 6 pairs one syllable apart (корова – корона)                               | planned: Яке слово?, Ловимо фішки (Слова)                                |
-| 11    | 8 words, "don't skip the middle"                                           | planned: Довгі слова                                                     |
-| 12    | 5 "which word did you read" pairs                                          | planned: Яке слово?                                                      |
+| 10    | 6 pairs one syllable apart (корова – корона)                               | `catch.js · words`; planned: Яке слово?                                  |
+| 11    | 8 words, "don't skip the middle"                                           | `catch.js · words` (some of the words); planned: Довгі слова             |
+| 12    | 5 "which word did you read" pairs                                          | `catch.js · words` (without полудниця: not a word); planned: Яке слово?  |
 | 13    | 5 sentences                                                                | planned: Читаємо фразами                                                 |
 | 14    | Review                                                                     | skipped: no new material                                                 |
-| 15–16 | Nouns in 3 forms, singular – plural                                        | planned: Ловимо фішки (Закінчення), Яке слово?                           |
+| 15–16 | Nouns in 3 forms, singular – plural                                        | `catch.js · end`; planned: Яке слово?                                    |
 | 17    | Choose the ending in a sentence                                            | planned: Пропущене закінчення                                            |
-| 18    | 4 verbs in 4 tenses                                                        | planned: Ловимо фішки (Закінчення)                                       |
+| 18    | 4 verbs in 4 tenses                                                        | `catch.js · end`                                                         |
 | 19    | Complete the ending (читає, читатиме: as corrected at the end of the file) | planned: Пропущене закінчення                                            |
 | 20    | «У шкільному саду» + 4 questions                                           | planned: text                                                            |
 | 21    | Review                                                                     | skipped: no new material                                                 |
