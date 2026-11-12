@@ -53,6 +53,7 @@
     Computer: "var(--comp)",
     Math: "var(--math)",
     "Українська література": "var(--ulit)",
+    Швидкочитання: "var(--sread)",
     Математика: "var(--math)",
     ABC: "var(--speech)",
     Syllables: "var(--speech)",

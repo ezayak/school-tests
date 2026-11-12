@@ -39,6 +39,7 @@
   --rel: #e6dfcf;
   --comp: #6527c4;
   --ulit: #0057b7; /* Українська література (Optima) */
+  --sread: #d62839; /* Швидкочитання (Optima) */
   --speech: #0f8b8d; /* Мовлення: speech games */
   --math: #ff8a3d;
   --math-ink: #ff8a3d; /* Math text colour: --math is too light for small text on white */
@@ -86,6 +87,7 @@
     --rel: #f3eee2;
     --comp: #9a6cff;
     --ulit: #6aa6ff;
+    --sread: #ff6b78;
     --speech: #3cc6c8;
     --math: #ff8a3d;
     --math-ink: #ff8a3d;
@@ -133,6 +135,7 @@
   --rel: #f3eee2;
   --comp: #9a6cff;
   --ulit: #6aa6ff;
+  --sread: #ff6b78;
   --speech: #3cc6c8;
   --math: #ff8a3d;
   --math-ink: #ff8a3d;
