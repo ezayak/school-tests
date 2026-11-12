@@ -621,3 +621,353 @@ body {
   border-color: var(--good);
   color: var(--good);
 }
+
+/* Книжка, part 2: a letter to tap in order (tapInOrder): used = done, no = a wrong tap */
+[data-t].used {
+  opacity: 0.25;
+}
+[data-t].no,
+.sr-ch.no,
+.sr-hrow.no {
+  animation: shake 0.35s;
+}
+[data-t].no {
+  outline: 3px solid var(--bad);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+/* a piece of the book: its own colours on paper, also in dark mode */
+.sr-row,
+.sr-grid,
+.sr-poem,
+.sr-ring,
+.sr-tangle,
+.sr-cubes {
+  --paper: #fffdf6;
+  --pink: #e05489;
+  background: var(--paper);
+  color: #1b2440;
+  border-radius: 16px;
+}
+/* Сині літери: the book's colours */
+.sr-row {
+  padding: 10px 14px;
+  align-items: center;
+}
+.sr-cl {
+  padding: 0 3px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.sr-tip .sr-cl {
+  font-size: 1.6rem;
+  padding: 0 8px;
+  background: #fffdf6;
+  border-radius: 8px;
+}
+.c-n {
+  color: #2f3d6b;
+}
+.c-r {
+  color: #e2453c;
+}
+.c-g {
+  color: #2e9d6e;
+}
+.c-o {
+  color: #f39a4a;
+}
+.c-p {
+  color: #e05489;
+}
+.c-u {
+  color: #9c5aa0;
+}
+.c-b {
+  color: #3da9e0;
+}
+/* Закресли повтори: the grid; gone = crossed out, keep = a letter that is there once */
+.sr-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  width: min(100%, 620px);
+  align-self: center;
+  border: 2px solid var(--ulit);
+}
+.sr-gc {
+  aspect-ratio: 1;
+  border: 1px solid var(--ulit);
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: clamp(1.1rem, 4vw, 1.8rem);
+  font-weight: 700;
+  cursor: pointer;
+}
+.sr-gc.gone {
+  color: #b8bfcc;
+  text-decoration: line-through 3px #e2453c;
+}
+.sr-gc.keep {
+  background: #ffe14d;
+}
+.sr-animals {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.sr-animal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font: inherit;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+/* Носоріг: the poem, the numbered gap that lights up, the words to put in */
+.sr-poem {
+  align-self: center;
+  padding: 12px 22px;
+  font-size: clamp(1.25rem, 3.4vw, 1.7rem);
+  font-weight: 700;
+}
+.sr-ptitle {
+  margin: 0 0 6px;
+  color: var(--ulit);
+  font-size: 1.3em;
+  text-align: center;
+}
+.sr-pl {
+  margin: 0;
+  line-height: 1.7;
+}
+.sr-num {
+  display: inline-block;
+  min-width: 1.6em;
+  border-radius: 8px;
+  color: #e2453c;
+  text-align: center;
+}
+.sr-num.now {
+  background: #ffe14d;
+}
+.sr-in {
+  color: #2e9d6e;
+}
+.sr-wordlist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  width: min(100%, 760px);
+  align-self: center;
+}
+.sr-wordlist .opt {
+  min-height: 52px;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+.sr-wn {
+  color: #e2453c;
+}
+/* Анаграми, Дзеркальні кубики: the word to read and the tiles to build it */
+.sr-scr {
+  letter-spacing: 0.12em;
+}
+.sr-img {
+  max-height: 150px;
+  max-width: 200px;
+  object-fit: contain;
+}
+.sr-build {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(100%, 560px);
+  align-self: center;
+}
+.sr-build .tile {
+  min-width: 52px;
+  font-family: var(--body);
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.sr-cubes {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+}
+.sr-cube {
+  display: grid;
+  place-items: center;
+  width: clamp(56px, 14vw, 90px);
+  aspect-ratio: 1;
+  border-radius: 6px;
+  box-shadow:
+    6px -6px 0 rgba(0, 0, 0, 0.18),
+    inset 0 0 0 2px rgba(0, 0, 0, 0.12);
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  font-weight: 800;
+}
+.sr-mir {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+.k-r {
+  background: #ef6f5e;
+}
+.k-y {
+  background: #f8de3c;
+}
+.k-b {
+  background: #4cb3f0;
+}
+.k-p {
+  background: #c4a0e0;
+}
+.k-g {
+  background: #79c46a;
+}
+/* Стрілки по колу: the letters on a ring and the arrows between them */
+.sr-ring {
+  position: relative;
+  width: min(100%, 420px, 52vh);
+  aspect-ratio: 1;
+  align-self: center;
+}
+.sr-arrows {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.sr-arrows line {
+  stroke-width: 0.9;
+}
+.sr-arrows.a line,
+.sr-arrows.a path {
+  stroke: #5a5fa8;
+  fill: #5a5fa8;
+}
+.sr-arrows.b line,
+.sr-arrows.b path {
+  stroke: #e8743b;
+  fill: #e8743b;
+}
+.sr-node {
+  position: absolute;
+  width: 17%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 50%;
+  color: #1b2440;
+  font: inherit;
+  font-size: clamp(1.5rem, 5vw, 2.4rem);
+  font-weight: 800;
+  cursor: pointer;
+}
+.sr-node.a {
+  background: #9fd0ee;
+}
+.sr-node.b {
+  background: #f9e45b;
+}
+/* Роз’єднай слова, Заховані слова: a row of letters to tap */
+.sr-glued,
+.sr-hrow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0;
+  font-size: clamp(1.5rem, 4.6vw, 2.4rem);
+  font-weight: 700;
+}
+.sr-ch {
+  padding: 2px 1px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.sr-ch.cut {
+  margin-right: 0.6em;
+  color: var(--good);
+}
+.sr-glued.done .sr-ch {
+  color: var(--ink);
+}
+.sr-ch.sel {
+  background: var(--hl);
+  color: #1b2440;
+}
+.sr-ch.in {
+  background: color-mix(in srgb, var(--good) 22%, transparent);
+  border-radius: 0;
+}
+.sr-ch.in.s {
+  border-radius: 12px 0 0 12px;
+}
+.sr-ch.in.e {
+  border-radius: 0 12px 12px 0;
+}
+.sr-found {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+.sr-found .ok {
+  color: var(--good);
+}
+/* Заплутані лінії: numbers at the top, tangled lines, letters at the bottom */
+.sr-tangle {
+  position: relative;
+  width: min(100%, 640px);
+  align-self: center;
+  padding-bottom: 56px;
+}
+.sr-tsvg {
+  display: block;
+  width: 100%;
+}
+.sr-tsvg path {
+  fill: none;
+  stroke: #e05489;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.sr-tsvg path.ok {
+  stroke: #2e9d6e;
+  opacity: 0.45;
+}
+.sr-tsvg circle {
+  fill: #4cb3f0;
+}
+.sr-tsvg text {
+  fill: #fff;
+  font: 800 28px var(--body);
+  text-anchor: middle;
+}
+.sr-low {
+  position: absolute;
+  bottom: 4px;
+  width: 52px;
+  height: 52px;
+  transform: translateX(-50%);
+  border: 0;
+  border-radius: 12px;
+  background: #f8de3c;
+  color: #1b2440;
+  font: inherit;
+  font-size: 1.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}

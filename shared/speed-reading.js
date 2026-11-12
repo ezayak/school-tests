@@ -19,6 +19,14 @@
 //   wedge  «Клин»: rows of a word cut in two, the halves further apart each row; they light up down, then up faster.
 //   odd    «Зайве слово»: a column of one word 3 times and a look-alike; tap the odd one (look-alikes from catch.js).
 //   sizes  «Велика — маленька»: letters of a word in different sizes; tap them from the biggest (p. 10) or smallest (p. 28).
+//   colors «Сині літери» (p. 6): tap only the dark-blue letters of a row, in order → the word.
+//   cross  «Закресли повтори» (p. 18): tap a repeated letter to cross it out everywhere; the ones left make two animals.
+//   poem   «Носоріг» (p. 16): put the numbered words into the poem, then read it.
+//   anagram «Анаграми» (p. 8, p. 22 with pictures) and mirror «Дзеркальні кубики» (p. 24): build the word from tiles (Kit.dragTiles).
+//   circle «Стрілки по колу» (p. 26): follow the arrows round the letters, tap them in order.
+//   split  «Роз’єднай слова» (p. 30): tap the last letter of each word of a sentence written without spaces.
+//   hidden «Заховані слова» (p. 30): tap the first and last letter of each word hidden in a row.
+//   lines  «Заплутані лінії» (p. 4): follow each number's tangled line (drawn new each time) to its letter.
 // <body data-game="text"> → a text (window.TEXT from text-<name>.js): 📖 Читаю with a stopwatch and words per minute
 //   (the best time on this device, or the times of T.readings: the same text read several times), ❓ Питання, 🔎 Помилки.
 (function () {
@@ -1154,6 +1162,689 @@
     },
   };
 
+  /* ================= Книжка, part 2: shared helpers ================= */
+  // A round of items: html = the game's own part of the card; render(item, done) shows one item and calls
+  // done(tries) when it is solved (tries = wrong taps; 0 = right the first time). Ends with the score screen.
+  function rounds(g, set, o, items, html, render) {
+    stopAll();
+    g.last = o || {};
+    const n = items.length,
+      marks = [];
+    let k = 0,
+      right = 0;
+    app.innerHTML = `<section class="card sr-play">${bar(set)}${html}<div class="sr-dots" id="dots"></div></section>`;
+    const next = () => {
+      if (k >= n) return end(g, set, right, n);
+      app.querySelector("#prog").textContent = `${marks.length} / ${n}`;
+      app.querySelector("#dots").innerHTML = dots(n, marks.length, marks);
+      let over = false;
+      render(items[k], (tries, wait = 1500) => {
+        if (over) return;
+        over = true;
+        if (!tries) right++;
+        marks.push(tries ? "late" : "on");
+        k++;
+        later(next, wait);
+      });
+    };
+    app.querySelector("#quit").onclick = () => start(g);
+    next();
+  }
+  // Tap letters in a fixed order: every [data-t] in box is a letter to tap; data-q = its place in the word (none = a wrong one).
+  // The slots fill with the word's letters; done(tries) when the word is complete.
+  function tapInOrder(box, slots, word, done) {
+    let next = 0,
+      tries = 0;
+    slots.classList.remove("done");
+    slots.innerHTML = "<i></i>".repeat(word.length);
+    box.querySelectorAll("[data-t]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          if (b.classList.contains("used")) return;
+          if (b.dataset.q !== undefined && +b.dataset.q === next) {
+            b.classList.add("used");
+            slots.children[next].textContent = word[next];
+            if (++next === word.length) {
+              slots.classList.add("done");
+              say(word);
+              done(tries);
+            }
+          } else {
+            tries++;
+            b.classList.remove("no");
+            void b.offsetWidth;
+            b.classList.add("no");
+          }
+        }),
+    );
+  }
+  // words for the made-up rounds: the book's words of 5–7 letters
+  const bookWords = () =>
+    [
+      ...new Set([
+        ...(BOOK.colors || []).map((r) => r.w),
+        ...(BOOK.lines || []).map((r) => r.w),
+        ...((BOOK.sizes || [])[1] || { items: [] }).items.map((r) => r.w),
+      ]),
+    ].filter((w) => w.length >= 5 && w.length <= 7);
+
+  /* ================= «Сині літери» ================= */
+  const colors = {
+    key: "colors",
+    ic: "🔵",
+    title: "Сині літери",
+    howto:
+      "Літери різних кольорів. Читай тільки темно-сині! Торкайся їх по черзі зліва направо — і вийде слово.",
+    sets: [{ k: "book", t: "З книжки · с. 6", sub: "ВНІКУНЛО → вікно" }],
+    play(set, o) {
+      rounds(
+        colors,
+        set,
+        o,
+        shuf(BOOK.colors || []),
+        `<p class="sr-tip">Тільки такі літери: <span class="sr-cl c-n">А</span></p><div class="sr-letters sr-row" id="ls"></div><div class="sr-slots" id="slots"></div>`,
+        (it, done) => {
+          let q = 0;
+          const ls = app.querySelector("#ls");
+          ls.innerHTML = [...it.p]
+            .map(
+              (ch, i) =>
+                `<button type="button" class="sr-cl c-${it.c[i]}" data-t${it.c[i] === "n" ? ` data-q="${q++}"` : ""}>${esc(ch)}</button>`,
+            )
+            .join("");
+          tapInOrder(ls, app.querySelector("#slots"), it.w, done);
+        },
+      );
+    },
+  };
+
+  /* ================= «Закресли повтори» ================= */
+  // tap a letter: if it is in the grid more than once, all of it is crossed out; the letters left, read from the top, make the words
+  const cross = {
+    key: "cross",
+    ic: "❌",
+    title: "Закресли повтори",
+    howto:
+      "Торкнись літери, яка повторюється — її закреслить усюди. Залиш тільки ті, що є один раз. З них склади слова і знайди їхні картинки!",
+    sets: [{ k: "book", t: "З книжки · с. 18", sub: "8 рядків по 10 літер" }],
+    play(set, o) {
+      const C = BOOK.cross;
+      rounds(
+        cross,
+        set,
+        o,
+        [C],
+        `<div class="sr-grid" id="grid"></div><p class="sr-tip" id="msg"></p><div class="sr-slots" id="left"></div><div class="choices sr-animals" id="pics" hidden></div>`,
+        (it, done) => {
+          const all = it.rows.join("");
+          const many = new Set([...all].filter((c) => all.split(c).length > 2));
+          const grid = app.querySelector("#grid"),
+            msg = app.querySelector("#msg");
+          let tries = 0;
+          grid.innerHTML = it.rows
+            .map((r) =>
+              [...r]
+                .map(
+                  (ch) =>
+                    `<button type="button" class="sr-gc" data-c="${esc(ch)}">${esc(ch)}</button>`,
+                )
+                .join(""),
+            )
+            .join("");
+          msg.textContent = "Закресли всі літери, які повторюються.";
+          const pics = () => {
+            const box = app.querySelector("#pics");
+            box.hidden = false;
+            msg.textContent =
+              "Прочитай літери згори вниз. Які тварини тут сховалися? Торкнись їх!";
+            app.querySelector("#left").innerHTML = [...all]
+              .filter((c) => !many.has(c))
+              .map((c) => `<i>${esc(c)}</i>`)
+              .join("");
+            let found = 0;
+            box.innerHTML = shuf(it.pics)
+              .map(
+                ([w, ic]) =>
+                  `<button type="button" class="choice sr-animal" data-w="${esc(w)}"><span class="sr-ic">${esc(ic)}</span><b>${esc(w)}</b></button>`,
+              )
+              .join("");
+            box.querySelectorAll(".choice").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  if (it.words.includes(b.dataset.w)) {
+                    b.classList.add("right");
+                    b.disabled = true;
+                    say(b.dataset.w);
+                    if (++found === it.words.length) done(tries, 2500);
+                  } else {
+                    tries++;
+                    b.classList.add("wrong");
+                    b.disabled = true;
+                  }
+                }),
+            );
+          };
+          grid.querySelectorAll(".sr-gc").forEach(
+            (b) =>
+              (b.onclick = () => {
+                const c = b.dataset.c;
+                if (b.classList.contains("gone")) return;
+                if (many.has(c)) {
+                  grid
+                    .querySelectorAll(`[data-c="${c}"]`)
+                    .forEach((x) => x.classList.add("gone"));
+                  const left = [
+                    ...grid.querySelectorAll(".sr-gc:not(.gone)"),
+                  ].filter((x) => many.has(x.dataset.c));
+                  if (!left.length) {
+                    grid
+                      .querySelectorAll(".sr-gc:not(.gone)")
+                      .forEach((x) => x.classList.add("keep"));
+                    pics();
+                  }
+                } else {
+                  // a letter that is there once stays: no mistake to tap it, it is marked
+                  b.classList.add("keep");
+                }
+              }),
+          );
+        },
+      );
+    },
+  };
+
+  /* ================= «Носоріг» ================= */
+  // the poem with numbered gaps; the gap lights up, tap the word with that number (or, harder, without numbers)
+  const poem = {
+    key: "poem",
+    ic: "🦏",
+    title: "Носоріг",
+    howto:
+      "У вірші замість слів — цифри. Знайди слово з такою цифрою і встав його. Потім прочитай увесь вірш!",
+    sets: [{ k: "book", t: "З книжки · с. 16", sub: "Е. Звоницький" }],
+    opts: () => [
+      {
+        k: "num",
+        lab: "Слова",
+        vals: [
+          ["1", "з цифрами"],
+          ["0", "без цифр"],
+        ],
+        def: "1",
+      },
+    ],
+    play(set, o) {
+      const P = BOOK.poem;
+      rounds(
+        poem,
+        set,
+        o,
+        [P],
+        `<div class="sr-poem"><h2 class="sr-ptitle">${esc(P.title)}</h2><div id="lines"></div><p class="note">${esc(P.author)}</p></div><div class="sr-wordlist" id="words"></div><div class="sr-btns" id="btns"></div>`,
+        (it, done) => {
+          let at = 1,
+            tries = 0;
+          const nums = o.num !== "0";
+          const lines = app.querySelector("#lines"),
+            words = app.querySelector("#words");
+          const draw = () => {
+            lines.innerHTML = it.lines
+              .map(
+                (l) =>
+                  `<p class="sr-pl">${esc(l).replace(/\{(\d)\}/g, (_, n) => (+n < at ? `<b class="sr-in">${esc(it.words[n - 1])}</b>` : `<span class="sr-num${+n === at ? " now" : ""}">${n}</span>`))}</p>`,
+              )
+              .join("");
+          };
+          const order = nums
+            ? it.words.map((w, i) => [w, i + 1])
+            : shuf(it.words.map((w, i) => [w, i + 1]));
+          words.innerHTML = order
+            .map(
+              ([w, n]) =>
+                `<button type="button" class="opt" data-n="${n}">${nums ? `<b class="sr-wn">${n}</b> ` : ""}${esc(w)}</button>`,
+            )
+            .join("");
+          words.querySelectorAll(".opt").forEach(
+            (b) =>
+              (b.onclick = () => {
+                if (+b.dataset.n === at) {
+                  b.disabled = true;
+                  b.classList.add("right");
+                  at++;
+                  draw();
+                  if (at > it.words.length) {
+                    const hear = V.has()
+                      ? '<button type="button" class="btn ghost" id="hear">🔊 Послухати вірш</button>'
+                      : "";
+                    app.querySelector("#btns").innerHTML =
+                      `${hear}<button type="button" class="btn big sr-yes" id="ok">✓ Прочитав увесь вірш</button>`;
+                    const h = app.querySelector("#hear");
+                    if (h)
+                      h.onclick = () =>
+                        say(
+                          it.lines
+                            .map((l) =>
+                              l.replace(/\{(\d)\}/g, (_, n) => it.words[n - 1]),
+                            )
+                            .join(" "),
+                        );
+                    app.querySelector("#ok").onclick = () => done(tries, 300);
+                  }
+                } else {
+                  tries++;
+                  b.classList.remove("wrong");
+                  void b.offsetWidth;
+                  b.classList.add("wrong");
+                }
+              }),
+          );
+          draw();
+        },
+      );
+    },
+  };
+
+  /* ================= «Анаграми» and «Дзеркальні кубики»: build the word from letter tiles (Kit.dragTiles) ================= */
+  // shows the tiles in box (a .line and a .bank), checks when the bank is empty; done(tries) when the word is right
+  function buildWord(box, word, done) {
+    box.innerHTML =
+      '<div class="line sr-line-w" id="L"></div><div class="bank sr-bank" id="B"></div>';
+    const L = box.querySelector("#L");
+    let tries = 0;
+    let letters = shuf([...word]);
+    if (letters.join("") === word && word.length > 1)
+      letters = [...letters.slice(1), letters[0]];
+    const T = Kit.dragTiles(
+      L,
+      box.querySelector("#B"),
+      letters.map((t) => ({ t })),
+      {
+        cls: "letter",
+        ph: "Склади слово тут",
+        onChange: (line, bank) => {
+          L.classList.remove("ok", "no");
+          if (bank.length) return;
+          if (line.map((x) => x.t).join("") === word) {
+            L.classList.add("ok");
+            T.lock();
+            say(word);
+            done(tries);
+          } else {
+            tries++;
+            L.classList.add("no");
+          }
+        },
+      },
+    );
+    T.draw();
+  }
+  const anagram = {
+    key: "anagram",
+    ic: "🔀",
+    title: "Анаграми",
+    howto:
+      "Літери в слові переплуталися. Переставляй їх (торкнись або перетягни), щоб вийшло справжнє слово!",
+    sets: BOOK.anagrams || [],
+    opts: (set) =>
+      set.k === "p22"
+        ? [
+            {
+              k: "pic",
+              lab: "Картинка",
+              vals: [
+                ["1", "одразу"],
+                ["0", "після"],
+              ],
+              def: "1",
+            },
+          ]
+        : [],
+    play(set, o) {
+      rounds(
+        anagram,
+        set,
+        o,
+        shuf(set.items),
+        `<div class="sr-qbox"><img class="sr-img" id="img" alt="" hidden><p class="sr-q sr-scr" id="scr"></p></div><div class="sr-build" id="build"></div>`,
+        ([p, w, img], done) => {
+          const im = app.querySelector("#img");
+          app.querySelector("#scr").textContent = p;
+          im.hidden = !(img && o.pic !== "0");
+          if (img) im.src = img;
+          buildWord(app.querySelector("#build"), w, (t) => {
+            im.hidden = !img;
+            done(t);
+          });
+        },
+      );
+    },
+  };
+  const mirror = {
+    key: "mirror",
+    ic: "🪞",
+    title: "Дзеркальні кубики",
+    howto:
+      "На кубиках літери як у дзеркалі. Прочитай слово і склади його з правильних літер!",
+    sets: [
+      { k: "book", t: "З книжки · с. 24", sub: "бук · сир · вовк" },
+      { k: "more", t: "Ще слова", sub: "слова з книжки" },
+    ],
+    play(set, o) {
+      const items =
+        set.k === "book"
+          ? shuf(BOOK.mirror || [])
+          : shuf(bookWords())
+              .slice(0, 8)
+              .map((w) => ({ w, c: Kit.pick(["r", "y", "b", "p", "g"]) }));
+      rounds(
+        mirror,
+        set,
+        o,
+        items,
+        `<div class="sr-qbox"><div class="sr-cubes" id="cubes"></div><span class="sr-ic" id="ic" hidden></span></div><div class="sr-build" id="build"></div>`,
+        (it, done) => {
+          const ic = app.querySelector("#ic");
+          ic.hidden = true;
+          ic.textContent = it.ic || "";
+          app.querySelector("#cubes").innerHTML = [...it.w]
+            .map(
+              (ch) =>
+                `<span class="sr-cube k-${it.c}"><span class="sr-mir">${esc(ch.toUpperCase())}</span></span>`,
+            )
+            .join("");
+          buildWord(app.querySelector("#build"), it.w, (t) => {
+            ic.hidden = !it.ic;
+            done(t);
+          });
+        },
+      );
+    },
+  };
+
+  /* ================= «Стрілки по колу» ================= */
+  // letters on a circle, arrows from one to the next: follow them with the eyes and tap the letters in that order
+  function ringSVG(n, path, cls) {
+    // node j sits clockwise from the top left (two at the top, as in the book)
+    const pos = (j) => {
+      const a = ((-90 - 180 / n + (360 / n) * j) * Math.PI) / 180;
+      return [50 + 38 * Math.cos(a), 50 + 38 * Math.sin(a)];
+    };
+    const arrows = path
+      .slice(0, -1)
+      .map((j, i) => {
+        const [x1, y1] = pos(j),
+          [x2, y2] = pos(path[i + 1]);
+        const d = Math.hypot(x2 - x1, y2 - y1),
+          r = 9 / d;
+        return `<line x1="${(x1 + (x2 - x1) * r).toFixed(1)}" y1="${(y1 + (y2 - y1) * r).toFixed(1)}" x2="${(x2 - (x2 - x1) * r).toFixed(1)}" y2="${(y2 - (y2 - y1) * r).toFixed(1)}" marker-end="url(#ah-${cls})"/>`;
+      })
+      .join("");
+    return {
+      pos,
+      svg: `<svg class="sr-arrows ${cls}" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah-${cls}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z"/></marker></defs>${arrows}</svg>`,
+    };
+  }
+  const circle = {
+    key: "circle",
+    ic: "🔄",
+    title: "Стрілки по колу",
+    howto:
+      "Літери стоять по колу. Стеж за стрілками тільки очима і торкайся літер по черзі — вийде слово!",
+    sets: [
+      { k: "book", t: "З книжки · с. 26", sub: "веселка · Україна" },
+      { k: "more", t: "Ще слова", sub: "слова з книжки" },
+    ],
+    play(set, o) {
+      const items =
+        set.k === "book"
+          ? BOOK.circles || []
+          : shuf(bookWords())
+              .slice(0, 8)
+              .map((w) => {
+                // the word's letters on random places of the ring
+                const spots = shuf([...Array(w.length).keys()]);
+                const ring = [];
+                spots.forEach((s, i) => (ring[s] = w[i].toUpperCase()));
+                return { w, ring: ring.join(""), path: spots };
+              });
+      rounds(
+        circle,
+        set,
+        o,
+        items,
+        `<div class="sr-ring" id="ring"></div><div class="sr-slots" id="slots"></div>`,
+        (it, done) => {
+          const n = it.ring.length,
+            cls = Kit.pick(["a", "b"]);
+          const R = ringSVG(n, it.path, cls);
+          const ring = app.querySelector("#ring");
+          ring.innerHTML =
+            R.svg +
+            [...it.ring]
+              .map((ch, j) => {
+                const [x, y] = R.pos(j);
+                return `<button type="button" class="sr-node ${cls}" style="left:${x}%;top:${y}%" data-t data-q="${it.path.indexOf(j)}">${esc(ch)}</button>`;
+              })
+              .join("");
+          tapInOrder(ring, app.querySelector("#slots"), it.w, done);
+        },
+      );
+    },
+  };
+
+  /* ================= «Роз’єднай слова» ================= */
+  // the sentence without spaces; tap the last letter of each word, a gap opens after it
+  const split = {
+    key: "split",
+    ic: "✂️",
+    title: "Роз’єднай слова",
+    howto:
+      "Слова злиплися! Торкнись останньої літери кожного слова — між словами з’явиться проміжок. Потім прочитай речення.",
+    sets: [
+      { k: "book", t: "З книжки · с. 30", sub: "Бджілкабриніланадквіткою." },
+    ],
+    play(set, o) {
+      rounds(
+        split,
+        set,
+        o,
+        shuf(BOOK.split || []),
+        `<p class="sr-glued" id="glued"></p>`,
+        (s, done) => {
+          const chars = [],
+            cuts = new Set();
+          for (const ch of s) {
+            if (ch === " ") cuts.add(chars.length - 1);
+            else chars.push(ch);
+          }
+          const box = app.querySelector("#glued");
+          let tries = 0,
+            found = 0;
+          box.innerHTML = chars
+            .map(
+              (ch, i) =>
+                `<button type="button" class="sr-ch" data-i="${i}">${esc(ch)}</button>`,
+            )
+            .join("");
+          box.querySelectorAll(".sr-ch").forEach(
+            (b) =>
+              (b.onclick = () => {
+                const i = +b.dataset.i;
+                if (b.classList.contains("cut")) return;
+                if (cuts.has(i)) {
+                  b.classList.add("cut");
+                  if (++found === cuts.size) {
+                    box.classList.add("done");
+                    say(s);
+                    done(tries, 2600);
+                  }
+                } else {
+                  tries++;
+                  b.classList.remove("no");
+                  void b.offsetWidth;
+                  b.classList.add("no");
+                }
+              }),
+          );
+        },
+      );
+    },
+  };
+
+  /* ================= «Заховані слова» ================= */
+  // a row of letters with 3 words in it: tap the first and the last letter of a word to circle it
+  const hidden = {
+    key: "hidden",
+    ic: "🔎",
+    title: "Заховані слова",
+    howto:
+      "У рядку сховалися слова. Знайди слово і торкнись його першої та останньої літери — воно обведеться. У кожному рядку три слова!",
+    sets: [{ k: "book", t: "З книжки · с. 30", sub: "…АСЛОНІГМАСКА…" }],
+    play(set, o) {
+      rounds(
+        hidden,
+        set,
+        o,
+        (BOOK.hidden || []).slice(),
+        `<p class="sr-hrow" id="row"></p><div class="sr-found" id="found"></div>`,
+        (it, done) => {
+          const box = app.querySelector("#row"),
+            fl = app.querySelector("#found");
+          const got = new Set();
+          let a = -1,
+            tries = 0;
+          box.innerHTML = [...it.p]
+            .map(
+              (ch, i) =>
+                `<button type="button" class="sr-ch" data-i="${i}">${esc(ch)}</button>`,
+            )
+            .join("");
+          const cells = [...box.children];
+          const list = () =>
+            (fl.innerHTML = it.w
+              .map((w) =>
+                got.has(w)
+                  ? `<span class="ok">${esc(w.toLowerCase())}</span>`
+                  : `<span>${"_ ".repeat(w.length).trim()}</span>`,
+              )
+              .join(""));
+          list();
+          cells.forEach(
+            (b) =>
+              (b.onclick = () => {
+                const i = +b.dataset.i;
+                if (a < 0) {
+                  a = i;
+                  b.classList.add("sel");
+                  return;
+                }
+                const [x, y] = a < i ? [a, i] : [i, a];
+                cells[a].classList.remove("sel");
+                a = -1;
+                const w = it.p.slice(x, y + 1);
+                if (x !== y && it.w.includes(w) && !got.has(w)) {
+                  got.add(w);
+                  for (let j = x; j <= y; j++)
+                    cells[j].classList.add(
+                      "in",
+                      ...(j === x ? ["s"] : []),
+                      ...(j === y ? ["e"] : []),
+                    );
+                  say(w.toLowerCase());
+                  list();
+                  if (got.size === it.w.length) done(tries, 1800);
+                } else if (x !== y) {
+                  tries++;
+                  box.classList.remove("no");
+                  void box.offsetWidth;
+                  box.classList.add("no");
+                }
+              }),
+          );
+        },
+      );
+    },
+  };
+
+  /* ================= «Заплутані лінії» ================= */
+  // numbers at the top, letters at the bottom, tangled lines between them (drawn new each time):
+  // follow the line of 1, 2, 3… with the eyes and tap the letter where it ends
+  function tangle(n) {
+    const xs = (i) => 50 + (i * 500) / Math.max(1, n - 1);
+    // a smooth line through the points (Catmull-Rom as cubic Bézier)
+    const smooth = (P) =>
+      P.map((p, i) => {
+        if (!i) return `M${p[0].toFixed(0)} ${p[1]}`;
+        const p0 = P[i - 2] || P[i - 1],
+          p1 = P[i - 1],
+          p3 = P[i + 1] || p;
+        const c1 = [p1[0] + (p[0] - p0[0]) / 6, p1[1] + (p[1] - p0[1]) / 6],
+          c2 = [p[0] - (p3[0] - p1[0]) / 6, p[1] - (p3[1] - p1[1]) / 6];
+        return `C${c1[0].toFixed(0)} ${c1[1].toFixed(0)} ${c2[0].toFixed(0)} ${c2[1].toFixed(0)} ${p[0].toFixed(0)} ${p[1]}`;
+      }).join(" ");
+    const R = () => 30 + Math.random() * 540;
+    return {
+      xs,
+      line: (i, j) =>
+        smooth([
+          [xs(i), 46],
+          [R(), 120],
+          [R(), 200],
+          [R(), 280],
+          [xs(j), 352],
+        ]),
+    };
+  }
+  const lines = {
+    key: "lines",
+    ic: "🧶",
+    title: "Заплутані лінії",
+    howto:
+      "Від кожної цифри йде лінія до літери. Стеж за лінією тільки очима! Знайди, куди веде 1, потім 2, 3… — і прочитай слово.",
+    sets: [{ k: "book", t: "З книжки · с. 4", sub: "1 2 3 → У А И" }],
+    play(set, o) {
+      rounds(
+        lines,
+        set,
+        o,
+        (BOOK.lines || []).map((l, i) =>
+          i ? { w: l.w, low: shuf([...l.w.toUpperCase()]).join("") } : l,
+        ),
+        `<p class="sr-find">Куди веде <b id="want">1</b>?</p><div class="sr-tangle" id="tangle"></div><div class="sr-slots" id="slots"></div>`,
+        (it, done) => {
+          const W = it.w.toUpperCase(),
+            n = W.length,
+            T = tangle(n);
+          // the bottom place of each number's letter (a letter twice: each number gets its own place)
+          const used = new Set(),
+            to = [...W].map((ch) => {
+              const j = [...it.low].findIndex(
+                (c, k) => c === ch && !used.has(k),
+              );
+              used.add(j);
+              return j;
+            });
+          const tg = app.querySelector("#tangle");
+          tg.innerHTML = `<svg viewBox="0 0 600 400" class="sr-tsvg" aria-hidden="true">${to.map((j, i) => `<path d="${T.line(i, j)}" data-l="${i}"/>`).join("")}${[...Array(n).keys()].map((i) => `<circle cx="${T.xs(i)}" cy="26" r="24"/><text x="${T.xs(i)}" y="36">${i + 1}</text>`).join("")}</svg>${[...it.low].map((ch, j) => `<button type="button" class="sr-low" style="left:${(T.xs(j) / 600) * 100}%" data-t data-q="${to.indexOf(j)}">${esc(ch)}</button>`).join("")}`;
+          const want = app.querySelector("#want");
+          want.textContent = "1";
+          const slots = app.querySelector("#slots");
+          tapInOrder(tg, slots, it.w, done);
+          // a solved line turns green, the next number shows
+          tg.querySelectorAll("[data-t]").forEach((b) =>
+            b.addEventListener("click", () => {
+              if (!b.classList.contains("used")) return;
+              const k = +b.dataset.q;
+              const p = tg.querySelector(`[data-l="${k}"]`);
+              if (p) p.classList.add("ok");
+              want.textContent = k + 2 <= n ? String(k + 2) : "✓";
+            }),
+          );
+        },
+      );
+    },
+  };
+
   const GAMES = {
     flash,
     which,
@@ -1165,6 +1856,15 @@
     wedge,
     odd,
     sizes,
+    colors,
+    cross,
+    poem,
+    anagram,
+    mirror,
+    circle,
+    split,
+    hidden,
+    lines,
   };
   if (GAMES[GAME]) start(GAMES[GAME]);
   if (GAME === "text") textPage(window.TEXT);

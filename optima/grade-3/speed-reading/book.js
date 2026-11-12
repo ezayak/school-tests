@@ -206,4 +206,149 @@ window.BOOK = {
       ],
     },
   ],
+  // «Сині літери» (p. 6): each row as printed; c = the colour of each letter: n dark blue (the word), r red, g green,
+  // o orange, p pink, u purple, b light blue (colours measured on the scan; the dark-blue letters make the word)
+  colors: [
+    { p: "ВНІКУНЛО", c: "nrnngnbn", w: "вікно" },
+    { p: "СЛОМНРЦІЕ", c: "ngnonpnun", w: "сонце" },
+    { p: "УХТКАЛТМКНА", c: "bnpongnrngn", w: "хатка" },
+    { p: "АВРІШДНРКО", c: "gnunrnbnpn", w: "відро" },
+    { p: "СУТМІБЛВЕДЦЬ", c: "nbnongnrnunn", w: "стілець" },
+    { p: "ОБНУВКАВИАЗР", c: "ungnbnpnonrn", w: "буквар" },
+    { p: "ОФТУРТЕБВОЛ", c: "rnunongnbnn", w: "футбол" },
+    { p: "ЛІЯНУЛРЬОКА", c: "ngnpbnrnunn", w: "лялька" },
+    { p: "ШОКМОДЛІЯУР", c: "nongnunpnbn", w: "школяр" },
+  ],
+  // «Закресли повтори» (p. 18): the grid; the letters that are there only once, read from the top, make the words
+  cross: {
+    rows: [
+      "бувздбвітх",
+      "ісґґуіґзді",
+      "ьбідізивбз",
+      "зґлевхіхіб",
+      "бідбґеґзґг",
+      "воьіубвіьд",
+      "ідбзндзувґ",
+      "ьуіьвіьрбі",
+    ],
+    words: ["слон", "тигр"],
+    // the book's pictures: circle the ones the words name
+    pics: [
+      ["кінь", "🐴"],
+      ["сова", "🦉"],
+      ["слон", "🐘"],
+      ["тигр", "🐯"],
+    ],
+  },
+  // «Носоріг» (p. 16), Е. Звоницький: the lines as printed, {n} = the numbered gap; words = the book's list 1–7
+  poem: {
+    title: "Носоріг",
+    author: "Е. Звоницький",
+    lines: [
+      "Збоку від усіх {1}",
+      "Брів безлюддям {2}",
+      "До {3} він простував,",
+      "Тілом гілля {4}",
+      "Слід за ним {5} й грізно",
+      "Сунулась {6} різна.",
+      "Цей добряга-носоріг {7} їм знайти поміг.",
+    ],
+    words: [
+      "доріг",
+      "носоріг",
+      "ріки",
+      "розсував",
+      "слухняно",
+      "звірина",
+      "воду",
+    ],
+  },
+  // «Анаграми»: [as printed, the word]; p. 8 (торав, карот left out: no clear word), p. 22 with the book's pictures
+  anagrams: [
+    {
+      k: "p8",
+      t: "Анаграми · с. 8",
+      sub: "Ісл → ліс",
+      items: [
+        ["Ісл", "ліс"],
+        ["таав", "вата"],
+        ["істл", "стіл"],
+        ["квакті", "квітка"],
+        ["коломо", "молоко"],
+        ["накімта", "кімната"],
+        ["ритвана", "тварина"],
+        ["людбвер", "верблюд"],
+        ["ілоцьве", "олівець"],
+        ["стяле", "стеля"],
+      ],
+    },
+    {
+      k: "p22",
+      t: "Слово до картинки · с. 22",
+      sub: "ТІК → кіт 🐱",
+      items: [
+        ["ТІК", "кіт", "img/book/cat.jpg"],
+        ["ПІОН", "поні", "img/book/pony.jpg"],
+        ["РАНО", "нора", "img/book/stump.jpg"],
+        ["МАЗОК", "замок", "img/book/lock.jpg"],
+        ["ЗУБОК", "бузок", "img/book/lilac.jpg"],
+        ["ПАРІ", "ріпа", "img/book/turnip.jpg"],
+        ["РИС", "сир", "img/book/cheese.jpg"],
+        ["КРУЧА", "ручка", "img/book/pen.jpg"],
+        ["ВРОДА", "дрова", "img/book/logs.jpg"],
+        ["ФАРА", "арфа", "img/book/harp.jpg"],
+      ],
+    },
+  ],
+  // «Дзеркальні кубики» (p. 24): each letter mirrored on its cube, the word read left to right; c = the cubes' colour
+  mirror: [
+    { w: "бук", c: "r", ic: "🌳" },
+    { w: "сир", c: "y", ic: "🧀" },
+    { w: "вовк", c: "b", ic: "🐺" },
+    { w: "ключ", c: "p", ic: "🔑" },
+    { w: "буря", c: "g", ic: "🌪️" },
+  ],
+  // «Стрілки по колу» (p. 26): ring = the letters clockwise from the top left; path = the order the arrows go
+  circles: [
+    { w: "веселка", ring: "ВЕКЕЛСА", path: [0, 3, 5, 1, 4, 2, 6] },
+    { w: "україна", ring: "УНАКЇРА", path: [0, 3, 5, 2, 4, 1, 6] },
+  ],
+  // «Роз’єднай слова» (p. 30): the sentences with their spaces (the game takes them out); as printed, even «почитанється»
+  split: [
+    "Сьогодні зранку хлопчики пішли рибалити.",
+    "Бджілка бриніла над квіткою.",
+    "Дівчатка гралися на подвір’ї.",
+    "Оленка пригостила яблуком свого друга.",
+    "Яскрава блискавка осяяла небо.",
+    "Щирі усмішки учнів надихали вчительку.",
+    "Серце матері гріє краще сонця.",
+    "Без трудів не їстимеш пирогів.",
+    "Добро почитанється з тебе.",
+  ],
+  // «Заховані слова» (p. 30): each row as printed and the words hidden in it (3 a row; the book gives no key)
+  hidden: [
+    { p: "МАСВНАСЛОНІГМАСКАПИЛРАНОККЛУВН", w: ["СЛОН", "МАСКА", "РАНОК"] },
+    { p: "МОЗАЛОДОБЕРІГВЕЧСТІЛЕЦЬЩЕНВІКНО", w: ["ОБЕРІГ", "СТІЛЕЦЬ", "ВІКНО"] },
+    { p: "КЛМНРОДИНАЙВНОАКУЛАНСВКАЛИНАЩК", w: ["РОДИНА", "АКУЛА", "КАЛИНА"] },
+    {
+      p: "СМІПОКВІТКАЛАВЗВЕСНАПРОНБАБУСЯРЯК",
+      w: ["КВІТКА", "ВЕСНА", "БАБУСЯ"],
+    },
+    { p: "УБОКАРТАСНОВГУМКАДОИОТЕЛЕФОНКО", w: ["КАРТА", "ГУМКА", "ТЕЛЕФОН"] },
+    { p: "ПРЕЧАШКАВНАКЛІНІЙКАСМОТРЦУКОР", w: ["ЧАШКА", "ЛІНІЙКА", "ЦУКОР"] },
+  ],
+  // «Заплутані лінії» (p. 4): the game draws its own tangled lines; low = the letters at the bottom as printed (book word),
+  // the other words get their letters shuffled
+  lines: [
+    { w: "музика", low: "УАИКЗМ" },
+    { w: "книжка" },
+    { w: "рюкзак" },
+    { w: "лялька" },
+    { w: "школяр" },
+    { w: "футбол" },
+    { w: "буквар" },
+    { w: "весна" },
+    { w: "літак" },
+    { w: "парта" },
+  ],
 };
