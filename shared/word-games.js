@@ -395,7 +395,10 @@
         bucketEl.classList.remove("full");
         lvl = 0;
         setWater();
-        if (full >= BUCKETS) return catchEnd(lv, Date.now() - t0, wrong);
+        if (full >= BUCKETS) {
+          stop(); // the clock and the chips stop before the end screen
+          return catchEnd(lv, Date.now() - t0, wrong);
+        }
         setTimeout(nextWord, 500);
       }, 1300);
     }
