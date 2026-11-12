@@ -511,13 +511,8 @@
         (b) =>
           (b.onclick = () => {
             if (busy || b.classList.contains("up")) return;
-            const c = cards[+b.dataset.i];
             b.classList.add("up");
             b.removeAttribute("aria-label");
-            if (V.ok) {
-              V.hush();
-              V.say(spoken(c.t));
-            }
             open.push(b);
             if (open.length < 2) return;
             n++;
@@ -599,11 +594,6 @@
       const ok = document.getElementById("okBtn");
       const btn = (side, i) =>
         app.querySelector(`.tg-mi[data-s="${side}"][data-i="${i}"]`);
-      const say = (t) => {
-        if (!V.ok) return;
-        V.hush();
-        V.say(spoken(t));
-      };
       // "end": draw the marks of the joined pairs
       function paint() {
         app.querySelectorAll(".tg-mi").forEach((b) => {
@@ -664,7 +654,6 @@
             if (checked) return;
             const side = b.dataset.s;
             const i = +b.dataset.i;
-            say(side === "q" ? list[i].t : String(ans[i]));
             if (!now) {
               // tap a joined one: undo it, and it is the first of a new pair
               const k =
