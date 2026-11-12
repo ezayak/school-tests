@@ -7,6 +7,17 @@
 .wrap {
   max-width: 1200px;
 }
+/* Ukrainian (Ловимо фішки): Lilita One and Atkinson Hyperlegible have no Cyrillic letters, so the whole page is in Nunito
+   (otherwise commas and digits come from another font than the letters) */
+body[data-lang="uk"] {
+  --body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+body[data-lang="uk"] .hero-title,
+body[data-lang="uk"] .ag-time,
+body[data-lang="uk"] .ag-clock {
+  font-weight: 800;
+}
 .card.ag-play {
   gap: 12px;
   padding: 14px;
@@ -120,6 +131,16 @@
 .ag-target {
   font-size: 1.8rem;
   font-weight: 700;
+}
+/* 👀 Бачу: the word to find, big on a yellow label */
+.ag-target.see {
+  padding: 0 18px 4px;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--hl);
+  color: #1b2440;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  line-height: 1.3;
 }
 .ag-clock,
 .ag-done {

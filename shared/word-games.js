@@ -1,21 +1,26 @@
 /* =====================================================================
-   Arabic reading games (Grade 3 and 4), one engine for two games.
+   Reading games, one engine for two games: Arabic (Grade 3 and 4) and, for Catch, Ukrainian (Optima Швидкочитання).
    <body data-game="catch">: «اِلْتَقِطِ الْكَلِمَةَ» Catch the word. A word is said; chips with words fly in from
      every side; tap the chip of the word you heard (each tapped chip is read aloud). A right tap fills the bucket,
      a wrong one spills water. 3 right taps fill a bucket, then the next word is said. 10 buckets end the game:
      the time is shown and the best time of the level is kept on this device. Levels: 2–3 letters, long words.
      Data: window.GAME_WORDS = [[word, en, uk], …] (arabic-reading/game-words.js).
+   <body data-game="catch" data-lang="uk">: «Ловимо фішки», the same game in Ukrainian, for reading accuracy.
+     The word is shown in the bar (👀 Бачу) or only said (🔊 Чую, device voice); the other chips are mostly its look-alikes.
+     Data: window.CATCH = {levels: [{k, t, sub, slow, groups: [["стра", "стри", "стро"], …]}]}: a group = words that look alike;
+     the target of a bucket is any word of the level. The best time is kept per level and per way (see / hear).
    <body data-game="gaps">: «أَكْمِلِ الْجُمْلَةَ» Complete the sentence. A sentence with a missing word and 5 words
      to choose from; a clock runs for each sentence. Time up: one heart lost (3 hearts). The game ends after
      10 sentences or when the hearts are gone. A picture can explain the sentence; it can be turned off.
      Data: window.GAME_SENTENCES = [{q: "… ___ …", a, o: [4 wrong], img | ic, en, uk}, …].
-   The page loads shared/common.js (Kit) and arabic-reading/hub.js (the back links) first.
+   The page loads shared/common.js (Kit) and its back links (window.READING_LINKS: arabic-reading/hub.js, or the data file) first.
    ===================================================================== */
 (function () {
   const { esc, shuf } = Kit;
   const app = document.getElementById("app");
   const GAME = document.body.dataset.game;
-  const V = Kit.voice("ar", { online: true });
+  const UK = document.body.dataset.lang === "uk";
+  const V = UK ? Kit.voice("uk-UA") : Kit.voice("ar", { online: true });
   const H = /[ً-ْٰـ]/g;
   const bare = (s) => String(s).replace(H, "");
   const store = {
@@ -53,63 +58,154 @@
       : '<p class="note">No Arabic voice and no internet right now: the word is written instead of said.</p>';
 
   /* ---------------- Catch the word ---------------- */
-  const LEVELS = {
-    short: {
-      t: "2–3 letters",
-      ar: "كَلِمَاتٌ قَصِيرَةٌ",
-      ok: (n) => n >= 2 && n <= 3,
-    },
-    long: { t: "Long words", ar: "كَلِمَاتٌ طَوِيلَةٌ", ok: (n) => n >= 5 },
-  };
+  // Ukrainian: the levels come from window.CATCH; mates.get(word) = the look-alikes of a word in its level
+  const UKL = UK ? (window.CATCH || {}).levels || [] : [];
+  const LEVELS = UK
+    ? Object.fromEntries(UKL.map((l) => [l.k, l]))
+    : {
+        short: {
+          t: "2–3 letters",
+          ar: "كَلِمَاتٌ قَصِيرَةٌ",
+          ok: (n) => n >= 2 && n <= 3,
+        },
+        long: {
+          t: "Long words",
+          ar: "كَلِمَاتٌ طَوِيلَةٌ",
+          ok: (n) => n >= 5,
+          slow: true,
+        },
+      };
+  const FIRST = Object.keys(LEVELS)[0];
   const BUCKETS = 10,
     FILL = 3; // right taps to fill one bucket
+  const P = UK ? "uk-catch-" : "ar-catch-"; // keys on this device
+  // the texts of the start, play and end screens
+  const TX = UK
+    ? {
+        title: '<h1 class="hero-title">Ловимо фішки</h1>',
+        sub: "Знайди слово, поки воно летить",
+        howto: `Подивись на слово вгорі і торкнись такої самої фішки. Будь уважним: інші фішки дуже схожі! Правильна фішка наливає воду у відерце 💧, неправильна розливає. Наповни ${BUCKETS} відерець якнайшвидше!`,
+        none: "Ще немає рекорду",
+        start: "▶ Почати",
+        again: "Ще раз",
+        quit: "Зупинити гру",
+        done: (n) => `${n} відерець!`,
+        rec: "Новий рекорд!",
+        best: (t) => `Твій рекорд: ${t}`,
+        wrong: (n) => `помилок: ${n}`,
+        play: "Грати ще",
+        levels: "Інший рівень",
+        cheer: (r) => (r ? "Новий рекорд!" : "Молодець!"),
+      }
+    : {
+        title:
+          '<h1 class="hero-title ar" dir="rtl">اِلْتَقِطِ الْكَلِمَةَ</h1>',
+        sub: "Catch the word",
+        howto: `Listen to the word, then tap its chip when it flies by. A right tap fills the bucket 💧, a wrong tap spills water. Fill ${BUCKETS} buckets as fast as you can!`,
+        none: "No record yet",
+        start: "▶ Start · اِبْدَأْ",
+        again: "Listen again",
+        quit: "Stop the game",
+        done: (n) => `${n} buckets!`,
+        rec: "A new record! · رَقْمٌ قِيَاسِيٌّ جَدِيدٌ",
+        best: (t) => `Your best: ${t}`,
+        wrong: (n) => `${n} wrong ${n === 1 ? "tap" : "taps"}`,
+        play: "Play again",
+        levels: "Change level",
+        cheer: (r) => (r ? "رَقْمٌ قِيَاسِيٌّ جَدِيدٌ" : "أَحْسَنْتَ"),
+      };
+  // Ukrainian: 👀 see the word in the bar, or 🔊 only hear it (needs a voice)
+  const mode = () =>
+    UK && V.has() && store.get(P + "mode", "see") === "hear" ? "hear" : "see";
+  const bestKey = (k) => P + "best-" + k + (UK ? "-" + mode() : "");
   const letters = (w) => bare(w).replace(/^ال/, "").length;
   const BUCKET_SVG = `<svg class="ag-pail-line" viewBox="0 0 100 120" aria-hidden="true"><path d="M8 26 Q50 -14 92 26" fill="none" stroke="currentColor" stroke-width="5"/><path d="M4 26 L96 26 L84 116 L16 116 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/></svg>`;
+  const levelHTML = (l) =>
+    UK
+      ? `<span>${esc(l.t)}</span><small>${esc(l.sub || "")}</small>`
+      : `<span class="ar">${l.ar}</span><small>${l.t}</small>`;
+  const modeHTML = () =>
+    UK && V.has()
+      ? `<div class="ag-opts-row"><div class="og"><span class="lab">Слово</span><div class="seg" role="group" aria-label="Слово"><button type="button" data-m="see" aria-pressed="${mode() === "see"}">👀 Бачу</button><button type="button" data-m="hear" aria-pressed="${mode() === "hear"}">🔊 Чую</button></div></div></div>`
+      : "";
 
   function catchStart() {
-    let lv = store.get("ar-catch-level", "short");
-    if (!LEVELS[lv]) lv = "short";
-    const best = (k) => +store.get("ar-catch-best-" + k, 0);
+    let lv = store.get(P + "level", FIRST);
+    if (!LEVELS[lv]) lv = FIRST;
+    const best = (k) => +store.get(bestKey(k), 0);
     app.innerHTML = `<section class="card pop ag-start">
       <div class="toprow">${links()}</div>
       <div class="ag-hero" aria-hidden="true"><span>🪣</span><span>💧</span><span>🐸</span></div>
-      <h1 class="hero-title ar" dir="rtl">اِلْتَقِطِ الْكَلِمَةَ</h1>
-      <p class="ag-sub">Catch the word</p>
-      <p class="howto">Listen to the word, then tap its chip when it flies by. A right tap fills the bucket 💧, a wrong tap spills water. Fill ${BUCKETS} buckets as fast as you can!</p>
-      <div class="ag-levels" role="group" aria-label="Level">${Object.entries(
+      ${TX.title}
+      <p class="ag-sub">${TX.sub}</p>
+      <p class="howto">${TX.howto}</p>
+      ${modeHTML()}<div class="ag-levels" role="group" aria-label="Level">${Object.entries(
         LEVELS,
       )
         .map(
           ([k, l]) =>
-            `<button type="button" class="ag-level" data-lv="${k}" aria-pressed="${k === lv}"><span class="ar">${l.ar}</span><small>${l.t}</small><small class="ag-rec">${best(k) ? "🏆 " + clock(best(k)) : "No record yet"}</small></button>`,
+            `<button type="button" class="ag-level" data-lv="${k}" aria-pressed="${k === lv}">${levelHTML(l)}<small class="ag-rec">${best(k) ? "🏆 " + clock(best(k)) : TX.none}</small></button>`,
         )
         .join("")}</div>
-      ${noVoice()}
-      <button class="btn big ag-go" id="go" type="button">▶ Start · اِبْدَأْ</button>
+      ${UK ? "" : noVoice()}
+      <button class="btn big ag-go" id="go" type="button">${TX.start}</button>
     </section>`;
     app.querySelectorAll("[data-lv]").forEach(
       (b) =>
         (b.onclick = () => {
           lv = b.dataset.lv;
-          store.set("ar-catch-level", lv);
+          store.set(P + "level", lv);
           app
             .querySelectorAll("[data-lv]")
             .forEach((x) => x.setAttribute("aria-pressed", x === b));
         }),
     );
+    // another way (see / hear) has its own records: draw the screen again
+    app.querySelectorAll("[data-m]").forEach(
+      (b) =>
+        (b.onclick = () => {
+          store.set(P + "mode", b.dataset.m);
+          catchStart();
+        }),
+    );
     app.querySelector("#go").onclick = () => catchPlay(lv);
   }
 
+  // the words of a level: Arabic by length, Ukrainian from the look-alike groups (each word once)
+  function levelWords(lv) {
+    if (!UK)
+      return {
+        WORDS: (window.GAME_WORDS || []).filter((w) =>
+          LEVELS[lv].ok(letters(w[0])),
+        ),
+        mates: null,
+      };
+    const byWord = new Map(),
+      mates = new Map();
+    for (const g of LEVELS[lv].groups || [])
+      for (const w of g) {
+        if (!byWord.has(w)) byWord.set(w, [w]);
+        const m = mates.get(byWord.get(w)) || new Set();
+        g.forEach((x) => x !== w && m.add(x));
+        mates.set(byWord.get(w), m);
+      }
+    for (const [w, m] of mates)
+      mates.set(
+        w,
+        [...m].map((x) => byWord.get(x)),
+      );
+    return { WORDS: [...byWord.values()], mates };
+  }
+
   function catchPlay(lv) {
-    const WORDS = (window.GAME_WORDS || []).filter((w) =>
-      LEVELS[lv].ok(letters(w[0])),
-    );
+    const { WORDS, mates } = levelWords(lv);
+    const see = mode() === "see";
     const order = shuf(WORDS);
     app.innerHTML = `<section class="card ag-play">
       <div class="ag-bar">
-        <button type="button" class="abtn" id="quit" aria-label="Stop the game">←</button>
-        <button type="button" class="abtn big" id="again"><span class="e">🔊</span> Listen again</button>
-        <span class="ag-target ar" id="target" dir="rtl"></span>
+        <button type="button" class="abtn" id="quit" aria-label="${TX.quit}">←</button>
+        ${!UK || V.has() ? `<button type="button" class="abtn big" id="again"><span class="e">🔊</span> ${TX.again}</button>` : ""}
+        ${UK ? `<span class="ag-target${see ? " see" : ""}" id="target"></span>` : '<span class="ag-target ar" id="target" dir="rtl"></span>'}
         <span class="ag-clock">⏱ <b id="clock">0:00</b></span>
       </div>
       <div class="ag-field">
@@ -143,7 +239,7 @@
     };
     const nextWord = () => {
       target = order[k++ % order.length];
-      targetEl.textContent = V.has() ? "" : target[0];
+      targetEl.textContent = see || !V.has() ? target[0] : "";
       waiting = false;
       since = 0;
       // a burst of 3 chips from 3 different sides; the target is one of them, at a random place
@@ -151,9 +247,10 @@
         at = Math.floor(Math.random() * 3);
       for (let n = 0; n < 3; n++) spawn(n === at ? target : other(), sides[n]);
       others = 2 - at;
-      say(target[0]);
+      if (!see || !UK) say(target[0]);
     };
-    app.querySelector("#again").onclick = () => target && say(target[0]);
+    const againBtn = app.querySelector("#again");
+    if (againBtn) againBtn.onclick = () => target && say(target[0]);
     app.querySelector("#quit").onclick = () => {
       stop();
       catchStart();
@@ -177,6 +274,12 @@
       return other();
     }
     function other() {
+      // Ukrainian: mostly a look-alike of the target (стра → стри, стро)
+      if (mates) {
+        const near = mates.get(target) || [];
+        if (near.length && Math.random() < 0.7)
+          return near[Math.floor(Math.random() * near.length)];
+      }
       const near = WORDS.filter(
         (w) =>
           w !== target &&
@@ -202,14 +305,14 @@
       const w = word || pickWord();
       const el = document.createElement("button");
       el.type = "button";
-      el.className = "ag-chip ar";
-      el.dir = "rtl";
+      el.className = UK ? "ag-chip" : "ag-chip ar";
+      if (!UK) el.dir = "rtl";
       el.textContent = w[0];
       el.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
       sky.appendChild(el);
       const cw = el.offsetWidth,
         ch = el.offsetHeight;
-      const speed = (lv === "long" ? 0.13 : 0.15) * Math.max(W, 420); // px per second
+      const speed = (LEVELS[lv].slow ? 0.13 : 0.15) * Math.max(W, 420); // px per second
       const side = from != null ? from : Math.floor(Math.random() * 4);
       let x, y, vx, vy;
       if (side === 0) {
@@ -337,20 +440,20 @@
   }
 
   function catchEnd(lv, ms, wrong) {
-    const key = "ar-catch-best-" + lv,
+    const key = bestKey(lv),
       best = +store.get(key, 0),
       record = !best || ms < best;
     if (record) store.set(key, ms);
     app.innerHTML = `<section class="card pop ag-end">
       <div class="toprow">${links()}</div>
       <div class="ag-hero" aria-hidden="true">${record ? "<span>🏆</span>" : ""}<span>🪣</span><span>🎉</span></div>
-      <h1 class="hero-title">${BUCKETS} buckets!</h1>
+      <h1 class="hero-title">${TX.done(BUCKETS)}</h1>
       <p class="ag-time">⏱ ${clock(ms)}</p>
-      <p class="ag-sub">${record ? "A new record! · رَقْمٌ قِيَاسِيٌّ جَدِيدٌ" : `Your best: ${clock(best)}`}</p>
-      <p class="note">${LEVELS[lv].t} · ${wrong} wrong ${wrong === 1 ? "tap" : "taps"}</p>
-      <div class="row" style="justify-content:center"><button class="btn big" id="again" type="button">Play again</button><button class="btn ghost" id="levels" type="button">Change level</button></div>
+      <p class="ag-sub">${record ? TX.rec : TX.best(clock(best))}</p>
+      <p class="note">${esc(LEVELS[lv].t)} · ${TX.wrong(wrong)}</p>
+      <div class="row" style="justify-content:center"><button class="btn big" id="again" type="button">${TX.play}</button><button class="btn ghost" id="levels" type="button">${TX.levels}</button></div>
     </section>`;
-    say(record ? "رَقْمٌ قِيَاسِيٌّ جَدِيدٌ" : "أَحْسَنْتَ");
+    say(TX.cheer(record));
     app.querySelector("#again").onclick = () => catchPlay(lv);
     app.querySelector("#levels").onclick = catchStart;
   }
