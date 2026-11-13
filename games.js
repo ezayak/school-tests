@@ -2446,6 +2446,7 @@ window.GAMES = [
       "grade-3/computer/chapter-2/img/lesson-4/spelling.jpg",
     ],
   },
+
   {
     school: "optima",
     grade: 3,
@@ -2453,12 +2454,18 @@ window.GAMES = [
     subject: "Українська література",
     title: "Українська література",
     hub: true,
-    lesson: "Читання · по складах, слова, весь текст на швидкість",
-    topics: "Богданчик · Щасливі літачки",
+    lesson:
+      "Уроки за підручником: текст по словах і реченнях, питання · Складова ракета",
+    topics:
+      "До школи ідемо в радісний час · Складова ракета: Богданчик, Щасливі літачки",
     path: "optima/grade-3/ukr-lit/index.html",
-    countLabel: "2 тексти",
+    countLabel: "1 урок · 2 тексти",
     year: "2026–2027",
     also: [
+      "optima/grade-3/ukr-lit/lessons.js",
+      "optima/grade-3/ukr-lit/lesson-1.html",
+      "optima/grade-3/ukr-lit/lesson-1.js",
+      "optima/grade-3/ukr-lit/img/lesson-1/flowers.jpg",
       "optima/grade-3/ukr-lit/texts.js",
       "optima/grade-3/ukr-lit/bohdanchyk.html",
       "optima/grade-3/ukr-lit/bohdanchyk.js",
