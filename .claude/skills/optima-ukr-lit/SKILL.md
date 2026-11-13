@@ -86,3 +86,27 @@ Check: the whole text is there in reading order (two columns on a tablet), each 
 📄 Увесь текст · 👆 По словах · 📏 По реченнях. In the two last modes: ← → by hand (or a tap on the text), ▶ goes on by itself
 (🐢 … 🐇: 2.6 s … 0.7 s a word, longer words longer, a sentence = its words × 0.8), 🔊 Вголос reads each word / sentence (▶ then waits for the voice), a tap on a word starts there,
 read words turn grey. The buttons sit in a bar under the text, the page buttons on its right; following the words turns the page. A sentence ends after . ! ? … (with » after it), so «— Дзелень! Дзелень!» is two. Reaching the end marks the text ✓ and offers «❓ До питань».
+Pages are made by the engine (poem: whole stanzas up to 16 lines, 12 when a line is over 34 letters and the poem goes in one column;
+a block of lines longer than a page is cut; prose: paragraphs up to 480 letters, a longer one at a sentence end). Set `pages` only to cut by hand.
+`acro: true | N` colours the first letters of the lines (an acrostic). A text with no picture in the book: leave out `img`, its `ic` is shown big.
+
+## All 87 lessons are built (book pp. 4–140)
+
+The book is done: one lesson per entry of the table of contents, plus one «Перевір свої знання» lesson at the end of each section
+(its text = the section's definitions, sayings or title lines; its questions = the review, «з якого твору ці рядки» as choice rows, the book's test).
+New work on this book is fixes; a new book of the series would get its own folder and part keys.
+
+## Lessons learned
+
+- The decoded text joins words cut at a line end: a real hyphen there is lost («лісок-перелісок», «сама-самісінька», «жуків-оленів», «весело-весело»),
+  and the book's stress marks leave gaps inside words («музик а», «бер езі»). Read every hyphen and gap against the page picture.
+- «Прочитай виділене / поясни виділені вислови»: the bold words are only on the picture (the text layer has no bold). Crop the page and look; never guess.
+- A task box between two texts (riddle, «Утвори прислів’я», a rule box) goes with the text it is about; a «Перевір себе» test after a text goes in its lesson
+  (the book's letters а) б) в) kept in the options).
+- Quotes inside a title: the book nests «…«…»…»; never write "…" inside a JS string («Їдемо на «Бережок»!»).
+- `ic` holds at most 2 emoji: ZWJ families (👨‍👩‍👦) count as 3.
+- Proverbs: one slide per proverb, `q` = its beginning, the endings as choices, `mean` = its meaning (the user asked for this).
+- The right answer is in a different place in each row; a choice list of the book's own words (a test, a word bank) stays in the book's order.
+- Picture crops: `book-pics.py` boxes often include a title, the page garland or a strip of text; look at every crop and trim it.
+- Write and register one lesson at a time: `ukr-lesson-add.js` registers every `lesson-N.js` in the folder, also one not yet committed.
+- Personal answers (`open`) are models, never the child's real data (no guessed name or age).
