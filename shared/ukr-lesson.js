@@ -246,7 +246,10 @@
   // x.pages: [[paras of page 1], …] sets the pages by hand; otherwise they are made here: a poem gets whole stanzas,
   // up to PAGE.lines lines a page; prose gets whole paragraphs, up to PAGE.chars letters a page, and a paragraph longer
   // than that is cut at the end of a sentence (the piece after the cut has no indent: {t, cont: true}).
-  const PAGE = { lines: 16, chars: 480 };
+  // a poem with a line over 34 letters is shown in one column, so a page holds fewer lines
+  const PAGE = { lines: 16, wideLines: 12, chars: 480 };
+  const isWide = (x) =>
+    x.poem && (x.pages || [x.paras]).flat(2).some((l) => l.length > 34);
   function paginate(x) {
     if (x.pages) return x.pages;
     const size = (q) => (x.poem ? q.length : (q.t || q).length);
@@ -265,7 +268,7 @@
       });
     const pages = [[]];
     let n = 0;
-    const max = x.poem ? PAGE.lines : PAGE.chars;
+    const max = x.poem ? (isWide(x) ? PAGE.wideLines : PAGE.lines) : PAGE.chars;
     paras.forEach((q) => {
       if (n && n + size(q) > max) {
         pages.push([]);
@@ -350,9 +353,7 @@
               .join(X.poem ? "" : " ")}</div>`,
         )
         .join("");
-    // a poem with long lines is shown in one column
-    const wide =
-      X.poem && (X.pages || [X.paras]).flat(2).some((l) => l.length > 34);
+    const wide = isWide(X);
     const textHTML = pages
       .map(
         (pg, p) =>

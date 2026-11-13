@@ -146,6 +146,8 @@
 }
 .ur-page.poem.wide {
   columns: 1;
+  font-size: 0.9em; /* long lines: a little smaller, so 12 lines fit a tablet */
+  line-height: 1.5;
 }
 /* an acrostic: the first letters of the lines, as the book prints them */
 .ur-acro {
