@@ -21,7 +21,7 @@ window.UA_LESSONS = {
           en: "Леся Храплива-Щур · вірш, прислів’я про навчання",
           path: "lesson-1.html",
           cover: "img/lesson-1/flowers.jpg",
-          note: "с. 4–5 · 9 питань · 4 прислів’я",
+          note: "с. 4–5 · 13 питань",
         },
       ],
     },

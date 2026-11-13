@@ -203,6 +203,8 @@ A lesson page (`data-view="lesson"`, the same `data-subject`) loads `shared/comm
 window.UA_LESSON = {
   subject: "Українська мова",  // or "Українська література"
   key: "um3-l1", n: 1, title: "Звуки і букви", pages: "с. 4–5", img: "img/lesson-1/",
+  part: { k: "sounds", tab: "Звуки і букви", ic: "🔤", t: "Звуки і букви. Алфавіт. Наголос" },  // the side bar part
+  card: { en: "the card's line", cover: "eagle" },                                            // the card in lessons.js
   learn: [{ t, ic, lines: ["text with [key words]"], ex: ["examples"], img, text, from: "№ 1, с. 4" }],   // language
   texts: [{ t, author, kind, ic, task, img, from, poem: true, paras: [["line", …], …] | ["paragraph", …] }], // reading
   // a text longer than one screen: pages: [[paras of page 1], [paras of page 2], …] instead of paras
@@ -215,8 +217,9 @@ Rows: `{q, ch: [...], a}` (choose; `a: [..]` = several, «Обери кільк�
 An item's id is `k`, else `n`, else its place («1-3»): give `k` when a book number has several items. `chip` = its name in the strip, `tip` = the words the task works on, `mean` = a meaning shown in a box beside the choices (a proverb).
 The engine does not shuffle choices: put the right one in a different place each time. `img` names a `.jpg` in the lesson's `img` folder.
 
-New lesson: the skill (`.claude/skills/optima-ukr-mova` or `optima-ukr-lit`): `lesson-N.js` + a copy of `lesson-1.html`, a card in `lessons.js`, the files and pictures in `also`
-of the subject's entry in `games.js` (and `countLabel` / `topics`), `node .claude/scripts/ukr-lesson-check.js <lesson-N.js>`, then bump `VERSION` in `sw.js`.
+New lesson: the skill (`.claude/skills/optima-ukr-mova` or `optima-ukr-lit`): write `lesson-N.js`, then `node .claude/scripts/ukr-lesson-add.js <folder>`
+(the html, `lessons.js` rebuilt from the lessons' `part` / `card`, the files and pictures in `also` of the subject's entry in `games.js`, `countLabel`, `topics`),
+`node .claude/scripts/ukr-lesson-check.js <lesson-N.js>`, then bump `VERSION` in `sw.js`.
 
 ## Ukrainian math (Optima, Grade 3)
 

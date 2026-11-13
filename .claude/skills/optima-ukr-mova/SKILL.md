@@ -45,7 +45,7 @@ Every answer is worked out (count the sounds, check the scheme symbol by symbol:
 
 ## 3. Write the lesson
 
-- `lesson-N.js` (shape of lesson-1.js), `lesson-N.html` (copy lesson-1.html: change the `.js` and the `<title>` = «<title> · Українська мова»).
+- `lesson-N.js` (shape of lesson-1.js); `ukr-lesson-add.js` makes `lesson-N.html` (see 5).
 - **Урок** (`learn`): 3–5 slides, one rule each, from the book's rule boxes and the exercise questions («Пригадай …»): `lines` with `[key words]`,
   `ex` = book examples worked out, `img` when the book's picture explains it, `from: "№ 1, с. 4"`. Don't put an exercise's own answer on a slide.
 - **Вправи** (`groups`): by type of task (`t`, `ic`), homework in its own group (🏠). Every item: `n` (book number), `k` when the number repeats, `chip`, `p` (book page), `q` (the book's wording),
@@ -68,7 +68,8 @@ The tiles are tapped with real pointer events (`.click()` does not move them). L
 
 ## 5. Register and show
 
-- Card in `lessons.js` (`note: "с. X–Y · K вправ"`, `cover` = a picture of the lesson); the files and pictures in `also` of the «Українська мова» entry in `games.js`, plus `countLabel` / `topics`.
+- The head has `part: {k, tab, ic, t}` (the book section) and `card: {en, cover}`; `node .claude/scripts/ukr-lesson-add.js optima/grade-3/ukr-mova`
+  makes `lesson-N.html`, rebuilds `lessons.js` and the «Українська мова» entry of `games.js` (files, pictures, `countLabel`, `topics`).
 - `prettier --write` the changed files, run the check again. Bump `VERSION` in `sw.js` once, last, in its own commit.
 - Show the user: slides, groups, what was left out and why, the answers that were worked out without a key. Commit each lesson on its own.
 

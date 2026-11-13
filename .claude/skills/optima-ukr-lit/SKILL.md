@@ -15,12 +15,16 @@ whenever the answer is in the text. Build **one lesson at a time**, show it, wai
 ## 1. Find the lesson
 
 Book: `~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Савчук А. Українська мова та читання. Частина 2. Підручник для 3 класу. Підручники та посібники.2020..pdf`.
-**PDF page = book page.** The text layer is garbled (broken font encoding): read the pages as pictures, and type the text from them.
+**PDF page = book page.** The text layer is cp1251 read as Latin-1 («Ïðî÷èòàé»): decode it with the helper, then check it against the page picture.
 
 ```sh
-B=~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Савчук*.pdf; S=<scratchpad>
-pdftoppm -r 110 -f 4 -l 6 -png $B $S/l     # to read; -r 200 for the crops and small print
+python3 -I .claude/scripts/savchuk-text.py 5 7          # the decoded text of pp. 5–7 (words cut at a line end joined, stress marks dropped)
+B="$(ls ~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Савчук*.pdf)"; S=<scratchpad>
+pdftoppm -r 80 -f 5 -l 7 -png "$B" $S/l                  # the pages as pictures: the layout, the pictures, the order of a two-column poem
+python3 -I .claude/scripts/book-pics.py "$B" 6 $S/pics   # the pictures of p. 6 cropped at 200 dpi (+ p6-boxes.png to look at)
 ```
+
+The table of contents is on pp. 142–144 (`savchuk-text.py 142 144`): one entry = one lesson, in that order. «�» in the decoded text = a lost letter: read it on the picture.
 
 - Theme titles: big blue capitals («ОСІНЬ НАША, ОСІНЬ — НЕБА ЯСНА ПРОСИНЬ») and a light-blue subtitle («ДО ШКОЛИ ІДЕМО В РАДІСНИЙ ЧАС»): a part of the side bar = the subtitle.
 - A lesson = one text (pink capitals title, the author in italics on the right) and every task after it up to the next text.
@@ -57,7 +61,10 @@ The right answer is in a different place in each row (the engine does not shuffl
 
 ## 4. Write, check, register
 
-- `lesson-N.js` (shape of lesson-1.js), `lesson-N.html` (copy lesson-1.html: change the `.js` and the `<title>` = «<title> · Українська література»).
+- `lesson-N.js` (shape of lesson-1.js) with the head: `part: {k, tab, ic, t}` (the theme: `t` = «THEME · Subtitle», `tab` = a short name; the same `k` for every lesson of it)
+  and `card: {en: "author · kind · topic", cover: "<picture name>"}`.
+- `node .claude/scripts/ukr-lesson-add.js optima/grade-3/ukr-lit`: makes `lesson-N.html`, rebuilds `lessons.js` from all the lessons' heads,
+  and the files, pictures, `countLabel`, `topics` of the «Українська література» entry in `games.js`. Then `prettier --write games.js optima/grade-3/ukr-lit/`.
 - `node .claude/scripts/ukr-lesson-check.js optima/grade-3/ukr-lit/lesson-N.js` must print OK.
 - Play and look (from the repo root):
 
@@ -71,8 +78,7 @@ bash $SH <scratchpad>/c.png $D lesson-N.html "reset;tab:tasks;click:#g-0;go:2" 1
 
 Check: the whole text is there in reading order (two columns on a tablet), each page fits 1280×800 with the bar, the sentences split where the book's sentences end, every question slide, a phone width.
 
-- Card in `lessons.js` (`cover` = the text's picture, `en` = author · kind · topic, `note: "с. X–Y · K питань"`), the files and pictures in `also` of the
-  «Українська література» entry in `games.js`, plus `countLabel` («N уроків · 2 тексти») / `topics`. `prettier --write`, check again; `VERSION` bump in `sw.js` last, in its own commit.
+- One commit per lesson (the lesson's files, `lessons.js`, `games.js`); `VERSION` bump in `sw.js` once, last, in its own commit.
 - Show the user: the text, the questions and their answers (the oral ones with the model answer), what was left out.
 
 ## The reader (shared/ukr-lesson.js)
