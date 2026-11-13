@@ -2456,7 +2456,7 @@ window.GAMES = [
     lesson: "Уроки за підручником: правило з прикладами, вправи",
     topics: "Звуки і букви. Алфавіт. Наголос",
     path: "optima/grade-3/ukr-mova/index.html",
-    countLabel: "3 уроки",
+    countLabel: "4 уроки",
     year: "2026–2027",
     also: [
       "optima/grade-3/ukr-mova/lessons.js",
@@ -2486,6 +2486,10 @@ window.GAMES = [
       "optima/grade-3/ukr-mova/img/lesson-3/button.jpg",
       "optima/grade-3/ukr-mova/img/lesson-3/crow.jpg",
       "optima/grade-3/ukr-mova/img/lesson-3/grid.jpg",
+      "optima/grade-3/ukr-mova/lesson-4.html",
+      "optima/grade-3/ukr-mova/lesson-4.js",
+      "optima/grade-3/ukr-mova/img/lesson-4/bread.jpg",
+      "optima/grade-3/ukr-mova/img/lesson-4/schemes.jpg",
     ],
   },
   {
