@@ -158,6 +158,10 @@
 .ur-stanza {
   break-inside: avoid;
 }
+/* a long block of lines (more than 8) may go on in the next column */
+.ur-stanza.long {
+  break-inside: auto;
+}
 .ur-t {
   border-radius: 6px;
   transition:

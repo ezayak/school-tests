@@ -328,7 +328,7 @@
       html
         .map(
           (st) =>
-            `<div class="${X.poem ? "ur-stanza" : `ur-para${st.cont ? " cont" : ""}`}">${st.lines
+            `<div class="${X.poem ? `ur-stanza${st.lines.length > 8 ? " long" : ""}` : `ur-para${st.cont ? " cont" : ""}`}">${st.lines
               .map(
                 (ws) =>
                   `<span class="ur-line">${ws
