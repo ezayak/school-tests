@@ -121,3 +121,9 @@ Folder `~/Documents/2026-2027/Alex/English/`. Page = the book page printed at th
 | File                               | Content                                                                 | Goes to                                                   | Status |
 | ---------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------- | ------ |
 | 20261111-Dictation-Unit2-Week5.pdf | Dictation on 16 Nov: 10 sentences with the week's suffix spelling words | `english-dictation-unit2-week5` (10 words + 10 sentences) | built  |
+
+## Teacher's files, 12 Nov (`~/Documents/2026-2027/Alex/English/`)
+
+| File                                               | Content                                                                                                                       | Goes to                                                                                         | Status |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------ |
+| 20261112-G4-GHW1-U1W5-Grammar-Run-On-Sentences.pdf | Graded Homework (1), due 17 Nov: Run-on sentences (Unit 1 Week 5, Term 1): 5 choose-the-fix, 3 run-ons and 2 fragments to fix | `../../term-1/english/unit1-week5` · `hw1` (10 questions, a picture and a 💡 Help rule on each) | built  |

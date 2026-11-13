@@ -1267,13 +1267,23 @@
       );
     const big = it.oi || it.oh || it.pics;
     const side = `${fromTag()}${hasPic(it) ? pic(it) : ""}`;
+    // help: {t, lines, vis} – a 💡 Help button that shows the rule (not the answer) until the right answer is tapped
     const main = `${qHTML(it.q)}
     <div class="opts ${it.two ? "two" : ""} ${big ? "pics" : ""}${it.opts.some((o) => o.length > 70) ? " long" : ""}">${order.map((o, j) => `<div class="optrow"><button type="button" class="opt${big ? " popt" : ""}" data-j="${j}">${o.ic ? `<span class="oic">${o.ic}</span>` : ""}${o.oi ? ic(o.oi, big ? 72 : 40) : ""}${o.oh ? visHTML(o.oh) : ""}${o.pi ? `<img class="oimg" src="${IMG(o.pi)}" alt="">` : ""}<span class="ot">${tx(o.t)}</span></button><button type="button" class="abtn sm" data-h="${j}" aria-label="Listen">🔊</button></div>`).join("")}</div>
-    <div id="fbx" class="fbx"></div>`;
+    <div id="fbx" class="fbx">${it.help ? `<div class="row center"><button class="btn ghost" id="helpBtn" type="button">💡 Help</button></div>` : ""}</div>`;
     app.innerHTML = `${hud()}<section class="card pop fc">${hasPic(it) ? split(side, main) : `<div class="row center">${fromTag()}</div>${main}`}</section>`;
     bindHome();
     const qs = plain(it.q);
     document.getElementById("sq").onclick = () => sayQ(qs);
+    if (it.help)
+      document.getElementById("helpBtn").onclick = () => {
+        const H = it.help;
+        document.getElementById("fbx").innerHTML =
+          `<div class="fb rule"><b>💡 ${esc(H.t)}</b>${H.lines.map((l) => `<span class="fx">${tx(l)}</span>`).join("")}${H.vis ? visHTML(H.vis) : ""}</div>`;
+        const fx = [...app.querySelectorAll("#fbx .fx")];
+        if (RA) readEl(fx);
+        else say(H.t + ". " + H.lines.map(plain).join(" "));
+      };
     app.querySelectorAll("[data-h]").forEach(
       (b) =>
         (b.onclick = () => {

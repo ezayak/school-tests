@@ -1094,6 +1094,15 @@ details.book[open] .alltext {
 .fb.ok > b {
   color: var(--good);
 }
+/* 💡 Help: the rule for the question (computer-lesson.js mc `help`) */
+.fb.rule {
+  border-color: var(--blue);
+  background: color-mix(in srgb, var(--blue) 10%, var(--card));
+  text-align: left;
+}
+.fb.rule > b {
+  color: var(--blue);
+}
 .fb.no > b {
   color: var(--bad);
 }

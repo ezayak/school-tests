@@ -1,5 +1,5 @@
 // English · Grade 4 · Unit 1 · Week 5 « Run-On Sentences », suffixes and argumentative text. Engine: shared/computer-lesson.js (data-subject="English").
-// Sources: Classwork Booklet Term 1 (pages 26–37), Homework Booklet Term 1 (pages 29–43), Vocabulary Related Words sheet, the Final exam memo.
+// Sources: Classwork Booklet Term 1 (pages 26–37), Homework Booklet Term 1 (pages 29–43), Vocabulary Related Words sheet, the Final exam memo, Graded Homework (1) Run-On Sentences (teacher’s file, 12 Nov, Term 2).
 // Every word is read aloud and lights up; the vocabulary has animated pictures (Kit.scene in shared/common.js).
 (function () {
   const SC = (bg, items, cap) => ({ kind: "scene", bg, items, cap });
@@ -51,6 +51,133 @@
       emoji,
     },
   ];
+  // 💡 Help on the Graded Homework (1): the rule for fixing the sentence, with the lesson's own example
+  const RULE = {
+    conj: {
+      t: "Fix it: a comma + a conjunction",
+      lines: [
+        "Two sentences with [nothing] between them = a run-on ✗",
+        "Join them with a [comma] and a [conjunction]: and, but, so, or.",
+        "The comma comes [before] the conjunction: “…, so we …” ✓ “… so, we …” ✗",
+      ],
+      vis: BL(
+        [
+          [
+            ["I walked in the snow", "i"],
+            [",", "p"],
+            ["and", "c"],
+            ["it was cold.", "i"],
+          ],
+        ],
+        { title: "✓" },
+      ),
+    },
+    three: {
+      t: "Fix it: 3 ways",
+      lines: [
+        "Make [two sentences]: a period and a capital letter.",
+        "Use a [semicolon] ; alone, with no conjunction after it.",
+        "Use a [comma] and a [conjunction] (and, but, so).",
+        "[Only a comma] is not enough ✗ (a comma splice).",
+      ],
+      vis: BL(
+        [
+          [
+            ["I walked in the snow", "i"],
+            [".", "p"],
+            ["It was cold.", "i"],
+          ],
+          [
+            ["I walked in the snow", "i"],
+            [";", "p"],
+            ["it was cold.", "i"],
+          ],
+          [
+            ["I walked in the snow", "i"],
+            [",", "p"],
+            ["and", "c"],
+            ["it was cold.", "i"],
+          ],
+        ],
+        { title: "✓ ✓ ✓" },
+      ),
+    },
+    many: {
+      t: "Too many clauses",
+      lines: [
+        "Three sentences joined with “and … but …” in one = [too many clauses] ✗",
+        "Fix it: make [two sentences]. The second one can use “, but”.",
+      ],
+      vis: BL(
+        [
+          [
+            ["Summer is coming", "i"],
+            [".", "p"],
+            ["I can’t wait", "i"],
+            [",", "p"],
+            ["and", "c"],
+            ["I will swim.", "i"],
+          ],
+        ],
+        { title: "✓" },
+      ),
+    },
+    subj: {
+      t: "A fragment: no subject",
+      lines: [
+        "A sentence needs a [subject]: [who] did it?",
+        "“planted seeds …” – who planted? Add a subject at the start.",
+        "A sentence starts with a [capital letter].",
+      ],
+      vis: BL(
+        [
+          [["Talk on the phone.", "f"]],
+          [
+            ["We", "c"],
+            ["talk on the phone.", "i"],
+          ],
+        ],
+        { join: "✗ ↓ ✓", legend: false },
+      ),
+    },
+    pred: {
+      t: "A fragment: no predicate",
+      lines: [
+        "A sentence needs a [predicate]: what [do they do]?",
+        "“Marcus and his friends …” – what did they do? Add it.",
+        "End with a period.",
+      ],
+      vis: BL(
+        [
+          [["My cute little kitten", "f"]],
+          [
+            ["My cute little kitten", "c"],
+            ["sleeps on my bed.", "i"],
+          ],
+        ],
+        { join: "✗ ↓ ✓", legend: false },
+      ),
+    },
+  };
+  // Graded Homework, part 1: the run-on, the choices a) b) c) in the sheet's order, which one is right, the picture, the rule
+  const hwc = (q, abc, r, vis, help, x) => ({
+    type: "mc",
+    q: `“${q}” Which choice fixes the run-on sentence?`,
+    opts: [abc[r], ...abc.filter((_, k) => k !== r)],
+    keep: abc,
+    vis,
+    help: RULE[help],
+    x,
+  });
+  // parts 2 and 3 (written on the sheet): the sentence, a right way (first) and wrong ones, the picture, the rule
+  const hwf = (q, o, vis, help, x) => ({
+    type: "mc",
+    q: `“${q}” Which is the right way to write it?`,
+    opts: o,
+    vis,
+    help: RULE[help],
+    x,
+  });
   // find the long o words (Classwork page 32)
   const lo = (s, ans, emoji) => ({
     type: "tapw",
@@ -1145,6 +1272,226 @@
               "I like to write stories, I write one every day, but sometimes I don’t have enough time.",
             ],
             "✍️📖",
+          ),
+        ],
+      },
+      // answers: no key with the sheet (UNVERIFIED.md, Term 2)
+      {
+        k: "hw1",
+        g: "🧩 Grammar · Run-on sentences",
+        t: "Graded Homework (1)",
+        en: "Run-ons and fragments · due 17/11",
+        ic: "🏠",
+        from: "Graded Homework (1)",
+        keep: true,
+        items: [
+          hwc(
+            "The sun was shining bright outside we decided to ride our bikes to the park.",
+            [
+              "The sun was shining bright outside, we decided to ride our bikes to the park.",
+              "The sun was shining bright outside so we decided to ride our bikes to the park.",
+              "The sun was shining bright outside, so we decided to ride our bikes to the park.",
+            ],
+            2,
+            SC(
+              "sky",
+              [
+                { e: "☀️", x: 18, y: 22, s: 24, a: "spin" },
+                { e: "🌳", x: 84, y: 54, s: 28 },
+                { e: "🚴", x: 20, y: 72, s: 22, dx: 48, a: "go", f: 1 },
+                { e: "🚴‍♀️", x: 8, y: 74, s: 18, dx: 52, a: "go:0.3", f: 1 },
+              ],
+              "Sunny → a bike ride to the park",
+            ),
+            "conj",
+            "a) only a comma ✗ · b) no comma before “so” ✗",
+          ),
+          hwc(
+            "Maya wanted to bake chocolate chip cookies she did not have any sugar left.",
+            [
+              "Maya wanted to bake chocolate chip cookies, but she did not have any sugar left.",
+              "Maya wanted to bake chocolate chip cookies, she did not have any sugar left.",
+              "Maya wanted to bake chocolate chip cookies but, she did not have any sugar left.",
+            ],
+            0,
+            SC(
+              "room",
+              [
+                { e: "👧", x: 22, y: 62, s: 28 },
+                { e: "🍪", x: 50, y: 34, s: 16, a: "pulse" },
+                { e: "🥣", x: 74, y: 70, s: 20, a: "shake" },
+                { t: "No sugar!", c: "bad", x: 74, y: 30, s: 8, a: "pop:0.6" },
+              ],
+              "Cookies? But no sugar",
+            ),
+            "conj",
+            "b) only a comma ✗ · c) the comma is after “but” ✗",
+          ),
+          hwc(
+            "The teacher clapped her hands three times the class quickly quieted down.",
+            [
+              "The teacher clapped her hands three times, the class quickly quieted down.",
+              "The teacher clapped her hands three times and the class quickly quieted down.",
+              "The teacher clapped her hands three times; the class quickly quieted down.",
+            ],
+            2,
+            SC(
+              "school",
+              [
+                { e: "👩‍🏫", x: 20, y: 60, s: 28 },
+                { e: "👏", x: 38, y: 36, s: 14, a: "pulse" },
+                { e: "🧒", x: 64, y: 72, s: 18 },
+                { e: "👦", x: 84, y: 72, s: 18 },
+                { t: "bla bla", c: "plain", x: 74, y: 40, s: 8, a: "hide" },
+                { e: "🤫", x: 74, y: 40, s: 14, a: "show" },
+              ],
+              "3 claps → the class is quiet",
+            ),
+            "three",
+            "a) only a comma ✗ · b) no comma before “and” ✗",
+          ),
+          hwc(
+            "Mark found a shiny green beetle in the grass he placed it gently in a jar.",
+            [
+              "Mark found a shiny green beetle in the grass, he placed it gently in a jar.",
+              "Mark found a shiny green beetle in the grass. He placed it gently in a jar.",
+              "Mark found a shiny green beetle in the grass; so he placed it gently in a jar.",
+            ],
+            1,
+            SC(
+              "grass",
+              [
+                { e: "👦", x: 18, y: 56, s: 28 },
+                { e: "🪲", x: 34, y: 76, s: 12, dx: 40, dy: -10, a: "go" },
+                { e: "🫙", x: 76, y: 64, s: 24 },
+              ],
+              "A beetle → into a jar",
+            ),
+            "three",
+            "a) only a comma ✗ · c) a semicolon needs no “so” ✗",
+          ),
+          hwc(
+            "The thunder cracked loudly the sudden noise frightened the sleeping cat the storm quickly passed over.",
+            [
+              "The thunder cracked loudly, and the sudden noise frightened the sleeping cat, but the storm quickly passed over.",
+              "The thunder cracked loudly. The sudden noise startled the sleeping cat, but the storm quickly passed over.",
+              "The thunder cracked loudly; the sudden noise frightened the sleeping cat but the storm quickly passed over.",
+            ],
+            1,
+            SC(
+              "rain",
+              [
+                { e: "🌩️", x: 40, y: 22, s: 28, a: "hide" },
+                { e: "☀️", x: 40, y: 22, s: 24, a: "show" },
+                { t: "BOOM!", c: "bad", x: 76, y: 30, s: 9, a: "hide" },
+                { e: "🐈", x: 40, y: 72, s: 24, a: "jump" },
+              ],
+              "Thunder → the cat jumps → the storm passes",
+            ),
+            "many",
+            "a) too many clauses ✗ · c) no comma before “but” ✗ · “startled” = frightened suddenly",
+          ),
+          hwf(
+            "He bought some flowers it was his mother’s birthday.",
+            [
+              "He bought some flowers. It was his mother’s birthday.",
+              "He bought some flowers, it was his mother’s birthday.",
+              "He bought some flowers it, was his mother’s birthday.",
+            ],
+            SC(
+              "room",
+              [
+                { e: "👦", x: 22, y: 62, s: 26 },
+                { e: "💐", x: 48, y: 54, s: 22, a: "pop" },
+                { e: "👩", x: 78, y: 62, s: 26 },
+                { e: "🎂", x: 78, y: 26, s: 14, a: "pulse" },
+              ],
+              "Flowers for Mom’s birthday",
+            ),
+            "three",
+            "Also right: “He bought some flowers because it was his mother’s birthday.”",
+          ),
+          hwf(
+            "Emma forgot her raincoat she got completely soaked on the walk to school.",
+            [
+              "Emma forgot her raincoat, so she got completely soaked on the walk to school.",
+              "Emma forgot her raincoat, she got completely soaked on the walk to school.",
+              "Emma forgot her raincoat so, she got completely soaked on the walk to school.",
+            ],
+            SC(
+              "rain",
+              [
+                { e: "🧥", x: 16, y: 26, s: 16 },
+                { t: "✗", c: "bad", x: 24, y: 18, s: 8 },
+                { e: "👧", x: 44, y: 66, s: 26, a: "shake" },
+                { e: "💦", x: 44, y: 40, s: 12, a: "fall" },
+                { e: "🏫", x: 84, y: 64, s: 22 },
+              ],
+              "No raincoat → soaked",
+            ),
+            "conj",
+            "Also right: two sentences, “Emma forgot her raincoat. She got completely soaked on the walk to school.”",
+          ),
+          hwf(
+            "She wanted to go for a run it started to rain outside.",
+            [
+              "She wanted to go for a run, but it started to rain outside.",
+              "She wanted to go for a run, it started to rain outside.",
+              "She wanted to go for a run but, it started to rain outside.",
+            ],
+            SC(
+              "sky",
+              [
+                { e: "🏃‍♀️", x: 18, y: 70, s: 24, dx: 30, a: "go", f: 1 },
+                { e: "☀️", x: 66, y: 24, s: 22, a: "hide" },
+                { e: "🌧️", x: 66, y: 24, s: 26, a: "show" },
+              ],
+              "A run? → rain!",
+            ),
+            "conj",
+            "“but”: the rain stopped her plan.",
+          ),
+          hwf(
+            "planted sunflower seeds in the garden, and green sprouts started appearing a week later.",
+            [
+              "We planted sunflower seeds in the garden, and green sprouts started appearing a week later.",
+              "Planted sunflower seeds in the garden, and green sprouts started appearing a week later.",
+              "Sunflower seeds in the garden, and green sprouts a week later.",
+            ],
+            SC(
+              "grass",
+              [
+                { e: "🧑‍🌾", x: 18, y: 58, s: 28 },
+                { e: "🌱", x: 50, y: 78, s: 14, a: "show" },
+                { e: "🌱", x: 66, y: 78, s: 14, a: "show" },
+                { e: "🌻", x: 84, y: 58, s: 22, a: "pop:1" },
+                { t: "a week later", c: "plain", x: 64, y: 24, s: 8 },
+              ],
+              "Seeds → sprouts",
+            ),
+            "subj",
+            "“We” is the subject: who planted. Any subject is right: I, Mom, Sara …",
+          ),
+          hwf(
+            "Marcus and his friends",
+            [
+              "Marcus and his friends played soccer in the park.",
+              "Marcus and his friends in the park.",
+              "Marcus and his friends, played soccer in the park.",
+            ],
+            SC(
+              "grass",
+              [
+                { e: "👦", x: 22, y: 62, s: 24 },
+                { e: "🧒", x: 40, y: 64, s: 20 },
+                { e: "👧", x: 56, y: 64, s: 20 },
+                { e: "⚽", x: 76, y: 76, s: 12, a: "jump" },
+                { t: "What did they do?", c: "plain", x: 50, y: 22, s: 8 },
+              ],
+              "Marcus and his friends …",
+            ),
+            "pred",
+            "“played soccer in the park” is the predicate: what they did. Any action is right.",
           ),
         ],
       },
