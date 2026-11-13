@@ -1,0 +1,280 @@
+/* Ukrainian language and reading lessons (shared/ukr-lesson.js): Optima, Українська мова · Українська література.
+   Loads after shared/theme.css, shared/lesson.css, shared/math-uk.css (the lesson layout shared with Optima Math)
+   and shared/drag-words.css (tiles). */
+:root {
+  --accent: var(--ulit);
+  --accent2: var(--umova);
+}
+[data-subject="Українська мова"] {
+  --accent: var(--umova-ink);
+  --accent2: var(--ulit);
+}
+
+/* ---------- 📖 the reader ---------- */
+.ur-card {
+  gap: 12px;
+}
+.ur-task {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.ur-modes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.ur-modes button {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink);
+  padding: 8px 6px;
+  cursor: pointer;
+}
+.ur-modes button[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.ur-ctl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+.ur-ctl[hidden] {
+  display: none;
+}
+.ur-ctl #playBtn {
+  min-width: 9.5em;
+}
+.ur-speed {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.ur-lv {
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  color: var(--accent);
+}
+.ur-loud[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.ur-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 14px 22px;
+  align-items: start;
+}
+.ur-body.one {
+  grid-template-columns: minmax(0, 1fr);
+}
+/* under the text, the whole width: ← ▶ → and the speed (by hand, the thumb is there), the pages on the right */
+.ur-col {
+  min-width: 0;
+}
+.ur-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  /* a text taller than the screen (a phone): the buttons stay at the bottom edge */
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: var(--card);
+  padding: 8px 0;
+}
+.ur-pnav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  font-weight: 800;
+}
+.ur-pic {
+  position: sticky;
+  top: 12px;
+}
+.ur-text {
+  font-size: 1.45rem;
+  line-height: 1.6;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  padding: 10px 18px 14px;
+}
+.ur-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--accent);
+  margin: 0;
+  text-align: center;
+}
+.ur-author {
+  margin: 0 0 6px;
+  text-align: center;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+.ur-para {
+  text-indent: 1.4em;
+  margin: 0 0 6px;
+}
+.ur-stanza {
+  margin: 0 0 12px;
+}
+.poem .ur-line {
+  display: block;
+}
+/* a poem's stanzas in two columns when there is room: down the left one, then the right one, as in the book */
+.ur-page.poem {
+  columns: 2 13em;
+  column-gap: 24px;
+}
+.ur-page[hidden] {
+  display: none;
+}
+.ur-stanza {
+  break-inside: avoid;
+}
+.ur-t {
+  border-radius: 6px;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.follow .ur-t.wd {
+  cursor: pointer;
+}
+.follow .ur-t.past {
+  color: var(--muted);
+}
+.ur-t.on {
+  background: var(--hl);
+  color: #1b2440;
+  box-shadow: 0 0 0 3px var(--hl);
+}
+
+/* ---------- ✏️ exercises ---------- */
+.ua-big {
+  font-family: var(--emoji);
+  font-size: 4rem;
+  line-height: 1.1;
+  text-align: center;
+}
+/* a proverb's meaning, beside the choices */
+.ua-mean {
+  background: color-mix(in srgb, var(--accent) 8%, var(--card));
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 8px 14px;
+}
+.ua-mean b {
+  color: var(--accent);
+}
+.ua-mean p {
+  margin: 4px 0 0;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+.ua-many {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+.ua-open {
+  margin: 0;
+  font-size: 1.1rem;
+  background: var(--card);
+  border: 2px dashed var(--muted);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+.ua-tl {
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+}
+.ua-line,
+.ua-bank {
+  justify-content: center;
+}
+.tile.ua-let {
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 1.8rem;
+  min-width: 52px;
+  padding: 2px 10px;
+}
+.tile.ua-wd {
+  font-family: var(--body);
+  font-weight: 800;
+}
+.ua-sol {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 1.1rem;
+}
+.ua-sol p {
+  margin: 0;
+}
+.ua-ex {
+  font-family: var(--body);
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .ur-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ur-pic {
+    position: static;
+    max-height: 180px;
+    order: -1;
+  }
+  /* following the words on a phone: the text gets the room */
+  .ur-card.follow .ur-pic {
+    display: none;
+  }
+  .ur-text {
+    font-size: 1.3rem;
+  }
+}
+@media (max-width: 480px) {
+  .ur-modes button {
+    font-size: 0.95rem;
+  }
+  .ur-ctl {
+    gap: 6px;
+  }
+  .ur-ctl .btn,
+  .ur-ctl .abtn {
+    padding: 6px 10px;
+    font-size: 0.95rem;
+  }
+  .ur-ctl #playBtn {
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+/* the answers of a choice: big enough to see and tap */
+.mu-ch {
+  font-size: 1.3rem;
+  padding: 10px 18px;
+  border-radius: 14px;
+}
+.mu-chs {
+  gap: 10px;
+}

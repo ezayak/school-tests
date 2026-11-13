@@ -247,7 +247,7 @@ Sources: `~/Documents/2026-2027/Alex/S.S.English/` (term booklets, `Term N/` she
 
 ## Ukrainian reading (Optima, Grade 3)
 
-Folder `optima/grade-3/ukr-lit/`, engine `shared/reading.js` + `shared/reading.css` (don't copy them; a text is only a data file). Format in README: "Ukrainian reading".
+Folder `optima/grade-3/ukr-lit/` («Складова ракета» texts; the book lessons there are in the next section), engine `shared/reading.js` + `shared/reading.css` (don't copy them; a text is only a data file). Format in README: "Ukrainian reading".
 Book: `~/Documents/2026-2027/Lucas/Optima/Літературне читання 3.pdf` (text layer: `pdftotext -f N -l N`; the words are split by zero-width spaces). Lucas reads slowly and has aphasia.
 
 - A text = `<name>.js` + `<name>.html` (copy bohdanchyk.html, change the `.js`), a card in `texts.js`, both files in `also` of the Українська література entry in `games.js`
@@ -262,6 +262,19 @@ Book: `~/Documents/2026-2027/Lucas/Optima/Літературне читання 
 - `launch` (Склади): the longest words, 10 per ~100 words; `fuel` (Слова): 20 per ~100 words, none twice. Spelled exactly as in the text.
 - Check with `node .claude/scripts/ukr-reading-check.js <text.js> "<book.pdf>" <page>` (syllables, stress, the word lists, the text against the book page).
 - Check in the browser at a phone width (360–390px upright, sideways) and a landscape tablet: the longest Склади word, Читання to the end, the page turn.
+
+## Ukrainian language and reading (Optima, Grade 3)
+
+Folders `optima/grade-3/ukr-mova/` (Українська мова) and `optima/grade-3/ukr-lit/` (Українська література, next to the «Складова ракета» texts), one engine `shared/ukr-lesson.js` + `.css`
+(don't copy it; a lesson is only a data file). Format in README: "Ukrainian language and reading lessons". Procedure, item types and checks: the `optima-ukr-mova` and `optima-ukr-lit` skills.
+Books in `~/Documents/2026-2027/Lucas/Optima/`: language «Українська мова та читання. Ч. 1» (Кравцова, Придаток; PDF page = book page + 3), reading Савчук «Ч. 2» (PDF page = book page).
+Their text layers are garbled: read the pages as pictures. Lucas has aphasia and reads slowly: a picture or emoji on every item, answers by a tap (choices, letter tiles, word tiles).
+
+- Language: a lesson = one topic (from the «початок уроку» sign to the next); Урок = the rule slides, Вправи = every exercise task that has something to check, homework 🏠 in its own group.
+- Reading: a lesson = one text exactly as printed (poem stanzas in reading order) and its questions as slides; answers in the text → choices, personal ones → `open` with a model answer and `help`.
+- Build one lesson at a time and show it. Leave out reading aloud in class, photos, drawing, videos; list them. Words missing or unreadable: never guess; ask.
+- Check with `node .claude/scripts/ukr-lesson-check.js <lesson-N.js>` and play it with `.claude/scripts/ukr-lesson-shot.sh` (every group to ✓, a phone width).
+- Then: card in `lessons.js`; files and pictures in `also` of the subject's entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
 ## Speed reading (Optima, Grade 3: Швидкочитання)
 

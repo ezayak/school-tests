@@ -1,0 +1,107 @@
+<!doctype html><meta charset="utf-8" />
+<body style="margin: 0">
+  <iframe id="f" style="border: 0"></iframe>
+  <script>
+    // Harness for shared/ukr-lesson.js pages (served next to the page by ukr-lesson-shot.sh).
+    // ?p=lesson-1.html&w=1280&h=900&do=<steps>   steps separated by ";":
+    //   reset (clears ua-* progress) | tab:tasks | click:<css selector> | go:3 (chip / dot 4) | wait:ms
+    //   solve (answers the exercise on screen right: choices, tiles with real taps, then ✓ Готово)
+    //   wrong (puts a wrong answer and presses ✓ Готово) | all (solve + Далі → through the whole group)
+    //   log (prints the ✓ / fb text into the page title, read by --dump-dom)
+    const P = new URLSearchParams(location.search),
+      f = document.getElementById("f");
+    f.style.width = (P.get("w") || 1280) + "px";
+    f.style.height = (P.get("h") || 900) + "px";
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    const steps = (P.get("do") || "").split(";").filter(Boolean);
+    if (steps[0] === "reset") {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("ua-") || k.startsWith("snav:"))
+        .forEach((k) => localStorage.removeItem(k));
+      steps.shift();
+    }
+    const out = [];
+    f.src = P.get("p") + "?t=" + Math.random();
+    f.onload = async () => {
+      const w = f.contentWindow,
+        d = f.contentDocument,
+        q = (s) => d.querySelector(s);
+      // a real tap on a tile: pointerdown on it, pointerup on the window (Kit.dragTiles)
+      const tap = (el) => {
+        const r = el.getBoundingClientRect();
+        const o = {
+          bubbles: true,
+          clientX: r.left + 5,
+          clientY: r.top + 5,
+          pointerId: 1,
+        };
+        el.dispatchEvent(new w.PointerEvent("pointerdown", o));
+        w.dispatchEvent(new w.PointerEvent("pointerup", o));
+      };
+      // the exercise on screen: its group by the title in the hud, its place by the current chip
+      const current = () => {
+        const L = w.UA_LESSON;
+        const t = q(".hud .qnum").textContent;
+        const g = L.groups.find((g) => t === `${g.ic} ${g.t}`);
+        const k = [...d.querySelectorAll(".mu-chip")].findIndex((c) =>
+          c.classList.contains("cur"),
+        );
+        return g.items[k];
+      };
+      async function answer(right) {
+        const it = current();
+        for (const [ri, r] of (it.rows || []).entries()) {
+          if (r.ch) {
+            const want = [].concat(r.a);
+            const pick = right ? want : [r.ch.find((c) => !want.includes(c))];
+            for (const v of pick)
+              [...d.querySelectorAll(`[data-c="${ri}"]`)]
+                .find((b) => b.dataset.v === v)
+                .click();
+          } else if (r.word || r.order) {
+            const parts = r.word ? [...r.word] : r.order;
+            const seq = right ? parts : parts.slice().reverse();
+            for (const p of seq) {
+              const t = [...d.querySelectorAll(`#B-${ri} .tile`)].find(
+                (x) => x.textContent === p,
+              );
+              tap(t);
+              await wait(30);
+            }
+          }
+        }
+        q("#okBtn").click();
+        await wait(60);
+        out.push(`${it.id}:${q("#fb").textContent.trim().slice(0, 40)}`);
+      }
+      await wait(300);
+      for (const s of steps) {
+        const [cmd, ...rest] = s.split(":");
+        const arg = rest.join(":");
+        if (cmd === "tab") q(`[data-tab="${arg}"]`).click();
+        else if (cmd === "go") q(`[data-go="${arg}"]`).click();
+        else if (cmd === "click") q(arg).click();
+        else if (cmd === "wait") await wait(+arg);
+        else if (cmd === "solve") await answer(true);
+        else if (cmd === "wrong") await answer(false);
+        else if (cmd === "all") {
+          const n = d.querySelectorAll(".mu-chip").length;
+          for (let i = 0; i < n; i++) {
+            await answer(true);
+            if (i < n - 1) q("#nextBtn").click();
+            await wait(60);
+          }
+        } else if (cmd === "log") {
+          const errs = w.__errs || [];
+          document.title =
+            out.join(" | ") + (errs.length ? " ERR " + errs.join(";") : "");
+          const pre = document.createElement("pre");
+          pre.id = "log";
+          pre.textContent = document.title;
+          document.body.prepend(pre);
+        }
+        await wait(120);
+      }
+    };
+  </script>
+</body>
