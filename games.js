@@ -2484,7 +2484,7 @@ window.GAMES = [
     topics:
       "До школи ідемо в радісний час · Розмаїттям кольоровим прикрашає осінь край · Матінко Покрово, накрий нашу хату теплом · Вивчай історичне минуле · Складова ракета",
     path: "optima/grade-3/ukr-lit/index.html",
-    countLabel: "14 уроків · 2 тексти",
+    countLabel: "15 уроків · 2 тексти",
     year: "2026–2027",
     also: [
       "optima/grade-3/ukr-lit/lessons.js",
@@ -2536,6 +2536,9 @@ window.GAMES = [
       "optima/grade-3/ukr-lit/lesson-14.html",
       "optima/grade-3/ukr-lit/lesson-14.js",
       "optima/grade-3/ukr-lit/img/lesson-14/cossack.jpg",
+      "optima/grade-3/ukr-lit/lesson-15.html",
+      "optima/grade-3/ukr-lit/lesson-15.js",
+      "optima/grade-3/ukr-lit/img/lesson-15/cossack.jpg",
       "optima/grade-3/ukr-lit/texts.js",
       "optima/grade-3/ukr-lit/bohdanchyk.html",
       "optima/grade-3/ukr-lit/bohdanchyk.js",
