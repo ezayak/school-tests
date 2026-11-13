@@ -128,7 +128,11 @@ used.forEach((f) => {
 const html = path.join(dir, base + ".html");
 if (!fs.existsSync(html)) err(`${html} is missing`);
 else {
-  const h = fs.readFileSync(html, "utf8");
+  const h = fs
+    .readFileSync(html, "utf8")
+    .replace(/\s+/g, " ")
+    .replace(/> /g, ">")
+    .replace(/ </g, "<"); // prettier may wrap the title
   for (const s of [
     `src="${base}.js"`,
     "shared/ukr-lesson.js",
