@@ -2483,7 +2483,7 @@ window.GAMES = [
       "Уроки за підручником: текст по словах і реченнях, питання · Складова ракета",
     topics: "До школи ідемо в радісний час · Складова ракета",
     path: "optima/grade-3/ukr-lit/index.html",
-    countLabel: "2 уроки · 2 тексти",
+    countLabel: "3 уроки · 2 тексти",
     year: "2026–2027",
     also: [
       "optima/grade-3/ukr-lit/lessons.js",
@@ -2493,6 +2493,9 @@ window.GAMES = [
       "optima/grade-3/ukr-lit/lesson-2.html",
       "optima/grade-3/ukr-lit/lesson-2.js",
       "optima/grade-3/ukr-lit/img/lesson-2/meadow.jpg",
+      "optima/grade-3/ukr-lit/lesson-3.html",
+      "optima/grade-3/ukr-lit/lesson-3.js",
+      "optima/grade-3/ukr-lit/img/lesson-3/bell.jpg",
       "optima/grade-3/ukr-lit/texts.js",
       "optima/grade-3/ukr-lit/bohdanchyk.html",
       "optima/grade-3/ukr-lit/bohdanchyk.js",
