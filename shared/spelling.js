@@ -623,14 +623,14 @@
     // each word gets its own line and bank; trailing punctuation is fixed, not built
     const W = (sent ? it.w.split(" ") : [it.w]).map((c) => {
       const [, w, p] = sent ? c.match(/^(.*?)([.,!?;:]*)$/) : [0, c, ""];
-      return { w, p, line: [], bank: mix(w) };
+      return { w, p, line: [], bank: mix(w), help: 0 };
     });
     let act = -1;
     let done = false;
     app.innerHTML = `${hud(`${sent ? "Sentence" : "Word"} ${S.i + 1} of ${S.list.length}`)}<section class="card pop fc">
   <span class="qtype dr">Build the ${sent ? "sentence" : "word"}</span>
   ${drawPic(it, "scene small")}${trHTML(it)}
-  <div class="audio"><button type="button" class="abtn" id="say1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="say2"><span class="e">🐢</span> Slowly</button></div>
+  <div class="audio"><button type="button" class="abtn" id="say1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="say2"><span class="e">🐢</span> Slowly</button><button type="button" class="abtn" id="helpBtn"><span class="e">💡</span> Help</button></div>
   ${sent ? '<div class="sent-row" id="sent" aria-label="Sentence"></div>' : ""}
   <div class="slots" id="line" aria-label="Your word"></div>
   <div class="letters" id="bank" aria-label="Letters"></div>
@@ -680,19 +680,40 @@
       T.use(W[a].line, W[a].bank);
     };
     if (!sent) sel(0);
+    // Help: keep the right letters at the start of the line, send the rest back, put the next right letter in
+    document.getElementById("helpBtn").onclick = () => {
+      if (done) return;
+      if (act < 0 || built(W[act]) === W[act].w)
+        act = W.findIndex((x) => built(x) !== x.w);
+      if (act < 0) return;
+      const x = W[act];
+      x.help++;
+      let j = 0;
+      while (j < x.line.length && x.line[j].t === x.w[j]) j++;
+      x.bank.push(...x.line.splice(j));
+      const k = x.bank.findIndex((l) => l.t === x.w[j]);
+      x.line.push(...x.bank.splice(k, 1));
+      sel(act);
+    };
     document.getElementById("checkBtn").onclick = () => {
       done = true;
       const mine = W.map((x) => built(x) + x.p).join(" ");
       const ok = mine === it.w;
       if (ok) S.score++;
-      else
+      // a wrong answer, or a right one built with Help, goes in the review list:
+      // how many times Help was tapped and, in a sentence, only the words it was tapped on
+      const helps = W.filter((x) => x.help);
+      if (!ok || helps.length)
         S.miss.push({
           q: sent ? "Build the sentence" : "Build the word",
-          your: mine,
-          right: it.w,
+          your: ok ? "" : mine,
+          right: ok && sent ? "" : it.w,
+          help: helps.reduce((n, x) => n + x.help, 0),
+          helpWords: sent ? helps.map((x) => [x.w, x.help]) : null,
         });
       document.getElementById("pts").textContent = S.score;
       L.classList.add(ok ? "ok" : "no");
+      document.getElementById("helpBtn").disabled = true;
       T.lock();
       drawSent();
       document.getElementById("fbx").innerHTML = fb(
@@ -707,6 +728,21 @@
   }
 
   /* ---------- END ---------- */
+  // one review entry: Help taps (in a sentence, the words they were on), what was written, the right spelling
+  function reviewLines(m) {
+    const out = [];
+    if (m.help)
+      out.push(
+        `💡 Help tapped ${m.help} ${m.help === 1 ? "time" : "times"}` +
+          (m.helpWords
+            ? ": " +
+              m.helpWords.map(([w, n]) => `<em>${esc(w)}</em> ×${n}`).join(", ")
+            : ""),
+      );
+    if (m.your) out.push(`You wrote: <s>${esc(m.your)}</s>`);
+    if (m.right) out.push(`Right spelling: <em>${esc(m.right)}</em>`);
+    return out;
+  }
   function end() {
     const pct = Math.round((S.score / Math.max(1, S.max)) * 100);
     const st = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
@@ -725,7 +761,7 @@
   <h2>${pct}% · ${msg}</h2>
   <div class="row"><button class="btn big" id="againBtn" type="button">Play again</button><button class="btn ghost" id="modesBtn" type="button">Other modes</button></div>
 </section>
-${S.miss.length ? `<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map((m) => `<li><div class="q">${esc(m.q)}</div><div class="a">You wrote: <s>${esc(m.your)}</s><br>Right spelling: <em>${esc(m.right)}</em></div></li>`).join("")}</ul></section>` : ""}`;
+${S.miss.length ? `<section class="card"><h3>Let's review (${S.miss.length})</h3><ul class="review">${S.miss.map((m) => `<li><div class="q">${esc(m.q)}</div><div class="a">${reviewLines(m).join("<br>")}</div></li>`).join("")}</ul></section>` : ""}`;
     document.getElementById("againBtn").onclick = () =>
       startMode(S.mode, S.kind);
     document.getElementById("modesBtn").onclick = home;
