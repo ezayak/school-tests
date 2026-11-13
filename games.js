@@ -2457,7 +2457,7 @@ window.GAMES = [
     topics:
       "Звуки і букви. Алфавіт. Наголос · Слово. Значення слова · Будова слова",
     path: "optima/grade-3/ukr-mova/index.html",
-    countLabel: "20 уроків",
+    countLabel: "21 урок",
     year: "2026–2027",
     also: [
       "optima/grade-3/ukr-mova/lessons.js",
@@ -2573,6 +2573,9 @@ window.GAMES = [
       "optima/grade-3/ukr-mova/lesson-20.html",
       "optima/grade-3/ukr-mova/lesson-20.js",
       "optima/grade-3/ukr-mova/img/lesson-20/butterfly.jpg",
+      "optima/grade-3/ukr-mova/lesson-21.html",
+      "optima/grade-3/ukr-mova/lesson-21.js",
+      "optima/grade-3/ukr-mova/img/lesson-21/sparrows.jpg",
     ],
   },
   {
