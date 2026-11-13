@@ -103,6 +103,14 @@
   position: sticky;
   top: 12px;
 }
+/* a text without a picture in the book: its emoji, big */
+.ur-emo {
+  display: block;
+  text-align: center;
+  font-family: var(--emoji);
+  font-size: 7rem;
+  line-height: 1.2;
+}
 .ur-text {
   font-size: 1.45rem;
   line-height: 1.6;

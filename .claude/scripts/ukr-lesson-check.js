@@ -54,7 +54,7 @@ const pic = (where, name) => {
     err(`${at}: t and paras (or pages)`);
   const paras = x.pages ? x.pages.flat() : x.paras || [];
   if (x.img) pic(at, x.img);
-  else err(`${at}: no picture`);
+  else if (!x.ic) err(`${at}: no picture (img) or emoji (ic)`);
   const lines = x.poem ? paras.flat() : paras;
   if (x.poem && !paras.every(Array.isArray))
     err(`${at}: a poem's paras are arrays of lines`);

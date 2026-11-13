@@ -210,6 +210,7 @@ window.UA_LESSON = {
   // pages are made by the engine (poem: whole stanzas up to 16 lines, 12 in one column; prose: paragraphs up to 480 letters);
   // pages: [[paras of page 1], …] instead of paras sets them by hand. A poem with a line over 34 letters is one column.
   // acro: true | N — an acrostic: the first letter of every line (or of the first N lines) in colour
+  // no img (the book has no picture for the text): its ic is shown big instead
   groups: [{ t, ic, items: [{ n, k, chip, p, hw, q, tip, mean, ic | img, rows: [...], help: ["…"], x: ["…"] }] }],
 };
 ```

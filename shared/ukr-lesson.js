@@ -232,7 +232,7 @@
   }
 
   /* ---------- 📖 Текст: the reader ---------- */
-  // A text: {t, author, kind, ic, task, img, poem, paras}. A poem's paras are stanzas (arrays of lines), prose paras are strings.
+  // A text: {t, author, kind, ic, task, img, poem, paras}; a text without a picture shows its emoji (ic) big instead. A poem's paras are stanzas (arrays of lines), prose paras are strings.
   // Tokens: every piece between spaces; a token with a letter or a digit is a word (a stop of «По словах»).
   // A sentence ends after a token ending in . ! ? … (quotes and brackets after it count too).
   const MODES = [
@@ -373,14 +373,14 @@
     app.innerHTML = `${hud(`📖 ${X.t}`, TEXTS.length > 1 ? `${xi + 1} / ${TEXTS.length}` : "")}<section class="card pop ur-card">
     ${X.task ? `<p class="ur-task">${kw(X.task)}</p>` : ""}
     <div class="ur-modes" role="group" aria-label="Як читати">${MODES.map((m) => `<button type="button" data-m="${m.k}" aria-pressed="${mode === m.k}">${m.t}</button>`).join("")}</div>
-    <div class="ur-body${X.img ? "" : " one"}">
+    <div class="ur-body">
       <div class="ur-col">
         <div class="ur-text" id="txt">
           <h2 class="ur-title">${esc(X.t)}</h2>${X.author ? `<p class="ur-author">${esc(X.author)}</p>` : ""}
           ${textHTML}
         </div>
       </div>
-      ${X.img ? `<img class="mu-pic ur-pic" src="${esc(pic(X.img))}" alt="">` : ""}
+      ${X.img ? `<img class="mu-pic ur-pic" src="${esc(pic(X.img))}" alt="">` : `<span class="ur-pic ur-emo" aria-hidden="true">${esc(X.ic || "📖")}</span>`}
     </div>
     <div class="ur-bar">
       <div class="ur-ctl" id="ctl">
