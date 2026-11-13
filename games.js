@@ -2481,9 +2481,10 @@ window.GAMES = [
     hub: true,
     lesson:
       "Уроки за підручником: текст по словах і реченнях, питання · Складова ракета",
-    topics: "До школи ідемо в радісний час · Складова ракета",
+    topics:
+      "До школи ідемо в радісний час · Розмаїттям кольоровим прикрашає осінь край · Складова ракета",
     path: "optima/grade-3/ukr-lit/index.html",
-    countLabel: "7 уроків · 2 тексти",
+    countLabel: "8 уроків · 2 тексти",
     year: "2026–2027",
     also: [
       "optima/grade-3/ukr-lit/lessons.js",
@@ -2512,6 +2513,10 @@ window.GAMES = [
       "optima/grade-3/ukr-lit/lesson-7.html",
       "optima/grade-3/ukr-lit/lesson-7.js",
       "optima/grade-3/ukr-lit/img/lesson-7/school-things.jpg",
+      "optima/grade-3/ukr-lit/lesson-8.html",
+      "optima/grade-3/ukr-lit/lesson-8.js",
+      "optima/grade-3/ukr-lit/img/lesson-8/autumn.jpg",
+      "optima/grade-3/ukr-lit/img/lesson-8/painter.jpg",
       "optima/grade-3/ukr-lit/texts.js",
       "optima/grade-3/ukr-lit/bohdanchyk.html",
       "optima/grade-3/ukr-lit/bohdanchyk.js",
