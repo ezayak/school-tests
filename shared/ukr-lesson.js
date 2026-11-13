@@ -327,8 +327,15 @@
                     .map((i, j) => {
                       const t = toks[i];
                       const nx = j + 1 < ws.length ? toks[ws[j + 1]] : null;
-                      const sp = nx ? (nx.s === t.s ? " " : "") : "";
-                      return `<span class="ur-t${t.word ? " wd" : ""}" data-t="${i}" data-s="${t.s}">${esc(t.w)}${sp}</span>${nx && nx.s !== t.s ? " " : ""}`;
+                      // the space before a dash does not break: the dash stays at the end of its line
+                      const sp = nx
+                        ? nx.s === t.s
+                          ? nx.w === "—"
+                            ? "\u00A0"
+                            : " "
+                          : ""
+                        : "";
+                      return `<span class="ur-t${t.word ? " wd" : ""}" data-t="${i}" data-s="${t.s}"><span class="ur-nb">${esc(t.w)}</span>${sp}</span>${nx && nx.s !== t.s ? " " : ""}`;
                     })
                     .join("")}</span>`,
               )
