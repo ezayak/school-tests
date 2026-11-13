@@ -48,9 +48,20 @@ for (const { n, L } of lessons) {
   if (L.n !== n) throw new Error(`lesson-${n}.js says n: ${L.n}`);
   if (!L.part || !L.card) throw new Error(`lesson-${n}.js: no part or card`);
   const f = path.join(dir, `lesson-${n}.html`);
-  const h = (fs.existsSync(f) ? fs.readFileSync(f, "utf8") : tpl)
+  const old = fs.existsSync(f) ? fs.readFileSync(f, "utf8") : null;
+  const title = `${L.title} · ${S}`;
+  // an existing page whose title (maybe wrapped by Prettier) and script are right is left as it is
+  const cur = old && old.match(/<title>([\s\S]*?)<\/title>/);
+  if (
+    old &&
+    old.includes(`src="lesson-${n}.js"`) &&
+    cur &&
+    cur[1].replace(/\s+/g, " ").trim() === title
+  )
+    continue;
+  const h = (old || tpl)
     .replace(/src="lesson-\d+\.js"/, `src="lesson-${n}.js"`)
-    .replace(/<title>[\s\S]*?<\/title>/, `<title>${L.title} · ${S}</title>`);
+    .replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`);
   fs.writeFileSync(f, h);
 }
 
