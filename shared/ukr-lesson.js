@@ -242,14 +242,48 @@
   ];
   // one word on the screen for so long at each speed (ms); a sentence: its words × this × 0.8
   const SPEED = [2600, 1900, 1400, 1000, 700];
-  // A long text has pages (x.pages: [[paras of page 1], …] instead of x.paras) so that one page fits the screen;
-  // each token knows its page (p).
+  // A long text is shown a page at a time, so that one page fits a landscape tablet with the buttons under it.
+  // x.pages: [[paras of page 1], …] sets the pages by hand; otherwise they are made here: a poem gets whole stanzas,
+  // up to PAGE.lines lines a page; prose gets whole paragraphs, up to PAGE.chars letters a page, and a paragraph longer
+  // than that is cut at the end of a sentence (the piece after the cut has no indent: {t, cont: true}).
+  const PAGE = { lines: 16, chars: 480 };
+  function paginate(x) {
+    if (x.pages) return x.pages;
+    const size = (q) => (x.poem ? q.length : (q.t || q).length);
+    let paras = x.paras;
+    if (!x.poem)
+      paras = paras.flatMap((q) => {
+        if (q.length <= PAGE.chars) return [q];
+        const out = [""];
+        q.split(/(?<=[.!?…][»")]*)\s+(?=[—«\p{Lu}])/u).forEach((sn) => {
+          const last = out.length - 1;
+          if (out[last] && out[last].length + sn.length > PAGE.chars)
+            out.push(sn);
+          else out[last] = out[last] ? out[last] + " " + sn : sn;
+        });
+        return out.map((t, i) => (i ? { t, cont: true } : t));
+      });
+    const pages = [[]];
+    let n = 0;
+    const max = x.poem ? PAGE.lines : PAGE.chars;
+    paras.forEach((q) => {
+      if (n && n + size(q) > max) {
+        pages.push([]);
+        n = 0;
+      }
+      pages[pages.length - 1].push(q);
+      n += size(q);
+    });
+    return pages;
+  }
+  // each token knows its sentence (s) and page (p); a paragraph is {lines: [[token indexes]], cont}
   function tokens(x) {
     const out = [];
     let s = 0;
-    const pages = (x.pages || [x.paras]).map((paras, p) =>
-      (x.poem ? paras : paras.map((q) => [q])).map((st) =>
-        st.map((l) =>
+    const pages = paginate(x).map((paras, p) =>
+      paras.map((q) => ({
+        cont: !!q.cont,
+        lines: (x.poem ? q : [q.t || q]).map((l) =>
           l
             .split(/\s+/)
             .filter(Boolean)
@@ -260,7 +294,7 @@
               return i;
             }),
         ),
-      ),
+      })),
     );
     return { toks: out, pages };
   }
@@ -286,7 +320,7 @@
       html
         .map(
           (st) =>
-            `<div class="${X.poem ? "ur-stanza" : "ur-para"}">${st
+            `<div class="${X.poem ? "ur-stanza" : `ur-para${st.cont ? " cont" : ""}`}">${st.lines
               .map(
                 (ws) =>
                   `<span class="ur-line">${ws

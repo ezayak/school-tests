@@ -130,6 +130,9 @@
   text-indent: 1.4em;
   margin: 0 0 6px;
 }
+.ur-para.cont {
+  text-indent: 0;
+}
 .ur-stanza {
   margin: 0 0 12px;
 }
