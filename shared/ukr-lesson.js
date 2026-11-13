@@ -266,9 +266,18 @@
         });
         return out.map((t, i) => (i ? { t, cont: true } : t));
       });
+    const max = x.poem ? (isWide(x) ? PAGE.wideLines : PAGE.lines) : PAGE.chars;
+    // a block of lines longer than a page (a poem printed without gaps) is cut into pages of max lines
+    if (x.poem)
+      paras = paras.flatMap((q) =>
+        q.length <= max
+          ? [q]
+          : Array.from({ length: Math.ceil(q.length / max) }, (_, i) =>
+              q.slice(i * max, (i + 1) * max),
+            ),
+      );
     const pages = [[]];
     let n = 0;
-    const max = x.poem ? (isWide(x) ? PAGE.wideLines : PAGE.lines) : PAGE.chars;
     paras.forEach((q) => {
       if (n && n + size(q) > max) {
         pages.push([]);
