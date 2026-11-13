@@ -2484,7 +2484,7 @@ window.GAMES = [
     topics:
       "До школи ідемо в радісний час · Розмаїттям кольоровим прикрашає осінь край · Матінко Покрово, накрий нашу хату теплом · Вивчай історичне минуле · Українці, що підкорили світ · Мандруємо Україною · Оповідання про дітей · Кожне відкриття — це чиєсь захоплення · Українські народні казки · Казки народів світу · Літературні казки українських і зарубіжних письменників · Давня і сучасна байка. П’єси · Поетичне намисто · Шевченкове слово в віках не старіє · Весна днем красна · Великдень на гостину просить · Складова ракета",
     path: "optima/grade-3/ukr-lit/index.html",
-    countLabel: "76 уроків · 2 тексти",
+    countLabel: "77 уроків · 2 тексти",
     year: "2026–2027",
     also: [
       "optima/grade-3/ukr-lit/lessons.js",
@@ -2729,6 +2729,9 @@ window.GAMES = [
       "optima/grade-3/ukr-lit/lesson-76.html",
       "optima/grade-3/ukr-lit/lesson-76.js",
       "optima/grade-3/ukr-lit/img/lesson-76/triumph.jpg",
+      "optima/grade-3/ukr-lit/lesson-77.html",
+      "optima/grade-3/ukr-lit/lesson-77.js",
+      "optima/grade-3/ukr-lit/img/lesson-77/triumph.jpg",
       "optima/grade-3/ukr-lit/texts.js",
       "optima/grade-3/ukr-lit/bohdanchyk.html",
       "optima/grade-3/ukr-lit/bohdanchyk.js",
