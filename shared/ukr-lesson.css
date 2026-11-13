@@ -144,6 +144,14 @@
   columns: 2 13em;
   column-gap: 24px;
 }
+.ur-page.poem.wide {
+  columns: 1;
+}
+/* an acrostic: the first letters of the lines, as the book prints them */
+.ur-acro {
+  color: var(--accent);
+  font-weight: 800;
+}
 .ur-page[hidden] {
   display: none;
 }

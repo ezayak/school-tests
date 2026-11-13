@@ -280,20 +280,28 @@
   function tokens(x) {
     const out = [];
     let s = 0;
+    let line = 0; // lines of a poem so far: an acrostic (x.acro) marks the first letter of the first x.acro lines (true: all)
     const pages = paginate(x).map((paras, p) =>
       paras.map((q) => ({
         cont: !!q.cont,
-        lines: (x.poem ? q : [q.t || q]).map((l) =>
-          l
+        lines: (x.poem ? q : [q.t || q]).map((l) => {
+          const acro = x.poem && (x.acro === true || line++ < (x.acro || 0));
+          return l
             .split(/\s+/)
             .filter(Boolean)
-            .map((w) => {
+            .map((w, j) => {
               const i = out.length;
-              out.push({ w, word: /[\p{L}\d]/u.test(w), s, p });
+              out.push({
+                w,
+                word: /[\p{L}\d]/u.test(w),
+                s,
+                p,
+                acro: acro && !j,
+              });
               if (/[.!?…][»")]*$/.test(w)) s++;
               return i;
-            }),
-        ),
+            });
+        }),
       })),
     );
     return { toks: out, pages };
@@ -335,17 +343,20 @@
                             : " "
                           : ""
                         : "";
-                      return `<span class="ur-t${t.word ? " wd" : ""}" data-t="${i}" data-s="${t.s}"><span class="ur-nb">${esc(t.w)}</span>${sp}</span>${nx && nx.s !== t.s ? " " : ""}`;
+                      return `<span class="ur-t${t.word ? " wd" : ""}" data-t="${i}" data-s="${t.s}"><span class="ur-nb">${t.acro ? `<b class="ur-acro">${esc(t.w[0])}</b>${esc(t.w.slice(1))}` : esc(t.w)}</span>${sp}</span>${nx && nx.s !== t.s ? " " : ""}`;
                     })
                     .join("")}</span>`,
               )
               .join(X.poem ? "" : " ")}</div>`,
         )
         .join("");
+    // a poem with long lines is shown in one column
+    const wide =
+      X.poem && (X.pages || [X.paras]).flat(2).some((l) => l.length > 34);
     const textHTML = pages
       .map(
         (pg, p) =>
-          `<div class="ur-page${X.poem ? " poem" : ""}" data-p="${p}">${stanzas(pg)}</div>`,
+          `<div class="ur-page${X.poem ? ` poem${wide ? " wide" : ""}` : ""}" data-p="${p}">${stanzas(pg)}</div>`,
       )
       .join("");
     const many = pages.length > 1;

@@ -207,7 +207,9 @@ window.UA_LESSON = {
   card: { en: "the card's line", cover: "eagle" },                                            // the card in lessons.js
   learn: [{ t, ic, lines: ["text with [key words]"], ex: ["examples"], img, text, from: "№ 1, с. 4" }],   // language
   texts: [{ t, author, kind, ic, task, img, from, poem: true, paras: [["line", …], …] | ["paragraph", …] }], // reading
-  // a text longer than one screen: pages: [[paras of page 1], [paras of page 2], …] instead of paras
+  // pages are made by the engine (poem: whole stanzas up to 16 lines; prose: paragraphs up to 480 letters);
+  // pages: [[paras of page 1], …] instead of paras sets them by hand. A poem with a line over 34 letters is one column.
+  // acro: true | N — an acrostic: the first letter of every line (or of the first N lines) in colour
   groups: [{ t, ic, items: [{ n, k, chip, p, hw, q, tip, mean, ic | img, rows: [...], help: ["…"], x: ["…"] }] }],
 };
 ```
