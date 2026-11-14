@@ -2455,9 +2455,9 @@ window.GAMES = [
     hub: true,
     lesson: "Уроки за підручником: правило з прикладами, вправи",
     topics:
-      "Звуки і букви. Алфавіт. Наголос · Слово. Значення слова · Будова слова · Частини мови · Речення · Текст",
+      "Звуки і букви. Алфавіт. Наголос · Слово. Значення слова · Будова слова · Частини мови · Речення · Текст · Повторення",
     path: "optima/grade-3/ukr-mova/index.html",
-    countLabel: "80 уроків",
+    countLabel: "81 урок",
     year: "2026–2027",
     also: [
       "optima/grade-3/ukr-mova/lessons.js",
@@ -2840,6 +2840,10 @@ window.GAMES = [
       "optima/grade-3/ukr-mova/img/lesson-80/bats.jpg",
       "optima/grade-3/ukr-mova/img/lesson-80/may.jpg",
       "optima/grade-3/ukr-mova/img/lesson-80/phones.jpg",
+      "optima/grade-3/ukr-mova/lesson-81.html",
+      "optima/grade-3/ukr-mova/lesson-81.js",
+      "optima/grade-3/ukr-mova/img/lesson-81/children.jpg",
+      "optima/grade-3/ukr-mova/img/lesson-81/race.jpg",
     ],
   },
   {
