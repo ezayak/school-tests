@@ -1,7 +1,7 @@
 // Урок 20. Слова з ненаголошеними голосними [е], [и] в коренях слів: вправи 90–94, с. 32–34.
 // Н. Кравцова, О. Придаток, В. Романова «Українська мова та читання», Ч. 1.
 // 91: the unstressed letter in the root of each word (the book marks the stress). 92: words of the text with unstressed е / и (a choice;
-// no key, unverified). 93: the riddles' answers дуб, липа, тополя, верба (no key, unverified).
+// no key, unverified). 93: the riddles' answers дуб, липа, тополя, береза (the book's key, с. 141).
 // Left out: 91.3 (the «hidden» words, unclear without a key), the video (QR), copying.
 const EI = ["е", "и"];
 window.UA_LESSON = {
@@ -173,7 +173,7 @@ window.UA_LESSON = {
             {
               q: "4. Проливала дрібні сльози молода дівиця, полоскала довгі коси у чистій водиці.",
               ch: ["калина", "верба", "береза"],
-              a: "верба",
+              a: "береза",
             },
           ],
           x: ["У словах плечи́стий, корена́стий — ненаголошене [е]."],

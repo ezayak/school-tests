@@ -1,5 +1,6 @@
 // Урок 48. Числівники в задачах і загадках: вправи 235–238, с. 83–84. Н. Кравцова, О. Придаток, В. Романова «Українська мова
 // та читання», Ч. 1. 237.1: 6 insects with 40 legs = 4 жуки (6 legs) + 2 павуки (8 legs): 24 + 16 = 40.
+// The book's key (с. 141) says «чотири жуки і три павуки» (= 7 комах, 48 ніг), which does not fit the poem (6 комах, 40 ніг): ask.
 // Left out, ask before adding: 237.2 — none of the book's expressions gives 40 (6·3+8 = 26, 6·4−8·3 = 0, 6·4+8·3 = 48); the right one
 // would be 6·4+8·2. 238: рік, сонце, рукавичка (the scrambled help words ецсон, кір, жинті, кавиручка). Left out: 236.2 pair work.
 window.UA_LESSON = {
