@@ -78,3 +78,19 @@ The tiles are tapped with real pointer events (`.click()` does not move them). L
 - lesson.css has a `.w` class (tappable words with a dotted line): don't use `.w` in the engine's markup.
 - A word bank («Слова для довідки») is choices, not tiles: the child picks the book's words.
 - «Запиши в порядку збільшення або зменшення» → both orders right (`alt` = the reverse).
+- **All 82 lessons are built** (book pp. 4–141, ex. 1–386): parts `sounds` · `words` · `build` · `parts` · `sentence` · `text` · `review`.
+  Each «Урок розвитку зв’язного мовлення» is its own lesson. A long topic is split at an exercise boundary into lessons of about 4–8 exercises.
+- **The book has an answer key** on p. 141 («ВІДГАДКИ»: riddles of ex. 60, 93, 181, 197, 207, 237, 258, 278, 312, 379, 385). Read it before
+  calling a riddle unverified. Its ex. 237 answer («чотири жуки і три павуки») does not fit the poem (6 insects, 40 legs): ask.
+- **Where a lesson ends:** exercises at the top of a page before the next light-blue title belong to the previous lesson. Look at the next page
+  before writing; if they were missed, add them to the previous lesson (amend only while it is the last commit, otherwise a fix commit).
+- **One lesson per commit:** `ukr-lesson-add.js` registers every `lesson-N.js` present, so write the next lesson only after committing
+  the current one (keep it in the scratchpad meanwhile).
+- **Choices:** at most about 7 per row (17 words in 3 rows ran far below the screen). For «which group» tasks give each row its own short list.
+- **Order rows:** `alt` must use the same words (same capital letters); otherwise drop the `alt`.
+- **Emoji:** a ZWJ emoji (👨‍👩‍👧) counts as 3 in the check; use a single one.
+- **Crops:** check every crop on a contact sheet. Bits of the text or the frame often get in: crop tighter or paint them white (PIL `ImageDraw`).
+  A thin strip (a scheme line) gets white padding so it shows at a sensible size. A lesson with no picture in the book uses emoji (`card.ic`).
+- **Model answers** for «write about yourself / your family» stay neutral (no names or ages from the family).
+- **Text and style lessons** (Текст): types розповідь / опис / міркування / есе and styles художній / науково-популярний / діловий are
+  `ch` rows; the parts (зачин …, твердження / доведення / висновок) are `ch` rows with a quoted sentence each.
