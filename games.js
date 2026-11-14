@@ -2457,7 +2457,7 @@ window.GAMES = [
     topics:
       "Звуки і букви. Алфавіт. Наголос · Слово. Значення слова · Будова слова · Частини мови",
     path: "optima/grade-3/ukr-mova/index.html",
-    countLabel: "58 уроків",
+    countLabel: "59 уроків",
     year: "2026–2027",
     also: [
       "optima/grade-3/ukr-mova/lessons.js",
@@ -2750,6 +2750,10 @@ window.GAMES = [
       "optima/grade-3/ukr-mova/img/lesson-58/monument.jpg",
       "optima/grade-3/ukr-mova/img/lesson-58/rebus.jpg",
       "optima/grade-3/ukr-mova/img/lesson-58/varenyky.jpg",
+      "optima/grade-3/ukr-mova/lesson-59.html",
+      "optima/grade-3/ukr-mova/lesson-59.js",
+      "optima/grade-3/ukr-mova/img/lesson-59/branch.jpg",
+      "optima/grade-3/ukr-mova/img/lesson-59/quest.jpg",
     ],
   },
   {
