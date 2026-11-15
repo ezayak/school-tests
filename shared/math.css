@@ -1077,3 +1077,7 @@
 .vis-fline .cap {
   margin-top: 2px;
 }
+/* fractions in the answer buttons: as big as the text around them */
+.opt .ot .fr {
+  font-size: 1.1em;
+}

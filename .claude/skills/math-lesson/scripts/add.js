@@ -17,9 +17,23 @@ const UNITS = {
   6: "Multiplication Strategies with Multi-Digit Numbers",
   7: "Division Strategies with Multi-Digit Dividends and 1-Digit Divisors",
   8: "Fraction Equivalence",
+  9: "Addition and Subtraction Meanings and Strategies with Fractions",
+  10: "Addition and Subtraction Strategies with Mixed Numbers",
+  11: "Multiply Fractions by Whole Numbers",
+  12: "Decimal Fractions",
+  13: "Units of Measurement and Data",
+  14: "Geometric Figures",
 };
 // the emoji of a new unit's chapter
-const ICONS = { 8: "🍕" };
+const ICONS = {
+  8: "🍕",
+  9: "➕",
+  10: "🥧",
+  11: "✖️",
+  12: "💲",
+  13: "📏",
+  14: "📐",
+};
 const num = (s) => s.split("-").map(Number);
 const byLesson = (a, b) => {
   const [x, y] = [num(a), num(b)];

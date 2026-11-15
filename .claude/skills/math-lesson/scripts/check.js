@@ -181,15 +181,21 @@ console.log(problems ? `${problems} problems` : "all checks passed");
 // fractions: "{1/4} = {3/12}" (a chain of them, "{2 1/3}" mixed numbers too) must be equal
 function mathErrors(text) {
   const errs0 = [];
-  const F = "\\{(?:(\\d+) )?(\\d+)/(\\d+)\\}";
-  const fv = (w, n, d) => Number(w || 0) + Number(n) / Number(d);
-  for (const m of text
-    .replace(/[[\]]/g, "")
-    .matchAll(new RegExp(`${F}(?:\\s*=\\s*${F})+`, "g"))) {
-    const vals = [...m[0].matchAll(new RegExp(F, "g"))].map((x) =>
-      fv(x[1], x[2], x[3]),
-    );
-    if (vals.some((v) => Math.abs(v - vals[0]) > 1e-9))
+  // fraction equations: "{1/4} = {3/12}", "{2/8} + {1/8} = {3/8}", "6 × {1/4} = {6/4}", "{2 1/3}" mixed numbers; every side must be equal
+  const T = "(?:\\{(?:\\d+ )?\\d+/\\d+\\}|\\d+)";
+  const run = new RegExp(`${T}(?:\\s*[+−×=]\\s*${T})+`, "g");
+  const ev = (e) =>
+    Function(
+      `return ${e
+        .replace(/\{(\d+) (\d+)\/(\d+)\}/g, "($1+$2/$3)")
+        .replace(/\{(\d+)\/(\d+)\}/g, "($1/$2)")
+        .replace(/×/g, "*")
+        .replace(/−/g, "-")}`,
+    )();
+  for (const m of text.replace(/[[\]]/g, "").matchAll(run)) {
+    if (!m[0].includes("{") || !m[0].includes("=")) continue;
+    const sides = m[0].split("=").map(ev);
+    if (sides.some((v) => Math.abs(v - sides[0]) > 1e-9))
       errs0.push(`wrong: ${m[0]}`);
   }
   // inside a fraction, "{3 × 2/4 × 2}" is not a whole-number equation
