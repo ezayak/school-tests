@@ -469,6 +469,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-9-2/curious.jpg",
           note: "5 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "9-3",
+          title: "Add Fractions",
+          en: "Add the numerators, keep the denominator",
+          path: "lesson-9-3.html",
+          cover: "img/lesson-9-3/curious.jpg",
+          note: "4 picture cards · 2 games · 6 exercises",
+        },
       ],
     },
     {
