@@ -477,6 +477,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-9-3/curious.jpg",
           note: "4 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "9-4",
+          title: "Show Subtracting Fractions",
+          en: "Take away fractions with the same denominator using tiles and number lines",
+          path: "lesson-9-4.html",
+          cover: "img/lesson-9-4/curious.jpg",
+          note: "5 picture cards · 2 games · 6 exercises",
+        },
       ],
     },
     {
