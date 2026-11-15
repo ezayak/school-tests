@@ -517,6 +517,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-10-1/curious.jpg",
           note: "5 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "10-2",
+          title: "Show Adding Mixed Numbers",
+          en: "Add the wholes and the parts; make another whole",
+          path: "lesson-10-2.html",
+          cover: "img/lesson-10-2/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
