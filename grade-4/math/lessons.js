@@ -448,6 +448,22 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 9,
+      dir: "unit-9",
+      ic: "➕",
+      title: "Addition and Subtraction Meanings and Strategies with Fractions",
+      items: [
+        {
+          n: "9-1",
+          title: "Break Up a Fraction",
+          en: "Decompose a fraction into a sum of fractions with the same denominator",
+          path: "lesson-9-1.html",
+          cover: "img/lesson-9-1/curious.jpg",
+          note: "5 picture cards · 2 games · 6 exercises",
+        },
+      ],
+    },
+    {
       n: "",
       part: "",
       dir: "times",
