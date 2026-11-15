@@ -413,6 +413,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-8-1/curious.jpg",
           note: "7 picture cards · 3 games · 8 exercises",
         },
+        {
+          n: "8-2",
+          title: "Make Equivalent Fractions",
+          en: "Multiply or divide the top and the bottom by the same number",
+          path: "lesson-8-2.html",
+          cover: "img/lesson-8-2/pizza.jpg",
+          note: "6 picture cards · 3 games · 7 exercises",
+        },
       ],
     },
     {
