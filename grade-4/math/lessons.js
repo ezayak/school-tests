@@ -493,6 +493,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-9-5/nails.jpg",
           note: "5 picture cards · 2 games · 7 exercises",
         },
+        {
+          n: "9-6",
+          title: "Fraction Word Problems",
+          en: "Add and subtract fractions to solve problems, one step at a time",
+          path: "lesson-9-6.html",
+          cover: "img/lesson-9-6/curious.jpg",
+          note: "5 picture cards · 2 games · 6 exercises",
+        },
       ],
     },
     {
