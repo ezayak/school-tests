@@ -485,6 +485,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-9-4/curious.jpg",
           note: "5 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "9-5",
+          title: "Subtract Fractions",
+          en: "Subtract the numerators, keep the denominator",
+          path: "lesson-9-5.html",
+          cover: "img/lesson-9-5/nails.jpg",
+          note: "5 picture cards · 2 games · 7 exercises",
+        },
       ],
     },
     {
