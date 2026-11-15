@@ -993,6 +993,20 @@
 .fb-w i.on {
   background: var(--sc);
 }
+.fb-pie {
+  width: 130px;
+  height: 130px;
+}
+.fb-pie path,
+.fb-pie circle {
+  fill: var(--card);
+  stroke: var(--ink);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+.fb-pie .on {
+  fill: var(--sc);
+}
 /* fraction number lines (vis kind "fline"), one under the other */
 .vis-fline {
   --flw: 0.86;

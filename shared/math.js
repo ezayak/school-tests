@@ -741,16 +741,40 @@
     </div>${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }
 
-  // fraction models: {rows: [{d: 12, k: 3, l: "{3/12}", g: 2, c}], cap}
-  //   d equal parts, the first k shaded; g: a grid of g rows (d / g parts in each); l: the label on the left. All the wholes are the same size.
+  // fraction models: {rows: [{d: 12, k: 3, l: "{3/12}", g: 2, c, on, pie}], side, cap}
+  //   d equal parts, the first k shaded (or the parts listed in on: [0, 2, 5]); g: a grid of g rows (d / g parts in each, filled column by column);
+  //   pie: a circle cut in d equal parts; l: the label on the left. All the wholes are the same size.
+  function pieSVG(r, cls) {
+    const R = 50,
+      C = 54;
+    const pt = (j) => {
+      const a = (j / r.d) * 2 * Math.PI - Math.PI / 2;
+      return `${(C + R * Math.cos(a)).toFixed(2)} ${(C + R * Math.sin(a)).toFixed(2)}`;
+    };
+    const on = (j) => (r.on ? r.on.includes(j) : j < (r.k || 0));
+    const parts =
+      r.d === 1
+        ? `<circle cx="${C}" cy="${C}" r="${R}"${on(0) ? ' class="on"' : ""}/>`
+        : Array.from(
+            { length: r.d },
+            (_, j) =>
+              `<path${on(j) ? ' class="on"' : ""} d="M${C} ${C} L${pt(j)} A${R} ${R} 0 0 1 ${pt(j + 1)} Z"/>`,
+          ).join("");
+    return `<svg class="fb-pie ${cls}" viewBox="0 0 108 108" aria-hidden="true">${parts}</svg>`;
+  }
   function fbar(v) {
     const row = (r, i) => {
       const g = r.g || 1;
+      const cls = COL[(r.c ?? i) % 4];
+      const on = (j) => (r.on ? r.on.includes(j) : j < (r.k || 0));
       const cells = Array.from(
         { length: r.d },
-        (_, j) => `<i${j < (r.k || 0) ? ` class="on"` : ""}></i>`,
+        (_, j) => `<i${on(j) ? ` class="on"` : ""}></i>`,
       ).join("");
-      return `<div class="fb-row">${r.l !== undefined ? `<span class="fb-l">${kw(r.l)}</span>` : ""}<div class="fb-w ${COL[(r.c ?? i) % 4]}${g > 1 ? " grid" : ""}" style="--d:${r.d / g};--g:${g}">${cells}</div></div>`;
+      const shape = r.pie
+        ? pieSVG(r, cls)
+        : `<div class="fb-w ${cls}${g > 1 ? " grid" : ""}" style="--d:${r.d / g};--g:${g}">${cells}</div>`;
+      return `<div class="fb-row">${r.l !== undefined ? `<span class="fb-l">${kw(r.l)}</span>` : ""}${shape}</div>`;
     };
     return `<div class="vis-fbar${v.side ? " side" : ""}">${v.rows.map(row).join("")}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }

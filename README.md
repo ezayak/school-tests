@@ -1044,7 +1044,8 @@ Drawings (`vis`):
 - `{kind: "pv", n, hl: [places from the right], val: true, cap}` – place-value chart with periods; `hl` digits are yellow, `val` writes their value.
 - `{kind: "nline", lo, hi, n, hide}` – number line for rounding (`hide`: no answer shown).
 - `{kind: "digits", rows: [{n, hl: [places from the right], t}], cap}` – numbers with some digits marked in yellow (the book's underlined digits); `t` = a note after the number.
-- `{kind: "fbar", rows: [{d: 12, k: 3, l: "{3/12}", g: 2}], side, cap}` – fraction models: every whole the same size, cut in `d` equal parts, the first `k` shaded;
+- `{kind: "fbar", rows: [{d: 12, k: 3, l: "{3/12}", g: 2, on, pie}], side, cap}` – fraction models: every whole the same size, cut in `d` equal parts, the first `k` shaded
+  (or the parts in `on: [0, 2, 5]`; `pie: true` = a circle cut in `d` equal parts);
   `g` = a grid of `g` rows (filled column by column: the book's 2 × 4 model), `l` = the label on the left, `side: true` = the models next to each other.
 - `{kind: "fline", lines: [{d: 4, pt: 1}, {d: 12, lab: false}], hi: 1, ring: 1/4, cap}` – fraction number lines one under the other, 0 to `hi`:
   `d` parts in each whole, `pt` = a point (the numerator), `lab: false` = only the whole numbers, `ring` = an oval round the same place on every line.
