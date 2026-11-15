@@ -504,6 +504,22 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 10,
+      dir: "unit-10",
+      ic: "🥧",
+      title: "Addition and Subtraction Strategies with Mixed Numbers",
+      items: [
+        {
+          n: "10-1",
+          title: "Break Up Mixed Numbers",
+          en: "Mixed numbers as wholes and parts, and as fractions greater than 1",
+          path: "lesson-10-1.html",
+          cover: "img/lesson-10-1/curious.jpg",
+          note: "5 picture cards · 2 games · 6 exercises",
+        },
+      ],
+    },
+    {
       n: "",
       part: "",
       dir: "times",
