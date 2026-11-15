@@ -429,6 +429,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-8-3/trail.jpg",
           note: "6 picture cards · 2 games · 7 exercises",
         },
+        {
+          n: "8-4",
+          title: "Compare with 0, 1/2 and 1",
+          en: "Compare fractions with the benchmarks 0, one half and 1",
+          path: "lesson-8-4.html",
+          cover: "img/lesson-8-4/curious.jpg",
+          note: "6 picture cards · 2 games · 7 exercises",
+        },
       ],
     },
     {
