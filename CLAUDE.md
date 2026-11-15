@@ -211,6 +211,7 @@ Alex has aphasia: short sentences, a picture on every card and question, and eve
 Folder `grade-4/math/unit-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Math">`) + `shared/math.js` / `.css` (don't copy them; a lesson is only a data file). Format in README: "Math lessons (Grade 4)".
 Procedure, item types and checks: the `math-lesson` skill; `unit-2/lesson-2-1.js` is the model.
 Sources: `~/Documents/2026-2027/Alex/Math/books/` (Reveal Math Student Edition Vol. 1 = Units 1–7, scanned, book page = PDF page − 20; Student Practice Book, text layer) and `Term N/` (class sheets, extra practice, homework, model answers).
+Vol. 2 (Units 8–14) is the online e-book filmed as screencasts (`books/*.mp4`): the `math-video-book` skill reads them; fractions are `{3/4}` in the text.
 Alex has aphasia: the parent explains each question by pointing at the pictures.
 
 - One page per book lesson (`lesson-2-1`): the Student Edition's 4 pages + its 2 Practice Book pages. The unit pages (`unit-2/place-value` …) hold the Term 1 sheets; keep them.

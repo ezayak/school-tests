@@ -22,6 +22,7 @@ The user reviews each lesson in the browser: build **one lesson at a time** unle
 
 ## 2. Read the sources
 
+- Student Edition Vol. 2 (Units 8–14): no PDF, the e-book filmed as videos: read it with the `math-video-book` skill, then build here.
 - Student Edition Vol. 1 (Units 1–7): scanned pictures, no text layer. Book page = PDF page − 20 (constant through Volume 1). Render and read:
   `pdftoppm -r 150 -f <p+20> -l <p+23> -png "$SE" <scratchpad>/se/l`. Zoom (`-r 300 -x -y -W -H`) on small print: underlined digits, exponents, the marks in a chart.
 - A book lesson is 4 pages: Be Curious (p. 1), Learn + Work Together (p. 2), On My Own (p. 3–4, numbered items, "Extend Your Thinking", "Error Analysis"), Reflect. "Math is… Mindset" boxes are skipped.
