@@ -461,6 +461,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-9-1/curious.jpg",
           note: "5 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "9-2",
+          title: "Show Adding Fractions",
+          en: "Add fractions with the same denominator using tiles and number lines",
+          path: "lesson-9-2.html",
+          cover: "img/lesson-9-2/curious.jpg",
+          note: "5 picture cards · 2 games · 6 exercises",
+        },
       ],
     },
     {
