@@ -27,5 +27,5 @@ for f in fs:
     if e > 6 or abs(d) > 0.5 * a.shape[0]:
         kept.append(f); last = a
 for i, f in enumerate(kept):
-    shutil.copy(f, f"{dst}/k{i:03d}_{os.path.basename(f)}")
+    shutil.copy(f, f"{dst}/k{i:04d}_{os.path.basename(f)}")
 print(len(kept))
