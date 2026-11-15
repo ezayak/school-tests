@@ -741,7 +741,7 @@
     </div>${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }
 
-  // fraction models: {rows: [{d: 12, k: 3, l: "{3/12}", g: 2, c, on, pie}], side, cap}
+  // fraction models: {rows: [{d: 12, k: 3, l: "{3/12}", g: 2, c, on, pie, cross}], side, cap}
   //   d equal parts, the first k shaded (or the parts listed in on: [0, 2, 5]); g: a grid of g rows (d / g parts in each, filled column by column);
   //   pie: a circle cut in d equal parts; l: the label on the left. All the wholes are the same size.
   function pieSVG(r, cls) {
@@ -767,9 +767,11 @@
       const g = r.g || 1;
       const cls = COL[(r.c ?? i) % 4];
       const on = (j) => (r.on ? r.on.includes(j) : j < (r.k || 0));
+      // cross: [parts] – crossed out (taken away)
       const cells = Array.from(
         { length: r.d },
-        (_, j) => `<i${on(j) ? ` class="on"` : ""}></i>`,
+        (_, j) =>
+          `<i${on(j) || (r.cross || []).includes(j) ? ` class="${on(j) ? "on" : ""}${(r.cross || []).includes(j) ? " x" : ""}"` : ""}></i>`,
       ).join("");
       const shape = r.pie
         ? pieSVG(r, cls)
@@ -780,7 +782,7 @@
   }
   // fraction number lines, one under the other, the same length: {lines: [{d: 4, pt: 1, lab: false, jumps: [1, 2]}], hi: 1, ring: 1/4, cap}
   //   d parts between two whole numbers; pt: the point (a numerator); lab: false = only the whole numbers; ring: circle the same place on every line;
-  //   jumps: arcs over the line from 0, so many parts each
+  //   jumps: arcs over the line from 0 (or from: k), so many parts each; a negative jump goes back
   function fline(v) {
     const hi = v.hi || 1;
     const line = (L) => {
@@ -799,10 +801,11 @@
           ? `<span class="pt" style="left:${(L.pt / n) * 100}%"></span>`
           : "";
       // jumps: [4, 1, 2] – arcs from 0, one colour each (adding on a number line)
-      let at = 0;
+      // from: where the first jump starts; a negative jump goes back (subtracting)
+      let at = L.from || 0;
       const arcs = (L.jumps || [])
         .map((j, i) => {
-          const a = `<span class="arc ${COL[i % 4]}" style="left:${(at / n) * 100}%;width:${(j / n) * 100}%"></span>`;
+          const a = `<span class="arc ${COL[i % 4]}${j < 0 ? " back" : ""}" style="left:${(Math.min(at, at + j) / n) * 100}%;width:${(Math.abs(j) / n) * 100}%"></span>`;
           at += j;
           return a;
         })

@@ -993,6 +993,25 @@
 .fb-w i.on {
   background: var(--sc);
 }
+/* a crossed-out part (taken away) */
+.fb-w i.x {
+  background:
+    linear-gradient(
+      to top right,
+      transparent calc(50% - 2px),
+      var(--ink) calc(50% - 2px),
+      var(--ink) calc(50% + 2px),
+      transparent calc(50% + 2px)
+    ),
+    linear-gradient(
+      to top left,
+      transparent calc(50% - 2px),
+      var(--ink) calc(50% - 2px),
+      var(--ink) calc(50% + 2px),
+      transparent calc(50% + 2px)
+    ),
+    color-mix(in srgb, var(--sc) 45%, var(--card));
+}
 .fb-pie {
   width: 130px;
   height: 130px;
@@ -1074,6 +1093,11 @@
   border-bottom: none;
   border-radius: 50% 50% 0 0 / 100% 100% 0 0;
   box-sizing: border-box;
+}
+.vis-fline .arc.back {
+  border-top-style: dashed;
+  border-left-style: dashed;
+  border-right-style: dashed;
 }
 .vis-fline .ring {
   position: absolute;
