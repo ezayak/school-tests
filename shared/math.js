@@ -9,11 +9,14 @@
 //     + story: {q: "the word problem", vis: {kind: "bar", …}, ask: true, why: "…", ans: "They have {} students."}
 //       ask: first "Add or subtract?" with the schema, then the columns
 //   {type: "num", q, a: 12, pre: "3 × 4 =", post: "", vis | img | emoji, x}  – type a number
+//     + fr: "?/8" (or "1/?") – the number is the top (or bottom) of a fraction: the answer box stands in the fraction
 //   {type: "flower", n: 4, q}                                  – the times-table flower: n × 1 … n × 10 on the petals
 // Drawings (vis):
 //   bar     – bar model (schema) of a word problem: rows of parts, ? for the unknown, braces for the total
 //   groups  – equal groups of things; array – rows and columns; cubes – sticks of cubes (times as many)
 //   pv      – place-value chart; nline – number line for rounding; colshow – a worked example in columns
+//   fbar    – fraction models: strips (or grids) cut in equal parts, some shaded; fline – number lines cut in fourths, twelfths …
+// Text: "{3/4}" is a stacked fraction, "{2 1/3}" a mixed number, "{?/8}" the part to find (shared/common.js Kit.frac).
 (function () {
   "use strict";
   const esc = (s) =>
@@ -22,7 +25,10 @@
       (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
     );
   const fmt = (n) => Number(n).toLocaleString("en-US");
-  const kw = (t) => esc(t).replace(/\[([^\]]+)\]/g, '<b class="kw">$1</b>');
+  // "{3/4}" → a stacked fraction (Kit.frac, shared/common.js)
+  const frac = (h) => (window.Kit && Kit.frac ? Kit.frac(h) : h);
+  const kw = (t) =>
+    frac(esc(t)).replace(/\[([^\]]+)\]/g, '<b class="kw">$1</b>');
   // digits from the right: 4568 → [8, 6, 5, 4]
   const dr = (n) => String(n).split("").reverse().map(Number);
   const PL = [
@@ -412,8 +418,14 @@
     let tries = 0,
       val = "";
     const side = `${E.fromTag()}${E.hasPic(it) ? E.pic(it) : ""}`;
+    const box = '<span class="mx-num on" id="nv" aria-live="polite"></span>';
+    // fr: "?/8" – the box is the top of the fraction ("1/?" – the bottom)
+    const fr = it.fr && it.fr.split("/");
+    const field = fr
+      ? `<span class="fr mx-fr">${fr.map((x) => `<span>${x === "?" ? box : esc(x)}</span>`).join("")}</span>`
+      : box;
     const main = `${E.qHTML(it.q)}
-      <div class="mx-numrow">${it.pre ? `<span class="mx-pre">${kw(it.pre)}</span>` : ""}<span class="mx-num on" id="nv" aria-live="polite"></span>${it.post ? `<span class="mx-pre">${kw(it.post)}</span>` : ""}</div>
+      <div class="mx-numrow">${it.pre ? `<span class="mx-pre">${kw(it.pre)}</span>` : ""}${field}${it.post ? `<span class="mx-pre">${kw(it.post)}</span>` : ""}</div>
       ${padHTML()}
       <div id="fbx" class="fbx"></div>`;
     E.app.innerHTML = `${E.hud()}<section class="card pop fc mx-numq">${E.hasPic(it) ? E.split(side, main) : `<div class="row center">${E.fromTag()}</div>${main}`}</section>`;
@@ -427,7 +439,10 @@
       nv.textContent = fmt(want);
       nv.classList.remove("on", "no");
       nv.classList.add("ok");
-      const full = `${it.pre ? it.pre + " " : ""}[${fmt(want)}]${it.post ? " " + it.post : ""}`;
+      const ans = it.fr
+        ? `{${it.fr.replace("?", `[${fmt(want)}]`)}}`
+        : `[${fmt(want)}]`;
+      const full = `${it.pre ? it.pre + " " : ""}${ans}${it.post ? " " + it.post : ""}`;
       E.feedback(ok, `${kw(full)}${it.x ? `<br>${kw(it.x)}` : ""}`);
       E.say(`${E.plain(full)}. ${E.plain(it.x || "")}`);
     }
@@ -726,9 +741,58 @@
     </div>${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }
 
+  // fraction models: {rows: [{d: 12, k: 3, l: "{3/12}", g: 2, c}], cap}
+  //   d equal parts, the first k shaded; g: a grid of g rows (d / g parts in each); l: the label on the left. All the wholes are the same size.
+  function fbar(v) {
+    const row = (r, i) => {
+      const g = r.g || 1;
+      const cells = Array.from(
+        { length: r.d },
+        (_, j) => `<i${j < (r.k || 0) ? ` class="on"` : ""}></i>`,
+      ).join("");
+      return `<div class="fb-row">${r.l !== undefined ? `<span class="fb-l">${kw(r.l)}</span>` : ""}<div class="fb-w ${COL[(r.c ?? i) % 4]}${g > 1 ? " grid" : ""}" style="--d:${r.d / g};--g:${g}">${cells}</div></div>`;
+    };
+    return `<div class="vis-fbar${v.side ? " side" : ""}">${v.rows.map(row).join("")}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
+  }
+  // fraction number lines, one under the other, the same length: {lines: [{d: 4, pt: 1, lab: false}], hi: 1, ring: 1/4, cap}
+  //   d parts between two whole numbers; pt: the point (a numerator); lab: false = only the whole numbers; ring: circle the same place on every line
+  function fline(v) {
+    const hi = v.hi || 1;
+    const line = (L) => {
+      const n = L.d * hi;
+      const tk = Array.from({ length: n + 1 }, (_, k) => {
+        const whole = k % L.d === 0;
+        const t = whole
+          ? String(k / L.d)
+          : L.lab === false
+            ? ""
+            : `{${k}/${L.d}}`;
+        return `<span class="tk${whole ? " w" : ""}" style="left:${(k / n) * 100}%">${t ? `<b>${frac(esc(t))}</b>` : ""}</span>`;
+      }).join("");
+      const pt =
+        L.pt !== undefined
+          ? `<span class="pt" style="left:${(L.pt / n) * 100}%"></span>`
+          : "";
+      return `<div class="fl">${tk}${pt}</div>`;
+    };
+    return `<div class="vis-fline">${v.ring !== undefined ? `<span class="ring" style="left:calc(${(v.ring / hi) * 100}% * var(--flw) + (100% - 100% * var(--flw)) / 2)"></span>` : ""}${v.lines.map(line).join("")}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
+  }
+
   window.CS_EXT = {
     items: { col: itCol, num: itNum, flower: itFlower },
     pts: { flower: () => FN },
-    vis: { bar, groups, array, cubes, pv, nline, colshow, digits, area },
+    vis: {
+      bar,
+      groups,
+      array,
+      cubes,
+      pv,
+      nline,
+      colshow,
+      digits,
+      area,
+      fbar,
+      fline,
+    },
   };
 })();

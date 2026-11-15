@@ -24,6 +24,8 @@ const VIS = [
   "colshow",
   "digits",
   "area",
+  "fbar",
+  "fline",
 ];
 global.window = {};
 // the lessons build their questions with shared/math-kit.js
@@ -176,8 +178,22 @@ for (const file of files) {
 console.log(problems ? `${problems} problems` : "all checks passed");
 
 // "3 × 40 = 120", "60,000 + 400 + 8 = 60,408", "56 = 8 × 7", "50 ÷ 5 = 10" in a text: each one must be true (× ÷ before + −; "7 ÷ 2 = 3 R1" is skipped)
+// fractions: "{1/4} = {3/12}" (a chain of them, "{2 1/3}" mixed numbers too) must be equal
 function mathErrors(text) {
-  const t = text.replace(/[[\]$¢]/g, "");
+  const errs0 = [];
+  const F = "\\{(?:(\\d+) )?(\\d+)/(\\d+)\\}";
+  const fv = (w, n, d) => Number(w || 0) + Number(n) / Number(d);
+  for (const m of text
+    .replace(/[[\]]/g, "")
+    .matchAll(new RegExp(`${F}(?:\\s*=\\s*${F})+`, "g"))) {
+    const vals = [...m[0].matchAll(new RegExp(F, "g"))].map((x) =>
+      fv(x[1], x[2], x[3]),
+    );
+    if (vals.some((v) => Math.abs(v - vals[0]) > 1e-9))
+      errs0.push(`wrong: ${m[0]}`);
+  }
+  // inside a fraction, "{3 × 2/4 × 2}" is not a whole-number equation
+  const t = text.replace(/\{[^{}]*\}/g, "F").replace(/[[\]$¢]/g, "");
   const N = "\\d[\\d,]*";
   const chain = `${N}(?:\\s*[×÷+−]\\s*${N})+`;
   const val = (e) =>
@@ -185,7 +201,7 @@ function mathErrors(text) {
       `return ${e.replace(/,/g, "").replace(/×/g, "*").replace(/÷/g, "/").replace(/−/g, "-")}`,
     )();
   const n = (s) => Number(s.replace(/,/g, ""));
-  const errs = [];
+  const errs = errs0;
   // a chain = a number, not inside a longer chain on either side
   for (const m of t.matchAll(
     new RegExp(

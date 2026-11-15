@@ -998,7 +998,7 @@ and bump `VERSION` in `sw.js`.
 ## Math lessons (Grade 4)
 
 Folder: `grade-4/math/`. One card on the home page ("Math", under Subjects, colour `--math`) opens `index.html`, which lists the lessons from `lessons.js`,
-one chapter per book unit with a heading (`part: "Unit"`, `chapters: [{n, dir: "unit-2", title, items}]`). Book: Reveal Math, Grade 4 (Student Edition + Student Practice Book).
+one chapter per book unit with a heading (`part: "Unit"`, `chapters: [{n, dir: "unit-2", title, items}]`). Book: Reveal Math, Grade 4 (Student Edition + Student Practice Book). Volume 2 (Units 8–14) is the online e-book, filmed: `math-video-book` skill.
 In each unit: first the **unit page** (`label: "Unit"` on its card: "Unit 2"), made in Term 1 from the school sheets, then one card per **book lesson** (`n: "2-1"`, "Lesson 2-1").
 A chapter can set its own `part` (`part: ""` = only its title: "Multiplication and division games"); `flat: true` would show all the cards together without headings (any lessons list).
 Unit pages: Unit 2 `place-value.html` (place value, compare, round), Unit 3 `add-subtract.html` (columns with regrouping, word problems),
@@ -1030,6 +1030,7 @@ Question types (games and exercises):
 - A word problem: `col` with `story: {q, vis: <bar model>, ask: true, why, ans: "They have {} students."}` – first "Add or subtract?" next to the schema
   (`why` replaces the default explanation), then the columns; `ans` is the answer sentence (`{}` = the result).
 - `{type: "num", q, a, pre: "3 × 4 =", post: "hours", hint, x}` – type a number (commas are added while typing). 2 tries.
+  `fr: "?/8"` (or `"1/?"`): the number is the top (bottom) of a fraction, the answer box stands in the fraction (`pre: "{2/4} ="`).
 - `{type: "flower", n: 4, c: "var(--heat)"}` – the times-table flower: n × 1 … n × 10 on the petals (10 points).
 - The engine's own `mc`, `multi` and `tf` work as usual.
 
@@ -1043,7 +1044,15 @@ Drawings (`vis`):
 - `{kind: "pv", n, hl: [places from the right], val: true, cap}` – place-value chart with periods; `hl` digits are yellow, `val` writes their value.
 - `{kind: "nline", lo, hi, n, hide}` – number line for rounding (`hide`: no answer shown).
 - `{kind: "digits", rows: [{n, hl: [places from the right], t}], cap}` – numbers with some digits marked in yellow (the book's underlined digits); `t` = a note after the number.
+- `{kind: "fbar", rows: [{d: 12, k: 3, l: "{3/12}", g: 2}], side, cap}` – fraction models: every whole the same size, cut in `d` equal parts, the first `k` shaded;
+  `g` = a grid of `g` rows (filled column by column: the book's 2 × 4 model), `l` = the label on the left, `side: true` = the models next to each other.
+- `{kind: "fline", lines: [{d: 4, pt: 1}, {d: 12, lab: false}], hi: 1, ring: 1/4, cap}` – fraction number lines one under the other, 0 to `hi`:
+  `d` parts in each whole, `pt` = a point (the numerator), `lab: false` = only the whole numbers, `ring` = an oval round the same place on every line.
 - `{kind: "area", rows: [8], cols: [20, 4], cells: [160, "?"], cap}` – an area model: the factors on top and on the left, a partial product in each cell (row by row; `"?"` = yellow, the one to find; `""` = empty).
+
+Fractions in any text (questions, options, `x`, cards, `lines` rows): `{3/4}` is a stacked fraction, `{2 1/3}` a mixed number, `{?/8}` the part to find (yellow);
+the voice says "3 fourths", "2 and 1 third" (`Kit.frac` / `Kit.fracSay` in `shared/common.js`, used by the engine's `kw` / `plain` when the page loads common.js).
+`check.js` checks that every `{a/b} = {c/d}` written in `x` is true.
 
 A game or exercise with `keep: true` keeps its items in order (the steps of one problem); otherwise they are shuffled.
 A lesson file is like a Science lesson (`words`, `ideas`, `games`, `exercises`, `key: "math4-u<unit>"`), with `imgDir: "img"` and `cover: "cover"`

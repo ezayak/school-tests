@@ -42,11 +42,16 @@
     },
   };
   // "[Search]" → a coloured key word; plain() is the same text for the voice
-  const kw = (t) => esc(t).replace(/\[([^\]]+)\]/g, '<b class="kw">$1</b>');
-  const plain = (t) =>
-    String(t ?? "")
+  // Math: "{3/4}" → a stacked fraction (Kit.frac), said "3 fourths" (pages without shared/common.js have no fractions)
+  const frac = (h) => (window.Kit && Kit.frac ? Kit.frac(h) : h);
+  const kw = (t) =>
+    frac(esc(t)).replace(/\[([^\]]+)\]/g, '<b class="kw">$1</b>');
+  const plain = (t) => {
+    const p = String(t ?? "")
       .replace(/[[\]]/g, "")
       .replace(/___/g, "…");
+    return window.Kit && Kit.fracSay ? Kit.fracSay(p) : p;
+  };
 
   /* ================= list of lessons ================= */
   if (view === "list") {
@@ -293,7 +298,7 @@
       case "nameext":
         return `<div class="vis-ne">${ic(v.type, 90)}<div class="ne"><span class="n"><b>${esc(v.name)}</b><small>name</small></span><span class="d"><b>${v.hideDot ? "?" : "."}</b><small>dot</small></span><span class="e"><b>${esc(v.ext)}</b><small>extension</small></span></div></div>`;
       case "lines":
-        return `<div class="vis-lines">${v.rows.map((r) => `<div>${esc(r)}</div>`).join("")}${v.note ? `<small>${esc(v.note)}</small>` : ""}</div>`;
+        return `<div class="vis-lines">${v.rows.map((r) => `<div>${frac(esc(r))}</div>`).join("")}${v.note ? `<small>${frac(esc(v.note))}</small>` : ""}</div>`;
       case "sizes": {
         const mx = Math.max(...v.items.map((i) => i.kb));
         return `<div class="vis-sizes">${v.items.map((it) => `<div class="sz">${ic(it.type, 40)}<span class="nm">${esc(it.name)}</span><span class="bar"><i style="width:${Math.max(3, Math.round(Math.sqrt(it.kb / mx) * 100))}%"></i></span><b>${it.kb >= 1024 ? Math.round(it.kb / 1024) + " MB" : it.kb + " KB"}</b></div>`).join("")}</div>`;

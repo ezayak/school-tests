@@ -1,4 +1,4 @@
-// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard,dragTiles,voice,sideNav}=Kit;
+// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard,dragTiles,voice,sideNav,frac,fracSay}=Kit;
 window.Kit = (function () {
   const esc = (s) =>
     String(s ?? "").replace(
@@ -432,6 +432,41 @@ window.Kit = (function () {
     if (!opt) addEventListener("hashchange", show);
     show();
   }
+  // Fractions in a text (Math): "{3/4}", a mixed number "{2 1/3}", the one to find "{?/8}" or "{[6]/8}".
+  // frac() takes escaped HTML and stacks them; fracSay() gives the words for the voice ("2 and 1 third").
+  const FR = /\{(?:(\d+) )?([^{}/\s]+)\/([^{}/\s]+)\}/g;
+  const frac = (h) =>
+    String(h).replace(
+      FR,
+      (_, w, n, d) =>
+        `${w ? `<span class="frw">${w}</span>` : ""}<span class="fr">${[n, d].map((x) => `<span${x === "?" ? ' class="frq"' : ""}>${x}</span>`).join("")}</span>`,
+    );
+  const DEN = {
+    2: ["half", "halves"],
+    3: ["third"],
+    4: ["fourth"],
+    5: ["fifth"],
+    6: ["sixth"],
+    7: ["seventh"],
+    8: ["eighth"],
+    9: ["ninth"],
+    10: ["tenth"],
+    12: ["twelfth"],
+    100: ["hundredth"],
+  };
+  const fracSay = (t) =>
+    String(t).replace(FR, (_, w, n, d) => {
+      const D = DEN[d];
+      const f =
+        d === "?"
+          ? `${n} over what number`
+          : !D
+            ? `${n} over ${d}`
+            : n === "?"
+              ? `how many ${D[1] || D[0] + "s"}`
+              : `${n} ${n === "1" ? D[0] : D[1] || D[0] + "s"}`;
+      return (w ? w + " and " : "") + f;
+    });
   return {
     esc,
     shuf,
@@ -444,5 +479,7 @@ window.Kit = (function () {
     dragTiles,
     voice,
     sideNav,
+    frac,
+    fracSay,
   };
 })();
