@@ -421,6 +421,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-8-2/pizza.jpg",
           note: "6 picture cards · 3 games · 7 exercises",
         },
+        {
+          n: "8-3",
+          title: "Equivalent Fractions on a Number Line",
+          en: "The same point on a number line, cut in more or fewer parts",
+          path: "lesson-8-3.html",
+          cover: "img/lesson-8-3/trail.jpg",
+          note: "6 picture cards · 2 games · 7 exercises",
+        },
       ],
     },
     {
