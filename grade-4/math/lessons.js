@@ -437,6 +437,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-8-4/curious.jpg",
           note: "6 picture cards · 2 games · 7 exercises",
         },
+        {
+          n: "8-5",
+          title: "Compare with Like Tops or Bottoms",
+          en: "Compare fractions with the same numerator or the same denominator",
+          path: "lesson-8-5.html",
+          cover: "img/lesson-8-5/curious.jpg",
+          note: "5 picture cards · 2 games · 7 exercises",
+        },
       ],
     },
     {
