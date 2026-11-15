@@ -778,8 +778,9 @@
     };
     return `<div class="vis-fbar${v.side ? " side" : ""}">${v.rows.map(row).join("")}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }
-  // fraction number lines, one under the other, the same length: {lines: [{d: 4, pt: 1, lab: false}], hi: 1, ring: 1/4, cap}
-  //   d parts between two whole numbers; pt: the point (a numerator); lab: false = only the whole numbers; ring: circle the same place on every line
+  // fraction number lines, one under the other, the same length: {lines: [{d: 4, pt: 1, lab: false, jumps: [1, 2]}], hi: 1, ring: 1/4, cap}
+  //   d parts between two whole numbers; pt: the point (a numerator); lab: false = only the whole numbers; ring: circle the same place on every line;
+  //   jumps: arcs over the line from 0, so many parts each
   function fline(v) {
     const hi = v.hi || 1;
     const line = (L) => {
@@ -797,7 +798,16 @@
         L.pt !== undefined
           ? `<span class="pt" style="left:${(L.pt / n) * 100}%"></span>`
           : "";
-      return `<div class="fl">${tk}${pt}</div>`;
+      // jumps: [4, 1, 2] – arcs from 0, one colour each (adding on a number line)
+      let at = 0;
+      const arcs = (L.jumps || [])
+        .map((j, i) => {
+          const a = `<span class="arc ${COL[i % 4]}" style="left:${(at / n) * 100}%;width:${(j / n) * 100}%"></span>`;
+          at += j;
+          return a;
+        })
+        .join("");
+      return `<div class="fl${L.jumps ? " has-j" : ""}">${arcs}${tk}${pt}</div>`;
     };
     return `<div class="vis-fline">${v.ring !== undefined ? `<span class="ring" style="left:calc(${(v.ring / hi) * 100}% * var(--flw) + (100% - 100% * var(--flw)) / 2)"></span>` : ""}${v.lines.map(line).join("")}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }

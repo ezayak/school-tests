@@ -1047,8 +1047,9 @@ Drawings (`vis`):
 - `{kind: "fbar", rows: [{d: 12, k: 3, l: "{3/12}", g: 2, on, pie}], side, cap}` – fraction models: every whole the same size, cut in `d` equal parts, the first `k` shaded
   (or the parts in `on: [0, 2, 5]`; `pie: true` = a circle cut in `d` equal parts);
   `g` = a grid of `g` rows (filled column by column: the book's 2 × 4 model), `l` = the label on the left, `side: true` = the models next to each other.
-- `{kind: "fline", lines: [{d: 4, pt: 1}, {d: 12, lab: false}], hi: 1, ring: 1/4, cap}` – fraction number lines one under the other, 0 to `hi`:
-  `d` parts in each whole, `pt` = a point (the numerator), `lab: false` = only the whole numbers, `ring` = an oval round the same place on every line.
+- `{kind: "fline", lines: [{d: 4, pt: 1}, {d: 12, lab: false, jumps: [4, 1, 2]}], hi: 1, ring: 1/4, cap}` – fraction number lines one under the other, 0 to `hi`:
+  `d` parts in each whole, `pt` = a point (the numerator), `lab: false` = only the whole numbers, `ring` = an oval round the same place on every line,
+  `jumps` = coloured arcs from 0, so many parts each (adding on a number line).
 - `{kind: "area", rows: [8], cols: [20, 4], cells: [160, "?"], cap}` – an area model: the factors on top and on the left, a partial product in each cell (row by row; `"?"` = yellow, the one to find; `""` = empty).
 
 Fractions in any text (questions, options, `x`, cards, `lines` rows): `{3/4}` is a stacked fraction, `{2 1/3}` a mixed number, `{?/8}` the part to find (yellow);
