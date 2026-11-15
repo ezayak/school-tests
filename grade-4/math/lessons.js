@@ -400,6 +400,22 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 8,
+      dir: "unit-8",
+      ic: "🍕",
+      title: "Fraction Equivalence",
+      items: [
+        {
+          n: "8-1",
+          title: "Equivalent Fractions",
+          en: "Different fractions that show the same amount",
+          path: "lesson-8-1.html",
+          cover: "img/lesson-8-1/curious.jpg",
+          note: "7 picture cards · 3 games · 8 exercises",
+        },
+      ],
+    },
+    {
       n: "",
       part: "",
       dir: "times",

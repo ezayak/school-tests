@@ -16,7 +16,10 @@ const UNITS = {
   5: "Numbers and Number Patterns",
   6: "Multiplication Strategies with Multi-Digit Numbers",
   7: "Division Strategies with Multi-Digit Dividends and 1-Digit Divisors",
+  8: "Fraction Equivalence",
 };
+// the emoji of a new unit's chapter
+const ICONS = { 8: "🍕" };
 const num = (s) => s.split("-").map(Number);
 const byLesson = (a, b) => {
   const [x, y] = [num(a), num(b)];
@@ -61,7 +64,7 @@ for (const file of process.argv.slice(2)) {
   }
   let ch = LS.chapters.find((c) => c.dir === dir);
   if (!ch) {
-    ch = { n: u, dir, title: UNITS[u], items: [] };
+    ch = { n: u, dir, ic: ICONS[u], title: UNITS[u], items: [] };
     LS.chapters.push(ch);
     LS.chapters.sort((a, b) => (a.n === "" ? 1 : b.n === "" ? -1 : a.n - b.n));
   }

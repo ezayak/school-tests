@@ -11,6 +11,9 @@ Source folder: `~/Documents/2026-2027/Alex/Math/`. Page numbers are the numbers 
 - Student Edition: `books/Reveal Math Student Edition, Grade 4, Volume 1.pdf` (Units 1–7, scanned pictures, no text layer). Book page = PDF page − 20.
 - Practice Book: `books/G-04+Student+Practice+Book_Reveal+Math,+Grade+4.pdf` (Units 2–14, text layer). A 2-page Family Letter opens each unit, so the offset grows:
   find a lesson with `pdftotext … | grep -n "Lesson 2-1"` (Practice p. 1 = PDF p. 11).
+- Student Edition **Volume 2** (Units 8–14): no PDF; the online e-book filmed while scrolling, `books/Screencast From 2026-11-15 18-18-07.mp4` (Unit 8)
+  and `books/Screencast From 2026-11-15 18-24-52.mp4` (Units 9–14). The e-book shows no page numbers: the rows below give the lesson and its part, `from: "e-book 8-1 · …"`.
+  How to read the videos: the `math-video-book` skill.
 - One book lesson = `unit-N/lesson-N-M.js` + `.html`: the Student Edition pages (Be Curious, Learn, Work Together, On My Own, Reflect) and its 2 Practice Book pages (Additional Practice).
 
 ## Student Edition, Volume 1
@@ -194,51 +197,65 @@ Source folder: `~/Documents/2026-2027/Alex/Math/`. Page numbers are the numbers 
 | 241–248    | Unit 7 Review, Fluency Practice                                                      | —                                                                                                                             | planned (unit review)                              |
 | G1–        | Glossary                                                                             | —                                                                                                                             | skipped (the words are in each lesson's Key words) |
 
+## Student Edition, Volume 2 (e-book videos)
+
+| Video · time             | Content                                                                                               | Goes to                                                                                     | Status                                    |
+| ------------------------ | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| 18-18-07.mp4 · 0:00–0:05 | Unit 8 opener « Fraction Equivalence » (Focus Question, Malik), STEM activity « Folds and Fractions » | —                                                                                           | skipped (paper folding, nothing to check) |
+| 18-18-07.mp4 · 0:05–0:09 | 8-1 Be Curious (pineapple pieces)                                                                     | `unit-8/lesson-8-1` · `curious` (picture `curious`, also the cover), card 1                 | built                                     |
+| 18-18-07.mp4 · 0:09–0:15 | 8-1 Learn (Marcy and Xavier: strips, number lines), Work Together ({2/8} and {1/4})                   | `unit-8/lesson-8-1` · cards 2–5, `learn`, `together`                                        | built                                     |
+| 18-18-07.mp4 · 0:15–0:32 | 8-1 On My Own 1–8                                                                                     | `unit-8/lesson-8-1` · `own1` (1–4), `own5` (5–6), `own7` (7–8)                              | built                                     |
+| 18-18-07.mp4 · 0:32–0:48 | 8-1 On My Own 9–12, Reflect                                                                           | `unit-8/lesson-8-1` · `own9` (11: the equivalent fraction, then yes / no; 12: in two steps) | built                                     |
+| 18-18-07.mp4 · 0:48–     | 8-2 … 8-5, Math Probe « Comparing Fractions », Unit 8 Review                                          | —                                                                                           | planned                                   |
+| 18-24-52.mp4             | Units 9–14                                                                                            | —                                                                                           | planned                                   |
+
 ## Student Practice Book
 
-| Practice pages | Content                                                                          | Goes to                                                                 | Status                             |
-| -------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------- |
-| before p. 1    | Unit 2 Family Letter (terms, 4,695,132 in the chart)                             | `unit-2/lesson-2-1` · game `value` (the number 4,695,132)               | built                              |
-| 1–2            | 2-1 Additional Practice 1–5 (Math @ Home activity skipped)                       | `unit-2/lesson-2-1` · `pb`                                              | built                              |
-| 3–4            | 2-2 Additional Practice 1–6                                                      | `unit-2/lesson-2-2` · `pb` (1: one question per cell)                   | built                              |
-| 5–6            | 2-3 Additional Practice 1–14                                                     | `unit-2/lesson-2-3` · `pb`                                              | built                              |
-| 7–8            | 2-4 Additional Practice 1–4                                                      | `unit-2/lesson-2-4` · `pb` (1: 12 roundings)                            | built                              |
-| 9–10           | 3-1 Additional Practice 1–6 (1: the estimate, then the actual answer in columns) | `unit-3/lesson-3-1` · `pb`                                              | built                              |
-| 11–12          | 3-2 Additional Practice 1–8 (8: « weights », written weighs)                     | `unit-3/lesson-3-2` · `pb`                                              | built                              |
-| 13–14          | 3-3 Additional Practice 1–12                                                     | `unit-3/lesson-3-3` · `pb`                                              | built                              |
-| 15–16          | 3-4 Additional Practice 1–12                                                     | `unit-3/lesson-3-4` · `pb`                                              | built                              |
-| 17–18          | 3-5 Additional Practice 1–8                                                      | `unit-3/lesson-3-5` · `pb`                                              | built                              |
-| 19–20          | 3-6 Additional Practice 1–13                                                     | `unit-3/lesson-3-6` · `pb` (13: both gifts, then which is more)         | built                              |
-| 21–22          | 3-7 Additional Practice 1–13                                                     | `unit-3/lesson-3-7` · `pb` (13: what went wrong, then the right answer) | built                              |
-| 23–24          | 3-8 Additional Practice 1–4                                                      | `unit-3/lesson-3-8` · `pb` (each problem in steps)                      | built                              |
-| 25–26          | 3-9 Additional Practice 1–4                                                      | `unit-3/lesson-3-9` · `pb` (each problem in steps)                      | built                              |
-| 27–28          | 4-1 Additional Practice 1–6                                                      | `unit-4/lesson-4-1` · `pb`                                              | built                              |
-| 29–30          | 4-2 Additional Practice 1–6 (5: « as Celeb », a typo for Caleb, fixed)           | `unit-4/lesson-4-2` · `pb` (3 and 6 in two questions each)              | built                              |
-| 31–32          | 4-3 Additional Practice 1–5                                                      | `unit-4/lesson-4-3` · `pb` (1: the equation, then the number)           | built                              |
-| 33–34          | 4-4 Additional Practice 1–6                                                      | `unit-4/lesson-4-4` · `pb`                                              | built                              |
-| 35–36          | 5-1 Additional Practice 1–4                                                      | `unit-5/lesson-5-1` · `pb`                                              | built                              |
-| 37–38          | 5-2 Additional Practice 1–10                                                     | `unit-5/lesson-5-2` · `pb`                                              | built                              |
-| 39–40          | 5-3 Additional Practice 1–9                                                      | `unit-5/lesson-5-3` · `pb`                                              | built                              |
-| 41–42          | 5-4 Additional Practice 1–10                                                     | `unit-5/lesson-5-4` · `pb` (pictures `pb5`, `pb7`, `pb10`)              | built                              |
-| 43–44          | 5-5 Additional Practice 1–6                                                      | `unit-5/lesson-5-5` · `pb`                                              | built                              |
-| 45–46          | 5-6 Additional Practice 1–5                                                      | `unit-5/lesson-5-6` · `pb` (picture `pb2`)                              | built                              |
-| 47–48          | 6-1 Additional Practice 1–7                                                      | `unit-6/lesson-6-1` · `pb`                                              | built                              |
-| 49–50          | 6-2 Additional Practice 1–6 (1: rounded to the nearest hundred)                  | `unit-6/lesson-6-2` · `pb`                                              | built                              |
-| 51–52          | 6-3 Additional Practice 1–6 (3–5: the split is given)                            | `unit-6/lesson-6-3` · `pb`                                              | built                              |
-| 53–54          | 6-4 Additional Practice 1–6                                                      | `unit-6/lesson-6-4` · `pb`                                              | built                              |
-| 55–56          | 6-5 Additional Practice 1–5                                                      | `unit-6/lesson-6-5` · `pb`                                              | built                              |
-| 57–58          | 6-6 Additional Practice 1–7                                                      | `unit-6/lesson-6-6` · `pb`                                              | built                              |
-| 59–60          | 6-7 Additional Practice 1–5                                                      | `unit-6/lesson-6-7` · `pb` (1), `pb2` (2–5)                             | built                              |
-| 61–62          | 6-8 Additional Practice 1–4                                                      | `unit-6/lesson-6-8` · `pb` (each problem in steps)                      | built                              |
-| 63–64          | 7-1 Additional Practice 1–7                                                      | `unit-7/lesson-7-1` · `pb`                                              | built                              |
-| 65–66          | 7-2 Additional Practice 1–7                                                      | `unit-7/lesson-7-2` · `pb`                                              | built                              |
-| 67–68          | 7-3 Additional Practice 1–8                                                      | `unit-7/lesson-7-3` · `pb`                                              | built                              |
-| 69–70          | 7-4 Additional Practice 1–8                                                      | `unit-7/lesson-7-4` · `pb`                                              | built                              |
-| 71–72          | 7-5 Additional Practice 1–8                                                      | `unit-7/lesson-7-5` · `pb`                                              | built                              |
-| 73–74          | 7-6 Additional Practice 1–7                                                      | `unit-7/lesson-7-6` · `pb`                                              | built                              |
-| 75–76          | 7-7 Additional Practice 1–4                                                      | `unit-7/lesson-7-7` · `pb`                                              | built                              |
-| 77–78          | 7-8 Additional Practice 1–4                                                      | `unit-7/lesson-7-8` · `pb` (each problem in steps)                      | built                              |
-| 79–            | Units 8–14 (fractions, decimals, measurement, geometry)                          | —                                                                       | waiting (Student Edition Volume 2) |
+| Practice pages | Content                                                                          | Goes to                                                                  | Status                            |
+| -------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------- |
+| before p. 1    | Unit 2 Family Letter (terms, 4,695,132 in the chart)                             | `unit-2/lesson-2-1` · game `value` (the number 4,695,132)                | built                             |
+| 1–2            | 2-1 Additional Practice 1–5 (Math @ Home activity skipped)                       | `unit-2/lesson-2-1` · `pb`                                               | built                             |
+| 3–4            | 2-2 Additional Practice 1–6                                                      | `unit-2/lesson-2-2` · `pb` (1: one question per cell)                    | built                             |
+| 5–6            | 2-3 Additional Practice 1–14                                                     | `unit-2/lesson-2-3` · `pb`                                               | built                             |
+| 7–8            | 2-4 Additional Practice 1–4                                                      | `unit-2/lesson-2-4` · `pb` (1: 12 roundings)                             | built                             |
+| 9–10           | 3-1 Additional Practice 1–6 (1: the estimate, then the actual answer in columns) | `unit-3/lesson-3-1` · `pb`                                               | built                             |
+| 11–12          | 3-2 Additional Practice 1–8 (8: « weights », written weighs)                     | `unit-3/lesson-3-2` · `pb`                                               | built                             |
+| 13–14          | 3-3 Additional Practice 1–12                                                     | `unit-3/lesson-3-3` · `pb`                                               | built                             |
+| 15–16          | 3-4 Additional Practice 1–12                                                     | `unit-3/lesson-3-4` · `pb`                                               | built                             |
+| 17–18          | 3-5 Additional Practice 1–8                                                      | `unit-3/lesson-3-5` · `pb`                                               | built                             |
+| 19–20          | 3-6 Additional Practice 1–13                                                     | `unit-3/lesson-3-6` · `pb` (13: both gifts, then which is more)          | built                             |
+| 21–22          | 3-7 Additional Practice 1–13                                                     | `unit-3/lesson-3-7` · `pb` (13: what went wrong, then the right answer)  | built                             |
+| 23–24          | 3-8 Additional Practice 1–4                                                      | `unit-3/lesson-3-8` · `pb` (each problem in steps)                       | built                             |
+| 25–26          | 3-9 Additional Practice 1–4                                                      | `unit-3/lesson-3-9` · `pb` (each problem in steps)                       | built                             |
+| 27–28          | 4-1 Additional Practice 1–6                                                      | `unit-4/lesson-4-1` · `pb`                                               | built                             |
+| 29–30          | 4-2 Additional Practice 1–6 (5: « as Celeb », a typo for Caleb, fixed)           | `unit-4/lesson-4-2` · `pb` (3 and 6 in two questions each)               | built                             |
+| 31–32          | 4-3 Additional Practice 1–5                                                      | `unit-4/lesson-4-3` · `pb` (1: the equation, then the number)            | built                             |
+| 33–34          | 4-4 Additional Practice 1–6                                                      | `unit-4/lesson-4-4` · `pb`                                               | built                             |
+| 35–36          | 5-1 Additional Practice 1–4                                                      | `unit-5/lesson-5-1` · `pb`                                               | built                             |
+| 37–38          | 5-2 Additional Practice 1–10                                                     | `unit-5/lesson-5-2` · `pb`                                               | built                             |
+| 39–40          | 5-3 Additional Practice 1–9                                                      | `unit-5/lesson-5-3` · `pb`                                               | built                             |
+| 41–42          | 5-4 Additional Practice 1–10                                                     | `unit-5/lesson-5-4` · `pb` (pictures `pb5`, `pb7`, `pb10`)               | built                             |
+| 43–44          | 5-5 Additional Practice 1–6                                                      | `unit-5/lesson-5-5` · `pb`                                               | built                             |
+| 45–46          | 5-6 Additional Practice 1–5                                                      | `unit-5/lesson-5-6` · `pb` (picture `pb2`)                               | built                             |
+| 47–48          | 6-1 Additional Practice 1–7                                                      | `unit-6/lesson-6-1` · `pb`                                               | built                             |
+| 49–50          | 6-2 Additional Practice 1–6 (1: rounded to the nearest hundred)                  | `unit-6/lesson-6-2` · `pb`                                               | built                             |
+| 51–52          | 6-3 Additional Practice 1–6 (3–5: the split is given)                            | `unit-6/lesson-6-3` · `pb`                                               | built                             |
+| 53–54          | 6-4 Additional Practice 1–6                                                      | `unit-6/lesson-6-4` · `pb`                                               | built                             |
+| 55–56          | 6-5 Additional Practice 1–5                                                      | `unit-6/lesson-6-5` · `pb`                                               | built                             |
+| 57–58          | 6-6 Additional Practice 1–7                                                      | `unit-6/lesson-6-6` · `pb`                                               | built                             |
+| 59–60          | 6-7 Additional Practice 1–5                                                      | `unit-6/lesson-6-7` · `pb` (1), `pb2` (2–5)                              | built                             |
+| 61–62          | 6-8 Additional Practice 1–4                                                      | `unit-6/lesson-6-8` · `pb` (each problem in steps)                       | built                             |
+| 63–64          | 7-1 Additional Practice 1–7                                                      | `unit-7/lesson-7-1` · `pb`                                               | built                             |
+| 65–66          | 7-2 Additional Practice 1–7                                                      | `unit-7/lesson-7-2` · `pb`                                               | built                             |
+| 67–68          | 7-3 Additional Practice 1–8                                                      | `unit-7/lesson-7-3` · `pb`                                               | built                             |
+| 69–70          | 7-4 Additional Practice 1–8                                                      | `unit-7/lesson-7-4` · `pb`                                               | built                             |
+| 71–72          | 7-5 Additional Practice 1–8                                                      | `unit-7/lesson-7-5` · `pb`                                               | built                             |
+| 73–74          | 7-6 Additional Practice 1–7                                                      | `unit-7/lesson-7-6` · `pb`                                               | built                             |
+| 75–76          | 7-7 Additional Practice 1–4                                                      | `unit-7/lesson-7-7` · `pb`                                               | built                             |
+| 77–78          | 7-8 Additional Practice 1–4                                                      | `unit-7/lesson-7-8` · `pb` (each problem in steps)                       | built                             |
+| before p. 79   | Unit 8 Family Letter (terms: benchmark fraction, equivalent fraction)            | `unit-8/lesson-8-1` · Key words                                          | built                             |
+| 79–80          | 8-1 Additional Practice 1–5 (Review box: Riley and Everett's apple)              | `unit-8/lesson-8-1` · card 6, `pb` (1: which two, 3 and 5: in two steps) | built                             |
+| 81–            | Units 8–14 (fractions, decimals, measurement, geometry)                          | —                                                                        | planned (with the e-book lessons) |
 
 ## Term 1 school sheets (`Term 1/`)
 
