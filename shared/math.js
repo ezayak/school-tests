@@ -27,6 +27,7 @@
   const fmt = (n) => Number(n).toLocaleString("en-US");
   // "{3/4}" → a stacked fraction (Kit.frac, shared/common.js)
   const frac = (h) => (window.Kit && Kit.frac ? Kit.frac(h) : h);
+  const fesc = (t) => frac(esc(t));
   const kw = (t) =>
     frac(esc(t)).replace(/\[([^\]]+)\]/g, '<b class="kw">$1</b>');
   // digits from the right: 4568 → [8, 6, 5, 4]
@@ -603,21 +604,21 @@
     const mx = Math.max(...rows.map(tot));
     const row = (r, k) =>
       `<div class="mb-row">
-        <span class="mb-l">${r.e ? `<span class="e">${esc(r.e)}</span>` : ""}${esc(r.l || "")}</span>
+        <span class="mb-l">${r.e ? `<span class="e">${fesc(r.e)}</span>` : ""}${fesc(r.l || "")}</span>
         <div class="mb-track">
-          ${r.brace ? `<div class="mb-brace${r.brace.q ? " q" : ""}" style="width:${(tot(r) / mx) * 100}%"><b>${esc(r.brace.t)}</b></div>` : ""}
+          ${r.brace ? `<div class="mb-brace${r.brace.q ? " q" : ""}" style="width:${(tot(r) / mx) * 100}%"><b>${fesc(r.brace.t)}</b></div>` : ""}
           <div class="mb-bar" style="width:${(tot(r) / mx) * 100}%">${r.segs
             .map(
               (s, i) =>
-                `<span class="mb-seg ${s.q ? "q" : COL[(s.c ?? k) % 4]}" style="flex:${s.v || 1}">${esc(s.t ?? "")}</span>`,
+                `<span class="mb-seg ${s.q ? "q" : COL[(s.c ?? k) % 4]}" style="flex:${s.v || 1}">${fesc(s.t ?? "")}</span>`,
             )
             .join("")}</div>
-          ${r.under ? `<div class="mb-under" style="width:${(tot(r) / mx) * 100}%">${esc(r.under)}</div>` : ""}
+          ${r.under ? `<div class="mb-under" style="width:${(tot(r) / mx) * 100}%">${fesc(r.under)}</div>` : ""}
         </div>
       </div>`;
     return `<div class="vis-mbar${v.total ? " has-total" : ""}">
-      ${v.title ? `<div class="mb-title">${esc(v.title)}</div>` : ""}
-      <div class="mb-rows">${rows.map(row).join("")}${v.total ? `<div class="mb-total${v.total.q !== false ? " q" : ""}"><b>${esc(v.total.t)}</b></div>` : ""}</div>
+      ${v.title ? `<div class="mb-title">${fesc(v.title)}</div>` : ""}
+      <div class="mb-rows">${rows.map(row).join("")}${v.total ? `<div class="mb-total${v.total.q !== false ? " q" : ""}"><b>${fesc(v.total.t)}</b></div>` : ""}</div>
       ${v.note ? `<small>${kw(v.note)}</small>` : ""}
     </div>`;
   }
