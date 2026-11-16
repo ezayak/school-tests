@@ -560,6 +560,22 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 11,
+      dir: "unit-11",
+      ic: "✖️",
+      title: "Multiply Fractions by Whole Numbers",
+      items: [
+        {
+          n: "11-1",
+          title: "Unit Fraction Times a Number",
+          en: "n × 1/d is n groups of 1/d: repeated addition",
+          path: "lesson-11-1.html",
+          cover: "img/lesson-11-1/curious.jpg",
+          note: "3 picture cards · 2 games · 6 exercises",
+        },
+      ],
+    },
+    {
       n: "",
       part: "",
       dir: "times",
