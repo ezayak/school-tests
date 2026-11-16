@@ -541,6 +541,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-10-4/curious.jpg",
           note: "4 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "10-5",
+          title: "Subtract Mixed Numbers",
+          en: "Subtract with equivalent fractions or a related addition",
+          path: "lesson-10-5.html",
+          cover: "img/lesson-10-5/curious.jpg",
+          note: "3 picture cards · 2 games · 6 exercises",
+        },
       ],
     },
     {
