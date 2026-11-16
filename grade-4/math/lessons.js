@@ -701,6 +701,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-13-5/curious.jpg",
           note: "4 picture cards · 1 games · 5 exercises",
         },
+        {
+          n: "13-6",
+          title: "More Measurement Problems",
+          en: "Elapsed time, tables and mixed units",
+          path: "lesson-13-6.html",
+          cover: "img/lesson-13-6/curious.jpg",
+          note: "4 picture cards · 1 games · 5 exercises",
+        },
       ],
     },
     {
