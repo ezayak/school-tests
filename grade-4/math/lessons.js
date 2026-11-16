@@ -677,6 +677,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-13-2/curious.jpg",
           note: "5 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "13-3",
+          title: "Customary Units of Capacity",
+          en: "Gallons, quarts, pints, cups and fluid ounces",
+          path: "lesson-13-3.html",
+          cover: "img/lesson-13-3/curious.jpg",
+          note: "5 picture cards · 2 games · 5 exercises",
+        },
       ],
     },
     {
