@@ -533,6 +533,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-10-3/curious.jpg",
           note: "4 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "10-4",
+          title: "Show Subtracting Mixed Numbers",
+          en: "Take away wholes and parts; decompose a whole when the part is too small",
+          path: "lesson-10-4.html",
+          cover: "img/lesson-10-4/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
