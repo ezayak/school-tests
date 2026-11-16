@@ -822,6 +822,23 @@
     return `<div class="vis-fline">${v.ring !== undefined ? `<span class="ring" style="left:calc(${(v.ring / hi) * 100}% * var(--flw) + (100% - 100% * var(--flw)) / 2)"></span>` : ""}${v.lines.map(line).join("")}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }
 
+  // a line plot (Unit 13): {kind: "lplot", ticks: ["3", "{3 1/2}", "4"], xs: [2, 0, 3], title, unit, cap}
+  //   ticks = the labels under the number line (fractions in braces), xs = how many ✕ above each tick
+  function lplot(v) {
+    const n = v.ticks.length;
+    const max = Math.max(1, ...v.xs);
+    const cols = v.ticks
+      .map(
+        (t, i) =>
+          `<div class="lp-c">${'<span class="lp-x">✕</span>'.repeat(v.xs[i] || 0)}</div>`,
+      )
+      .join("");
+    const labs = v.ticks
+      .map((t) => `<div class="lp-l">${frac(esc(t))}</div>`)
+      .join("");
+    return `<div class="vis-lplot" style="--n:${n};--max:${max}">${v.title ? `<div class="lp-t">${kw(v.title)}</div>` : ""}<div class="lp-cols">${cols}</div><div class="lp-axis"></div><div class="lp-labs">${labs}</div>${v.unit ? `<div class="lp-u">${kw(v.unit)}</div>` : ""}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
+  }
+
   // geometry (Unit 14): {kind: "geo", w: 300, h: 160, items: [...], cap}, coordinates in a w × h box (y down)
   //   {t: "pt", p: [x, y], l: "A", lp: "n" | "s" | "e" | "w" | "ne" …}   a point with its label
   //   {t: "seg" | "ray" | "line", a: [x, y], b: [x, y], dash, c}        a ray has its arrow at b, a line at both ends
@@ -936,6 +953,7 @@
       fbar,
       fline,
       geo,
+      lplot,
     },
   };
 })();

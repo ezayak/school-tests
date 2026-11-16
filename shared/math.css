@@ -1181,3 +1181,62 @@
   font-size: 8px;
   fill: var(--muted);
 }
+
+/* a line plot (vis kind "lplot"): ✕ marks in columns above a number line */
+.vis-lplot {
+  width: min(100%, 520px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: var(--display);
+}
+.lp-t {
+  text-align: center;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+.lp-cols,
+.lp-labs {
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+}
+.lp-c {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  min-height: calc(var(--max) * 1.5rem);
+}
+.lp-x {
+  font-size: 1.25rem;
+  line-height: 1.2em;
+  font-weight: 700;
+  color: var(--heat);
+}
+.lp-axis {
+  height: 0;
+  border-top: 2.5px solid var(--ink);
+  margin: 2px calc(50% / var(--n));
+  position: relative;
+}
+.lp-l {
+  position: relative;
+  text-align: center;
+  font-size: 1.1rem;
+  padding-top: 10px;
+  white-space: nowrap;
+}
+.lp-l::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  height: 12px;
+  border-left: 2px solid var(--ink);
+}
+.lp-u {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 6px;
+  color: var(--muted);
+}

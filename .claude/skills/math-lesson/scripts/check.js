@@ -27,6 +27,7 @@ const VIS = [
   "fbar",
   "fline",
   "geo",
+  "lplot",
 ];
 global.window = {};
 // the lessons build their questions with shared/math-kit.js
