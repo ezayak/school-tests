@@ -1141,6 +1141,9 @@
   height: auto;
   overflow: visible;
 }
+.vis-geo.prot svg {
+  width: min(100%, 560px);
+}
 .geo-l {
   font-family: var(--display);
   font-size: 17px;
@@ -1163,4 +1166,18 @@
 }
 .geo-poly.f3 {
   fill: color-mix(in srgb, var(--comp) 25%, var(--card));
+}
+.geo-prot {
+  fill: color-mix(in srgb, var(--hl) 22%, var(--card));
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.geo-s {
+  font-family: var(--body);
+  font-size: 10px;
+  fill: var(--ink);
+}
+.geo-in {
+  font-size: 8px;
+  fill: var(--muted);
 }

@@ -1050,7 +1050,7 @@ Drawings (`vis`):
 - `{kind: "fline", lines: [{d: 4, pt: 1}, {d: 12, lab: false, jumps: [4, 1, 2]}], hi: 1, ring: 1/4, cap}` – fraction number lines one under the other, 0 to `hi`:
   `d` parts in each whole, `pt` = a point (the numerator), `lab: false` = only the whole numbers, `ring` = an oval round the same place on every line,
   `jumps` = coloured arcs from 0 (or from `from`), so many parts each, a negative jump goes back (adding and subtracting on a number line).
-- `{kind: "geo", w, h, items: [{t: "pt", p: [x, y], l: "A"}, {t: "seg" | "ray" | "line", a, b, dash}, {t: "poly", pts, fill}, {t: "arc", v, a, b, l: "45°"}, {t: "right", v, a, b}, {t: "text", p, s}], cap}` – geometry (Unit 14): points, segments, rays (arrow at b), lines (arrows at both ends), shapes, angle arcs and right-angle marks, in a w × h box (y down).
+- `{kind: "geo", w, h, items: [{t: "pt", p: [x, y], l: "A"}, {t: "seg" | "ray" | "line", a, b, dash}, {t: "poly", pts, fill}, {t: "arc", v, a, b, l: "45°"}, {t: "right", v, a, b}, {t: "text", p, s}, {t: "prot", c, r, in}], cap}` – geometry (Unit 14): points, segments, rays (arrow at b), lines (arrows at both ends), shapes, angle arcs and right-angle marks, a protractor (a tick every 1°, numbers every 10°; `in: true` adds the inner scale), in a w × h box (y down).
 - `{kind: "area", rows: [8], cols: [20, 4], cells: [160, "?"], cap}` – an area model: the factors on top and on the left, a partial product in each cell (row by row; `"?"` = yellow, the one to find; `""` = empty).
 
 Fractions in any text (questions, options, `x`, cards, `lines` rows): `{3/4}` is a stacked fraction, `{2 1/3}` a mixed number, `{?/8}` the part to find (yellow);

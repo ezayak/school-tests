@@ -829,6 +829,7 @@
   //   {t: "arc", v, a, b, r: 22, l: "45°"}                               the angle at v from the side to a to the side to b
   //   {t: "right", v, a, b}                                              a right-angle square at v
   //   {t: "text", p: [x, y], s: "…"}
+  //   {t: "prot", c: [x, y], r, in}                                      a protractor (in: true = the inner scale too)
   function geo(v) {
     const W = v.w || 300,
       Hh = v.h || 160;
@@ -887,12 +888,36 @@
           const lp = [it.v[0] + m[0] * (r + 14), it.v[1] + m[1] * (r + 14) + 5];
           return `<path d="M${P(s1)} A${r} ${r} 0 ${big ? 0 : 0} ${sweep} ${P(s2)}" fill="none" stroke="var(--heat)" stroke-width="2.5"/>${it.l ? `<text x="${lp[0]}" y="${lp[1]}" class="geo-l geo-a" text-anchor="middle">${esc(it.l)}</text>` : ""}`;
         }
+        // a protractor: {t: "prot", c: [x, y], r: 130, in: true} – a half circle, a tick every 1° (longer every 5° and 10°), a number every 10° on the outer scale (0 at the right);
+        // in: true adds the inner scale (0 at the left)
+        if (it.t === "prot") {
+          const [cx, cy] = it.c,
+            r = it.r || 130;
+          const at = (d, rr) => [
+            cx + rr * Math.cos((d * Math.PI) / 180),
+            cy - rr * Math.sin((d * Math.PI) / 180),
+          ];
+          let g = `<path d="M${cx - r} ${cy} A${r} ${r} 0 0 1 ${cx + r} ${cy} Z" class="geo-prot"/>`;
+          for (let d = 0; d <= 180; d++) {
+            const p1 = at(d, r),
+              p2 = at(d, r - (d % 10 === 0 ? 11 : d % 5 === 0 ? 7 : 4));
+            g += `<line x1="${p1[0]}" y1="${p1[1]}" x2="${p2[0]}" y2="${p2[1]}" stroke="var(--ink)" stroke-width="${d % 5 ? 0.5 : 1.1}"/>`;
+            if (d % 10 === 0) {
+              const o = at(d, r - 20),
+                i = at(d, r - 35);
+              g += `<text x="${o[0]}" y="${o[1] + 4}" class="geo-s" text-anchor="middle">${d}</text>`;
+              if (it.in)
+                g += `<text x="${i[0]}" y="${i[1] + 3}" class="geo-s geo-in" text-anchor="middle">${180 - d}</text>`;
+            }
+          }
+          return g + `<circle cx="${cx}" cy="${cy}" r="3" fill="var(--ink)"/>`;
+        }
         if (it.t === "text")
           return `<text x="${it.p[0]}" y="${it.p[1]}" class="geo-l" text-anchor="middle">${esc(it.s)}</text>`;
         return "";
       })
       .join("");
-    return `<div class="vis-geo"><svg viewBox="-20 -20 ${W + 40} ${Hh + 40}" role="img" aria-hidden="true"><defs><marker id="geoA" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink)"/></marker></defs>${out}</svg>${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
+    return `<div class="vis-geo${v.items.some((it) => it.t === "prot") ? " prot" : ""}"><svg viewBox="-20 -20 ${W + 40} ${Hh + 40}" role="img" aria-hidden="true"><defs><marker id="geoA" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink)"/></marker></defs>${out}</svg>${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }
 
   window.CS_EXT = {
