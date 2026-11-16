@@ -990,6 +990,13 @@
   grid-auto-flow: column;
   height: calc(var(--g) * 40px);
 }
+/* a square whole: 10 strips (tenths) or a 10 × 10 grid (hundredths) */
+.vis-fbar .fb-w.sq,
+.vis-fbar.side .fb-w.sq {
+  width: min(170px, 38vw);
+  height: min(170px, 38vw);
+  flex: none;
+}
 .fb-w i {
   border-right: 2px solid var(--ink);
   border-bottom: 2px solid var(--ink);
