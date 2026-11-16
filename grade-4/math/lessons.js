@@ -597,6 +597,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-11-4/curious.jpg",
           note: "3 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "11-5",
+          title: "Fraction Times Number Problems",
+          en: "Word problems with fractions and mixed numbers, step by step",
+          path: "lesson-11-5.html",
+          cover: "img/lesson-11-5/juice.jpg",
+          note: "2 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
