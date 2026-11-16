@@ -701,6 +701,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-14-6/curious.jpg",
           note: "5 picture cards · 3 games · 6 exercises",
         },
+        {
+          n: "14-7",
+          title: "Classify Polygons",
+          en: "Trapezoid, parallelogram, rhombus, rectangle, square",
+          path: "lesson-14-7.html",
+          cover: "img/lesson-14-7/curious.jpg",
+          note: "7 picture cards · 2 games · 5 exercises",
+        },
       ],
     },
     {
