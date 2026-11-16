@@ -525,6 +525,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-10-2/curious.jpg",
           note: "4 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "10-3",
+          title: "Add Mixed Numbers",
+          en: "Add wholes and parts, or change to fractions first",
+          path: "lesson-10-3.html",
+          cover: "img/lesson-10-3/curious.jpg",
+          note: "4 picture cards · 2 games · 6 exercises",
+        },
       ],
     },
     {
