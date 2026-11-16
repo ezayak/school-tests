@@ -661,6 +661,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-14-1/curious.jpg",
           note: "5 picture cards · 1 games · 5 exercises",
         },
+        {
+          n: "14-2",
+          title: "Classify Angles",
+          en: "Acute, right and obtuse angles",
+          path: "lesson-14-2.html",
+          cover: "img/lesson-14-2/curious.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
