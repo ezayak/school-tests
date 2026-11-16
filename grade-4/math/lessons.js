@@ -717,6 +717,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-13-7/curious.jpg",
           note: "5 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "13-8",
+          title: "Area Formula",
+          en: "A = l × w: find the area or a missing side",
+          path: "lesson-13-8.html",
+          cover: "img/lesson-13-8/curious.jpg",
+          note: "4 picture cards · 2 games · 5 exercises",
+        },
       ],
     },
     {
