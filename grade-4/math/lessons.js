@@ -648,6 +648,22 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 14,
+      dir: "unit-14",
+      ic: "📐",
+      title: "Geometric Figures",
+      items: [
+        {
+          n: "14-1",
+          title: "Lines, Segments and Rays",
+          en: "Points, lines, line segments and rays",
+          path: "lesson-14-1.html",
+          cover: "img/lesson-14-1/curious.jpg",
+          note: "5 picture cards · 1 games · 5 exercises",
+        },
+      ],
+    },
+    {
       n: "",
       part: "",
       dir: "times",
