@@ -581,6 +581,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-11-2/curious.jpg",
           note: "3 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "11-3",
+          title: "Multiply a Fraction by a Number",
+          en: "n × a/d = n × a × 1/d = na/d",
+          path: "lesson-11-3.html",
+          cover: "img/lesson-11-3/curious.jpg",
+          note: "3 picture cards · 2 games · 6 exercises",
+        },
       ],
     },
     {
