@@ -608,6 +608,22 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 12,
+      dir: "unit-12",
+      ic: "💲",
+      title: "Decimal Fractions",
+      items: [
+        {
+          n: "12-1",
+          title: "Tenths and Hundredths",
+          en: "Tenths and hundredths: dimes and pennies, strips and grids",
+          path: "lesson-12-1.html",
+          cover: "img/lesson-12-1/curious.jpg",
+          note: "4 picture cards · 2 games · 6 exercises",
+        },
+      ],
+    },
+    {
       n: "",
       part: "",
       dir: "times",
