@@ -741,6 +741,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-13-10/curious.jpg",
           note: "5 picture cards · 1 games · 5 exercises",
         },
+        {
+          n: "13-11",
+          title: "Line Plot Problems",
+          en: "Add and subtract fractions read from line plots",
+          path: "lesson-13-11.html",
+          cover: "img/lesson-13-11/curious.jpg",
+          note: "5 picture cards · 1 games · 5 exercises",
+        },
       ],
     },
     {
