@@ -669,6 +669,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-13-1/curious.jpg",
           note: "5 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "13-2",
+          title: "Customary Units of Weight",
+          en: "Tons, pounds and ounces",
+          path: "lesson-13-2.html",
+          cover: "img/lesson-13-2/curious.jpg",
+          note: "5 picture cards · 2 games · 5 exercises",
+        },
       ],
     },
     {
