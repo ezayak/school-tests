@@ -1029,7 +1029,7 @@ Question types (games and exercises):
   ✓ Check marks the wrong places in red; 💡 Help explains one column; after 3 tries the answer is shown. When it is done, the carries are filled in.
 - A word problem: `col` with `story: {q, vis: <bar model>, ask: true, why, ans: "They have {} students."}` – first "Add or subtract?" next to the schema
   (`why` replaces the default explanation), then the columns; `ans` is the answer sentence (`{}` = the result).
-- `{type: "num", q, a, pre: "3 × 4 =", post: "hours", hint, x}` – type a number (commas are added while typing). 2 tries.
+- `{type: "num", q, a, pre: "3 × 4 =", post: "hours", hint, x}` – type a number (commas are added while typing). 2 tries. A decimal answer (`a: 0.75`) or `dec: true` adds a point key to the pad.
   `fr: "?/8"` (or `"1/?"`): the number is the top (bottom) of a fraction, the answer box stands in the fraction (`pre: "{2/4} ="`).
 - `{type: "flower", n: 4, c: "var(--heat)"}` – the times-table flower: n × 1 … n × 10 on the petals (10 points).
 - The engine's own `mc`, `multi` and `tf` work as usual.

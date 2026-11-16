@@ -200,6 +200,10 @@
   background: var(--good);
   color: #fff;
 }
+/* the decimal pad: . 0 ⌫, then ✓ across the row */
+.mx-pad.dec .ok {
+  grid-column: span 3;
+}
 .mx-work {
   display: flex;
   align-items: center;

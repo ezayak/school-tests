@@ -94,7 +94,12 @@ for (const file of files) {
       if (it.story) vis(it.story.vis, id);
       if (!["multi", "flower"].includes(it.type) && !hasPic(it) && !it.story)
         if (it.type !== "col") bad.push("no picture " + id);
-      if (it.type === "num" && !Number.isInteger(Number(it.a)))
+      if (
+        it.type === "num" &&
+        !Number.isInteger(Number(it.a)) &&
+        !it.dec &&
+        !/^\d+\.\d+$/.test(String(it.a))
+      )
         bad.push(`num answer is not a whole number ${id}`);
       if (it.type === "mc") {
         if (new Set(it.opts).size !== it.opts.length)
@@ -140,7 +145,9 @@ for (const file of files) {
       // the equations written in the explanation are right, and the [number] in it is the answer
       for (const e of mathErrors(it.x || "")) bad.push(`${e} (${id})`);
       if (it.type === "num" && it.x) {
-        const b = (it.x.match(/(?<![\d,])\[\$?([\d,]+)¢?\](?![\d,])/) || [])[1];
+        const b = (it.x.match(
+          /(?<![\d,])\[\$?([\d,]+(?:\.\d+)?)¢?\](?![\d,])/,
+        ) || [])[1];
         if (b && Number(b.replace(/,/g, "")) !== Number(it.a))
           bad.push(`x says [${b}] but the answer is ${it.a} (${id})`);
       }
@@ -182,7 +189,7 @@ console.log(problems ? `${problems} problems` : "all checks passed");
 function mathErrors(text) {
   const errs0 = [];
   // fraction equations: "{1/4} = {3/12}", "{2/8} + {1/8} = {3/8}", "6 × {1/4} = {6/4}", "{2 1/3}" mixed numbers; every side must be equal
-  const T = "(?:\\{(?:\\d+ )?\\d+/\\d+\\}|\\d+)";
+  const T = "(?:\\{(?:\\d+ )?\\d+/\\d+\\}|\\d+(?:\\.\\d+)?)";
   const run = new RegExp(`${T}(?:\\s*[+−×=]\\s*${T})+`, "g");
   const ev = (e) =>
     Function(
@@ -200,7 +207,7 @@ function mathErrors(text) {
   }
   // inside a fraction, "{3 × 2/4 × 2}" is not a whole-number equation
   const t = text.replace(/\{[^{}]*\}/g, "F").replace(/[[\]$¢]/g, "");
-  const N = "\\d[\\d,]*";
+  const N = "\\d[\\d,]*(?:\\.\\d+)?";
   const chain = `${N}(?:\\s*[×÷+−]\\s*${N})+`;
   const val = (e) =>
     Function(

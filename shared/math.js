@@ -8,7 +8,7 @@
 //                                                                 (or the regrouped number), boxes below for the answer
 //     + story: {q: "the word problem", vis: {kind: "bar", …}, ask: true, why: "…", ans: "They have {} students."}
 //       ask: first "Add or subtract?" with the schema, then the columns
-//   {type: "num", q, a: 12, pre: "3 × 4 =", post: "", vis | img | emoji, x}  – type a number
+//   {type: "num", q, a: 12, pre: "3 × 4 =", post: "", vis | img | emoji, x}  – type a number (a: 0.75 or dec: true adds a point key)
 //     + fr: "?/8" (or "1/?") – the number is the top (or bottom) of a fraction: the answer box stands in the fraction
 //   {type: "flower", n: 4, q}                                  – the times-table flower: n × 1 … n × 10 on the petals
 // Drawings (vis):
@@ -52,6 +52,7 @@
   document.addEventListener("keydown", (e) => {
     if (!keyFn || !document.contains(keyFn.el)) return;
     if (/^[0-9]$/.test(e.key)) keyFn.fn(e.key);
+    else if (e.key === "." || e.key === ",") keyFn.fn(".");
     else if (e.key === "Backspace" || e.key === "Delete") keyFn.fn("del");
     else if (e.key === "Enter") keyFn.fn("ok");
     else if (e.key === "ArrowLeft") keyFn.fn("left");
@@ -59,14 +60,15 @@
     else return;
     e.preventDefault();
   });
-  const padHTML = () =>
-    `<div class="mx-pad" role="group" aria-label="Number pad">${[
+  // dec: a decimal point key (decimals, Unit 12): . 0 ⌫, then ✓ on its own row
+  const padHTML = (dec) =>
+    `<div class="mx-pad${dec ? " dec" : ""}" role="group" aria-label="Number pad">${[
       1, 2, 3, 4, 5, 6, 7, 8, 9,
     ]
       .map((d) => `<button type="button" data-k="${d}">${d}</button>`)
       .join(
         "",
-      )}<button type="button" data-k="del" class="del" aria-label="Delete">⌫</button><button type="button" data-k="0">0</button><button type="button" data-k="ok" class="ok" aria-label="Check">✓</button></div>`;
+      )}${dec ? '<button type="button" data-k="." class="dot" aria-label="Point">.</button><button type="button" data-k="0">0</button><button type="button" data-k="del" class="del" aria-label="Delete">⌫</button>' : '<button type="button" data-k="del" class="del" aria-label="Delete">⌫</button><button type="button" data-k="0">0</button>'}<button type="button" data-k="ok" class="ok" aria-label="Check">✓</button></div>`;
   function bindPad(root, fn) {
     const el = root.querySelector(".mx-pad");
     el.querySelectorAll("[data-k]").forEach(
@@ -418,6 +420,8 @@
   function itNum(it, E) {
     let tries = 0,
       val = "";
+    // a decimal answer (0.75) or dec: true shows the point key; the number is shown as typed
+    const dec = it.dec || /\./.test(String(it.a));
     const side = `${E.fromTag()}${E.hasPic(it) ? E.pic(it) : ""}`;
     const box = '<span class="mx-num on" id="nv" aria-live="polite"></span>';
     // fr: "?/8" – the box is the top of the fraction ("1/?" – the bottom)
@@ -427,14 +431,14 @@
       : box;
     const main = `${E.qHTML(it.q)}
       <div class="mx-numrow">${it.pre ? `<span class="mx-pre">${kw(it.pre)}</span>` : ""}${field}${it.post ? `<span class="mx-pre">${kw(it.post)}</span>` : ""}</div>
-      ${padHTML()}
+      ${padHTML(dec)}
       <div id="fbx" class="fbx"></div>`;
     E.app.innerHTML = `${E.hud()}<section class="card pop fc mx-numq">${E.hasPic(it) ? E.split(side, main) : `<div class="row center">${E.fromTag()}</div>${main}`}</section>`;
     E.bindHome();
     document.getElementById("sq").onclick = () => E.sayQ(E.plain(it.q));
     const nv = document.getElementById("nv");
     const want = Number(String(it.a).replace(/,/g, ""));
-    const show = () => (nv.textContent = val ? fmt(val) : "");
+    const show = () => (nv.textContent = val ? (dec ? val : fmt(val)) : "");
     function done(ok) {
       keyFn = null;
       nv.textContent = fmt(want);
@@ -452,7 +456,7 @@
       if (k === "del") val = val.slice(0, -1);
       else if (k === "ok") {
         if (!val) return;
-        if (Number(val) === want) {
+        if (Math.abs(Number(val) - want) < 1e-9) {
           if (!tries) E.addPts(1);
           else
             E.S.miss.push({
@@ -479,6 +483,8 @@
         val = "";
       } else if (/^\d$/.test(k) && val.length < 9)
         val = val === "0" ? k : val + k;
+      else if (k === "." && dec && !val.includes(".") && val.length < 8)
+        val = (val || "0") + ".";
       show();
     });
     E.autoSayQ(E.plain(it.q));
