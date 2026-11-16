@@ -645,6 +645,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-12-4/curious.jpg",
           note: "3 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "12-5",
+          title: "Problems with Money",
+          en: "Dollars, dimes and pennies as decimals: add, subtract, compare",
+          path: "lesson-12-5.html",
+          cover: "img/lesson-12-5/curious.jpg",
+          note: "4 picture cards · 2 games · 5 exercises",
+        },
       ],
     },
     {
