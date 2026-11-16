@@ -709,6 +709,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-14-7/curious.jpg",
           note: "7 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "14-8",
+          title: "Classify Triangles",
+          en: "Acute, right, obtuse; equilateral, isosceles, scalene",
+          path: "lesson-14-8.html",
+          cover: "img/lesson-14-8/curious.jpg",
+          note: "6 picture cards · 2 games · 5 exercises",
+        },
       ],
     },
     {
