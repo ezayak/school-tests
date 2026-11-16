@@ -549,6 +549,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-10-5/curious.jpg",
           note: "3 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "10-6",
+          title: "Mixed Number Word Problems",
+          en: "Add and subtract mixed numbers to solve problems, step by step",
+          path: "lesson-10-6.html",
+          cover: "img/lesson-10-6/learn.jpg",
+          note: "4 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
