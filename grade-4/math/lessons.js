@@ -717,6 +717,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-14-8/curious.jpg",
           note: "6 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "14-9",
+          title: "Line Symmetry",
+          en: "Fold a figure so the two halves match",
+          path: "lesson-14-9.html",
+          cover: "img/lesson-14-9/curious.jpg",
+          note: "5 picture cards · 2 games · 5 exercises",
+        },
       ],
     },
     {
