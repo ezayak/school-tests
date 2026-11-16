@@ -733,6 +733,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-13-9/curious.jpg",
           note: "5 picture cards · 1 games · 5 exercises",
         },
+        {
+          n: "13-10",
+          title: "Line Plots",
+          en: "Show measurements as ✕ marks above a number line, and read them",
+          path: "lesson-13-10.html",
+          cover: "img/lesson-13-10/curious.jpg",
+          note: "5 picture cards · 1 games · 5 exercises",
+        },
       ],
     },
     {
