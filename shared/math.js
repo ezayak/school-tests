@@ -822,6 +822,79 @@
     return `<div class="vis-fline">${v.ring !== undefined ? `<span class="ring" style="left:calc(${(v.ring / hi) * 100}% * var(--flw) + (100% - 100% * var(--flw)) / 2)"></span>` : ""}${v.lines.map(line).join("")}${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
   }
 
+  // geometry (Unit 14): {kind: "geo", w: 300, h: 160, items: [...], cap}, coordinates in a w × h box (y down)
+  //   {t: "pt", p: [x, y], l: "A", lp: "n" | "s" | "e" | "w" | "ne" …}   a point with its label
+  //   {t: "seg" | "ray" | "line", a: [x, y], b: [x, y], dash, c}        a ray has its arrow at b, a line at both ends
+  //   {t: "poly", pts: [[x, y], …], fill: 0–3}                           a closed shape
+  //   {t: "arc", v, a, b, r: 22, l: "45°"}                               the angle at v from the side to a to the side to b
+  //   {t: "right", v, a, b}                                              a right-angle square at v
+  //   {t: "text", p: [x, y], s: "…"}
+  function geo(v) {
+    const W = v.w || 300,
+      Hh = v.h || 160;
+    const P = (q) => `${q[0]} ${q[1]}`;
+    const off = {
+      n: [0, -10],
+      s: [0, 18],
+      e: [10, 5],
+      w: [-16, 5],
+      ne: [8, -8],
+      nw: [-16, -8],
+      se: [8, 16],
+      sw: [-16, 16],
+    };
+    const unit = (a, b) => {
+      const dx = b[0] - a[0],
+        dy = b[1] - a[1],
+        L = Math.hypot(dx, dy) || 1;
+      return [dx / L, dy / L];
+    };
+    const out = (v.items || [])
+      .map((it) => {
+        const col =
+          it.c !== undefined
+            ? `var(--${["cool", "ke", "good", "comp"][it.c % 4]})`
+            : "var(--ink)";
+        if (it.t === "pt") {
+          const o = off[it.lp || "n"];
+          return `<circle cx="${it.p[0]}" cy="${it.p[1]}" r="4" fill="var(--ink)"/>${it.l ? `<text x="${it.p[0] + o[0]}" y="${it.p[1] + o[1]}" class="geo-l">${esc(it.l)}</text>` : ""}`;
+        }
+        if (it.t === "seg" || it.t === "ray" || it.t === "line") {
+          const ms = it.t === "line" ? ' marker-start="url(#geoA)"' : "";
+          const me = it.t !== "seg" ? ' marker-end="url(#geoA)"' : "";
+          return `<line x1="${it.a[0]}" y1="${it.a[1]}" x2="${it.b[0]}" y2="${it.b[1]}" stroke="${col}" stroke-width="3"${it.dash ? ' stroke-dasharray="7 6"' : ""}${ms}${me}/>`;
+        }
+        if (it.t === "poly")
+          return `<polygon points="${it.pts.map(P).join(" ")}" class="geo-poly${it.fill !== undefined ? " f" + (it.fill % 4) : ""}"/>`;
+        if (it.t === "arc" || it.t === "right") {
+          const r = it.r || 22,
+            u = unit(it.v, it.a),
+            w = unit(it.v, it.b);
+          if (it.t === "right") {
+            const s = 14,
+              p1 = [it.v[0] + u[0] * s, it.v[1] + u[1] * s],
+              p3 = [it.v[0] + w[0] * s, it.v[1] + w[1] * s],
+              p2 = [p1[0] + w[0] * s, p1[1] + w[1] * s];
+            return `<polyline points="${[p1, p2, p3].map(P).join(" ")}" fill="none" stroke="var(--heat)" stroke-width="2.5"/>`;
+          }
+          const s1 = [it.v[0] + u[0] * r, it.v[1] + u[1] * r],
+            s2 = [it.v[0] + w[0] * r, it.v[1] + w[1] * r];
+          const cross = u[0] * w[1] - u[1] * w[0];
+          const dot = u[0] * w[0] + u[1] * w[1];
+          const big = Math.atan2(cross, dot) < 0 ? 1 : 0;
+          const sweep = cross > 0 ? 1 : 0;
+          const m = unit([0, 0], [u[0] + w[0], u[1] + w[1]]);
+          const lp = [it.v[0] + m[0] * (r + 14), it.v[1] + m[1] * (r + 14) + 5];
+          return `<path d="M${P(s1)} A${r} ${r} 0 ${big ? 0 : 0} ${sweep} ${P(s2)}" fill="none" stroke="var(--heat)" stroke-width="2.5"/>${it.l ? `<text x="${lp[0]}" y="${lp[1]}" class="geo-l geo-a" text-anchor="middle">${esc(it.l)}</text>` : ""}`;
+        }
+        if (it.t === "text")
+          return `<text x="${it.p[0]}" y="${it.p[1]}" class="geo-l" text-anchor="middle">${esc(it.s)}</text>`;
+        return "";
+      })
+      .join("");
+    return `<div class="vis-geo"><svg viewBox="-20 -20 ${W + 40} ${Hh + 40}" role="img" aria-hidden="true"><defs><marker id="geoA" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink)"/></marker></defs>${out}</svg>${v.cap ? `<div class="cap">${kw(v.cap)}</div>` : ""}</div>`;
+  }
+
   window.CS_EXT = {
     items: { col: itCol, num: itNum, flower: itFlower },
     pts: { flower: () => FN },
@@ -837,6 +910,7 @@
       area,
       fbar,
       fline,
+      geo,
     },
   };
 })();

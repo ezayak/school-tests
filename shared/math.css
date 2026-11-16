@@ -1128,3 +1128,39 @@
 .opt .ot .fr {
   font-size: 1.1em;
 }
+
+/* geometry (vis kind "geo") */
+.vis-geo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.vis-geo svg {
+  width: min(100%, 420px);
+  height: auto;
+  overflow: visible;
+}
+.geo-l {
+  font-family: var(--display);
+  font-size: 17px;
+  fill: var(--ink);
+}
+.geo-a {
+  fill: var(--heat);
+}
+.geo-poly {
+  fill: color-mix(in srgb, var(--cool) 18%, var(--card));
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+.geo-poly.f1 {
+  fill: color-mix(in srgb, var(--ke) 25%, var(--card));
+}
+.geo-poly.f2 {
+  fill: color-mix(in srgb, var(--good) 25%, var(--card));
+}
+.geo-poly.f3 {
+  fill: color-mix(in srgb, var(--comp) 25%, var(--card));
+}
