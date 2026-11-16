@@ -725,6 +725,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-14-9/curious.jpg",
           note: "5 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "14-10",
+          title: "Draw Lines of Symmetry",
+          en: "Find all the lines of symmetry of a figure",
+          path: "lesson-14-10.html",
+          cover: "img/lesson-14-10/curious.jpg",
+          note: "5 picture cards · 1 games · 5 exercises",
+        },
       ],
     },
     {
