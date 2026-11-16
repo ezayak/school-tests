@@ -685,6 +685,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-13-3/curious.jpg",
           note: "5 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "13-4",
+          title: "Units of Time",
+          en: "Hours to minutes, minutes to seconds",
+          path: "lesson-13-4.html",
+          cover: "img/lesson-13-4/curious.jpg",
+          note: "5 picture cards · 2 games · 5 exercises",
+        },
       ],
     },
     {
