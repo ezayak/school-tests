@@ -685,6 +685,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-14-4/curious.jpg",
           note: "5 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "14-5",
+          title: "Add and Subtract Angles",
+          en: "Break an angle into smaller angles: add and subtract their measures",
+          path: "lesson-14-5.html",
+          cover: "img/lesson-14-5/curious.jpg",
+          note: "5 picture cards · 2 games · 6 exercises",
+        },
       ],
     },
     {
