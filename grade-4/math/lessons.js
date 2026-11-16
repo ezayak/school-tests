@@ -677,6 +677,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-14-3/curious.jpg",
           note: "7 picture cards · 3 games · 6 exercises",
         },
+        {
+          n: "14-4",
+          title: "Parallel and Perpendicular Lines",
+          en: "Lines that never meet, lines that meet at a right angle",
+          path: "lesson-14-4.html",
+          cover: "img/lesson-14-4/curious.jpg",
+          note: "5 picture cards · 2 games · 5 exercises",
+        },
       ],
     },
     {
