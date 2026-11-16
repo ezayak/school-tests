@@ -725,6 +725,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-13-8/curious.jpg",
           note: "4 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "13-9",
+          title: "Perimeter and Area Problems",
+          en: "Use one formula to find a side, then the other formula",
+          path: "lesson-13-9.html",
+          cover: "img/lesson-13-9/curious.jpg",
+          note: "5 picture cards · 1 games · 5 exercises",
+        },
       ],
     },
     {
