@@ -693,6 +693,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-13-4/curious.jpg",
           note: "5 picture cards · 2 games · 5 exercises",
         },
+        {
+          n: "13-5",
+          title: "Measurement Problems",
+          en: "Convert to the smaller unit, then add, subtract, multiply or divide",
+          path: "lesson-13-5.html",
+          cover: "img/lesson-13-5/curious.jpg",
+          note: "4 picture cards · 1 games · 5 exercises",
+        },
       ],
     },
     {
