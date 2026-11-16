@@ -124,10 +124,11 @@ for (const file of files) {
         const noE = new Set(
           it.opts.filter((o) => !o.ok).map((o) => o.emoji || o.img),
         );
+        // (every option right: nothing to give away)
         if (
           [...okE].every((e) => !noE.has(e)) &&
           okE.size === 1 &&
-          noE.size <= 1
+          noE.size === 1
         )
           bad.push(
             `multi ${id}: the right answers have their own picture (${[...okE]}): it gives them away`,
