@@ -27,6 +27,7 @@ python3 -I .claude/skills/math-video-book/scripts/pair.py $S/keep $S/p.png 12,13
   Run it on the long video in the background (`run_in_background`), and once only: keep the folders for the next lessons.
 - Find the lesson on the contact sheets: a lesson starts with a blue banner and its title, then "Be Curious". The `keep/` names give the frame in `all/` (`k011_f00028.png`),
   and the f number is the time: ÷ 4 = seconds into the video.
+- **Text first, with OCR** (saves most of the picture reading): `scripts/ocr.sh <keep> <from> <to>` prints the words of every frame once (`tesseract`, `sudo apt install tesseract-ocr`). Stacked fractions come out wrong: for those, grids and drawings, read the pictures (`stitch.py` + the frames).
 - Read every item at full size with `pair.py` (two frames side by side, the text column only). Small print (exponents, the labels of a number line): `pair.py` on a single frame.
 
 ## 2. What the e-book shows
