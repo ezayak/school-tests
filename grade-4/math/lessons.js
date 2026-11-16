@@ -621,6 +621,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-12-1/curious.jpg",
           note: "4 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "12-2",
+          title: "Decimals",
+          en: "Write tenths and hundredths as decimals: 0.2, 0.37, 1.55",
+          path: "lesson-12-2.html",
+          cover: "img/lesson-12-2/curious.jpg",
+          note: "3 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
