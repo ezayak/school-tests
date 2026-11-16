@@ -637,6 +637,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-12-3/curious.jpg",
           note: "3 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "12-4",
+          title: "Add Tenths and Hundredths",
+          en: "Write tenths as hundredths, then add",
+          path: "lesson-12-4.html",
+          cover: "img/lesson-12-4/curious.jpg",
+          note: "3 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
