@@ -693,6 +693,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-14-5/curious.jpg",
           note: "5 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "14-6",
+          title: "Unknown Angle Measures",
+          en: "Find a missing angle with an equation",
+          path: "lesson-14-6.html",
+          cover: "img/lesson-14-6/curious.jpg",
+          note: "5 picture cards · 3 games · 6 exercises",
+        },
       ],
     },
     {
