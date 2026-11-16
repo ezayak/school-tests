@@ -669,6 +669,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-14-2/curious.jpg",
           note: "4 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "14-3",
+          title: "Draw and Measure Angles",
+          en: "Measure angles in degrees with a protractor",
+          path: "lesson-14-3.html",
+          cover: "img/lesson-14-3/curious.jpg",
+          note: "7 picture cards · 3 games · 6 exercises",
+        },
       ],
     },
     {
