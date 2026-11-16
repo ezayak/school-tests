@@ -589,6 +589,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-11-3/curious.jpg",
           note: "3 picture cards · 2 games · 6 exercises",
         },
+        {
+          n: "11-4",
+          title: "Mixed Number Times a Number",
+          en: "Multiply the whole part and the fraction part, then add",
+          path: "lesson-11-4.html",
+          cover: "img/lesson-11-4/curious.jpg",
+          note: "3 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
