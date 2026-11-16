@@ -68,7 +68,7 @@
       .map((d) => `<button type="button" data-k="${d}">${d}</button>`)
       .join(
         "",
-      )}${dec ? '<button type="button" data-k="." class="dot" aria-label="Point">.</button><button type="button" data-k="0">0</button><button type="button" data-k="del" class="del" aria-label="Delete">⌫</button>' : '<button type="button" data-k="del" class="del" aria-label="Delete">⌫</button><button type="button" data-k="0">0</button>'}<button type="button" data-k="ok" class="ok" aria-label="Check">✓</button></div>`;
+      )}${dec ? '<button type="button" data-k="." class="mx-dot" aria-label="Point">.</button><button type="button" data-k="0">0</button><button type="button" data-k="del" class="del" aria-label="Delete">⌫</button>' : '<button type="button" data-k="del" class="del" aria-label="Delete">⌫</button><button type="button" data-k="0">0</button>'}<button type="button" data-k="ok" class="ok" aria-label="Check">✓</button></div>`;
   function bindPad(root, fn) {
     const el = root.querySelector(".mx-pad");
     el.querySelectorAll("[data-k]").forEach(
