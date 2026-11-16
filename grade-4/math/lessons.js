@@ -656,6 +656,22 @@ window.CS_LESSONS = {
       ],
     },
     {
+      n: 13,
+      dir: "unit-13",
+      ic: "📏",
+      title: "Units of Measurement and Data",
+      items: [
+        {
+          n: "13-1",
+          title: "Metric Units",
+          en: "Kilometers, meters, centimeters, millimeters; kilograms and grams; liters and milliliters",
+          path: "lesson-13-1.html",
+          cover: "img/lesson-13-1/curious.jpg",
+          note: "5 picture cards · 2 games · 5 exercises",
+        },
+      ],
+    },
+    {
       n: 14,
       dir: "unit-14",
       ic: "📐",
