@@ -60,7 +60,10 @@ window.LESSON = {
         "Union Falls 0.4 mi, Rock Bridge 0.25 mi.",
         "0.4 is to the [right] of 0.25 on the number line: 0.4 > 0.25.",
       ],
-      vis: { kind: "lines", rows: ["Union Falls 0.4 mi", "Rock Bridge 0.25 mi"] },
+      vis: {
+        kind: "lines",
+        rows: ["Union Falls 0.4 mi", "Rock Bridge 0.25 mi"],
+      },
     },
     {
       t: "As hundredths",
