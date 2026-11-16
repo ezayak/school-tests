@@ -629,6 +629,14 @@ window.CS_LESSONS = {
           cover: "img/lesson-12-2/curious.jpg",
           note: "3 picture cards · 1 games · 6 exercises",
         },
+        {
+          n: "12-3",
+          title: "Compare Decimals",
+          en: "Compare decimals with number lines, grids and hundredths",
+          path: "lesson-12-3.html",
+          cover: "img/lesson-12-3/curious.jpg",
+          note: "3 picture cards · 1 games · 6 exercises",
+        },
       ],
     },
     {
