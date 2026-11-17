@@ -20,7 +20,6 @@ window.GAMES = [
       "Your own word lists with emoji pictures · Learn, Match, Listen & spell, Build the word · English, Українська, Français, العربية · share a link with other parents",
     path: "my-dictations/index.html",
     countLabel: "Made on this device",
-    // Arabic plays with the Arabic lesson engine: offline through the Grade 3 Arabic entry's list
     also: [
       "my-dictations/maker.js",
       "my-dictations/play.html",

@@ -3,7 +3,7 @@
 (function () {
   const id = new URLSearchParams(location.search).get("id");
   const d = id && MyDict.get(id);
-  // none on this device: the list; an Arabic one: its own page (the Arabic lesson engine)
+  // none on this device: the list; an Arabic one: its own page (shared/spelling-ar.js)
   if (!d || MyDict.LANGS[d.lang].rtl) {
     location.replace(d ? MyDict.playUrl(d) : "index.html");
     window.SPELLING = { title: "", lang: "en-US", items: [] };

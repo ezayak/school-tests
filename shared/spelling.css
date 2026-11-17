@@ -244,3 +244,39 @@ body {
   font-size: 1.35rem;
   font-weight: 400;
 }
+
+/* Arabic dictations (shared/spelling-ar.js adds .sp-ar to the body): Arabic letters in Noto Naskh Arabic,
+   the 4 words of "Listen and choose" in a grid; the letter tiles and the joined word come from drag-words.css */
+.sp-ar .ar {
+  font-family: "Noto Naskh Arabic", "Geeza Pro", "Arabic Typesetting", serif;
+  font-weight: 700;
+}
+.sp-ar .hero-title .k {
+  font-family: var(--display), "Noto Naskh Arabic", serif;
+}
+.sp-ar .fc-word {
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+.sp-ar .spell-in {
+  font-family: "Noto Naskh Arabic", "Geeza Pro", serif;
+  letter-spacing: 0;
+}
+.sp-ar .tile.ar {
+  font-size: 1.5rem;
+  padding: 4px 14px;
+}
+.sp-ar .fb .ar,
+.sp-ar .review .ar {
+  font-size: 1.3rem;
+}
+.sp-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.sp-choices .mi.word {
+  font-size: 1.8rem;
+  min-height: 72px;
+}

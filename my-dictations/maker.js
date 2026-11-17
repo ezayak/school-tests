@@ -3,7 +3,7 @@
 // or the translations (MyDict.translate, or "cat - кіт" in the list) and the letters to colour → saved.
 // Share: a link with the whole dictation in it (MyDict.encode); opening it here offers to save it.
 // Storage, share code and emoji: shared/dictation-store.js. The game: play.html (shared/spelling.js),
-// for Arabic play-ar.html (the Arabic lesson engine); MyDict.playUrl picks the page.
+// for Arabic play-ar.html (shared/spelling-ar.js); MyDict.playUrl picks the page.
 (function () {
   const { esc } = Kit;
   const M = window.MyDict;

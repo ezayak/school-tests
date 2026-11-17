@@ -1,6 +1,6 @@
 // My dictations: dictations that parents make on the device (my-dictations/). Saving on this device, the share code,
 // the emoji pictures for words and sentences, and the data for the game: the spelling engine (shared/spelling.js)
-// or, for Arabic, the Arabic lesson engine (grade-3/term-1/arabic/arabic-lesson.js, play-ar.html).
+// or, for Arabic, the Arabic dictation game (shared/spelling-ar.js, play-ar.html); both take MyDict.toSpelling.
 // A dictation: {id, title, lang ("en-US" | "uk-UA" | "fr-FR" | "ar"), made (time), show, to, items: [{w, s, e, t, m}]}
 //   show: "pic" (default: an emoji picture with each word) or "tr" (its translation instead, in the language to);
 //   w: the word or sentence; s: true for a sentence; e: its picture (1–2 emoji; with "tr" only when there is no translation);
@@ -539,201 +539,12 @@ window.MyDict = (function () {
     };
   }
 
-  /* ---------- for the Arabic lesson engine (play-ar.html) ---------- */
-  // the page that plays a dictation
+  /* ---------- the page that plays a dictation ---------- */
+  // play.html (spelling engine), or play-ar.html for Arabic (shared/spelling-ar.js)
   const playUrl = (d) =>
     (LANGS[d.lang] && LANGS[d.lang].rtl ? "play-ar.html" : "play.html") +
     "?id=" +
     encodeURIComponent(d.id);
-  // An Arabic dictation as an Arabic lesson (window.LESSON of arabic-lesson.js, the format of the Arabic reading steps):
-  // a tab for the words and one for the sentences, each a list of games. A typed answer is checked by its letters only
-  // (no tashkeel: the engine's normAr). The word is only heard (mute) where seeing it would give the answer away.
-  function toArabicLesson(d) {
-    const W = d.items.filter((i) => !i.s && !/\s/.test(i.w));
-    const S = d.items.filter((i) => i.s || /\s/.test(i.w));
-    // the picture: the translation card (show "tr"), or the emoji
-    const pic = (it) =>
-      usesTr(d, it) ? { img: trPic(it.t, d.to) } : { ic: it.e || "❓" };
-    const sec = (k, tab, t, icon, en, uk, items) =>
-      items.length ? { k, tab, t, ic: icon, en, uk, items } : null;
-    // 3 other words of the list to choose from, the ones of a similar length first
-    const others = (w) =>
-      W.filter((x) => low(x.w) !== low(w.w))
-        .sort(
-          (a, b) =>
-            Math.abs(a.w.length - w.w.length) -
-              Math.abs(b.w.length - w.w.length) || Math.random() - 0.5,
-        )
-        .slice(0, 3)
-        .map((x) => x.w);
-    const exercises = [
-      sec(
-        "w-read",
-        "w",
-        "اقْرَأِ الْكَلِمَاتِ",
-        "📇",
-        "Read each word, then listen to check",
-        "Прочитай кожне слово, потім послухай, щоб перевірити",
-        W.map((w) => ({
-          type: "read",
-          q: "اقْرَأِ الْكَلِمَةَ",
-          a: w.w,
-          ...pic(w),
-          en: "Read the word.",
-          uk: "Прочитай слово.",
-        })),
-      ),
-      sec(
-        "w-hear",
-        "w",
-        "اسْتَمِعْ وَاخْتَرْ",
-        "👂",
-        "Listen and choose the word",
-        "Послухай і вибери слово",
-        W.length < 2
-          ? []
-          : W.map((w) => ({
-              type: "mc",
-              q: "اخْتَرِ الْكَلِمَةَ الَّتِي تَسْمَعُهَا",
-              say: w.w,
-              mute: w.w,
-              o: [w.w, ...others(w)],
-              ...pic(w),
-              en: "Which word do you hear?",
-              uk: "Яке слово ти чуєш?",
-            })),
-      ),
-      sec(
-        "w-build",
-        "w",
-        "رَتِّبِ الْحُرُوفَ",
-        "🔤",
-        "Listen and build the word from its letters",
-        "Послухай і склади слово з літер",
-        W.map((w) => ({
-          type: "build",
-          tiles: "letters",
-          q: "رَتِّبِ الْحُرُوفَ لِتُكَوِّنَ الْكَلِمَةَ",
-          say: w.w,
-          mute: w.w,
-          a: w.w,
-          ...pic(w),
-          en: "Put the letters of the word you hear in order.",
-          uk: "Розстав літери почутого слова по порядку.",
-        })),
-      ),
-      sec(
-        "w-write",
-        "w",
-        "اسْتَمِعْ وَاكْتُبْ",
-        "✍️",
-        "Dictation: listen and write the word",
-        "Диктант: послухай і напиши слово",
-        W.map((w) => ({
-          type: "word",
-          q: "اسْتَمِعْ وَاكْتُبِ الْكَلِمَةَ",
-          say: w.w,
-          mute: w.w,
-          a: [w.w],
-          ...pic(w),
-          en: "Write the word you hear.",
-          uk: "Напиши слово, яке чуєш.",
-        })),
-      ),
-      sec(
-        "s-read",
-        "s",
-        "اقْرَأِ الْجُمَلَ",
-        "📇",
-        "Read each sentence, then listen to check",
-        "Прочитай кожне речення, потім послухай, щоб перевірити",
-        S.map((s) => ({
-          type: "read",
-          q: "اقْرَأِ الْجُمْلَةَ",
-          a: s.w,
-          ...pic(s),
-          en: "Read the sentence.",
-          uk: "Прочитай речення.",
-        })),
-      ),
-      sec(
-        "s-build",
-        "s",
-        "رَتِّبِ الْكَلِمَاتِ",
-        "🧱",
-        "Listen and put the words in order",
-        "Послухай і розстав слова по порядку",
-        S.filter((s) => s.w.split(" ").length > 1).map((s) => ({
-          type: "build",
-          q: "رَتِّبِ الْكَلِمَاتِ لِتُكَوِّنَ الْجُمْلَةَ",
-          say: s.w,
-          mute: s.w,
-          a: s.w,
-          ...pic(s),
-          en: "Put the words of the sentence you hear in order.",
-          uk: "Розстав слова почутого речення по порядку.",
-        })),
-      ),
-      sec(
-        "s-write",
-        "s",
-        "اسْتَمِعْ وَاكْتُبْ",
-        "✍️",
-        "Dictation: listen and write the sentence",
-        "Диктант: послухай і напиши речення",
-        S.map((s) => ({
-          type: "word",
-          q: "اسْتَمِعْ وَاكْتُبِ الْجُمْلَةَ",
-          say: s.w,
-          mute: s.w,
-          a: [s.w],
-          ...pic(s),
-          en: "Write the sentence you hear.",
-          uk: "Напиши речення, яке чуєш.",
-        })),
-      ),
-    ].filter(Boolean);
-    const tabs = [
-      W.length && {
-        k: "w",
-        ic: "🔤",
-        t: "Words",
-        short: "Words",
-        ar: "الْكَلِمَاتُ",
-        sub: ["Games with the words", "أَلْعَابُ الْكَلِمَاتِ"],
-      },
-      S.length && {
-        k: "s",
-        ic: "📝",
-        t: "Sentences",
-        short: "Sentences",
-        ar: "الْجُمَلُ",
-        sub: ["Games with the sentences", "أَلْعَابُ الْجُمَلِ"],
-      },
-    ].filter(Boolean);
-    const n = [
-      W.length && `${W.length} word${W.length === 1 ? "" : "s"}`,
-      S.length && `${S.length} sentence${S.length === 1 ? "" : "s"}`,
-    ]
-      .filter(Boolean)
-      .join(" · ");
-    return {
-      n: "my-" + d.id,
-      title: d.title,
-      en: "My dictation · " + n,
-      uk: "Мій диктант · " + n,
-      unit: "My dictation · الْإِمْلَاءُ",
-      ic: pics(d.items[0].e)[0] || "✏️",
-      links: [
-        ["../index.html", "← All games"],
-        ["index.html", "My dictations"],
-      ],
-      tabs,
-      stories: [],
-      exercises,
-    };
-  }
-
   return {
     LANGS,
     list,
@@ -761,6 +572,5 @@ window.MyDict = (function () {
     ranges,
     toSpelling,
     playUrl,
-    toArabicLesson,
   };
 })();

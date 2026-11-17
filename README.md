@@ -597,10 +597,12 @@ next to the Multiplication and Division games of `grade-4/math/times/`). Nothing
     the word to fix, and its letters to tap to colour them (optional: the sound to learn; not in Arabic). Save → back to the list.
 - `my-dictations/play.html` + `play.js`: gives the saved dictation to `shared/spelling.js` (`autoMark: false`, `home` / `hub` / `hubName` for the links;
   a sentence highlights the first word of the word list it has).
-- `my-dictations/play-ar.html` + `play-ar.js`: an Arabic dictation plays with the Arabic lesson engine (`grade-3/term-1/arabic/arabic-lesson.js`, not changed),
-  as a `window.LESSON` made by `MyDict.toArabicLesson` in the format of the Arabic reading steps: tabs Words · Sentences, each with
-  📇 read (then listen to check) · 👂 listen and choose the word (words) · 🔤 / 🧱 build from letters / words · ✍️ listen and write.
-  Words and sentences are kept without tashkeel (`MyDict.plain`: when pasted, fixed, saved or opened from a link). Typed answers are checked by their letters only (the engine's `normAr`: no tashkeel, alef forms); the page has `<meta name="referrer" content="no-referrer" />` for the online voice.
+- `my-dictations/play-ar.html` + `play-ar.js`: an Arabic dictation plays with its own engine `shared/spelling-ar.js` (not the Arabic lesson engine),
+  with the same data (`MyDict.toSpelling`) and the look of the spelling games (spelling.css; Arabic styles under `.sp-ar`):
+  📇 Read (flash cards, ← Back / Next →) · 👂 Listen and choose (words, from 2) · 🔤 Listen and build (letters right to left, joined above the line;
+  a sentence from its words; 💡 Help) · ✍️ Dictation (type it). No question lines or "Read the question" buttons: the voice says the word.
+  Words and sentences are kept without tashkeel (`MyDict.plain`: when pasted, fixed, saved or opened from a link); typed answers are checked by their
+  letters only (no tashkeel, one alef, ى / ي, ة / ه). Voice: `Kit.voice("ar", {online: true})`, the page has `<meta name="referrer" content="no-referrer" />`.
   `MyDict.playUrl` picks the page; each page sends a dictation of the other kind to the other one.
 - `shared/dictation-store.js` (`MyDict`): saving (`localStorage` "my-dictations"), the share code, the pasted-text parser, the emoji suggestions.
   Share = a link `my-dictations/index.html#add=<code>`, the code is the dictation packed with `CompressionStream("deflate-raw")` in URL-safe base64
