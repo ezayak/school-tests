@@ -1,0 +1,217 @@
+<!doctype html><meta charset="utf-8" />
+<!-- Drives a French lesson page (french-lesson.js) in an iframe: opens every tab and tile,
+     steps through the story / word cards, and plays every game and exercise to its score screen.
+     ?p=<lesson .html>  &mode=play (one line per tile) | dump (every screen's HTML, for an old/new diff)
+     &tr=off|en|uk|ar (translation shown).
+     &shot=<tab>:<tile index>[:<button index>[:<steps>]] opens that tile (and the game behind that button of a
+     learn screen, then answers <steps> items) and stops, for a screenshot (shot.sh). Math.random is seeded again for every tile, so two engine
+     versions that make the same markup print the same dump. Run it with play.sh / compare.sh. -->
+<body style="margin: 0">
+  <iframe id="f" style="width: 1280px; height: 900px; border: 0"></iframe>
+  <pre id="out"></pre>
+  <script>
+    const P = new URLSearchParams(location.search);
+    const PAGE = P.get("p"),
+      MODE = P.get("mode") || "play",
+      TR = P.get("tr") || "off";
+    const f = document.getElementById("f"),
+      out = document.getElementById("out");
+    const log = (s) => (out.textContent += s + "\n");
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    let errs = [];
+    let SRC = null;
+    // the page with a seeded Math.random and a silent voice, loaded as srcdoc (same origin)
+    async function load() {
+      if (!SRC) {
+        const base = new URL(PAGE, location.href).href;
+        const pre =
+          `<base href="${base}"><script>(function(){let s=20261117;` +
+          `Math.random=function(){s=(s*1103515245+12345)%2147483648;return s/2147483648};` +
+          `if(window.speechSynthesis)speechSynthesis.speak=function(){};` +
+          `window.onerror=function(m,u,l){(parent.__errs=parent.__errs||[]).push(m+" @"+l)};})();<\/script>`;
+        SRC = (await (await fetch(PAGE)).text()).replace(
+          /<head>/i,
+          "<head>" + pre,
+        );
+      }
+      try {
+        localStorage.clear();
+        localStorage.setItem("fr-tr", TR);
+        localStorage.setItem("fr-auto", "0");
+      } catch (e) {}
+      f.srcdoc = SRC;
+      await new Promise((r) => (f.onload = r));
+      await wait(150);
+      return f.contentDocument;
+    }
+    const q = (d, s) => d.querySelector(s);
+    const qa = (d, s) => [...d.querySelectorAll(s)];
+    let dumpN = 0;
+    function rec(d, label) {
+      if (MODE !== "dump") return;
+      const app = q(d, "#app");
+      log(`=== ${++dumpN} ${label}\n${app ? app.innerHTML : "(no #app)"}`);
+    }
+    // play one game / exercise to its score screen; returns the number of answered items
+    async function play(d, label) {
+      let steps = 0;
+      for (let n = 0; n < 600; n++) {
+        await wait(70);
+        rec(d, label + " · step " + n);
+        if (!q(d, "#pts")) return q(d, "#menuBtn") ? steps : "no score screen"; // the score screen
+        const nx = q(d, "#nextBtn");
+        if (nx) {
+          nx.click();
+          steps++;
+          continue;
+        }
+        const ag = q(d, "#fbx #againBtn");
+        if (ag) {
+          ag.click();
+          continue;
+        }
+        const cb = q(d, "#checkBtn");
+        if (cb && !cb.disabled) {
+          cb.click();
+          continue;
+        }
+        // mc, yn: the first option that is still open
+        const opt = q(d, ".opt:not([disabled])");
+        if (opt) {
+          opt.click();
+          continue;
+        }
+        const ch = q(d, ".choice:not([disabled])");
+        if (ch) {
+          ch.click();
+          continue;
+        }
+        // fill: the first piece for the active blank
+        const chip = q(d, "#chips .chip-o");
+        if (chip) {
+          chip.click();
+          continue;
+        }
+        // order / letters: the 💡 hint puts the next right card in place
+        const hint = q(d, "#hintBtn");
+        if (hint) {
+          hint.click();
+          continue;
+        }
+        // match: the first free picture, then the first free words
+        const l = qa(d, "#colL [data-l]").find((b) => !q(b, ".tag"));
+        if (l) {
+          if (!l.classList.contains("sel")) l.click();
+          await wait(30);
+          const r = qa(d, "#colR [data-r]").find((b) => !q(b, ".tag"));
+          if (r) r.click();
+          continue;
+        }
+        // spell (Dictée): type a wrong answer twice, the engine then shows the right one
+        const sp = q(d, "#spell");
+        if (sp) {
+          sp.value = "x";
+          sp.dispatchEvent(new Event("input", { bubbles: true }));
+          const c2 = q(d, "#checkBtn");
+          if (c2) c2.click();
+          continue;
+        }
+        return "STUCK at item " + (steps + 1);
+      }
+      return "STUCK (too many steps)";
+    }
+    const tileSel = "#panel [data-m], #panel [data-x], #panel [data-d]";
+    async function open(tab, j) {
+      const d = await load();
+      const t = q(d, `[data-tab="${tab}"]`);
+      if (t) t.click();
+      await wait(60);
+      const tile = qa(d, tileSel)[j];
+      tile.click();
+      await wait(120);
+      return { d, id: tile.id };
+    }
+    // the buttons on a learn screen that start a game
+    const subSel =
+      "#ouGame, #ouBuild, #vIl, #vFill, .card [data-g], [data-dm], #bs-w, #bs-l, #goQ";
+    async function shot(spec) {
+      const [tab, j, sb, steps] = spec.split(":");
+      let { d } = await open(tab, +j);
+      if (sb !== undefined && sb !== "") {
+        qa(d, subSel)[+sb].click();
+        await wait(150);
+      }
+      // answer a few items first (the harness's own answers: the screen after them)
+      for (let k = 0; k < +(steps || 0); k++) {
+        const nx = q(d, "#nextBtn");
+        if (nx) nx.click();
+        else
+          q(
+            d,
+            ".opt:not([disabled]), .choice:not([disabled]), #chips .chip-o, #hintBtn",
+          )?.click();
+        await wait(150);
+      }
+      f.contentWindow.scrollTo(0, 0);
+    }
+    async function main() {
+      window.__errs = [];
+      if (P.get("shot")) return shot(P.get("shot"));
+      const d0 = await load();
+      const tabs = qa(d0, "[data-tab]").map((b) => b.dataset.tab);
+      if (!tabs.length) tabs.push("");
+      for (const tab of tabs) {
+        const d1 = await load();
+        const t = q(d1, `[data-tab="${tab}"]`);
+        if (t) t.click();
+        await wait(60);
+        rec(d1, `home · ${tab}`);
+        const n = qa(d1, tileSel).length;
+        for (let j = 0; j < n; j++) {
+          let { d, id } = await open(tab, j);
+          const name = `${tab} · ${id}`;
+          if (q(d, "#pts")) {
+            const r = await play(d, name);
+            log(`${name}: ${typeof r === "number" ? r + " steps" : r}`);
+            continue;
+          }
+          rec(d, name);
+          // story / word cards: step through every card
+          const cnt = q(d, ".count");
+          if (cnt) {
+            const total = +cnt.textContent.split("/")[1];
+            for (let k = 1; k < total; k++) {
+              q(d, "#nextBtn").click();
+              await wait(70);
+              rec(d, `${name} · card ${k + 1}`);
+            }
+            log(`${name}: ${total} cards`);
+          } else log(`${name}: open`);
+          // the games started from this screen
+          const subs = qa(d, subSel).length;
+          for (let s = 0; s < subs; s++) {
+            ({ d } = await open(tab, j));
+            const b = qa(d, subSel)[s];
+            const sub = `${name} → ${b.id || b.textContent.trim().slice(0, 30)}`;
+            b.click();
+            await wait(120);
+            if (q(d, "#pts")) {
+              const r = await play(d, sub);
+              log(`${sub}: ${typeof r === "number" ? r + " steps" : r}`);
+            } else {
+              rec(d, sub);
+              log(`${sub}: open`);
+            }
+          }
+        }
+      }
+      log(
+        (window.__errs || []).length
+          ? "ERRORS:\n" + window.__errs.join("\n")
+          : "no JS errors",
+      );
+      log("DONE");
+    }
+    main().catch((e) => log("HARNESS ERROR " + e.stack));
+  </script>
+</body>
