@@ -1,0 +1,258 @@
+/* My dictations (my-dictations/index.html): the list, Step 1 (paste) and Step 2 (check the pictures). */
+a.btn {
+  display: inline-block;
+  text-decoration: none;
+}
+.md-link {
+  border: 0;
+  background: none;
+  padding: 0;
+}
+.md-in,
+.md-text {
+  /* Atkinson and Nunito have no Arabic letters: Arabic words use Noto Naskh Arabic */
+  font:
+    400 1.05rem "Atkinson Hyperlegible",
+    "Nunito",
+    "Noto Naskh Arabic",
+    system-ui,
+    sans-serif;
+  color: var(--ink);
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 10px 12px;
+  width: 100%;
+  min-width: 0;
+}
+.md-text {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 12em;
+}
+.md-in:focus-visible,
+.md-text:focus-visible {
+  outline: 3px solid var(--cool);
+  outline-offset: 2px;
+}
+.md-lab {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 700;
+}
+.md-line {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.md-msg {
+  margin: 0;
+  font-weight: 700;
+  color: var(--good);
+  min-height: 1.45em;
+}
+.md-msg.bad {
+  color: var(--bad);
+}
+.md-msg:empty {
+  min-height: 0;
+}
+.md-empty {
+  color: var(--muted);
+  text-align: center;
+  margin: 8px 0;
+}
+
+/* the list */
+.md-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.md-item {
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 5px 5px 0 var(--ink);
+  border-top: 10px solid var(--ke);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.md-item.md-new {
+  animation: md-new 1.6s ease;
+}
+@keyframes md-new {
+  0%,
+  40% {
+    background: color-mix(in srgb, var(--hl) 45%, var(--card));
+  }
+}
+.md-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.md-head h3 {
+  font-family: var(--display), "Noto Naskh Arabic";
+  font-size: 1.4rem;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+.md-thumbs {
+  display: grid;
+  grid-template-columns: repeat(3, 1.6em);
+  font-family: var(--emoji);
+  font-size: 1.4rem;
+  line-height: 1.5;
+  text-align: center;
+  flex-shrink: 0;
+}
+.md-thumbs span {
+  white-space: nowrap;
+  overflow: hidden;
+}
+.md-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.md-acts .btn {
+  font-size: 1.2rem;
+  padding: 8px 20px;
+}
+.md-acts .abtn {
+  font-size: 1rem;
+  padding: 8px 12px;
+}
+.md-del {
+  margin-left: auto;
+}
+.md-share {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 2px dashed var(--grid);
+  padding-top: 12px;
+}
+.md-incoming {
+  border-top: 10px solid var(--pe);
+}
+
+/* Step 2: one row per word or sentence */
+.card h2 .md-n {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.md-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.md-row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 10px;
+  align-items: start;
+  padding-bottom: 12px;
+  border-bottom: 2px dashed var(--grid);
+}
+.md-pic {
+  width: 64px;
+  height: 64px;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--sky);
+  font-family: var(--emoji);
+  font-size: 1.9rem;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+/* a sentence's two emoji side by side */
+.md-pic.two {
+  font-size: 1.35rem;
+}
+.md-pic[aria-expanded="true"] {
+  background: var(--hl);
+}
+.md-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.md-x {
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: var(--card);
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  padding: 0;
+}
+.md-letters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.md-l {
+  min-width: 34px;
+  height: 40px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--card);
+  font-family: var(--display);
+  font-size: 1.3rem;
+  padding: 0 6px;
+}
+.md-l[aria-pressed="true"] {
+  background: var(--hl);
+  color: #1b2440;
+}
+.md-sp {
+  width: 12px;
+}
+.md-pick {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: color-mix(in srgb, var(--sky) 60%, var(--card));
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  padding: 12px;
+}
+.md-now {
+  font-family: var(--emoji);
+  font-size: 1.3rem;
+}
+.md-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+  gap: 6px;
+}
+.md-e {
+  height: 52px;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: var(--card);
+  font-family: var(--emoji);
+  font-size: 1.7rem;
+  padding: 0;
+}
+.md-e:active {
+  background: var(--hl);
+}
+@media (prefers-reduced-motion: reduce) {
+  .md-item.md-new {
+    animation: none;
+  }
+}

@@ -34,6 +34,8 @@ const CORE = [
   "./shared/arabic-revision.css",
   "./shared/spelling.css",
   "./shared/spelling.js",
+  "./shared/dictation-store.js",
+  "./shared/dictation-maker.css",
   "./shared/drag-words.css",
   "./shared/reading.css",
   "./shared/reading.js",

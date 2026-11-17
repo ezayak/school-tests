@@ -578,6 +578,35 @@ add its files and pictures to the English entry's `also` in `games.js`, and bump
 `ref("5:vfill", "exercises", g)` takes exercise `vfill` of Week 5 and shows it in section `g`. Sections follow the school's exam memo;
 new exercises use the week's texts (pictures by `src`). It is a "Final exam" card in `games.js` (not on the English page); its files are in the English entry's `also`.
 
+## My dictations (made by parents)
+
+A dictation game any parent can make on their own device, for any grade: the **My dictations** card on the home page
+(the **🎮 Games** button of the side bar: `period: "Games"` in `games.js`, no grade; its cards are shown once, with every grade filter,
+next to the Multiplication and Division games of `grade-4/math/times/`). Nothing is built in the repo; the dictations live in the browser.
+
+- `my-dictations/index.html` + `maker.js`: the list (▶ Play · 📤 Share · ✏️ Edit · 🗑), **+ New dictation** and the box for a link from another parent.
+  - Step 1: a name, the language of the words (English · Українська · Français · العربية: the voice; it follows the letters of the pasted text,
+    `MyDict.fitLang`: Arabic letters → العربية, Cyrillic → Українська, also for a saved or shared dictation), one text box. One word or sentence per line;
+    "1." / "١." / "-" / "•" at the start are removed; "cat, dog, hen" (or "قِطَّةٌ، سَمَكَةٌ") on one line = several words; a line that ends with . ? ! ؟ (with a space in it) or has 3 words or more is a sentence.
+  - Step 2: a row per item with its emoji picture (tap → suggestions, search, or type any emoji; a sentence takes 1–2 emoji),
+    the word to fix, and its letters to tap to colour them (optional: the sound to learn; not in Arabic). Save → back to the list.
+- `my-dictations/play.html` + `play.js`: gives the saved dictation to `shared/spelling.js` (`autoMark: false`, `home` / `hub` / `hubName` for the links;
+  a sentence highlights the first word of the word list it has).
+- `my-dictations/play-ar.html` + `play-ar.js`: an Arabic dictation plays with the Arabic lesson engine (`grade-3/term-1/arabic/arabic-lesson.js`, not changed),
+  as a `window.LESSON` made by `MyDict.toArabicLesson` in the format of the Arabic reading steps: tabs Words · Sentences, each with
+  📇 read (then listen to check) · 👂 listen and choose the word (words) · 🔤 / 🧱 build from letters / words · ✍️ listen and write.
+  Words and sentences are kept without tashkeel (`MyDict.plain`: when pasted, fixed, saved or opened from a link). Typed answers are checked by their letters only (the engine's `normAr`: no tashkeel, alef forms); the page has `<meta name="referrer" content="no-referrer" />` for the online voice.
+  `MyDict.playUrl` picks the page; each page sends a dictation of the other kind to the other one.
+- `shared/dictation-store.js` (`MyDict`): saving (`localStorage` "my-dictations"), the share code, the pasted-text parser, the emoji suggestions.
+  Share = a link `my-dictations/index.html#add=<code>`, the code is the dictation packed with `CompressionStream("deflate-raw")` in URL-safe base64
+  (~500 characters for 15 items); nothing goes to a server. Opening the link offers to save it ("You already have this dictation" for the same one).
+  Everything read from a link or storage is checked (`MyDict.clean`): text lengths, at most 60 items, a picture is only emoji (at most 2).
+- Emoji words: `shared/emoji-words-{en,uk,fr,ar}.js`, made by `.claude/scripts/emoji-words.py` from the Unicode CLDR emoji names and keywords
+  (Emoji 14.0 or older, so older tablets show them); its `EXTRA` adds words of school spelling lists that Unicode does not have. A word is looked up as it is,
+  then without its ending (birds → bird; Arabic: without و / ال / بال … and a plural ending), then (words of 4 letters or more) as a word of the list
+  that starts the same (кити → кит). Arabic is looked up without tashkeel, with one alef, ى → ي and ة → ه (the same in the script and in `MyDict`).
+- Styles: `shared/dictation-maker.css`. The two shared files are in CORE of `sw.js`; the pages and emoji lists in `also` of the My dictations entry.
+
 ## Arabic lessons (Grade 3)
 
 Folder: `grade-3/term-1/arabic/`. One card on the home page ("Arabic Lessons") opens `index.html`, which lists the lessons from `lessons.js`.
