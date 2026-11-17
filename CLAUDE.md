@@ -128,7 +128,7 @@ Sorting:
 What to build:
 
 - **Lesson** `lesson-N.js` + `lesson-N.html` (copy lesson-2.html, change the script and title), pictures in `img/lesson-N/` (`pdftoppm -r 200`, find boxes on a grid, crop with PIL; people ~250–500px, panels ~700px, comic cover ~1000px; check a contact sheet for cut text or bits of the next panel).
-  Learn: story (every panel, then "Des phrases pour parler" with `title`), words (`people` with `say`, `phrases` = the page's Vocabulaire), one `sound` tile per Phonétique sound, a `rule` card for a grammar box. The `verb` view only knows s'appeler: another verb needs an engine change first.
+  Learn: story (every panel, then "Des phrases pour parler" with `title`), words (`people` with `say`, `phrases` = the page's Vocabulaire), one `sound` tile per Phonétique sound, a `rule` card for a grammar box. The `verb` view takes any verb whose forms are `p` + `stem` + `end` (s'appeler, avoir); a new kind of view needs an engine change first. Procedure and check scripts: the `french-lesson` skill.
   Play: listen, match, bword, bsent, ilelle (if people have il / elle), and `game` tiles for the lesson's own point (Un ou une ?).
   Exercices: every book "Parle" / cahier exercise / sheet task, one section each, `from` = where it is ("Cahier p. 7 ex. 5"); a sheet task the lesson already has is not built twice.
   Dictée: a "(by spelling)" sheet or list = one entry in `dictee` (its words and its sentences, a picture on each); the engine makes the build-from-letters and hear-and-type games.

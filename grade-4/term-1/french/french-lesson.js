@@ -283,7 +283,10 @@
   const MODES = {
     story: { t: "L’histoire", en: "The story" },
     words: { t: "Les mots", en: "Words & names" },
-    verb: { t: "Le verbe s’appeler", en: "The verb s’appeler" },
+    verb: {
+      t: (L.verb && L.verb.t) || "Le verbe s’appeler",
+      en: (L.verb && L.verb.en) || "The verb s’appeler",
+    },
     rule: { t: (L.rule || {}).t, en: (L.rule || {}).en },
     listen: { t: "Écoute et touche", en: "Listen, tap the picture" },
     match: { t: "Relie", en: "Match pictures and names" },
@@ -654,19 +657,37 @@
     autoSay(R.fr);
   }
 
-  /* ================= LEARN: le verbe s'appeler ================= */
+  /* ================= LEARN: a verb (s'appeler, avoir) ================= */
+  // V = L.verb: {t?, en?, img?, games?: [{t, x: exercise k}], rows: [{p, el?, stem?, end, name, img|emoji, en?, uk?, ar?}]}
+  // Without t / stem / games it is le verbe s’appeler (stem "appell", buttons Il ou Elle ? and Complète).
+  // A row without its own en / uk / ar shows the translation of its whole sentence (dict / auto).
   function verbView() {
     hush();
     const V = L.verb;
-    const full = (r) => `${r.p} ${r.el}appell${r.end} ${r.name}.`;
-    app.innerHTML = `${titleBar("Le verbe s’appeler")}<section class="card pop">
+    const stem = (r) => r.stem ?? "appell";
+    const sp = (r) => (/’$/.test(r.p) ? "" : " "); // J’ai: no space after J’
+    const full = (r) =>
+      `${r.p}${sp(r)}${r.el || ""}${stem(r)}${r.end} ${r.name}.`;
+    const trRow = (r) =>
+      r[trLang]
+        ? `${esc(r[trLang])} ${esc(personOf(r.name) ? N3(r.name) : r.name)}`
+        : esc(trOf(full(r)));
+    const btns = V.games
+      ? V.games
+          .map(
+            (x, i) =>
+              `<button type="button" class="btn${i ? " ghost" : ""}" data-g="${i}">${esc(x.t)}</button>`,
+          )
+          .join("")
+      : `<button type="button" class="btn" id="vIl">👦 Il ou Elle ? 👧</button><button type="button" class="btn ghost" id="vFill">✍️ Complète</button>`;
+    app.innerHTML = `${titleBar(MODES.verb.t)}<section class="card pop">
     ${split(
       `<p class="hint">Tap a line to hear it. The coloured letters change.</p>
-    <div class="verb">${V.rows.map((r, k) => `<button type="button" class="vrow" data-v="${k}">${pic(r, "pic face2")}<span class="vpv"><span class="vp">${esc(r.p)}</span> <span class="vv"><span class="el">${esc(r.el)}</span>appell<span class="end">${esc(r.end)}</span></span></span><span class="vn">${esc(r.name)}</span>${trLang !== "off" ? `<span class="vt" ${trLang === "ar" ? 'dir="rtl"' : ""}>${esc(r[trLang])} ${esc(personOf(r.name) ? N3(r.name) : r.name)}</span>` : ""}</button>`).join("")}</div>
+    <div class="verb">${V.rows.map((r, k) => `<button type="button" class="vrow" data-v="${k}">${pic(r, "pic face2")}<span class="vpv"><span class="vp">${esc(r.p)}</span>${sp(r)}<span class="vv"><span class="el">${esc(r.el)}</span>${esc(stem(r))}<span class="end">${esc(r.end)}</span></span></span><span class="vn">${esc(r.name)}</span>${trLang !== "off" ? `<span class="vt" ${trLang === "ar" ? 'dir="rtl"' : ""}>${trRow(r)}</span>` : ""}</button>`).join("")}</div>
 `,
       `<div class="audio"><button type="button" class="abtn big" id="vAll">🔊 <span>Écoute tout</span></button></div>
     ${V.img ? `<details class="book"><summary>📕 The page in the book</summary>${pic({ img: V.img }, "pic wide")}</details>` : ""}
-    <div class="row center"><button type="button" class="btn" id="vIl">👦 Il ou Elle ? 👧</button><button type="button" class="btn ghost" id="vFill">✍️ Complète</button></div>`,
+    <div class="row center">${btns}</div>`,
       "wide",
     )}
   </section>`;
@@ -686,10 +707,22 @@
       hush();
       say(V.rows.map(full).join(" "), true);
     };
-    document.getElementById("vIl").onclick = gameIlElle;
     autoSay(V.rows.map(full).join(" "), true);
-    document.getElementById("vFill").onclick = () =>
-      startExercise(L.exercises.findIndex((x) => x.k === "verbe"));
+    if (V.games)
+      app
+        .querySelectorAll("[data-g]")
+        .forEach(
+          (b) =>
+            (b.onclick = () =>
+              startExercise(
+                L.exercises.findIndex((x) => x.k === V.games[+b.dataset.g].x),
+              )),
+        );
+    else {
+      document.getElementById("vIl").onclick = gameIlElle;
+      document.getElementById("vFill").onclick = () =>
+        startExercise(L.exercises.findIndex((x) => x.k === "verbe"));
+    }
   }
   function N3(n) {
     const a = L.auto && L.auto(`C’est ${n}.`);

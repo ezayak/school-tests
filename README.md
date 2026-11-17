@@ -785,7 +785,7 @@ Each lesson: `lesson-N.html` (copy `lesson-1.html`, change `lesson-1.js` to `les
 A lesson page has three tabs, like the Arabic lessons (the last tab used is remembered). The lesson file lists its tiles and their pictures:
 
 - **Apprends** – `learn: [{k, img}]`, k = `story` (picture by picture), `words` (flash cards of `people` + `phrases`),
-  `sound` with `s: "ou"` (one tile per sound in `sounds`), `verb` (only s’appeler), `rule` (a grammar card: `rule`)
+  `sound` with `s: "ou"` (one tile per sound in `sounds`), `verb` (a verb table: `verb`), `rule` (a grammar card: `rule`)
 - **Joue** – `play: [{k, img}]`, k = `listen` (hear a person’s sentence, tap the picture), `match` (pictures ↔ names, rounds of up to 5),
   `bword` (letters, from `build`), `bsent` (word cards or letters, from `sentences`), `ilelle` (Il ou Elle ?),
   or `game` with its own `t`, `en` and `items` (e.g. Un ou une ?)
@@ -799,6 +799,9 @@ The parts of a lesson file:
 
 - `people: [{fr, img, g: "il"|"elle", say?, en, uk, ar}]` (`people: []` for a lesson without people: the word cards are only `phrases`, and no listen / match / ilelle tiles) – `say` is what the card says (“C’est un garçon. Il s’appelle Chadi.”), otherwise “Il / Elle s’appelle …”
 - `phrases: [{fr, img|emoji, en, uk, ar}]`, `story: [{img, title?, lines: [{who, fr}]}]` (`title` = “Des phrases pour parler”: not in “Lis tout”)
+- `verb: {t?, en?, img?, games?: [{t, x}], rows: [{p, el?, stem?, end, name, img|emoji, en?, uk?, ar?}]}` – a row is `p` + `el` + `stem` + `end` + `name` (“Je” “m’” “appell” “e” “Noura”; “J’” “” “ai” “sept ans”, no space after an apostrophe);
+  without `t` / `stem` / `games` it is le verbe s’appeler (stem “appell”, buttons Il ou Elle ? and Complète → exercise `verbe`); `games` = its own buttons (exercise `k`s);
+  a row without `en` / `uk` / `ar` shows the translation of its whole sentence (Lesson 3: avoir)
 - `sounds: [{s, ipa, intro, hear, img, words, pics, not}]` – `intro` / `hear`: what the voice says when the screen opens / on the big button;
   a word’s picture comes from `pics`, a person or a phrase card; `not` = words without the sound, for the “Tu entends … ?” game
 - `rule: {t, en, fr, img, groups: [{t, en, lines}], games: [{t, x: exercise k}]}` – the capital letter and the end mark of each line light up
