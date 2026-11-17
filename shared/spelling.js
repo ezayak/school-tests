@@ -1,11 +1,13 @@
 // Spelling and dictation games (English, Grades 3 and 4): Learn · Match · Listen & spell · Build.
 // A game is only a data file that sets window.SPELLING and is loaded before this engine (see README "English dictations"):
 //   title, heading ("Dictation:", default "Spelling:"), subtitle, lang (voice, "en-US"), pattern, langs ({uk: "Українська", …}),
-//   hub (the "English" link, default "index.html"), items, pics.
+//   hub (the "English" link, default "index.html"), hubName (its text, default "English"),
+//   home (the "← All games" link, default "../../../index.html"), autoMark (false: no long-vowel guess), items, pics.
 // item fields:
 //   w     : the word or sentence (exactly as it should be spelled)
 //   type  : "word" (default) or "sentence"
-//   mark  : [start, length] of the letters to highlight in a word (default: the long-vowel pattern)
+//   mark  : [start, length] of the letters to highlight in a word, or a list of them ([[0, 2], [4, 1]])
+//           (default: the long-vowel pattern, unless autoMark is false)
 //   key   : the word to highlight in a sentence
 //   pic   : a drawing name from pics, OR
 //   img   : a picture file, e.g. "images/toad.png"
@@ -122,15 +124,19 @@
   /* ---------- long-vowel pattern highlight ---------- */
   function marked(w, it) {
     if (it && it.mark) {
-      const [i, n] = it.mark;
-      return (
-        esc(w.slice(0, i)) +
-        `<span class="m">${esc(w.slice(i, i + n))}</span>` +
-        esc(w.slice(i + n))
-      );
+      const parts = Array.isArray(it.mark[0]) ? it.mark : [it.mark];
+      let out = "",
+        at = 0;
+      for (const [i, n] of parts) {
+        out +=
+          esc(w.slice(at, i)) +
+          `<span class="m">${esc(w.slice(i, i + n))}</span>`;
+        at = i + n;
+      }
+      return out + esc(w.slice(at));
     }
     const e = esc(w);
-    if (/\s/.test(w)) return e;
+    if (/\s/.test(w) || LIST.autoMark === false) return e;
     let m;
     if ((m = w.match(/eigh|oa|ow|ou|ai|ay|ey|ee|ea|ie|ei|igh|oe|ue|ew/)))
       return (
@@ -201,7 +207,7 @@
     } catch (e) {}
     const langs = Object.entries(LIST.langs || {});
     app.innerHTML = `<section class="card pop">
-  <div class="topbar"><div class="toplinks"><a class="back" href="../../../index.html">← All games</a><a class="back" href="${esc(LIST.hub || "index.html")}">English</a></div><span class="eyebrow">${esc(LIST.subtitle)}</span></div>
+  <div class="topbar"><div class="toplinks"><a class="back" href="${esc(LIST.home || "../../../index.html")}">← All games</a><a class="back" href="${esc(LIST.hub || "index.html")}">${esc(LIST.hubName || "English")}</a></div><span class="eyebrow">${esc(LIST.subtitle)}</span></div>
   <h1 class="hero-title"><span class="p">${esc(LIST.heading || "Spelling:")}</span> <span class="k">${esc(LIST.title)}</span></h1>
   <div class="thumbs">${WORDS.slice(0, 10)
     .map((it) => drawPic(it))
