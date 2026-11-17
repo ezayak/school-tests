@@ -588,7 +588,12 @@ next to the Multiplication and Division games of `grade-4/math/times/`). Nothing
   - Step 1: a name, the language of the words (English · Українська · Français · العربية: the voice; it follows the letters of the pasted text,
     `MyDict.fitLang`: Arabic letters → العربية, Cyrillic → Українська, also for a saved or shared dictation), one text box. One word or sentence per line;
     "1." / "١." / "-" / "•" at the start are removed; "cat, dog, hen" (or "قِطَّةٌ، سَمَكَةٌ") on one line = several words; a line that ends with . ? ! ؟ (with a space in it) or has 3 words or more is a sentence.
-  - Step 2: a row per item with its emoji picture (tap → suggestions, search, or type any emoji; a sentence takes 1–2 emoji),
+  - Under each word: 🖼️ Picture (default) or 🌐 Translation, with the language to translate to (Українська · English · العربية · Français;
+    never the words' own). Translations come from MyMemory (`MyDict.translate`, `api.mymemory.translated.net`: free, no key,
+    about 5000 characters a day per device, sent without a referrer), or the parent writes them in the list after a dash (`cat - кіт`, works offline);
+    each one can be fixed in Step 2. In the games the translation is drawn as a 320 × 180 SVG card (`MyDict.trPic`) in the picture's place
+    (`img` in both engines, no engine change); a word without a translation shows its emoji. Saved as `show: "tr"`, `to`, and `t` on each item.
+  - Step 2: a row per item with its emoji picture (or its translation box) (tap → suggestions, search, or type any emoji; a sentence takes 1–2 emoji),
     the word to fix, and its letters to tap to colour them (optional: the sound to learn; not in Arabic). Save → back to the list.
 - `my-dictations/play.html` + `play.js`: gives the saved dictation to `shared/spelling.js` (`autoMark: false`, `home` / `hub` / `hubName` for the links;
   a sentence highlights the first word of the word list it has).

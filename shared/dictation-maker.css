@@ -42,6 +42,21 @@ a.btn {
   gap: 6px;
   font-weight: 700;
 }
+/* a little wider than the other pages, so Step 1's two choices fit in one row on a tablet */
+.wrap {
+  max-width: 860px;
+}
+/* Step 1: the language and "Under each word, show" side by side (one under the other on a phone) */
+.md-opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  align-items: flex-start;
+}
+/* "Translate to" only in translation mode: the hidden attribute wins over display: flex */
+.md-lab[hidden] {
+  display: none;
+}
 .md-line {
   display: flex;
   gap: 10px;
@@ -161,6 +176,19 @@ a.btn {
   align-items: start;
   padding-bottom: 12px;
   border-bottom: 2px dashed var(--grid);
+}
+/* translations instead of pictures: no picture button, the translation box under the word */
+.md-row.tr {
+  grid-template-columns: 1fr auto;
+}
+.md-tl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--emoji);
+}
+.md-t {
+  background: color-mix(in srgb, var(--sky) 70%, var(--card));
 }
 .md-pic {
   width: 64px;

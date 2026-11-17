@@ -1,5 +1,6 @@
 // My dictations (my-dictations/index.html): the list of the dictations made on this device, and the maker:
-// Step 1 paste the words and sentences → Step 2 check the pictures (emoji) and the letters to colour → saved.
+// Step 1 paste the words and sentences, choose pictures or translations → Step 2 check the pictures (emoji)
+// or the translations (MyDict.translate, or "cat - кіт" in the list) and the letters to colour → saved.
 // Share: a link with the whole dictation in it (MyDict.encode); opening it here offers to save it.
 // Storage, share code and emoji: shared/dictation-store.js. The game: play.html (shared/spelling.js),
 // for Arabic play-ar.html (the Arabic lesson engine); MyDict.playUrl picks the page.
@@ -8,7 +9,10 @@
   const M = window.MyDict;
   const app = document.getElementById("app");
   let view = "list";
-  let draft = null; // {id, title, lang, text, items: [{w, s, e, m, auto}]}; auto: the picture was chosen by the page
+  // {id, title, lang, show, to, text, items: [{w, s, e, t, m, auto, autoT}]};
+  // auto / autoT: the picture / translation was found by the page (it follows a fixed word)
+  let draft = null;
+  let trRun = 0; // the translating round now running (a new one stops the old one)
   let picking = -1; // the row whose picture picker is open
   let fresh = true; // the first tap in a sentence's picker replaces its picture, the next one adds a second
   let sharing = ""; // the dictation whose share link is shown
@@ -26,7 +30,8 @@
       .filter(Boolean)
       .join(" · ");
   };
-  const info = (d) => `${count(d)} · ${M.LANGS[d.lang].name}`;
+  const info = (d) =>
+    `${count(d)} · ${M.LANGS[d.lang].name}${d.show === "tr" ? " → " + M.TO[d.to].name : ""}`;
   const thumbs = (d) =>
     `<span class="md-thumbs" aria-hidden="true">${d.items
       .slice(0, 6)
@@ -164,6 +169,8 @@ ${all.length ? `<section class="md-list">${all.map(itemHTML).join("")}</section>
   }
 
   /* ---------- Step 1: paste ---------- */
+  // the list as text again (← Back, ✏️ Edit): the words and numbered sentences only; their translations,
+  // pictures and letters stay with them in draft.items and come back on Next (next() finds them by the word)
   const toText = (items) => {
     let n = 0;
     return items.map((i) => (i.s ? `${++n}. ${i.w}` : i.w)).join("\n");
@@ -175,7 +182,7 @@ ${all.length ? `<section class="md-list">${all.map(itemHTML).join("")}</section>
   ${top('<button class="back md-link" type="button" data-act="cancel">← My dictations</button>', "Step 1 of 2")}
   <h1 class="hero-title"><span class="p">Paste</span> <span class="k">the list</span></h1>
   <label class="md-lab">Name of the dictation<input class="md-in" id="title" dir="auto" autocomplete="off" maxlength="80" placeholder="For example: Unit 2 · Week 5" value="${esc(draft.title)}"></label>
-  <div class="md-lab">Language of the words (for the voice)<div class="seg" role="group" aria-label="Language">${Object.entries(
+  <div class="md-opts"><div class="md-lab">Language of the words (for the voice)<div class="seg" role="group" aria-label="Language">${Object.entries(
     M.LANGS,
   )
     .map(
@@ -183,8 +190,17 @@ ${all.length ? `<section class="md-list">${all.map(itemHTML).join("")}</section>
         `<button type="button" data-act="lang" data-lang="${k}" aria-pressed="${draft.lang === k}">${esc(L.name)}</button>`,
     )
     .join("")}</div></div>
+  <div class="md-lab">Under each word, show<div class="seg" role="group" aria-label="Picture or translation"><button type="button" data-act="show" data-show="pic" aria-pressed="${draft.show !== "tr"}">🖼️ Picture</button><button type="button" data-act="show" data-show="tr" aria-pressed="${draft.show === "tr"}">🌐 Translation</button></div></div></div>
+  <div class="md-lab" id="toBox"${draft.show === "tr" ? "" : " hidden"}>Translate to<div class="seg" role="group" aria-label="Translate to">${Object.entries(
+    M.TO,
+  )
+    .map(
+      ([k, L]) =>
+        `<button type="button" data-act="to" data-to="${k}" aria-pressed="${draft.to === k}"${k === draft.lang.split("-")[0] ? " disabled" : ""}>${esc(L.name)}</button>`,
+    )
+    .join("")}</div></div>
   <label class="md-lab">Words and sentences<textarea class="md-text" id="text" dir="auto" rows="12" spellcheck="false" placeholder="pitch&#10;teacher&#10;cheese&#10;1. The runner needed to stretch.&#10;2. What is your favorite color?">${esc(draft.text)}</textarea></label>
-  <p class="hint">One word or sentence on each line. Numbers like “1.” are taken away.</p>
+  <p class="hint">One word or sentence on each line. Numbers like “1.” are taken away.<span id="trHint"${draft.show === "tr" ? "" : " hidden"}> The translations are found on the internet; you can also write them yourself after a dash: <b>cat - кіт</b>.</span></p>
   <div class="row"><button class="btn big" type="button" data-act="next">Next →</button></div>
   <p class="md-msg bad" id="pmsg"></p>
 </section>`;
@@ -192,33 +208,94 @@ ${all.length ? `<section class="md-list">${all.map(itemHTML).join("")}</section>
   }
   // the language buttons follow the letters of the text (Arabic letters → العربية), so a list is never played
   // in the wrong game; the parent can still pick French for Latin letters
+  // (only the words count, not the translations after a dash); the language to is never the words' own
   function fitLang() {
-    draft.lang = M.fitLang(draft.lang, document.getElementById("text").value);
+    const text = document.getElementById("text").value;
+    draft.lang = M.fitLang(
+      draft.lang,
+      draft.show === "tr" ? M.wordsOnly(text) : text,
+    );
+    draft.to = M.toFor(draft.lang, draft.to);
     app
       .querySelectorAll("[data-lang]")
       .forEach((x) =>
         x.setAttribute("aria-pressed", x.dataset.lang === draft.lang),
       );
+    app.querySelectorAll("[data-to]").forEach((x) => {
+      x.setAttribute("aria-pressed", x.dataset.to === draft.to);
+      x.disabled = x.dataset.to === draft.lang.split("-")[0];
+    });
   }
   async function next() {
     draft.title = document.getElementById("title").value.trim();
     draft.text = document.getElementById("text").value;
     fitLang();
-    const items = M.parse(draft.text, draft.lang);
+    const tr = draft.show === "tr";
+    const items = M.parse(draft.text, draft.lang, tr);
     if (!items.length)
       return msg("pmsg", "Paste at least one word first.", true);
     msg("pmsg", "Finding pictures…");
     await Promise.all([M.loadEmoji(draft.lang), M.loadEmoji("en-US")]);
-    // a line that was there before keeps the picture and letters chosen for it
+    // a line that was there before keeps the picture, translation and letters chosen for it
     const old = draft.items || [];
     const keys = items.filter((i) => !i.s).map((i) => i.w);
     draft.items = items.map((it) => {
-      const o = old.find((x) => x.w === it.w && x.s === it.s && !x.auto);
-      return o
-        ? { ...o }
-        : { ...it, e: M.suggest(it, draft.lang, keys), auto: true };
+      const o = old.find((x) => x.w === it.w && x.s === it.s);
+      const e =
+        o && !o.auto
+          ? { e: o.e, m: o.m }
+          : { e: M.suggest(it, draft.lang, keys), auto: true };
+      // a translation written in the list wins; else the one found before (in the same language)
+      const t = it.t
+        ? { t: it.t }
+        : o && o.t && draft.toWas === draft.to
+          ? { t: o.t, autoT: o.autoT }
+          : {};
+      return { w: it.w, s: it.s, ...e, ...t };
     });
+    draft.toWas = draft.to;
     check();
+    if (tr) translateAll();
+  }
+  // the missing translations, 4 at a time; each row is filled in as its answer comes
+  async function translateAll() {
+    const run = ++trRun;
+    const todo = draft.items.filter((it) => !it.t && it.w.trim());
+    if (!todo.length) return;
+    let done = 0,
+      found = 0;
+    const show = () =>
+      msg(
+        "tmsg",
+        done < todo.length
+          ? `Translating… ${done} / ${todo.length}`
+          : found === todo.length
+            ? "Translated. Check them and fix any that are wrong."
+            : `${todo.length - found} could not be translated (no internet?). Type them in.`,
+        done === todo.length && found < todo.length,
+      );
+    show();
+    const queue = todo.slice();
+    const worker = async () => {
+      while (queue.length) {
+        const it = queue.shift();
+        const w = it.w;
+        const t = await M.translate(w, draft.lang, draft.to);
+        if (run !== trRun || !draft) return;
+        done++;
+        if (t && it.w === w && !it.t) {
+          found++;
+          it.t = t;
+          it.autoT = true;
+          const inp = app.querySelector(
+            `.md-t[data-i="${draft.items.indexOf(it)}"]`,
+          );
+          if (inp && !inp.value) inp.value = t;
+        }
+        show();
+      }
+    };
+    await Promise.all([worker(), worker(), worker(), worker()]);
   }
 
   /* ---------- Step 2: check the pictures ---------- */
@@ -262,12 +339,18 @@ ${all.length ? `<section class="md-list">${all.map(itemHTML).join("")}</section>
   <div class="row"><button class="abtn" type="button" data-act="set" data-i="${i}" data-e="">No picture</button><button class="abtn" type="button" data-act="pick" data-i="${i}">Done</button></div>
 </div>`;
   }
-  const row = (it, i) => `<div class="md-row" data-i="${i}">
-  <button type="button" class="md-pic${M.pics(it.e).length > 1 ? " two" : ""}" data-act="pick" data-i="${i}" aria-label="Change the picture" aria-expanded="${picking === i}">${esc(it.e || "❓")}</button>
-  <div class="md-main"><input class="md-in md-w" dir="auto" data-i="${i}" value="${esc(it.w)}" autocomplete="off" spellcheck="false" aria-label="${it.s ? "Sentence" : "Word"}" placeholder="${it.s ? "Type a sentence" : "Type a word"}">${letters(it, i)}</div>
+  // translations: no picture button, a translation box under the word instead
+  const trBox = (it, i) =>
+    `<label class="md-tl"><span aria-hidden="true">🌐</span><input class="md-in md-t" dir="auto" data-i="${i}" value="${esc(it.t || "")}" autocomplete="off" aria-label="Translation" placeholder="${esc(M.TO[draft.to].name)}"></label>`;
+  const row = (it, i) => {
+    const tr = draft.show === "tr";
+    return `<div class="md-row${tr ? " tr" : ""}" data-i="${i}">
+  ${tr ? "" : `<button type="button" class="md-pic${M.pics(it.e).length > 1 ? " two" : ""}" data-act="pick" data-i="${i}" aria-label="Change the picture" aria-expanded="${picking === i}">${esc(it.e || "❓")}</button>`}
+  <div class="md-main"><input class="md-in md-w" dir="auto" data-i="${i}" value="${esc(it.w)}" autocomplete="off" spellcheck="false" aria-label="${it.s ? "Sentence" : "Word"}" placeholder="${it.s ? "Type a sentence" : "Type a word"}">${letters(it, i)}${tr ? trBox(it, i) : ""}</div>
   <button type="button" class="md-x" data-act="drop" data-i="${i}" aria-label="Delete">🗑</button>
   ${picking === i ? picker(it, i) : ""}
 </div>`;
+  };
   function part(s) {
     const rows = draft.items
       .map((it, i) => (it.s === s ? row(it, i) : ""))
@@ -282,8 +365,9 @@ ${all.length ? `<section class="md-list">${all.map(itemHTML).join("")}</section>
     const y = window.scrollY;
     app.innerHTML = `<section class="card pop">
   ${top('<button class="back md-link" type="button" data-act="back">← Step 1</button>', "Step 2 of 2")}
-  <h1 class="hero-title"><span class="p">Check</span> <span class="k">the pictures</span></h1>
-  <p class="howto">Tap a picture to change it. You can fix a word here${M.LANGS[draft.lang].rtl ? "" : ", and tap its letters to colour the sound your child learns (you can skip this)"}.</p>
+  <h1 class="hero-title"><span class="p">Check</span> <span class="k">the ${draft.show === "tr" ? "translations" : "pictures"}</span></h1>
+  <p class="howto">${draft.show === "tr" ? `Each word shows its translation (${esc(M.TO[draft.to].name)}) instead of a picture: fix any that are wrong.` : "Tap a picture to change it."} You can fix a word here${M.LANGS[draft.lang].rtl ? "" : ", and tap its letters to colour the sound your child learns (you can skip this)"}.</p>
+  ${draft.show === "tr" ? '<p class="md-msg" id="tmsg"></p>' : ""}
 </section>
 ${part(false)}${part(true)}
 <section class="card"><div class="row"><button class="btn big" type="button" data-act="save">Save ✓</button><button class="btn ghost" type="button" data-act="back">← Back</button></div><p class="md-msg bad" id="kmsg"></p></section>`;
@@ -310,8 +394,17 @@ ${part(false)}${part(true)}
       );
     const r = app.querySelector(`.md-row[data-i="${i}"]`);
     const pic = r.querySelector(".md-pic");
-    pic.textContent = it.e || "❓";
-    pic.classList.toggle("two", M.pics(it.e).length > 1);
+    if (pic) {
+      pic.textContent = it.e || "❓";
+      pic.classList.toggle("two", M.pics(it.e).length > 1);
+    }
+    // a translation found by the page is found again for the new word
+    if (draft.show === "tr" && (it.autoT || !it.t)) {
+      delete it.t;
+      const ti = r.querySelector(".md-t");
+      if (ti) ti.value = "";
+      translateAll();
+    }
     const L = r.querySelector(".md-letters");
     if (L) L.outerHTML = letters(it, i);
   }
@@ -327,13 +420,15 @@ ${part(false)}${part(true)}
   function save() {
     const items = draft.items
       .filter((it) => it.w.trim())
-      .map(({ auto, ...it }) => it);
+      .map(({ auto, autoT, ...it }) => it);
     if (!items.length) return msg("kmsg", "Add at least one word first.", true);
     const d = M.save({
       id: draft.id,
       title: draft.title,
       lang: draft.lang,
       made: draft.made,
+      show: draft.show,
+      to: draft.to,
       items,
     });
     if (!d)
@@ -355,9 +450,18 @@ ${part(false)}${part(true)}
     const id = b.dataset.id;
     switch (b.dataset.act) {
       case "new":
-        draft = { id: "", title: "", lang: "en-US", text: "", items: [] };
+        draft = {
+          id: "",
+          title: "",
+          lang: "en-US",
+          show: "pic",
+          to: "uk",
+          text: "",
+          items: [],
+        };
         return paste();
       case "cancel":
+        trRun++;
         draft = null;
         return list();
       case "lang":
@@ -367,10 +471,25 @@ ${part(false)}${part(true)}
           .forEach((x) => x.setAttribute("aria-pressed", x === b));
         draft.title = document.getElementById("title").value;
         draft.text = document.getElementById("text").value;
+        fitLang();
+        return;
+      case "show":
+        draft.show = b.dataset.show;
+        app
+          .querySelectorAll("[data-show]")
+          .forEach((x) => x.setAttribute("aria-pressed", x === b));
+        document.getElementById("toBox").hidden = draft.show !== "tr";
+        document.getElementById("trHint").hidden = draft.show !== "tr";
+        fitLang();
+        return;
+      case "to":
+        draft.to = b.dataset.to;
+        fitLang();
         return;
       case "next":
         return next();
       case "back":
+        trRun++;
         draft.text = toText(draft.items.filter((it) => it.w.trim()));
         return paste();
       case "pick":
@@ -419,6 +538,7 @@ ${part(false)}${part(true)}
         if (!d) return;
         draft = {
           ...d,
+          toWas: d.to,
           text: toText(d.items),
           items: d.items.map((it) => ({ ...it })),
         };
@@ -456,10 +576,16 @@ ${part(false)}${part(true)}
     const t = ev.target;
     if (t.classList.contains("md-w"))
       edited(+t.dataset.i, t.value.replace(/\s+/g, " ").trim());
+    // a translation typed by the parent stays, even when the word changes
+    if (t.classList.contains("md-t")) {
+      const it = draft.items[+t.dataset.i];
+      it.t = t.value.replace(/\s+/g, " ").trim();
+      it.autoT = false;
+    }
   });
   app.addEventListener("keydown", (ev) => {
     if (ev.key === "Enter" && ev.target.id === "code") addCode();
-    if (ev.key === "Enter" && ev.target.classList.contains("md-w"))
+    if (ev.key === "Enter" && /md-[wt]\b/.test(ev.target.className))
       ev.target.blur();
   });
 

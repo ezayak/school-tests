@@ -1,8 +1,10 @@
 // My dictations: dictations that parents make on the device (my-dictations/). Saving on this device, the share code,
 // the emoji pictures for words and sentences, and the data for the game: the spelling engine (shared/spelling.js)
 // or, for Arabic, the Arabic lesson engine (grade-3/term-1/arabic/arabic-lesson.js, play-ar.html).
-// A dictation: {id, title, lang ("en-US" | "uk-UA" | "fr-FR" | "ar"), made (time), items: [{w, s, e, m}]}
-//   w: the word or sentence; s: true for a sentence; e: its picture (1–2 emoji);
+// A dictation: {id, title, lang ("en-US" | "uk-UA" | "fr-FR" | "ar"), made (time), show, to, items: [{w, s, e, t, m}]}
+//   show: "pic" (default: an emoji picture with each word) or "tr" (its translation instead, in the language to);
+//   w: the word or sentence; s: true for a sentence; e: its picture (1–2 emoji; with "tr" only when there is no translation);
+//   t: its translation (show "tr");
 //   m: the letters to colour (indexes in w; not for Arabic: its letters join).
 // Arabic words and sentences are kept without tashkeel (plain), even when the parent pastes them with it.
 // Saved in localStorage ("my-dictations"): it stays on this device until the browser's site data is cleared.
@@ -16,6 +18,18 @@ window.MyDict = (function () {
     "fr-FR": { name: "Français", emo: "fr" },
     ar: { name: "العربية", emo: "ar", rtl: true },
   };
+  // the languages a dictation can be translated to (show: "tr")
+  const TO = {
+    uk: { name: "Українська" },
+    en: { name: "English" },
+    ar: { name: "العربية", rtl: true },
+    fr: { name: "Français" },
+  };
+  // the code of a dictation's language for the translation service: "en-US" → "en"
+  const code = (lang) => String(lang).split("-")[0];
+  // the language to translate to when none fits: Ukrainian, or English for a Ukrainian dictation
+  const toFor = (lang, to) =>
+    TO[to] && to !== code(lang) ? to : code(lang) === "uk" ? "en" : "uk";
   const MAX_ITEMS = 60;
 
   /* ---------- saving on this device ---------- */
@@ -81,6 +95,8 @@ window.MyDict = (function () {
         const w = str(it.w, 200).replace(/\s+/g, " ");
         if (!w) return null;
         const out = { w, s: !!it.s, e: emojiOnly(it.e) };
+        const t = str(it.t, 160).replace(/\s+/g, " ");
+        if (t) out.t = t;
         if (!out.s && Array.isArray(it.m)) {
           const m = [
             ...new Set(
@@ -102,11 +118,14 @@ window.MyDict = (function () {
         delete it.m;
         it.w = plain(it.w, lang);
       });
+    const show = d.show === "tr" ? "tr" : "pic";
     return {
       id: typeof d.id === "string" && /^[a-z0-9]{1,20}$/.test(d.id) ? d.id : "",
       title: str(d.title, 80) || "My dictation",
       lang,
       made: Number.isFinite(d.made) ? d.made : Date.now(),
+      show,
+      to: toFor(lang, d.to),
       items,
     };
   }
@@ -128,12 +147,21 @@ window.MyDict = (function () {
         new Blob([bytes]).stream().pipeThrough(stream),
       ).arrayBuffer(),
     );
-  // short keys: t title, l language, i items [w, picture, 1 = sentence, letters…]
+  // short keys: t title, l language, i items [w, picture, 1 = sentence, letters…];
+  // with translations also o: the language to, and each item [w, picture, 1 = sentence, translation, letters…]
   async function encode(d) {
+    const tr = d.show === "tr";
     const pack = {
       t: d.title,
       l: d.lang,
-      i: d.items.map((it) => [it.w, it.e, it.s ? 1 : 0, ...(it.m || [])]),
+      ...(tr ? { o: d.to } : {}),
+      i: d.items.map((it) => [
+        it.w,
+        it.e,
+        it.s ? 1 : 0,
+        ...(tr ? [it.t || ""] : []),
+        ...(it.m || []),
+      ]),
     };
     const bytes = new TextEncoder().encode(JSON.stringify(pack));
     if (typeof CompressionStream === "undefined") return "0" + b64(bytes);
@@ -151,16 +179,20 @@ window.MyDict = (function () {
         bytes = await pipe(bytes, new DecompressionStream("deflate-raw"));
       const p = JSON.parse(new TextDecoder().decode(bytes));
       if (!p || !Array.isArray(p.i)) return null;
+      const tr = typeof p.o === "string";
       return clean({
         title: p.t,
         lang: p.l,
+        show: tr ? "tr" : "pic",
+        to: p.o,
         items: p.i.map(
           (a) =>
             Array.isArray(a) && {
               w: a[0],
               e: a[1],
               s: a[2] === 1,
-              m: a.slice(3),
+              t: tr ? a[3] : "",
+              m: a.slice(tr ? 4 : 3),
             },
         ),
       });
@@ -191,6 +223,12 @@ window.MyDict = (function () {
       return LANGS[lang].rtl || lang === "uk-UA" ? "en-US" : lang;
     return sc;
   }
+  // the pasted text without the translations after " - " (for the language of the words)
+  const wordsOnly = (text) =>
+    String(text || "")
+      .split(/\r?\n/)
+      .map((l) => l.replace(/^\s*[-–•*·]\s*/, "").split(TR_SEP)[0])
+      .join("\n");
   // Arabic without tashkeel (harakat, shadda, sukun, tanween, dagger alef) and tatweel; other languages as they are
   const plain = (w, lang) =>
     LANGS[lang] && LANGS[lang].rtl
@@ -200,15 +238,31 @@ window.MyDict = (function () {
   /* ---------- pasted text → items ---------- */
   // one item per line; "1." "2)" "١." "-" "•" at the start are removed; a line with commas (, ، ;) and no spaces
   // between the words ("cat, dog, hen") is several words; a sentence = ends with . ? ! ؟ or has 3 words or more.
-  // lang: Arabic text loses its tashkeel here, so the list shows the plain letters
-  function parse(text, lang) {
+  // lang: Arabic text loses its tashkeel here, so the list shows the plain letters.
+  // tr: a line can also have its translation after " - ", " – ", " — ", " = " or a tab ("cat - кіт").
+  const TR_SEP = /\s+[-–—=]\s+|\t+/;
+  function parse(text, lang, tr) {
     const out = [];
-    for (let line of plain(text || "", lang).split(/\r?\n/)) {
-      line = line
-        .replace(/^\s*(?:[\d٠-٩]+\s*[.)\-]|[-–•*·])\s*/, "")
-        .replace(/\s+/g, " ")
-        .trim();
+    for (let line of String(text || "").split(/\r?\n/)) {
+      line = line.replace(/^\s*(?:[\d٠-٩]+\s*[.)\-]|[-–•*·])\s*/, "");
+      let t = "";
+      if (tr && TR_SEP.test(line)) {
+        const k = line.search(TR_SEP);
+        t = line.slice(k).replace(TR_SEP, "").replace(/\s+/g, " ").trim();
+        line = line.slice(0, k);
+      }
+      line = plain(line, lang).replace(/\s+/g, " ").trim();
       if (!line) continue;
+      if (t) {
+        const sent = /[.?!…؟]["»”']?$/.test(line) && /\s/.test(line);
+        out.push({
+          ...(sent || line.split(" ").length >= 3
+            ? { w: line, s: true }
+            : word(line)),
+          t,
+        });
+        continue;
+      }
       const parts = line.split(/\s*[,;،؛]\s*/).filter(Boolean);
       if (parts.length > 1 && parts.every((p) => !/\s/.test(p))) {
         parts.forEach((p) => out.push(word(p)));
@@ -364,6 +418,78 @@ window.MyDict = (function () {
     return out;
   }
 
+  /* ---------- translations (show: "tr") ---------- */
+  // a translation from MyMemory (api.mymemory.translated.net: free, no key, about 5000 characters a day
+  // per device); "" when there is none (no internet, the day's limit, the same text back). The parent can
+  // always type it or write it in the list.
+  async function translate(text, from, to) {
+    const url =
+      "https://api.mymemory.translated.net/get?q=" +
+      encodeURIComponent(text) +
+      "&langpair=" +
+      encodeURIComponent(code(from) + "|" + to);
+    try {
+      const ctl = new AbortController();
+      const stop = setTimeout(() => ctl.abort(), 10000);
+      const r = await fetch(url, {
+        referrerPolicy: "no-referrer",
+        signal: ctl.signal,
+      });
+      clearTimeout(stop);
+      const j = await r.json();
+      let t = String((j.responseData || {}).translatedText || "");
+      if (j.responseStatus != 200 || /MYMEMORY|QUERY LENGTH|INVALID/i.test(t))
+        return "";
+      t = t
+        .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n))
+        .replace(/&quot;/g, '"')
+        .replace(/&amp;/g, "&")
+        .replace(/\s+/g, " ")
+        .trim();
+      // "معلم/teacher": the translation, without the word itself after a slash
+      if (to !== "en" && /\/[A-Za-z\s]+$/.test(t))
+        t = t.replace(/\/[A-Za-z\s]+$/, "");
+      return t.toLowerCase() === text.toLowerCase() ? "" : t.slice(0, 160);
+    } catch (e) {
+      return "";
+    }
+  }
+  // the translation drawn as a picture (an SVG card, 320 × 180, as the pictures of both games), so it shows in the
+  // picture's place with no change to the engines: the words on lines that fit, as big as they can be, and the language below
+  function trPic(t, to) {
+    const x = (v) =>
+      String(v).replace(
+        /[&<>"]/g,
+        (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+      );
+    const ws = String(t).split(" ");
+    const lines = [];
+    const max = Math.max(12, Math.ceil(Math.sqrt(t.length * 2.6)));
+    for (const w of ws) {
+      const l = lines[lines.length - 1];
+      if (l && (l + " " + w).length <= max)
+        lines[lines.length - 1] = l + " " + w;
+      else lines.push(w);
+    }
+    const long = Math.max(...lines.map((l) => l.length));
+    const size = Math.round(
+      Math.min(64, 290 / (long * 0.58), 128 / (lines.length * 1.2)),
+    );
+    const L = TO[to] || { name: "" };
+    const y0 = 82 - ((lines.length - 1) * size * 1.2) / 2;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180"><rect width="320" height="180" fill="#e4f0fb"/><g font-family="Nunito, 'Atkinson Hyperlegible', 'Noto Naskh Arabic', Arial, sans-serif" font-weight="700" fill="#1b2440" text-anchor="middle"${L.rtl ? ' direction="rtl"' : ""}>${lines
+      .map(
+        (l, i) =>
+          `<text x="160" y="${(y0 + i * size * 1.2).toFixed(1)}" font-size="${size}" dominant-baseline="central">${x(l)}</text>`,
+      )
+      .join(
+        "",
+      )}</g><text x="160" y="164" font-family="Arial, sans-serif" font-size="14" fill="#56637f" text-anchor="middle">${x(L.name)}</text></svg>`;
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  }
+  // the picture of an item in the game: its translation card, or its emoji
+  const usesTr = (d, it) => d.show === "tr" && !!it.t;
+
   /* ---------- for the spelling engine ---------- */
   // letter indexes → [[start, length], …]
   function ranges(m) {
@@ -397,12 +523,16 @@ window.MyDict = (function () {
           ? {
               w: it.w,
               type: "sentence",
-              emoji: it.e || "❓",
+              ...(usesTr(d, it)
+                ? { img: trPic(it.t, d.to) }
+                : { emoji: it.e || "❓" }),
               key: keyOf(it.w, keys),
             }
           : {
               w: it.w,
-              emoji: it.e || "❓",
+              ...(usesTr(d, it)
+                ? { img: trPic(it.t, d.to) }
+                : { emoji: it.e || "❓" }),
               ...(it.m ? { mark: ranges(it.m) } : {}),
             },
       ),
@@ -421,7 +551,9 @@ window.MyDict = (function () {
   function toArabicLesson(d) {
     const W = d.items.filter((i) => !i.s && !/\s/.test(i.w));
     const S = d.items.filter((i) => i.s || /\s/.test(i.w));
-    const ic = (it) => it.e || "❓";
+    // the picture: the translation card (show "tr"), or the emoji
+    const pic = (it) =>
+      usesTr(d, it) ? { img: trPic(it.t, d.to) } : { ic: it.e || "❓" };
     const sec = (k, tab, t, icon, en, uk, items) =>
       items.length ? { k, tab, t, ic: icon, en, uk, items } : null;
     // 3 other words of the list to choose from, the ones of a similar length first
@@ -446,7 +578,7 @@ window.MyDict = (function () {
           type: "read",
           q: "اقْرَأِ الْكَلِمَةَ",
           a: w.w,
-          ic: ic(w),
+          ...pic(w),
           en: "Read the word.",
           uk: "Прочитай слово.",
         })),
@@ -466,7 +598,7 @@ window.MyDict = (function () {
               say: w.w,
               mute: w.w,
               o: [w.w, ...others(w)],
-              ic: ic(w),
+              ...pic(w),
               en: "Which word do you hear?",
               uk: "Яке слово ти чуєш?",
             })),
@@ -485,7 +617,7 @@ window.MyDict = (function () {
           say: w.w,
           mute: w.w,
           a: w.w,
-          ic: ic(w),
+          ...pic(w),
           en: "Put the letters of the word you hear in order.",
           uk: "Розстав літери почутого слова по порядку.",
         })),
@@ -503,7 +635,7 @@ window.MyDict = (function () {
           say: w.w,
           mute: w.w,
           a: [w.w],
-          ic: ic(w),
+          ...pic(w),
           en: "Write the word you hear.",
           uk: "Напиши слово, яке чуєш.",
         })),
@@ -519,7 +651,7 @@ window.MyDict = (function () {
           type: "read",
           q: "اقْرَأِ الْجُمْلَةَ",
           a: s.w,
-          ic: ic(s),
+          ...pic(s),
           en: "Read the sentence.",
           uk: "Прочитай речення.",
         })),
@@ -537,7 +669,7 @@ window.MyDict = (function () {
           say: s.w,
           mute: s.w,
           a: s.w,
-          ic: ic(s),
+          ...pic(s),
           en: "Put the words of the sentence you hear in order.",
           uk: "Розстав слова почутого речення по порядку.",
         })),
@@ -555,7 +687,7 @@ window.MyDict = (function () {
           say: s.w,
           mute: s.w,
           a: [s.w],
-          ic: ic(s),
+          ...pic(s),
           en: "Write the sentence you hear.",
           uk: "Напиши речення, яке чуєш.",
         })),
@@ -617,6 +749,11 @@ window.MyDict = (function () {
     parse,
     plain,
     fitLang,
+    wordsOnly,
+    TO,
+    toFor,
+    translate,
+    trPic,
     loadEmoji,
     emojiFor,
     suggest,
