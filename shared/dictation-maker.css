@@ -42,9 +42,49 @@ a.btn {
   gap: 6px;
   font-weight: 700;
 }
-/* a little wider than the other pages, so Step 1's two choices fit in one row on a tablet */
+/* the width of the other hub pages (index.css, english-hub.css): 860px, 1200px on a landscape tablet */
 .wrap {
   max-width: 860px;
+}
+@media (orientation: landscape) and (min-width: 760px) {
+  .wrap {
+    max-width: 1200px;
+  }
+}
+/* the list page: the how-to and "+ New dictation" in one row (the button under it when it does not fit) */
+.md-intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+.md-intro .howto {
+  flex: 1 1 320px;
+}
+.md-intro .btn {
+  font-size: 1.15rem;
+  padding: 10px 20px;
+  white-space: nowrap;
+}
+/* "Got a link from another parent?": a smaller card right after the header */
+.md-getlink {
+  padding: 14px 18px;
+  gap: 8px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.md-getlink h3 {
+  font-size: 1.1rem;
+}
+.md-getlink .hint {
+  font-size: 0.92rem;
+}
+.md-getlink .md-in {
+  padding: 8px 12px;
+}
+.md-getlink .btn {
+  font-size: 1.1rem;
+  padding: 8px 18px;
 }
 /* Step 1: the language and "Under each word, show" side by side (one under the other on a phone) */
 .md-opts {
@@ -81,9 +121,10 @@ a.btn {
 }
 
 /* the list */
+/* the saved dictations side by side, as many columns as fit (at least 340px each; one column on a phone) */
 .md-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
   gap: 16px;
 }
 .md-item {

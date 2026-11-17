@@ -86,15 +86,14 @@
     app.innerHTML = `<section class="card pop">
   ${top('<a class="back" href="../index.html">← All games</a>', "Games · Dictations")}
   <h1 class="hero-title"><span class="p">My</span> <span class="k">dictations</span></h1>
-  <p class="howto">Make a spelling game from any word list: paste the words and sentences, check the pictures, play. Send it to other parents with a link.</p>
-  <div class="row"><button class="btn big" type="button" data-act="new">+ New dictation</button></div>
+  <div class="md-intro"><p class="howto">Make a spelling game from any word list: paste the words and sentences, check the pictures, play. Send it to other parents with a link.</p><button class="btn" type="button" data-act="new">+ New dictation</button></div>
 </section>
-${incomingHTML()}
-${all.length ? `<section class="md-list">${all.map(itemHTML).join("")}</section>` : '<p class="md-empty">No dictations yet. Tap “+ New dictation” to make the first one.</p>'}
-<section class="card"><h3>Got a link from another parent?</h3>
+<section class="card md-getlink"><h3>Got a link from another parent?</h3>
   <p class="hint">Paste the link (or the whole message) here and tap Add.</p>
   <div class="md-line"><input class="md-in" id="code" autocomplete="off" placeholder="https://…#add=…" aria-label="Link or code"><button class="btn" type="button" data-act="addcode">Add</button></div>
   <p class="md-msg" id="cmsg"></p></section>
+${incomingHTML()}
+${all.length ? `<section class="md-list">${all.map(itemHTML).join("")}</section>` : '<p class="md-empty">No dictations yet. Tap “+ New dictation” to make the first one.</p>'}
 <p class="note">Your dictations are kept on this device, in this browser. Clearing the browser's data deletes them: share them to keep a copy.</p>`;
     // the share links are made now, so a tap on Share can open the device's share menu at once
     all.forEach((d) =>
