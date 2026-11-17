@@ -7,7 +7,51 @@
 // "Subjects" for subject pages that hold the lessons and dictations of every term (no term: field).
 // hub: true → the card opens a list page ("Open →") instead of a game.
 // school: "optima" → shown when Optima is chosen in the school switch (no school: field = SJAS); see SCHOOLS in index.js.
+// period: "Games" (no grade:, no term:) → the Games part of the side bar: shown once, with every grade filter.
 window.GAMES = [
+  {
+    period: "Games",
+    subject: "Dictations",
+    title: "My dictations",
+    hub: true,
+    lesson:
+      "Make a dictation for any grade: paste the words, check the pictures, play",
+    topics:
+      "Your own word lists with emoji pictures · Learn, Match, Listen & spell, Build the word · English, Українська, Français, العربية · share a link with other parents",
+    path: "my-dictations/index.html",
+    countLabel: "Made on this device",
+    // Arabic plays with the Arabic lesson engine: offline through the Grade 3 Arabic entry's list
+    also: [
+      "my-dictations/maker.js",
+      "my-dictations/play.html",
+      "my-dictations/play.js",
+      "my-dictations/play-ar.html",
+      "my-dictations/play-ar.js",
+      "shared/emoji-words-en.js",
+      "shared/emoji-words-uk.js",
+      "shared/emoji-words-fr.js",
+      "shared/emoji-words-ar.js",
+    ],
+  },
+  {
+    period: "Games",
+    subject: "Math",
+    title: "Multiplication games",
+    lesson: "Times tables 2–12 or random",
+    topics: "Mixed-up sums to type, rockets to blow up, memory and matching",
+    path: "grade-4/math/times/index.html#games", // #games: its top link goes back to Games
+    countLabel: "× 2–12 · 🎲 random",
+    // times.js is offline through the Grade 4 Math entry's "also"
+  },
+  {
+    period: "Games",
+    subject: "Math",
+    title: "Division games",
+    lesson: "Divide by 2–12 or random",
+    topics: "Mixed-up sums to type, rockets to blow up, memory and matching",
+    path: "grade-4/math/times/division.html#games", // #games: its top link goes back to Games
+    countLabel: "÷ 2–12 · 🎲 random",
+  },
   {
     grade: 3,
     term: 1,

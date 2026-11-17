@@ -33,6 +33,7 @@
     "Mid-term exam",
     "Final exam",
     "Subjects",
+    "Games",
     "Mid-term 1",
     "Final term 1",
     "Term 1",
@@ -62,8 +63,11 @@
     Verbs: "var(--speech)",
     Body: "var(--speech)",
     Grammar: "var(--speech)",
+    Dictations: "var(--blue)",
   };
   const ALL = window.GAMES || [];
+  // the Games part (games.js period "Games"): for every grade, so they have no grade and are kept out of the grade filter
+  const forAll = (g) => g.period === "Games";
   const esc = (s) =>
     String(s).replace(
       /[&<>"]/g,
@@ -110,13 +114,15 @@
     SCH = SCHOOLS.find((s) => s.k === school);
     games = ALL.filter((g) => (g.school || "sjas") === school);
     const order = SCH.by ? Object.keys(SCH.by.names) : [];
-    grades = [...new Set(games.map(lv))].sort((a, b) =>
-      SCH.by ? order.indexOf(a) - order.indexOf(b) : a - b,
+    grades = [...new Set(games.filter((g) => !forAll(g)).map(lv))].sort(
+      (a, b) => (SCH.by ? order.indexOf(a) - order.indexOf(b) : a - b),
     );
     terms = SCH.revisions
       ? [
           ...new Set(
-            games.filter((g) => g.period !== "Subjects").map((g) => g.term),
+            games
+              .filter((g) => g.period !== "Subjects" && !forAll(g))
+              .map((g) => g.term),
           ),
         ].sort((a, b) => a - b)
       : [];
@@ -191,7 +197,9 @@
     document.getElementById("filters").innerHTML = ["all", ...grades]
       .map((v) => {
         const n =
-          v === "all" ? games.length : games.filter((g) => lv(g) === v).length;
+          v === "all"
+            ? games.length
+            : games.filter((g) => forAll(g) || lv(g) === v).length;
         return `<button type="button" id="f-${v}" data-g="${v}" aria-pressed="${String(v) === String(grade)}"><b>${v === "all" ? (SCH.by ? SCH.by.all : "All grades") : esc(lvName(v))}</b><small>${n} game${n === 1 ? "" : "s"}</small></button>`;
       })
       .join("");
@@ -208,9 +216,10 @@
           slide([panel()], dir);
         }),
     );
-    // the side bar: Subjects, then Revision T1, T2 … (only the terms with revisions); the grade filter applies to every part
+    // the side bar: Subjects, Games, then Revision T1, T2 … (only the terms with revisions); the grade filter applies
+    // to every part but Games
     const pool = games.filter(
-      (g) => grade === "all" || String(lv(g)) === String(grade),
+      (g) => forAll(g) || grade === "all" || String(lv(g)) === String(grade),
     );
     const parts = [
       {
@@ -220,41 +229,54 @@
         f: (g) => g.period === "Subjects",
         html: subjectCards,
       },
+      {
+        k: "games",
+        ic: "🎮",
+        t: "Games",
+        f: forAll,
+        once: true,
+        html: subjectCards,
+      },
       ...terms.map((t) => ({
         k: "t" + t,
         ic: "📝",
         t: "Revision T" + t,
-        f: (g) => g.period !== "Subjects" && g.term === t,
+        f: (g) => g.period !== "Subjects" && !forAll(g) && g.term === t,
         html: (gs, gr) => revisions(gs, gr, t),
       })),
-    ].map((p) => {
-      const gs = pool.filter(p.f);
-      // a revision part shows every grade that has revisions in any term, so Mid-term / Final say "No revisions yet"
-      const shown = grades.filter((gr) =>
-        (p.k === "subjects"
-          ? gs
-          : pool.filter((g) => g.period !== "Subjects")
-        ).some((g) => lv(g) === gr),
-      );
-      return {
-        k: p.k,
-        ic: p.ic,
-        t: p.t,
-        n: gs.length,
-        html: shown.length
-          ? shown
-              .map((gr) => {
-                const n = gs.filter((g) => lv(g) === gr).length;
-                // no side bar (only Subjects): the heading names the part
-                return `<section class="grade"><h2>${esc(lvName(gr))}<small>${n} game${n === 1 ? "" : "s"}</small></h2>${terms.length ? "" : `<h3>${esc(p.t)}</h3>`}${p.html(
-                  gs.filter((g) => lv(g) === gr),
-                  gr,
-                )}</section>`;
-              })
-              .join("")
-          : '<p class="empty">No games for this choice yet.</p>',
-      };
-    });
+    ]
+      .map((p) => {
+        const gs = pool.filter(p.f);
+        // a revision part shows every grade that has revisions in any term, so Mid-term / Final say "No revisions yet"
+        const shown = grades.filter((gr) =>
+          (p.k === "subjects"
+            ? gs
+            : pool.filter((g) => g.period !== "Subjects")
+          ).some((g) => lv(g) === gr),
+        );
+        return {
+          k: p.k,
+          ic: p.ic,
+          t: p.t,
+          n: gs.length,
+          // Games: the same cards for every grade, shown once
+          html: p.once
+            ? p.html(gs)
+            : shown.length
+              ? shown
+                  .map((gr) => {
+                    const n = gs.filter((g) => lv(g) === gr).length;
+                    // no side bar (only Subjects): the heading names the part
+                    return `<section class="grade"><h2>${esc(lvName(gr))}<small>${n} game${n === 1 ? "" : "s"}</small></h2>${terms.length ? "" : `<h3>${esc(p.t)}</h3>`}${p.html(
+                      gs.filter((g) => lv(g) === gr),
+                      gr,
+                    )}</section>`;
+                  })
+                  .join("")
+              : '<p class="empty">No games for this choice yet.</p>',
+        };
+      })
+      .filter((p) => p.k !== "games" || p.n); // a school without Games cards: no Games button
     const all = parts.map((p) => p.k);
     Kit.sideNav(document.getElementById("list"), parts, {
       open: sec,

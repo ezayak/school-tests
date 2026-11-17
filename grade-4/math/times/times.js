@@ -7,6 +7,7 @@
 //   🔗 Matching:  check at the end, or a right pair disappears (a choice); 6, 8 or 12 pairs (a choice)
 // Division: the same games with n · k ÷ n (48 ÷ 6); Random from 4 ÷ 2 … 144 ÷ 12.
 // Saved on the device (key "tg-math4" / "tg-div4"): the number picked, the choices, the best scores and steps, the rocket speed.
+// Opened from the home page's Games part (index.html#games, games.js): the top link goes back there, not to the Math lessons.
 (function () {
   "use strict";
   const { esc } = Kit;
@@ -30,6 +31,7 @@
       localStorage.setItem(k, JSON.stringify(v));
     } catch (e) {}
   };
+  const FROM_GAMES = location.hash === "#games";
   let pick = get(KEY + "-n", 2);
   if (pick !== "r" && !NUMS.includes(pick)) pick = 2;
 
@@ -188,7 +190,7 @@
   function home() {
     const list = tiles();
     app.innerHTML = `<section class="card">
-    <div class="topbar"><a class="back" href="../index.html">← Math lessons</a><span class="eyebrow">Grade 4 · Math</span></div>
+    <div class="topbar">${FROM_GAMES ? '<a class="back" href="../../../index.html">← Games</a>' : '<a class="back" href="../index.html">← Math lessons</a>'}<span class="eyebrow">Grade 4 · Math</span></div>
     <h1 class="hero-title"><span class="p">${DIV ? "Division" : "Multiplication"}</span> <span class="k">games</span></h1>
     <p class="howto">Pick a ${DIV ? "number to divide by" : "times table"}, or 🎲 Random for all of them. 🎲 Mixed up: type each answer on the number pad. 🚀 Rockets: tap the right answer before the rocket flies away. 🧠 Memory: turn over two cards to find a sum and its answer. 🔗 Matching: tap a sum, then its answer.</p>
   </section>
