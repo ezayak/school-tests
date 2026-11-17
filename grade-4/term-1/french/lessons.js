@@ -19,5 +19,13 @@ window.FR_LESSONS = {
       cover: "img/lesson-2/comic.jpg",
       note: "Story · 25 words · 6 games · 8 exercises",
     },
+    {
+      n: 3,
+      title: "Quel âge tu as ?",
+      en: "How old are you? · Les nombres de 1 à 10, le verbe avoir, J’ai … ans, le son « ain », les liaisons",
+      path: "lesson-3.html",
+      cover: "img/lesson-3/comic.jpg",
+      note: "Story · 35 words · 7 games · 9 exercises",
+    },
   ],
 };
