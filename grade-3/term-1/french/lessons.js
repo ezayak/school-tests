@@ -9,7 +9,7 @@ const BOOK = [
     en: "Welcome! · menu, taxi, croissant…, Lève-toi !, Lis !…, the alphabet, the new friends",
     path: "unite-0.html",
     cover: "img/unite-0/amis.jpg",
-    note: "Livre p. 4–7 · 12 instructions · 10 words · 4 games · 8 exercises",
+    note: "Livre p. 4–7 · 1 video · 12 instructions · 10 words · 4 games · 8 exercises",
   },
 ];
 const TEACHER = [

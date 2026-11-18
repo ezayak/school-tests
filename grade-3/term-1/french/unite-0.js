@@ -1,7 +1,8 @@
 // Français · Grade 3 · Léo et Théo Plus 1 · Unité 0 « Bienvenue ! » (Livre p. 4–7): Tu parles déjà français !,
 // Que fais-tu à l’école ?, L’alphabet, the new friends. Book exercises only (the teacher's lessons are lesson-N.js).
 // Left out: ex. 2 (Connais-tu d’autres mots français ?), ex. 7 (song, no words printed), ex. 8 (Loto des lettres, a class game).
-// The engine is grade-4/term-1/french/french-lesson.js. Pictures: img/unite-0/<name>.jpg (cropped from the book scan out4, out5).
+// The engine is grade-4/term-1/french/french-lesson.js. Pictures: img/unite-0/<name>.jpg (cropped from the book scan out4, out5, own size).
+// Video: video/video-0.mp4 (the book's VIDEO_0, re-encoded to 480p; online only).
 (function () {
   // ex. 1: [word, picture, number in the book, English, Українська, العربية]
   const W = [
@@ -201,6 +202,7 @@
     n: 0,
     key: "fr3-u0",
     imgDir: "unite-0",
+    native: true,
     label: "Unité 0",
     grade: 3,
     title: "Bienvenue !",
@@ -213,6 +215,14 @@
     learn: [
       { k: "story", img: "leve" },
       { k: "words", img: "croissant" },
+      {
+        k: "video",
+        v: "video-0",
+        t: "L’alphabet",
+        en: "Video: the alphabet",
+        from: "Livre p. 6 ex. 5",
+        img: "alphabet",
+      },
     ],
     play: [
       { k: "listen", img: "taxi" },
