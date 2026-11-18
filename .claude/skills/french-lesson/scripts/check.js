@@ -31,7 +31,9 @@ const SRC = [L].concat((L.use || []).map((n) => DATA[n]).filter(Boolean));
 const bad = [];
 const notes = [];
 const IMG = (n) =>
-  n.includes("/") ? `img/${n}.jpg` : `img/lesson-${L.n}/${n}.jpg`;
+  n.includes("/")
+    ? `img/${n}.jpg`
+    : `img/${L.imgDir || "lesson-" + L.n}/${n}.jpg`;
 const usedImgs = new Set();
 function pic(o, where) {
   if (!o || (!o.img && !o.emoji)) return bad.push("no picture: " + where);
@@ -236,10 +238,10 @@ if ((L.play || []).some((m) => m.k === "ilelle") || (L.verb && !L.verb.games))
   );
 
 // --- picture files: used, and listed in games.js
-const folder = path.join(dir, `img/lesson-${L.n}`);
+const folder = path.join(dir, `img/${L.imgDir || "lesson-" + L.n}`);
 const games = fs.readFileSync("games.js", "utf8");
 const inAlso = (rel) => games.includes(`"${path.join(dir, rel)}"`);
-if (/^\d+$/.test(String(L.n)) && fs.existsSync(folder)) {
+if ((L.imgDir || /^\d+$/.test(String(L.n))) && fs.existsSync(folder)) {
   const allJs = fs
     .readdirSync(dir)
     .filter((f) => f.endsWith(".js"))
@@ -247,11 +249,11 @@ if (/^\d+$/.test(String(L.n)) && fs.existsSync(folder)) {
     .join("\n");
   for (const f of fs.readdirSync(folder)) {
     const name = f.replace(/\.jpg$/, "");
-    const rel = `img/lesson-${L.n}/${f}`;
+    const rel = `img/${L.imgDir || "lesson-" + L.n}/${f}`;
     if (
       !usedImgs.has(rel) &&
       !allJs.includes(`"${name}"`) &&
-      !allJs.includes(`lesson-${L.n}/${name}"`)
+      !allJs.includes(`${L.imgDir || "lesson-" + L.n}/${name}"`)
     )
       bad.push("picture not used: " + rel);
     if (!inAlso(rel)) bad.push("picture not in games.js also: " + rel);

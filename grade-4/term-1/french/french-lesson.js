@@ -69,9 +69,13 @@
 
   /* ================= lesson ================= */
   const L = window.LESSON;
+  // a lesson's picture folder: img/lesson-N, or its own (Grade 3 book: imgDir "unite-1")
+  const DIR = (X) => X.imgDir || `lesson-${X.n}`;
+  // its saved tab: by number, or by its own key (Grade 3 book: "fr3-u1")
+  const KEY = L.key || L.n;
   // "bouli" → this lesson's folder; "lesson-1/bouli" → another lesson's folder
   const IMG = (n) =>
-    n.includes("/") ? `img/${n}.jpg` : `img/lesson-${L.n}/${n}.jpg`;
+    n.includes("/") ? `img/${n}.jpg` : `img/${DIR(L)}/${n}.jpg`;
   // other lessons loaded on the page (a revision): their translations and exercises can be used
   const DATA = window.FR_DATA || {};
   const SRC = [L].concat((L.use || []).map((n) => DATA[n]).filter(Boolean));
@@ -333,7 +337,7 @@
     { k: "dictee", ic: "🎧", t: "Dictée", en: "Spelling" },
     { k: "ex", ic: "✏️", t: "Exercices", en: "School exercises" },
   ].filter((t) => t.k === "ex" || L[t.k]);
-  let tab = store.get("fr-tab-" + L.n, TABS[0].k);
+  let tab = store.get("fr-tab-" + KEY, TABS[0].k);
   if (!TABS.some((t) => t.k === tab)) tab = TABS[0].k;
   function home() {
     hush();
@@ -384,7 +388,7 @@
       (b) =>
         (b.onclick = () => {
           tab = b.dataset.tab;
-          store.set("fr-tab-" + L.n, tab);
+          store.set("fr-tab-" + KEY, tab);
           home();
         }),
     );
@@ -928,7 +932,7 @@
   function refItems(ref) {
     const [n, k] = ref.split(":");
     const R = DATA[n];
-    const p = (im) => (im && !im.includes("/") ? `lesson-${R.n}/${im}` : im);
+    const p = (im) => (im && !im.includes("/") ? `${DIR(R)}/${im}` : im);
     return R.exercises
       .find((x) => x.k === k)
       .items.map((it) => ({
