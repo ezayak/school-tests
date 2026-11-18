@@ -69,6 +69,8 @@
 
   /* ================= lesson ================= */
   const L = window.LESSON;
+  // native: the pictures are small scans (Grade 3 book): shown at their own size in the middle of the box, never stretched
+  if (L.native) document.body.classList.add("native");
   // a lesson's picture folder: img/lesson-N, or its own (Grade 3 book: imgDir "unite-1")
   const DIR = (X) => X.imgDir || `lesson-${X.n}`;
   // its saved tab: by number, or by its own key (Grade 3 book: "fr3-u1")
@@ -314,6 +316,7 @@
     bword: { t: "Construis le mot", en: "Build the word" },
     bsent: { t: "Construis la phrase", en: "Build the sentence" },
     ilelle: { t: "Il ou Elle ?", en: "He or she?" },
+    video: { t: "La vidéo", en: "Watch the video" },
   };
   const menu = (list) =>
     (list || []).map((m) => ({
@@ -324,9 +327,9 @@
     }));
   const LEARN = menu(L.learn);
   const PLAY = menu(L.play);
-  // id: m-story, m-ou (a sound), m-game6 (game tiles are numbered: a lesson can have several)
+  // id: m-story, m-ou (a sound), m-game6, m-video0 (game and video tiles are numbered: a lesson can have several)
   const mAttr = (m, i) =>
-    `data-m="${m.k}" data-i="${i}" id="m-${m.s || (m.k === "game" ? "game" + i : m.k)}"`;
+    `data-m="${m.k}" data-i="${i}" id="m-${m.s || (m.k === "game" || m.k === "video" ? m.k + i : m.k)}"`;
   function tile(m, data) {
     return `<button type="button" class="mode" ${data}>${pic(m, "thumb")}<b>${esc(m.t)}</b><small>${esc(m.en)}</small></button>`;
   }
@@ -430,6 +433,7 @@
           bword: gameBuildWord,
           bsent: chooseSent,
           ilelle: gameIlElle,
+          video: () => videoView(m),
           game: () => run(m.t, shuf(m.items)),
         })[m.k]();
     });
@@ -440,6 +444,28 @@
       .querySelectorAll("[data-d]")
       .forEach((b) => (b.onclick = () => dicteeView(L.dictee[+b.dataset.d])));
     document.title = `${L.title} · Français ${L.label || "Leçon " + L.n}`;
+  }
+
+  /* ================= LEARN: a video ================= */
+  // m = {k: "video", v: "cartoon-1", t, en, from}: video/<v>.mp4 next to the lesson, poster video/<v>.jpg.
+  // Videos are online only (sw.js never saves /video/): a message when there is no internet.
+  function videoView(m) {
+    hush();
+    app.innerHTML = `${titleBar(m.t)}<section class="card pop fc">
+    ${m.from ? `<span class="qtype">${esc(m.from)}</span>` : ""}
+    <div class="vbox" id="vbox"></div>
+  </section>`;
+    bindHome();
+    const b = document.getElementById("vbox");
+    const off = () => {
+      b.innerHTML = `<div class="voff">📶<b>You need the internet to watch the video.</b><span>Connect to Wi-Fi and open this page again.</span></div>`;
+    };
+    if (navigator.onLine === false) return off();
+    b.innerHTML = `<video controls playsinline preload="none" poster="video/${esc(m.v)}.jpg"><source src="video/${esc(m.v)}.mp4" type="video/mp4"></video>`;
+    const v = b.querySelector("video");
+    v.addEventListener("error", off, true);
+    v.querySelector("source").addEventListener("error", off);
+    top0();
   }
 
   /* ================= LEARN: story ================= */

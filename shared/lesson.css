@@ -2166,3 +2166,25 @@ details.book[open] .alltext {
   color: #1b2440;
   text-align: center;
 }
+
+/* a lesson video (French book units) */
+.vbox video {
+  display: block;
+  width: 100%;
+  max-height: 75vh;
+  background: #000;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+}
+
+/* native: small book scans at their own size, in the middle of the box (body.native, French book units) */
+.native .pic:not(.face):not(.face2) img,
+.native .thumb img {
+  object-fit: scale-down;
+}
+.native .pic.wide img,
+.native .pic.strip img {
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}

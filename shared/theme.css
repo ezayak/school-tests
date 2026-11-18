@@ -619,3 +619,22 @@ button:focus-visible {
     margin-left: auto;
   }
 }
+
+/* a school video that needs the internet (Computer and French lessons) */
+.voff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  padding: 22px 14px;
+  border: 2.5px dashed var(--muted);
+  border-radius: 12px;
+  font-size: 1.05rem;
+}
+.voff:first-line {
+  font-size: 2.4rem;
+}
+.voff span {
+  color: var(--muted);
+}
