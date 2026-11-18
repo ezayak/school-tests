@@ -44,8 +44,25 @@
     <h1 class="hero-title"><span class="p">Français</span> <span class="k">Leçons</span></h1>
     <p class="howto">Pick a lesson. Each lesson has the story with pictures and sound, the words, games (listen, match, build the word, build the sentence) and the school exercises.</p>
   </section>
-  <div class="items">${LS.items.map((it) => Kit.lessonCard(it, "Leçon")).join("")}</div>
-  <div class="soon">New lessons will be added here.</div>`;
+  ${
+    LS.groups
+      ? `<div id="secs"></div>`
+      : `<div class="items">${LS.items.map((it) => Kit.lessonCard(it, "Leçon")).join("")}</div>
+  <div class="soon">New lessons will be added here.</div>`
+  }`;
+    // groups: one section per group in the side bar (Grade 3: the book's units · the teacher's lessons);
+    // a group's label is its cards' word ("Unité 1"), an empty group says what is coming
+    if (LS.groups)
+      Kit.sideNav(
+        document.getElementById("secs"),
+        LS.groups.map((g) => ({
+          k: g.k,
+          ic: g.ic,
+          t: g.t,
+          n: g.items.length,
+          html: `${g.intro ? `<p class="howto">${esc(g.intro)}</p>` : ""}${g.items.length ? `<div class="items">${g.items.map((it) => Kit.lessonCard(it, g.label || "Leçon")).join("")}</div>` : `<div class="soon">${esc(g.empty || "Coming soon.")}</div>`}`,
+        })),
+      );
     document.title = `French · Grade ${LS.grade}`;
     return;
   }
