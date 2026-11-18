@@ -1,6 +1,6 @@
 ---
 name: french-lesson
-description: Build or update French lessons and revisions (Grade 4 Alex, grade-4/term-1/french/lesson-N.js; Grade 3 Lucas, grade-3/term-1/french/) for the school-tests study games from the teacher's lesson slides (« Leçon 3 Quel âge tu as »), the scanned Français plus 1 book and cahier pages, and the school sheets (Travail de classe, Devoir noté, Exercices d'application, Modèle de réponse) in ~/Documents/2026-2027/Alex/French/ or ~/Documents/2026-2027/Lucas/French/. Use this whenever the user sends or mentions French slides, book or cahier pages, a French sheet or homework, a French lesson or revision ("Leçon 3", "le verbe avoir", "les nombres"), asks to add, update or check French lessons, change the French engine, or asks which French pages are already built, even if they don't say "lesson".
+description: Build or update French lessons and revisions (Grade 4 Alex, grade-4/term-1/french/lesson-N.js; Grade 3 Lucas, grade-3/term-1/french/: book lessons unite-N.js from « Léo et Théo Plus 1 » and the teacher's lessons) for the school-tests study games from the Léo et Théo book scans (~/Documents/2026-2027/Lucas/French/book/), the teacher's lesson slides (« Leçon 3 Quel âge tu as »), the scanned Français plus 1 book and cahier pages, and the school sheets (Travail de classe, Devoir noté, Exercices d'application, Modèle de réponse) in ~/Documents/2026-2027/Alex/French/ or ~/Documents/2026-2027/Lucas/French/. Use this whenever the user sends or mentions French slides, book or cahier pages, a French sheet or homework, a French lesson, unit or revision ("Leçon 3", "Unité 2", "Léo et Théo", "le verbe avoir", "les nombres"), asks to add, update or check French lessons, change the French engine, or asks which French pages are already built, even if they don't say "lesson".
 ---
 
 # French lessons and revisions (Grade 3 and 4)
@@ -74,3 +74,16 @@ npx --no-install prettier --write <changed files>; node --check <each .js>
 - `lessons.js` card; in `games.js` the French entry's `also` (the `.html`, `.js`, every picture), `countLabel` ("N lessons") and `topics`; `VERSION` bump in `sw.js` last, in its own commit.
 - Report: what was built (by book / cahier / sheet page), what was left out and why (listening, open speaking, pages for later), unverified answers, typos fixed, words or names to ask about. Then wait for approval.
 - Commits when approved: engine change · lesson · formatting-only (if any) · `sw.js` bump. No Co-Authored-By line (CLAUDE.md).
+
+## 7. Grade 3: book lessons (« Léo et Théo Plus 1 »)
+
+Grade 3 has two groups on its French page (`groups` in `grade-3/term-1/french/lessons.js`, side bar by `Kit.sideNav`):
+**Léo et Théo Plus 1** (`BOOK`, one lesson per Unité, book exercises only) and **Teacher's lessons** (`TEACHER`, the teacher's slides and sheets).
+Never mix them: a sheet task goes into a teacher's lesson, a book task into a book lesson, even when the topic is the same.
+
+- The plan, the file → page map and what is built: `grade-3/term-1/french/SOURCES.md`. Read it first and update its rows in the same commit as the lesson.
+- Scan: `~/Documents/2026-2027/Lucas/French/book/outN.png`, a two-page spread per file; the file number is **not** the page number (use the map).
+  Crop straight from the PNG with PIL (no `pdftoppm`); the spread is 1399×891, so a panel is about 300–650px wide: keep it at its size, don't upscale past ~700px.
+- Files `unite-N.js` / `.html`, pictures `img/unite-N/`; `from: "Livre p. N ex. M"` with the printed page number.
+- Before the first book lesson: the engine change from SOURCES.md (`L.key` / `L.imgDir`), in its own stage, with the old-vs-new compare.
+- Video: an mp4 per lesson with a start time, sent by the user; online only (not precached), like `videoHTML` in `shared/computer-lesson.js`.

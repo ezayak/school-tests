@@ -145,6 +145,8 @@ Rules for every French file:
 - Then: entry in `lessons.js` (lesson) or a "Final exam" / "Mid-term exam" card in `games.js` (revision); new files and pictures in `also` of the French entry, plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 - Grade 3: `grade-3/term-1/french/` (Lessons 1–4 and `revision-1`, the same format); pages load the engine from `../../../grade-4/term-1/french/french-lesson.js`.
   Grade 3 has no book slides after « La présentation »: a lesson is a topic sheet (Les salutations, Les consignes de la classe) or a topic of the sheets (Les lettres et les mots).
+- Grade 3 French page has two groups in the side bar (`groups` in `lessons.js`): **Léo et Théo Plus 1** = the book (`~/Documents/2026-2027/Lucas/French/book/`), one lesson `unite-N` per Unité,
+  book exercises only; **Teacher's lessons** = `lesson-N` from the teacher's slides and sheets. Never mix the two. Plan and page map: `grade-3/term-1/french/SOURCES.md`; procedure: the `french-lesson` skill, section 7.
 - A change to the engine must leave the existing lessons as they were: render every screen of the old and new version with the same `Math.random` seed and compare (headless Chrome: `google-chrome --headless=new --dump-dom` on a harness page that clicks through an iframe), then play every game and exercise to the score screen.
 - Check in the browser: the list, each tab, the sound and rule screens, translations on, one exercise of each type.
 
