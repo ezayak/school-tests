@@ -2,7 +2,16 @@
 // The pages use the Grade 4 engine: ../../../grade-4/term-1/french/french-lesson.js
 // Two groups in the side bar: the book « Léo et Théo Plus 1 » (one lesson per Unité, book exercises only)
 // and the teacher's lessons (her slides and sheets).
-const BOOK = [];
+const BOOK = [
+  {
+    n: 0,
+    title: "Bienvenue !",
+    en: "Welcome! · menu, taxi, croissant…, Lève-toi !, Lis !…, the alphabet, the new friends",
+    path: "unite-0.html",
+    cover: "img/unite-0/amis.jpg",
+    note: "Livre p. 4–7 · 12 instructions · 10 words · 4 games · 8 exercises",
+  },
+];
 const TEACHER = [
   {
     n: 1,
