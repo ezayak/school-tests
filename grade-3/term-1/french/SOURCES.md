@@ -22,7 +22,10 @@ Scan: `~/Documents/2026-2027/Lucas/French/book/outN.png`, one two-page spread pe
   Écoute et dis le numéro → `tap`; Remets dans l'ordre → `order`; Cherche les mots avec le son → `letters` / `mc`.
 - Left out (list them in the table): Brico (crafts), Joue / Joue au… with a classmate, Dessine, Mime, the « Mes compétences » projects
   (only their reading questions go in, into the unit before them).
-- Video: an mp4 file per lesson with a start time, from the user (`video/` next to the lesson, not precached: online only, like the Computer lessons' school videos).
+- Videos: the book's mp4s in `book/` (CARTOON_UNITE-N = the opening comic, VIDEO_N = the unit's VIDÉO exercise, VIDEO_AUTOUR_DE_TOI_N = Le monde autour de toi, VIDEO_CIVILISATION_1/2),
+  re-encoded to 480p (`ffmpeg -vf scale=-2:480 -crf 28`, ~1–5 MB) into `video/` as `cartoon-N`, `video-N`, `autour-N`, `civilisation-N` with a `.jpg` poster.
+  A `video` tile in Learn (`{k: "video", v, t, en, from, img}`); not in `also` (online only). Each video is committed with its unit. No VIDEO_1 file (p. 12 ex. 8).
+- Pictures: `native: true` (shown at their own size); crops are never upscaled.
 - One lesson at a time: build, check (`french-lesson` skill scripts), show, wait for approval, commit; `VERSION` bump in `sw.js` last.
 - Order: Unité 0 → 1 → 2 → 3 → 4 → 5 → 6, then « Vive les fêtes ! », « Grand jeu de l'oie » (revision game), Projet de lecture (a story).
 
@@ -34,10 +37,10 @@ Scan: `~/Documents/2026-2027/Lucas/French/book/outN.png`, one two-page spread pe
 | out3        | 2–3   | Tableau des contenus                                                                            | skipped (contents)                                                                              |
 | out4        | 4–5   | Unité 0 Bienvenue ! · Tu parles déjà français ? · Que fais-tu à l'école ? (consignes)           | `unite-0` · mots, relie, consignes, jacques (ex. 2 left out: open question)                     |
 | out5        | 6–7   | Unité 0 · L'alphabet (voyelles, consonnes, prénoms épelés)                                      | `unite-0` · voyelles, reponds, prenoms, epelle (ex. 7 song with no words, ex. 8 Loto: left out) |
-| out7        | 8–9   | Unité 1 Salut, les amis ! · comic, Léo et Théo                                                  | not yet · `unite-1`                                                                             |
-| out8        | 10–11 | Unité 1 · Comment tu t'appelles ? · Les salutations                                             | not yet · `unite-1`                                                                             |
-| out10       | 12–13 | Unité 1 · Comment ça va ? · Chante ! Bonjour, les amis ! · Boîte à sons : l'intonation          | not yet · `unite-1`                                                                             |
-| out11       | 14–15 | Unité 1 · Saluer et accueillir (le monde autour de toi) · Brico : marionnettes à doigts         | not yet · `unite-1`                                                                             |
+| out7        | 8–9   | Unité 1 Salut, les amis ! · comic, Léo et Théo                                                  | `unite-1` · cartoon-1 video, story, qui, joue (ex. 2 song: in the story)                        |
+| out8        | 10–11 | Unité 1 · Comment tu t'appelles ? · Les salutations                                             | `unite-1` · story, tappelles, epelle, salutations, observe (unverified)                         |
+| out10       | 12–13 | Unité 1 · Comment ça va ? · Chante ! Bonjour, les amis ! · Boîte à sons : l'intonation          | `unite-1` · words, cava, montre (unverified), story: song and intonation (ex. 8 video: no file) |
+| out11       | 14–15 | Unité 1 · Saluer et accueillir (le monde autour de toi) · Brico : marionnettes à doigts         | `unite-1` · accueillir, monde, civilisation-1 video (ex. 2 open, ex. 4 mime, Brico: left out)   |
 | out12       | 16–17 | Unité 2 Voici ma famille ! · comic · Vrai ou faux · Réponds · Chante ! Ma famille               | not yet · `unite-2`                                                                             |
 | out14       | 18–19 | Unité 2 · Ma famille · Quel âge as-tu ? (les nombres de 0 à 12)                                 | not yet · `unite-2`                                                                             |
 | out15       | 20–21 | Unité 2 · Les animaux domestiques · Chante ! La famille Hurluberlu · Boîte à sons : le son [y]  | not yet · `unite-2`                                                                             |

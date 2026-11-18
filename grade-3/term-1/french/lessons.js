@@ -11,6 +11,14 @@ const BOOK = [
     cover: "img/unite-0/amis.jpg",
     note: "Livre p. 4–7 · 1 video · 12 instructions · 10 words · 4 games · 8 exercises",
   },
+  {
+    n: 1,
+    title: "Salut, les amis !",
+    en: "Hi, friends! · Je m’appelle…, Bonjour, Bonsoir, Bonne nuit, Comment ça va ?",
+    path: "unite-1.html",
+    cover: "img/unite-1/amis.jpg",
+    note: "Livre p. 8–15 · 2 videos · 14 words · 4 games · 10 exercises",
+  },
 ];
 const TEACHER = [
   {
