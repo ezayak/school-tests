@@ -1,0 +1,937 @@
+# Files already used for the app (one path per line, from ~/Documents/2026-2027). Baseline 2026-11-20: every file there was then, except Alex/Arabic/book/.
+Alex/!booklets/20261031-T2-Classwork-Booklet.pdf
+Alex/!booklets/20261031-T2-Homework-Booklet.pdf
+Alex/!booklets/20261105-G4- Social Studies - Term Two.pdf
+Alex/!booklets/Term 1/G4 - Social Studies Booklet - Term one .pdf
+Alex/!booklets/Term 1/G4 Computer Booklet Term1.pdf
+Alex/!booklets/Term 1/T1- English Classwork-Booklet G4.pdf
+Alex/!booklets/Term 1/T1- English Homework-Booklet G4.pdf
+Alex/!booklets/Term 1/Term 1 Science Booklet Grade 4.pdf
+Alex/Arabic/20261031-8bcb45db-337a-41a9-b1b4-b7c621c91646.pdf
+Alex/Arabic/20261108-دليل.pdf
+Alex/Arabic/Term 1/20261012-1111111111111.pdf
+Alex/Arabic/Term 1/20261019-مراجهة رابعة ( عربي ) معدلة.pdf
+Alex/Arabic/Term 1/20261019-نموذج حل مراجعة العربي رابعة إبتدائي.pdf
+Alex/Arabic/Term 1/20261020-إملاء رابعة .pdf
+Alex/Arabic/Term 1/20261031-8bcb45db-337a-41a9-b1b4-b7c621c91646.pdf
+Alex/Arabic/Term 1/��إجابات كتاب التقييمات اللغة العربية�.pdf
+Alex/Computer/20261105-LU_G4_U2_L2_1_Modify_picture_VT.mp4
+Alex/Computer/20261108-LU_G4_U2_L2_4_Change_pyramids_colors_VT.mp4
+Alex/Computer/20261119-HW1_for_T2-G4.pdf
+Alex/Computer/20261119-LU_G4_U2_L4_1_Read_mode_VT.mp4
+Alex/Computer/20261119-LU_G4_U2_L4_2_Print_options_VT.mp4
+Alex/Computer/Term 1/20260921-LU_G4_U1_L1_1_Search_file_or_folder_VT.mp4
+Alex/Computer/Term 1/20260921-LU_G4_U1_L1_2_Find_file_or_folder_VT (1).mp4
+Alex/Computer/Term 1/20260921-LU_G4_U1_L1_2_Find_file_or_folder_VT.mp4
+Alex/Computer/Term 1/20260921-LU_G4_U1_L1_4_Create_shortcut_VT.mp4
+Alex/Computer/Term 1/20260921-LU_G4_U1_L1_5_Move_shortcut_VT.mp4
+Alex/Computer/Term 1/20260921-LU_G4_U1_L1_6_Create_desktop_shortcut_VT.mp4
+Alex/Computer/Term 1/20260921-LU_G4_U1_L1_7_Delete_shortcut_VT.mp4
+Alex/Computer/Term 1/20260924-HW1_for_T1-G4.pdf
+Alex/Computer/Term 1/20261005-CW1_for_T1-_G4-Model_Answers.pdf
+Alex/Computer/Term 1/20261005-CW2_for_T1-_G4-Model_Answers.pdf
+Alex/Computer/Term 1/20261005-HW1_for_T1-G4_-Model_Answers.pdf
+Alex/Computer/Term 1/20261017-LU_G4_U1_L3_1_Change_date_and_time_VT.mp4
+Alex/Computer/Term 1/20261017-LU_G4_U1_L3_2_Set_time_zone_VT.mp4
+Alex/Computer/Term 1/20261017-LU_G4_U1_L3_3_Change_screen_resolution_VT.mp4
+Alex/Computer/Term 1/20261017-LU_G4_U1_L3_4_Create_favorite_desktop_VT.mp4
+Alex/Computer/Term 1/20261017-LU_G4_U1_L3_5_Adjust_volume_VT.mp4
+Alex/Computer/Term 1/20261017-LU_G4_U1_L4_1_Search_help_VT.mp4
+Alex/Computer/Term 1/20261017-LU_G4_U1_L4_2_Scan_for_viruses_VT.mp4
+Alex/Computer/Term 1/20261017-LU_G4_U1_L4_3_Update_antivirus_VT.mp4
+Alex/Computer/Term 1/20261022-HW2_for_T1-G4.pdf
+Alex/Computer/Term 1/20261024-Screenshot_20261023_180702_Word.jpg
+Alex/Computer/Term 1/20261026-LU_G4_U2_L1_1_Change_indentation_of_paragraph_VT.mp4
+Alex/Computer/Term 1/20261026-LU_G4_U2_L1_2_Change_lines_distance_VT.mp4
+Alex/Computer/Term 1/20261026-LU_G4_U2_L1_3_Change_paragraphs_distance_VT.mp4
+Alex/Computer/Term 1/20261026-LU_G4_U2_L1_4_Add_shading_VT.mp4
+Alex/Computer/Term 1/20261026-LU_G4_U2_L1_5_Add_border_VT.mp4
+Alex/Computer/Term 1/20261026-LU_G4_U2_L1_6_Apply_character_spacing_VT.mp4
+Alex/Computer/Term 1/20261026-LU_G4_U2_L1_7_Show_or_hide_characters_VT.mp4
+Alex/Computer/Term 1/20261028-CW1_for_T1-_G4-Model_Answers.pdf
+Alex/Computer/Term 1/20261028-CW2_for_T1-_G4-Model_Answers.pdf
+Alex/Computer/Term 1/20261028-CW3_for_T1-_G4-Model_Answers.pdf
+Alex/Computer/Term 1/20261028-CW4_for_T1-_G4-Model_Answers.pdf
+Alex/Computer/Term 1/20261028-HW1_for_T1-G4_-Model_Answers.pdf
+Alex/Computer/Term 1/20261028-HW2_for_T1-G4_-Model_Answers.pdf
+Alex/Computer/Term 1/lesson-1.pdf
+Alex/Computer/Term 1/lesson-2.pdf
+Alex/Computer/chapter-1/01.png
+Alex/Computer/chapter-1/02.png
+Alex/Computer/chapter-1/03.png
+Alex/Computer/chapter-1/04.png
+Alex/Computer/chapter-1/05.png
+Alex/Computer/chapter-1/06.png
+Alex/Computer/chapter-1/07.png
+Alex/Computer/chapter-1/08.png
+Alex/Computer/chapter-1/09.png
+Alex/Computer/chapter-1/10.png
+Alex/Computer/chapter-1/11.png
+Alex/Computer/chapter-1/12.png
+Alex/Computer/chapter-1/13.png
+Alex/Computer/chapter-1/14.png
+Alex/Computer/chapter-1/15.png
+Alex/Computer/chapter-1/16.png
+Alex/Computer/chapter-1/17.png
+Alex/Computer/chapter-1/18.png
+Alex/Computer/chapter-1/19.png
+Alex/Computer/chapter-1/stacked.png
+Alex/Computer/chapter-2/01.png
+Alex/Computer/chapter-2/02.png
+Alex/Computer/chapter-2/03.png
+Alex/Computer/chapter-2/04.png
+Alex/Computer/chapter-2/05.png
+Alex/Computer/chapter-2/06.png
+Alex/Computer/chapter-2/07.png
+Alex/Computer/chapter-2/08.png
+Alex/Computer/chapter-2/09.png
+Alex/Computer/chapter-2/10.png
+Alex/Computer/chapter-2/11.png
+Alex/Computer/chapter-2/12.png
+Alex/Computer/chapter-2/13.png
+Alex/Computer/chapter-2/14.png
+Alex/Computer/chapter-2/15.png
+Alex/Computer/chapter-2/stacked.png
+Alex/Computer/chapter-3/2026-10-20_15-45.png
+Alex/Computer/chapter-3/2026-10-20_15-46.png
+Alex/Computer/chapter-3/2026-10-20_15-47.png
+Alex/Computer/chapter-3/2026-10-20_15-47_1.png
+Alex/Computer/chapter-3/2026-10-20_15-48.png
+Alex/Computer/chapter-3/2026-10-20_15-48_1.png
+Alex/Computer/chapter-3/2026-10-20_15-48_2.png
+Alex/Computer/chapter-3/2026-10-20_15-49.png
+Alex/Computer/chapter-3/2026-10-20_15-49_1.png
+Alex/Computer/chapter-3/2026-10-20_15-49_2.png
+Alex/Computer/chapter-3/2026-10-20_15-50.png
+Alex/Computer/chapter-3/2026-10-20_15-50_1.png
+Alex/Computer/chapter-3/2026-10-20_15-50_2.png
+Alex/Computer/chapter-3/2026-10-20_15-51.png
+Alex/Computer/chapter-3/2026-10-20_16-12.png
+Alex/Computer/chapter-3/pics/2026-10-20_16-12_1.png
+Alex/Computer/chapter-3/pics/2026-10-20_16-15.png
+Alex/Computer/chapter-3/pics/2026-10-20_16-15_1.png
+Alex/Computer/chapter-3/pics/2026-10-20_16-16.png
+Alex/Computer/chapter-3/pics/2026-10-20_16-16_1.png
+Alex/Computer/chapter-3/pics/2026-10-20_16-17.png
+Alex/Computer/chapter-3/pics/2026-10-20_16-18.png
+Alex/Computer/chapter-4/2026-10-21_09-13.png
+Alex/Computer/chapter-4/2026-10-21_09-14.png
+Alex/Computer/chapter-4/2026-10-21_09-14_1.png
+Alex/Computer/chapter-4/2026-10-21_09-14_2.png
+Alex/Computer/chapter-4/2026-10-21_09-15.png
+Alex/Computer/chapter-4/2026-10-21_09-15_1.png
+Alex/Computer/chapter-4/2026-10-21_09-16.png
+Alex/Computer/chapter-4/2026-10-21_09-16_1.png
+Alex/Computer/chapter-4/2026-10-21_09-17.png
+Alex/Computer/chapter-4/2026-10-21_09-17_1.png
+Alex/Computer/chapter-4/2026-10-21_09-17_2.png
+Alex/Computer/chapter-4/2026-10-21_09-18.png
+Alex/Computer/chapter-4/2026-10-21_09-18_1.png
+Alex/Computer/chapter-4/2026-10-21_09-18_2.png
+Alex/Computer/chapter-4/2026-10-21_09-19.png
+Alex/Computer/chapter-4/2026-10-21_09-19_1.png
+Alex/Computer/chapter-4/2026-10-21_09-19_2.png
+Alex/Computer/chapter-4/2026-10-21_09-20.png
+Alex/Computer/chapter-4/2026-10-21_09-20_1.png
+Alex/Computer/unit-2/2026-10-24_10-50.png
+Alex/Computer/unit-2/2026-10-24_10-51.png
+Alex/Computer/unit-2/2026-10-24_10-51_1.png
+Alex/Computer/unit-2/2026-10-24_10-51_2.png
+Alex/Computer/unit-2/2026-10-24_10-52.png
+Alex/Computer/unit-2/2026-10-24_10-52_1.png
+Alex/Computer/unit-2/2026-10-24_10-52_2.png
+Alex/Computer/unit-2/2026-10-24_10-52_3.png
+Alex/Computer/unit-2/2026-10-24_10-53.png
+Alex/Computer/unit-2/2026-10-24_10-53_1.png
+Alex/Computer/unit-2/2026-10-24_10-53_2.png
+Alex/Computer/unit-2/2026-10-24_10-53_3.png
+Alex/Computer/unit-2/2026-10-24_10-54.png
+Alex/Computer/unit-2/2026-10-24_10-54_1.png
+Alex/Computer/unit-2/2026-10-24_10-54_2.png
+Alex/Computer/unit-2/2026-10-24_10-54_3.png
+Alex/Computer/unit-2/2026-10-24_10-55.png
+Alex/Computer/unit-2/2026-10-24_10-55_1.png
+Alex/Computer/unit-2/2026-10-24_10-55_2.png
+Alex/Computer/unit-2/2026-10-24_10-55_3.png
+Alex/Computer/unit-2/2026-10-24_10-55_4.png
+Alex/Computer/unit-2/2026-10-24_10-56.png
+Alex/Computer/unit-2/2026-10-24_10-56_1.png
+Alex/Computer/unit-2/2026-10-24_10-56_2.png
+Alex/Computer/unit-2/2026-10-24_10-56_3.png
+Alex/Computer/unit-2/2026-10-24_10-56_4.png
+Alex/Computer/unit-2/2026-10-24_10-57.png
+Alex/Computer/unit-2/2026-10-24_10-57_1.png
+Alex/Computer/unit-2/2026-10-24_10-57_2.png
+Alex/Computer/unit-2/2026-10-24_10-57_3.png
+Alex/Computer/unit-2/2026-10-24_10-57_4.png
+Alex/Computer/unit-2/2026-10-24_10-58.png
+Alex/Computer/unit-2/2026-10-24_10-58_1.png
+Alex/Computer/unit-2/2026-10-24_11-02.png
+Alex/Computer/unit-2/2026-10-24_11-02_1.png
+Alex/Computer/unit-2/2026-10-24_11-02_2.png
+Alex/Computer/unit-2/2026-10-24_11-02_3.png
+Alex/Computer/unit-2/2026-10-24_11-03.png
+Alex/Computer/unit-2/2026-10-24_11-03_1.png
+Alex/Computer/unit-2/2026-10-24_11-03_2.png
+Alex/Computer/unit-2/2026-10-24_11-03_3.png
+Alex/Computer/unit-2/2026-10-24_11-04.png
+Alex/Computer/unit-2/2026-10-24_11-04_1.png
+Alex/Computer/unit-2/2026-10-24_11-04_2.png
+Alex/Computer/unit-2/2026-10-24_11-04_3.png
+Alex/Computer/unit-2/2026-10-24_11-04_4.png
+Alex/Computer/unit-2/2026-10-24_11-05.png
+Alex/Computer/unit-2/2026-10-24_11-05_1.png
+Alex/Computer/unit-2/2026-10-24_11-05_2.png
+Alex/Computer/unit-2/2026-10-24_11-05_3.png
+Alex/Computer/unit-2/2026-10-24_11-05_4.png
+Alex/Computer/unit-2/2026-10-24_11-06.png
+Alex/Computer/unit-2/2026-10-24_11-06_1.png
+Alex/Computer/unit-2/2026-10-24_11-06_2.png
+Alex/Computer/unit-2/2026-10-24_11-06_3.png
+Alex/Computer/unit-2/2026-10-24_11-06_4.png
+Alex/Computer/unit-2/2026-10-24_11-06_5.png
+Alex/Computer/unit-2/2026-10-24_11-07.png
+Alex/Computer/unit-2/2026-10-24_11-07_1.png
+Alex/Computer/unit-2/2026-10-24_11-07_2.png
+Alex/Computer/unit-2/2026-10-24_11-07_3.png
+Alex/Computer/unit-2/2026-10-24_11-08.png
+Alex/Computer/unit-2/2026-10-24_11-08_1.png
+Alex/Computer/unit-2/2026-10-24_11-08_2.png
+Alex/Computer/unit-2/2026-10-24_11-08_3.png
+Alex/Computer/unit-2/2026-10-24_11-08_4.png
+Alex/Computer/unit-2/2026-10-24_11-09.png
+Alex/Computer/unit-2/2026-10-24_11-09_1.png
+Alex/Computer/unit-2/2026-10-24_11-09_2.png
+Alex/Computer/unit-2/2026-10-24_11-09_3.png
+Alex/Computer/unit-2/2026-10-24_11-09_4.png
+Alex/Computer/unit-2/2026-10-24_11-09_5.png
+Alex/Computer/unit-2/2026-10-24_11-10.png
+Alex/Computer/unit-2/2026-10-24_11-10_1.png
+Alex/Computer/unit-2/2026-10-24_11-10_2.png
+Alex/Computer/unit-2/2026-10-24_11-10_3.png
+Alex/Computer/unit-2/2026-10-24_11-11.png
+Alex/Computer/unit-2/2026-10-24_11-11_1.png
+Alex/Computer/unit-2/2026-10-24_11-11_2.png
+Alex/Computer/unit-2/2026-10-24_11-12.png
+Alex/Computer/unit-2/2026-10-24_11-12_1.png
+Alex/Computer/unit-2/2026-10-24_11-12_2.png
+Alex/Computer/unit-2/2026-10-24_11-12_3.png
+Alex/Computer/unit-2/2026-10-24_11-12_4.png
+Alex/Computer/unit-2/2026-10-24_11-13.png
+Alex/Computer/unit-2/2026-10-24_11-13_1.png
+Alex/Computer/unit-2/2026-10-24_11-13_2.png
+Alex/Computer/unit-2/2026-10-24_11-13_3.png
+Alex/Computer/unit-2/2026-10-24_11-13_4.png
+Alex/Computer/unit-2/2026-10-24_11-14.png
+Alex/Computer/unit-2/2026-10-24_11-14_1.png
+Alex/Computer/unit-2/2026-10-24_11-14_2.png
+Alex/Computer/unit-3/lu_g4_se_final_page100.png
+Alex/Computer/unit-3/lu_g4_se_final_page101.png
+Alex/Computer/unit-3/lu_g4_se_final_page102.png
+Alex/Computer/unit-3/lu_g4_se_final_page103.png
+Alex/Computer/unit-3/lu_g4_se_final_page107.png
+Alex/Computer/unit-3/lu_g4_se_final_page108.png
+Alex/Computer/unit-3/lu_g4_se_final_page109-1.png
+Alex/Computer/unit-3/lu_g4_se_final_page109-2.png
+Alex/Computer/unit-3/lu_g4_se_final_page112-1.png
+Alex/Computer/unit-3/lu_g4_se_final_page112-2.png
+Alex/Computer/unit-3/lu_g4_se_final_page112-3.png
+Alex/Computer/unit-3/lu_g4_se_final_page112-4.png
+Alex/Computer/unit-3/lu_g4_se_final_page112-5.png
+Alex/Computer/unit-3/lu_g4_se_final_page113.png
+Alex/Computer/unit-3/lu_g4_se_final_page114-1.png
+Alex/Computer/unit-3/lu_g4_se_final_page115.png
+Alex/Computer/unit-3/lu_g4_se_final_page116.png
+Alex/Computer/unit-3/lu_g4_se_final_page117.png
+Alex/Computer/unit-3/lu_g4_se_final_page118-1.png
+Alex/Computer/unit-3/lu_g4_se_final_page118-2.png
+Alex/Computer/unit-3/lu_g4_se_final_page119.png
+Alex/Computer/unit-3/lu_g4_se_final_page124.png
+Alex/Computer/unit-3/lu_g4_se_final_page125.png
+Alex/Computer/unit-3/lu_g4_se_final_page98-1.png
+Alex/Computer/unit-3/lu_g4_se_final_page98-2.png
+Alex/Computer/unit-3/lu_g4_se_final_page99-1.png
+Alex/English/20261107-Deer, The Nautilus (E) Differentiated Genre Passages.pdf
+Alex/English/20261107-Grammar Combining Sentences.pdf
+Alex/English/20261107-Graphic Organizer 23.pdf
+Alex/English/20261107-Spelling Proofreading.pdf
+Alex/English/20261107-Think Aloud Cloud I wonder ….pdf
+Alex/English/20261111-Dictation-Unit2-Week5.pdf
+Alex/English/20261112-G4-GHW1-U1W5-Grammar-Run-On-Sentences.pdf
+Alex/English/2print/input-book.pdf
+Alex/English/2print/input.pdf
+Alex/English/Term 1/20260921-Dictation_Unit1_Week3.pdf
+Alex/English/Term 1/20260921-T1_Graded_HW_Vocabulary.pdf
+Alex/English/Term 1/20261003-MidTerm.pdf
+Alex/English/Term 1/20261005-Model-answers-1.pdf
+Alex/English/Term 1/20261005-Model-answers-2.pdf
+Alex/English/Term 1/20261005-Model-answers-3.pdf
+Alex/English/Term 1/20261005-Model-answers-4.pdf
+Alex/English/Term 1/20261008-English-Mid_Term1_Memo.pdf
+Alex/English/Term 1/20261008-Grammar Conjunctions.pdf
+Alex/English/Term 1/20261008-Grammar Simple and Compound Sentences.pdf
+Alex/English/Term 1/20261008-Graphic Organizer 23.pdf
+Alex/English/Term 1/20261008-HW-Booklet-Comprehension-Model-Answer-p.12-13&15-16.pdf
+Alex/English/Term 1/20261008-HW-Booklet-Longi.pdf
+Alex/English/Term 1/20261008-Sound Spelling Card Long EE TREE.pdf
+Alex/English/Term 1/20261008-Sound Spelling Card Long I FIVE.pdf
+Alex/English/Term 1/20261008-Stormy Weather (A) Differentiated Genre Passages.pdf
+Alex/English/Term 1/20261008-Stormy Weather (B) Differentiated Genre Passages.pdf
+Alex/English/Term 1/20261008-Stormy Weather (E) Differentiated Genre Passages.pdf
+Alex/English/Term 1/20261008-Stormy Weather (O) Differentiated Genre Passages.pdf
+Alex/English/Term 1/20261008-Think Aloud Cloud I predicted …because ….pdf
+Alex/English/Term 1/20261008-Unit1-Week3-comprehension-skillsp.44-47.pdf
+Alex/English/Term 1/20261008-Unit1-Week3-shared-readp.39-41.pdf
+Alex/English/Term 1/20261017-A Helping Hand (E) Differentiated Genre Passages.pdf
+Alex/English/Term 1/20261017-Grammar Run-On Sentences.pdf
+Alex/English/Term 1/20261017-Graphic Organizer 23.pdf
+Alex/English/Term 1/20261017-Graphic Organizer 3 Central Idea and Relevant Details.pdf
+Alex/English/Term 1/20261017-Sound Spelling Card Long O boat.pdf
+Alex/English/Term 1/20261017-Think Aloud Cloud When I read …, I had to reread ….pdf
+Alex/English/Term 1/20261017-Vocabulary Related Words.pdf
+Alex/English/Term 1/20261019-G4-Dictation-Unit1-Week4.pdf
+Alex/English/Term 1/20261019-Graded-HW-Leveled-Reader-Start_Small_Think_Big.pdf
+Alex/English/Term 1/20261019-Start Small, Think Big.pdf
+Alex/English/Term 1/20261024-Final-Term1-Memo.pdf
+Alex/English/Term 1/20261024-Term1-G4-English-Projects.pdf
+Alex/English/Term 1/20261024-The Dream Team.pdf
+Alex/English/Term 1/20261030-CW-Bookletp.34-35-36.pdf
+Alex/English/Term 1/20261030-HW-Booklet-Comprehension-p.37-38-39.pdf
+Alex/English/Term 1/20261030-HW-Booklet-Comprehension-p40-41-42.pdf
+Alex/English/Term 1/20261030-Long-o-HW-Booklet-p.29-30.pdf
+Alex/English/Term 1/20261030-Unit1Week5-Comprehension-SkillsP.70till73.pdf
+Alex/English/Term 1/20261030-Unit1Week5-Shared-Read-P65till67.pdf
+Alex/English/Term 1/Idioms – Picture Dictionary.pdf
+Alex/English/Term 1/vocabulary-flashcards-mid-term.pdf
+Alex/English/english-book-1.pdf
+Alex/French/20261117-G4 Devoir noté 1 du deuxième terme.pdf
+Alex/French/20261117-Lecon 3 Quel age tu as.pdf
+Alex/French/Term 1/20261010-G4 Devoir noté 1.pdf
+Alex/French/Term 1/20261010-G4 Exercices d'application mi terme 4.pdf
+Alex/French/Term 1/20261010-Lecon 1 La rencontre.pdf
+Alex/French/Term 1/20261010-comprehension1 4 eme primaire.pdf
+Alex/French/Term 1/20261013-G4 Devoir noté1 (Modèle de réponse).pdf
+Alex/French/Term 1/20261013-G4 Exercices d'application de mi-terme 1( Modèle de réponse).pdf
+Alex/French/Term 1/20261013-G4 Leçon 1(New).pdf
+Alex/French/Term 1/20261013-G4 Travail de classe 1 (modèle de reponse).pdf
+Alex/French/Term 1/20261013-G4 Travail de classe 1.pdf
+Alex/French/Term 1/20261024-G.4 Devoir noté 2 du premier terme du premier terme.pdf
+Alex/French/Term 1/20261024-G.4 Lecon 2 Filles et garcons.pdf
+Alex/French/Term 1/20261029-G4 exercices d'applicalion final du premier terme (New).pdf
+Alex/French/Term 1/20261103-G4 exercices d'applicalion final du premier terme (Modèle de réponse).pdf
+Alex/French/Term 1/La Rencontre French game.html
+Alex/French/french-lesson-3.pdf
+Alex/G4/Term 1/20261008-G4 - Social Studies Booklet - Term one .pdf
+Alex/G4/Term 1/20261008-T1- English Classwork-Booklet G4.pdf
+Alex/G4/Term 1/20261008-T1- English Homework-Booklet G4.pdf
+Alex/G4/Term 1/20261008-Term 1 Science Booklet Grade 4.pdf
+Alex/Math/20261116-Extra_Practice_-_L14-2.pdf
+Alex/Math/20261116-Extra_Practice_-_L4-3.pdf
+Alex/Math/20261116-Extra_Practice_-_L4-4.pdf
+Alex/Math/20261116-L_14-2.pdf
+Alex/Math/20261116-L_4-3.pdf
+Alex/Math/20261116-L_4-4.pdf
+Alex/Math/20261119-HW_1_T2_G4.pdf
+Alex/Math/20261119-L5-1.pdf
+Alex/Math/20261119-L_5-1.pdf
+Alex/Math/20261120-Math Replay Classify Angles.mp4
+Alex/Math/20261120-Math Replay Understand Factors of a Number.mp4
+Alex/Math/Term 1/202060924-L2-3.pdf
+Alex/Math/Term 1/20260920-HW_1_G4.pdf
+Alex/Math/Term 1/20260920-ModelAnswers_L_2-1.pdf
+Alex/Math/Term 1/20260920-ModelAnswers_L_2-2.pdf
+Alex/Math/Term 1/20260921-L2-1.pdf
+Alex/Math/Term 1/20260921-L2-2.pdf
+Alex/Math/Term 1/20260924-L_2-3.pdf
+Alex/Math/Term 1/20261005-L2-2.pdf
+Alex/Math/Term 1/20261005-L2-3.pdf
+Alex/Math/Term 1/20261005-L2-4.pdf
+Alex/Math/Term 1/20261005-L_2-1.pdf
+Alex/Math/Term 1/20261005-L_2-2.pdf
+Alex/Math/Term 1/20261005-L_2-4.pdf
+Alex/Math/Term 1/20261008-L14-1.pdf
+Alex/Math/Term 1/20261008-L_14-1.pdf
+Alex/Math/Term 1/20261008-Revision_MidT_1.pdf
+Alex/Math/Term 1/20261017-Extra_Practice_-_L3-4.pdf
+Alex/Math/Term 1/20261017-L_3-4_copy.pdf
+Alex/Math/Term 1/20261022-Extra_Practice_-_L4-1.pdf
+Alex/Math/Term 1/20261022-L3-7.pdf
+Alex/Math/Term 1/20261022-L_3-7.pdf
+Alex/Math/Term 1/20261022-L_4-1.pdf
+Alex/Math/Term 1/20261023-HW_2_-_T1_-_2026.pdf
+Alex/Math/Term 1/20261024-Oct 24, 2026 at 10 20 PM.jpg
+Alex/Math/Term 1/20261028-Extra_Practice_-_L4-2.pdf
+Alex/Math/Term 1/20261028-L_4-2.pdf
+Alex/Math/Term 1/20261028-Rvision_FT_1_2027.pdf
+Alex/Math/books/G-04+Student+Practice+Book_Reveal+Math,+Grade+4.pdf
+Alex/Math/books/Reveal Math Student Edition, Grade 4, Volume 1.pdf
+Alex/Math/books/Screencast From 2026-11-15 18-18-07.mp4
+Alex/Math/books/Screencast From 2026-11-15 18-24-52.mp4
+Alex/Religion/20261107-درس القديس ابانوب.pdf
+Alex/Religion/20261107-واجب علي درس دبورة وباراق والقديس أبانوب.pdf
+Alex/Religion/20261114-زكا العشار.jpeg
+Alex/Religion/20261114-واجب للصف الرابع الأبتدائي( زكا العشار ).pdf
+Alex/Religion/Term 1/20261008-CHR_prim4_tr1.pdf
+Alex/Religion/Term 1/20261008-الدرس الاول g4.pdf
+Alex/Religion/Term 1/20261008-الدرس الثالث العباده.pdf
+Alex/Religion/Term 1/20261008-الدرس الثاني تسبحة العذراء g4.pdf
+Alex/Religion/Term 1/20261008-الدرس الرابع يشوع بن نون.pdf
+Alex/Religion/Term 1/20261008-الواجب علي درس علمنا يارب ان نصلي.pdf
+Alex/Religion/Term 1/20261008-الواجب علي درس يشوع بن نون.pdf
+Alex/Religion/Term 1/20261008-تدريبات علي درسيg4.pdf
+Alex/Religion/Term 1/20261010-الدرس الخامس للصف الرابع الابتدائي.pdf
+Alex/Religion/Term 1/20261010-الدرس السادس للصف الرابع الابتدائي.pdf
+Alex/Religion/Term 1/20261010-الواجب للصف الرابع الابتدائي.pdf
+Alex/Religion/Term 1/20261010-طفولة السيد المسيح - من بيت لحم إلى الهيكل (1).pdf
+Alex/Religion/Term 1/20261011-الواجب للصف الرابع الابتدائي.pdf
+Alex/Religion/Term 1/20261017-حل المراجعة للصف الرابع.pdf
+Alex/Religion/Term 1/20261017-مراجعة الدروس التي تم دراستها.pdf
+Alex/Religion/Term 1/20261024-Elia .pdf
+Alex/Religion/Term 1/20261024-الدرس_الثاني-_بعض_الآيات_الذهبية.pdf
+Alex/Religion/Term 1/20261031-Elia .pdf
+Alex/Religion/Term 1/20261031-الدرس_الثاني-_بعض_الآيات_الذهبية.pdf
+Alex/Religion/Term 1/20261031-دبورة_وباراق_باوربوينت_مطوّر.pdf
+Alex/Religion/Term 1/20261031-واجب علي قوة الصلاة.pdf
+Alex/Religion/Term 1/CHR_prim4_tr1.pdf
+Alex/S.S.English/20261105-G4- Social Studies - Term Two.pdf
+Alex/S.S.English/20261118-People and the Land .pdf
+Alex/S.S.English/Term 1/20260921-Graded H.W 1.pdf
+Alex/S.S.English/Term 1/20260928-Ch1L2-Weather and Climate.pdf
+Alex/S.S.English/Term 1/20261008-Ch1L2-Weather and Climate.pdf
+Alex/S.S.English/Term 1/20261009-Ch1L1-Lands and regions in the United States.pdf
+Alex/S.S.English/Term 1/20261009-Memo -MidTerm 1- Grade 4.pdf
+Alex/S.S.English/Term 1/20261022-Ch1L3-Regions and resources .pdf
+Alex/S.S.English/Term 1/20261024-Grade 4 - Graded Homework 2 - Ch1L3 -docx.pdf
+Alex/S.S.English/Term 1/20261029-Memo -FinalTerm 1- Grade 4 .pdf
+Alex/S.S.English/Term 1/USA Explorer game.html
+Alex/S.S.English/book/001.png
+Alex/S.S.English/book/002.png
+Alex/S.S.English/book/003.png
+Alex/S.S.English/book/004.png
+Alex/S.S.English/book/005.png
+Alex/S.S.English/book/006.png
+Alex/S.S.English/book/007.png
+Alex/S.S.English/book/008.png
+Alex/S.S.English/book/009.png
+Alex/S.S.English/book/010.png
+Alex/S.S.English/book/011.png
+Alex/S.S.English/book/012.png
+Alex/S.S.English/book/013.png
+Alex/S.S.English/book/014.png
+Alex/S.S.English/book/015.png
+Alex/S.S.English/book/016.png
+Alex/S.S.English/book/017.png
+Alex/S.S.English/book/018.png
+Alex/S.S.English/book/019.png
+Alex/S.S.English/book/020.png
+Alex/S.S.English/book/021.png
+Alex/S.S.English/book/022.png
+Alex/S.S.English/book/023.png
+Alex/S.S.English/book/024.png
+Alex/S.S.English/book/025.png
+Alex/S.S.English/book/026.png
+Alex/S.S.English/book/027.png
+Alex/S.S.English/book/028.png
+Alex/S.S.English/book/029.png
+Alex/S.S.English/book/030.png
+Alex/S.S.English/book/031.png
+Alex/S.S.English/book/032.png
+Alex/S.S.English/book/033.png
+Alex/S.S.English/book/034.png
+Alex/S.S.English/book/035.png
+Alex/S.S.English/book/036.png
+Alex/S.S.English/book/037.png
+Alex/S.S.English/book/038.png
+Alex/S.S.English/book/039.png
+Alex/S.S.English/book/040.png
+Alex/S.S.English/book/041.png
+Alex/S.S.English/book/042.png
+Alex/S.S.English/book/043.png
+Alex/S.S.English/book/044.png
+Alex/S.S.English/book/045.png
+Alex/S.S.English/book/046.png
+Alex/S.S.English/book/047.png
+Alex/S.S.English/book/048.png
+Alex/S.S.English/book/049.png
+Alex/S.S.English/book/050.png
+Alex/S.S.English/book/051.png
+Alex/S.S.English/book/052.png
+Alex/S.S.English/book/053.png
+Alex/S.S.English/book/054.png
+Alex/S.S.English/book/055.png
+Alex/S.S.English/book/056.png
+Alex/S.S.English/book/057.png
+Alex/S.S.English/book/058.png
+Alex/S.S.English/book/059.png
+Alex/S.S.English/book/060.png
+Alex/S.S.English/book/061.png
+Alex/S.S.English/book/062.png
+Alex/S.S.English/book/063.png
+Alex/S.S.English/book/064.png
+Alex/S.S.English/book/065.png
+Alex/S.S.English/book/066.png
+Alex/S.S.English/book/067.png
+Alex/S.S.English/book/068.png
+Alex/S.S.English/book/069.png
+Alex/S.S.English/book/070.png
+Alex/S.S.English/book/071.png
+Alex/S.S.English/book/072.png
+Alex/S.S.English/book/073.png
+Alex/S.S.English/book/074.png
+Alex/S.S.English/book/075.png
+Alex/S.S.English/book/076.png
+Alex/S.S.English/book/077.png
+Alex/S.S.English/book/078.png
+Alex/S.S.English/book/079.png
+Alex/S.S.English/book/080.png
+Alex/S.S.English/book/081.png
+Alex/S.S.English/book/082.png
+Alex/S.S.English/book/083.png
+Alex/S.S.English/book/084.png
+Alex/S.S.English/book/085.png
+Alex/S.S.English/book/086.png
+Alex/S.S.English/book/087.png
+Alex/S.S.English/book/088.png
+Alex/S.S.English/book/089.png
+Alex/S.S.English/book/090.png
+Alex/S.S.English/book/091.png
+Alex/S.S.English/book/092.png
+Alex/S.S.English/book/093.png
+Alex/S.S.English/book/094.png
+Alex/S.S.English/book/095.png
+Alex/S.S.English/book/096.png
+Alex/S.S.English/book/097.png
+Alex/S.S.English/book/098.png
+Alex/S.S.English/book/099.png
+Alex/S.S.English/book/100.png
+Alex/S.S.English/book/101.png
+Alex/S.S.English/book/102.png
+Alex/S.S.English/book/103.png
+Alex/S.S.English/book/104.png
+Alex/S.S.English/book/105.png
+Alex/S.S.English/book/106.png
+Alex/S.S.English/book/107.png
+Alex/S.S.English/book/108.png
+Alex/S.S.English/book/109.png
+Alex/S.S.English/book/110.png
+Alex/S.S.English/book/111.png
+Alex/S.S.English/book/112.png
+Alex/S.S.English/book/113.png
+Alex/S.S.English/book/114.png
+Alex/S.S.English/book/115.png
+Alex/S.S.English/book/116.png
+Alex/S.S.English/book/117.png
+Alex/S.S.English/book/118.png
+Alex/S.S.English/book/119.png
+Alex/S.S.English/book/120.png
+Alex/S.S.English/book/121.png
+Alex/S.S.English/book/122.png
+Alex/S.S.English/book/123.png
+Alex/S.S.English/book/124.png
+Alex/S.S.English/book/125.png
+Alex/S.S.English/book/126.png
+Alex/S.S.English/book/127.png
+Alex/S.S.English/book/128.png
+Alex/S.S.English/book/129.png
+Alex/S.S.English/book/130.png
+Alex/S.S.English/book/131.png
+Alex/S.S.English/book/132.png
+Alex/S.S.English/book/133.png
+Alex/S.S.English/book/134.png
+Alex/S.S.English/book/135.png
+Alex/S.S.English/book/136.png
+Alex/S.S.English/book/137.png
+Alex/S.S.English/book/138.png
+Alex/S.S.English/book/139.png
+Alex/S.S.English/book/140.png
+Alex/S.S.English/book/141.png
+Alex/S.S.English/book/142.png
+Alex/S.S.English/book/143.png
+Alex/S.S.English/book/144.png
+Alex/S.S.English/book/145.png
+Alex/S.S.English/book/146.png
+Alex/S.S.English/book/147.png
+Alex/S.S.English/book/148.png
+Alex/S.S.English/book/149.png
+Alex/S.S.English/book/150.png
+Alex/S.S.English/book/151.png
+Alex/S.S.English/book/152.png
+Alex/S.S.English/book/153.png
+Alex/S.S.English/book/154.png
+Alex/S.S.English/book/155.png
+Alex/S.S.English/book/156.png
+Alex/S.S.English/book/157.png
+Alex/S.S.English/book/158.png
+Alex/S.S.English/book/159.png
+Alex/S.S.English/book/160.png
+Alex/S.S.English/book/161.png
+Alex/S.S.English/book/162.png
+Alex/S.S.English/book/163.png
+Alex/S.S.English/book/164.png
+Alex/S.S.English/book/165.png
+Alex/S.S.English/book/166.png
+Alex/S.S.English/book/167.png
+Alex/S.S.English/book/168.png
+Alex/S.S.English/book/169.png
+Alex/S.S.English/book/170.png
+Alex/S.S.English/book/171.png
+Alex/S.S.English/book/172.png
+Alex/S.S.English/book/173.png
+Alex/S.S.English/book/174.png
+Alex/S.S.English/book/175.png
+Alex/S.S.English/book/176.png
+Alex/S.S.English/book/177.png
+Alex/S.S.English/book/178.png
+Alex/S.S.English/book/179.png
+Alex/S.S.English/book/180.png
+Alex/S.S.English/book/181.png
+Alex/S.S.English/book/182.png
+Alex/S.S.English/book/183.png
+Alex/S.S.English/book/184.png
+Alex/S.S.English/book/185.png
+Alex/S.S.English/book/186.png
+Alex/S.S.English/book/187.png
+Alex/S.S.English/book/188.png
+Alex/S.S.English/book/189.png
+Alex/S.S.English/book/190.png
+Alex/S.S.English/book/191.png
+Alex/S.S.English/book/192.png
+Alex/S.S.English/book/193.png
+Alex/S.S.English/book/194.png
+Alex/S.S.English/book/195.png
+Alex/S.S.English/book/196.png
+Alex/S.S.English/book/197.png
+Alex/S.S.English/book/198.png
+Alex/S.S.English/book/199.png
+Alex/S.S.English/book/200.png
+Alex/S.S.English/book/201.png
+Alex/S.S.English/book/202.png
+Alex/S.S.English/book/203.png
+Alex/S.S.English/book/204.png
+Alex/S.S.English/book/205.png
+Alex/S.S.English/book/206.png
+Alex/S.S.English/book/207.png
+Alex/S.S.English/book/208.png
+Alex/S.S.English/book/209.png
+Alex/S.S.English/book/210.png
+Alex/S.S.English/book/211.png
+Alex/S.S.English/book/212.png
+Alex/S.S.English/book/213.png
+Alex/S.S.English/book/214.png
+Alex/S.S.English/book/215.png
+Alex/S.S.English/book/216.png
+Alex/S.S.English/book/217.png
+Alex/S.S.English/book/218.png
+Alex/S.S.English/book/219.png
+Alex/S.S.English/book/220.png
+Alex/S.S.English/book/221.png
+Alex/S.S.English/book/222.png
+Alex/S.S.English/book/223.png
+Alex/S.S.English/book/224.png
+Alex/S.S.English/book/225.png
+Alex/S.S.English/book/226.png
+Alex/S.S.English/book/227.png
+Alex/S.S.English/book/228.png
+Alex/S.S.English/book/229.png
+Alex/S.S.English/book/230.png
+Alex/S.S.English/book/231.png
+Alex/S.S.English/book/232.png
+Alex/S.S.English/book/233.png
+Alex/S.S.English/book/234.png
+Alex/S.S.English/book/235.png
+Alex/S.S.English/book/236.png
+Alex/S.S.English/book/237.png
+Alex/S.S.English/book/238.png
+Alex/S.S.English/book/239.png
+Alex/S.S.English/book/240.png
+Alex/S.S.English/book/241.png
+Alex/S.S.English/book/242.png
+Alex/S.S.English/book/243.png
+Alex/S.S.English/book/244.png
+Alex/S.S.English/book/245.png
+Alex/S.S.English/book/246.png
+Alex/S.S.English/book/247.png
+Alex/S.S.English/book/248.png
+Alex/S.S.English/book/249.png
+Alex/S.S.English/book/ss-book.pdf
+Alex/SSArabic/20261108-‎⁨الاماكن الخدمية في مدينتنا (الشرح)⁩.pdf
+Alex/SSArabic/20261108-‎⁨حل تدريبات كتاب المدرسة علي الاماكن الخد⁩.pdf
+Alex/SSArabic/20261108-‎⁨مراجعة علي الاماكن الخدمية⁩.pdf
+Alex/SSArabic/20261116-‎⁨اين تقع محافظتي⁩.pdf
+Alex/SSArabic/20261116-‎⁨تدريبات الوحدة الثانية رابعة⁩.pdf
+Alex/SSArabic/20261116-‎⁨تدريبات علي درس اين تقع محافظتي⁩.pdf
+Alex/SSArabic/20261116-‎⁨تدريبات علي مدينتنا في المستقبل⁩.pdf
+Alex/SSArabic/20261116-‎⁨مدينتنا في المستقبل⁩.pdf
+Alex/SSArabic/Term 1/20261008-اجابة تدريبات الدرس الاول والثانى فى الكتاب المدرسى.pdf
+Alex/SSArabic/Term 1/20261008-الدرس الاول الصف الرابع الاماكن و الاتجاهات من حولنا.pdf
+Alex/SSArabic/Term 1/20261008-الصف الرابع الدرس الثاني الخريطة في حيات.pdf
+Alex/SSArabic/Term 1/20261008-مراجعة درس الاماكن والاتجاهات من حولنا.pdf
+Alex/SSArabic/Term 1/20261008-مراجعة درس الخريطة في حياتنا.pdf
+Alex/SSArabic/Term 1/20261016-تدريبات الكتاب المدرسي علي مصادر جمع الم.pdf
+Alex/SSArabic/Term 1/20261016-تدريبات الوحدة الاولي الكتاب المدرسي g4.pdf
+Alex/SSArabic/Term 1/20261016-تدريبات كتاب المدرسة درس تطور الخريطة ال.pdf
+Alex/SSArabic/Term 1/20261016-تطور الخريطة الصف الرابع.pdf
+Alex/SSArabic/Term 1/20261016-مصادر جمع المعلومات (1).pdf
+Alex/SSArabic/Term 1/20261017-G4.pdf
+Alex/SSArabic/Term 1/20261017-اجابة تدريبات دروس شهر أكتوبر.pdf
+Alex/SSArabic/Term 1/20261017-تدريبات دروس شهر أكتوبر.pdf
+Alex/SSArabic/Term 1/20261030-‎⁨تدريبات كتاب المدرسة الصف الرابع⁩.pdf
+Alex/SSArabic/Term 1/20261030-‎⁨تطور مدينتنا⁩.pdf
+Alex/SSArabic/Term 1/20261030-‎⁨كيف تبدو مدينتنا⁩.pdf
+Alex/Science/20261107-G4-Science Term2-Booklet- 2026-2027.pdf
+Alex/Science/20261107-L1-WAVE PROPERTIES.pdf
+Alex/Science/20261115-L1-WAVE PROPERTIES.pdf
+Alex/Science/20261115-Transverse and Longitudinal Waves.mp4
+Alex/Science/20261115-Waves for Kids! (Sound Waves, Amplitude, Wavelength, Frequency) 🌊🔊.mp4
+Alex/Science/20261115-wave properties song.mp4
+Alex/Science/Term 1/20260914-Energy,speed - Part 1.pdf
+Alex/Science/Term 1/20260914-Energy,speed - Part 2.pdf
+Alex/Science/Term 1/20260914-Science Graded Homework 1 GRADE 4.pdf
+Alex/Science/Term 1/20260915-Model answer of the graphic diagram.pdf
+Alex/Science/Term 1/20260927-Energy transfer-updated.pdf
+Alex/Science/Term 1/20260927-Lesson 1 practice sheets Model Answers.pdf
+Alex/Science/Term 1/20261009-Energy transfer song.mp4
+Alex/Science/Term 1/20261009-Model answer of the graphic diagram.pdf
+Alex/Science/Term 1/20261009-Science Graded Homework 1 GRADE 4.pdf
+Alex/Science/Term 1/20261012-Graded Homework 1 GRADE 4.pdf
+Alex/Science/Term 1/20261012-Graded classwork 2.pdf
+Alex/Science/Term 1/20261012-Graded classwork1 lesson 1 grade 4.pdf
+Alex/Science/Term 1/20261012-Model Answer of Graded classwor1.pdf
+Alex/Science/Term 1/20261012-Model answer of Graded Homework 1.pdf
+Alex/Science/Term 1/20261012-Model answer of Graded classwork 2.pdf
+Alex/Science/Term 1/20261012-Model answer science extra practice sheet.pdf
+Alex/Science/Term 1/20261012-Science extra practice sheet.pdf
+Alex/Science/Term 1/20261017-Lesson 3 practice sheets - MA.pdf
+Alex/Science/Term 1/20261017-Lesson Quiz MA.pdf
+Alex/Science/Term 1/20261024-Electric circuits .pdf
+Alex/Science/Term 1/20261024-Energy transfer h.w (2).pdf
+Alex/Science/Term 1/20261024-IMG_20260815_110206.png
+Alex/Science/Term 1/20261031-Energy transfer h.w (2) modwl answer.pdf
+Alex/Science/Term 1/20261031-Lesson4practicesheets-MA.pdf
+Alex/Science/Term 1/20261031-MA lesson quiz electric circuits.pdf
+Alex/Science/Term 1/20261031-Model answer of Graded classwork 3.pdf
+Alex/Science/book/NA_Elevate_Gr4_T1.pdf
+Alex/Science/book/NA_Elevate_Gr4_T2.pdf
+Alex/Science/book/NA_Elevate_Gr4_T3.pdf
+Alex/Science/book/NA_Elevate_Gr4_T4.pdf
+Alex/Science/book/NA_Elevate_Gr4_T5.pdf
+Alex/Science/book/NA_Elevate_Gr4_T6.pdf
+Alex/Science/book/NA_Elevate_Gr4_T7.pdf
+Alex/Science/book/NA_Elevate_Gr4_T8.pdf
+Alex/Speech/Дитячий плакат_ частини тіла й обличчя.png
+Alex/Speech/Положення предметів_ навчальний плакат.png
+Alex/Speech/Положення предметів_ яскравий навчальний плакат.png
+Alex/Speech/Україномовний колаж навчальних карток для дітей.png
+Alex/WhatsApp Image 2026-11-15 at 16.28.15.jpeg
+Alex/projects/.xdp-.wordcraft-save-2-0.tmp-8qxcPv
+Alex/projects/Term 1/61f22RxgkoL._AC_UF350,350_QL50_.jpg
+Alex/projects/Term 1/Petcube From The Inception.mp4
+Alex/projects/Term 1/Picture4.jpg
+Alex/projects/Term 1/english-term-1-project.docx
+Alex/projects/Term 1/english-term-1-project.pdf
+Alex/projects/Term 1/product-connection-play-2.jpg
+Lucas/!booklets/Term 1/Computer - P.A G.3 T.1.pdf
+Lucas/!booklets/Term 1/English - Term-1-HW-Booklet 2027 G3 updated.pdf
+Lucas/!booklets/Term 1/English - Term1-CW-Booklet 2027 G3 updated.pdf
+Lucas/!booklets/Term 1/SS - Term (1) - Grade 3.pdf
+Lucas/!booklets/Term 1/Science - Grade 3 Term 1 booklet 2027 - Copy.pdf
+Lucas/Arabic/20261103-دليل المعلم للتدريس الخطة العلاجية للمهارات ال_261031_195323.pdf
+Lucas/Arabic/Term 1/20261017-مراجعة لغة عربية.pdf
+Lucas/Arabic/Term 1/20261020-نموذج اجابة مراجعة شهر أكتوبر (2).pdf
+Lucas/Arabic/Term 1/asrar-alnajah-flashcards.pdf
+Lucas/Arabic/lesson-x/Scanned Document-2.pdf
+Lucas/Arabic/lesson-x/Scanned Document-3.pdf
+Lucas/Arabic/lesson-x/Scanned Document-4.pdf
+Lucas/Arabic/lesson-x/Scanned Document-5.pdf
+Lucas/Arabic/lesson-x/Scanned Document.pdf
+Lucas/Arabic/lesson-x/hw-tests.pdf
+Lucas/Computer/20261103-Term 2 Computer Booklet Grade 3.pdf
+Lucas/Computer/20261109-Robot+4.mp4
+Lucas/Computer/20261119-G.3_G.H1T.2.pdf
+Lucas/Computer/Term 1/20251011-assignment-A.pdf
+Lucas/Computer/Term 1/20251011-assignment-B.pdf
+Lucas/Computer/Term 1/20251020-Grade_Three_Graded_Homework2.pdf
+Lucas/Computer/Term 1/20251023-Assessment - Interacting Version B.pdf
+Lucas/Computer/Term 1/20251023-Assessment - My Devices Version A.pdf
+Lucas/Computer/Term 1/20251023-Assessment - My Devices: Version C.pdf
+Lucas/Computer/Term 1/20251023-Assessment - My Devices_ Version C.pdf
+Lucas/Computer/Term 1/20260924-G.3_G.H1T.1.pdf
+Lucas/Computer/Term 1/20261022-Assesstive+Technology.mp4
+Lucas/Computer/Term 1/20261022-Braille(1).mp4
+Lucas/Computer/Term 1/20261022-Driving+wheel.mp4
+Lucas/Computer/Term 1/20261022-G.3_G.H2_T.1.pdf
+Lucas/Computer/Term 1/20261022-Graphic+Tablet.mp4
+Lucas/Computer/Term 1/20261022-Mouse+Head.mp4
+Lucas/Computer/Term 1/20261022-VR+Glove.mp4
+Lucas/Computer/Term 1/20261022-VR+Headset..mp4
+Lucas/Computer/Term 1/20261024-AF0AEE31-CB60-4C8B-BAC3-6BCC7B9C9FCB.png
+Lucas/Computer/Term 1/20261024-Oct 24, 2026 at 9 55 AM.png
+Lucas/Computer/Term 1/3D_Printer.mp4
+Lucas/Computer/Term 1/G.3_Model_Answer_G.C_2T.1.pdf
+Lucas/Computer/Term 1/Inkjet_Laser1.mp4
+Lucas/Computer/Term 1/Plotter.mp4
+Lucas/Computer/Term 1/Thermal_printer.mp4
+Lucas/Computer/Term 1/computer-lessons-term-1.pdf
+Lucas/Computer/Term 1/lesson-3.pdf
+Lucas/English/20261107-classwork booklet T2 2027. G3.pdf
+Lucas/English/20261107-homework booklet T2 2027 G3.pdf
+Lucas/English/20261112-dictationmemo-Unit2-Week5.pdf
+Lucas/English/20261116-long-vowels-Graded-Homework.pdf
+Lucas/English/Term 1/20250920-flashcards.pdf
+Lucas/English/Term 1/20260920-VocabularyGradedHW.pdf
+Lucas/English/Term 1/20261008-Mid_Term_1_Exam_Memo.docx.pdf
+Lucas/English/Term 1/20261008-Sound Spelling Card Long A TRAIN.pdf
+Lucas/English/Term 1/20261008-Sound Spelling Card Long O boat.pdf
+Lucas/English/Term 1/20261015-Dictation_Memo.pdf
+Lucas/English/Term 1/20261019-Leveled_Reader_Graded_Homework.pdf
+Lucas/English/Term 1/20261019-The Race for the Presidency.pdf
+Lucas/English/Term 1/20261020-94.pdf
+Lucas/English/Term 1/20261020-Leveled_Reader_Graded_Homework.pdf
+Lucas/English/Term 1/20261022-G_3_Final_Term_Exam_Memo_2026.pdf
+Lucas/English/Term 1/20261024-preserving-a-special-place.pdf
+Lucas/English/Term 1/20261029-22, 30,31,32.pdf
+Lucas/English/Term 1/20261029-31f1c051-a104-41b4-bd24-6ff3768706b7.jpg
+Lucas/English/Term 1/20261029-37ff9375-e551-431f-a07f-b3c9a123ca0b.jpg
+Lucas/English/Term 1/20261029-6c20e784-4abb-48c9-8bd9-82b3eae442e7.jpg
+Lucas/English/Term 1/20261029-Screenshot_20261029_140241_WPS Office.jpg
+Lucas/English/Term 1/20261029-Screenshot_20261029_141129_WPS Office.jpg
+Lucas/English/Term 1/20261029-cae2425c-1558-4b2d-8e82-b2b4fa3dfc29.jpg
+Lucas/English/Term 1/20261029-p21,22,23.pdf
+Lucas/English/Term 1/20261029-p31,32.pdf
+Lucas/English/to-print/input-book.pdf
+Lucas/English/to-print/input.pdf
+Lucas/French/20261114-DOC-20261111-WA0055.pdf
+Lucas/French/20261114-la famille -1.pdf
+Lucas/French/20261118-G3- Devoir note 1-term 2.pdf
+Lucas/French/Term 1/20260923-Devoir note 1-Term1.pdf
+Lucas/French/Term 1/20260923-La presentation-2.pdf
+Lucas/French/Term 1/20260923-La presentation.pdf
+Lucas/French/Term 1/20260923-les personnages du livre.pdf
+Lucas/French/Term 1/20261006-G 3-Exercices d'application-mi-term1-26-27.pdf
+Lucas/French/Term 1/20261006-Les consignes de la classe.pdf
+Lucas/French/Term 1/20261008-Devoir note 1-Term1.pdf
+Lucas/French/Term 1/20261008-G 3-Exercices d'application-mi-term1-26-27.pdf
+Lucas/French/Term 1/20261008-La presentation (2).pdf
+Lucas/French/Term 1/20261008-La presentation.pdf
+Lucas/French/Term 1/20261008-Les consignes de la classe.pdf
+Lucas/French/Term 1/20261008-les personnages du livre.pdf
+Lucas/French/Term 1/20261013-Devoir note 1- term 1- MA.pdf
+Lucas/French/Term 1/20261013-G 3 Exercices d'app - Mi-terme 1- MA.pdf
+Lucas/French/Term 1/20261013-Travail de classe note 1-term 1- MA.pdf
+Lucas/French/Term 1/20261013-Travail de classe note 2- term 1-MA.pdf
+Lucas/French/Term 1/20261024-G 3- Devoir note 2-term 1.pdf
+Lucas/French/Term 1/20261029-G. 3 Exercices d'application Examen final -term 1.pdf
+Lucas/French/Term 1/20261029-Les salutations.pdf
+Lucas/French/Term 1/20261103-G. 3 Exercices d'app examen final MA + GCW 3+ GCW 4.pdf
+Lucas/French/Term 1/La Presentation French game.html
+Lucas/French/book/CARTOON_UNITE1.mp4
+Lucas/French/book/CARTOON_UNITE2.mp4
+Lucas/French/book/CARTOON_UNITE3.mp4
+Lucas/French/book/CARTOON_UNITE4.mp4
+Lucas/French/book/CARTOON_UNITE5.mp4
+Lucas/French/book/CARTOON_UNITE6.mp4
+Lucas/French/book/VIDEO_0.mp4
+Lucas/French/book/VIDEO_2.mp4
+Lucas/French/book/VIDEO_3.mp4
+Lucas/French/book/VIDEO_4.mp4
+Lucas/French/book/VIDEO_5.mp4
+Lucas/French/book/VIDEO_6.mp4
+Lucas/French/book/VIDEO_AUTOUR_DE_TOI_3.mp4
+Lucas/French/book/VIDEO_AUTOUR_DE_TOI_4.mp4
+Lucas/French/book/VIDEO_AUTOUR_DE_TOI_5.mp4
+Lucas/French/book/VIDEO_AUTOUR_DE_TOI_6.mp4
+Lucas/French/book/VIDEO_CIVILISATION_1.mp4
+Lucas/French/book/VIDEO_CIVILISATION_2.mp4
+Lucas/Grade 3/Term 1/20261008-Computer - P.A G.3 T.1.pdf
+Lucas/Grade 3/Term 1/20261008-English - Term-1-HW-Booklet 2027 G3 updated.pdf
+Lucas/Grade 3/Term 1/20261008-English - Term1-CW-Booklet 2027 G3 updated.pdf
+Lucas/Grade 3/Term 1/20261008-SS - Term (1) - Grade 3.pdf
+Lucas/Grade 3/Term 1/20261008-Science - Grade 3 Term 1 booklet 2027 - Copy.pdf
+Lucas/Math/20261115-M.A._Ch2_L4.pdf
+Lucas/Math/20261115-M.A._Ch2_L5.pdf
+Lucas/Math/20261115-M.A_Ch2_L3.pdf
+Lucas/Math/Term 1/20260929-HW-1.pdf
+Lucas/Math/Term 1/20261009-G3_HW1_T1.pdf
+Lucas/Math/Term 1/20261009-MA_ch1_lesson_1.pdf
+Lucas/Math/Term 1/20261009-MA_ch1_lesson_2.pdf
+Lucas/Math/Term 1/20261009-MA_ch1_lesson_3.pdf
+Lucas/Math/Term 1/20261009-Sep 8, 2026 at 8 01 PM.jpg
+Lucas/Math/Term 1/20261017-MA_ch1_4.pdf
+Lucas/Math/Term 1/20261017-MA_ch1_5.pdf
+Lucas/Math/Term 1/20261024-Extra_Practice_ch1_lessons(4-5).pdf
+Lucas/Math/Term 1/20261024-G3_HW2_T1.pdf
+Lucas/Math/Term 1/20261024-M.A_Extra_Practice_ch1_lessons(4-5).pdf
+Lucas/Math/Term 1/20261024-rounding-nearest-10-100-1.pdf
+Lucas/Math/Term 1/20261029-M.A._Ch2_L1.pdf
+Lucas/Math/Term 1/42.pdf
+Lucas/Math/Term 1/43.pdf
+Lucas/Math/Term 1/44.pdf
+Lucas/Music/Term 1/20261024-‎⁨انا ابن مصر⁩.pdf
+Lucas/Music/Term 1/20261024-‎⁨تحيا مصر⁩.pdf
+Lucas/Music/Term 1/20261024-‎⁨حبك يا بلدى⁩.pdf
+Lucas/Music/Term 1/20261024-‎⁨هنا مصر⁩.pdf
+Lucas/Optima/speed-reading.txt
+Lucas/Optima/Літературне читання 3.pdf
+Lucas/Optima/ПІДРУЧНИК_Козак М. Математика. Частина 1. Підручник для 3 класу. Підручники та посібники. 2020.pdf
+Lucas/Optima/ПІДРУЧНИК_Савчук А. Українська мова та читання. Частина 2. Підручник для 3 класу. Підручники та посібники.2020..pdf
+Lucas/Optima/Підручник_Придаток.Українська мова..Підручник для 3 класу.Підручники та посібники.2020.pdf
+Lucas/Optima/швидкочитання.pdf
+Lucas/Religion/20261009-3 ب كتاب التربيه الدينيه المسيحيه الصف الثالث الابتدائي الترم الاول 2026=2027.pdf
+Lucas/Religion/20261107-IMG_20261107_195533.jpg
+Lucas/Religion/20261107-_.pdf
+Lucas/Religion/20261107-ترانيم اطفال ترنيمة كان فى عنقود عنب(360P).mp4
+Lucas/Religion/20261114-.pdf
+Lucas/Religion/20261114-IMG_20261113_190353.jpg
+Lucas/Religion/20261114-____.pdf
+Lucas/Religion/Term 1/20260920-DOC-20260831-WA0038.pdf
+Lucas/Religion/Term 1/20260920-VID-20260831-WA0041.mp4
+Lucas/Religion/Term 1/20261008-الدرس الثالث.pdf
+Lucas/Religion/Term 1/20261008-درس المحفوظات-1.pdf
+Lucas/Religion/Term 1/20261009-3 ب كتاب التربيه الدينيه المسيحيه الصف الثالث الابتدائي الترم الاول 2026=2027.pdf
+Lucas/Religion/Term 1/20261009-DOC-20260831-WA0038.pdf
+Lucas/Religion/Term 1/20261009-IMG_٢٠٢٦٠٩٢٦_١٨٥٤٢٦.jpg
+Lucas/Religion/Term 1/20261009-IMG_٢٠٢٦١٠٠٣_٢١٠٠٢٢.jpg
+Lucas/Religion/Term 1/20261009-VID-20260831-WA0041.mp4
+Lucas/Religion/Term 1/20261009-‏٢١ سبتمبر ٢٠٢٦ عند الساعة ٥ ٣٤ م.jpg
+Lucas/Religion/Term 1/20261010-.pdf
+Lucas/Religion/Term 1/20261010-IMG_20261010_192034.jpg
+Lucas/Religion/Term 1/20261010-VID-20261009-WA0002.mp4
+Lucas/Religion/Term 1/20261010-VID-20261009-WA0003.mp4
+Lucas/Religion/Term 1/20261010-ترنيمة دانيال(480P).mp4
+Lucas/Religion/Term 1/20261017-.... (2).pdf
+Lucas/Religion/Term 1/20261017-.....pdf
+Lucas/Religion/Term 1/20261017-.pdf
+Lucas/Religion/Term 1/20261024-.pdf
+Lucas/Religion/Term 1/20261024-IMG_20261024_173337.jpg
+Lucas/Religion/Term 1/20261031-2.pdf
+Lucas/Religion/Term 1/20261031-IMG_20261031_180610.jpg
+Lucas/Religion/Term 1/3 ب كتاب التربيه الدينيه المسيحيه الصف الثالث الابتدائي الترم الاول 2026=2027.pdf
+Lucas/S.S.English/20261107-Term (2) - Grade 3.pdf
+Lucas/S.S.English/20261115-chapter 3 lesson 2.pdf
+Lucas/S.S.English/Term 1/20260921-term 1 chapter 1 lesson 2.pdf
+Lucas/S.S.English/Term 1/20261001-Graded Homework (1)2026-2027.pdf
+Lucas/S.S.English/Term 1/20261009-Grade 3 Term (1) Memo for MidTerm Exam 2026-2027.pdf
+Lucas/S.S.English/Term 1/20261017-term 1 chapter 1 lesson 3.pdf
+Lucas/S.S.English/Term 1/20261022-Term (1) Memo for Final Term Exam 2026-2027.pdf
+Lucas/S.S.English/Term 1/20261024-PHOTO-2026-10-23-23-18-14.jpg
+Lucas/S.S.English/Term 1/20261024-grade 3 graded homework( 2).pdf
+Lucas/S.S.English/Term 1/Climate Quest game.html
+Lucas/Science/20261106-Science grade 3 term 2.pdf
+Lucas/Science/20261117-Topic 2 Lesson 1 ( Electric Forces).pdf
+Lucas/Science/Term 1/20250923-Topic 1 Lesson 1 ppt.  ( Motion ).pdf
+Lucas/Science/Term 1/20250923-Topic 1 Lesson 1 ppt. ( Motion ).pdf
+Lucas/Science/Term 1/20260922-Terminology.pdf
+Lucas/Science/Term 1/20261003-Patterns in Motion .pdf
+Lucas/Science/Term 1/20261008-Graded hm 1.pdf
+Lucas/Science/Term 1/20261008-Patterns in Motion .pdf
+Lucas/Science/Term 1/20261008-Sep 22, 2026 at 8 56 AM.jpg
+Lucas/Science/Term 1/20261009-Oct 5, 2026 at 9 12 AM.png
+Lucas/Science/Term 1/20261017-Oct 17, 2026 at 2 20 PM.jpg
+Lucas/Science/Term 1/20261017-Oct 17, 2026 at 9 23 AM.jpg
+Lucas/Science/Term 1/20261020-Topic 1 Lesson 3 ppt (Forces and Motion).pdf
+Lucas/Science/Term 1/20261024-Oct 24, 2026 at 2 55 PM.png
+Lucas/Science/Term 1/20261024-Oct 24, 2026 at 9 15 AM.jpg
+Lucas/Science/Term 1/20261024-Topic 1 Lesson 4 ppt..pdf
+Lucas/Science/Term 1/20261026-Graded HW 2 Term 1 (Due date 29-10-2026).pdf
+Lucas/Science/Term 1/2026929-Graded hm 1.pdf
+Lucas/Science/Term 1/Motion Quest game.html

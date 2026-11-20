@@ -1,0 +1,140 @@
+{
+  "root": "~/Documents/2026-2027",
+  "ignore": [],
+  "ignoreGlobs": ["*/ebook/*", "*/out[0-9]*.png"],
+  "rules": {
+    "minFiles": 3,
+    "maxAgeDays": 4
+  },
+  "subjects": [
+    {
+      "id": "g4-english",
+      "kid": "Alex",
+      "name": "English",
+      "folders": ["Alex/English"],
+      "booklets": ["English", "Classwork", "Homework"],
+      "app": "grade-4/term-2/english",
+      "skill": "english-lesson"
+    },
+    {
+      "id": "g4-math",
+      "kid": "Alex",
+      "name": "Math",
+      "folders": ["Alex/Math"],
+      "app": "grade-4/math",
+      "skill": "math-lesson"
+    },
+    {
+      "id": "g4-science",
+      "kid": "Alex",
+      "name": "Science",
+      "folders": ["Alex/Science"],
+      "booklets": ["Science"],
+      "app": "grade-4/science",
+      "skill": "science-lesson"
+    },
+    {
+      "id": "g4-ss",
+      "kid": "Alex",
+      "name": "Social Studies",
+      "folders": ["Alex/S.S.English"],
+      "booklets": ["Social Studies"],
+      "app": "grade-4/social-studies",
+      "skill": "social-studies-lesson"
+    },
+    {
+      "id": "g4-french",
+      "kid": "Alex",
+      "name": "French",
+      "folders": ["Alex/French"],
+      "app": "grade-4/term-1/french",
+      "skill": "french-lesson"
+    },
+    {
+      "id": "g4-arabic",
+      "kid": "Alex",
+      "name": "Arabic",
+      "folders": ["Alex/Arabic"],
+      "app": "grade-4/term-1/arabic"
+    },
+    {
+      "id": "g4-ss-arabic",
+      "kid": "Alex",
+      "name": "SS Arabic",
+      "folders": ["Alex/SSArabic"],
+      "app": "grade-4/term-1/social-studies-arabic"
+    },
+    {
+      "id": "g4-religion",
+      "kid": "Alex",
+      "name": "Religion",
+      "folders": ["Alex/Religion"],
+      "app": "grade-4/term-1/religion"
+    },
+    {
+      "id": "g4-computer",
+      "kid": "Alex",
+      "name": "Computer",
+      "folders": ["Alex/Computer"],
+      "booklets": ["Computer"],
+      "app": "grade-4/computer",
+      "skill": "computer-lesson"
+    },
+    {
+      "id": "g3-english",
+      "kid": "Lucas",
+      "name": "English",
+      "folders": ["Lucas/English"],
+      "booklets": ["English"],
+      "app": "grade-3/term-1/english",
+      "skill": "english-dictation"
+    },
+    {
+      "id": "g3-french",
+      "kid": "Lucas",
+      "name": "French",
+      "folders": ["Lucas/French"],
+      "app": "grade-3/term-1/french",
+      "skill": "french-lesson"
+    },
+    {
+      "id": "g3-arabic",
+      "kid": "Lucas",
+      "name": "Arabic",
+      "folders": ["Lucas/Arabic"],
+      "app": "grade-3/term-1/arabic",
+      "skill": "arabic-hw-tests"
+    },
+    {
+      "id": "g3-religion",
+      "kid": "Lucas",
+      "name": "Religion",
+      "folders": ["Lucas/Religion"],
+      "app": "grade-3/term-1/religion"
+    },
+    {
+      "id": "g3-computer",
+      "kid": "Lucas",
+      "name": "Computer",
+      "folders": ["Lucas/Computer"],
+      "booklets": ["Computer"],
+      "app": "grade-3/computer"
+    },
+    {
+      "id": "g3-science",
+      "kid": "Lucas",
+      "name": "Science",
+      "folders": ["Lucas/Science"],
+      "booklets": ["Science"],
+      "app": "grade-3/term-1/science"
+    },
+    {
+      "id": "g3-ss",
+      "kid": "Lucas",
+      "name": "Social Studies",
+      "folders": ["Lucas/S.S.English"],
+      "booklets": ["SS"],
+      "app": "grade-3/term-1/social-studies"
+    }
+  ]
+}
