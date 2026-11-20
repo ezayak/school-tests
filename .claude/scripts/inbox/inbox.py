@@ -10,6 +10,7 @@ its path is in done.txt (every file there when the tool started, plus what was b
   inbox.py --telegram         send the short summary to Telegram when a subject is ready
   inbox.py done <file>...     mark files as used (after the lesson is built)
   inbox.py done --subject g4-math   mark every new file of a subject as used
+  inbox.py prep <subject>     contact sheets, page text and video frames of its new files (see prep.py)
   inbox.py baseline           mark every file there is now as used (first run only)
 
 Only the standard library and the poppler tools (pdfinfo, pdftotext) are used.
@@ -306,6 +307,15 @@ def main(argv):
                 paths.append(rel(p.resolve()) if p.is_absolute() or p.exists() else a)
         n = add_done(paths)
         print(f"{len(n)} files marked as used.")
+        return
+    if argv[:1] == ["prep"]:
+        import prep
+
+        result, _ = scan(argv[1])
+        for s in result:
+            print(f"## {s['kid']} · {s['name']} ({s['id']}) · {len(s['new'])} new")
+            for x in s["new"]:
+                print(prep.line(x["file"], prep.prep(ROOT / x["file"])))
         return
     result, other = scan(only)
     if "--json" in argv:

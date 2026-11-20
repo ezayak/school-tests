@@ -321,6 +321,8 @@ Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a gam
 
 - New teacher files: start from `python3 .claude/scripts/inbox/inbox.py --subject <id>` (ids in `subjects.json` next to it) instead of comparing folders by hand.
   After building: a row in the subject's `SOURCES.md` and `inbox.py done <files>`, committed with the lesson.
+- «build inbox <id>» (the daily Telegram message): `inbox.py --subject <id>`, then `inbox.py prep <id>` and look at its contact sheets and `text.txt` first
+  (`~/.cache/school-inbox/…`); render a page at full size only to read small print or crop a picture. Then the subject's skill.
 - Changes come in small stages (≤5 changes each). Show the diff and wait for approval before applying.
 - One commit per concern: fix / refactor / formatting / sw.js version bump.
 - Commit messages: no Co-Authored-By line. Don't push unless asked.
