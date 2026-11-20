@@ -1,2 +1,3 @@
 .vscode/tasks.json
 .claude/scripts/inbox/.cache.json
+.claude/scripts/inbox/__pycache__/

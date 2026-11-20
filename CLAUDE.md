@@ -323,6 +323,8 @@ Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a gam
   After building: a row in the subject's `SOURCES.md` and `inbox.py done <files>`, committed with the lesson.
 - «build inbox <id>» (the daily Telegram message): `inbox.py --subject <id>`, then `inbox.py prep <id>` and look at its contact sheets and `text.txt` first
   (`~/.cache/school-inbox/…`); render a page at full size only to read small print or crop a picture. Then the subject's skill.
+- The "Then:" steps of every subject: `.claude/scripts/inbox/register.py add <hub path> <new files / picture folders>` (the `also` list), `register.py check <hub path>`,
+  `countLabel` / `topics` by hand, and last `register.py bump "<reason>"` in its own commit.
 - Changes come in small stages (≤5 changes each). Show the diff and wait for approval before applying.
 - One commit per concern: fix / refactor / formatting / sw.js version bump.
 - Commit messages: no Co-Authored-By line. Don't push unless asked.
