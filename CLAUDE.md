@@ -319,6 +319,8 @@ Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a gam
 
 ## Workflow
 
+- New teacher files: start from `python3 .claude/scripts/inbox/inbox.py --subject <id>` (ids in `subjects.json` next to it) instead of comparing folders by hand.
+  After building: a row in the subject's `SOURCES.md` and `inbox.py done <files>`, committed with the lesson.
 - Changes come in small stages (≤5 changes each). Show the diff and wait for approval before applying.
 - One commit per concern: fix / refactor / formatting / sw.js version bump.
 - Commit messages: no Co-Authored-By line. Don't push unless asked.
