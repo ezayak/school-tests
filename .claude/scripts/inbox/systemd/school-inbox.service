@@ -1,0 +1,6 @@
+[Unit]
+Description=School inbox: new teacher files, Telegram message when a subject is ready
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/olena/projects/school-tests/.claude/scripts/inbox/inbox.py --telegram
