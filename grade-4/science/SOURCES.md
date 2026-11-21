@@ -52,3 +52,10 @@ Book: `book/NA_Elevate_Gr4_T<topic>.pdf` (the lessons' Learn tab and "Book quest
 | 12    | Book page: Wave Characteristics                              | —                                                                                       | skipped (same text as slides 9–11)        |
 | 13–14 | Book pages: How does a wave move? (transverse, longitudinal) | `topic-3/lesson-1` · cards (already built), words Compression / Rarefaction             | built                                     |
 | 15    | Wave energy: the spring; transfer = relocate                 | `topic-3/lesson-1` · `slides` 15–16, card "Waves carry energy, not water"               | built                                     |
+
+## 20261121-H.W (1) g4 term 2.pdf (2 pages, Graded Homework (1), Term 2, text layer)
+
+| Page | Content                                                                        | Goes to                         | Status |
+| ---- | ------------------------------------------------------------------------------ | ------------------------------- | ------ |
+| 1    | T3 L1 choose 1–5 (medium, empty space, trough to trough, frequency, amplitude) | `topic-3/lesson-1` · `hw1` 1–5  | built  |
+| 2    | T3 L1 true or false 1–5                                                        | `topic-3/lesson-1` · `hw1` 6–10 | built  |

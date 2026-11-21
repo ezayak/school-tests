@@ -1,6 +1,6 @@
 // Science · Grade 4 · Topic 3 · Lesson 1 « Properties of Waves » (book pages 106–113).
 // All the content of the lesson. The engine is shared/computer-lesson.js (no Mini Windows).
-// Learn: the book and the teacher's slides (WAVE PROPERTIES). Exercises: the slides' fill-in blanks, Term 2 booklet practice sheet (pp. 2–3) + Lesson Quiz (pp. 4–6),
+// Learn: the book and the teacher's slides (WAVE PROPERTIES). Exercises: the slides' fill-in blanks, Term 2 booklet practice sheet (pp. 2–3) + Lesson Quiz (pp. 4–6), Term 2 Graded Homework (1),
 // and the book's own questions. The booklet has no answer key: see grade-4/science/UNVERIFIED.md.
 // Every answer has a picture (Alex has aphasia: the picture explains the word or the sentence).
 // mc(q, [[answer, picture], …], more): the first answer is right; a picture is a file name in img/lesson-1/
@@ -82,6 +82,15 @@ const RAFT = SC(
     { e: "🏝️", x: 86, y: 58, s: 24 },
   ],
   "the wave pushes the raft",
+);
+const AIR = SC(
+  "sky",
+  [
+    { e: "🔔", x: 15, y: 50, s: 24, a: "shake" },
+    { e: "〰️", x: 30, y: 50, s: 18, dx: 45, a: "go" },
+    { e: "👂", x: 85, y: 50, s: 24 },
+  ],
+  "sound travels through the air",
 );
 const MOVE_BOX = SC(
   "room",
@@ -839,6 +848,117 @@ window.LESSON = {
             x: "Energy makes things [move]. The wave moves the raft: that shows the energy. A length or a color does not.",
           },
         ),
+      ],
+    },
+    {
+      k: "hw1",
+      t: "Graded Homework 1",
+      en: "Choose · true or false",
+      ic: "🏠",
+      from: "Graded Homework (1) · Term 2",
+      keep: true,
+      items: [
+        mc(
+          "The material through which a wave travels is called a ___",
+          [
+            ["Medium", "🌬️💧🪵"],
+            ["Vibration", "📳"],
+            ["Frequency", "e-freq-high"],
+            ["Wavelength", "e-wavelength"],
+          ],
+          {
+            vis: AIR,
+            x: "A [medium] is the material: air, water or wood. Sound travels through the air to your ear.",
+          },
+        ),
+        mc(
+          "Which wave can travel through [empty space]?",
+          [
+            ["Light wave", "💡"],
+            ["Sound wave", "🔊"],
+            ["Water wave", "🌊"],
+            ["All waves", "💡🔊🌊"],
+          ],
+          {
+            img: "sun-earth",
+            keep: ["Sound wave", "Water wave", "Light wave", "All waves"],
+            x: "[Light] needs no medium: it comes from the Sun through empty space. Sound and water waves need a material.",
+          },
+        ),
+        mc(
+          "The distance between two [trough] points on a wave is called ___",
+          [
+            ["Wavelength", "e-wavelength"],
+            ["Amplitude", "e-amplitude"],
+            ["Frequency", "e-freq-high"],
+            ["Wave speed", "🏃💨"],
+          ],
+          {
+            img: "e-trough",
+            x: "From one trough to the next trough (or crest to crest) is one [wavelength].",
+          },
+        ),
+        mc(
+          "___ is the number of waves in a certain amount of time.",
+          [
+            ["Frequency", "e-freq-high"],
+            ["Amplitude", "e-amplitude"],
+            ["Wavelength", "e-wavelength"],
+            ["Wave speed", "🏃💨"],
+          ],
+          {
+            img: "frequency",
+            x: "Count the waves in 1 second: that is the [frequency].",
+          },
+        ),
+        mc(
+          "Which characteristic describes how [high] a wave is from its resting position?",
+          [
+            ["Amplitude", "e-amplitude"],
+            ["Frequency", "e-freq-high"],
+            ["Wavelength", "e-wavelength"],
+            ["Wave speed", "🏃💨"],
+          ],
+          {
+            img: "amplitude",
+            x: "From the middle (rest) up to the crest: that height is the [amplitude].",
+          },
+        ),
+        {
+          type: "tf",
+          q: "A wave is a disturbance that carries energy.",
+          a: true,
+          img: "surfer",
+          x: "Yes: a wave is a [disturbance] that carries [energy]. The wave's energy pushes the surfer.",
+        },
+        {
+          type: "tf",
+          q: "High-frequency waves have fewer repetitions in a certain amount of time.",
+          a: false,
+          img: "e-freq-high",
+          x: "High frequency = [many] waves in 1 second, not fewer. Few waves is a low frequency.",
+        },
+        {
+          type: "tf",
+          q: "High frequency of waves has short wavelength.",
+          a: true,
+          img: "frequency",
+          x: "Many waves fit in 1 second only if each wave is [short]. High frequency = short wavelength.",
+        },
+        {
+          type: "tf",
+          q: "Transverse waves consist of rarefactions and compressions.",
+          a: false,
+          img: "e-compression",
+          x: "Compressions and rarefactions are in a [longitudinal] wave. A transverse wave has crests and troughs.",
+        },
+        {
+          type: "tf",
+          q: "Longitudinal waves are moving along the particles in the same direction.",
+          a: true,
+          img: "e-longitudinal",
+          x: "In a [longitudinal] wave the particles go back and forth the [same] way as the wave moves.",
+        },
       ],
     },
     {
