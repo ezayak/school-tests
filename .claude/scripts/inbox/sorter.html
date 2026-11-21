@@ -234,6 +234,71 @@
         color: var(--muted);
         padding: 30px 0;
       }
+      .page.picked {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px var(--accent);
+      }
+      .pick {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        margin-bottom: 3px;
+      }
+      .pick input {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+      }
+      .ticks {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .ticks button {
+        font: 13px system-ui;
+        padding: 4px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--line);
+        background: none;
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .build {
+        position: sticky;
+        bottom: 0;
+        z-index: 2;
+        background: var(--card);
+        border: 2px solid var(--accent);
+        border-radius: 10px;
+        padding: 12px;
+        margin-top: 8px;
+      }
+      .build h2 {
+        font-size: 15px;
+        margin: 0 0 8px;
+      }
+      .build .btn:disabled {
+        opacity: 0.5;
+      }
+      .jobs {
+        margin-top: 10px;
+        font-size: 13px;
+      }
+      .job {
+        border-top: 1px solid var(--line);
+        padding: 6px 0;
+      }
+      .job pre {
+        margin: 4px 0 0;
+        max-height: 160px;
+        overflow: auto;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        color: var(--muted);
+        font-size: 12px;
+      }
       #big {
         position: fixed;
         inset: 0;
@@ -322,7 +387,8 @@
         const pages = {};
         for (const [p, v] of Object.entries(n.pages || {})) {
           const pv = {};
-          for (const k of ["s", "target", "text"]) if (v[k]) pv[k] = v[k];
+          for (const k of ["s", "target", "text", "pick"])
+            if (v[k]) pv[k] = v[k];
           if (Object.keys(pv).length) pages[p] = pv;
         }
         if (Object.keys(pages).length) out.pages = pages;
@@ -399,6 +465,140 @@
           main.append($("p", {}, btn, err));
         }
         for (const f of s.files) main.append(fileCard(f));
+        main.append(buildBar(s));
+      }
+
+      // The «Create / Update lesson» bar: what to build, sent to /api/build; build.py runs it.
+      const builds = {}; // subject id -> {mode, target, text}, kept while the page is open
+      let countLine = null;
+      let jobsBox = null;
+
+      function ticked(s) {
+        let pages = 0;
+        let files = 0;
+        for (const f of s.files) {
+          const n = Object.values(f.note.pages || {}).filter(
+            (p) => p.pick,
+          ).length;
+          pages += n;
+          if (n) files++;
+        }
+        return { pages, files };
+      }
+
+      function updateBuild() {
+        const s = data.subjects.find((x) => x.id === current);
+        if (!s || !countLine) return;
+        const t = ticked(s);
+        countLine.textContent = t.pages
+          ? `${t.pages} page${t.pages > 1 ? "s" : ""} ticked in ${t.files} file${t.files > 1 ? "s" : ""}: only these are used.`
+          : "No page ticked: all new files of this subject are used (with your notes).";
+      }
+
+      function buildBar(s) {
+        const b =
+          builds[s.id] ||
+          (builds[s.id] = { mode: "new", target: "", text: "" });
+        const btn = $("button", { class: "btn" });
+        const label = () => {
+          btn.textContent =
+            b.mode === "new" ? "🛠 Create lesson" : "🛠 Update lesson";
+          btn.disabled = !b.target.trim();
+        };
+        const mode = $("select", {
+          onchange: (e) => {
+            b.mode = e.target.value;
+            label();
+          },
+        });
+        for (const [v, t] of [
+          ["new", "New lesson"],
+          ["update", "Update a lesson"],
+        ]) {
+          const o = $("option", { value: v, text: t });
+          if (b.mode === v) o.selected = true;
+          mode.append(o);
+        }
+        const target = $("input", {
+          list: "targets",
+          placeholder: "Which lesson (e.g. Lesson 4-3, الدرس 5)",
+          value: b.target,
+          oninput: (e) => {
+            b.target = e.target.value;
+            label();
+          },
+        });
+        const text = $("textarea", {
+          placeholder:
+            "What to do (optional): e.g. only the story and the words, exercises next time",
+          oninput: (e) => (b.text = e.target.value),
+        });
+        text.value = b.text;
+        btn.onclick = async () => {
+          const t = ticked(s);
+          const what = t.pages ? `${t.pages} ticked pages` : "all new files";
+          const verb = b.mode === "new" ? "Create" : "Update";
+          if (
+            !confirm(
+              `${verb} "${b.target}" from ${what}?\nClaude builds it, checks it and pushes it live.`,
+            )
+          )
+            return;
+          btn.disabled = true;
+          const r = await fetch("/api/build", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ subject: s.id, ...b }),
+          });
+          if (!r.ok) alert((await r.json()).error || "Not sent");
+          else b.text = "";
+          label();
+          loadJobs(s.id);
+        };
+        label();
+        countLine = $("div", { class: "meta" });
+        jobsBox = $("div", { class: "jobs" });
+        const bar = $(
+          "section",
+          { class: "build" },
+          $("h2", { text: `Build ${s.kid} · ${s.name}` }),
+          $("div", { class: "row" }, mode, target),
+          text,
+          countLine,
+          btn,
+          jobsBox,
+        );
+        updateBuild();
+        loadJobs(s.id);
+        return bar;
+      }
+
+      const STATUS = {
+        queued: "⏳ waiting",
+        running: "🛠 building",
+        checking: "🔍 checking",
+        pushed: "✅ live",
+        failed: "❌ failed",
+      };
+      let jobsTimer = null;
+
+      async function loadJobs(subject) {
+        clearTimeout(jobsTimer);
+        const r = await fetch("/api/jobs/" + encodeURIComponent(subject));
+        const { jobs } = await r.json();
+        if (subject !== current || !jobsBox) return;
+        jobsBox.replaceChildren(
+          ...jobs.map((j) => {
+            const head = `${STATUS[j.status] || j.status} · ${j.mode === "new" ? "new" : "update"} “${j.target}” · ${j.created}`;
+            const box = $("div", { class: "job" }, $("div", { text: head }));
+            if (j.result) box.append($("div", { text: j.result, dir: "auto" }));
+            if (j.tail.length && j.status !== "pushed")
+              box.append($("pre", { text: j.tail.join("\n") }));
+            return box;
+          }),
+        );
+        if (jobs.some((j) => !["pushed", "failed"].includes(j.status)))
+          jobsTimer = setTimeout(() => loadJobs(subject), 5000);
       }
 
       function fileCard(f) {
@@ -457,6 +657,30 @@
         if (f.pictures.length) {
           const grid = $("div", { class: "pages" });
           f.pictures.forEach((pic, i) => grid.append(pageBox(f, pic, i + 1)));
+          if (f.pictures.length > 1) {
+            const tickAll = (on) => {
+              f.pictures.forEach((_, i) => {
+                const pn = f.note.pages[i + 1] || (f.note.pages[i + 1] = {});
+                pn.pick = on;
+              });
+              save(f.file);
+              render();
+            };
+            card.append(
+              $(
+                "div",
+                { class: "ticks" },
+                $("button", {
+                  text: "☑ Tick all",
+                  onclick: () => tickAll(true),
+                }),
+                $("button", {
+                  text: "☐ Tick none",
+                  onclick: () => tickAll(false),
+                }),
+              ),
+            );
+          }
           card.append(grid);
         }
         return card;
@@ -464,7 +688,21 @@
 
       function pageBox(f, pic, n) {
         const pn = f.note.pages[n] || (f.note.pages[n] = {});
-        const box = $("div", { class: "page", "data-s": pn.s || "" });
+        const box = $("div", {
+          class: "page" + (pn.pick ? " picked" : ""),
+          "data-s": pn.s || "",
+        });
+        const tick = $("input", {
+          type: "checkbox",
+          onchange: (e) => {
+            pn.pick = e.target.checked;
+            box.classList.toggle("picked", pn.pick);
+            save(f.file);
+            updateBuild();
+          },
+        });
+        tick.checked = !!pn.pick;
+        box.append($("label", { class: "pick" }, tick, "Use for the lesson"));
         const extra = $("div");
         const drawExtra = () => {
           extra.replaceChildren();

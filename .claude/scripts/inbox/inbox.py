@@ -248,7 +248,7 @@ def note_lines(n):
         out.append("  - parent: " + " · ".join(x for x in (head, n.get("text", "").replace("\n", " / ")) if x))
     names = {"skip": "skip", "answers": "answers here", "other": "other lesson"}
     for p, v in sorted(n.get("pages", {}).items(), key=lambda kv: int(kv[0])):
-        bits = [names.get(v.get("s"), "")]
+        bits = ["☑ ticked" if v.get("pick") else "", names.get(v.get("s"), "")]
         if v.get("target"):
             bits.append("→ " + v["target"])
         if v.get("text"):

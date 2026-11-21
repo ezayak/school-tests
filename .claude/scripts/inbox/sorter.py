@@ -38,6 +38,7 @@ import prep  # noqa: E402
 import review  # noqa: E402
 
 NOTES = Path("~/.local/share/school-inbox/notes.json").expanduser()
+JOBS = Path("~/.local/share/school-inbox/jobs").expanduser()  # build requests; build.py runs them
 PASSWORD = Path("~/.local/share/school-inbox/password").expanduser()
 PORT = 8770
 # Served without the password: the browser fetches the manifest without it
@@ -52,6 +53,8 @@ LOCK = threading.Lock()
 PREPARING = {}  # subject id -> "running" / "done" / error text
 # Pages that may send review notes (the app on GitHub Pages, the local test server)
 APP_ORIGINS = {"https://ezayak.github.io", "http://127.0.0.1:8765"}
+# The sorting page's own addresses (Origin of its own requests)
+SELF_HOSTS = {"mollers-pi.cheetah-krait.ts.net", f"mollers-pi.local:{PORT}", f"127.0.0.1:{PORT}", f"localhost:{PORT}"}
 
 
 def hash_password(pw, salt):
@@ -145,6 +148,52 @@ def inbox_data():
     return {"subjects": subjects}
 
 
+def new_job(body):
+    """A «Create / Update lesson» press: saved as jobs/<id>.json (status "queued"), then the runner is started.
+    The ticked pages are read from the notes, so the job says exactly what the page showed."""
+    result, _ = inbox.scan(body.get("subject"))
+    s = next((x for x in result if x["id"] == body.get("subject")), None)
+    mode, target, text = body.get("mode"), str(body.get("target") or "").strip(), str(body.get("text") or "").strip()
+    if not s or mode not in ("new", "update") or not target or len(target) > 200 or len(text) > 4000:
+        return None
+    notes = load_notes()
+    picks = []
+    for x in s["new"]:
+        pages = sorted(int(p) for p, v in notes.get(x["file"], {}).get("pages", {}).items() if v.get("pick"))
+        if pages:
+            picks.append({"file": x["file"], "pages": pages})
+    job = {
+        "id": time.strftime("%Y%m%d-%H%M%S-") + s["id"],
+        "subject": s["id"],
+        "mode": mode,
+        "target": target,
+        "text": text,
+        "picks": picks,  # empty: all new files of the subject
+        "status": "queued",
+        "created": time.strftime("%Y-%m-%d %H:%M"),
+    }
+    with LOCK:
+        JOBS.mkdir(parents=True, exist_ok=True)
+        (JOBS / (job["id"] + ".json")).write_text(json.dumps(job, ensure_ascii=False, indent=1))
+    # The runner is its own service: a job keeps running when this page restarts.
+    subprocess.run(["systemctl", "--user", "start", "--no-block", "school-build.service"], capture_output=True)
+    return job
+
+
+def list_jobs(subject):
+    """The last 5 jobs of a subject, newest first, with the end of each log."""
+    jobs = []
+    for f in sorted(JOBS.glob(f"*-{subject}.json"), reverse=True)[:5]:
+        try:
+            j = json.loads(f.read_text())
+        except (OSError, ValueError):
+            continue
+        log = f.with_suffix(".log")
+        j["tail"] = log.read_text(errors="replace").splitlines()[-12:] if log.exists() else []
+        jobs.append(j)
+    return jobs
+
+
 def prepare(subject):
     PREPARING[subject] = "running"
     try:
@@ -200,6 +249,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, (HERE / "sorter.html").read_bytes(), "text/html; charset=utf-8")
         if path == "/api/inbox":
             return self.send(200, inbox_data())
+        if path.startswith("/api/jobs/"):
+            return self.send(200, {"jobs": list_jobs(unquote(path[10:]).replace("/", ""))})
         if path.startswith("/img/"):
             f = (prep.CACHE / unquote(path[5:])).resolve()
             if f.is_file() and prep.CACHE.resolve() in f.parents and f.suffix == ".jpg":
@@ -217,11 +268,20 @@ class Handler(BaseHTTPRequestHandler):
         except ValueError:
             return self.send(400, {"error": "bad json"})
         path = urlparse(self.path).path
+        # Only the review notes may come from another site (the app). Anything else from a foreign page
+        # (a site open on the tablet, riding on the Tailscale login) is refused: a build runs Claude.
+        origin = self.headers.get("Origin")
+        own = SELF_HOSTS | {self.headers.get("Host"), self.headers.get("X-Forwarded-Host")}
+        if path != "/api/review" and origin and urlparse(origin).netloc not in own:
+            return self.send(403, {"error": "other site"})
         if path == "/api/note" and isinstance(body.get("file"), str):
             save_note(body["file"], body.get("note") or {})
             return self.send(200, {"ok": True})
         if path == "/api/review":
             return self.send(200 if review.add(body) else 400, {"ok": True})
+        if path == "/api/build":
+            job = new_job(body)
+            return self.send(200 if job else 400, job or {"error": "subject, new/update and a lesson name are needed"})
         if path == "/api/prep" and isinstance(body.get("subject"), str):
             if PREPARING.get(body["subject"]) != "running":
                 threading.Thread(target=prepare, args=(body["subject"],), daemon=True).start()
