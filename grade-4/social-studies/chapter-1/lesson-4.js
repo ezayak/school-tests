@@ -1,7 +1,7 @@
 // Social Studies · Grade 4 · Chapter 1 · Lesson 4 « People and the Land » (myWorld Interactive 4, book pp. 28–33).
 // All the content of the lesson. The engine is shared/computer-lesson.js (no Mini Windows).
 // Learn: the book's text in easy words (picture cards), the book's vocabulary + the booklet's words, the story « Marjory Stoneman Douglas » (p. 36, story-douglas.html).
-// Exercises: Term 2 booklet, Lesson 4 exercise sheet (pp. 3–5), and the book's Reading Checks and Lesson 4 Check (pp. 29–33).
+// Exercises: Term 2 booklet, Lesson 4 exercise sheet (pp. 3–5), Graded Homework (1) of Term 2 (with 💡 Help), and the book's Reading Checks and Lesson 4 Check (pp. 29–33).
 // The booklet has no answer key: the answers follow the book (grade-4/social-studies/UNVERIFIED.md).
 // Pictures: .claude/skills/social-studies-lesson/scripts/pictures/chapter-1-lesson-4.py (book crops, the booklet's irrigation drawing, e-*.jpg drawings).
 
@@ -38,6 +38,55 @@ const FL = ["Florida", "🌴"],
   WI = ["Wisconsin", "❄️"];
 const where = (q, emoji, inFlorida) =>
   two(q, emoji, inFlorida ? [FL, WI] : [WI, FL]);
+
+// Graded Homework 1: a 💡 Help for each question (a hint and the Learn card to look at)
+const card = (name) => `Look at the card «${name}» in Learn.`;
+const HW_HELP = [
+  {
+    t: "Saving the aquifer",
+    lines: [
+      card("Saving the aquifer"),
+      "In open [ditches], the sun dried up the water.",
+      "Where does the water go now?",
+    ],
+    vis: {
+      kind: "strip",
+      items: [
+        { e: "☀️💧", label: "Open ditches" },
+        { e: "🚇💧", label: "Tunnels" },
+      ],
+    },
+  },
+  {
+    t: "People change the land",
+    lines: [
+      card("People change the land"),
+      "Burning made the land [clear]. What grew after the fire?",
+    ],
+    vis: {
+      kind: "strip",
+      items: [
+        { e: "🔥🌾", label: "Burn" },
+        { e: "🌱🦬", label: "Grass for animals" },
+      ],
+    },
+  },
+  {
+    t: "Irrigation",
+    lines: [card("Irrigation"), "Water goes to the [crops] in pipes."],
+    vis: { kind: "strip", items: [{ e: "💧➡️🌽", label: "Water to crops" }] },
+  },
+  {
+    t: "Aquifer",
+    lines: [card("Aquifer"), "The water is in the [rock under the ground]."],
+    vis: { kind: "strip", items: [{ e: "🪨💧", label: "Under the ground" }] },
+  },
+  {
+    t: "Houses on stilts",
+    lines: [card("Houses on stilts"), "The word has [beach] in it."],
+    vis: { kind: "strip", items: [{ e: "🏖️🏠", label: "At the beach" }] },
+  },
+];
 
 window.LESSON = {
   n: 4,
@@ -599,6 +648,78 @@ window.LESSON = {
           img: "e-tunnel",
         },
       ],
+    },
+    // Graded Homework (1), Term 2 (due 24 Nov 2026): A answer 1–2, B write the term 1–3.
+    // The open questions are two-choice (Help works only on choose items); help: the Learn card to look at.
+    {
+      k: "hw1",
+      t: "Graded Homework 1",
+      en: "Graded Homework 1 · with 💡 Help",
+      ic: "🏠",
+      from: "Graded Homework (1) · Term 2",
+      keep: true,
+      items: [
+        two(
+          "How did people protect the Ogallala Aquifer?",
+          "ogallala-map",
+          [
+            [
+              "They carry the water in tunnels under the ground, and better irrigation wastes less water.",
+              "e-tunnel",
+            ],
+            ["They carry the water in open ditches in the sun.", "☀️💧"],
+          ],
+          "Open ditches lost water: the [sun] dried it up. [Tunnels under the ground] keep the water, and better [irrigation] wastes less.",
+        ),
+        two(
+          "Why did American Indians change the land by burning forests?",
+          "🔥🌲",
+          [
+            [
+              "To clear the land: it made rich soil and grass for animals.",
+              "🌾🦬",
+            ],
+            ["To build big cities and roads.", "🏙️🛣️"],
+          ],
+          "[American Indians] [burned] prairies and forests to [clear] the land. Then the soil was rich and grass grew for the animals.",
+        ),
+        mc(
+          "___ : using technology to bring water to crops.",
+          [
+            ["Irrigation", "w-irrigation"],
+            ["Aquifer", "w-aquifer"],
+            ["Beach house", "stilts"],
+          ],
+          {
+            img: "irrigation-drawing",
+            x: "[Irrigation] brings water to the crops in pipes, from lakes, rivers and streams.",
+          },
+        ),
+        mc(
+          "An ___ is an underground layer of rocks that holds water.",
+          [
+            ["Aquifer", "w-aquifer"],
+            ["Irrigation", "w-irrigation"],
+            ["Beach house", "stilts"],
+          ],
+          {
+            img: "e-aquifer",
+            x: "An [aquifer] is a layer of rock under the ground that holds water.",
+          },
+        ),
+        mc(
+          "___ is a house built on or near a beach.",
+          [
+            ["Beach house", "stilts"],
+            ["Skyway", "w-skyway"],
+            ["Aquifer", "w-aquifer"],
+          ],
+          {
+            emoji: "🏖️🏠",
+            x: "A [beach house] is at the beach. It stands on [stilts], so the water does not come in.",
+          },
+        ),
+      ].map((it, k) => ({ ...it, help: HW_HELP[k] })),
     },
     {
       k: "check",

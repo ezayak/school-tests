@@ -65,3 +65,9 @@ the scan repeats some spreads (047 and 048 are both pp. 40–41), so check the p
 | 14–16 | Ch2 L3 Growth and Civil War: A choose 1–10; B fill 1–7; E ✓/✗ 1–7; F answer 1–2 (the sheet has no C or D) | `chapter-2/lesson-3` · `bk-choose` (10), `bk-fill` (7), `bk-tf` (7), `bk-answer` (2)                                    | built                                                                                         |
 | 17    | Notes                                                                                                     | —                                                                                                                       | skipped (empty lines)                                                                         |
 | 18    | Civil War word search (24 words)                                                                          | `chapter-2/lesson-3` · `wsearch` (10 of the words, those in the lesson: a 12×12 grid)                                   | built (names and battles not in the book left out: Gettysburg, Sherman, Appomattox, Shiloh …) |
+
+## 20261121-Graded H.W (1).pdf (1 page, Term 2, Ch1 L4, due 24 Nov 2026)
+
+| Page | Content                                                      | Goes to                                                              | Status                                                                                               |
+| ---- | ------------------------------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| 1    | A answer 1–2 (Ogallala Aquifer, burning forests); B term 1–3 | `chapter-1/lesson-4` · `hw1` (5), each with 💡 Help (the Learn card) | built (A as two-choice items: the engine's Help works only on choose items; the model answer in `x`) |
