@@ -9,9 +9,11 @@ The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones
 
 ## Rules
 
-Folder `optima/grade-3/speed-reading/`, engine `shared/speed-reading.js` + `.css` (don't copy it; a game or text is data in `daily.js`, `book.js`, `catch.js` or `text-*.js`). Format in README: "Speed reading".
+Folder `optima/grade-3/speed-reading/`, engine `shared/speed-reading.js` + `.css` (don't copy it; a game or text is data in `daily.js`, `book.js` or `text-*.js`); «Ловець слів» is `catch.js` on `shared/word-games.js`. Format in README: "Speed reading".
 Sources: `~/Documents/2026-2027/Lucas/Optima/` (`speed-reading.txt` = the 30-day programme → Щодня; `швидкочитання.pdf` = «Школа швидкочитання» → Книжка and Тексти). Log: `SOURCES.md` in the folder.
 
+- A new `text-*.js` + `.html`: `node .claude/scripts/scaffold/new.js optima/grade-3/speed-reading/text-<name>.html --like <a text page>.html --title "…"` (check `key`: it follows only the number in the file name),
+  then `node .claude/scripts/scaffold/format.js` on the new page. A new game in `daily.js` / `book.js`: `format.js` on a game page that loads it (e.g. `flash.html`); «Ловець слів» (`catch.html`) runs on `shared/word-games.js`.
 - No days or weeks: the programme's material is grouped by skill into small games. The hub has three sections (Щодня · Книжка · Тексти).
 - The booklet stays exactly as printed: words run together, missing letters (■), letters cut off (`cut`), even a likely misprint. Never "fix" them; ask only when an answer can't be worked out.
 - Answers the book does not give are worked out (letter colours and sizes measured on the scan) and listed for the user before building; the made-up ones are noted in `SOURCES.md`.

@@ -74,9 +74,10 @@ The right answer is in a different place in each row (the engine does not shuffl
 
 ## 4. Write, check, register
 
-- `lesson-N.js` (shape of lesson-1.js) with the head: `part: {k, tab, ic, t}` (the theme: `t` = «THEME · Subtitle», `tab` = a short name; the same `k` for every lesson of it)
+- `lesson-N.js` + `lesson-N.html` from the scaffold: `node .claude/scripts/scaffold/new.js optima/grade-3/ukr-lit/lesson-N.html --like optima/grade-3/ukr-lit/lesson-<N-1>.html` (sets `key`, `n`),
+  then `node .claude/scripts/scaffold/format.js optima/grade-3/ukr-lit/lesson-N.html` (every item kind, its fields and a real example); open a sibling only for what the sheet doesn't show. The head: `part: {k, tab, ic, t}` (the theme: `t` = «THEME · Subtitle», `tab` = a short name; the same `k` for every lesson of it)
   and `card: {en: "author · kind · topic", cover: "<picture name>"}`.
-- `node .claude/scripts/ukr-lesson-add.js optima/grade-3/ukr-lit`: makes `lesson-N.html`, rebuilds `lessons.js` from all the lessons' heads,
+- `node .claude/scripts/ukr-lesson-add.js optima/grade-3/ukr-lit`: sets the title of `lesson-N.html` (makes it when missing), rebuilds `lessons.js` from all the lessons' heads,
   and the files, pictures, `countLabel`, `topics` of the «Українська література» entry in `games.js`. Then `prettier --write games.js optima/grade-3/ukr-lit/`.
 - `node .claude/scripts/ukr-lesson-check.js optima/grade-3/ukr-lit/lesson-N.js` must print OK.
 - Play and look (from the repo root):

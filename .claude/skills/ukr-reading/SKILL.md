@@ -13,7 +13,8 @@ The book lessons in the same folder (text + questions) are the `optima-ukr-lit` 
 Folder `optima/grade-3/ukr-lit/` («Складова ракета» texts; the book lessons there are in the next section), engine `shared/reading.js` + `shared/reading.css` (don't copy them; a text is only a data file). Format in README: "Ukrainian reading".
 Book: `~/Documents/2026-2027/Lucas/Optima/Літературне читання 3.pdf` (text layer: `pdftotext -f N -l N`; the words are split by zero-width spaces). Lucas reads slowly and has aphasia.
 
-- A text = `<name>.js` + `<name>.html` (copy bohdanchyk.html, change the `.js`), a card in `texts.js`, both files in `also` of the Українська література entry in `games.js`
+- A text = `<name>.js` + `<name>.html` (`node .claude/scripts/scaffold/new.js optima/grade-3/ukr-lit/<name>.html --like optima/grade-3/ukr-lit/bohdanchyk.html --title "…" --set key=ulit3-<name>`: the key doesn't follow the file name;
+  then `format.js` on the new page), a card in `texts.js`, both files in `also` of the Українська література entry in `games.js`
   plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 - The text exactly as the book prints it (’ apostrophes, « » quotes, – dashes). Lines of a phrase or a short sentence (≤ 7 words).
   More than about 100 words: `pages: [[lines], …]` of about 100 words each, cut at a paragraph or sentence; no separate cards, no page buttons.

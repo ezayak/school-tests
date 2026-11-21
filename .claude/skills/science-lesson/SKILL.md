@@ -49,7 +49,9 @@ Check every new picture on a contact sheet (5 per row) before using it: cut text
 
 ## 4. Write the exercises
 
-Copy the pattern of `topic-3/lesson-3.js` (the newest): helpers above `window.LESSON`, then the data.
+The pattern is `topic-3/lesson-3.js` (the newest): helpers above `window.LESSON`, then the data.
+For the format of every item kind (its fields and a real example) run `node .claude/scripts/scaffold/format.js grade-4/science/topic-N/lesson-M.html` instead of reading other lessons.
+A lesson that is not built yet (all 30 are): `node .claude/scripts/scaffold/new.js <new page>.html --like <a sibling>.html --title "…"`.
 
 - `mc(q, [[answer, picture], …], more)`: the first answer is right; a picture that looks like a file name (`e-crest`, `../lesson-1/e-transverse`) goes to `pics`, anything else (emoji) to `icons`. A name→picture map (`PART`, `EYE`) and a small builder (`parts("Cuticle", "Sepal")`) keep repeated answer lists short.
 - One exercise per booklet task group, in booklet order: `k: "ps-…"` for the practice sheet, `"quiz"` for the Lesson Quiz, `"slides"` for the teacher's slides; `from: "Booklet · Practice sheet p. 7–8"`; `keep: true` (items stay in the booklet's order). The book's "Book questions" (`k: "check"`) stay last.
