@@ -36,6 +36,14 @@ import prep  # noqa: E402
 NOTES = Path("~/.local/share/school-inbox/notes.json").expanduser()
 PASSWORD = Path("~/.local/share/school-inbox/password").expanduser()
 PORT = 8770
+# Served without the password: the browser fetches the manifest without it
+# when the page is added to the home screen. Nothing private in them.
+PUBLIC = {
+    "/manifest.json": (HERE / "manifest.json", "application/manifest+json"),
+    "/icon-180.png": (HERE / "icons/icon-180.png", "image/png"),
+    "/icon-192.png": (HERE / "icons/icon-192.png", "image/png"),
+    "/icon-512.png": (HERE / "icons/icon-512.png", "image/png"),
+}
 LOCK = threading.Lock()
 PREPARING = {}  # subject id -> "running" / "done" / error text
 
@@ -156,9 +164,12 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_GET(self):
+        path = urlparse(self.path).path
+        if path in PUBLIC:
+            f, kind = PUBLIC[path]
+            return self.send(200, f.read_bytes(), kind)
         if not self.allowed():
             return
-        path = urlparse(self.path).path
         if path == "/":
             return self.send(200, (HERE / "sorter.html").read_bytes(), "text/html; charset=utf-8")
         if path == "/api/inbox":

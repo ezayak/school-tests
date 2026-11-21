@@ -12,6 +12,8 @@ They were made to save tokens: Claude reads short text reports and small contact
 3. **Sort** (optional, saves the most questions): open **http://mollers-pi.local:8770** (or http://192.168.100.143:8770) on the phone or tablet at home,
    or http://127.0.0.1:8770 on the Pi. Per file: where it goes ("Lesson 4-3"), what it is (homework, slides, answer key, skip…), a note.
    Per page: Use / Skip / Answers / Other lesson, and a note (words that can't be read, what the teacher said).
+   As an app on the Android tablet (once): in Chrome open `chrome://flags/#unsafely-treat-insecure-origin-as-secure`, enter `http://mollers-pi.local:8770`, Enabled, Relaunch;
+   then open the page, ⋮ → "Add to home screen" → Install. (Without the flag it is only a shortcut that opens a browser tab: Chrome installs apps only from https.)
 4. **Build**: in a **new** Claude session, write «build inbox g4-math». Claude reads `inbox.py --subject g4-math` (your notes included), the contact sheets and the text,
    then follows the subject's skill. After the lesson: a row in the subject's `SOURCES.md`, `inbox.py done <files>`, `register.py`, commit.
 5. **`/clear`** after the lesson is committed: one lesson per session.
