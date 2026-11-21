@@ -6,7 +6,7 @@ description: Build or update Grade 4 Computer lessons (grade-4/computer/chapter-
 # Computer lessons (Grade 4)
 
 The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting", "Offline cache") and the format in `README.md` ("Computer lessons (Grade 4)", "… chapter 2 and Mini Word for Grade 4", "Mini Outlook and Mini Edge"). Read those first.
-The newest finished chapter is the model: copy its lesson shape (header comment, `window.LESSON` with `question`, `words`, `ideas`, `howto`, `games`, `exercises`).
+The newest finished chapter is the model: the new lesson starts from it with the scaffold ("4. Write the lesson").
 
 Alex has aphasia and is learning to read again: everything is read aloud, short sentences, key words in `[brackets]`, a picture on every card and question. The computer steps are practised on a pretend program, never only described.
 The user (the parent) reads the code and reviews every stage: build **one lesson at a time** unless told to do a batch, show it, wait for approval before committing.
@@ -60,6 +60,10 @@ Crop from the high-res figure PNGs first (1920 wide, clean), the scroll shots on
 School videos: `chapter-N/video/lM-<name>.mp4` + a poster `.jpg` (ffmpeg command in README). Videos are online only: never in `also`.
 
 ## 4. Write the lesson
+
+Start from the scaffold (CLAUDE.md "Workflow"): `node .claude/scripts/scaffold/new.js grade-4/computer/chapter-N/lesson-M.html --like <a lesson of the newest chapter>.html --title "…"`
+(the page with its pretend program, and a frame: header comment marked TODO, `n`, `grade`), then `node .claude/scripts/scaffold/format.js grade-4/computer/chapter-N/lesson-M.html` (every item kind, its fields and a real example).
+A new chapter with another program: take a sibling that loads that program, or fix the page's `<script>` / `<link>` lines. Open the sibling only for what the sheet doesn't show.
 
 Header comment: `// Computer · Grade 4 · Unit N · Lesson M « Title » (book pages A–B[, CW…, HW…]).` plus any book mistakes fixed. Fields: `n`, `grade: 4`, `title`, `unit: "Unit N · Lesson M"`, `book: "Book pages A–B"`, `cover`, `question {q, a, img}`, `words`, `ideas`, `howto`, `games`, `exercises` (`from: "Book p. 104 · Hands on 1"` or `"School · CW1"`).
 

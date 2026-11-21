@@ -6,7 +6,7 @@ description: Build or update Grade 4 Math lessons (Reveal Math, grade-4/math/uni
 # Math lessons (Grade 4)
 
 The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Math lessons (Grade 4)"). Read those first.
-`grade-4/math/unit-2/lesson-2-1.js` is the model: copy its shape (helpers at the top, then `window.LESSON`).
+A new lesson starts from the scaffold, with a lesson of the same unit as the sibling ("3. Build the lesson").
 
 Alex has aphasia and is learning to read again: the parent explains each question by pointing at the pictures. Every question has a drawing (`vis`) or a picture (`img`) or an emoji; short sentences; key words in `[brackets]`; answers typed on the number pad when they are numbers.
 The user reviews each lesson in the browser: build **one lesson at a time** unless told to do a batch, show it, wait for approval.
@@ -46,7 +46,9 @@ Alex has aphasia: the parent explains each question by pointing at the pictures.
 
 ## 3. Build the lesson
 
-Files: `unit-N/lesson-N-M.js`, pictures in `unit-N/img/lesson-N-M/`. The `.html`, the card in `lessons.js` (a new unit gets its chapter) and the files in `games.js` come from
+Files: `unit-N/lesson-N-M.js`, pictures in `unit-N/img/lesson-N-M/`. Start from the scaffold: `node .claude/scripts/scaffold/new.js grade-4/math/unit-N/lesson-N-M.html --like <the lesson before>.html --title "…"`
+(the page and a frame: header comment marked TODO, the sibling's `const { … } = MathKit;` line if it has one, `n`, `key`, `imgDir`), then `node .claude/scripts/scaffold/format.js grade-4/math/unit-N/lesson-N-M.html` (every item kind, its fields and a real example).
+Open the sibling only for what the sheet doesn't show. The `.html` (kept when `new.js` made it), the card in `lessons.js` (a new unit gets its chapter) and the files in `games.js` come from
 `node .claude/skills/math-lesson/scripts/add.js grade-4/math/unit-N/lesson-N-M.js` (then prettier on `games.js` and `lessons.js`).
 Build questions with `shared/math-kit.js` (see README for the list: forms, `cmp`, `roundQ`, `col`, `step`, `distrib`, `areaQ`, `estDiv`, `partialQ`, `remQ`, bar diagrams …):
 it works out every answer. A new question shape used by more than one lesson goes into the kit, not into a lesson file. A problem in several steps (`step`, `partialQ`, `areaQ`, `remQ`)

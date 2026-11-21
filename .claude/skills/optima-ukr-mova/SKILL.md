@@ -58,7 +58,8 @@ Every answer is worked out (count the sounds, check the scheme symbol by symbol:
 
 ## 3. Write the lesson
 
-- `lesson-N.js` (shape of lesson-1.js); `ukr-lesson-add.js` makes `lesson-N.html` (see 5).
+- `lesson-N.js` + `lesson-N.html` from the scaffold: `node .claude/scripts/scaffold/new.js optima/grade-3/ukr-mova/lesson-N.html --like optima/grade-3/ukr-mova/lesson-<N-1>.html` (sets `key`, `n`; `ukr-lesson-add.js` in 5 sets the title),
+  then `node .claude/scripts/scaffold/format.js optima/grade-3/ukr-mova/lesson-N.html` (every item kind, its fields and a real example); open a sibling only for what the sheet doesn't show.
 - **Урок** (`learn`): 3–5 slides, one rule each, from the book's rule boxes and the exercise questions («Пригадай …»): `lines` with `[key words]`,
   `ex` = book examples worked out, `img` when the book's picture explains it, `from: "№ 1, с. 4"`. Don't put an exercise's own answer on a slide.
 - **Вправи** (`groups`): by type of task (`t`, `ic`), homework in its own group (🏠). Every item: `n` (book number), `k` when the number repeats, `chip`, `p` (book page), `q` (the book's wording),

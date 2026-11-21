@@ -57,7 +57,8 @@ A table lesson («Таблиця множення числа N», «Таблиц
 
 ## 3. Write the lesson
 
-- `lesson-N.js` (copy the shape of lesson-2.js), `lesson-N.html` (copy lesson-2.html: change the `.js` and the `<title>`), a card in `lessons.js` (`note: "с. X–Y · K вправ"`).
+- `lesson-N.js` + `lesson-N.html` from the scaffold: `node .claude/scripts/scaffold/new.js optima/grade-3/math/lesson-N.html --like optima/grade-3/math/lesson-<N-1>.html --title "…"` (sets `key`, `n`),
+  then `node .claude/scripts/scaffold/format.js optima/grade-3/math/lesson-N.html` (every item kind, its fields and a real example); open a sibling only for what the sheet doesn't show; a card in `lessons.js` (`note: "с. X–Y · K вправ"`).
 - **Урок** (`learn`): 3–6 slides, one idea each: what the topic is, how to do it, one book example worked out (`ex`), a picture or `schema` when the book has one. `from: "№ 7, с. 5"`.
 - **Задачі** (`groups`): every exercise, the book's wording in `q`, the book's number in `n`, the page in `p`, items in book order inside a group.
 - Word problems: `help` = 3–4 short lines leading to the operation, `schema` = bar model (`segs` with `v` for the lengths, `q: true` on the unknown, `brace` / `total`), `steps` = one line per action with units in brackets `(м)`, `answer` = the full sentence containing the answer number once.

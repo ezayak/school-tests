@@ -5,7 +5,7 @@ description: Build or update Grade 4 Social Studies lessons and stories (myWorld
 
 # Social Studies lessons and stories (Grade 4)
 
-The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Social Studies lessons (Grade 4)", "English stories" for the story format). Read those first. This skill is the working procedure on top of them. The model to copy is `grade-4/social-studies/chapter-1/lesson-4.js` with its story `story-douglas.js`.
+The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Social Studies lessons (Grade 4)", "English stories" for the story format). Read those first. This skill is the working procedure on top of them. The model is `grade-4/social-studies/chapter-1/lesson-4.js` with its story `story-douglas.js`: the `--like` sibling of the scaffold ("4a", "4b").
 
 Alex has aphasia: the parent explains every question by pointing at pictures. So the book's text is retold **in easy words** on picture cards (one idea per card, 1–3 short sentences, the key words in `[brackets]`), **every question has a picture, every answer has a picture or an emoji, and every sentence answer has an explanation (`x`)**.
 The user reads the code and reviews every lesson: build one lesson, show it, wait for approval before committing.
@@ -50,7 +50,9 @@ Check every new picture on a contact sheet (PIL, 4 per row) before using it: cut
 
 ## 4a. Write the lesson
 
-Copy `lesson-4.js`: the helpers at the top (`mc`, `two` for the booklet's two-choice questions, builders for repeated answer pairs like `adapt` / `where`, `word` for match pairs), then `window.LESSON`.
+Start from the scaffold (CLAUDE.md "Workflow"): `node .claude/scripts/scaffold/new.js grade-4/social-studies/chapter-N/lesson-M.html --like grade-4/social-studies/chapter-1/lesson-4.html --title "…"`
+(the page and a frame: header comment marked TODO, `n`, `key`, `grade`), then `node .claude/scripts/scaffold/format.js grade-4/social-studies/chapter-N/lesson-M.html` (every item kind, its fields and a real example).
+Add the helpers of `lesson-4.js` you need at the top (`mc`, `two` for the booklet's two-choice questions, builders for repeated answer pairs like `adapt` / `where`, `word` for match pairs); open it only for what the sheet doesn't show.
 
 - Header comment: book pages, the booklet pages, "no answer key → UNVERIFIED.md", the picture script.
 - `n`, `key: "ss4-c<chapter>-l<lesson>"`, `unit: "Chapter N · Lesson M"`, `book: "Book pp. X–Y"`, `cover`, `question` (the book's "Unlock the Big Question" sentence turned into a question, with an easy answer).
@@ -66,7 +68,8 @@ Copy `lesson-4.js`: the helpers at the top (`mc`, `two` for the booklet's two-ch
 
 ## 4b. Write a story
 
-Copy `story-douglas.js` / `.html` (the `.html` has `<body data-view="story" data-subject="Social Studies">`). Format: README "English stories".
+`node .claude/scripts/scaffold/new.js grade-4/social-studies/chapter-N/story-<name>.html --like grade-4/social-studies/chapter-1/story-douglas.html --title "…" --set key=ss4-<name>`
+(the key doesn't follow the file name; the page keeps `<body data-view="story" data-subject="Social Studies">`), then `format.js` on the new page. Format: README "English stories".
 
 - `key: "ss4-<name>"`, `subject: "Social Studies"`, `kind` ("Citizenship · … · Book p. 36"), `lesson: {path: "lesson-M.html", label: "Lesson M"}`, `hub: "../index.html"`, `question` (a stand-in: log it in `UNVERIFIED.md`).
 - `pages`: the text exactly as printed, a paragraph cut into pages of 2–4 sentences, a picture on each page, one `easy` sentence each (use the person's name rather than guessing anything not in the text). A side label (Quality: Determination) is a `{box, p}`.
