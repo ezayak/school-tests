@@ -1,6 +1,6 @@
 /* Test p. 49–50 · التَّقْيِيمُ الْأُسْبُوعِيُّ · الْفَتْرَةُ الرَّابِعَةُ (Alex's «الأداءات والتقييمات» book with the answers, «حل التقييمات» p. 49–50,
    الْوَحْدَةُ الثَّانِيَةُ «أَخْلَاقِي .. حَيَاتِي»). Named by the book pages, not by a test number (the parent's wish).
-   The text: three lines of the poem «طَرِيقُ السَّعَادَةِ», a different three in each group (A: lines 3–5, B: 1–3, C: 2–4).
+   The text: three lines of the poem (one part, all shown at once) «طَرِيقُ السَّعَادَةِ», a different three in each group (A: lines 3–5, B: 1–3, C: 2–4).
    The answers are the handwritten key of the book; tashkeel and translations of the lines from Grade 3 Lesson 4 (the same poem).
    Each group: أَوَّلًا the text and its questions (أ ب ج د), ثَانِيًا a writing task (discuss an idea).
    Pictures: from Grade 3 Lesson 4 (../../../grade-3/term-1/arabic/img/lesson-4/), the sheet has none.
@@ -53,20 +53,21 @@ const LINE = [
     uk: "Я всім розповім про мою вдячність вам, тож будь щасливий і завжди май найкращі чесноти.",
   },
 ];
-const NTH = [
-  ["الْبَيْتُ الْأَوَّلُ", "Line 1", "Рядок 1"],
-  ["الْبَيْتُ الثَّانِي", "Line 2", "Рядок 2"],
-  ["الْبَيْتُ الثَّالِثُ", "Line 3", "Рядок 3"],
-];
+// a test tab shows only the first part of its text (no part navigation), so the three lines are one part, as on the sheet
 const TEXT = (lines, pic) => ({
   title: "أَوَّلًا: نَصُّ «طَرِيقُ السَّعَادَةِ»: اقْرَأْ ثُمَّ أَجِبْ",
   en: "First: the poem “The Road to Happiness”. Read, then answer",
   uk: "Спершу: вірш «Шлях до щастя». Прочитай, потім дай відповіді",
-  parts: lines.map((n, i) => ({
-    para: NTH[i][0],
-    ...(i === 0 ? { img: IMG + pic } : {}),
-    ...LINE[n],
-  })),
+  parts: [
+    {
+      para: "الْأَبْيَاتُ",
+      img: IMG + pic,
+      ...["ar", "en", "uk"].reduce(
+        (o, k) => ({ ...o, [k]: lines.map((n) => LINE[n][k]).join(" ") }),
+        {},
+      ),
+    },
+  ],
 });
 
 const WRITE_T = "ثَانِيًا: الْكِتَابَةُ (مُنَاقَشَةُ فِكْرَةٍ)";
@@ -128,6 +129,7 @@ window.LESSON = {
     ثُمَّ: ["then", "потім"],
     أَجِبْ: ["answer", "дай відповідь"],
     الْبَيْتُ: ["the line (of a poem)", "рядок (вірша)"],
+    الْأَبْيَاتُ: ["the lines (of a poem)", "рядки (вірша)"],
     الْأَوَّلُ: ["the first", "перший"],
     قَدْ: ["(already) / may", "(вже) / може"],
     بِأَنَّكَ: ["that you", "що ти"],
