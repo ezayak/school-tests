@@ -1,4 +1,4 @@
-// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard,dragTiles,voice,sideNav,frac,fracSay}=Kit;
+// Small helpers shared by every page. Use: const {esc,shuf,pick,star,lessonCard,dragTiles,voice,sideNav,frac,fracSay}=Kit; review mode: Kit.review
 window.Kit = (function () {
   const esc = (s) =>
     String(s ?? "").replace(
@@ -467,6 +467,159 @@ window.Kit = (function () {
               : `${n} ${n === "1" ? D[0] : D[1] || D[0] + "s"}`;
       return (w ? w + " and " : "") + f;
     });
+  // Review mode (the parent only): hold any page title 2 s to turn it on / off on this device.
+  // Then a ✎ button writes a note about what is on screen; notes go to the sorting page on the Pi
+  // (.claude/scripts/inbox/review.py) and wait on the device while it cannot be reached.
+  // An engine says what is on screen with Kit.review.item = () => "slide 4: …".
+  const review = (function () {
+    const ROOT = (document.currentScript?.src || "").replace(
+      /shared\/common\.js.*$/,
+      "",
+    );
+    const LOCAL = /^http:\/\/(127\.0\.0\.1|localhost)[:/]/.test(location.href);
+    const SERVER = LOCAL
+      ? "http://127.0.0.1:8770"
+      : "https://mollers-pi.cheetah-krait.ts.net";
+    const ON = "kit-review",
+      QUEUE = "kit-review-queue";
+    const store = {
+      get(k) {
+        try {
+          return localStorage.getItem(k);
+        } catch (e) {
+          return null;
+        }
+      },
+      set(k, v) {
+        try {
+          v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v);
+        } catch (e) {}
+      },
+    };
+    const queue = () => {
+      try {
+        return JSON.parse(store.get(QUEUE) || "[]");
+      } catch (e) {
+        return [];
+      }
+    };
+    const api = { item: () => "" };
+    let btn = null;
+
+    function toast(msg) {
+      const t = document.createElement("div");
+      t.className = "kit-rv-toast";
+      t.textContent = msg;
+      document.body.append(t);
+      setTimeout(() => t.remove(), 2500);
+    }
+    function paint() {
+      const n = queue().length;
+      if (btn) btn.dataset.wait = n ? String(n) : "";
+    }
+    async function flush() {
+      for (const note of queue()) {
+        try {
+          const r = await fetch(SERVER + "/api/review", {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify(note),
+          });
+          if (!r.ok && r.status !== 400) break; // 400: a broken note, dropped
+        } catch (e) {
+          break; // not reachable: try again later
+        }
+        store.set(
+          QUEUE,
+          JSON.stringify(queue().filter((x) => x.id !== note.id)),
+        );
+      }
+      paint();
+    }
+    function write() {
+      let item = "";
+      try {
+        item = String(api.item() || "");
+      } catch (e) {}
+      const d = document.createElement("dialog");
+      d.className = "kit-rv-dlg";
+      d.innerHTML = `<form method="dialog">
+        <b>Review note</b>
+        ${item ? `<div class="kit-rv-on">On screen: ${esc(item)}</div>` : ""}
+        <textarea rows="5" placeholder="What is wrong, what should it be?"></textarea>
+        <div class="kit-rv-row"><button value="">Cancel</button><button value="send" class="kit-rv-send">Send</button></div>
+      </form>`;
+      document.body.append(d);
+      d.addEventListener("close", () => {
+        const text = d.querySelector("textarea").value.trim();
+        d.remove();
+        if (d.returnValue !== "send" || !text) return;
+        const note = {
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+          page: location.href.split(/[?#]/)[0].replace(ROOT, ""),
+          title:
+            document.querySelector("h1")?.textContent.trim() || document.title,
+          item,
+          text,
+        };
+        store.set(QUEUE, JSON.stringify(queue().concat(note)));
+        flush().then(() =>
+          toast(
+            queue().some((x) => x.id === note.id)
+              ? "Saved here: it is sent when the Pi can be reached"
+              : "Note sent ✓",
+          ),
+        );
+      });
+      d.showModal();
+      d.querySelector("textarea").focus();
+    }
+    function show(on) {
+      btn?.remove();
+      btn = null;
+      if (!on) return;
+      btn = document.createElement("button");
+      btn.className = "kit-rv-btn";
+      btn.type = "button";
+      btn.title = "Review note";
+      btn.textContent = "✎";
+      btn.onclick = write;
+      document.body.append(btn);
+      paint();
+    }
+    function toggle() {
+      const on = !store.get(ON);
+      store.set(ON, on ? "1" : null);
+      show(on);
+      toast(on ? "Review mode on" : "Review mode off");
+    }
+
+    // Hold a title 2 s (titles are drawn by the engines and redrawn, so the listener is on the document)
+    let timer = 0;
+    const stop = () => clearTimeout(timer);
+    document.addEventListener("pointerdown", (e) => {
+      stop();
+      if (e.target.closest?.("h1")) timer = setTimeout(toggle, 2000);
+    });
+    for (const ev of ["pointerup", "pointercancel", "pointermove"])
+      document.addEventListener(
+        ev,
+        (e) =>
+          (ev !== "pointermove" ||
+            Math.abs(e.movementX) + Math.abs(e.movementY) > 6) &&
+          stop(),
+      );
+    const start = () => {
+      show(!!store.get(ON));
+      flush();
+    };
+    document.readyState === "loading"
+      ? document.addEventListener("DOMContentLoaded", start)
+      : start();
+    addEventListener("online", flush);
+    return api;
+  })();
+
   return {
     esc,
     shuf,
@@ -481,5 +634,6 @@ window.Kit = (function () {
     sideNav,
     frac,
     fracSay,
+    review,
   };
 })();

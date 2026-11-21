@@ -638,3 +638,90 @@ button:focus-visible {
 .voff span {
   color: var(--muted);
 }
+
+/* Review mode (Kit.review, the parent only): the ✎ button, the note box, the short messages */
+h1 {
+  -webkit-touch-callout: none; /* holding a title turns review mode on: no copy menu */
+}
+.kit-rv-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2.5px solid var(--ink);
+  background: var(--hl);
+  color: #1b2440;
+  font-size: 24px;
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+}
+.kit-rv-btn[data-wait]:not([data-wait=""])::after {
+  content: attr(data-wait);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  padding: 0 4px;
+  border-radius: 10px;
+  background: var(--bad);
+  color: #fff;
+  font-size: 13px;
+  line-height: 20px;
+}
+.kit-rv-dlg {
+  width: min(520px, calc(100vw - 32px));
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.kit-rv-dlg form {
+  display: grid;
+  gap: 10px;
+}
+.kit-rv-on {
+  color: var(--muted);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.kit-rv-dlg textarea {
+  font: inherit;
+  padding: 8px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.kit-rv-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.kit-rv-row button {
+  font: inherit;
+  padding: 6px 16px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+}
+.kit-rv-row .kit-rv-send {
+  background: var(--ink);
+  color: var(--card);
+}
+.kit-rv-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 80px;
+  z-index: 60;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 32px);
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--card);
+}
