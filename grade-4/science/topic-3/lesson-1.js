@@ -863,8 +863,8 @@ window.LESSON = {
           [
             ["Medium", "🌬️💧🪵"],
             ["Vibration", "📳"],
-            ["Frequency", "e-freq-high"],
-            ["Wavelength", "e-wavelength"],
+            ["Frequency", "〰️⏱️"],
+            ["Wavelength", "〰️↔️"],
           ],
           {
             vis: AIR,
