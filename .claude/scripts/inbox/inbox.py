@@ -7,7 +7,8 @@ its path is in done.txt (every file there when the tool started, plus what was b
   inbox.py                    report of the new files (Markdown), grouped by subject
   inbox.py --subject g4-math  only one subject
   inbox.py --json             the same as JSON (for Claude)
-  inbox.py --telegram         send the short summary to Telegram when a subject is ready
+  inbox.py --telegram [--prep] send the short summary to Telegram when a subject is ready
+                              (--prep: then prep every ready subject, OCR included)
   inbox.py done <file>...     mark files as used (after the lesson is built)
   inbox.py done --subject g4-math   mark every new file of a subject as used
   inbox.py prep <subject>     contact sheets, page text and video frames of its new files (see prep.py)
@@ -201,6 +202,7 @@ def scan(only=None):
                 "app_exists": app.is_dir(),
                 "log": (s["app"] + "/SOURCES.md") if (app / "SOURCES.md").exists() else None,
                 "skill": s.get("skill"),
+                "ocr": s.get("ocr"),
                 "new": [describe(p, cache) for p in new],
             }
         )
@@ -315,7 +317,7 @@ def main(argv):
         for s in result:
             print(f"## {s['kid']} · {s['name']} ({s['id']}) · {len(s['new'])} new")
             for x in s["new"]:
-                print(prep.line(x["file"], prep.prep(ROOT / x["file"])))
+                print(prep.line(x["file"], prep.prep(ROOT / x["file"], s.get("ocr"))))
         return
     result, other = scan(only)
     if "--json" in argv:
@@ -327,6 +329,14 @@ def main(argv):
             print(text)
         else:
             print("Nothing ready; no message sent.")
+        if "--prep" in argv:  # contact sheets and OCR ready before the session starts
+            import prep
+
+            for s in result:
+                if ready(s):
+                    for x in s["new"]:
+                        prep.prep(ROOT / x["file"], s.get("ocr"))
+                    print(f"prepared {s['id']}")
     else:
         print(report(result, other))
 

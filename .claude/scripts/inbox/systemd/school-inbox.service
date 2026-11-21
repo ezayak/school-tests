@@ -3,4 +3,5 @@ Description=School inbox: new teacher files, Telegram message when a subject is 
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python3 /home/olena/projects/school-tests/.claude/scripts/inbox/inbox.py --telegram
+ExecStart=/usr/bin/python3 /home/olena/projects/school-tests/.claude/scripts/inbox/inbox.py --telegram --prep
+TimeoutStartSec=2h

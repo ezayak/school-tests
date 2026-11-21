@@ -14,7 +14,8 @@
       "folders": ["Alex/English"],
       "booklets": ["English", "Classwork", "Homework"],
       "app": "grade-4/term-2/english",
-      "skill": "english-lesson"
+      "skill": "english-lesson",
+      "ocr": "eng"
     },
     {
       "id": "g4-math",
@@ -22,7 +23,8 @@
       "name": "Math",
       "folders": ["Alex/Math"],
       "app": "grade-4/math",
-      "skill": "math-lesson"
+      "skill": "math-lesson",
+      "ocr": "eng"
     },
     {
       "id": "g4-science",
@@ -31,7 +33,8 @@
       "folders": ["Alex/Science"],
       "booklets": ["Science"],
       "app": "grade-4/science",
-      "skill": "science-lesson"
+      "skill": "science-lesson",
+      "ocr": "eng"
     },
     {
       "id": "g4-ss",
@@ -40,7 +43,8 @@
       "folders": ["Alex/S.S.English"],
       "booklets": ["Social Studies"],
       "app": "grade-4/social-studies",
-      "skill": "social-studies-lesson"
+      "skill": "social-studies-lesson",
+      "ocr": "eng"
     },
     {
       "id": "g4-french",
@@ -48,28 +52,32 @@
       "name": "French",
       "folders": ["Alex/French"],
       "app": "grade-4/term-1/french",
-      "skill": "french-lesson"
+      "skill": "french-lesson",
+      "ocr": "fra+eng"
     },
     {
       "id": "g4-arabic",
       "kid": "Alex",
       "name": "Arabic",
       "folders": ["Alex/Arabic"],
-      "app": "grade-4/term-1/arabic"
+      "app": "grade-4/term-1/arabic",
+      "ocr": "ara"
     },
     {
       "id": "g4-ss-arabic",
       "kid": "Alex",
       "name": "SS Arabic",
       "folders": ["Alex/SSArabic"],
-      "app": "grade-4/term-1/social-studies-arabic"
+      "app": "grade-4/term-1/social-studies-arabic",
+      "ocr": "ara"
     },
     {
       "id": "g4-religion",
       "kid": "Alex",
       "name": "Religion",
       "folders": ["Alex/Religion"],
-      "app": "grade-4/term-1/religion"
+      "app": "grade-4/term-1/religion",
+      "ocr": "ara"
     },
     {
       "id": "g4-computer",
@@ -78,7 +86,8 @@
       "folders": ["Alex/Computer"],
       "booklets": ["Computer"],
       "app": "grade-4/computer",
-      "skill": "computer-lesson"
+      "skill": "computer-lesson",
+      "ocr": "eng"
     },
     {
       "id": "g3-english",
@@ -87,7 +96,8 @@
       "folders": ["Lucas/English"],
       "booklets": ["English"],
       "app": "grade-3/term-1/english",
-      "skill": "english-dictation"
+      "skill": "english-dictation",
+      "ocr": "eng"
     },
     {
       "id": "g3-french",
@@ -95,7 +105,8 @@
       "name": "French",
       "folders": ["Lucas/French"],
       "app": "grade-3/term-1/french",
-      "skill": "french-lesson"
+      "skill": "french-lesson",
+      "ocr": "fra+eng"
     },
     {
       "id": "g3-arabic",
@@ -103,7 +114,8 @@
       "name": "Arabic",
       "folders": ["Lucas/Arabic"],
       "app": "grade-3/term-1/arabic",
-      "skill": "arabic"
+      "skill": "arabic",
+      "ocr": "ara"
     },
     {
       "id": "g3-religion",
@@ -111,7 +123,8 @@
       "name": "Religion",
       "folders": ["Lucas/Religion"],
       "app": "grade-3/term-1/religion",
-      "skill": "religion-lesson"
+      "skill": "religion-lesson",
+      "ocr": "ara"
     },
     {
       "id": "g3-computer",
@@ -119,7 +132,8 @@
       "name": "Computer",
       "folders": ["Lucas/Computer"],
       "booklets": ["Computer"],
-      "app": "grade-3/computer"
+      "app": "grade-3/computer",
+      "ocr": "eng"
     },
     {
       "id": "g3-science",
@@ -127,7 +141,8 @@
       "name": "Science",
       "folders": ["Lucas/Science"],
       "booklets": ["Science"],
-      "app": "grade-3/term-1/science"
+      "app": "grade-3/term-1/science",
+      "ocr": "eng"
     },
     {
       "id": "g3-ss",
@@ -135,7 +150,8 @@
       "name": "Social Studies",
       "folders": ["Lucas/S.S.English"],
       "booklets": ["SS"],
-      "app": "grade-3/term-1/social-studies"
+      "app": "grade-3/term-1/social-studies",
+      "ocr": "eng"
     }
   ]
 }
