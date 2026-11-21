@@ -17,7 +17,6 @@ Alex/Arabic/Term 1/20261031-8bcb45db-337a-41a9-b1b4-b7c621c91646.pdf
 Alex/Arabic/Term 1/��إجابات كتاب التقييمات اللغة العربية�.pdf
 Alex/Computer/20261105-LU_G4_U2_L2_1_Modify_picture_VT.mp4
 Alex/Computer/20261108-LU_G4_U2_L2_4_Change_pyramids_colors_VT.mp4
-Alex/Computer/20261119-HW1_for_T2-G4.pdf
 Alex/Computer/20261119-LU_G4_U2_L4_1_Read_mode_VT.mp4
 Alex/Computer/20261119-LU_G4_U2_L4_2_Print_options_VT.mp4
 Alex/Computer/Term 1/20260921-LU_G4_U1_L1_1_Search_file_or_folder_VT.mp4
