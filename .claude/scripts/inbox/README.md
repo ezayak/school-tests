@@ -17,6 +17,11 @@ They were made to save tokens: Claude reads short text reports and small contact
    then follows the subject's skill. After the lesson: a row in the subject's `SOURCES.md`, `inbox.py done <files>`, `register.py`, commit.
 5. **`/clear`** after the lesson is committed: one lesson per session.
 
+Or **build from the sorting page**, without a Claude session: tick the pages to use ("Use for the lesson"; Tick all / none per file;
+nothing ticked = all new files of the subject), then in the **Build** bar at the bottom choose New lesson / Update a lesson, write which lesson
+and, if needed, what to do, and press **Create / Update lesson**. `build.py` (below) runs it and the bar shows ⏳ → 🛠 → 🔍 → ✅ live / ❌ failed;
+the same result comes on Telegram with the commit link. Used pages are unticked and marked "used: <lesson>".
+
 ## Why: where the tokens went (Nov 2–20, 26 sessions)
 
 - 5,190 million tokens were re-read from the cache, 103 million new input, 19 million output. Every tool call sends the whole conversation again.
@@ -32,16 +37,17 @@ They were made to save tokens: Claude reads short text reports and small contact
 
 ## The scripts (`.claude/scripts/inbox/`)
 
-| File                  | What it does                                                                                        |
-| --------------------- | --------------------------------------------------------------------------------------------------- |
-| `inbox.py`            | Finds the new files per subject, guesses lesson and kind, prints the report with the parent's notes |
-| `prep.py`             | Contact sheets, page pictures, `text.txt` (text layer), `ocr.txt` (Tesseract), video frames         |
-| `sorter.py` + `.html` | The sorting page (local web server, password from the network)                                      |
-| `review.py`           | The parent's review notes from the lesson pages (sent to the sorting page), listed for Claude       |
-| `register.py`         | After a lesson: the `also` list in `games.js`, the offline check, the `sw.js` VERSION bump          |
-| `subjects.json`       | The settings (below)                                                                                |
-| `done.txt`            | Every file already used (one path per line). Committed with the lesson that used it                 |
-| `systemd/`            | `school-inbox.service` + `.timer` (19:00), `school-sorter.service` (the page, always on)            |
+| File                  | What it does                                                                                                                |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `inbox.py`            | Finds the new files per subject, guesses lesson and kind, prints the report with the parent's notes                         |
+| `prep.py`             | Contact sheets, page pictures, `text.txt` (text layer), `ocr.txt` (Tesseract), video frames                                 |
+| `sorter.py` + `.html` | The sorting page (local web server, password from the network)                                                              |
+| `review.py`           | The parent's review notes from the lesson pages (sent to the sorting page), listed for Claude                               |
+| `register.py`         | After a lesson: the `also` list in `games.js`, the offline check, the `sw.js` VERSION bump                                  |
+| `subjects.json`       | The settings (below)                                                                                                        |
+| `done.txt`            | Every file already used (one path per line). Committed with the lesson that used it                                         |
+| `build.py`            | Runs the page's Create / Update lesson jobs: Claude in a worktree, checks, push to main, Telegram                           |
+| `systemd/`            | `school-inbox.service` + `.timer` (19:00), `school-sorter.service` (the page, always on), `school-build.service` (the jobs) |
 
 Commands (from the repo root):
 
@@ -100,6 +106,30 @@ python3 .claude/scripts/inbox/sorter.py --set-password     # in a terminal; then
 | Telegram bot token and owner | from `school-hw`: keyring `telegram-homework` / `Alex`, `var/telegram/owner.json`                       |
 | Page cache (not in git)      | `.claude/scripts/inbox/.cache.json` (page count and first text per file)                                |
 
+## Build jobs (`build.py`)
+
+A press on Create / Update lesson saves `~/.local/share/school-inbox/jobs/<id>.json` and starts `school-build.service`, which runs the queued jobs one at a time:
+
+1. a fresh git worktree from `origin/main` in `~/.cache/school-inbox/build/<id>`: your own checkout and its uncommitted files are never touched;
+2. `claude -p` («build inbox <id>» + the job: lesson, your text, the ticked pages) with the subject's skill. The press is the approval: it does not ask,
+   commits the lesson and the `sw.js` bump, never pushes (blocked). At most `rules.buildBudgetUsd` dollars (subjects.json) and 90 minutes per job;
+3. the script itself checks the commits: only files in the subject's app folder + `games.js`, `sw.js`, `done.txt`; Prettier; `node --check`; `register.py check`; `sw.js` bumped;
+4. all good: rebased on `origin/main` and **pushed to main** (live on the tablets), the worktree removed. Anything wrong: nothing pushed,
+   the worktree and the branch `build/<id>` stay (named in the Telegram message) for a look in a normal session.
+
+After a job pushed, your own checkout is behind: `git pull --rebase` before your next push.
+
+```bash
+python3 .claude/scripts/inbox/build.py --list                 # the jobs and their status
+cat ~/.local/share/school-inbox/jobs/<id>.log                 # what Claude did (one line per step)
+journalctl --user -u school-build -n 20 --no-pager            # the runner itself
+git worktree list; git worktree remove --force <path>; git branch -D build/<id>   # after looking at a failed job
+```
+
+Sign-in: the runner uses the Claude Code CLI (`~/.local/bin/claude`) and its login, which ends every few weeks. For a login that lasts,
+run `claude setup-token` once in a terminal and put the token into `~/.local/share/school-inbox/claude.env` as
+`CLAUDE_CODE_OAUTH_TOKEN=…` (`chmod 600`); `school-build.service` reads that file.
+
 ## Services
 
 ```bash
@@ -108,6 +138,7 @@ systemctl --user start school-inbox.service              # run the check now (se
 journalctl --user -u school-inbox -n 20 --no-pager       # what the last run did
 systemctl --user restart school-sorter                   # after a password change
 journalctl --user -u school-sorter -n 5 --no-pager       # the page's start line
+cp .claude/scripts/inbox/systemd/*.service ~/.config/systemd/user/ && systemctl --user daemon-reload   # after a unit changes
 ```
 
 Who needs the password: the Pi itself, never; your own devices through Tailscale, never (`tailscale serve` passes on your Tailscale login,

@@ -4,7 +4,8 @@
   "ignoreGlobs": ["*/ebook/*", "*/out[0-9]*.png"],
   "rules": {
     "minFiles": 3,
-    "maxAgeDays": 4
+    "maxAgeDays": 4,
+    "buildBudgetUsd": 10
   },
   "subjects": [
     {
