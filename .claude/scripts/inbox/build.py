@@ -89,7 +89,10 @@ def prompt(job):
     if job["picks"]:
         out.append("Use only these ticked pages (pictures: ~/.cache/school-inbox/<file without extension>/pages/p-N.jpg):")
         for p in job["picks"]:
-            out.append(f"- {p['file']}: p. {', '.join(map(str, p['pages']))}")
+            if p["file"].lower().endswith(".pdf"):
+                out.append(f"- {p['file']}: p. {', '.join(map(str, p['pages']))}")
+            else:
+                out.append(f"- {p['file']} (whole file)")
     else:
         out.append("No pages ticked: use the subject's new files that belong to this lesson, with the parent's notes.")
     return "\n".join(out)

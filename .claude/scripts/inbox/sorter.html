@@ -682,6 +682,26 @@
             );
           }
           card.append(grid);
+        } else if (f.ext !== "pdf") {
+          // A video or photo has no page pictures: one tick for the whole file (kept as page 1)
+          const pn = f.note.pages[1] || (f.note.pages[1] = {});
+          const tick = $("input", {
+            type: "checkbox",
+            onchange: (e) => {
+              pn.pick = e.target.checked;
+              save(f.file);
+              updateBuild();
+            },
+          });
+          tick.checked = !!pn.pick;
+          card.append(
+            $(
+              "label",
+              { class: "pick" },
+              tick,
+              pn.used ? `Use again (used: ${pn.used})` : "Use for the lesson",
+            ),
+          );
         }
         return card;
       }
