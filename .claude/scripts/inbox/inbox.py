@@ -86,8 +86,13 @@ def load_done():
 
 
 def add_done(paths):
+    """Mark files as used. A file with a 📌 page (keep for later, set on the sorting page) stays in the inbox."""
     done = load_done()
-    new = sorted(set(paths) - done)
+    notes = load_notes()
+    kept = {p for p in paths if any(v.get("keep") for v in notes.get(p, {}).get("pages", {}).values())}
+    for p in sorted(kept):
+        print(f"kept in the inbox (📌 page): {p}")
+    new = sorted(set(paths) - done - kept)
     if new:
         with DONE_FILE.open("a") as f:
             f.write("".join(p + "\n" for p in new))
@@ -251,6 +256,8 @@ def note_lines(n):
         bits = ["☑ ticked" if v.get("pick") else "", names.get(v.get("s"), "")]
         if v.get("target"):
             bits.append("→ " + v["target"])
+        if v.get("keep"):
+            bits.append("📌 keep for later")
         if v.get("text"):
             bits.append(v["text"].replace("\n", " / "))
         out.append(f"  - p. {p}: " + " · ".join(b for b in bits if b))

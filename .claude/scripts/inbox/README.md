@@ -41,6 +41,9 @@ Per file:
 
 Per page (under each page picture; tap a picture to see it big): **Use** / **Skip** / **Answers** / **Other lesson**, a note
 (words that can't be read), and the **Use for the lesson** tick for the Build bar. Everything is saved as you type ("Saved ✓").
+**Other lesson** = this page belongs to a different lesson than the file (type which one in "Which lesson?").
+**📌 Keep for later** = the page still has something to build (e.g. half homework, half lesson): `inbox.py done` leaves a file with a 📌 page
+in the inbox; untick 📌 once the page is fully used.
 
 A subject whose files are not prepared yet (no page pictures) has a **Prepare page pictures** button: it runs `prep` (pictures, text, OCR) on the Pi.
 The notes go to `~/.local/share/school-inbox/notes.json` and are printed by `inbox.py --subject <id>`, so «build inbox <id>» follows them.

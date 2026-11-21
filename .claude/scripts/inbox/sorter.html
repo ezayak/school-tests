@@ -387,7 +387,7 @@
         const pages = {};
         for (const [p, v] of Object.entries(n.pages || {})) {
           const pv = {};
-          for (const k of ["s", "target", "text", "pick", "used"])
+          for (const k of ["s", "target", "text", "pick", "used", "keep"])
             if (v[k]) pv[k] = v[k];
           if (Object.keys(pv).length) pages[p] = pv;
         }
@@ -710,6 +710,15 @@
             pn.used ? `Use again (used: ${pn.used})` : "Use for the lesson",
           ),
         );
+        const keep = $("input", {
+          type: "checkbox",
+          onchange: (e) => {
+            pn.keep = e.target.checked;
+            save(f.file);
+          },
+        });
+        keep.checked = !!pn.keep;
+        box.append($("label", { class: "pick" }, keep, "📌 Keep for later"));
         const extra = $("div");
         const drawExtra = () => {
           extra.replaceChildren();
