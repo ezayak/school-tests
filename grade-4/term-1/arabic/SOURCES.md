@@ -10,5 +10,6 @@ Source folder: `~/Documents/2026-2027/Alex/Arabic/`.
 
 Before 2026-11-20: every file in the folder was already used (listed in `.claude/scripts/inbox/done.txt`), except `book/`.
 
-| Date | File | Goes to | Status |
-| ---- | ---- | ------- | ------ |
+| Date       | File                                                                                      | Goes to                                                                                                | Status                                                                                    |
+| ---------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| 2026-11-21 | `book/حل التقييمات - لغة عربية - 4 ابتدائي - ترم 1 - ذاكرولي.pdf` p. 49–50 (PDF p. 47–48) | `test-p49` · التقييم الأسبوعي, poem «طريق السعادة», groups A · B · C, answers from the handwritten key | **built** (the homework at the top of p. 49 and the rest of the book: still in the inbox) |
