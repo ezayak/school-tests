@@ -387,7 +387,7 @@
         const pages = {};
         for (const [p, v] of Object.entries(n.pages || {})) {
           const pv = {};
-          for (const k of ["s", "target", "text", "pick"])
+          for (const k of ["s", "target", "text", "pick", "used"])
             if (v[k]) pv[k] = v[k];
           if (Object.keys(pv).length) pages[p] = pv;
         }
@@ -702,7 +702,14 @@
           },
         });
         tick.checked = !!pn.pick;
-        box.append($("label", { class: "pick" }, tick, "Use for the lesson"));
+        box.append(
+          $(
+            "label",
+            { class: "pick" },
+            tick,
+            pn.used ? `Use again (used: ${pn.used})` : "Use for the lesson",
+          ),
+        );
         const extra = $("div");
         const drawExtra = () => {
           extra.replaceChildren();

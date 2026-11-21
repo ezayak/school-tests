@@ -1,0 +1,9 @@
+[Unit]
+Description=School inbox: run the Create / Update lesson jobs from the sorting page (started by sorter.py)
+
+[Service]
+Type=oneshot
+Environment=PATH=/home/olena/.local/bin:/home/olena/.config/nvm/versions/node/v26.13.0/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/python3 /home/olena/projects/school-tests/.claude/scripts/inbox/build.py
+EnvironmentFile=-/home/olena/.local/share/school-inbox/claude.env
+TimeoutStartSec=6h
