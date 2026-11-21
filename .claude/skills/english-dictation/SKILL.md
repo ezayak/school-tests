@@ -32,8 +32,9 @@ The boys learn from pictures and sound (Alex is learning to read again, Lucas ha
 
 Grade 4: `grade-4/term-N/english/english-dictation-unitN-weekM.{js,html}`; Grade 3: `grade-3/term-1/english/english-<topic>.{js,html}`.
 
-- Page: copy the last dictation's `.html`, change only `<title>` ("Dictation Unit 2 Week 5") and the data file's name.
-- Data file: copy the model `.js`. First line: `// <title> · English, Grade N. Source: <sheet file> (dictation on <date>). Engine: shared/spelling.js.`
+- Page and data file: `node .claude/scripts/scaffold/new.js grade-4/term-N/english/english-dictation-unitN-weekM.html --like <the last dictation>.html --title "Dictation Unit 2 Week 5"`
+  (it keeps `heading`, `subtitle`, `lang`), then `node .claude/scripts/scaffold/format.js <the new page>.html` for the word and sentence format.
+- First line of the data file: `// <title> · English, Grade N. Source: <sheet file> (dictation on <date>). Engine: shared/spelling.js.`
   `heading: "Dictation:"` (Grade 3 spelling lists leave it out: "Spelling:"), `subtitle: "Grade 4 English · Dictation"`, `lang: "en-US"`.
 - From Term 2 on: `hub: "../../term-1/english/index.html"` (the "English" link).
 

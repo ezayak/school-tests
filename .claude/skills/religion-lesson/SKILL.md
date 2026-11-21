@@ -20,7 +20,7 @@ Sorting:
   belongs to that lesson (build that lesson if it is missing, then put the page there). If unsure which part is homework, ask before building.
 - Words missing or unreadable: never guess. List them and ask.
 
-What to build: `uN-lesson-M.js` + `uN-lesson-M.html` (copy u2-lesson-4.html), pictures in `img/uN-lesson-M/` (`pdftoppm -r 300`, then PIL; story ~700px, small activity pictures ~300px).
+What to build: `uN-lesson-M.js` + `uN-lesson-M.html` (`node .claude/scripts/scaffold/new.js grade-3/term-1/religion/uN-lesson-M.html --like grade-3/term-1/religion/u2-lesson-4.html --title "…"`, then `format.js` on the new page for the item format), pictures in `img/uN-lesson-M/` (`pdftoppm -r 300`, then PIL; story ~700px, small activity pictures ~300px).
 
 - `n: "rel-uNlM"`, `tapq: true`, `links` back to "Religion lessons", `tabs`: story · games · verse, plus hw only when there is real homework for this lesson.
 - Story: the book text word for word in short parts (one picture each, reuse a picture for two parts if needed); the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.

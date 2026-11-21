@@ -24,10 +24,10 @@ Sorting a scan:
 
 What to build:
 
-- **Lesson** `lesson-N.js` + `lesson-N.html` + `lesson-N-exercises.html` (copy lesson-1's), pictures cropped from the book into `img/lesson-N/` (~700px).
+- **Lesson** `lesson-N.js` + `lesson-N.html` (`new.js … --like lesson-1.html`, see "3. Build") + `lesson-N-exercises.html` (copy lesson-1's, change the `.js` and the title), pictures cropped from the book into `img/lesson-N/` (~700px).
   Story texts, words, opposites / plurals / meanings (the book's قاموس), every book exercise as a section; every item has a picture.
-- **Test** `test-N.js` + `test-N.html` (copy test-1.html): one tab per group, the sheet's paragraph with a picture above the tasks, items without pictures. See "Arabic tests" below.
-- **Homework** `hw-N.js` + `hw-N.html` for Lesson N (copy hw-2.html): one tab per book page, only the homework tasks, a picture (`img` or emoji `ic`) on every item.
+- **Test** `test-N.js` + `test-N.html` (`new.js --like test-1.html`, see "3. Build"): one tab per group, the sheet's paragraph with a picture above the tasks, items without pictures. See "Arabic tests" below.
+- **Homework** `hw-N.js` + `hw-N.html` for Lesson N (`new.js --like hw-3.html`, see "3. Build"): one tab per book page, only the homework tasks, a picture (`img` or emoji `ic`) on every item.
   More homework for a lesson that already has `hw-N` = new tabs in it.
 - Item type: one word to write → `word` (list every accepted answer); choices given in brackets → `mc` (right one first); words to put in order (رَتِّبْ) → `build` with `a` = the sentence (word tiles, `Kit.dragTiles`; the page loads drag-words.css and shared/common.js); sentence, writing, copying → `open` with a model answer.
   A writing task (new ending, write about yourself) gets a folded `help` question that leads to an idea; its options are `[ar, en, uk]`, so they are translated.
@@ -87,10 +87,12 @@ Keep a notes file in the scratchpad (`<scratchpad>/hw/notes.md`) and write each 
 
 ## 3. Build
 
-Copy, don't write from scratch:
+Start from the scaffold, don't write from scratch (CLAUDE.md "Workflow"):
+`node .claude/scripts/scaffold/new.js grade-3/term-1/arabic/test-N.html --like grade-3/term-1/arabic/test-1.html --title "…"` (page + empty frame with `n`),
+then `node .claude/scripts/scaffold/format.js grade-3/term-1/arabic/test-N.html` (every item kind, its fields and a real example). Open a sibling only for what the sheet doesn't show.
 
-- **Test**: `test-N.html` = copy of `test-1.html` (change the `.js` and the title). `test-N.js` like `test-1.js`: `n: "tN"`, `tapq: true`, `exSub`, `tabs` = one per group with `story: 0` (or the group's own text index when the groups have different paragraphs), `stories` = the paragraph(s), one part each, `para: "السُّؤَالُ الْأَوَّلُ: اقْرَأِ الْفِقْرَةَ التَّالِيَةَ ثُمَّ أَجِبْ"`, `img` from the lesson's pictures. Sections `k: "a1"`, `"a2"`, … with `tab: "a"`, one per lettered part, `t` as printed.
-- **Homework**: `hw-N.html` = copy of `hw-3.html` (it loads `drag-words.css` and `shared/common.js` for `build`). `hw-N.js` like `hw-3.js`: `n: "hN"`, one tab per book page (`{k: "p41", ic, t: "Page 41", short: "p.41", ar: "صَفْحَةُ ٤١"}`), a tab with a text to read gets `story: i`. Every homework item has a picture (`img` from `img/lesson-N/`, or an emoji `ic`, at most 2 emoji).
+- **Test**: `test-N.html` + `.js` from `new.js --like test-1.html`, filled like `test-1.js`: `n: "tN"`, `tapq: true`, `exSub`, `tabs` = one per group with `story: 0` (or the group's own text index when the groups have different paragraphs), `stories` = the paragraph(s), one part each, `para: "السُّؤَالُ الْأَوَّلُ: اقْرَأِ الْفِقْرَةَ التَّالِيَةَ ثُمَّ أَجِبْ"`, `img` from the lesson's pictures. Sections `k: "a1"`, `"a2"`, … with `tab: "a"`, one per lettered part, `t` as printed.
+- **Homework**: `hw-N.html` + `.js` from `new.js --like hw-3.html` (the page loads `drag-words.css` and `shared/common.js` for `build`), filled like `hw-3.js`: `n: "hN"`, one tab per book page (`{k: "p41", ic, t: "Page 41", short: "p.41", ar: "صَفْحَةُ ٤١"}`), a tab with a text to read gets `story: i`. Every homework item has a picture (`img` from `img/lesson-N/`, or an emoji `ic`, at most 2 emoji).
 - A sheet with no paragraph (only tasks): tabs without `story`, an emoji `ic` on every item (test-5).
 - Items repeated in several groups: write them once as a `const` and copy them into each section (`items.map((it) => ({ ...it }))`, see test-3.js).
 - Item types ("Rules" above): one word → `word` with every accepted answer; choices in brackets → `mc` (right one first); رَتِّبْ → `build` (homework); sentences, writing, copying → `open` with a model answer; syllables → `open` with `plain: true` (“اَلْ / عَا / مِ”); a writing task gets a `help` question with `[ar, en, uk]` options.

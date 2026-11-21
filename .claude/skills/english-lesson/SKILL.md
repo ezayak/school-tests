@@ -37,14 +37,14 @@ Sorting:
 
 What to build:
 
-- **Lesson** `unitN-weekM.js` + `.html` (copy `term-1/english/unit1-week5.html`, change the `.js` and the title), pictures in `img/unitN-weekM/`.
+- **Lesson** `unitN-weekM.js` + `.html` (`new.js --like` the newest week, see "4. Write the files"), pictures in `img/unitN-weekM/`.
   `key: "en4-uNwM"`, `unit: "Unit N · Week M"`, `hub`: the English page (`"../../term-1/english/index.html"` from a later term), `question` = the Essential Question.
   Learn: the week's story tiles, then decks (vocabulary words, the grammar rule boxes, the spelling list by pattern, figurative language), each card with `vis`, `src` or `emoji`.
   Play: games for the week's points (sort, match, mc). Exercises: every booklet task, one exercise each, `from: "Classwork p. 3"` (the PDF page number, printed at the bottom centre),
   `g` = the section ("🧩 Grammar · …", "🔊 Phonics · …", "🔤 Vocabulary", "🧱 Vocabulary strategy · …", "📖 Reading · …"); items in the booklet's order.
-- **Story** `story-<name>.js` + `.html` (copy `term-1/english/story-helping-hand.html`, change the `.js`), pictures in `img/<name>/` (`pdftoppm -r 200`, then PIL; ~700px, small pictures ~400px).
+- **Story** `story-<name>.js` + `.html` (`new.js --like` the newest story, with `--set key=en4-<name>`: the key doesn't follow the file name), pictures in `img/<name>/` (`pdftoppm -r 200`, then PIL; ~700px, small pictures ~400px).
   Text exactly as printed, short pages, one `easy` sentence each, `gloss` for the hard words, the booklet's questions in order; `lesson: {path, label}`, and `hub` (as above) from a later term.
-- **Dictation** (a school dictation sheet) `english-dictation-unitN-weekM.js` + `.html` (copy the last one, change the `<title>` and the `.js`); format in README "English dictations", procedure and checks in the `english-dictation` skill.
+- **Dictation** (a school dictation sheet) `english-dictation-unitN-weekM.js` + `.html` (`new.js --like` the last one); format in README "English dictations", procedure and checks in the `english-dictation` skill.
   The sheet's words and sentences exactly as printed (a sheet with only sentences: the week's spelling words in them are the words); `mark` the sound or suffix on each word, `key` in each sentence; a picture (`pics` drawing) on every item; `date` in `dictations.js`.
 - Item types: circle / choose / which sentence is right → `mc` (right one first; `keep` for a fixed list like the tense names); underline or circle words in a sentence → `tapw`;
   word sort, "write the words that contain …" → `sort`; match a word to its meaning → `match` or `mc`; complete a verb, fill a gap → `mc` with likely wrong forms;
@@ -92,7 +92,10 @@ Scene notes: backgrounds are `sky night room grass stage school rain plain`. Bub
 
 ## 4. Write the files
 
-Copy the newest finished week as the model (`grade-4/term-2/english/unit3-week5.js` and `story-food-thought.js` at the time of writing): helper functions at the top (`SC`, `cj`, and small builders for repeated item pairs), then `window.LESSON`, then `(window.EN_DATA = window.EN_DATA || {}).u<unit>w<week> = window.LESSON;`. HTML: copy an existing page and change only the `.js` and `<title>`.
+Start from the scaffold with the newest finished week as the sibling (`grade-4/term-2/english/unit3-week5.html` and `story-food-thought.html` at the time of writing):
+`node .claude/scripts/scaffold/new.js grade-4/term-2/english/unit3-week6.html --like grade-4/term-2/english/unit3-week5.html --title "…"` writes the page and a frame
+(`key`, `n`, `imgDir`, the `EN_DATA` register line, `grade` / `book` / `hub` / `cover` kept); then `node .claude/scripts/scaffold/format.js grade-4/term-2/english/unit3-week6.html` (every item kind, its fields and a real example).
+Add the sibling's helper functions you need at the top (`SC`, `cj`, small builders for repeated item pairs); open the sibling only for what the sheet doesn't show.
 
 Header fields: `key: "en4-uNwM"`, `n` = previous lesson's `n` + 1, `unit`, `hub: "../../term-1/english/index.html"` (from a later term), `imgDir`, `cover: "cover"`, `question`. Stories: `lesson: {path, label}` and `hub`.
 

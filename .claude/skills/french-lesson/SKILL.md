@@ -27,12 +27,12 @@ Sorting:
 
 What to build:
 
-- **Lesson** `lesson-N.js` + `lesson-N.html` (copy lesson-2.html, change the script and title), pictures in `img/lesson-N/` (`pdftoppm -r 200`, find boxes on a grid, crop with PIL; people ~250–500px, panels ~700px, comic cover ~1000px; check a contact sheet for cut text or bits of the next panel).
+- **Lesson** `lesson-N.js` + `lesson-N.html` (`new.js --like lesson-2.html`, see "4. Write the files"), pictures in `img/lesson-N/` (`pdftoppm -r 200`, find boxes on a grid, crop with PIL; people ~250–500px, panels ~700px, comic cover ~1000px; check a contact sheet for cut text or bits of the next panel).
   Learn: story (every panel, then "Des phrases pour parler" with `title`), words (`people` with `say`, `phrases` = the page's Vocabulaire), one `sound` tile per Phonétique sound, a `rule` card for a grammar box. The `verb` view takes any verb whose forms are `p` + `stem` + `end` (s'appeler, avoir); a new kind of view needs an engine change first. Procedure and check scripts: this skill.
   Play: listen, match, bword, bsent, ilelle (if people have il / elle), and `game` tiles for the lesson's own point (Un ou une ?).
   Exercices: every book "Parle" / cahier exercise / sheet task, one section each, `from` = where it is ("Cahier p. 7 ex. 5"); a sheet task the lesson already has is not built twice.
   Dictée: a "(by spelling)" sheet or list = one entry in `dictee` (its words and its sentences, a picture on each); the engine makes the build-from-letters and hear-and-type games.
-- **Revision** `revision-N.js` + `revision-N.html` (copy revision-1.html; it loads every lesson it uses before its own file): Exercices only, the term sheet's tasks in its order,
+- **Revision** `revision-N.js` + `revision-N.html` (`new.js --like revision-1.html`; the page loads every lesson it uses before its own file: fix that list): Exercices only, the term sheet's tasks in its order,
   then the lessons' main exercises through `ref: "N:k"`; pictures from the lessons (`img: "lesson-2/parle-9"`), never new copies.
 - Item types: put in order → `order` (`q` for "Réponds" / "Regarde et écris"); write a word with a sound → `letters`; choose / entoure / oui-non question → `mc` (right one first, `full` for the whole answer);
   complete a verb, a capital letter, . ? ! → `fill`; "Mets un (x) si c'est une phrase" → `yn` with `ask`, `x`, `fix`; listen and point → `tap`; relie → `match`.
@@ -79,7 +79,9 @@ Render the pages for cropping at 200 dpi (slides at 100–150 dpi). Sizes: peopl
 
 ## 4. Write the files
 
-Copy `lesson-2.js` (header comment with the sources, `NAMES`, `DICT`, a sentence-pattern `one()` for `auto`, `window.LESSON`, the last `FR_DATA` line) and `lesson-2.html` (change the `.js` and the `<title>`).
+Start from the scaffold (CLAUDE.md "Workflow"): `node .claude/scripts/scaffold/new.js grade-4/term-1/french/lesson-N.html --like grade-4/term-1/french/lesson-2.html --title "…"`
+(the page, and a frame with the header comment marked TODO, `auto` and the last `FR_DATA` line), then `node .claude/scripts/scaffold/format.js grade-4/term-1/french/lesson-N.html` (every item kind, its fields and a real example).
+Add what `lesson-2.js` has around the object (`NAMES`, `DICT`, a sentence-pattern `one()` for `auto`); open it only for what the sheet doesn't show.
 
 - **Translations**: `DICT` for the fixed sentences; `auto` builds the patterns (« Il a neuf ans. », « Il s’appelle X. », « C’est un… »). Keep the patterns small and readable; anything odd goes in `DICT`. Names need none.
 - **Exercise items are shuffled** unless `keep: true`; mc options are shuffled (the right one first). Use `full` on mc when the spoken answer is the whole sentence.
@@ -123,6 +125,6 @@ Never mix them: a sheet task goes into a teacher's lesson, a book task into a bo
 - The plan, the file → page map and what is built: `grade-3/term-1/french/SOURCES.md`. Read it first and update its rows in the same commit as the lesson.
 - Scan: `~/Documents/2026-2027/Lucas/French/book/outN.png`, a two-page spread per file; the file number is **not** the page number (use the map).
   Crop straight from the PNG with PIL (no `pdftoppm`); the spread is 1399×891, so a panel is about 300–650px wide: keep it at its size, don't upscale past ~700px.
-- Files `unite-N.js` / `.html`, pictures `img/unite-N/`; `from: "Livre p. N ex. M"` with the printed page number.
+- Files `unite-N.js` / `.html` from `new.js grade-3/term-1/french/unite-N.html --like grade-3/term-1/french/unite-3.html --title "…"` (it sets `key`, `imgDir`, the register id), pictures `img/unite-N/`; `from: "Livre p. N ex. M"` with the printed page number.
 - Before the first book lesson: the engine change from SOURCES.md (`L.key` / `L.imgDir`), in its own stage, with the old-vs-new compare.
 - Video: an mp4 per lesson with a start time, sent by the user; online only (not precached), like `videoHTML` in `shared/computer-lesson.js`.
