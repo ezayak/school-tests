@@ -123,6 +123,11 @@ const same = (k) =>
 
 // the frame of a value
 const ident = (k) => (/^[A-Za-z_$][\w$]*$/.test(k) ? k : JSON.stringify(k));
+// `auto(fr) { … }` in the sibling: printed as it is, without "auto:" in front
+const method = (v) =>
+  typeof v === "function" &&
+  !/^(async\s+)?(function\b|\(|[\w$]+\s*=>)/.test(v.toString());
+const prop = (k, v, s) => (method(v) ? s : `${ident(k)}: ${s}`);
 function frame(v, depth) {
   if (typeof v === "function") return v.toString();
   if (Array.isArray(v)) return "[]";
@@ -140,7 +145,7 @@ function frame(v, depth) {
     return depth > 0
       ? "{}"
       : `{ ${Object.entries(v)
-          .map(([k, x]) => `${ident(k)}: ${frame(x, depth + 1)}`)
+          .map(([k, x]) => prop(k, x, frame(x, depth + 1)))
           .join(", ")} }`;
   return String(v);
 }
@@ -158,7 +163,7 @@ const fields = Object.entries(obj).map(([k, v]) => {
     s = JSON.stringify(v);
     kept.push(k);
   } else s = frame(v, 0);
-  return `${ident(k)}: ${s},`;
+  return `${prop(k, v, s)},`;
 });
 
 // the parts of the sibling's text around the object
