@@ -110,6 +110,9 @@ Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a gam
   After a lesson (or a stage of a longer task) is committed, tell the user to start a new session (`/clear`) for the next one.
 - Source pages stay out of the conversation where possible: read `prep`'s `text.txt` / `ocr.txt` and contact sheets first,
   open a single page as a picture only to crop it or to check a word, and never re-open a page already looked at.
+- A new lesson starts from `node .claude/scripts/scaffold/new.js <new page.html> --like <sibling.html>` (the page and an empty frame),
+  then `node .claude/scripts/scaffold/format.js <new page.html>` (every item kind, its fields and a real example).
+  Open the engine or a sibling lesson only for what the sheet doesn't show.
 - The "Then:" steps of every subject: `.claude/scripts/inbox/register.py add <hub path> <new files / picture folders>` (the `also` list), `register.py check <hub path>`,
   `countLabel` / `topics` by hand, and last `register.py bump "<reason>"` in its own commit.
 - Changes come in small stages (≤5 changes each). Show the diff and wait for approval before applying.
