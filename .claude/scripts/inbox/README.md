@@ -28,7 +28,7 @@ They were made to save tokens: Claude reads short text reports and small contact
   - One lesson per session; text and contact sheets before page pictures; never re-open a page (rules in CLAUDE.md "Workflow").
   - Scripts for the finding, preparing, sorting and bookkeeping (below).
 - Ideas not built yet: lesson scaffolds per engine (no re-reading of the model lesson), a translation memory (reuse `en` / `uk` / `ar` already written),
-  review notes on the lesson pages, a cheaper model (`/model sonnet`) for mechanical steps.
+  a cheaper model (`/model sonnet`) for mechanical steps.
 
 ## The scripts (`.claude/scripts/inbox/`)
 
@@ -37,6 +37,7 @@ They were made to save tokens: Claude reads short text reports and small contact
 | `inbox.py`            | Finds the new files per subject, guesses lesson and kind, prints the report with the parent's notes |
 | `prep.py`             | Contact sheets, page pictures, `text.txt` (text layer), `ocr.txt` (Tesseract), video frames         |
 | `sorter.py` + `.html` | The sorting page (local web server, password from the network)                                      |
+| `review.py`           | The parent's review notes from the lesson pages (sent to the sorting page), listed for Claude       |
 | `register.py`         | After a lesson: the `also` list in `games.js`, the offline check, the `sw.js` VERSION bump          |
 | `subjects.json`       | The settings (below)                                                                                |
 | `done.txt`            | Every file already used (one path per line). Committed with the lesson that used it                 |

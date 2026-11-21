@@ -35,6 +35,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import inbox  # noqa: E402
 import prep  # noqa: E402
+import review  # noqa: E402
 
 NOTES = Path("~/.local/share/school-inbox/notes.json").expanduser()
 PASSWORD = Path("~/.local/share/school-inbox/password").expanduser()
@@ -49,6 +50,8 @@ PUBLIC = {
 }
 LOCK = threading.Lock()
 PREPARING = {}  # subject id -> "running" / "done" / error text
+# Pages that may send review notes (the app on GitHub Pages, the local test server)
+APP_ORIGINS = {"https://ezayak.github.io", "http://127.0.0.1:8765"}
 
 
 def hash_password(pw, salt):
@@ -181,6 +184,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", kind)
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-store")
+        if self.headers.get("Origin") in APP_ORIGINS and self.path.startswith("/api/review"):
+            self.send_header("Access-Control-Allow-Origin", self.headers["Origin"])
         self.end_headers()
         self.wfile.write(data)
 
@@ -215,6 +220,8 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/note" and isinstance(body.get("file"), str):
             save_note(body["file"], body.get("note") or {})
             return self.send(200, {"ok": True})
+        if path == "/api/review":
+            return self.send(200 if review.add(body) else 400, {"ok": True})
         if path == "/api/prep" and isinstance(body.get("subject"), str):
             if PREPARING.get(body["subject"]) != "running":
                 threading.Thread(target=prepare, args=(body["subject"],), daemon=True).start()
