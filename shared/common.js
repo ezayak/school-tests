@@ -470,7 +470,7 @@ window.Kit = (function () {
   // Review mode (the parent only): hold any page title 2 s to turn it on / off on this device.
   // Then a ✎ button writes a note about what is on screen; notes go to the sorting page on the Pi
   // (.claude/scripts/inbox/review.py) and wait on the device while it cannot be reached.
-  // An engine says what is on screen with Kit.review.item = () => "slide 4: …".
+  // What is on screen is read from the page; an engine can say it better with Kit.review.item = () => "slide 4: …".
   const review = (function () {
     const ROOT = (document.currentScript?.src || "").replace(
       /shared\/common\.js.*$/,
@@ -503,7 +503,45 @@ window.Kit = (function () {
         return [];
       }
     };
-    const api = { item: () => "" };
+    // What is on screen, read from the page (an engine can set its own Kit.review.item):
+    // text the parent selected, the #part, the side-bar tab, the headings in view, the text in the middle of the screen.
+    let sel = "",
+      selAt = 0;
+    document.addEventListener("selectionchange", () => {
+      const t = String(getSelection() || "").trim();
+      if (t) ((sel = t), (selAt = Date.now()));
+    });
+    const short = (t, n) => {
+      t = String(t).replace(/\s+/g, " ").trim();
+      return t.length > n ? t.slice(0, n) + "…" : t;
+    };
+    const inView = (el) => {
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.bottom > 0 && r.top < innerHeight;
+    };
+    function onScreen() {
+      const out = [];
+      if (sel && Date.now() - selAt < 20000)
+        out.push(`selected «${short(sel, 300)}»`);
+      if (location.hash) out.push(decodeURIComponent(location.hash));
+      const tab = document.querySelector('[aria-current="page"]');
+      if (tab) out.push(`tab «${short(tab.innerText, 40)}»`);
+      const hs = [...document.querySelectorAll("h2, h3")].filter(inView);
+      if (hs.length)
+        out.push(
+          hs
+            .slice(0, 3)
+            .map((h) => `«${short(h.innerText, 60)}»`)
+            .join(", "),
+        );
+      let el = document.elementFromPoint(innerWidth / 2, innerHeight / 2);
+      while (el && el.parentElement && el.innerText.trim().length < 20)
+        el = el.parentElement;
+      if (el && el !== document.body)
+        out.push(`middle «${short(el.innerText, 160)}»`);
+      return out.join(" · ");
+    }
+    const api = { item: onScreen };
     let btn = null;
 
     function toast(msg) {
