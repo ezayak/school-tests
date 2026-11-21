@@ -129,8 +129,11 @@ def inbox_data():
     result, _ = inbox.scan()
     notes = load_notes()
     subjects = []
+    reviews = {}
+    for x in review.open_notes():
+        reviews.setdefault(review.subject_of(x["page"], inbox.CONFIG["subjects"]), []).append(x)
     for s in result:
-        if not s["new"]:
+        if not s["new"] and not reviews.get(s["id"]):
             continue
         files = []
         for x in s["new"]:
@@ -143,9 +146,11 @@ def inbox_data():
                 "ready": inbox.ready(s),
                 "preparing": PREPARING.get(s["id"]),
                 "files": files,
+                "reviews": reviews.get(s["id"], []),
             }
         )
-    return {"subjects": subjects}
+    # Notes on pages of no subject (Optima, speech games…): shown, fixed in a Claude session
+    return {"subjects": subjects, "otherReviews": reviews.get(None, [])}
 
 
 def new_job(body):
@@ -172,6 +177,43 @@ def new_job(body):
         "status": "queued",
         "created": time.strftime("%Y-%m-%d %H:%M"),
     }
+    return queue_job(job)
+
+
+def new_fix_job(body):
+    """A «Fix notes» press: the ticked review notes of one subject, as a job for build.py (mode "fix")."""
+    s = next((x for x in inbox.CONFIG["subjects"] if x["id"] == body.get("subject")), None)
+    ids = body.get("ids")
+    if not s or not isinstance(ids, list):
+        return None
+    busy = set()  # notes already in a job that has not finished (a second press)
+    for f in JOBS.glob("*.json"):
+        try:
+            j = json.loads(f.read_text())
+        except (OSError, ValueError):
+            continue
+        if j.get("status") not in ("pushed", "failed"):
+            busy |= {x["id"] for x in j.get("notes", [])}
+    subjects = inbox.CONFIG["subjects"]
+    notes = [x for x in review.open_notes() if x["id"] in ids and x["id"] not in busy and review.subject_of(x["page"], subjects) == s["id"]]
+    if not notes:
+        return None
+    titles = list(dict.fromkeys(x["title"] or x["page"] for x in notes))
+    job = {
+        "id": time.strftime("%Y%m%d-%H%M%S-") + s["id"],
+        "subject": s["id"],
+        "mode": "fix",
+        "target": " · ".join(titles)[:200],
+        "text": str(body.get("text") or "").strip()[:4000],
+        "picks": [],
+        "notes": notes,
+        "status": "queued",
+        "created": time.strftime("%Y-%m-%d %H:%M"),
+    }
+    return queue_job(job)
+
+
+def queue_job(job):
     with LOCK:
         JOBS.mkdir(parents=True, exist_ok=True)
         (JOBS / (job["id"] + ".json")).write_text(json.dumps(job, ensure_ascii=False, indent=1))
@@ -282,6 +324,9 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/build":
             job = new_job(body)
             return self.send(200 if job else 400, job or {"error": "subject, new/update and a lesson name are needed"})
+        if path == "/api/fix":
+            job = new_fix_job(body)
+            return self.send(200 if job else 400, job or {"error": "no open notes of this subject ticked"})
         if path == "/api/prep" and isinstance(body.get("subject"), str):
             if PREPARING.get(body["subject"]) != "running":
                 threading.Thread(target=prepare, args=(body["subject"],), daemon=True).start()

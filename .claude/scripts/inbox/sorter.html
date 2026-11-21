@@ -419,7 +419,13 @@
               },
               `${s.kid} · ${s.name}`,
               $("small", {
-                text: `${s.files.length} new · ${sorted} sorted${s.ready ? " · ready" : ""}`,
+                text: [
+                  s.files.length &&
+                    `${s.files.length} new · ${sorted} sorted${s.ready ? " · ready" : ""}`,
+                  s.reviews.length && `✎ ${s.reviews.length} to fix`,
+                ]
+                  .filter(Boolean)
+                  .join(" · "),
               }),
             ),
           );
@@ -427,10 +433,18 @@
         const main = document.getElementById("main");
         main.replaceChildren();
         const s = data.subjects.find((x) => x.id === current);
+        if (data.otherReviews.length)
+          main.append(
+            $("p", {
+              class: "meta",
+              text: `✎ ${data.otherReviews.length} review note(s) on pages of no subject here (${[...new Set(data.otherReviews.map((x) => x.page))].join(", ")}): fix them in a Claude session («fix review notes»).`,
+            }),
+          );
         if (!s) {
           main.append($("p", { class: "empty", text: "No new files. 🎉" }));
           return;
         }
+        if (s.reviews.length) main.append(reviewCard(s));
         const targets = new Set();
         for (const f of s.files) {
           f.hints.forEach((h) => targets.add(h));
@@ -465,7 +479,84 @@
           main.append($("p", {}, btn, err));
         }
         for (const f of s.files) main.append(fileCard(f));
-        main.append(buildBar(s));
+        if (s.files.length) main.append(buildBar(s));
+        else {
+          // Only review notes: no build bar, but the jobs (the fixes) still show
+          jobsBox = $("div", { class: "jobs" });
+          main.append($("section", { class: "build" }, jobsBox));
+          loadJobs(s.id);
+        }
+      }
+
+      // The review notes written in the app (review mode) on this subject's pages; «Fix notes» runs build.py on the ticked ones.
+      const fixPicks = {}; // note id -> ticked (all ticked at first), kept while the page is open
+      function reviewCard(s) {
+        const btn = $("button", { class: "btn" });
+        const picked = () => s.reviews.filter((x) => fixPicks[x.id] !== false);
+        const label = () => {
+          const n = picked().length;
+          btn.textContent = `🛠 Fix ${n} note${n === 1 ? "" : "s"}`;
+          btn.disabled = !n;
+        };
+        const text = $("textarea", {
+          placeholder: "What to do (optional), for all ticked notes",
+        });
+        const list = s.reviews.map((x) => {
+          const tick = $("input", {
+            type: "checkbox",
+            onchange: (e) => {
+              fixPicks[x.id] = e.target.checked;
+              label();
+            },
+          });
+          tick.checked = fixPicks[x.id] !== false;
+          return $(
+            "div",
+            { class: "job" },
+            $(
+              "label",
+              { class: "pick" },
+              tick,
+              `${x.title || x.page} · ${x.at}`,
+            ),
+            x.item
+              ? $("div", {
+                  class: "meta",
+                  text: "On screen: " + x.item,
+                  dir: "auto",
+                })
+              : "",
+            $("div", { text: x.text, dir: "auto" }),
+          );
+        });
+        btn.onclick = async () => {
+          const ids = picked().map((x) => x.id);
+          if (
+            !confirm(
+              `Fix ${ids.length} note(s)?\nClaude fixes them, checks it and pushes it live.`,
+            )
+          )
+            return;
+          btn.disabled = true;
+          const r = await fetch("/api/fix", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ subject: s.id, ids, text: text.value }),
+          });
+          if (!r.ok) alert((await r.json()).error || "Not sent");
+          else text.value = "";
+          label();
+          loadJobs(s.id);
+        };
+        label();
+        return $(
+          "section",
+          { class: "file" },
+          $("h2", { text: "✎ Review notes to fix" }),
+          ...list,
+          text,
+          btn,
+        );
       }
 
       // The «Create / Update lesson» bar: what to build, sent to /api/build; build.py runs it.
@@ -589,7 +680,7 @@
         if (subject !== current || !jobsBox) return;
         jobsBox.replaceChildren(
           ...jobs.map((j) => {
-            const head = `${STATUS[j.status] || j.status} · ${j.mode === "new" ? "new" : "update"} “${j.target}” · ${j.created}`;
+            const head = `${STATUS[j.status] || j.status} · ${{ new: "new", update: "update", fix: "fix" }[j.mode]} “${j.target}” · ${j.created}`;
             const box = $("div", { class: "job" }, $("div", { text: head }));
             if (j.result) box.append($("div", { text: j.result, dir: "auto" }));
             if (j.tail.length && j.status !== "pushed")

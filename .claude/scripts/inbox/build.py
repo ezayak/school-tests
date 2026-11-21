@@ -26,6 +26,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import inbox  # noqa: E402
+import review  # noqa: E402
 
 REPO = inbox.REPO
 JOBS = Path("~/.local/share/school-inbox/jobs").expanduser()
@@ -39,7 +40,7 @@ SHARED_FILES = {"games.js", "sw.js", ".claude/scripts/inbox/done.txt"}
 PRETTIER = Path("~/node_modules/.bin/prettier").expanduser()  # 3.9.10, as CLAUDE.md says
 PRETTIER_EXT = {".js", ".css", ".html", ".md", ".json"}
 
-RULES = """You run unattended: the parent pressed «Create / Update lesson» on the sorting page.
+RULES = """You run unattended: the parent pressed «Create / Update lesson» or «Fix notes» on the sorting page.
 That press is the approval: do not ask questions, do not wait for approval, do not show diffs.
 - Follow CLAUDE.md and the subject's skill as in a normal «build inbox» session. First read the parent's
   memory notes: ~/.claude/projects/-home-olena-projects-school-tests/memory/MEMORY.md (and the files it lists).
@@ -50,6 +51,9 @@ That press is the approval: do not ask questions, do not wait for approval, do n
   CLAUDE.md: if the lesson needs that, build what you can without it and say so at the end.
 - When ticked pages are given, use only those. Run `inbox.py done` only for files that are used up:
   a big file (a book) of which only some pages were ticked stays in the inbox.
+- A «Fix notes» job: fix only the review notes given, as in a «fix review notes» session (the subject's skill),
+  in one commit, then the bump. Never run `review.py done`: the job script marks the notes fixed after the push.
+  A note that needs an engine or shared/ change: leave it and say so at the end.
 - If you cannot do it (pages unreadable, the task unclear, the lesson not found), commit nothing.
 - Your last message is sent to the parent on Telegram: 2-4 short lines, what was built or why not."""
 
@@ -79,6 +83,21 @@ def subject_of(job):
 
 def prompt(job):
     s = subject_of(job)
+    if job["mode"] == "fix":
+        out = [
+            "fix review notes",
+            "",
+            f"Job: fix these {len(job['notes'])} review notes of the parent ({s['kid']} · {s['name']}, skill {s.get('skill')}),",
+            "written in the app's review mode: the page, what was on screen, the note.",
+        ]
+        for x in job["notes"]:
+            out.append(f"- `{x['id']}` {x['page']} ({x['title']})")
+            if x.get("item"):
+                out.append(f"  - on screen: {x['item']}")
+            out.append(f"  - note: {x['text']}")
+        if job["text"]:
+            out.append(f"Parent's description: {job['text']}")
+        return "\n".join(out)
     verb = "Create a new lesson" if job["mode"] == "new" else "Update the existing lesson"
     out = [
         f"build inbox {job['subject']}",
@@ -216,7 +235,10 @@ def run(job):
     git("push", "-q", "origin", "HEAD:main", cwd=wt)
     head = git("rev-parse", "HEAD", cwd=wt)
     log(job, "✓ pushed: " + "; ".join(commits))
-    clear_picks(job)
+    if job["mode"] == "fix":
+        review.done({x["id"] for x in job["notes"]})
+    else:
+        clear_picks(job)
     git("worktree", "remove", "--force", str(wt))
     git("branch", "-D", branch)
     save(job, status="pushed", commits=commits, url=COMMIT_URL + head)
@@ -258,7 +280,7 @@ if __name__ == "__main__":
     if "--list" in sys.argv:
         for f in sorted(JOBS.glob("*.json")):
             j = json.loads(f.read_text())
-            print(f"{j['id']}  {j['status']:8}  {j['mode']} «{j['target']}»  {j.get('url', '')}")
+            print(f"{j['id']}  {j['status']:8}  {j['mode']:6} «{j['target']}»  {j.get('url', '')}")
     else:
         os.environ["PATH"] = os.pathsep.join([str(CLAUDE.parent), os.environ.get("PATH", "")])
         main()

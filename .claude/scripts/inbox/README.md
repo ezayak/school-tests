@@ -61,7 +61,10 @@ To write down what is wrong in a lesson while looking at it on the tablet, witho
 3. The note goes to the sorting page on the Pi ("Note sent ✓"): from the app on GitHub Pages to https://mollers-pi.cheetah-krait.ts.net
    (the Tailscale app must be on), from the local test server to http://127.0.0.1:8770. When the Pi can't be reached, it says
    "Saved here", waits on the device (a number on the ✎ button) and is sent by itself later.
-4. **Fix**: in a new Claude session, write «fix review notes». Claude runs `review.py`, fixes each note with its subject's skill, commits,
+4. **Fix from the sorting page**: the subject's tab shows its notes at the top ("✎ Review notes to fix", all ticked);
+   untick the ones to keep for later and press **🛠 Fix N notes**. `build.py` runs it like a lesson job (checks, pushes, Telegram)
+   and marks the notes fixed after the push. Notes on pages of no subject (Optima, speech games) are listed but fixed in a session.
+   **Or** in a new Claude session, write «fix review notes». Claude runs `review.py`, fixes each note with its subject's skill, commits,
    then `review.py done <ids>`. One subject per session.
 
 ```bash

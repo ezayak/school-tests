@@ -10,6 +10,7 @@ The app sends them to the sorting page (sorter.py, POST /api/review); kept in
 """
 
 import json
+import re
 import sys
 import threading
 import time
@@ -56,6 +57,18 @@ def done(ids):
             if x["id"] in ids:
                 x["done"] = time.strftime("%Y-%m-%d")
         write(notes)
+
+
+def subject_of(page, subjects):
+    """The subject whose app folder holds the page; a term folder doesn't count
+    (grade-4/term-1/english/… belongs to the English of grade-4/term-2/english). None = no subject (Optima, speech…)."""
+    norm = lambda p: re.sub(r"/term-\d+/", "/", "/" + p.strip("/") + "/")
+    page = norm(page)
+    return next((s["id"] for s in subjects if page.startswith(norm(s["app"]))), None)
+
+
+def open_notes():
+    return [x for x in load() if not x.get("done")]
 
 
 def report(show_all=False):
