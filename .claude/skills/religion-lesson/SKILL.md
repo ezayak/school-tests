@@ -39,6 +39,8 @@ Rules:
 - `en` / `uk` on every text, part, section, item and help option.
 - `gloss` has every Arabic word of the texts, paragraph titles, verse and its gap choices, questions, options, `x`, help and model answers. Same spelling with different meanings
   (حَلَمَ / حُلْمَ, مِنْ / مَنْ, حَدَثَ / حَدَثٍ) get their own exact-tashkeel keys. Check with a script: no word without a gloss, no item without a picture, every `img` exists, every gap once.
+- Fill the gloss with the `arabic` skill's three steps (its "4. Gloss"): `check.js <file> --missing` → `gloss-reuse.js` over `grade-3/term-1/religion/*.js grade-3/term-1/arabic/*.js`
+  (about half the words are already glossed there) → write only the words left, then `gloss-insert.js`. Read the reused lines first: a gloss can carry another text's meaning.
 - Then: entry in `LESSONS` (`religion/lessons.js`); files + pictures in `also` of the Religion entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 - A change to the engine must leave the Arabic pages as they were: check an Arabic lesson (story → Words button) and a test (fixed text, no part navigation).
 - Check in the browser: the list, each tab, the verse games (tiles move with real taps, not script `.click()`).

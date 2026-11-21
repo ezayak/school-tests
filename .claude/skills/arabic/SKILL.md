@@ -106,7 +106,7 @@ Every Arabic word of the paragraph, questions, options, answers, `x` and help ne
 ```bash
 S=<scratchpad>; A=grade-3/term-1/arabic; K=.claude/skills/arabic/scripts
 node $K/check.js $A/test-N.js --missing | tail -n +2 | grep -v '^problems' > $S/miss.txt
-node $K/gloss-reuse.js $S/miss.txt $S/gl-reused.txt $A/*.js       # copies glosses from every other Arabic file
+node $K/gloss-reuse.js $S/miss.txt $S/gl-reused.txt $A/*.js grade-3/term-1/religion/*.js   # copies glosses from every other Arabic and Religion file
 #   then write the words in $S/miss.txt.left by hand into $S/gl-new.txt as "word|en|uk" lines
 node $K/gloss-insert.js $A/test-N.js $S/gl-reused.txt $S/gl-new.txt
 npx --no-install prettier --write $A/test-N.js && node $K/check.js $A/test-N.js --missing
