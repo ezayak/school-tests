@@ -5,7 +5,7 @@ description: Build English dictation (spelling) games for the school-tests study
 
 # English dictations (Grades 3 and 4)
 
-The format is in `README.md` ("English dictations"); the rules in `CLAUDE.md` ("English (Grade 4)", "Workflow", "Formatting", "Offline cache"). Read them first.
+The format is in `README.md` ("English dictations"); the rules in the `english-lesson` skill ("Rules": what to build, dictation, item types) and `CLAUDE.md` ("Workflow", "Formatting", "Offline cache"). Read them first.
 The engine `shared/spelling.js` is never copied: a dictation is a data file (`window.SPELLING`) plus a 40-line page.
 The models: `grade-4/term-2/english/english-dictation-unit2-week5.js` (suffixes, a sheet with sentences only) and `grade-4/term-1/english/english-dictation-unit1-week4.js` (a sound, words and sentences).
 

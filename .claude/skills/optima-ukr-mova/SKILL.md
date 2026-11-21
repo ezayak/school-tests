@@ -5,11 +5,24 @@ description: Build Optima Grade 3 Ukrainian language lessons («Українсь
 
 # Optima Українська мова (Grade 3)
 
-The rules live in `CLAUDE.md` ("Ukrainian language and reading (Optima, Grade 3)", plus "Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Ukrainian language and reading lessons (Optima, Grade 3)").
+The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Ukrainian language and reading lessons (Optima, Grade 3)").
 Read those first. `optima/grade-3/ukr-mova/lesson-1.js` is the model (slides, every row kind, homework, pictures from the book).
 
 Lucas has aphasia and reads slowly: short Ukrainian sentences, the key words in `[brackets]`, a picture (`img`) or an emoji (`ic`) on every exercise,
 answers he taps (choices, letter tiles, word tiles), never typed. Build **one lesson at a time**, show it, wait for approval before the next one.
+
+## Rules
+
+Folders `optima/grade-3/ukr-mova/` (Українська мова) and `optima/grade-3/ukr-lit/` (Українська література, next to the «Складова ракета» texts), one engine `shared/ukr-lesson.js` + `.css`
+(don't copy it; a lesson is only a data file). Format in README: "Ukrainian language and reading lessons". Procedure, item types and checks: the `optima-ukr-mova` and `optima-ukr-lit` skills.
+Books in `~/Documents/2026-2027/Lucas/Optima/`: language «Українська мова та читання. Ч. 1» (Кравцова, Придаток; PDF page = book page + 3), reading Савчук «Ч. 2» (PDF page = book page).
+Their text layers are garbled: read the pages as pictures. Lucas has aphasia and reads slowly: a picture or emoji on every item, answers by a tap (choices, letter tiles, word tiles).
+
+- Language: a lesson = one topic (from the «початок уроку» sign to the next); Урок = the rule slides, Вправи = every exercise task that has something to check, homework 🏠 in its own group.
+- Reading: a lesson = one text exactly as printed (poem stanzas in reading order) and its questions as slides; answers in the text → choices, personal ones → `open` with a model answer and `help`.
+- Build one lesson at a time and show it. Leave out reading aloud in class, photos, drawing, videos; list them. Words missing or unreadable: never guess; ask.
+- Check with `node .claude/scripts/ukr-lesson-check.js <lesson-N.js>` and play it with `.claude/scripts/ukr-lesson-shot.sh` (every group to ✓, a phone width).
+- Then: card in `lessons.js`; files and pictures in `also` of the subject's entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find the lesson
 

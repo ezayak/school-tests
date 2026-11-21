@@ -113,90 +113,14 @@ Rules:
 
 ## French (Grade 3 and 4): lessons and revisions
 
-Engine `grade-4/term-1/french/french-lesson.js` (don't copy it; a lesson or a revision is only a data file). Format in README: "French lessons (Grade 4)"; `lesson-2.js` is the fullest example.
-Sources: Grade 4 (Alex) `~/Documents/2026-2027/Alex/French/`, Grade 3 (Lucas) `~/Documents/2026-2027/Lucas/French/`: the teacher's lesson slides (book pages
-"Livre p. N", "Cahier d'exercices p. N", often with the answers filled in), class work / homework sheets (Travail de classe, Devoir noté, some with a "Modèle de réponse"),
-and the term sheet "Exercices d'application" (mid-term / final). The boys learn from pictures and sound: a picture on every item.
-
-Sorting:
-
-- Each slide says its book page. The lesson = book pages + cahier pages + the sheets for that lesson. A sheet file name can be wrong (a "Devoir noté" that says "Travail de classe" on the page): say so.
-- Sheets on several lessons (Exercices d'application) = the revision, not a lesson. A sentence from neither lesson (e.g. « J'ai une gomme rouge ») goes in with an emoji picture: list it for the user.
-- Answers come from the teacher's filled-in pages and "Modèle de réponse". An answer with no key (no model answer, a picture to interpret): give the likely one and say it is unverified.
-- Words missing or unreadable: never guess. List them and ask.
-
-What to build:
-
-- **Lesson** `lesson-N.js` + `lesson-N.html` (copy lesson-2.html, change the script and title), pictures in `img/lesson-N/` (`pdftoppm -r 200`, find boxes on a grid, crop with PIL; people ~250–500px, panels ~700px, comic cover ~1000px; check a contact sheet for cut text or bits of the next panel).
-  Learn: story (every panel, then "Des phrases pour parler" with `title`), words (`people` with `say`, `phrases` = the page's Vocabulaire), one `sound` tile per Phonétique sound, a `rule` card for a grammar box. The `verb` view takes any verb whose forms are `p` + `stem` + `end` (s'appeler, avoir); a new kind of view needs an engine change first. Procedure and check scripts: the `french-lesson` skill.
-  Play: listen, match, bword, bsent, ilelle (if people have il / elle), and `game` tiles for the lesson's own point (Un ou une ?).
-  Exercices: every book "Parle" / cahier exercise / sheet task, one section each, `from` = where it is ("Cahier p. 7 ex. 5"); a sheet task the lesson already has is not built twice.
-  Dictée: a "(by spelling)" sheet or list = one entry in `dictee` (its words and its sentences, a picture on each); the engine makes the build-from-letters and hear-and-type games.
-- **Revision** `revision-N.js` + `revision-N.html` (copy revision-1.html; it loads every lesson it uses before its own file): Exercices only, the term sheet's tasks in its order,
-  then the lessons' main exercises through `ref: "N:k"`; pictures from the lessons (`img: "lesson-2/parle-9"`), never new copies.
-- Item types: put in order → `order` (`q` for "Réponds" / "Regarde et écris"); write a word with a sound → `letters`; choose / entoure / oui-non question → `mc` (right one first, `full` for the whole answer);
-  complete a verb, a capital letter, . ? ! → `fill`; "Mets un (x) si c'est une phrase" → `yn` with `ask`, `x`, `fix`; listen and point → `tap`; relie → `match`.
-
-Rules for every French file:
-
-- French exactly as the book prints it (’ apostrophes, a space before ? and !); only the teacher's slide typos are fixed, and listed for the user.
-- Every French text has an EN / UA / AR translation through `dict` or `auto`; names need none.
-- Check with a script before calling it done: every sentence translates, every item has a picture, every `img` exists, every picture file is used and listed in `also`.
-- Then: entry in `lessons.js` (lesson) or a "Final exam" / "Mid-term exam" card in `games.js` (revision); new files and pictures in `also` of the French entry, plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
-- Grade 3: `grade-3/term-1/french/` (Lessons 1–4 and `revision-1`, the same format); pages load the engine from `../../../grade-4/term-1/french/french-lesson.js`.
-  Grade 3 has no book slides after « La présentation »: a lesson is a topic sheet (Les salutations, Les consignes de la classe) or a topic of the sheets (Les lettres et les mots).
-- Grade 3 French page has two groups in the side bar (`groups` in `lessons.js`): **Léo et Théo Plus 1** = the book (`~/Documents/2026-2027/Lucas/French/book/`), one lesson `unite-N` per Unité,
-  book exercises only; **Teacher's lessons** = `lesson-N` from the teacher's slides and sheets. Never mix the two. Plan and page map: `grade-3/term-1/french/SOURCES.md`; procedure: the `french-lesson` skill, section 7.
-- A change to the engine must leave the existing lessons as they were: render every screen of the old and new version with the same `Math.random` seed and compare (headless Chrome: `google-chrome --headless=new --dump-dom` on a harness page that clicks through an iframe), then play every game and exercise to the score screen.
-- Check in the browser: the list, each tab, the sound and rule screens, translations on, one exercise of each type.
+Engine `grade-4/term-1/french/french-lesson.js`, used by Grade 4 (`grade-4/term-1/french/`) and Grade 3 (`grade-3/term-1/french/`, loaded from `../../../grade-4/term-1/french/french-lesson.js`).
+A change to the engine must leave every existing lesson of both grades as it was (the skill has the compare procedure). Rules, sources and procedure: the `french-lesson` skill.
 
 ## English (Grade 4): lessons and stories
 
-Folders: `grade-4/term-1/english/`, `grade-4/term-2/english/`, … One English page for all terms: `grade-4/term-1/english/index.html` (list in its `dictations.js`).
-Engines: lessons `shared/computer-lesson.js` (`<body data-subject="English">`), stories `shared/story.js`, dictations `shared/spelling.js` (don't copy them; a lesson, a story or a dictation is only a data file).
-Format in README: "English stories", "English lessons (Grade 4)", "English revision"; `term-1/english/unit1-week5.js` is the fullest example.
-Step-by-step procedure, lessons learned and the check scripts (data check, play-through, screenshots, offline list): the `english-lesson` skill in `.claude/skills/english-lesson/`.
-Sources: the term booklets in `~/Documents/2026-2027/Alex/!booklets/` (Classwork and Homework Booklet), and `~/Documents/2026-2027/Alex/English/Term N/`
-(shared reads, leveled readers, model answers, memos, dictations). Alex is learning to read again: everything is read aloud, a picture on every item.
-
-Sources log (Term 2 on; Term 1 sources are in the `// Sources:` line at the top of each file):
-
-- Each term folder has `SOURCES.md` (every source file page by page: what it was built into, `file · key`, or why it was skipped),
-  `TODO.md` (tasks waiting for a text that is not scanned yet), `UNVERIFIED.md` (answers written without a school key).
-- Before building: read `SOURCES.md` and compare it with the source folders; build only the pages that are not in it, and say which ones are already built.
-- With every lesson or story: update its rows in the three files, in the same commit.
-
-Sorting:
-
-- Wonders pages say the week at the foot ("Grade 4 · Unit 2 · Week 5"), school sheets at the top ("Unit 2 week 5"). The booklets go week by week after a divider page
-  (with "Talk About It" = the week's cover picture and Essential Question).
-- A text (Genre Passages O1–O3, a homework comprehension text, a poem) = a story; its questions go in the story. Grammar, phonics, spelling, vocabulary pages = exercises of the week's lesson.
-- Skipped: cover, dividers, fluency charts ("Words Read / Number of Errors"), a page printed in both booklets (build it once).
-  A task about a text that is not in the booklet (writing frames, "Read this excerpt from …"): into `TODO.md` until the user sends the scan.
-- Words missing or unreadable: never guess. List them and ask.
-- Answers: from the school's model answers or memo when there are some. Without a key: give the likely answer, add a `// unverified` comment and a row in `UNVERIFIED.md`.
-
-What to build:
-
-- **Lesson** `unitN-weekM.js` + `.html` (copy `term-1/english/unit1-week5.html`, change the `.js` and the title), pictures in `img/unitN-weekM/`.
-  `key: "en4-uNwM"`, `unit: "Unit N · Week M"`, `hub`: the English page (`"../../term-1/english/index.html"` from a later term), `question` = the Essential Question.
-  Learn: the week's story tiles, then decks (vocabulary words, the grammar rule boxes, the spelling list by pattern, figurative language), each card with `vis`, `src` or `emoji`.
-  Play: games for the week's points (sort, match, mc). Exercises: every booklet task, one exercise each, `from: "Classwork p. 3"` (the PDF page number, printed at the bottom centre),
-  `g` = the section ("🧩 Grammar · …", "🔊 Phonics · …", "🔤 Vocabulary", "🧱 Vocabulary strategy · …", "📖 Reading · …"); items in the booklet's order.
-- **Story** `story-<name>.js` + `.html` (copy `term-1/english/story-helping-hand.html`, change the `.js`), pictures in `img/<name>/` (`pdftoppm -r 200`, then PIL; ~700px, small pictures ~400px).
-  Text exactly as printed, short pages, one `easy` sentence each, `gloss` for the hard words, the booklet's questions in order; `lesson: {path, label}`, and `hub` (as above) from a later term.
-- **Dictation** (a school dictation sheet) `english-dictation-unitN-weekM.js` + `.html` (copy the last one, change the `<title>` and the `.js`); format in README "English dictations", procedure and checks in the `english-dictation` skill.
-  The sheet's words and sentences exactly as printed (a sheet with only sentences: the week's spelling words in them are the words); `mark` the sound or suffix on each word, `key` in each sentence; a picture (`pics` drawing) on every item; `date` in `dictations.js`.
-- Item types: circle / choose / which sentence is right → `mc` (right one first; `keep` for a fixed list like the tense names); underline or circle words in a sentence → `tapw`;
-  word sort, "write the words that contain …" → `sort`; match a word to its meaning → `match` or `mc`; complete a verb, fill a gap → `mc` with likely wrong forms;
-  rewrite / combine / correct a sentence → `mc` (which is right) or `order` (build it from cards); question about a text, writing task → `open` with a model answer.
-
-Then:
-
-- Entry in `term-1/english/dictations.js` (`kind: "Lesson"` / `"Story"`, `term: N` for a later term, which shows a "Term N" tag; path from the term-1 folder: `"../../term-2/english/…"`).
-- The new files and pictures in `also` of the Grade 4 English entry in `games.js`, plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
-- Check with a script: every item has a picture, every `img` / `src` exists, every picture file is used and in `also`, every `path` and `hub` link opens.
-- Check in the browser: the English page (the tag), each tab and section of the lesson, every story page, one exercise of each type, the back links.
+Folders `grade-4/term-1/english/`, `grade-4/term-2/english/`, …; one English page for all terms: `grade-4/term-1/english/index.html` (list in its `dictations.js`).
+Engines: lessons `shared/computer-lesson.js` (`<body data-subject="English">`), stories `shared/story.js`, dictations `shared/spelling.js`.
+Rules, sources and procedure: the `english-lesson` skill (its "Rules" also cover dictations); dictation sheets: the `english-dictation` skill.
 
 ## Computer (Grade 4): lessons
 
@@ -219,55 +143,19 @@ Rules, sources and procedure: the `social-studies-lesson` skill.
 
 ## Ukrainian reading (Optima, Grade 3)
 
-Folder `optima/grade-3/ukr-lit/` («Складова ракета» texts; the book lessons there are in the next section), engine `shared/reading.js` + `shared/reading.css` (don't copy them; a text is only a data file). Format in README: "Ukrainian reading".
-Book: `~/Documents/2026-2027/Lucas/Optima/Літературне читання 3.pdf` (text layer: `pdftotext -f N -l N`; the words are split by zero-width spaces). Lucas reads slowly and has aphasia.
-
-- A text = `<name>.js` + `<name>.html` (copy bohdanchyk.html, change the `.js`), a card in `texts.js`, both files in `also` of the Українська література entry in `games.js`
-  plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
-- The text exactly as the book prints it (’ apostrophes, « » quotes, – dashes). Lines of a phrase or a short sentence (≤ 7 words).
-  More than about 100 words: `pages: [[lines], …]` of about 100 words each, cut at a paragraph or sentence; no separate cards, no page buttons.
-- Syllables: `-` between them, split between two consonants (ос-то-ронь, крис-ла-ту), a word-initial cluster stays (зга-, тре-, хви-),
-  `ь` and `й` stay with the syllable before (лень-кий, дій-ка), `дж` / `дз` as one sound stay together (на-ро-джен-ня).
-  `*` before the stressed syllable of every word of two syllables or more, before « when the word starts with one (`*«Ма-буть,`).
-  A real hyphen is `‑` (U+2011) at the end of its syllable (`*мо-ря‑-о-ке-*а-ни`, one `*` per part).
-  Stress the way a dictionary gives it; list the less obvious ones for the user (Сашка́, одна́ одну́, ранко́ву).
-- `launch` (Склади): the longest words, 10 per ~100 words; `fuel` (Слова): 20 per ~100 words, none twice. Spelled exactly as in the text.
-- Check with `node .claude/scripts/ukr-reading-check.js <text.js> "<book.pdf>" <page>` (syllables, stress, the word lists, the text against the book page).
-- Check in the browser at a phone width (360–390px upright, sideways) and a landscape tablet: the longest Склади word, Читання to the end, the page turn.
+«Складова ракета» texts in `optima/grade-3/ukr-lit/`, engine `shared/reading.js` + `.css`. Rules and checks: the `ukr-reading` skill.
 
 ## Ukrainian language and reading (Optima, Grade 3)
 
-Folders `optima/grade-3/ukr-mova/` (Українська мова) and `optima/grade-3/ukr-lit/` (Українська література, next to the «Складова ракета» texts), one engine `shared/ukr-lesson.js` + `.css`
-(don't copy it; a lesson is only a data file). Format in README: "Ukrainian language and reading lessons". Procedure, item types and checks: the `optima-ukr-mova` and `optima-ukr-lit` skills.
-Books in `~/Documents/2026-2027/Lucas/Optima/`: language «Українська мова та читання. Ч. 1» (Кравцова, Придаток; PDF page = book page + 3), reading Савчук «Ч. 2» (PDF page = book page).
-Their text layers are garbled: read the pages as pictures. Lucas has aphasia and reads slowly: a picture or emoji on every item, answers by a tap (choices, letter tiles, word tiles).
-
-- Language: a lesson = one topic (from the «початок уроку» sign to the next); Урок = the rule slides, Вправи = every exercise task that has something to check, homework 🏠 in its own group.
-- Reading: a lesson = one text exactly as printed (poem stanzas in reading order) and its questions as slides; answers in the text → choices, personal ones → `open` with a model answer and `help`.
-- Build one lesson at a time and show it. Leave out reading aloud in class, photos, drawing, videos; list them. Words missing or unreadable: never guess; ask.
-- Check with `node .claude/scripts/ukr-lesson-check.js <lesson-N.js>` and play it with `.claude/scripts/ukr-lesson-shot.sh` (every group to ✓, a phone width).
-- Then: card in `lessons.js`; files and pictures in `also` of the subject's entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+Folders `optima/grade-3/ukr-mova/` and `optima/grade-3/ukr-lit/`, one engine `shared/ukr-lesson.js` + `.css`. Rules and procedure: the `optima-ukr-mova` (language) and `optima-ukr-lit` (reading) skills.
 
 ## Speed reading (Optima, Grade 3: Швидкочитання)
 
-Folder `optima/grade-3/speed-reading/`, engine `shared/speed-reading.js` + `.css` (don't copy it; a game or text is data in `daily.js`, `book.js`, `catch.js` or `text-*.js`). Format in README: "Speed reading".
-Sources: `~/Documents/2026-2027/Lucas/Optima/` (`speed-reading.txt` = the 30-day programme → Щодня; `швидкочитання.pdf` = «Школа швидкочитання» → Книжка and Тексти). Log: `SOURCES.md` in the folder.
-
-- No days or weeks: the programme's material is grouped by skill into small games. The hub has three sections (Щодня · Книжка · Тексти).
-- The booklet stays exactly as printed: words run together, missing letters (■), letters cut off (`cut`), even a likely misprint. Never "fix" them; ask only when an answer can't be worked out.
-- Answers the book does not give are worked out (letter colours and sizes measured on the scan) and listed for the user before building; the made-up ones are noted in `SOURCES.md`.
-- Check with real taps in headless Chrome: every game to its end screen, at a phone width and a landscape tablet. Then `also` / `countLabel` in `games.js`; `VERSION` bump in `sw.js` last.
+Folder `optima/grade-3/speed-reading/`, engine `shared/speed-reading.js` + `.css`. Rules and checks: the `speed-reading` skill.
 
 ## Ukrainian math (Optima, Grade 3)
 
-Folder `optima/grade-3/math/`, engine `shared/math-uk.js` + `.css` (don't copy them; a lesson is only a data file). Format in README: "Ukrainian math (Optima, Grade 3)".
-Procedure, check script and screenshots: the `optima-math` skill. Book: `~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Козак М. Математика. Частина 1. … 2020.pdf` (read the pages as pictures, the text layer is noisy).
-
-- A lesson = one green title in the book (the star line to the next one). Build one lesson at a time and show it before the next.
-- Every book exercise goes in, in a group of its type; what has nothing to check (Пофантазуй, drawing, stick puzzles) is left out and listed.
-- Word problems: `help`, a bar `schema`, `steps` with units, `answer` with the answer number once. Table lessons get `drill` (the two table games).
-- The book's wording and signs (`·` for ×). Every answer worked out and passed by `check.js`; unit conversions checked by hand.
-- Then: card in `lessons.js`; files and pictures in `also` of the Математика entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+Folder `optima/grade-3/math/`, engine `shared/math-uk.js` + `.css`. Rules, procedure and checks: the `optima-math` skill.
 
 ## Speech games (Мовлення)
 

@@ -5,11 +5,22 @@ description: Build Optima Grade 3 Math lessons (Ukrainian, «Математик�
 
 # Optima Math lessons (Grade 3)
 
-The rules live in `CLAUDE.md` ("Ukrainian math (Optima, Grade 3)", plus "Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Ukrainian math (Optima, Grade 3)").
+The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Ukrainian math (Optima, Grade 3)").
 Read those first. `optima/grade-3/math/lesson-2.js` is a full example (slides, every row kind, word problems, comparisons with units).
 
 Lucas has aphasia and reads slowly: short Ukrainian sentences, the key words in `[brackets]`, a schema on every word problem.
 The user reviews each lesson in the browser: build **one lesson at a time**, show it, wait for approval before the next one.
+
+## Rules
+
+Folder `optima/grade-3/math/`, engine `shared/math-uk.js` + `.css` (don't copy them; a lesson is only a data file). Format in README: "Ukrainian math (Optima, Grade 3)".
+Procedure, check script and screenshots: this skill. Book: `~/Documents/2026-2027/Lucas/Optima/ПІДРУЧНИК_Козак М. Математика. Частина 1. … 2020.pdf` (read the pages as pictures, the text layer is noisy).
+
+- A lesson = one green title in the book (the star line to the next one). Build one lesson at a time and show it before the next.
+- Every book exercise goes in, in a group of its type; what has nothing to check (Пофантазуй, drawing, stick puzzles) is left out and listed.
+- Word problems: `help`, a bar `schema`, `steps` with units, `answer` with the answer number once. Table lessons get `drill` (the two table games).
+- The book's wording and signs (`·` for ×). Every answer worked out and passed by `check.js`; unit conversions checked by hand.
+- Then: card in `lessons.js`; files and pictures in `also` of the Математика entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find the lesson
 

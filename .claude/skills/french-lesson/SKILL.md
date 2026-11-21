@@ -5,11 +5,50 @@ description: Build or update French lessons and revisions (Grade 4 Alex, grade-4
 
 # French lessons and revisions (Grade 3 and 4)
 
-The rules live in `CLAUDE.md` ("French (Grade 3 and 4): lessons and revisions", plus "Workflow", "Formatting", "Offline cache") and the data format in `README.md` ("French lessons (Grade 3 and 4)"). Read both first. This skill is the working procedure on top of them, the scripts, and what was learned building Grade 4 Lessons 1–3.
+The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting", "Offline cache") and the data format in `README.md` ("French lessons (Grade 3 and 4)"). Read both first. This skill is the working procedure on top of them, the scripts, and what was learned building Grade 4 Lessons 1–3.
 
 The boys learn from pictures and sound (Alex has aphasia): a picture on every item, every French word can be heard, translations EN / UA / AR. The user (the parent) reads the code and reviews every stage: build, check, show, and wait for approval before committing.
 
 `S=.claude/skills/french-lesson/scripts` below; run everything from the repo root.
+
+## Rules
+
+Engine `grade-4/term-1/french/french-lesson.js` (don't copy it; a lesson or a revision is only a data file). Format in README: "French lessons (Grade 4)"; `lesson-2.js` is the fullest example.
+Sources: Grade 4 (Alex) `~/Documents/2026-2027/Alex/French/`, Grade 3 (Lucas) `~/Documents/2026-2027/Lucas/French/`: the teacher's lesson slides (book pages
+"Livre p. N", "Cahier d'exercices p. N", often with the answers filled in), class work / homework sheets (Travail de classe, Devoir noté, some with a "Modèle de réponse"),
+and the term sheet "Exercices d'application" (mid-term / final). The boys learn from pictures and sound: a picture on every item.
+
+Sorting:
+
+- Each slide says its book page. The lesson = book pages + cahier pages + the sheets for that lesson. A sheet file name can be wrong (a "Devoir noté" that says "Travail de classe" on the page): say so.
+- Sheets on several lessons (Exercices d'application) = the revision, not a lesson. A sentence from neither lesson (e.g. « J'ai une gomme rouge ») goes in with an emoji picture: list it for the user.
+- Answers come from the teacher's filled-in pages and "Modèle de réponse". An answer with no key (no model answer, a picture to interpret): give the likely one and say it is unverified.
+- Words missing or unreadable: never guess. List them and ask.
+
+What to build:
+
+- **Lesson** `lesson-N.js` + `lesson-N.html` (copy lesson-2.html, change the script and title), pictures in `img/lesson-N/` (`pdftoppm -r 200`, find boxes on a grid, crop with PIL; people ~250–500px, panels ~700px, comic cover ~1000px; check a contact sheet for cut text or bits of the next panel).
+  Learn: story (every panel, then "Des phrases pour parler" with `title`), words (`people` with `say`, `phrases` = the page's Vocabulaire), one `sound` tile per Phonétique sound, a `rule` card for a grammar box. The `verb` view takes any verb whose forms are `p` + `stem` + `end` (s'appeler, avoir); a new kind of view needs an engine change first. Procedure and check scripts: this skill.
+  Play: listen, match, bword, bsent, ilelle (if people have il / elle), and `game` tiles for the lesson's own point (Un ou une ?).
+  Exercices: every book "Parle" / cahier exercise / sheet task, one section each, `from` = where it is ("Cahier p. 7 ex. 5"); a sheet task the lesson already has is not built twice.
+  Dictée: a "(by spelling)" sheet or list = one entry in `dictee` (its words and its sentences, a picture on each); the engine makes the build-from-letters and hear-and-type games.
+- **Revision** `revision-N.js` + `revision-N.html` (copy revision-1.html; it loads every lesson it uses before its own file): Exercices only, the term sheet's tasks in its order,
+  then the lessons' main exercises through `ref: "N:k"`; pictures from the lessons (`img: "lesson-2/parle-9"`), never new copies.
+- Item types: put in order → `order` (`q` for "Réponds" / "Regarde et écris"); write a word with a sound → `letters`; choose / entoure / oui-non question → `mc` (right one first, `full` for the whole answer);
+  complete a verb, a capital letter, . ? ! → `fill`; "Mets un (x) si c'est une phrase" → `yn` with `ask`, `x`, `fix`; listen and point → `tap`; relie → `match`.
+
+Rules for every French file:
+
+- French exactly as the book prints it (’ apostrophes, a space before ? and !); only the teacher's slide typos are fixed, and listed for the user.
+- Every French text has an EN / UA / AR translation through `dict` or `auto`; names need none.
+- Check with a script before calling it done: every sentence translates, every item has a picture, every `img` exists, every picture file is used and listed in `also`.
+- Then: entry in `lessons.js` (lesson) or a "Final exam" / "Mid-term exam" card in `games.js` (revision); new files and pictures in `also` of the French entry, plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+- Grade 3: `grade-3/term-1/french/` (Lessons 1–4 and `revision-1`, the same format); pages load the engine from `../../../grade-4/term-1/french/french-lesson.js`.
+  Grade 3 has no book slides after « La présentation »: a lesson is a topic sheet (Les salutations, Les consignes de la classe) or a topic of the sheets (Les lettres et les mots).
+- Grade 3 French page has two groups in the side bar (`groups` in `lessons.js`): **Léo et Théo Plus 1** = the book (`~/Documents/2026-2027/Lucas/French/book/`), one lesson `unite-N` per Unité,
+  book exercises only; **Teacher's lessons** = `lesson-N` from the teacher's slides and sheets. Never mix the two. Plan and page map: `grade-3/term-1/french/SOURCES.md`; procedure: this skill, section 7.
+- A change to the engine must leave the existing lessons as they were: render every screen of the old and new version with the same `Math.random` seed and compare (headless Chrome: `google-chrome --headless=new --dump-dom` on a harness page that clicks through an iframe), then play every game and exercise to the score screen.
+- Check in the browser: the list, each tab, the sound and rule screens, translations on, one exercise of each type.
 
 ## 1. Find what is new
 
@@ -51,7 +90,7 @@ Copy `lesson-2.js` (header comment with the sources, `NAMES`, `DICT`, a sentence
 - **sound**: `s` is matched as text in the words (« ain » in Alain, copain, main); `not` = words without it for the « Tu entends ? » game.
 - A lesson card in `lessons.js` (`n, title, en, path, cover, note`); a revision card under "Final exam" / "Mid-term exam" in `games.js`.
 
-An engine change (a new view or field) is its own stage and commit: old lessons must render the same. Check it with `compare.sh` (below), and add the new field to the README format (and to CLAUDE.md if it changes a rule there).
+An engine change (a new view or field) is its own stage and commit: old lessons must render the same. Check it with `compare.sh` (below), and add the new field to the README format (and to "Rules" above if it changes a rule there).
 
 ## 5. Check
 
