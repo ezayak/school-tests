@@ -926,3 +926,5 @@ Lucas/Science/Term 1/Motion Quest game.html
 Alex/Science/20261121-H.W (1) g4 term 2.pdf
 Alex/S.S.English/20261121-Graded H.W (1).pdf
 Lucas/French/book/20261121-Livre Unite 3 Tous a l'ecole (p26-33).pdf
+Lucas/French/book/CARTOON_UNITE3.mp4
+Lucas/French/book/VIDEO_AUTOUR_DE_TOI_3.mp4
