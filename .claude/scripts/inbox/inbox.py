@@ -80,9 +80,13 @@ def rel(p):
 
 
 def load_done():
-    if not DONE_FILE.exists():
-        return set()
-    return {l.strip() for l in DONE_FILE.read_text().splitlines() if l.strip() and not l.startswith("#")}
+    """done.txt here plus the one on GitHub (origin/main): a job from the sorting page pushes from its own worktree,
+    so this checkout may not have its done.txt yet."""
+    text = DONE_FILE.read_text() if DONE_FILE.exists() else ""
+    r = subprocess.run(["git", "show", "origin/main:" + DONE_FILE.relative_to(REPO).as_posix()], cwd=REPO, capture_output=True, text=True)
+    if r.returncode == 0:
+        text += "\n" + r.stdout
+    return {l.strip() for l in text.splitlines() if l.strip() and not l.startswith("#")}
 
 
 def add_done(paths):
