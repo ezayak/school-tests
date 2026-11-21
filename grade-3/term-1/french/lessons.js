@@ -27,6 +27,14 @@ const BOOK = [
     cover: "img/unite-2/p1.jpg",
     note: "Livre p. 16–25 · 3 videos · 31 words · 4 games · 10 exercises",
   },
+  {
+    n: 3,
+    title: "Tous à l’école !",
+    en: "Everyone to school! · le cahier, la gomme…, les couleurs, la salle de classe, dans / sur / sous, le son [u]",
+    path: "unite-3.html",
+    cover: "img/unite-3/p4.jpg",
+    note: "Livre p. 26–33 · 1 video · 50 words · 7 games · 9 exercises",
+  },
 ];
 const TEACHER = [
   {
