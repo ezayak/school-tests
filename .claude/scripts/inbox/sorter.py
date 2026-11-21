@@ -3,9 +3,11 @@
 
   python3 .claude/scripts/inbox/sorter.py                  http://127.0.0.1:8770 on this computer
   python3 .claude/scripts/inbox/sorter.py --lan            also http://mollers-pi.local:8770 from a phone / tablet at home
+  https://mollers-pi.cheetah-krait.ts.net                  from your own devices anywhere (tailscale serve --bg 8770)
   python3 .claude/scripts/inbox/sorter.py --set-password   choose the password (in a terminal; asked twice, never shown)
 
-From the home network the browser asks for the password (any user name); this computer itself needs none.
+Who needs the password: this computer itself, never; your own devices through Tailscale (the request carries
+your Tailscale login), never; the home network and anything else (a Tailscale funnel), always (any user name).
 --lan without a password set: the page stays on this computer only. The password is kept as a salted hash
 (PBKDF2) in ~/.local/share/school-inbox/password (readable by you only). Plain http: fine at home, not on public Wi-Fi.
 
@@ -21,6 +23,7 @@ import hmac
 import json
 import os
 import secrets
+import subprocess
 import sys
 import threading
 import time
@@ -50,6 +53,19 @@ PREPARING = {}  # subject id -> "running" / "done" / error text
 
 def hash_password(pw, salt):
     return hashlib.pbkdf2_hmac("sha256", pw.encode(), salt, 200_000).hex()
+
+
+def tailscale_owner():
+    """The Tailscale login of this Pi's owner, read at start (None without Tailscale)."""
+    try:
+        out = subprocess.run(["tailscale", "status", "--json"], capture_output=True, text=True, timeout=5).stdout
+        s = json.loads(out)
+        return s["User"][str(s["Self"]["UserID"])]["LoginName"]
+    except Exception:
+        return None
+
+
+OWNER = tailscale_owner()
 
 
 def set_password():
@@ -140,8 +156,13 @@ def prepare(subject):
 
 class Handler(BaseHTTPRequestHandler):
     def allowed(self):
-        """This computer: always. The home network: with the password."""
-        if self.client_address[0] in ("127.0.0.1", "::1"):
+        """This computer: always. Through Tailscale: your own devices. Home network or anyone else: the password."""
+        local = self.client_address[0] in ("127.0.0.1", "::1")
+        # tailscale serve / funnel pass requests on from 127.0.0.1: they are not this computer
+        proxied = any(h in self.headers for h in ("X-Forwarded-For", "Tailscale-User-Login", "Tailscale-Funnel-Request"))
+        if local and not proxied:
+            return True
+        if local and OWNER and self.headers.get("Tailscale-User-Login") == OWNER:
             return True
         auth = self.headers.get("Authorization", "")
         if auth.startswith("Basic ") and password_ok(auth):
@@ -215,7 +236,7 @@ if __name__ == "__main__":
         else:
             print("No password set (sorter.py --set-password): the page stays on this computer only.", flush=True)
     server = ThreadingHTTPServer((host, PORT), Handler)
-    where = "http://mollers-pi.local:{0} (home network, password) and http://127.0.0.1:{0}" if host == "0.0.0.0" else "http://127.0.0.1:{0}"
+    where = "https://mollers-pi.cheetah-krait.ts.net (Tailscale), http://mollers-pi.local:{0} (home network, password) and http://127.0.0.1:{0}" if host == "0.0.0.0" else "http://127.0.0.1:{0}"
     print("Sorting page: " + where.format(PORT) + "  (Ctrl+C to stop)", flush=True)
     try:
         server.serve_forever()

@@ -9,11 +9,10 @@ They were made to save tokens: Claude reads short text reports and small contact
 2. **19:00 every day** the inbox check runs (`school-inbox.timer`). For every subject that is **ready** (3 or more new files, or a file waiting 4 days) it
    - sends a private Telegram message through @alex_moller_hw_bot, e.g. «📚 Alex · Math: 13 new → Lesson 4-3 (practice); …», with the link to the sorting page;
    - prepares the files: page pictures, contact sheets, the text layer and OCR (see `prep` below), so nothing has to be done when the session starts.
-3. **Sort** (optional, saves the most questions): open **http://mollers-pi.local:8770** (or http://192.168.100.143:8770) on the phone or tablet at home,
-   or http://127.0.0.1:8770 on the Pi. Per file: where it goes ("Lesson 4-3"), what it is (homework, slides, answer key, skip…), a note.
+3. **Sort** (optional, saves the most questions): open **https://mollers-pi.cheetah-krait.ts.net** on the phone or tablet (anywhere, Tailscale app on, no password),
+   or http://mollers-pi.local:8770 at home (password), or http://127.0.0.1:8770 on the Pi. Per file: where it goes ("Lesson 4-3"), what it is (homework, slides, answer key, skip…), a note.
    Per page: Use / Skip / Answers / Other lesson, and a note (words that can't be read, what the teacher said).
-   As an app on the Android tablet (once): in Chrome open `chrome://flags/#unsafely-treat-insecure-origin-as-secure`, enter `http://mollers-pi.local:8770`, Enabled, Relaunch;
-   then open the page, ⋮ → "Add to home screen" → Install. (Without the flag it is only a shortcut that opens a browser tab: Chrome installs apps only from https.)
+   As an app (once per device): open the https address in Chrome, ⋮ → "Add to home screen" → Install. (Only the https address installs: Chrome refuses plain http.)
 4. **Build**: in a **new** Claude session, write «build inbox g4-math». Claude reads `inbox.py --subject g4-math` (your notes included), the contact sheets and the text,
    then follows the subject's skill. After the lesson: a row in the subject's `SOURCES.md`, `inbox.py done <files>`, `register.py`, commit.
 5. **`/clear`** after the lesson is committed: one lesson per session.
@@ -110,5 +109,10 @@ systemctl --user restart school-sorter                   # after a password chan
 journalctl --user -u school-sorter -n 5 --no-pager       # the page's start line
 ```
 
-The page needs no password on the Pi itself; from the home network it asks for it (any user name; a wrong one waits 1 s).
-It is plain http: fine at home, not reachable from outside the home network. Without a password set, `--lan` keeps it on the Pi only.
+Who needs the password: the Pi itself, never; your own devices through Tailscale, never (`tailscale serve` passes on your Tailscale login,
+and the page compares it with the Pi's owner); the home network and anyone else, always (any user name; a wrong one waits 1 s).
+Without a password set, `--lan` keeps the home address on the Pi only.
+
+Tailscale (`tailscale serve --bg 8770`, set once, survives reboots): https://mollers-pi.cheetah-krait.ts.net, reachable only from devices
+logged into your Tailscale account. `tailscale serve status` shows it; `tailscale serve reset` turns it off.
+Never `tailscale funnel` without checking the password rules above first: funnel opens the page to the whole internet.
