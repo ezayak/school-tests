@@ -639,6 +639,10 @@ window.Kit = (function () {
       stop();
       if (e.target.closest?.("h1")) timer = setTimeout(toggle, 2000);
     });
+    // Android: a long press opens the menu and cancels the hold; not on a title
+    document.addEventListener("contextmenu", (e) => {
+      if (e.target.closest?.("h1")) e.preventDefault();
+    });
     for (const ev of ["pointerup", "pointercancel", "pointermove"])
       document.addEventListener(
         ev,
