@@ -5,10 +5,22 @@ description: Build or update Grade 4 Social Studies lessons and stories (myWorld
 
 # Social Studies lessons and stories (Grade 4)
 
-The rules live in `CLAUDE.md` ("Social Studies (Grade 4): lessons and stories", plus "Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Social Studies lessons (Grade 4)", "English stories" for the story format). Read those first. This skill is the working procedure on top of them. The model to copy is `grade-4/social-studies/chapter-1/lesson-4.js` with its story `story-douglas.js`.
+The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Social Studies lessons (Grade 4)", "English stories" for the story format). Read those first. This skill is the working procedure on top of them. The model to copy is `grade-4/social-studies/chapter-1/lesson-4.js` with its story `story-douglas.js`.
 
 Alex has aphasia: the parent explains every question by pointing at pictures. So the book's text is retold **in easy words** on picture cards (one idea per card, 1–3 short sentences, the key words in `[brackets]`), **every question has a picture, every answer has a picture or an emoji, and every sentence answer has an explanation (`x`)**.
 The user reads the code and reviews every lesson: build one lesson, show it, wait for approval before committing.
+
+## Rules
+
+Folder `grade-4/social-studies/chapter-N/`, engines `shared/computer-lesson.js` (`<body data-subject="Social Studies">`) and `shared/story.js` for stories (don't copy them; a lesson or a story is only a data file).
+Format in README: "Social Studies lessons (Grade 4)". Procedure, picture scripts and checks: this skill; `chapter-1/lesson-4.js` + `story-douglas.js` are the model.
+Sources: `~/Documents/2026-2027/Alex/S.S.English/` (term booklets, `Term N/` sheets) and `book/` (myWorld Interactive 4, two-page spreads as PNG). Alex has aphasia: the parent explains each question by pointing at the pictures.
+
+- A lesson = one book lesson + the booklet's exercise sheet for it. The book's text is retold in easy words on picture cards (short sentences, key words in `[brackets]`); the booklet's questions stay as printed.
+- Stories to know (Citizenship pages, history stories the booklet asks about) = story pages with the text exactly as printed, an easy sentence per page, a summary, and no questions.
+- Every question has a picture, every answer a picture or an emoji, every sentence answer an explanation (`x`). Colouring is left out.
+- Logs in `grade-4/social-studies/`: `SOURCES.md` (every book page and booklet page → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (the booklets have no key). Update them with every lesson, in the same commit.
+- Words missing or unreadable: never guess; ask. Then: `lessons.js` (`term: N`), files and pictures in `also` of the Social Studies entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find what is new
 

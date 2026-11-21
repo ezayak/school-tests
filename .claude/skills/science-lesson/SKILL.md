@@ -5,11 +5,24 @@ description: Build or update Grade 4 Science lessons (Elevate Science, grade-4/s
 
 # Science lessons (Grade 4)
 
-The rules live in `CLAUDE.md` ("Science (Grade 4): lessons", plus "Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Science lessons (Grade 4)"). Read those first. This skill is the working procedure on top of them, the scripts, and what was learned building the Term 2 booklet.
+The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Science lessons (Grade 4)"). Read those first. This skill is the working procedure on top of them, the scripts, and what was learned building the Term 2 booklet.
 
 All 30 lessons of the book (Topics 1–8) are built, with the book's Lesson Check as "Book questions". New sources add **exercises** (and sometimes picture cards or key words) to an existing lesson; they don't make new lessons.
 
 Alex has aphasia: the parent explains every question by pointing at pictures. So **every question has a picture that explains it, every answer has a picture or an emoji, and every answer that is a sentence gets an explanation (`x`)** shown after it is chosen. This applies to the lessons being built or updated; the older lessons are not fixed unless the user asks.
+
+## Rules
+
+Folder `grade-4/science/topic-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Science">`, don't copy it; a lesson is only a data file). Format in README: "Science lessons (Grade 4)".
+All 30 book lessons are built; new sources (term booklets, the teacher's slides, school sheets) add exercises to them. Procedure, picture scripts and checks: this skill.
+Sources: `~/Documents/2026-2027/Alex/Science/` (booklets, slides, sheets) and `book/` (Elevate Science). Alex has aphasia: the parent explains each question by pointing at the pictures.
+
+- Logs (Term 2 on), in `grade-4/science/`: `SOURCES.md` (every page → `file · exercise key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (answers without a school key; the teacher's filled-in slides are a key). Update them with every lesson, in the same commit.
+- Every question has a picture that explains it; every answer has a picture (`pics`) or emoji (`icons`); every sentence answer has an explanation (`x`). Pictures: explanation drawings `e-*.jpg` (PIL scripts in the skill), booklet crops (empty label boxes numbered in red), emoji or animated scenes (the page then loads `shared/common.js`).
+  Only the lessons being built or updated; older lessons stay as they are unless asked.
+- Booklet answers have no key: give the right one from the book, a `// unverified` reason in `UNVERIFIED.md`. Words missing or unreadable: never guess; ask.
+- `term: N` in `lessons.js` on a lesson with Term N booklet sheets (a "Term N" tag after "Lesson M"). One commit per lesson.
+- Then: files and pictures in `also` of the Science entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find what is new
 

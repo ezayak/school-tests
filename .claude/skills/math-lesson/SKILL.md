@@ -5,11 +5,26 @@ description: Build or update Grade 4 Math lessons (Reveal Math, grade-4/math/uni
 
 # Math lessons (Grade 4)
 
-The rules live in `CLAUDE.md` ("Math (Grade 4): book lessons", plus "Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Math lessons (Grade 4)"). Read those first.
+The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting" and "Offline cache") and the format in `README.md` ("Math lessons (Grade 4)"). Read those first.
 `grade-4/math/unit-2/lesson-2-1.js` is the model: copy its shape (helpers at the top, then `window.LESSON`).
 
 Alex has aphasia and is learning to read again: the parent explains each question by pointing at the pictures. Every question has a drawing (`vis`) or a picture (`img`) or an emoji; short sentences; key words in `[brackets]`; answers typed on the number pad when they are numbers.
 The user reviews each lesson in the browser: build **one lesson at a time** unless told to do a batch, show it, wait for approval.
+
+## Rules
+
+Folder `grade-4/math/unit-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Math">`) + `shared/math.js` / `.css` (don't copy them; a lesson is only a data file). Format in README: "Math lessons (Grade 4)".
+Procedure, item types and checks: this skill; `unit-2/lesson-2-1.js` is the model.
+Sources: `~/Documents/2026-2027/Alex/Math/books/` (Reveal Math Student Edition Vol. 1 = Units 1–7, scanned, book page = PDF page − 20; Student Practice Book, text layer) and `Term N/` (class sheets, extra practice, homework, model answers).
+Vol. 2 (Units 8–14) is the online e-book filmed as screencasts (`books/*.mp4`): the `math-video-book` skill reads them; fractions are `{3/4}` in the text.
+Alex has aphasia: the parent explains each question by pointing at the pictures.
+
+- One page per book lesson (`lesson-2-1`): the Student Edition's 4 pages + its 2 Practice Book pages. The unit pages (`unit-2/place-value` …) hold the Term 1 sheets; keep them.
+  A new school sheet goes into its book lesson as a "🏫 School" section.
+- Every book item in the book's order; every question has a drawing (`vis`), picture or emoji. Numbers are typed on the number pad (`num`), worked out, never from memory.
+  The Be Curious picture is the cover; other pictures are drawn by `shared/math.js` unless the book's own picture explains more. Unit 1 « Math Is… » and drawing tasks are skipped.
+- Logs in `grade-4/math/`: `SOURCES.md` (every book / Practice Book page and sheet → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (answers without a key, `// unverified` in the file). Update them with every lesson, in the same commit.
+- Words or numbers missing or unreadable: never guess; ask. Then: card in `lessons.js` (under its unit), files and pictures in `also` of the Math entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find what is new
 

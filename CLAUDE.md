@@ -200,53 +200,22 @@ Then:
 
 ## Computer (Grade 4): lessons
 
-Folder `grade-4/computer/chapter-N/` (one per book unit), engine `shared/computer-lesson.js` (don't copy it; a lesson is only a data file). Format in README: "Computer lessons (Grade 4)".
-Procedure, how to read the e-book screenshots and the checks: the `computer-lesson` skill. Sources: `~/Documents/2026-2027/Alex/Computer/` (`unit-N/` e-book screenshots and figure PNGs, `Term N/` videos and CW / HW sheets).
-Alex has aphasia: short sentences, a picture on every card and question, and every computer skill practised on a pretend program (Mini Windows, Mini Word, Mini Outlook + Mini Edge).
-
-- Every blue "N.N.N To …" box = a how-to in the pretend program, every Hands on task = an exercise in the book's order. A skill the program can't do yet = a program change first, in its own stage, and the older lessons must still play.
-- Logs in `grade-4/computer/`: `SOURCES.md` (every screenshot folder, figure, sheet, video → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (Hands on answers have no key in the screenshots). Update them with every lesson, in the same commit.
-- Words missing or unreadable: never guess; ask. Then: card in `lessons.js` (under its chapter), files and pictures (not videos) in `also` of the Computer entry in `games.js`, plus `countLabel` / `topics`; a new shared program file in CORE of `sw.js`; `VERSION` bump in `sw.js` last.
+Folder `grade-4/computer/chapter-N/`, engine `shared/computer-lesson.js` and the pretend programs (Mini Windows, Mini Word, Mini Outlook, Mini Edge).
+A program change must leave the older lessons playing. Rules, sources and procedure: the `computer-lesson` skill.
 
 ## Math (Grade 4): book lessons
 
-Folder `grade-4/math/unit-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Math">`) + `shared/math.js` / `.css` (don't copy them; a lesson is only a data file). Format in README: "Math lessons (Grade 4)".
-Procedure, item types and checks: the `math-lesson` skill; `unit-2/lesson-2-1.js` is the model.
-Sources: `~/Documents/2026-2027/Alex/Math/books/` (Reveal Math Student Edition Vol. 1 = Units 1–7, scanned, book page = PDF page − 20; Student Practice Book, text layer) and `Term N/` (class sheets, extra practice, homework, model answers).
-Vol. 2 (Units 8–14) is the online e-book filmed as screencasts (`books/*.mp4`): the `math-video-book` skill reads them; fractions are `{3/4}` in the text.
-Alex has aphasia: the parent explains each question by pointing at the pictures.
-
-- One page per book lesson (`lesson-2-1`): the Student Edition's 4 pages + its 2 Practice Book pages. The unit pages (`unit-2/place-value` …) hold the Term 1 sheets; keep them.
-  A new school sheet goes into its book lesson as a "🏫 School" section.
-- Every book item in the book's order; every question has a drawing (`vis`), picture or emoji. Numbers are typed on the number pad (`num`), worked out, never from memory.
-  The Be Curious picture is the cover; other pictures are drawn by `shared/math.js` unless the book's own picture explains more. Unit 1 « Math Is… » and drawing tasks are skipped.
-- Logs in `grade-4/math/`: `SOURCES.md` (every book / Practice Book page and sheet → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (answers without a key, `// unverified` in the file). Update them with every lesson, in the same commit.
-- Words or numbers missing or unreadable: never guess; ask. Then: card in `lessons.js` (under its unit), files and pictures in `also` of the Math entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+Folder `grade-4/math/unit-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Math">`) + `shared/math.js` / `.css`.
+Rules, sources and procedure: the `math-lesson` skill (Volume 2 from the e-book videos: `math-video-book`).
 
 ## Science (Grade 4): lessons
 
-Folder `grade-4/science/topic-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Science">`, don't copy it; a lesson is only a data file). Format in README: "Science lessons (Grade 4)".
-All 30 book lessons are built; new sources (term booklets, the teacher's slides, school sheets) add exercises to them. Procedure, picture scripts and checks: the `science-lesson` skill.
-Sources: `~/Documents/2026-2027/Alex/Science/` (booklets, slides, sheets) and `book/` (Elevate Science). Alex has aphasia: the parent explains each question by pointing at the pictures.
-
-- Logs (Term 2 on), in `grade-4/science/`: `SOURCES.md` (every page → `file · exercise key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (answers without a school key; the teacher's filled-in slides are a key). Update them with every lesson, in the same commit.
-- Every question has a picture that explains it; every answer has a picture (`pics`) or emoji (`icons`); every sentence answer has an explanation (`x`). Pictures: explanation drawings `e-*.jpg` (PIL scripts in the skill), booklet crops (empty label boxes numbered in red), emoji or animated scenes (the page then loads `shared/common.js`).
-  Only the lessons being built or updated; older lessons stay as they are unless asked.
-- Booklet answers have no key: give the right one from the book, a `// unverified` reason in `UNVERIFIED.md`. Words missing or unreadable: never guess; ask.
-- `term: N` in `lessons.js` on a lesson with Term N booklet sheets (a "Term N" tag after "Lesson M"). One commit per lesson.
-- Then: files and pictures in `also` of the Science entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+Folder `grade-4/science/topic-N/`, engine `shared/computer-lesson.js` (`<body data-subject="Science">`). Rules, sources and procedure: the `science-lesson` skill.
 
 ## Social Studies (Grade 4): lessons and stories
 
-Folder `grade-4/social-studies/chapter-N/`, engines `shared/computer-lesson.js` (`<body data-subject="Social Studies">`) and `shared/story.js` for stories (don't copy them; a lesson or a story is only a data file).
-Format in README: "Social Studies lessons (Grade 4)". Procedure, picture scripts and checks: the `social-studies-lesson` skill; `chapter-1/lesson-4.js` + `story-douglas.js` are the model.
-Sources: `~/Documents/2026-2027/Alex/S.S.English/` (term booklets, `Term N/` sheets) and `book/` (myWorld Interactive 4, two-page spreads as PNG). Alex has aphasia: the parent explains each question by pointing at the pictures.
-
-- A lesson = one book lesson + the booklet's exercise sheet for it. The book's text is retold in easy words on picture cards (short sentences, key words in `[brackets]`); the booklet's questions stay as printed.
-- Stories to know (Citizenship pages, history stories the booklet asks about) = story pages with the text exactly as printed, an easy sentence per page, a summary, and no questions.
-- Every question has a picture, every answer a picture or an emoji, every sentence answer an explanation (`x`). Colouring is left out.
-- Logs in `grade-4/social-studies/`: `SOURCES.md` (every book page and booklet page → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (the booklets have no key). Update them with every lesson, in the same commit.
-- Words missing or unreadable: never guess; ask. Then: `lessons.js` (`term: N`), files and pictures in `also` of the Social Studies entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+Folder `grade-4/social-studies/chapter-N/`, engines `shared/computer-lesson.js` (`<body data-subject="Social Studies">`) and `shared/story.js`.
+Rules, sources and procedure: the `social-studies-lesson` skill.
 
 ## Ukrainian reading (Optima, Grade 3)
 

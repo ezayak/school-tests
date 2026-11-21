@@ -5,11 +5,21 @@ description: Build or update Grade 4 Computer lessons (grade-4/computer/chapter-
 
 # Computer lessons (Grade 4)
 
-The rules live in `CLAUDE.md` ("Workflow", "Formatting", "Offline cache") and the format in `README.md` ("Computer lessons (Grade 4)", "… chapter 2 and Mini Word for Grade 4", "Mini Outlook and Mini Edge"). Read those first.
+The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting", "Offline cache") and the format in `README.md` ("Computer lessons (Grade 4)", "… chapter 2 and Mini Word for Grade 4", "Mini Outlook and Mini Edge"). Read those first.
 The newest finished chapter is the model: copy its lesson shape (header comment, `window.LESSON` with `question`, `words`, `ideas`, `howto`, `games`, `exercises`).
 
 Alex has aphasia and is learning to read again: everything is read aloud, short sentences, key words in `[brackets]`, a picture on every card and question. The computer steps are practised on a pretend program, never only described.
 The user (the parent) reads the code and reviews every stage: build **one lesson at a time** unless told to do a batch, show it, wait for approval before committing.
+
+## Rules
+
+Folder `grade-4/computer/chapter-N/` (one per book unit), engine `shared/computer-lesson.js` (don't copy it; a lesson is only a data file). Format in README: "Computer lessons (Grade 4)".
+Procedure, how to read the e-book screenshots and the checks: this skill. Sources: `~/Documents/2026-2027/Alex/Computer/` (`unit-N/` e-book screenshots and figure PNGs, `Term N/` videos and CW / HW sheets).
+Alex has aphasia: short sentences, a picture on every card and question, and every computer skill practised on a pretend program (Mini Windows, Mini Word, Mini Outlook + Mini Edge).
+
+- Every blue "N.N.N To …" box = a how-to in the pretend program, every Hands on task = an exercise in the book's order. A skill the program can't do yet = a program change first, in its own stage, and the older lessons must still play.
+- Logs in `grade-4/computer/`: `SOURCES.md` (every screenshot folder, figure, sheet, video → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (Hands on answers have no key in the screenshots). Update them with every lesson, in the same commit.
+- Words missing or unreadable: never guess; ask. Then: card in `lessons.js` (under its chapter), files and pictures (not videos) in `also` of the Computer entry in `games.js`, plus `countLabel` / `topics`; a new shared program file in CORE of `sw.js`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find what is new
 
