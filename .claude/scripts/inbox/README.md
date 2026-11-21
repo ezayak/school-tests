@@ -49,7 +49,7 @@ The notes go to `~/.local/share/school-inbox/notes.json` and are printed by `inb
 
 To write down what is wrong in a lesson while looking at it on the tablet, without a Claude session:
 
-1. **Turn it on**: on any page of the app, **hold the page title** (the big heading at the top) for **2 seconds**. "Review mode on" shows and a
+1. **Turn it on**: on any page of the app, **hold the page title** (the big heading at the top) or, in an exercise, **the line "… · 1/10"** at the top, for **2 seconds**. "Review mode on" shows and a
    **✎** button appears in the corner. It stays on for this device and browser (every page, after reloads) until you hold a title 2 s again ("Review mode off").
    The children's tablets never see it unless someone turns it on there.
 2. **Write a note**: go to the slide or exercise that is wrong, press **✎**, write what is wrong and what it should be, **Send**.

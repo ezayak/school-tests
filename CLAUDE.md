@@ -106,7 +106,7 @@ Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a gam
   After building: a row in the subject's `SOURCES.md` and `inbox.py done <files>`, committed with the lesson.
 - «build inbox <id>» (the daily Telegram message): `inbox.py --subject <id>` (with the parent's notes from the sorting page `sorter.py`, http://127.0.0.1:8770: follow them), then `inbox.py prep <id>` and look at its contact sheets and `text.txt` first
   (`~/.cache/school-inbox/…`); render a page at full size only to read small print or crop a picture. Then the subject's skill.
-- «fix review notes» (the parent's notes from the app's review mode: hold a page title 2 s, then ✎): `python3 .claude/scripts/inbox/review.py`, fix each note with its subject's skill,
+- «fix review notes» (the parent's notes from the app's review mode: hold a page title or an exercise's 1/10 line 2 s, then ✎): `python3 .claude/scripts/inbox/review.py`, fix each note with its subject's skill,
   then `review.py done <ids>` (after the fix is committed). One subject per session.
 - A job from the sorting page's «Create / Update lesson» button (`build.py` runs `claude -p` in a worktree): the press is the approval, so no diff is shown and nothing is asked;
   commit the lesson and the `sw.js` bump, never push (the script checks and pushes). Rules in the job's prompt.

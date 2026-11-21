@@ -467,7 +467,7 @@ window.Kit = (function () {
               : `${n} ${n === "1" ? D[0] : D[1] || D[0] + "s"}`;
       return (w ? w + " and " : "") + f;
     });
-  // Review mode (the parent only): hold any page title 2 s to turn it on / off on this device.
+  // Review mode (the parent only): hold any page title (or an exercise's "… · 3/10" line) 2 s to turn it on / off on this device.
   // Then a ✎ button writes a note about what is on screen; notes go to the sorting page on the Pi
   // (.claude/scripts/inbox/review.py) and wait on the device while it cannot be reached.
   // What is on screen is read from the page; an engine can say it better with Kit.review.item = () => "slide 4: …".
@@ -637,11 +637,11 @@ window.Kit = (function () {
     const stop = () => clearTimeout(timer);
     document.addEventListener("pointerdown", (e) => {
       stop();
-      if (e.target.closest?.("h1")) timer = setTimeout(toggle, 2000);
+      if (e.target.closest?.("h1, .qnum")) timer = setTimeout(toggle, 2000);
     });
     // Android: a long press opens the menu and cancels the hold; not on a title
     document.addEventListener("contextmenu", (e) => {
-      if (e.target.closest?.("h1")) e.preventDefault();
+      if (e.target.closest?.("h1, .qnum")) e.preventDefault();
     });
     for (const ev of ["pointerup", "pointercancel", "pointermove"])
       document.addEventListener(
