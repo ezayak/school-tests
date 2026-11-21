@@ -467,7 +467,7 @@ window.Kit = (function () {
               : `${n} ${n === "1" ? D[0] : D[1] || D[0] + "s"}`;
       return (w ? w + " and " : "") + f;
     });
-  // Review mode (the parent only): hold any page title (or an exercise's "… · 3/10" line) 2 s to turn it on / off on this device.
+  // Review mode (the parent only): tap any page title (or an exercise's "… · 3/10" line) 6 times quickly to turn it on / off on this device.
   // Then a ✎ button writes a note about what is on screen; notes go to the sorting page on the Pi
   // (.claude/scripts/inbox/review.py) and wait on the device while it cannot be reached.
   // What is on screen is read from the page; an engine can say it better with Kit.review.item = () => "slide 4: …".
@@ -545,6 +545,7 @@ window.Kit = (function () {
     let btn = null;
 
     function toast(msg) {
+      document.querySelectorAll(".kit-rv-toast").forEach((x) => x.remove());
       const t = document.createElement("div");
       t.className = "kit-rv-toast";
       t.textContent = msg;
@@ -632,25 +633,29 @@ window.Kit = (function () {
       toast(on ? "Review mode on" : "Review mode off");
     }
 
-    // Hold a title 2 s (titles are drawn by the engines and redrawn, so the listener is on the document)
-    let timer = 0;
-    const stop = () => clearTimeout(timer);
+    // Tap a title 6 times, each tap within 1 s of the last (titles are drawn by the engines and redrawn,
+    // so the listener is on the document). From the 3rd tap a message counts down: the parent sees it is counting.
+    const TAPS = 6;
+    let taps = 0,
+      last = 0;
     document.addEventListener("pointerdown", (e) => {
-      stop();
-      if (e.target.closest?.("h1, .qnum")) timer = setTimeout(toggle, 2000);
+      if (!e.isPrimary) return;
+      const now = Date.now();
+      if (!e.target.closest?.("h1, .qnum")) return void (taps = 0);
+      taps = now - last < 1000 ? taps + 1 : 1;
+      last = now;
+      if (taps >= TAPS) {
+        taps = 0;
+        toggle();
+      } else if (taps >= 3) {
+        const n = TAPS - taps;
+        toast(`${n} more tap${n > 1 ? "s" : ""}`);
+      }
     });
-    // Android: a long press opens the menu and cancels the hold; not on a title
+    // Android: a long press opens the menu; not on a title
     document.addEventListener("contextmenu", (e) => {
       if (e.target.closest?.("h1, .qnum")) e.preventDefault();
     });
-    for (const ev of ["pointerup", "pointercancel", "pointermove"])
-      document.addEventListener(
-        ev,
-        (e) =>
-          (ev !== "pointermove" ||
-            Math.abs(e.movementX) + Math.abs(e.movementY) > 6) &&
-          stop(),
-      );
     const start = () => {
       show(!!store.get(ON));
       flush();

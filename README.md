@@ -420,8 +420,8 @@ Without a name it just says "Ready?".
 
 ## Review mode (the parent's notes)
 
-Hold any page title (in an exercise: the "… · 1/10" line at the top) 2 s: "Review mode on" and a ✎ button. ✎ writes a note about what is on screen; it goes to the sorting page on the Pi
-and Claude fixes it on «fix review notes». Hold a title 2 s again to turn it off. Details: `.claude/scripts/inbox/README.md` ("Review mode").
+Tap any page title (in an exercise: the "… · 1/10" line at the top) 6 times quickly: "Review mode on" and a ✎ button. ✎ writes a note about what is on screen; it goes to the sorting page on the Pi
+and Claude fixes it on «fix review notes». 6 taps again turn it off. Details: `.claude/scripts/inbox/README.md` ("Review mode").
 
 ## Publish with GitHub Pages
 

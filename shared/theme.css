@@ -642,8 +642,9 @@ button:focus-visible {
 /* Review mode (Kit.review, the parent only): the ✎ button, the note box, the short messages */
 h1,
 .qnum {
-  /* holding a title turns review mode on: no copy menu (iOS), no text selection (Android cancels the hold) */
+  /* 6 quick taps on a title turn review mode on: no copy menu (iOS), no word selection, no double-tap zoom */
   -webkit-touch-callout: none;
+  touch-action: manipulation;
   -webkit-user-select: none;
   user-select: none;
 }
