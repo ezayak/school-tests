@@ -1,4 +1,4 @@
-// Computer · Grade 4 · Chapter 2 · Unit 2 · Lesson 2 « Images and graphics » (book pages 68–79).
+// Computer · Grade 4 · Chapter 2 · Unit 2 · Lesson 2 « Images and graphics » (book pages 68–79, HW1 for Term 2).
 // All the content of the lesson. The how-to's are done in Mini Word (shared/wordsim.js). Same format as lesson-1.js.
 (function () {
   const PIC = { doc: "animalsPic" }; // the elephant is paragraph 4
@@ -938,6 +938,80 @@
             q: "How does your SmartArt make the information easier to understand?",
             a: "The ideas are in [boxes] with [colours] and in [order], so you understand them [at a glance].",
             img: "pyramid-colors",
+          },
+        ],
+      },
+      {
+        k: "hw1",
+        t: "Homework 1",
+        en: "School · HW1 for Term 2 · U2 L2",
+        ic: "🏠",
+        from: "School · HW1 for Term 2 (U2 L2)",
+        items: [
+          {
+            type: "mc",
+            q: "You can use ___ SmartArt to create the cycle of a butterfly.",
+            opts: ["Cycle", "Pyramid"],
+            img: "text-cycle",
+          },
+          {
+            type: "mc",
+            q: "The ___ SmartArt shows relationships from top to bottom in an organized way.",
+            opts: ["Pyramid", "Picture"],
+            img: "pyramid",
+          },
+          {
+            type: "mc",
+            q: "___ helps you create diagrams to show different ideas.",
+            opts: ["SmartArt", "Shapes"],
+            oi: ["smartart", "shapes"],
+            img: "pyramid-colors",
+          },
+          {
+            type: "mc",
+            q: "To draw a shape in MS Word, you should click and ___ the mouse.",
+            opts: ["drag", "paste"],
+            img: "shapes",
+          },
+          {
+            type: "mc",
+            q: "You can find SmartArt in the ___ group.",
+            opts: ["Illustrations", "Paragraph"],
+            icon: "smartart",
+          },
+          {
+            type: "tf",
+            q: "You can personalize a SmartArt graphic by changing its color.",
+            a: true,
+            x: "SmartArt Design tab › [Change Colors].",
+            img: "pyramid-colors",
+          },
+          {
+            type: "tf",
+            q: "You can change the color of a picture.",
+            a: true,
+            x: "Picture Format tab › [Color].",
+            img: "picture-format",
+          },
+          {
+            type: "tf",
+            q: "Every SmartArt has its own purpose.",
+            a: true,
+            x: "Choose the one that best shows what you want to explain.",
+            img: "pyramid",
+          },
+          {
+            type: "tf",
+            q: "You cannot change the size of a shape.",
+            a: false,
+            x: "You can make a shape [bigger] or [smaller].",
+            img: "shapes",
+          },
+          {
+            type: "tf",
+            q: "Picture Format tab allows you to change the size, color and position of a picture.",
+            a: true,
+            img: "picture-format",
           },
         ],
       },

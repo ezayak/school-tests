@@ -65,7 +65,7 @@ window.CS_LESSONS = {
           en: "Picture Format, styles, position, wrap text, crop, SmartArt, shapes",
           path: "lesson-2.html",
           cover: "img/lesson-2/picture-styles.jpg",
-          note: "13 picture cards · 12 how-to's in Mini Word · 5 games · 5 exercises",
+          note: "13 picture cards · 12 how-to's in Mini Word · 5 games · 6 exercises",
         },
         {
           n: 3,

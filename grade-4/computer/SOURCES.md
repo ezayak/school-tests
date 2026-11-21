@@ -77,7 +77,8 @@ Figure PNGs (`unit-3/lu_g4_se_final_pageNN[-k].png`, 1920 wide, transparent back
 
 ## Other files in the Computer folder
 
-| File                                                   | Content                       | Status                                                    |
-| ------------------------------------------------------ | ----------------------------- | --------------------------------------------------------- |
-| `20261105-LU_G4_U2_L2_1_Modify_picture_VT.mp4`         | school video, Unit 2 Lesson 2 | not built yet (Unit 2 lessons have no videos so far; ask) |
-| `20261108-LU_G4_U2_L2_4_Change_pyramids_colors_VT.mp4` | school video, Unit 2 Lesson 2 | not built yet (as above)                                  |
+| File                                                   | Content                                                              | Status                                                               |
+| ------------------------------------------------------ | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `20261105-LU_G4_U2_L2_1_Modify_picture_VT.mp4`         | school video, Unit 2 Lesson 2                                        | not built yet (Unit 2 lessons have no videos so far; ask)            |
+| `20261108-LU_G4_U2_L2_4_Change_pyramids_colors_VT.mp4` | school video, Unit 2 Lesson 2                                        | not built yet (as above)                                             |
+| `20261119-HW1_for_T2-G4.pdf` p. 1                      | HW1 for Term 2, Unit 2 Lesson 2: A) Choose 1–5, B) True or False 1–5 | `chapter-2/lesson-2.js` · exercise `hw1`, built (no key: UNVERIFIED) |
