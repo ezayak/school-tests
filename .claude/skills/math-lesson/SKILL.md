@@ -95,5 +95,5 @@ Look at the screenshots: a drawing that gives the answer away (a `pv` with `val:
 ## 5. Logs, list, offline
 
 - `SOURCES.md`: the lesson's book pages and Practice Book pages → `file · exercise key`, **built**; skipped parts with why. `TODO.md`: what waits for a scan. `UNVERIFIED.md`: one row per `// unverified`.
-- `lessons.js` and `games.js` (the card, `also`, `countLabel`, `topics`): `add.js` (above). Then `node .claude/skills/english-lesson/scripts/offline-check.js grade-4/math` (0 missing, 0 not listed).
+- `lessons.js` and `games.js` (the card, `also`, `countLabel`, `topics`): `add.js` (above). Then `python3 .claude/scripts/inbox/register.py check grade-4/math` (0 missing, 0 not listed).
 - Commits: one per lesson (files, pictures, log rows, `lessons.js`, `games.js`); an engine change (`shared/math.js`, `shared/computer-lesson.js`) in its own commit first; `VERSION` bump in `sw.js` last, in its own commit. No Co-Authored-By line. Don't push unless asked.

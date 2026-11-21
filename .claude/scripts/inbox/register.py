@@ -3,7 +3,7 @@
 
   register.py add <hub> <file or folder>...   add the missing files to the `also` list of the games.js entry
                                               whose `path` is <hub> (a folder = every file in it); runs Prettier
-  register.py check [<hub>]                   files listed but missing; pages, scripts, pictures in the hub's
+  register.py check [<hub> | <folder>]        files listed but missing; pages, scripts, pictures in the hub's
                                               folders that no `also` lists (they would not work offline);
                                               videos (video/ folders) are never precached and not checked
   register.py bump "<reason>"                 VERSION vN → vN+1 in sw.js; prints the commit command
@@ -129,6 +129,20 @@ def check(hub=None):
     text = GAMES.read_text()
     known = listed(text) | core()
     missing = sorted(p for p in known if not (REPO / p).exists())
+    if hub and (REPO / hub).is_dir():  # a folder: its files that nothing lists
+        folder = hub.rstrip("/")
+        missing = [p for p in missing if p.startswith(folder + "/")]
+        unlisted = {
+            f.relative_to(REPO).as_posix(): folder
+            for f in (REPO / folder).rglob("*")
+            if f.is_file()
+            and f.suffix.lower() in OFFLINE
+            and f.name not in NEVER
+            and not f.name.startswith("_")
+            and f.relative_to(REPO).as_posix() not in known
+            and "/video/" not in f.relative_to(REPO).as_posix()
+        }
+        return report(missing, unlisted)
     lines, spans = entries(text)
     hubs = []
     for a, b in spans:
@@ -146,8 +160,12 @@ def check(hub=None):
         for d in roots(also, h):
             for f in (REPO / d).rglob("*"):
                 r = f.relative_to(REPO).as_posix()
-                if f.is_file() and f.suffix.lower() in OFFLINE and f.name not in NEVER and r not in known and "/video/" not in r:
+                if f.is_file() and f.suffix.lower() in OFFLINE and f.name not in NEVER and not f.name.startswith("_") and r not in known and "/video/" not in r:
                     unlisted.setdefault(r, h)
+    return report(missing, unlisted)
+
+
+def report(missing, unlisted):
     for p in missing:
         print(f"missing file   {p}")
     for f, h in sorted(unlisted.items()):

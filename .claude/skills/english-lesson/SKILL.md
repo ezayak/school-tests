@@ -128,10 +128,10 @@ npx --no-install prettier --write <changed files>; node --check <each .js>
 
 ## 7. Offline, at the end of a batch
 
-Add every new file and picture to `also` of the Grade 4 English entry in `games.js`, update `countLabel` and `topics`, then check:
+Add every new file and picture to `also` (`python3 .claude/scripts/inbox/register.py add <hub> <files / picture folders>`) of the Grade 4 English entry in `games.js`, update `countLabel` and `topics`, then check:
 
 ```bash
-node $S/offline-check.js grade-4/term-2/english   # 0 missing, 0 not listed
+python3 .claude/scripts/inbox/register.py check grade-4/term-2/english   # 0 missing, 0 not listed
 ```
 
 Commit that, then bump `VERSION` in `sw.js` in its own last commit. Don't push unless the user asks.

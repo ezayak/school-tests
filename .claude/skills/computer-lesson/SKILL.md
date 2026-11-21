@@ -99,10 +99,10 @@ npx --no-install prettier --write <changed files>; node --check <each .js>
 
 ## 7. Offline, at the end of a batch
 
-Add every new file and picture (not videos) to `also` of the Computer entry in `games.js` (and `shared/netsim.*` to CORE in `sw.js` if it is new), update `countLabel` and `topics`, then:
+Add every new file and picture (not videos) to `also` (`python3 .claude/scripts/inbox/register.py add <hub> <files / picture folders>`) of the Computer entry in `games.js` (and `shared/netsim.*` to CORE in `sw.js` if it is new), update `countLabel` and `topics`, then:
 
 ```bash
-node .claude/skills/english-lesson/scripts/offline-check.js grade-4/computer   # 0 missing, 0 not listed (except video/)
+python3 .claude/scripts/inbox/register.py check grade-4/computer   # 0 missing, 0 not listed (except video/)
 ```
 
 Commit that, then bump `VERSION` in `sw.js` in its own last commit. Don't push unless the user asks.
