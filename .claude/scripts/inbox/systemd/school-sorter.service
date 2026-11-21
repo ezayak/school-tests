@@ -1,8 +1,8 @@
 [Unit]
-Description=School inbox sorting page (http://127.0.0.1:8770)
+Description=School inbox sorting page (http://mollers-pi.local:8770, password)
 
 [Service]
-ExecStart=/usr/bin/python3 /home/olena/projects/school-tests/.claude/scripts/inbox/sorter.py
+ExecStart=/usr/bin/python3 /home/olena/projects/school-tests/.claude/scripts/inbox/sorter.py --lan
 Restart=on-failure
 
 [Install]

@@ -304,7 +304,7 @@ def short(result):
         lines.append(f"📚 {s['kid']} · {s['name']}: {len(s['new'])} new → " + "; ".join(tags[:6]) + ("…" if len(tags) > 6 else ""))
     if lines:
         lines.append("")
-        lines.append("Sort the pages: http://127.0.0.1:8770 (on the computer)")
+        lines.append("Sort the pages: http://mollers-pi.local:8770 (at home; or http://192.168.100.143:8770)")
         lines.append("Then in Claude: «build inbox <subject>», e.g. «build inbox " + next(s["id"] for s in result if ready(s)) + "».")
     return "\n".join(lines)
 
