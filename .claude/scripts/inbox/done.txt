@@ -826,20 +826,8 @@ Lucas/French/Term 1/20261103-G. 3 Exercices d'app examen final MA + GCW 3+ GCW 4
 Lucas/French/Term 1/La Presentation French game.html
 Lucas/French/book/CARTOON_UNITE1.mp4
 Lucas/French/book/CARTOON_UNITE2.mp4
-Lucas/French/book/CARTOON_UNITE3.mp4
-Lucas/French/book/CARTOON_UNITE4.mp4
-Lucas/French/book/CARTOON_UNITE5.mp4
-Lucas/French/book/CARTOON_UNITE6.mp4
 Lucas/French/book/VIDEO_0.mp4
 Lucas/French/book/VIDEO_2.mp4
-Lucas/French/book/VIDEO_3.mp4
-Lucas/French/book/VIDEO_4.mp4
-Lucas/French/book/VIDEO_5.mp4
-Lucas/French/book/VIDEO_6.mp4
-Lucas/French/book/VIDEO_AUTOUR_DE_TOI_3.mp4
-Lucas/French/book/VIDEO_AUTOUR_DE_TOI_4.mp4
-Lucas/French/book/VIDEO_AUTOUR_DE_TOI_5.mp4
-Lucas/French/book/VIDEO_AUTOUR_DE_TOI_6.mp4
 Lucas/French/book/VIDEO_CIVILISATION_1.mp4
 Lucas/French/book/VIDEO_CIVILISATION_2.mp4
 Lucas/Grade 3/Term 1/20261008-Computer - P.A G.3 T.1.pdf
