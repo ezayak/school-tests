@@ -4,7 +4,7 @@
 // are in the story), p. 32 ex. 1–3 (describe, open choice, mime, colours of your choice: the emotions are words), p. 33 Brico.
 // Unverified: p. 30 ex. 11 item 1 correction (the clock is above the board: « au-dessus du tableau » is not in the book), p. 32 ex. 4.
 // The engine is grade-4/term-1/french/french-lesson.js. Pictures: img/unite-3/<name>.jpg (book scan out20–out24, own size).
-// Videos: video/cartoon-3.mp4 (p. 26 ex. 1), video/autour-3.mp4 (p. 32 Le monde autour de toi: the five emotions); online only.
+// Videos: video/cartoon-3.mp4 (p. 26 ex. 1), video/video-3.mp4 (p. 28 ex. 5: the school things), video/autour-3.mp4 (p. 32 Le monde autour de toi: the five emotions); online only.
 (function () {
   // [French, English, Українська, العربية]
   const T = [
@@ -699,6 +699,14 @@
       },
       { k: "story", img: "p8" },
       { k: "words", img: "objets" },
+      {
+        k: "video",
+        v: "video-3",
+        t: "Les objets scolaires",
+        en: "Video: school things",
+        from: "Livre p. 28 ex. 5",
+        img: "objets",
+      },
       { k: "sound", s: "ou", img: "ronde" },
       {
         k: "video",
