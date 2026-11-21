@@ -1,13 +1,61 @@
 ---
-name: arabic-hw-tests
-description: Build Grade 3 Arabic weekly tests (التقييم الأسبوعي, groups أ ب ج) and homework pages (الأداءات المنزلية) for the school-tests study games from Lucas's scans (~/Documents/2026-2027/Lucas/Arabic/, e.g. lesson-x/hw-tests.pdf, the «الأداءات والتقييمات» workbook). Use this whenever the user sends or mentions Arabic test sheets, homework pages, التقييم / الأداءات pages, asks to add, update or check Arabic tests or homework, or asks which of them are already built, even if they don't say "test".
+name: arabic
+description: Build Grade 3 Arabic lessons (story texts, words, the book's قاموس, every book exercise; grade-3/term-1/arabic/lesson-N.js), weekly tests (التقييم الأسبوعي, groups أ ب ج) and homework pages (الأداءات المنزلية) for the school-tests study games from Lucas's scans (~/Documents/2026-2027/Lucas/Arabic/, e.g. lesson-x/hw-tests.pdf, the «الأداءات والتقييمات» workbook). Use this whenever the user sends or mentions Arabic book pages, a lesson story, test sheets, homework pages, التقييم / الأداءات pages, asks to add, update or check Arabic lessons, tests or homework, or asks which of them are already built, even if they don't say "test".
 ---
 
 # Arabic tests and homework (Grade 3)
 
-The rules live in `CLAUDE.md` ("Arabic (Grade 3): lessons, tests, homework" and "Arabic tests", plus "Workflow", "Formatting" and "Offline cache") and the formats in `README.md` ("Arabic tests", "Arabic homework"). Read those first. This skill is the working procedure on top of them, with the scripts and what was learned building Lessons 5–8.
+The subject rules are in "Rules" below (moved from `CLAUDE.md`); the shared ones in `CLAUDE.md` ("Workflow", "Formatting" and "Offline cache") and the formats in `README.md` ("Arabic tests", "Arabic homework"). Read those first. This skill is the working procedure on top of them, with the scripts and what was learned building Lessons 5–8.
 
 Lucas has aphasia: the parent explains each question by pointing at the picture, and every Arabic word must be tappable with a translation. The user reviews every stage: build one sheet, show it, wait for approval, then the next.
+
+## Rules
+
+Folder `grade-3/term-1/arabic/`, engine `arabic-lesson.js` (don't copy it, only data files change). Formats are in README: "Arabic lessons", "Arabic tests", "Arabic homework".
+The user sends scans of Lucas's book pages (PDFs in `~/Documents/2026-2027/Lucas/Arabic/`). Lucas has aphasia; the parent explains each question by pointing at the picture.
+
+Sorting a scan:
+
+- Each page header says the lesson (title of the story, الأسبوع week number, الفترة period). Match it to `lessons.js` by title. A scan can hold pages of two lessons: put each page with its own lesson, and say so.
+- أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ = classwork (skip unless asked). ثَانِيًا: الْأَدَاءَاتُ الْمَنْزِلِيَّةُ = homework. التَّقْيِيمُ sheets with groups (أ)(ب)(ج) = tests.
+- Handwriting on the page is Lucas's own answers: ignore it, it is not the key. Duplicate pages in a scan: use the cleanest one.
+- A page already built (same page in an earlier scan, a test already in `TESTS`): skip it and say so.
+- Words missing or covered in the scan: never guess. List them and ask.
+
+What to build:
+
+- **Lesson** `lesson-N.js` + `lesson-N.html` + `lesson-N-exercises.html` (copy lesson-1's), pictures cropped from the book into `img/lesson-N/` (~700px).
+  Story texts, words, opposites / plurals / meanings (the book's قاموس), every book exercise as a section; every item has a picture.
+- **Test** `test-N.js` + `test-N.html` (copy test-1.html): one tab per group, the sheet's paragraph with a picture above the tasks, items without pictures. See "Arabic tests" below.
+- **Homework** `hw-N.js` + `hw-N.html` for Lesson N (copy hw-2.html): one tab per book page, only the homework tasks, a picture (`img` or emoji `ic`) on every item.
+  More homework for a lesson that already has `hw-N` = new tabs in it.
+- Item type: one word to write → `word` (list every accepted answer); choices given in brackets → `mc` (right one first); words to put in order (رَتِّبْ) → `build` with `a` = the sentence (word tiles, `Kit.dragTiles`; the page loads drag-words.css and shared/common.js); sentence, writing, copying → `open` with a model answer.
+  A writing task (new ending, write about yourself) gets a folded `help` question that leads to an idea; its options are `[ar, en, uk]`, so they are translated.
+- `en` / `uk` translate every Arabic word they mention; never a transliteration like «tamdee».
+
+Rules for every Arabic file:
+
+- Full tashkeel on all Arabic. `en` and `uk` on every text, section and item.
+- `gloss` has every Arabic word of the texts, questions, options and model answers (one entry per word without tashkeel is enough). Check it with a script before calling it done: no word without a gloss, no item without a picture (tests: the text has it), every `img` path exists.
+- Pictures: crop from the scan (`pdftoppm -r 400`, then PIL), or reuse one from `img/lesson-*/`. An emoji `ic` is at most 2 emoji with no space ("🧴🧴"); more get cut off on a landscape tablet.
+- Then: entry in `LESSONS` / `TESTS` / `HOMEWORK` (`lessons.js`); the new files and pictures in `also` of the Arabic entry in `games.js`, plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
+- Check in the browser: the list on `index.html`, each tab, one typed answer.
+
+### Arabic tests
+
+- A test is one التَّقْيِيمُ الْأُسْبُوعِيُّ sheet (الْفَتْرَةُ الرَّابِعَةُ, after the lesson's homework pages). Numbered in the order of the workbook pages, not the order they are built: `test-1` is p. 7–8 and a sheet that comes between two built tests takes its place in the numbering (the later tests are renamed). Before building, check `TESTS` and the `unit` page numbers: the same sheet may be built already.
+- Head: `n: "tN"`, `title: "التَّقْيِيمُ الْأُسْبُوعِيُّ"`, `en: "Weekly test · <story in English>"`, `unit: "الْفَتْرَةُ الرَّابِعَةُ · p. X–Y"`, `cover` = a picture of that text from `img/lesson-N/`,
+  `tapq: true`, `exSub: ["Answer the questions", "أَجِبْ عَنِ الْأَسْئِلَةِ التَّالِيَةِ"]`.
+- Tabs: one per group, `{k: "a", ic: "📝", t: "Group A", short: "A", ar: "الْمَجْمُوعَةُ (أ)", story: 0}`; the groups share the one paragraph.
+- Text: the paragraph exactly as the sheet prints it, with tashkeel taken from the lesson text; one part, `para: "السُّؤَالُ الْأَوَّلُ: اقْرَأِ الْفِقْرَةَ التَّالِيَةَ ثُمَّ أَجِبْ"`, `img` from the lesson.
+- Sections: one per lettered part of a group (أ، ب، ج), `k: "a1"`, `"a2"`, … with `tab: "a"`, `t` as printed ("أ) اسْتَخْرِجْ مِنَ الْفِقْرَةِ"); items in the sheet's order.
+- Items, no pictures:
+  - "استخرج / هات" one word → `word` with every word of the paragraph that fits. If the asked word is not in the paragraph as printed (e.g. the singular of حِصَصِ), accept the right word and say so in `en` / `uk`.
+  - a question sentence, or "أجب" → `open` with the model answer.
+  - syllables (حَلِّلْ إِلَى مَقَاطِعَ صَوْتِيَّةٍ) → `open` with `plain: true`, answer like "اَلْ / عَا / مِ".
+  - an answer found only in a later part of the story → give it, and say in `en` / `uk` where it comes from.
+- السُّؤَالُ الثَّانِي: اكْتُبْ مَا يُمْلَى عَلَيْكَ (dictation) is left out: the teacher dictates it, the sheet has no text.
+- `TESTS` entry: `{n, nAr, title, en, path, cover, note: "Groups A · B · C · <count> questions · text from Lesson N"}`; in `games.js`: `test-N.html` / `.js` in `also`, `countLabel` ("… · N tests") and `topics` ("Tests 1–N").
 
 ## 1. Find what is new
 
@@ -45,7 +93,7 @@ Copy, don't write from scratch:
 - **Homework**: `hw-N.html` = copy of `hw-3.html` (it loads `drag-words.css` and `shared/common.js` for `build`). `hw-N.js` like `hw-3.js`: `n: "hN"`, one tab per book page (`{k: "p41", ic, t: "Page 41", short: "p.41", ar: "صَفْحَةُ ٤١"}`), a tab with a text to read gets `story: i`. Every homework item has a picture (`img` from `img/lesson-N/`, or an emoji `ic`, at most 2 emoji).
 - A sheet with no paragraph (only tasks): tabs without `story`, an emoji `ic` on every item (test-5).
 - Items repeated in several groups: write them once as a `const` and copy them into each section (`items.map((it) => ({ ...it }))`, see test-3.js).
-- Item types (CLAUDE.md): one word → `word` with every accepted answer; choices in brackets → `mc` (right one first); رَتِّبْ → `build` (homework); sentences, writing, copying → `open` with a model answer; syllables → `open` with `plain: true` (“اَلْ / عَا / مِ”); a writing task gets a `help` question with `[ar, en, uk]` options.
+- Item types ("Rules" above): one word → `word` with every accepted answer; choices in brackets → `mc` (right one first); رَتِّبْ → `build` (homework); sentences, writing, copying → `open` with a model answer; syllables → `open` with `plain: true` (“اَلْ / عَا / مِ”); a writing task gets a `help` question with `[ar, en, uk]` options.
 - `en` / `uk` on every text, section and item: a plain translation of the question, not a transliteration.
 - Pictures: reuse `img/lesson-N/` (the lesson the text comes from). New pictures only when the sheet has its own: `pdftoppm -r 400 -f N -l N`, crop with PIL (coordinates from the 200 dpi page × 2), check a contact sheet for cut edges, answer circles and neighbouring panels.
 
@@ -54,7 +102,7 @@ Copy, don't write from scratch:
 Every Arabic word of the paragraph, questions, options, answers, `x` and help needs a gloss entry (one per spelling without tashkeel is enough; the engine matches exact first, then without tashkeel). Do it in three steps:
 
 ```bash
-S=<scratchpad>; A=grade-3/term-1/arabic; K=.claude/skills/arabic-hw-tests/scripts
+S=<scratchpad>; A=grade-3/term-1/arabic; K=.claude/skills/arabic/scripts
 node $K/check.js $A/test-N.js --missing | tail -n +2 | grep -v '^problems' > $S/miss.txt
 node $K/gloss-reuse.js $S/miss.txt $S/gl-reused.txt $A/*.js       # copies glosses from every other Arabic file
 #   then write the words in $S/miss.txt.left by hand into $S/gl-new.txt as "word|en|uk" lines
@@ -72,7 +120,7 @@ The check skips single letters, syllables and `___` gaps. A word written with a 
 
 ```bash
 node --check $A/test-N.js && node $K/check.js $A/test-N.js        # 0 words without gloss (except letters/syllables), problems: none
-.claude/skills/arabic-hw-tests/scripts/play.sh test-N.html         # every section reaches "score N / M"
+.claude/skills/arabic/scripts/play.sh test-N.html         # every section reaches "score N / M"
 npx --no-install prettier --check $A games.js
 ```
 
@@ -83,6 +131,6 @@ npx --no-install prettier --check $A games.js
 
 - Entry in `TESTS` / `HOMEWORK` (`lessons.js`): `{n, nAr, title, en, path, cover, note}`; the note says the groups / pages and the number of questions.
 - `games.js`, the Arabic entry: the new `.html` / `.js` (and new pictures) in `also`, and its `countLabel` / `topics` (“Tests 1–N”).
-- Both in one go: `python3 .claude/skills/arabic-hw-tests/scripts/register.py test N nAr en cover note` (or `hw N nAr title en cover note`) adds the entry in number order, the two files to `also`, and updates `countLabel` / “Tests 1–N”. New pictures: `scripts/add-pictures.py lesson-N hw-a.jpg …`. Then check that the question count in the note matches the file's items.
+- Both in one go: `python3 .claude/skills/arabic/scripts/register.py test N nAr en cover note` (or `hw N nAr title en cover note`) adds the entry in number order, the two files to `also`, and updates `countLabel` / “Tests 1–N”. New pictures: `scripts/add-pictures.py lesson-N hw-a.jpg …`. Then check that the question count in the note matches the file's items.
 - Report: what was built (pages, groups, number of items), pages skipped and why, the unverified answers, words that could not be read. Wait for approval, then commit (one commit per sheet), and bump `VERSION` in `sw.js` in a separate last commit after the batch.
 - Git has no identity configured on this machine: commit with `git -c user.name=Olena -c user.email=ezayak@gmail.com commit …` (the author of the earlier commits). No Co-Authored-By line.

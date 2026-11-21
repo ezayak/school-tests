@@ -1,7 +1,7 @@
 #!/bin/bash
 # Play every section of an Arabic page to its score screen in headless Chromium, one run per section.
-# Usage (from the repo root): .claude/skills/arabic-hw-tests/scripts/play.sh test-3.html          (tabs and sections found in the .js)
-#                             .claude/skills/arabic-hw-tests/scripts/play.sh lesson-5-exercises.html
+# Usage (from the repo root): .claude/skills/arabic/scripts/play.sh test-3.html          (tabs and sections found in the .js)
+#                             .claude/skills/arabic/scripts/play.sh lesson-5-exercises.html
 # Prints one line per section: "score N / M", "cards", or "STUCK …" / "ERR …" / "timeout", and any JS error.
 DIR=grade-3/term-1/arabic; PAGE="$1"; HERE="$(cd "$(dirname "$0")" && pwd)"
 [ -f "$DIR/$PAGE" ] || { echo "no $DIR/$PAGE"; exit 2; }

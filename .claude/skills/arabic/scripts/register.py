@@ -1,6 +1,6 @@
 # Usage (from the repo root):
-#   python3 .claude/skills/arabic-hw-tests/scripts/register.py test N nAr en cover note
-#   python3 .claude/skills/arabic-hw-tests/scripts/register.py hw N nAr title en cover note
+#   python3 .claude/skills/arabic/scripts/register.py test N nAr en cover note
+#   python3 .claude/skills/arabic/scripts/register.py hw N nAr title en cover note
 import sys, re
 kind = sys.argv[1]
 A = "grade-3/term-1/arabic/"

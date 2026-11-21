@@ -1,4 +1,4 @@
-# Usage (from the repo root): python3 .claude/skills/arabic-hw-tests/scripts/add-pictures.py lesson-N hw-a.jpg hw-b.jpg
+# Usage (from the repo root): python3 .claude/skills/arabic/scripts/add-pictures.py lesson-N hw-a.jpg hw-b.jpg
 import sys, re
 d, names = sys.argv[1], sys.argv[2:]
 g = open("games.js", encoding="utf8").read()

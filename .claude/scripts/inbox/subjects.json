@@ -103,14 +103,15 @@
       "name": "Arabic",
       "folders": ["Lucas/Arabic"],
       "app": "grade-3/term-1/arabic",
-      "skill": "arabic-hw-tests"
+      "skill": "arabic"
     },
     {
       "id": "g3-religion",
       "kid": "Lucas",
       "name": "Religion",
       "folders": ["Lucas/Religion"],
-      "app": "grade-3/term-1/religion"
+      "app": "grade-3/term-1/religion",
+      "skill": "religion-lesson"
     },
     {
       "id": "g3-computer",
