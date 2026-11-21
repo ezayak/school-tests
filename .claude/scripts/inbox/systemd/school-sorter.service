@@ -1,0 +1,9 @@
+[Unit]
+Description=School inbox sorting page (http://127.0.0.1:8770)
+
+[Service]
+ExecStart=/usr/bin/python3 /home/olena/projects/school-tests/.claude/scripts/inbox/sorter.py
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

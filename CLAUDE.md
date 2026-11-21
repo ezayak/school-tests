@@ -104,7 +104,7 @@ Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a gam
 
 - New teacher files: start from `python3 .claude/scripts/inbox/inbox.py --subject <id>` (ids in `subjects.json` next to it) instead of comparing folders by hand.
   After building: a row in the subject's `SOURCES.md` and `inbox.py done <files>`, committed with the lesson.
-- «build inbox <id>» (the daily Telegram message): `inbox.py --subject <id>`, then `inbox.py prep <id>` and look at its contact sheets and `text.txt` first
+- «build inbox <id>» (the daily Telegram message): `inbox.py --subject <id>` (with the parent's notes from the sorting page `sorter.py`, http://127.0.0.1:8770: follow them), then `inbox.py prep <id>` and look at its contact sheets and `text.txt` first
   (`~/.cache/school-inbox/…`); render a page at full size only to read small print or crop a picture. Then the subject's skill.
 - One lesson per session: the whole conversation is sent again with every request, so a long session costs many times more.
   After a lesson (or a stage of a longer task) is committed, tell the user to start a new session (`/clear`) for the next one.

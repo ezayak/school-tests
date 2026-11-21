@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>School inbox</title>
+    <!-- A tool page served by sorter.py, not part of the app: its styles stay here. -->
+    <style>
+      :root {
+        --bg: #f6f5f2;
+        --card: #fff;
+        --ink: #1f2328;
+        --muted: #6b7280;
+        --line: #dedbd5;
+        --accent: #2563eb;
+        --skip: #9ca3af;
+        --ans: #16a34a;
+        --other: #d97706;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #17181b;
+          --card: #222327;
+          --ink: #e8e6e3;
+          --muted: #9aa0a6;
+          --line: #3a3b40;
+          --accent: #7aa2ff;
+          --skip: #6b7280;
+          --ans: #4ade80;
+          --other: #fbbf24;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          15px/1.4 system-ui,
+          sans-serif;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 10px 16px;
+        background: var(--card);
+        border-bottom: 1px solid var(--line);
+      }
+      header h1 {
+        font-size: 17px;
+        margin: 0;
+        flex: 1;
+      }
+      #saved {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .wrap {
+        display: flex;
+        gap: 16px;
+        padding: 16px;
+      }
+      nav {
+        flex: 0 0 210px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      nav button {
+        text-align: left;
+        padding: 9px 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--card);
+        color: var(--ink);
+        font: inherit;
+        cursor: pointer;
+      }
+      nav button.on {
+        border-color: var(--accent);
+        box-shadow: inset 3px 0 0 var(--accent);
+      }
+      nav small {
+        color: var(--muted);
+        display: block;
+      }
+      main {
+        flex: 1;
+        min-width: 0;
+      }
+      @media (max-width: 760px) {
+        .wrap {
+          flex-direction: column;
+          padding: 12px 16px;
+        }
+        nav {
+          flex: none;
+          flex-direction: row;
+          overflow-x: auto;
+        }
+        nav button {
+          flex: 0 0 auto;
+        }
+      }
+      .file {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 14px;
+      }
+      .file.skipped {
+        opacity: 0.55;
+      }
+      .file h2 {
+        font-size: 15px;
+        margin: 0 0 2px;
+        overflow-wrap: anywhere;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      input,
+      select,
+      textarea {
+        font: inherit;
+        color: var(--ink);
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 6px 8px;
+      }
+      .row input {
+        flex: 1 1 180px;
+      }
+      textarea {
+        width: 100%;
+        min-height: 36px;
+        resize: vertical;
+      }
+      .pages {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .page {
+        border: 2px solid var(--line);
+        border-radius: 8px;
+        padding: 4px;
+      }
+      .page[data-s="skip"] {
+        border-color: var(--skip);
+      }
+      .page[data-s="skip"] img {
+        opacity: 0.35;
+      }
+      .page[data-s="answers"] {
+        border-color: var(--ans);
+      }
+      .page[data-s="other"] {
+        border-color: var(--other);
+      }
+      .page img {
+        width: 100%;
+        height: 170px;
+        object-fit: contain;
+        cursor: zoom-in;
+        background: #fff;
+        border-radius: 4px;
+      }
+      .page .n {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
+        margin: 4px 0;
+      }
+      .chips button {
+        font: 12px system-ui;
+        padding: 3px 6px;
+        border-radius: 99px;
+        border: 1px solid var(--line);
+        background: none;
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .chips button.on {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .page input,
+      .page textarea {
+        width: 100%;
+        font-size: 13px;
+        margin-top: 3px;
+      }
+      .btn {
+        font: inherit;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid var(--accent);
+        background: var(--accent);
+        color: #fff;
+        cursor: pointer;
+      }
+      .empty {
+        color: var(--muted);
+        padding: 30px 0;
+      }
+      #big {
+        position: fixed;
+        inset: 0;
+        z-index: 5;
+        background: rgba(0, 0, 0, 0.85);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: zoom-out;
+      }
+      #big img {
+        max-width: 96vw;
+        max-height: 96vh;
+        background: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>📥 School inbox</h1>
+      <span id="saved"></span>
+    </header>
+    <div class="wrap">
+      <nav id="nav"></nav>
+      <main id="main"><p class="empty">Loading…</p></main>
+    </div>
+    <div id="big"><img alt="" /></div>
+    <datalist id="targets"></datalist>
+    <script>
+      const KINDS = [
+        ["", "What is it?"],
+        ["lesson", "Lesson pages / slides"],
+        ["classwork", "Classwork"],
+        ["homework", "Homework"],
+        ["test", "Test / quiz"],
+        ["key", "Answer key / model answers"],
+        ["video", "Video"],
+        ["skip", "Skip: nothing to build"],
+      ];
+      const STATES = [
+        ["", "Use"],
+        ["skip", "Skip"],
+        ["answers", "Answers"],
+        ["other", "Other lesson"],
+      ];
+      let data = { subjects: [] };
+      let current = null;
+      const timers = {};
+      const $ = (tag, attrs = {}, ...kids) => {
+        const e = document.createElement(tag);
+        for (const [k, v] of Object.entries(attrs)) {
+          if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+          else if (k === "text") e.textContent = v;
+          else e.setAttribute(k, v);
+        }
+        e.append(...kids);
+        return e;
+      };
+
+      async function load() {
+        const r = await fetch("/api/inbox");
+        data = await r.json();
+        if (!data.subjects.some((s) => s.id === current))
+          current = data.subjects[0]?.id ?? null;
+        render();
+      }
+
+      function save(file) {
+        const f = findFile(file);
+        clearTimeout(timers[file]);
+        document.getElementById("saved").textContent = "…";
+        timers[file] = setTimeout(async () => {
+          const note = clean(f.note);
+          await fetch("/api/note", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ file, note }),
+          });
+          document.getElementById("saved").textContent = "Saved ✓";
+        }, 500);
+      }
+
+      function clean(n) {
+        const out = {};
+        for (const k of ["target", "kind", "text"]) if (n[k]) out[k] = n[k];
+        const pages = {};
+        for (const [p, v] of Object.entries(n.pages || {})) {
+          const pv = {};
+          for (const k of ["s", "target", "text"]) if (v[k]) pv[k] = v[k];
+          if (Object.keys(pv).length) pages[p] = pv;
+        }
+        if (Object.keys(pages).length) out.pages = pages;
+        return out;
+      }
+
+      function findFile(file) {
+        for (const s of data.subjects)
+          for (const f of s.files) if (f.file === file) return f;
+      }
+
+      function render() {
+        const nav = document.getElementById("nav");
+        nav.replaceChildren();
+        for (const s of data.subjects) {
+          const sorted = s.files.filter(
+            (f) => f.note.kind || f.note.target,
+          ).length;
+          nav.append(
+            $(
+              "button",
+              {
+                class: s.id === current ? "on" : "",
+                onclick: () => {
+                  current = s.id;
+                  render();
+                },
+              },
+              `${s.kid} · ${s.name}`,
+              $("small", {
+                text: `${s.files.length} new · ${sorted} sorted${s.ready ? " · ready" : ""}`,
+              }),
+            ),
+          );
+        }
+        const main = document.getElementById("main");
+        main.replaceChildren();
+        const s = data.subjects.find((x) => x.id === current);
+        if (!s) {
+          main.append($("p", { class: "empty", text: "No new files. 🎉" }));
+          return;
+        }
+        const targets = new Set();
+        for (const f of s.files) {
+          f.hints.forEach((h) => targets.add(h));
+          if (f.note.target) targets.add(f.note.target);
+        }
+        document
+          .getElementById("targets")
+          .replaceChildren(
+            ...[...targets].map((t) => $("option", { value: t })),
+          );
+        if (s.files.some((f) => !f.pictures.length)) {
+          const busy = s.preparing === "running";
+          const btn = $("button", {
+            class: "btn",
+            text: busy ? "Preparing… (pages and OCR)" : "Prepare page pictures",
+            onclick: async () => {
+              btn.disabled = true;
+              btn.textContent = "Preparing… (pages and OCR)";
+              await fetch("/api/prep", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ subject: s.id }),
+              });
+              poll();
+            },
+          });
+          btn.disabled = busy;
+          const err =
+            s.preparing && s.preparing.startsWith("error")
+              ? " " + s.preparing
+              : "";
+          main.append($("p", {}, btn, err));
+        }
+        for (const f of s.files) main.append(fileCard(f));
+      }
+
+      function fileCard(f) {
+        f.note.pages = f.note.pages || {};
+        const name = f.file.split("/").pop();
+        const card = $("section", {
+          class: "file" + (f.note.kind === "skip" ? " skipped" : ""),
+        });
+        const meta = [
+          f.date,
+          f.kind,
+          f.pages ? f.pages + " p." : "",
+          ...f.hints,
+        ]
+          .filter(Boolean)
+          .join(" · ");
+        const kind = $("select", {
+          onchange: (e) => {
+            f.note.kind = e.target.value;
+            card.classList.toggle("skipped", f.note.kind === "skip");
+            save(f.file);
+          },
+        });
+        for (const [v, t] of KINDS) {
+          const o = $("option", { value: v, text: t });
+          if ((f.note.kind || "") === v) o.selected = true;
+          kind.append(o);
+        }
+        const target = $("input", {
+          list: "targets",
+          placeholder: "Goes to (e.g. Lesson 4-3, Unit 2 Week 5)",
+          value: f.note.target || "",
+          oninput: (e) => {
+            f.note.target = e.target.value;
+            save(f.file);
+          },
+        });
+        const text = $("textarea", {
+          placeholder:
+            "Note for Claude (what the teacher said, words you can read, …)",
+          oninput: (e) => {
+            f.note.text = e.target.value;
+            save(f.file);
+          },
+        });
+        text.value = f.note.text || "";
+        card.append(
+          $("h2", { text: name, dir: "auto" }),
+          $("div", {
+            class: "meta",
+            text: f.file.split("/").slice(0, -1).join(" / ") + " · " + meta,
+          }),
+          $("div", { class: "row" }, target, kind),
+          text,
+        );
+        if (f.pictures.length) {
+          const grid = $("div", { class: "pages" });
+          f.pictures.forEach((pic, i) => grid.append(pageBox(f, pic, i + 1)));
+          card.append(grid);
+        }
+        return card;
+      }
+
+      function pageBox(f, pic, n) {
+        const pn = f.note.pages[n] || (f.note.pages[n] = {});
+        const box = $("div", { class: "page", "data-s": pn.s || "" });
+        const extra = $("div");
+        const drawExtra = () => {
+          extra.replaceChildren();
+          if (pn.s === "other")
+            extra.append(
+              $("input", {
+                list: "targets",
+                placeholder: "Which lesson?",
+                value: pn.target || "",
+                oninput: (e) => {
+                  pn.target = e.target.value;
+                  save(f.file);
+                },
+              }),
+            );
+          const t = $("textarea", {
+            placeholder: "Note for this page",
+            oninput: (e) => {
+              pn.text = e.target.value;
+              save(f.file);
+            },
+          });
+          t.value = pn.text || "";
+          extra.append(t);
+        };
+        const chips = $("div", { class: "chips" });
+        for (const [v, t] of STATES) {
+          chips.append(
+            $("button", {
+              class: (pn.s || "") === v ? "on" : "",
+              text: t,
+              onclick: () => {
+                pn.s = v;
+                box.dataset.s = v;
+                chips
+                  .querySelectorAll("button")
+                  .forEach((b, i) =>
+                    b.classList.toggle("on", STATES[i][0] === v),
+                  );
+                drawExtra();
+                save(f.file);
+              },
+            }),
+          );
+        }
+        drawExtra();
+        box.append(
+          $("img", {
+            src: "/img/" + pic.split("/").map(encodeURIComponent).join("/"),
+            loading: "lazy",
+            alt: "page " + n,
+            onclick: (e) => {
+              const big = document.getElementById("big");
+              big.querySelector("img").src = e.target.src;
+              big.style.display = "flex";
+            },
+          }),
+          $("div", {
+            class: "n",
+            text: f.pictures.length > 1 ? "Page " + n : "",
+          }),
+          chips,
+          extra,
+        );
+        return box;
+      }
+
+      async function poll() {
+        await load();
+        const s = data.subjects.find((x) => x.id === current);
+        if (s && s.preparing === "running") setTimeout(poll, 3000);
+      }
+
+      document.getElementById("big").onclick = (e) =>
+        (e.currentTarget.style.display = "none");
+      load();
+    </script>
+  </body>
+</html>

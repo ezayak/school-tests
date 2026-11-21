@@ -11,6 +11,7 @@ its path is in done.txt (every file there when the tool started, plus what was b
                               (--prep: then prep every ready subject, OCR included)
   inbox.py done <file>...     mark files as used (after the lesson is built)
   inbox.py done --subject g4-math   mark every new file of a subject as used
+  sorter.py                   the sorting page: the parent's notes per file / page, printed in this report
   inbox.py prep <subject>     contact sheets, page text and video frames of its new files (see prep.py)
   inbox.py baseline           mark every file there is now as used (first run only)
 
@@ -229,7 +230,35 @@ def ready(s):
     return n >= CONFIG["rules"]["minFiles"] or age >= CONFIG["rules"]["maxAgeDays"]
 
 
+NOTES = Path("~/.local/share/school-inbox/notes.json").expanduser()  # written by the sorting page (sorter.py)
+
+
+def load_notes():
+    try:
+        return json.loads(NOTES.read_text())
+    except (OSError, ValueError):
+        return {}
+
+
+def note_lines(n):
+    """The parent's sorting notes of one file, as indented report lines."""
+    out = []
+    head = " · ".join(x for x in (n.get("target") and "→ " + n["target"], n.get("kind")) if x)
+    if head or n.get("text"):
+        out.append("  - parent: " + " · ".join(x for x in (head, n.get("text", "").replace("\n", " / ")) if x))
+    names = {"skip": "skip", "answers": "answers here", "other": "other lesson"}
+    for p, v in sorted(n.get("pages", {}).items(), key=lambda kv: int(kv[0])):
+        bits = [names.get(v.get("s"), "")]
+        if v.get("target"):
+            bits.append("→ " + v["target"])
+        if v.get("text"):
+            bits.append(v["text"].replace("\n", " / "))
+        out.append(f"  - p. {p}: " + " · ".join(b for b in bits if b))
+    return out
+
+
 def report(result, other):
+    notes = load_notes()
     out = [f"# School inbox · {time.strftime('%Y-%m-%d %H:%M')}", ""]
     waiting = [s for s in result if s["new"]]
     if not waiting:
@@ -254,6 +283,7 @@ def report(result, other):
             if x["hints"]:
                 bits.append(", ".join(x["hints"]))
             out.append(f"- `{x['file']}` · " + " · ".join(bits))
+            out += note_lines(notes.get(x["file"], {}))
         out.append("")
     if other:
         out.append("## Not watched (no subject in subjects.json)")
@@ -274,7 +304,8 @@ def short(result):
         lines.append(f"📚 {s['kid']} · {s['name']}: {len(s['new'])} new → " + "; ".join(tags[:6]) + ("…" if len(tags) > 6 else ""))
     if lines:
         lines.append("")
-        lines.append("In Claude: «build inbox <subject>», e.g. «build inbox " + next(s["id"] for s in result if ready(s)) + "».")
+        lines.append("Sort the pages: http://127.0.0.1:8770 (on the computer)")
+        lines.append("Then in Claude: «build inbox <subject>», e.g. «build inbox " + next(s["id"] for s in result if ready(s)) + "».")
     return "\n".join(lines)
 
 
@@ -321,6 +352,11 @@ def main(argv):
         return
     result, other = scan(only)
     if "--json" in argv:
+        notes = load_notes()
+        for s in result:
+            for x in s["new"]:
+                if x["file"] in notes:
+                    x["parent"] = notes[x["file"]]
         print(json.dumps({"subjects": [s for s in result if s["new"]], "other": other}, ensure_ascii=False, indent=1))
     elif "--telegram" in argv:
         text = short(result)
