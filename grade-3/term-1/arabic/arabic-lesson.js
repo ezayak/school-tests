@@ -372,9 +372,10 @@
         "Homework",
         "الْوَاجِبَاتُ",
         HW,
-        HW.map((l) => card(l, "Homework · Lesson", "وَاجِبُ الدَّرْسِ")).join(
-          "",
-        ),
+        // an entry that is not one lesson's homework (a unit review) names itself: label: [en, ar]
+        HW.map((l) =>
+          card(l, ...(l.label || ["Homework · Lesson", "وَاجِبُ الدَّرْسِ"])),
+        ).join(""),
       ),
       // a reading card opens with ?g=<grade>, so its back link comes back to this hub
       sec(

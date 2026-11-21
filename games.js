@@ -739,7 +739,7 @@ window.GAMES = [
       "Lesson 1 · الزَّهْرَةُ وَالصَّبَّارُ · Lesson 2 · السَّعَادَةُ فِي الْمُسَاعَدَةِ · Lesson 3 · أَوَّلُ مَنْ رَفَعَ يَدَهُ · Lesson 4 · أَخْلَاقُنَا · Lesson 5 · الْعُصْفُورُ الْجَرِيءُ · Lesson 6 · صُنْدُوقُ الِابْتِكَارِ · Lesson 7 · وَرَقَةٌ مِنَ التَّارِيخِ · Lesson 8 · وَطَنِي, December review: stories with pictures, audio & translation, words, opposites & plurals, exercises · Tests 1–13 · التَّقْيِيمُ الْأُسْبُوعِيُّ · Homework · الْأَدَاءَاتُ الْمَنْزِلِيَّةُ · Reading · الْقِرَاءَةُ: letters and harakat, three-letter words, madd (long vowels), sukun and syllables, ta and ha, shadda, tanween, moon lam and sun lam, hamza and the alif ى, sentences and short texts · Reading games: catch the word, complete the sentence",
     path: "grade-3/term-1/arabic/index.html",
     countLabel:
-      "8 lessons · 13 tests · 7 homework · 10 reading steps · 2 games",
+      "8 lessons · 13 tests · 8 homework · 10 reading steps · 2 games",
     year: "2026–2027",
     also: [
       "grade-3/term-1/arabic/arabic-lesson.css",
@@ -785,6 +785,8 @@ window.GAMES = [
       "grade-3/term-1/arabic/hw-7.js",
       "grade-3/term-1/arabic/hw-8.html",
       "grade-3/term-1/arabic/hw-8.js",
+      "grade-3/term-1/arabic/hw-r2.html",
+      "grade-3/term-1/arabic/hw-r2.js",
       "grade-3/term-1/arabic/lesson-1.html",
       "grade-3/term-1/arabic/lesson-1-exercises.html",
       "grade-3/term-1/arabic/lesson-1.js",
@@ -860,6 +862,7 @@ window.GAMES = [
       "grade-3/term-1/arabic/img/lesson-4/g-clothes.jpg",
       "grade-3/term-1/arabic/img/lesson-4/g-food.jpg",
       "grade-3/term-1/arabic/img/lesson-4/giving.jpg",
+      "grade-3/term-1/arabic/img/lesson-4/hw-recycle.jpg",
       "grade-3/term-1/arabic/img/lesson-4/t-boy.jpg",
       "grade-3/term-1/arabic/img/lesson-4/t-girl.jpg",
       "grade-3/term-1/arabic/img/lesson-4/t-plane.jpg",

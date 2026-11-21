@@ -225,6 +225,16 @@ window.HOMEWORK = [
     note: "p. 39 · 40 · 42 · 18 questions",
   },
   {
+    n: 2,
+    nAr: "الثَّانِيَةِ",
+    label: ["Homework · Unit review", "مُرَاجَعَةُ الْوَحْدَةِ"],
+    title: "مُرَاجَعَةُ الْوَحْدَةِ الثَّانِيَةِ",
+    en: "Homework · Unit 2 review",
+    path: "hw-r2.html",
+    cover: "img/lesson-3/iman.jpg",
+    note: "p. 44 · 45 · 46 · 26 questions · Lessons 3 and 4",
+  },
+  {
     n: 5,
     nAr: "الْخَامِسُ",
     title: "الْعُصْفُورُ الْجَرِيءُ",
