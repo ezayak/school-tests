@@ -11,8 +11,7 @@ They were made to save tokens: Claude reads short text reports and small contact
    - prepares the files: page pictures, contact sheets, the text layer and OCR (see `prep` below), so nothing has to be done when the session starts.
 3. **Sort** (optional, saves the most questions): open **https://mollers-pi.cheetah-krait.ts.net** on the phone or tablet (anywhere, Tailscale app on, no password),
    or http://mollers-pi.local:8770 at home (password), or http://127.0.0.1:8770 on the Pi. Per file: where it goes ("Lesson 4-3"), what it is (homework, slides, answer key, skip…), a note.
-   Per page: Use / Skip / Answers / Other lesson, and a note (words that can't be read, what the teacher said).
-   As an app (once per device): open the https address in Chrome, ⋮ → "Add to home screen" → Install. (Only the https address installs: Chrome refuses plain http.)
+   Per page: Use / Skip / Answers / Other lesson, and a note (words that can't be read, what the teacher said). More in "The sorting page" below.
 4. **Build**: in a **new** Claude session, write «build inbox g4-math». Claude reads `inbox.py --subject g4-math` (your notes included), the contact sheets and the text,
    then follows the subject's skill. After the lesson: a row in the subject's `SOURCES.md`, `inbox.py done <files>`, `register.py`, commit.
 5. **`/clear`** after the lesson is committed: one lesson per session.
@@ -21,6 +20,53 @@ Or **build from the sorting page**, without a Claude session: tick the pages to 
 nothing ticked = all new files of the subject), then in the **Build** bar at the bottom choose New lesson / Update a lesson, write which lesson
 and, if needed, what to do, and press **Create / Update lesson**. `build.py` (below) runs it and the bar shows ⏳ → 🛠 → 🔍 → ✅ live / ❌ failed;
 the same result comes on Telegram with the commit link. Used pages are unticked and marked "used: <lesson>".
+
+## The sorting page
+
+The page (`sorter.py` + `sorter.html`, always on as `school-sorter.service`) shows the new files of every subject.
+
+| Address                                 | From where                               | Password |
+| --------------------------------------- | ---------------------------------------- | -------- |
+| https://mollers-pi.cheetah-krait.ts.net | anywhere, Tailscale app on and logged in | no       |
+| http://mollers-pi.local:8770            | the home network                         | yes      |
+| http://127.0.0.1:8770                   | the Pi itself                            | no       |
+
+As an app (once per device): open the https address in Chrome, ⋮ → "Add to home screen" → Install (only https installs: Chrome refuses plain http).
+
+Per file:
+
+- **Where it goes**: the lesson, e.g. "Lesson 4-3" (the list offers the guesses of `inbox.py` and the lessons already named);
+- **What it is**: Lesson pages / slides, Classwork, Homework, Test / quiz, Answer key / model answers, Video, or Skip: nothing to build;
+- **Note**: anything Claude should know (what the teacher said, which exercise is for which day).
+
+Per page (under each page picture; tap a picture to see it big): **Use** / **Skip** / **Answers** / **Other lesson**, a note
+(words that can't be read), and the **Use for the lesson** tick for the Build bar. Everything is saved as you type ("Saved ✓").
+
+A subject whose files are not prepared yet (no page pictures) has a **Prepare page pictures** button: it runs `prep` (pictures, text, OCR) on the Pi.
+The notes go to `~/.local/share/school-inbox/notes.json` and are printed by `inbox.py --subject <id>`, so «build inbox <id>» follows them.
+
+## Review mode (notes from the app)
+
+To write down what is wrong in a lesson while looking at it on the tablet, without a Claude session:
+
+1. **Turn it on**: on any page of the app, **hold the page title** (the big heading at the top) for **2 seconds**. "Review mode on" shows and a
+   **✎** button appears in the corner. It stays on for this device and browser (every page, after reloads) until you hold a title 2 s again ("Review mode off").
+   The children's tablets never see it unless someone turns it on there.
+2. **Write a note**: go to the slide or exercise that is wrong, press **✎**, write what is wrong and what it should be, **Send**.
+   The note keeps the page, its title and what was on screen (the slide or part, the headings in view, text you selected just before).
+3. The note goes to the sorting page on the Pi ("Note sent ✓"): from the app on GitHub Pages to https://mollers-pi.cheetah-krait.ts.net
+   (the Tailscale app must be on), from the local test server to http://127.0.0.1:8770. When the Pi can't be reached, it says
+   "Saved here", waits on the device (a number on the ✎ button) and is sent by itself later.
+4. **Fix**: in a new Claude session, write «fix review notes». Claude runs `review.py`, fixes each note with its subject's skill, commits,
+   then `review.py done <ids>`. One subject per session.
+
+```bash
+python3 .claude/scripts/inbox/review.py              # the open notes, by page
+python3 .claude/scripts/inbox/review.py --all        # the fixed ones too
+python3 .claude/scripts/inbox/review.py done <id>... # mark as fixed
+```
+
+The notes are kept in `~/.local/share/school-inbox/review.json`. Only the app's own sites (GitHub Pages, the local test server) may send them.
 
 ## Why: where the tokens went (Nov 2–20, 26 sessions)
 
@@ -74,7 +120,7 @@ python3 .claude/scripts/inbox/sorter.py --set-password     # in a terminal; then
   "root": "~/Documents/2026-2027",
   "ignore": [], // folders never scanned (relative to root)
   "ignoreGlobs": ["*/ebook/*", "*/out[0-9]*.png"], // working files: video frames Claude extracted
-  "rules": { "minFiles": 3, "maxAgeDays": 4 }, // when a subject is "ready" for the Telegram message
+  "rules": { "minFiles": 3, "maxAgeDays": 4, "buildBudgetUsd": 10 }, // "ready" for the Telegram message; dollars per build job
   "subjects": [
     {
       "id": "g4-math", // used in «build inbox g4-math» and --subject
@@ -91,9 +137,31 @@ python3 .claude/scripts/inbox/sorter.py --set-password     # in a terminal; then
 ```
 
 - **Add a subject**: one more entry. Files in folders that no subject watches are listed under "Not watched" in the report (only counted).
-- Watched now: Alex (Grade 4) English, Math, Science, Social Studies, French, Arabic, SS Arabic, Religion, Computer;
-  Lucas (Grade 3) English, French, Arabic, Religion, Computer, Science, Social Studies. Not watched: Lucas Math, Optima, Music, Speech, projects.
+- **Change a subject** (e.g. English moves to a new term folder): edit its `app`; the id stays, so the notes and `done.txt` still match.
+- A subject without a `skill` is watched and reported, but «build inbox» and the Build bar have no rules for it yet: build it in a normal session.
+- Not watched: Lucas Math, Optima, Music, Speech, projects.
 - Baseline (2026-11-20): every file there was then counts as used, except `Alex/Arabic/book/`.
+
+The subjects now:
+
+| id             | Kid   | Subject        | Watched folder      | Booklet words                | App folder                             | Skill                   | OCR     |
+| -------------- | ----- | -------------- | ------------------- | ---------------------------- | -------------------------------------- | ----------------------- | ------- |
+| `g4-english`   | Alex  | English        | `Alex/English`      | English, Classwork, Homework | `grade-4/term-2/english`               | `english-lesson`        | eng     |
+| `g4-math`      | Alex  | Math           | `Alex/Math`         |                              | `grade-4/math`                         | `math-lesson`           | eng     |
+| `g4-science`   | Alex  | Science        | `Alex/Science`      | Science                      | `grade-4/science`                      | `science-lesson`        | eng     |
+| `g4-ss`        | Alex  | Social Studies | `Alex/S.S.English`  | Social Studies               | `grade-4/social-studies`               | `social-studies-lesson` | eng     |
+| `g4-french`    | Alex  | French         | `Alex/French`       |                              | `grade-4/term-1/french`                | `french-lesson`         | fra+eng |
+| `g4-arabic`    | Alex  | Arabic         | `Alex/Arabic`       |                              | `grade-4/term-1/arabic`                | —                       | ara     |
+| `g4-ss-arabic` | Alex  | SS Arabic      | `Alex/SSArabic`     |                              | `grade-4/term-1/social-studies-arabic` | —                       | ara     |
+| `g4-religion`  | Alex  | Religion       | `Alex/Religion`     |                              | `grade-4/term-1/religion`              | —                       | ara     |
+| `g4-computer`  | Alex  | Computer       | `Alex/Computer`     | Computer                     | `grade-4/computer`                     | `computer-lesson`       | eng     |
+| `g3-english`   | Lucas | English        | `Lucas/English`     | English                      | `grade-3/term-1/english`               | `english-dictation`     | eng     |
+| `g3-french`    | Lucas | French         | `Lucas/French`      |                              | `grade-3/term-1/french`                | `french-lesson`         | fra+eng |
+| `g3-arabic`    | Lucas | Arabic         | `Lucas/Arabic`      |                              | `grade-3/term-1/arabic`                | `arabic`                | ara     |
+| `g3-religion`  | Lucas | Religion       | `Lucas/Religion`    |                              | `grade-3/term-1/religion`              | `religion-lesson`       | ara     |
+| `g3-computer`  | Lucas | Computer       | `Lucas/Computer`    | Computer                     | `grade-3/computer`                     | —                       | eng     |
+| `g3-science`   | Lucas | Science        | `Lucas/Science`     | Science                      | `grade-3/term-1/science`               | —                       | eng     |
+| `g3-ss`        | Lucas | Social Studies | `Lucas/S.S.English` | SS                           | `grade-3/term-1/social-studies`        | —                       | eng     |
 
 ## Where things are kept
 
