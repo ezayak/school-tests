@@ -1023,9 +1023,9 @@ window.GAMES = [
     hub: true,
     lesson: "التربية الدينية المسيحية · Read, listen & practise each lesson",
     topics:
-      "Units 1–3 · all 18 lessons of Term 1 · آدَمُ وَحَوَّاءُ · التَّنَاوُلُ · يُوسُفُ الصِّدِّيقُ · دَانِيَالُ · الْعَائِلَةُ الْمُقَدَّسَةُ فِي مِصْرَ · السَّامِرِيُّ الصَّالِحُ · دَاوُدُ وَيُونَاثَانُ: stories with pictures, audio & translation, the book's activities as games, golden verses",
+      "Units 1–3 · all 18 lessons of Term 1 + the November revision · آدَمُ وَحَوَّاءُ · التَّنَاوُلُ · يُوسُفُ الصِّدِّيقُ · دَانِيَالُ · الْعَائِلَةُ الْمُقَدَّسَةُ فِي مِصْرَ · السَّامِرِيُّ الصَّالِحُ · دَاوُدُ وَيُونَاثَانُ: stories with pictures, audio & translation, the book's activities as games, golden verses",
     path: "grade-3/term-1/religion/index.html",
-    countLabel: "18 lessons",
+    countLabel: "18 lessons · 1 revision",
     year: "2026–2027",
     // uses the Arabic lesson engine (listed in the Arabic entry's "also")
     also: [
@@ -1218,6 +1218,8 @@ window.GAMES = [
       "grade-3/term-1/religion/img/u3-lesson-5/tree.jpg",
       "grade-3/term-1/religion/u3-lesson-6.html",
       "grade-3/term-1/religion/u3-lesson-6.js",
+      "grade-3/term-1/religion/revision-november.html",
+      "grade-3/term-1/religion/revision-november.js",
       "grade-3/term-1/religion/img/u3-lesson-6/fight.jpg",
       "grade-3/term-1/religion/img/u3-lesson-6/friends.jpg",
       "grade-3/term-1/religion/img/u3-lesson-6/goliath.jpg",
