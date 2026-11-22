@@ -1,5 +1,5 @@
 // Math · Grade 4 · Lesson 4-4 « Solve Comparison Problems Using Division » (Reveal Math, Unit 4).
-// Sources: Student Edition Vol. 1 p. 117–120, Student Practice Book p. 33–34. No teacher's key for this lesson yet. Log: grade-4/math/SOURCES.md.
+// Sources: Student Edition Vol. 1 p. 117–120, Student Practice Book p. 33–34. No teacher's key for this lesson yet. Log: grade-4/math/SOURCES.md. School video: video/l4-4-division.mp4 (class replay, 2026-11-21).
 // Drawings: bar (the bar diagram; the unknown is yellow with "?"), lines.
 const fmt = (n) => n.toLocaleString("en-US");
 // lb (= total) is n times as many as la: la unknown → total ÷ n
@@ -128,6 +128,15 @@ window.LESSON = {
         kind: "lines",
         rows: ["10 × 5 = ? → 50", "50 ÷ 5 = ? → 10", "50 ÷ 10 = ? → 5 times"],
       },
+    },
+  ],
+
+  videos: [
+    {
+      k: "division",
+      t: "Solve comparison problems using division",
+      video: "l4-4-division",
+      img: "curious",
     },
   ],
 

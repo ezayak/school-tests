@@ -456,3 +456,10 @@ Built into the unit pages before the book lessons (one page per unit, see the he
 | 20261116-L_14-2.pdf                    | teacher's key, book p. 221–222               | `unit-14/lesson-14-2`                            | built (checked)                  |
 | 20261116-Extra_Practice_-_L14-2.pdf    | class sheet: classify angles, rotation, draw | `unit-14/lesson-14-2` · `school` (draw: skipped) | built                            |
 | 20261116-L_4-3.pdf, 20261116-L_4-4.pdf | teacher's keys for Lessons 4-3 and 4-4       | `unit-4/lesson-4-3`, `lesson-4-4`                | planned (check against the keys) |
+
+## School videos (Math folder root; online only, not saved offline)
+
+| File                                                                    | What                              | Goes to                                                         | Status  |
+| ----------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------- | ------- |
+| 20261121-Math Replay Solve Comparison Problems Using Division.mp4       | class replay (1:42), the $50 coat | `unit-4/lesson-4-4` · Learn tab video `video/l4-4-division.mp4` | built   |
+| 20261121-Math Replay Solve Comparison Problems Using Multiplication.mp4 | class replay for Lesson 4-1       | `unit-4/lesson-4-1` (video on the Learn tab)                    | planned |
