@@ -930,3 +930,4 @@ Lucas/French/book/VIDEO_AUTOUR_DE_TOI_3.mp4
 Alex/Computer/20261119-HW1_for_T2-G4.pdf
 Lucas/French/book/VIDEO_3.mp4
 Alex/Math/20261121-Math Replay Solve Comparison Problems Using Division.mp4
+Alex/Math/20261121-Math Replay Solve Comparison Problems Using Multiplication.mp4

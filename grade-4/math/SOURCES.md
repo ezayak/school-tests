@@ -459,7 +459,7 @@ Built into the unit pages before the book lessons (one page per unit, see the he
 
 ## School videos (Math folder root; online only, not saved offline)
 
-| File                                                                    | What                              | Goes to                                                         | Status  |
-| ----------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------- | ------- |
-| 20261121-Math Replay Solve Comparison Problems Using Division.mp4       | class replay (1:42), the $50 coat | `unit-4/lesson-4-4` · Learn tab video `video/l4-4-division.mp4` | built   |
-| 20261121-Math Replay Solve Comparison Problems Using Multiplication.mp4 | class replay for Lesson 4-1       | `unit-4/lesson-4-1` (video on the Learn tab)                    | planned |
+| File                                                                    | What                                                                                                                         | Goes to                                                               | Status |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------ |
+| 20261121-Math Replay Solve Comparison Problems Using Division.mp4       | class replay (1:42), the $50 coat                                                                                            | `unit-4/lesson-4-4` · Learn tab video `video/l4-4-division.mp4`       | built  |
+| 20261121-Math Replay Solve Comparison Problems Using Multiplication.mp4 | class replay (1:36), Penelope and Madison (21 = 3 × ?), Ty and Dan's coins; the lesson's title and examples are Lesson 4-3's | `unit-4/lesson-4-3` · Learn tab video `video/l4-3-multiplication.mp4` | built  |
