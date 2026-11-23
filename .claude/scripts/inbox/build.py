@@ -47,8 +47,9 @@ That press is the approval: do not ask questions, do not wait for approval, do n
 - Commit on the current branch (a git worktree made for this job): the lesson (with its SOURCES.md row and
   done.txt) in one commit, then `register.py bump "<reason>"` alone in a last commit. Never push: the job script
   checks the commits and pushes them itself.
-- Change only the subject's lesson files, games.js, sw.js and done.txt. Never change an engine, shared/, a skill or
-  CLAUDE.md: if the lesson needs that, build what you can without it and say so at the end.
+- Change only the subject's lesson files, games.js, sw.js and done.txt. The subject's files may be in, or move to,
+  any term folder of its grade (grade-N/term-T/<subject>/), e.g. a revision moved to another term.
+  Never change an engine, shared/, a skill or CLAUDE.md: if the lesson needs that, build what you can without it and say so at the end.
 - A revision (the file's kind is `revision`, or the job is a revision / review): also the `revision` skill.
 - When ticked pages are given, use only those. Run `inbox.py done` only for files that are used up:
   a big file (a book) of which only some pages were ticked stays in the inbox.
@@ -204,13 +205,13 @@ def checks(job, wt, final):
     if not changed:
         return problems or [not_done(final)]
     app = s["app"].rstrip("/") + "/"
-    folders = [app]
-    # an exam revision goes in the folder of the job's term: grade-N/term-T/<subject>/ (CLAUDE.md "Revisions")
+    # the subject's files may be in (or move to) any term folder of its grade: grade-N/term-T/<subject>/
+    # (an exam revision goes in the folder of the exam's term, CLAUDE.md "Revisions")
     grade = re.match(r"grade-\d+/", app)
-    term = re.search(r"\bterm\s*\(?(\d)", job.get("target", ""), re.I)
-    if grade and term:
-        folders.append(f"{grade.group(0)}term-{term.group(1)}/{Path(app).name}/")
-    others = [f for f in changed if not f.startswith(tuple(folders)) and f not in SHARED_FILES]
+    terms = re.compile(re.escape(grade.group(0)) + r"term-\d+/" + re.escape(Path(app).name) + "/") if grade else None
+    others = [
+        f for f in changed if not f.startswith(app) and not (terms and terms.match(f)) and f not in SHARED_FILES
+    ]
     if others:
         problems.append("changed outside the lesson's folder: " + ", ".join(others[:8]))
     present = [f for f in changed if (wt / f).exists()]
