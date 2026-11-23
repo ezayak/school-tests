@@ -1485,6 +1485,8 @@ window.GAMES = [
       "grade-3/term-1/french/img/unite-3/trousse2.jpg",
       "grade-3/term-1/french/img/unite-3/vert.jpg",
       "grade-3/term-1/french/img/unite-3/violet.jpg",
+      "grade-3/term-1/french/img/unite-3/nous.jpg",
+      "grade-3/term-1/french/img/unite-3/loupe.jpg",
     ],
   },
   {
