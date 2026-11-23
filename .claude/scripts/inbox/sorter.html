@@ -434,6 +434,33 @@
       .file .head {
         padding: 16px 20px;
       }
+      .file .top {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .file .top > div {
+        flex: 1;
+        min-width: 0;
+      }
+      .fold {
+        flex: none;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        min-height: 40px;
+        padding: 0 12px;
+        border-radius: 8px;
+        border: 1px solid var(--field);
+        background: var(--card);
+        color: var(--ink);
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      .file.folded .ticks,
+      .file.folded .pages {
+        display: none;
+      }
       .file h2 {
         font-size: 16px;
         margin: 0 0 2px;
@@ -1512,12 +1539,38 @@
           jobsTimer = setTimeout(() => loadJobs(subject), 5000);
       }
 
+      const unfolded = new Set(); // files whose pages show; every file starts folded
       function fileCard(f) {
         f.note.pages = f.note.pages || {};
         const name = f.file.split("/").pop();
         const card = $("section", {
-          class: "file" + (f.note.kind === "skip" ? " skipped" : ""),
+          class:
+            "file" +
+            (f.note.kind === "skip" ? " skipped" : "") +
+            (f.pictures.length && !unfolded.has(f.file) ? " folded" : ""),
         });
+        // Fold / unfold the page pictures (the file's information stays)
+        const fold = $("button", {
+          type: "button",
+          class: "fold",
+          onclick: () => {
+            if (unfolded.has(f.file)) unfolded.delete(f.file);
+            else unfolded.add(f.file);
+            card.classList.toggle("folded", !unfolded.has(f.file));
+            foldLabel();
+          },
+        });
+        const foldLabel = () => {
+          const open = unfolded.has(f.file);
+          const n = f.pictures.length;
+          const ticked = Object.values(f.note.pages).filter(
+            (p) => p.pick,
+          ).length;
+          fold.textContent = open
+            ? "Hide pages ▴"
+            : `Show ${n} page${n === 1 ? "" : "s"}${ticked ? ` · ${ticked} ticked` : ""} ▾`;
+          fold.setAttribute("aria-expanded", open);
+        };
         const meta = [
           f.date,
           f.kind,
@@ -1559,11 +1612,21 @@
           $(
             "div",
             { class: "head" },
-            $("h2", { text: name, dir: "auto" }),
-            $("div", {
-              class: "meta",
-              text: f.file.split("/").slice(0, -1).join(" / ") + " · " + meta,
-            }),
+            $(
+              "div",
+              { class: "top" },
+              $(
+                "div",
+                {},
+                $("h2", { text: name, dir: "auto" }),
+                $("div", {
+                  class: "meta",
+                  text:
+                    f.file.split("/").slice(0, -1).join(" / ") + " · " + meta,
+                }),
+              ),
+              f.pictures.length ? fold : "",
+            ),
             $(
               "div",
               { class: "fields" },
@@ -1583,6 +1646,7 @@
             nPick.textContent = `${ps.filter((p) => p.pick).length} for this lesson`;
             const k = ps.filter((p) => p.keep).length;
             nKeep.textContent = k ? `${k} kept for later` : "";
+            foldLabel();
           };
           f.pictures.forEach((pic, i) =>
             grid.append(pageBox(f, pic, i + 1, recount)),
