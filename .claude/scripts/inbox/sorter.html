@@ -715,7 +715,6 @@
         position: sticky;
         top: 72px;
         max-height: calc(100vh - 88px);
-        overflow-y: auto;
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -734,7 +733,24 @@
         gap: 14px;
       }
       .build {
+        flex: none;
         border: 2px solid var(--accent);
+      }
+      /* Recent builds scroll inside the card (its title and ⤢ stay on top) */
+      .recent {
+        min-height: 180px;
+        overflow-y: auto;
+      }
+      main .recent {
+        max-height: 70vh;
+      }
+      .recent .card-head {
+        position: sticky;
+        top: -18px;
+        z-index: 1;
+        margin: -18px -18px 0;
+        padding: 18px 18px 8px;
+        background: var(--card);
       }
       .build .over {
         font-size: 12px;
@@ -771,31 +787,40 @@
         font-size: 18px;
         cursor: pointer;
       }
-      .recent .jobs {
-        max-height: 360px;
-        overflow-y: auto;
-      }
-      /* A card of the build panel opened full screen (⤢): over the whole page, the text kept readable */
+      /* A card of the build panel opened as a popup (⤢): almost the whole screen, over a dimmed page */
       body.full {
         overflow: hidden;
+      }
+      body.full #shade {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 9;
+        background: rgba(0, 0, 0, 0.4);
       }
       body.full aside {
         z-index: 10;
       }
+      body.full aside > :not(.full) {
+        visibility: hidden;
+      }
       body.full aside section.full,
       body.full main section.full {
         position: fixed;
-        inset: 0;
+        inset: 24px;
         z-index: 10;
-        margin: 0;
-        border: none;
-        border-radius: 0;
-        overflow-y: auto;
-        padding: 24px max(24px, calc((100vw - 760px) / 2));
-      }
-      .recent.full .jobs {
         max-height: none;
-        overflow: visible;
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        overflow-y: auto;
+        padding: 24px max(24px, calc((100vw - 48px - 760px) / 2));
+      }
+      body.full .recent.full .card-head {
+        top: -24px;
+        margin: -24px calc(-1 * max(24px, calc((100vw - 48px - 760px) / 2))) 0;
+        padding: 24px max(24px, calc((100vw - 48px - 760px) / 2)) 8px;
       }
       .build .sum {
         padding: 10px 12px;
@@ -913,6 +938,7 @@
           top: auto;
           z-index: 5;
           max-height: 85vh;
+          overflow-y: auto;
           padding: 0 24px 28px;
           background: var(--card);
           border-radius: 24px 24px 0 0;
@@ -921,6 +947,17 @@
         body.open aside .recent {
           border: none;
           padding: 0;
+        }
+        body.open aside .recent {
+          max-height: 60vh;
+        }
+        body.open.full aside {
+          background: none;
+        }
+        body.open aside .recent .card-head {
+          top: 0;
+          margin: 0;
+          padding: 0 0 8px;
         }
         .sheet-head {
           grid-column: 1 / -1;
@@ -943,6 +980,16 @@
         }
       }
       @media (max-width: 760px) {
+        body.full aside section.full,
+        body.full main section.full {
+          inset: 12px;
+          padding: 16px;
+        }
+        body.full .recent.full .card-head {
+          top: -16px;
+          margin: -16px -16px 0;
+          padding: 16px 16px 8px;
+        }
         body.has-bar #bar {
           padding: 10px 16px 16px;
         }
@@ -1039,7 +1086,7 @@
       <div><span id="bar-n"></span><small id="bar-k"></small></div>
       <button class="btn" onclick="sheet(true)">Build lesson</button>
     </div>
-    <div id="shade" onclick="sheet(false)"></div>
+    <div id="shade" onclick="full ? fullScreen('') : sheet(false)"></div>
     <div id="big"><img alt="" /></div>
     <datalist id="targets"></datalist>
     <script>
@@ -1433,7 +1480,7 @@
         if (!open) fullScreen("");
       }
 
-      // The build card or recent builds full screen: ⤢ opens, ✕ or Esc closes. Kept when the page redraws.
+      // The build card or recent builds in a big popup: ⤢ opens, ✕, Esc or a tap outside closes. Kept when the page redraws.
       let full = "";
       function expandButton(name) {
         return $("button", {
@@ -1450,10 +1497,7 @@
           const on = b.dataset.full === name;
           b.closest("section").classList.toggle("full", on);
           b.textContent = on ? "✕" : "⤢";
-          b.setAttribute(
-            "aria-label",
-            on ? "Close full screen" : "Full screen",
-          );
+          b.setAttribute("aria-label", on ? "Close" : "Open big");
         }
       }
       document.addEventListener("keydown", (e) => {
