@@ -510,6 +510,20 @@ window.GAMES = [
   },
   {
     grade: 4,
+    term: 2,
+    period: "Mid-term exam",
+    subject: "Computer",
+    title: "Word Quest",
+    lesson: "Unit 2 · L2 Images and graphics, L3 Editing and grammar check",
+    topics:
+      "Picture Format, Remove Background, Crop, Wrap Text, SmartArt pyramid & cycle, Shapes, Find and Replace, Spelling and Grammar",
+    path: "grade-4/term-2/computer/revision-1.html",
+    questions: 82,
+    year: "2026–2027",
+    // the page is offline through the Grade 4 Computer entry's "also" (pictures: the lessons')
+  },
+  {
+    grade: 4,
     term: 1,
     period: "Final exam",
     subject: "Math",
@@ -1661,7 +1675,7 @@ window.GAMES = [
     topics:
       "Ch. 1 · My desktop, Files and folders, Computer settings, Protect my computer · Ch. 2 · Paragraphs, Images and graphics, Editing & grammar, Views & print · Ch. 3 · My friends, Forward an email, Sending files, Email rules",
     path: "grade-4/computer/index.html",
-    countLabel: "12 lessons · 3 chapters",
+    countLabel: "12 lessons · 3 chapters · 1 revision",
     year: "2026–2027",
     // the school videos (computer/video/) are online only, so they are not listed here
     also: [
@@ -1814,6 +1828,8 @@ window.GAMES = [
       "grade-4/computer/chapter-3/img/lesson-4/lunchbox.jpg",
       "grade-4/computer/chapter-3/img/lesson-4/mistakes.jpg",
       "grade-4/computer/chapter-3/img/lesson-4/spell.jpg",
+      "grade-4/term-2/computer/revision-1.html",
+      "grade-4/term-2/computer/revision-1.js",
     ],
   },
   {
