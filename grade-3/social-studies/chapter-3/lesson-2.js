@@ -1,13 +1,11 @@
-// Social Studies · Grade 3 · Term 2 · Mid-term revision: Chapter 3 « Communities Build a Nation » · Lesson 2 « Early Explorers ».
-// Its card is in games.js (Grade 3 · Term 2 · Mid-term exam); Grade 3 Social Studies has no lessons hub yet, so « hub » is the home page.
+// Social Studies · Grade 3 · Chapter 3 « Communities Build a Nation » · Lesson 2 « Early Explorers » (Term 2, for the mid-term revision).
 // All the content of the lesson. The engine is shared/computer-lesson.js (no Mini Windows).
 // Learn: the teacher's slides « chapter 3 lesson 2 2026-2027 » (17 pages) in easy words, one picture card per idea, the slides' words.
 // Exercises: Graded Homework (1) of Term 2 (correct the underlined words, with 💡 Help) and revision questions on the slides.
 // No answer key: the answers follow the slides (the underlined words of the homework are not visible in the text layer: the wrong word of each sentence was found from the slides).
-// Pictures (img/revision-1/): crops of the slides (rendered 1280×720), slide page in the comment above each card.
-// Sources: 20261123-chapter 3 lesson 2 2026-2027.pdf (pp. 1–17), 20261123-Term (2) Graded Homework (1) 2026-2027.pdf (p. 1).
+// Pictures: crops of the slides (rendered 1280×720), slide page in the comment above each card.
 
-// mc(q, [[answer, picture], …], more): the first answer is right; a picture is a file name in img/revision-1/ or 1–2 emoji.
+// mc(q, [[answer, picture], …], more): the first answer is right; a picture is a file name in img/lesson-2/ or 1–2 emoji.
 const mc = (q, answers, more) => {
   const isImg = (p) => /^[a-z.][a-z0-9./-]*$/.test(p);
   const opts = answers.map((a) => a[0]);
@@ -38,14 +36,11 @@ const country = (q, p, right, x) =>
 const card = (name) => `Look at the card «${name}» in Learn.`;
 
 window.LESSON = {
-  n: "Revision",
-  label: "Mid-term 2",
-  key: "ss3-t2-revision-1",
+  n: 2,
+  key: "ss3-c3-l2",
   grade: 3,
-  imgDir: "img/revision-1",
-  hub: "../../../index.html",
   title: "Early Explorers",
-  unit: "Mid-term 2 · Chapter 3 · Lesson 2",
+  unit: "Chapter 3 · Lesson 2",
   book: "Teacher's slides",
   cover: "explorers",
   question: {
