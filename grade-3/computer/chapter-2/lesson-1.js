@@ -1,4 +1,4 @@
-// Computer · Grade 3 · Chapter 2 · Unit 2 · Lesson 1 « Robots in our daily lives » (book pages 38–43).
+// Computer · Grade 3 · Chapter 2 · Unit 2 · Lesson 1 « Robots in our daily lives » (book pages 38–43, Graded Classwork 1 with its model answer).
 // All the content of the lesson. Same format as the chapter 1 lessons. No Mini Word here: the robots are learnt from pictures.
 window.LESSON = {
   n: 1,
@@ -592,6 +592,75 @@ window.LESSON = {
             "A robot that stays in one place",
           ],
           img: "mobile-robot",
+        },
+      ],
+    },
+    {
+      k: "cw1",
+      t: "Graded Classwork 1",
+      en: "The robots in our daily lives",
+      ic: "🏫",
+      from: "Graded Classwork (1)",
+      items: [
+        {
+          type: "mc",
+          q: "Does the robot get [information] from its environment?",
+          opts: ["Yes", "No"],
+          img: "sensors",
+        },
+        {
+          type: "mc",
+          q: "Can a human [control] a robot remotely?",
+          opts: ["Yes", "No"],
+          vis: { kind: "emoji", e: "🎮 ➜ 🤖" },
+        },
+        {
+          type: "mc",
+          q: "Is a robot [wheel] one type of the robot?",
+          opts: ["Yes", "No"],
+          img: "mobile-robot",
+        },
+        {
+          type: "mc",
+          q: "Is “the sense” one of the [senses] of a robot?",
+          opts: ["No", "Yes"],
+          img: "sensors",
+        },
+        {
+          type: "mc",
+          q: "Can a robot help a [doctor] during surgery?",
+          opts: ["Yes", "No"],
+          img: "hospital",
+        },
+        {
+          type: "mc",
+          q: "A … robot can move in the air, in the sea or navigate on land.",
+          opts: ["mobile", "fixed"],
+          img: "mobile-robot",
+        },
+        {
+          type: "mc",
+          q: "A type of [fixed] robot is…",
+          opts: ["robotic arm", "sea robot"],
+          img: "fixed-robot",
+        },
+        {
+          type: "mc",
+          q: "The robot needs … to work.",
+          opts: ["power", "food"],
+          img: "battery-robot",
+        },
+        {
+          type: "mc",
+          q: "A [motor] is like … It helps the robot move using electricity.",
+          opts: ["muscles", "food"],
+          img: "motor-arm",
+        },
+        {
+          type: "mc",
+          q: "Why do doctors use robots in surgery?",
+          opts: ["To do surgery more carefully", "To help lift heavy things"],
+          img: "hospital",
         },
       ],
     },

@@ -935,3 +935,5 @@ Lucas/Religion/20261121-DOC-20261119-WA0061.pdf
 Lucas/Religion/20261121-share-1795286278324-__3_____.pdf
 Lucas/S.S.English/20261123-Term (2) Graded Homework (1) 2026-2027.pdf
 Lucas/S.S.English/20261123-chapter 3 lesson 2 2026-2027.pdf
+Lucas/Computer/20261123-G.3_G.C1T.2.pdf
+Lucas/Computer/20261123-G.3_G.C1T.2_Model_Ans.pdf

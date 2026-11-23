@@ -59,7 +59,7 @@ window.CS_LESSONS = {
           en: "What a robot is, fixed and mobile robots, sensors, where robots help us",
           path: "lesson-1.html",
           cover: "img/lesson-1/mobile-robot.jpg",
-          note: "11 picture cards · 5 games · 5 exercises",
+          note: "11 picture cards · 5 games · 6 exercises",
         },
         {
           n: 2,
