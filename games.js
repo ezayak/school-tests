@@ -383,11 +383,12 @@ window.GAMES = [
     period: "Mid-term exam",
     subject: "Religion",
     title: "Religion Revision",
-    lesson: "مُرَاجَعَةُ شَهْرِ نُوفَمْبِرَ · Revision November, Units 2–3",
+    lesson:
+      "مُرَاجَعَةُ شَهْرِ نُوفَمْبِرَ · Revision November, Units 2–3 + the lessons' games and golden verses",
     topics:
-      "Daniel and the three young men, Joseph in prison and at Pharaoh's palace, the Holy Family in Egypt, the bunch of grapes, the widow's son at Nain · choose, true or false, complete, who said it, who am I, order, match",
+      "Daniel and the three young men, Joseph in prison and at Pharaoh's palace, the Holy Family in Egypt, the bunch of grapes, the widow's son at Nain, Unit 3 memory verses · choose, true or false, complete, who said it, who am I, order, match · 9 golden verses",
     path: "grade-3/term-2/religion/revision-november.html",
-    questions: 116,
+    questions: 210,
     year: "2026–2027",
     // the page is offline through the Grade 3 Religion entry's "also" (pictures: the lessons')
   },
