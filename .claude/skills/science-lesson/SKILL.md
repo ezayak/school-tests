@@ -22,8 +22,8 @@ Sources: `~/Documents/2026-2027/Alex/Science/` (booklets, slides, sheets) and `b
   Only the lessons being built or updated; older lessons stay as they are unless asked.
 - Booklet answers have no key: give the right one from the book, a `// unverified` reason in `UNVERIFIED.md`. Words missing or unreadable: never guess; ask.
 - `term: N` in `lessons.js` on a lesson with Term N booklet sheets (a "Term N" tag after "Lesson M"). One commit per lesson.
-- **Revision** (practice sheets over several lessons, a topic review, an exam memo): the `revision` skill. The lessons it reuses get the `EN_DATA` line (that skill's section 3).
-  The old `term-1/final-term-1/science-revision.html` (a `quiz-common.js` page) is not a model.
+- **Revision** (practice sheets over several lessons, a topic review, an exam memo): the `revision` skill. A topic review (kind D) is on the lesson engine: the lessons it reuses get the `EN_DATA` line (that skill's section 3).
+  An exam revision (sheet, memo) is a Quest (`shared/quest.js`, the `revision` skill section 0), the look of the old `term-1/final-term-1/science-revision.html` (never copy its code).
 - Then: files and pictures in `also` of the Science entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find what is new

@@ -70,7 +70,9 @@ Rules, sources and procedure: the `social-studies-lesson` skill.
 ## Revisions (every subject)
 
 A revision sheet (مراجعة), exam practice (Exercices d'application), exam memo or the book's chapter / unit review (inbox kind `revision`): the `revision` skill together with the subject's skill.
-New revisions are data for the subject's engine, never new pages in `mid-term-1/` / `final-term-1/`.
+New revisions are data files, never new pages in `mid-term-1/` / `final-term-1/`: Social Studies, Science, Math and Computer on the Quest engine `shared/quest.js`
+(the look of the Term 1 Quest pages), English, French, Arabic and Religion on the subject's lesson engine,
+SS Arabic in the look of `grade-4/term-1/mid-term-1/social-studies-arabic-revision.html` (the `revision` skill, section 0).
 An exam revision (mid-term / final) goes in the folder of the exam's term, `grade-N/term-T/<subject>/` (T = the job's "Term T"),
 with a `games.js` card `term: T`, `period: "Mid-term exam"` / `"Final exam"`: it shows under that term's "Revision T" button. Lessons stay where they are.
 

@@ -24,8 +24,8 @@ Alex has aphasia: the parent explains each question by pointing at the pictures.
 - Every book item in the book's order; every question has a drawing (`vis`), picture or emoji. Numbers are typed on the number pad (`num`), worked out, never from memory.
   The Be Curious picture is the cover; other pictures are drawn by `shared/math.js` unless the book's own picture explains more. Unit 1 « Math Is… » and drawing tasks are skipped.
 - Logs in `grade-4/math/`: `SOURCES.md` (every book / Practice Book page and sheet → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (answers without a key, `// unverified` in the file). Update them with every lesson, in the same commit.
-- **Revision** (Unit Review, Math Probe, a «Revision MidT» sheet, an exam memo): the `revision` skill; items and MathKit helpers as in a lesson, every word problem with its schema.
-  The old `term-1/final-term-1/math-revision.html` (a `quiz-common.js` page) is not a model.
+- **Revision** (Unit Review, Math Probe, a «Revision MidT» sheet, an exam memo): the `revision` skill; a Unit Review (kind D): items and MathKit helpers as in a lesson, every word problem with its schema.
+  An exam revision (sheet, memo) is a Quest (`shared/quest.js`, the `revision` skill section 0); never copy the code of the old `term-1/final-term-1/math-revision.html`.
 - Words or numbers missing or unreadable: never guess; ask. Then: card in `lessons.js` (under its unit), files and pictures in `also` of the Math entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find what is new

@@ -21,7 +21,7 @@ Sources: `~/Documents/2026-2027/Alex/S.S.English/` (term booklets, `Term N/` she
 - Every question has a picture, every answer a picture or an emoji, every sentence answer an explanation (`x`). Colouring is left out.
 - Logs in `grade-4/social-studies/`: `SOURCES.md` (every book page and booklet page → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (the booklets have no key). Update them with every lesson, in the same commit.
 - **Revision** (the book's Visual Review and Chapter Assessment, an exam memo): the `revision` skill. Model: `chapter-1/review.js` (kind D), its card in `lessons.js` with `n: "Review"`, `label: "Chapter N"`.
-  The old `term-1/final-term-1/social-studies-revision.html` is not a model.
+  An exam revision (sheet, memo) is a Quest (`shared/quest.js`, the `revision` skill section 0), the look of the old `term-1/final-term-1/social-studies-revision.html` (never copy its code).
 - Words missing or unreadable: never guess; ask. Then: `lessons.js` (`term: N`), files and pictures in `also` of the Social Studies entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find what is new
