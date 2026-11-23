@@ -776,7 +776,8 @@
         flex: 1;
         min-width: 0;
       }
-      .expand {
+      .expand,
+      #big .close {
         flex: none;
         display: grid;
         place-items: center;
@@ -789,7 +790,8 @@
         color: var(--ink);
         cursor: pointer;
       }
-      .expand svg {
+      .expand svg,
+      #big .close svg {
         width: 20px;
         height: 20px;
       }
@@ -1063,20 +1065,159 @@
         color: var(--muted);
         font-size: 12px;
       }
+      /* A page opened big (tap its picture): the picture on the left, the page's ticks, chips and note on the right */
+      body.big {
+        overflow: hidden;
+      }
       #big {
         position: fixed;
         inset: 0;
-        z-index: 5;
-        background: rgba(0, 0, 0, 0.85);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        cursor: zoom-out;
+        z-index: 20;
+        display: flex;
+        padding: 16px;
+        background: rgba(0, 0, 0, 0.75);
       }
-      #big img {
-        max-width: 96vw;
-        max-height: 96vh;
-        background: #fff;
+      #big[hidden] {
+        display: none;
+      }
+      #big .box {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        max-width: 1400px;
+        margin: 0 auto;
+        background: var(--card);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      }
+      #big .bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px 10px 20px;
+        border-bottom: 1px solid var(--line);
+      }
+      #big .bar h2 {
+        flex: 1;
+        min-width: 0;
+        margin: 0;
+        font-size: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      #big .bar small {
+        margin-left: 10px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      #big .page {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 300px;
+        grid-template-rows: auto auto 1fr;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      #big .page .thumb {
+        grid-column: 1;
+        grid-row: 1 / span 3;
+        min-height: 0;
+        background: var(--bg);
+      }
+      #big .page .checks,
+      #big .page .chips,
+      #big .page .extra {
+        grid-column: 2;
+      }
+      #big .page .checks {
+        padding: 12px 16px;
+      }
+      #big .page.picked .checks {
+        background: var(--accent-soft);
+      }
+      #big .page .checks .pick {
+        min-height: 44px;
+        font-size: 15px;
+      }
+      #big .page .chips {
+        padding: 14px 16px 8px;
+      }
+      #big .chips button {
+        min-height: 44px;
+        font-size: 14px;
+      }
+      #big .page .extra {
+        padding: 0 16px 16px;
+      }
+      #big .page .extra textarea {
+        min-height: 140px;
+        font-size: 14px;
+      }
+      #big .page img {
+        height: 100%;
+        cursor: default;
+      }
+      #big .page .n {
+        display: none;
+      }
+      #big .arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+        place-items: center;
+        width: 56px;
+        height: 56px;
+        padding: 0 0 4px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.55);
+        color: #fff;
+        font-size: 36px;
+        line-height: 1;
+        cursor: pointer;
+      }
+      #big .arrow.prev {
+        left: 16px;
+      }
+      #big .arrow.next {
+        right: 16px;
+      }
+      #big .arrow:disabled {
+        opacity: 0.2;
+        cursor: default;
+      }
+      /* Phone: the picture on top, the controls under it, scrolling */
+      @media (max-width: 760px) {
+        #big {
+          padding: 0;
+        }
+        #big .box {
+          border-radius: 0;
+        }
+        #big .bar small {
+          display: block;
+          margin: 0;
+        }
+        #big .page {
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-rows: 60vh;
+          overflow-y: auto;
+        }
+        #big .page .thumb {
+          grid-row: 1;
+        }
+        #big .page .checks,
+        #big .page .chips,
+        #big .page .extra {
+          grid-column: 1;
+          grid-row: auto;
+        }
       }
     </style>
   </head>
@@ -1096,7 +1237,7 @@
       <button class="btn" onclick="sheet(true)">Build lesson</button>
     </div>
     <div id="shade" onclick="full ? fullScreen('') : sheet(false)"></div>
-    <div id="big"><img alt="" /></div>
+    <div id="big" hidden role="dialog" aria-modal="true"></div>
     <datalist id="targets"></datalist>
     <script>
       const KINDS = [
@@ -1853,7 +1994,8 @@
         return card;
       }
 
-      function pageBox(f, pic, n, recount) {
+      // big: the box drawn in the page's popup (the picture doesn't open it again)
+      function pageBox(f, pic, n, recount, big = false) {
         const pn = f.note.pages[n] || (f.note.pages[n] = {});
         const box = $("div", {
           class: "page" + (pn.pick ? " picked" : ""),
@@ -1954,13 +2096,9 @@
             { class: "thumb" },
             $("img", {
               src: "/img/" + pic.split("/").map(encodeURIComponent).join("/"),
-              loading: "lazy",
+              loading: big ? "eager" : "lazy",
               alt: "page " + n,
-              onclick: (e) => {
-                const big = document.getElementById("big");
-                big.querySelector("img").src = e.target.src;
-                big.style.display = "flex";
-              },
+              onclick: () => big || openBig(f, n),
             }),
             role,
             later,
@@ -1975,6 +2113,101 @@
         return box;
       }
 
+      // A page opened big: its picture and every control of its card. ‹ › (arrow keys, a swipe) go through all the
+      // subject's pages, file after file. ✕, Esc or a tap on the dark edge closes; the cards redraw then.
+      let bigAt = -1; // place in bigList() while open
+      const bigList = () =>
+        (data.subjects.find((x) => x.id === current)?.files || []).flatMap(
+          (f) => f.pictures.map((pic, i) => [f, pic, i + 1]),
+        );
+      function openBig(f, n) {
+        bigAt = bigList().findIndex(([g, , m]) => g === f && m === n);
+        drawBig();
+      }
+      function moveBig(d) {
+        const to = bigAt + d;
+        if (to >= 0 && to < bigList().length) {
+          bigAt = to;
+          drawBig();
+        }
+      }
+      function closeBig() {
+        bigAt = -1;
+        document.getElementById("big").hidden = true;
+        document.body.classList.remove("big");
+        render();
+      }
+      function drawBig() {
+        const list = bigList();
+        if (!list[bigAt]) return closeBig();
+        const [f, pic, n] = list[bigAt];
+        const arrow = (d, cls, label, text) => {
+          const b = $("button", {
+            type: "button",
+            class: "arrow " + cls,
+            "aria-label": label,
+            text,
+            onclick: () => moveBig(d),
+          });
+          b.disabled = !list[bigAt + d];
+          return b;
+        };
+        const close = $("button", {
+          type: "button",
+          class: "close",
+          "aria-label": "Close",
+          onclick: closeBig,
+        });
+        close.innerHTML = ICON_CLOSE;
+        const box = pageBox(f, pic, n, () => {}, true);
+        const thumb = box.querySelector(".thumb");
+        thumb.append(
+          arrow(-1, "prev", "Previous page", "‹"),
+          arrow(1, "next", "Next page", "›"),
+        );
+        let x0 = null; // swipe on the picture
+        thumb.addEventListener("touchstart", (e) => {
+          x0 = e.touches[0].clientX;
+        });
+        thumb.addEventListener("touchend", (e) => {
+          const dx = e.changedTouches[0].clientX - x0;
+          if (x0 !== null && Math.abs(dx) > 60) moveBig(dx < 0 ? 1 : -1);
+          x0 = null;
+        });
+        const big = document.getElementById("big");
+        big.replaceChildren(
+          $(
+            "div",
+            { class: "box" },
+            $(
+              "div",
+              { class: "bar" },
+              $(
+                "h2",
+                { dir: "auto" },
+                f.file.split("/").pop(),
+                $("small", {
+                  text: `Page ${n} of ${f.pictures.length} · ${bigAt + 1} / ${list.length}`,
+                }),
+              ),
+              close,
+            ),
+            box,
+          ),
+        );
+        big.hidden = false;
+        document.body.classList.add("big");
+      }
+      document.getElementById("big").addEventListener("click", (e) => {
+        if (e.target === e.currentTarget) closeBig();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (bigAt < 0 || e.target.matches("input, textarea, select")) return;
+        if (e.key === "Escape") closeBig();
+        else if (e.key === "ArrowLeft") moveBig(-1);
+        else if (e.key === "ArrowRight") moveBig(1);
+      });
+
       async function poll() {
         await load();
         const s = data.subjects.find((x) => x.id === current);
@@ -1982,8 +2215,6 @@
       }
 
       window.addEventListener("hashchange", route);
-      document.getElementById("big").onclick = (e) =>
-        (e.currentTarget.style.display = "none");
       load();
     </script>
   </body>
