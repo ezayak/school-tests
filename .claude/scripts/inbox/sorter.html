@@ -693,6 +693,73 @@
         color: var(--muted);
         padding: 30px 0;
       }
+      /* «+ Add an old file»: a used file back into the subject's list */
+      nav button.add-old {
+        border: 1px dashed var(--field);
+        margin-top: 8px;
+      }
+      #old {
+        width: min(560px, calc(100vw - 32px));
+        max-height: min(85vh, 680px);
+        padding: 16px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--card);
+        color: var(--ink);
+      }
+      #old::backdrop {
+        background: rgba(0, 0, 0, 0.45);
+      }
+      #old .head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      #old h2 {
+        flex: 1;
+        margin: 0;
+        font-size: 18px;
+      }
+      #old select,
+      #old input {
+        width: 100%;
+        margin-bottom: 8px;
+      }
+      #old .list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        max-height: 50vh;
+        overflow: auto;
+      }
+      #old .list button {
+        flex: none;
+        display: block;
+        min-height: 48px;
+        padding: 6px 10px;
+        text-align: left;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--soft);
+        color: var(--ink);
+        font: inherit;
+        cursor: pointer;
+        overflow-wrap: anywhere;
+      }
+      #old .list small {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .tag-old {
+        flex: none;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 99px;
+        background: var(--later-soft);
+        color: var(--later);
+      }
       .pick {
         display: flex;
         align-items: center;
@@ -1243,6 +1310,7 @@
     </div>
     <div id="shade" onclick="full ? fullScreen('') : sheet(false)"></div>
     <div id="big" hidden role="dialog" aria-modal="true"></div>
+    <dialog id="old"></dialog>
     <datalist id="targets"></datalist>
     <script>
       const KINDS = [
@@ -1387,6 +1455,18 @@
             ),
           );
         }
+        nav.append(
+          $(
+            "button",
+            { class: "add-old", onclick: () => addOld() },
+            $(
+              "span",
+              {},
+              "+ Add an old file",
+              $("small", { text: "already used, for a new lesson" }),
+            ),
+          ),
+        );
         // Tablet / phone list: a banner on top for the review notes
         const withNotes = data.subjects.filter((x) => x.reviews.length);
         if (withNotes.length) {
@@ -1443,6 +1523,17 @@
           document.body.classList.remove("has-bar", "open");
           return;
         }
+        main.append(
+          $(
+            "p",
+            {},
+            $("button", {
+              class: "btn plain",
+              text: "+ Add an old file",
+              onclick: () => addOld(s.id),
+            }),
+          ),
+        );
         if (s.reviews.length) main.append(reviewCard(s));
         const targets = new Set();
         for (const f of s.files) {
@@ -1835,6 +1926,99 @@
       }
 
       const unfolded = new Set(); // files whose pages show; every file starts folded
+      // «+ Add an old file»: a file already used for a lesson goes back into its subject's list, to build with again.
+      // inbox.py done (after the lesson) or ✕ Take out on its card removes it.
+      const oldBox = document.getElementById("old");
+      function addOld(sid) {
+        const pick = $(
+          "select",
+          { "aria-label": "Subject", onchange: () => list() },
+          ...data.all.map((x) =>
+            $("option", { value: x.id, text: `${x.kid} · ${x.name}` }),
+          ),
+        );
+        pick.value = sid || current || data.all[0]?.id;
+        const find = $("input", {
+          type: "search",
+          placeholder: "Search: name or date (20261105)",
+          oninput: () => show(),
+        });
+        const box = $("div", { class: "list" });
+        let files = [];
+        const show = () => {
+          const q = find.value.trim().toLowerCase();
+          const hits = files.filter((f) => f.toLowerCase().includes(q));
+          box.replaceChildren(
+            ...(hits.length
+              ? hits.slice(0, 200).map((f) =>
+                  $(
+                    "button",
+                    {
+                      type: "button",
+                      dir: "auto",
+                      onclick: () => reopen(pick.value, f, true),
+                    },
+                    $("b", { text: f.split("/").pop() }),
+                    $("small", { text: f.split("/").slice(0, -1).join(" / ") }),
+                  ),
+                )
+              : [
+                  $("p", {
+                    class: "empty",
+                    text: files.length
+                      ? "Nothing found."
+                      : "No used files here.",
+                  }),
+                ]),
+          );
+        };
+        const list = async () => {
+          box.replaceChildren($("p", { class: "empty", text: "Loading…" }));
+          const r = await fetch("/api/used/" + encodeURIComponent(pick.value));
+          files = (await r.json()).files;
+          show();
+        };
+        oldBox.replaceChildren(
+          $(
+            "div",
+            { class: "head" },
+            $("h2", { text: "Add an old file" }),
+            $("button", {
+              type: "button",
+              class: "btn plain",
+              text: "✕",
+              "aria-label": "Close",
+              onclick: () => oldBox.close(),
+            }),
+          ),
+          $("p", {
+            class: "meta",
+            text: "A file already used for a lesson, back into the list to build with again.",
+          }),
+          pick,
+          find,
+          box,
+        );
+        oldBox.showModal();
+        list();
+      }
+      oldBox.addEventListener("click", (e) => {
+        if (e.target === oldBox) oldBox.close(); // a tap outside
+      });
+      async function reopen(subject, file, open) {
+        await fetch("/api/reopen", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ subject, file, open }),
+        });
+        if (open) {
+          oldBox.close();
+          current = subject;
+          if (location.hash.slice(1) !== subject) location.hash = subject;
+        }
+        await load();
+      }
+
       function fileCard(f) {
         f.note.pages = f.note.pages || {};
         const name = f.file.split("/").pop();
@@ -1879,6 +2063,16 @@
             "div",
             { class: "top" },
             $("h2", { text: name, dir: "auto" }),
+            f.reopened ? $("span", { class: "tag-old", text: "old file" }) : "",
+            f.reopened
+              ? $("button", {
+                  type: "button",
+                  class: "fold",
+                  text: "✕ Take out",
+                  title: "Back to the used files",
+                  onclick: () => reopen(current, f.file, false),
+                })
+              : "",
             f.pictures.length ? fold : "",
           ),
           $(

@@ -55,6 +55,12 @@ Per page (under each page picture; tap a picture to see it big): **Use** / **Ski
 **Keep for later** (a "Later" tag on the picture) = the page still has something to build (e.g. half homework, half lesson): `inbox.py done`
 leaves a file with such a page in the inbox; untick it once the page is fully used.
 
+**+ Add an old file** (at the bottom of the subject list, and at the top of every subject) brings back a file already used for a lesson,
+to build a new lesson with it: choose the subject, search by name or date, tap the file. It shows in the subject's list with an "old file" tag
+and is sorted, ticked and built like a new one (press **Prepare page pictures** if it has no pictures yet). `inbox.py done` (after the lesson)
+takes it out again, or **✕ Take out** on its card. It is kept in `~/.local/share/school-inbox/reopened.json`, not by removing its line from `done.txt`
+(that file is also read from GitHub), and it doesn't make the subject "ready" for the Telegram message.
+
 A subject whose files are not prepared yet (no page pictures) has a **Prepare page pictures** button: it runs `prep` (pictures, text, OCR) on the Pi.
 The notes go to `~/.local/share/school-inbox/notes.json` and are printed by `inbox.py --subject <id>`, so «build inbox <id>» follows them.
 
@@ -121,6 +127,7 @@ python3 .claude/scripts/inbox/inbox.py --json              # the same as JSON
 python3 .claude/scripts/inbox/inbox.py prep g4-math        # prepare its new files (pictures, text, OCR)
 python3 .claude/scripts/inbox/inbox.py done <file>...      # mark files as used
 python3 .claude/scripts/inbox/inbox.py done --subject g4-math   # mark all new files of a subject as used
+python3 .claude/scripts/inbox/inbox.py reopen <file>...    # an old (used) file back into the inbox; `reopen --undo <file>` takes it out
 python3 .claude/scripts/inbox/inbox.py --telegram [--prep] # what the 19:00 run does
 
 python3 .claude/scripts/inbox/register.py add grade-4/math/index.html <files / picture folders>
@@ -187,6 +194,7 @@ The subjects now:
 | ---------------------------- | ------------------------------------------------------------------------------------------------------- |
 | Prepared files               | `~/.cache/school-inbox/<Kid>/<Subject>/<file>/` (`sheet-N.jpg`, `pages/p-N.jpg`, `text.txt`, `ocr.txt`) |
 | The parent's sorting notes   | `~/.local/share/school-inbox/notes.json`                                                                |
+| Old files added again        | `~/.local/share/school-inbox/reopened.json`                                                             |
 | The page password (hash)     | `~/.local/share/school-inbox/password` (PBKDF2, readable by you only)                                   |
 | OCR languages                | `~/.local/share/tessdata/` (eng, ara, fra, ukr from tessdata_best)                                      |
 | Telegram bot token and owner | from `school-hw`: keyring `telegram-homework` / `Alex`, `var/telegram/owner.json`                       |

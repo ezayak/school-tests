@@ -147,7 +147,24 @@ def inbox_data():
             }
         )
     # Notes on pages of no subject (Optima, speech games…): shown, fixed in a Claude session
-    return {"subjects": subjects, "otherReviews": reviews.get(None, [])}
+    # "all": every subject, for «+ Add an old file» (a subject with nothing new is not in "subjects")
+    every = [{"id": s["id"], "kid": s["kid"], "name": s["name"]} for s in inbox.CONFIG["subjects"]]
+    return {"subjects": subjects, "otherReviews": reviews.get(None, []), "all": every}
+
+
+def subject_by_id(sid):
+    return next((x for x in inbox.CONFIG["subjects"] if x["id"] == sid), None)
+
+
+def reopen(body):
+    """«+ Add an old file» (open: true) or ✕ Take out (open: false): only a used file of that subject."""
+    s = subject_by_id(body.get("subject"))
+    f = body.get("file")
+    if not s or not isinstance(f, str) or f not in {inbox.rel(p) for p in inbox.files_of(s)}:
+        return False
+    with LOCK:
+        inbox.set_reopened([f], bool(body.get("open")))
+    return True
 
 
 def new_job(body):
@@ -288,6 +305,9 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, (HERE / "sorter.html").read_bytes(), "text/html; charset=utf-8")
         if path == "/api/inbox":
             return self.send(200, inbox_data())
+        if path.startswith("/api/used/"):
+            s = subject_by_id(unquote(path[10:]))
+            return self.send(200, {"files": inbox.used_files(s) if s else []})
         if path.startswith("/api/jobs/"):
             return self.send(200, {"jobs": list_jobs(unquote(path[10:]).replace("/", ""))})
         if path.startswith("/img/"):
@@ -316,6 +336,8 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/note" and isinstance(body.get("file"), str):
             save_note(body["file"], body.get("note") or {})
             return self.send(200, {"ok": True})
+        if path == "/api/reopen":
+            return self.send(200 if reopen(body) else 400, {"ok": True})
         if path == "/api/review":
             return self.send(200 if review.add(body) else 400, {"ok": True})
         if path == "/api/build":

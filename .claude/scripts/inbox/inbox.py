@@ -13,6 +13,8 @@ child with the same name counts (the downloader starts every name with the date)
                               (--prep: then prep every ready subject, OCR included)
   inbox.py done <file>...     mark files as used (after the lesson is built)
   inbox.py done --subject g4-math   mark every new file of a subject as used
+  inbox.py reopen <file>...   put used (old) files back into the inbox for a new lesson; `done` takes them out again
+  inbox.py reopen --undo <file>...  take them out without building
   sorter.py                   the sorting page: the parent's notes per file / page, printed in this report
   inbox.py prep <subject>     contact sheets, page text and video frames of its new files (see prep.py)
   inbox.py baseline           mark every file there is now as used (first run only)
@@ -107,16 +109,51 @@ def is_used(r, done, done_names):
 
 def add_done(paths):
     """Mark files as used. A file with a 📌 page (keep for later, set on the sorting page) stays in the inbox."""
+    paths = set(paths)
     done = load_done()
     notes = load_notes()
     kept = {p for p in paths if any(v.get("keep") for v in notes.get(p, {}).get("pages", {}).values())}
     for p in sorted(kept):
         print(f"kept in the inbox (📌 page): {p}")
-    new = sorted(set(paths) - done - kept)
+    new = sorted(paths - done - kept)
     if new:
         with DONE_FILE.open("a") as f:
             f.write("".join(p + "\n" for p in new))
+    set_reopened(paths - kept, False)
     return new
+
+
+# Old (used) files put back into the inbox for a new lesson: the sorting page's «+ Add an old file» or `inbox.py reopen`.
+# Kept here and not by deleting the line from done.txt, because done.txt is also read from origin/main.
+REOPENED = Path("~/.local/share/school-inbox/reopened.json").expanduser()
+
+
+def load_reopened():
+    try:
+        return set(json.loads(REOPENED.read_text()))
+    except (OSError, ValueError):
+        return set()
+
+
+def set_reopened(paths, on=True):
+    old = load_reopened()
+    now = (old | set(paths)) if on else (old - set(paths))
+    if now != old:
+        REOPENED.parent.mkdir(parents=True, exist_ok=True)
+        tmp = REOPENED.with_suffix(".tmp")
+        tmp.write_text(json.dumps(sorted(now), ensure_ascii=False, indent=0))
+        tmp.replace(REOPENED)
+
+
+def used_files(subject):
+    """The used files of a subject that are still there (not put back already), newest first: what can be added again."""
+    done = load_done()
+    done_names = {by_name(d) for d in done}
+    back = load_reopened()
+    files = [rel(p) for p in files_of(subject)]
+    name = lambda r: r.split("/")[-1]  # noqa: E731
+    used = (r for r in files if is_used(r, done, done_names) and r not in back)
+    return sorted(used, key=lambda r: (bool(re.match(r"20\d{6}-", name(r))), name(r)), reverse=True)  # dated first
 
 
 def ignored(r):
@@ -210,6 +247,7 @@ def describe(p, cache):
 def scan(only=None):
     done = load_done()
     done_names = {by_name(d) for d in done}
+    back = load_reopened()
     cache = json.loads(CACHE_FILE.read_text()) if CACHE_FILE.exists() else {}
     claimed = set()
     result = []
@@ -218,7 +256,7 @@ def scan(only=None):
         claimed |= {rel(p) for p in files}
         if only and s["id"] != only:
             continue
-        new = sorted((p for p in files if not is_used(rel(p), done, done_names)), key=lambda p: p.name)
+        new = sorted((p for p in files if not is_used(rel(p), done, done_names) or rel(p) in back), key=lambda p: p.name)
         app = REPO / s["app"]
         result.append(
             {
@@ -230,7 +268,7 @@ def scan(only=None):
                 "log": (s["app"] + "/SOURCES.md") if (app / "SOURCES.md").exists() else None,
                 "skill": s.get("skill"),
                 "ocr": s.get("ocr"),
-                "new": [describe(p, cache) for p in new],
+                "new": [{**describe(p, cache), **({"reopened": True} if rel(p) in back else {})} for p in new],
             }
         )
     CACHE_FILE.write_text(json.dumps(cache, ensure_ascii=False, indent=0))
@@ -247,11 +285,12 @@ def scan(only=None):
 
 
 def ready(s):
-    """A subject is ready when it has enough new files, or a file waiting too long."""
-    n = len(s["new"])
+    """A subject is ready when it has enough new files, or a file waiting too long. Old files added again don't count."""
+    fresh = [x for x in s["new"] if not x.get("reopened")]
+    n = len(fresh)
     if not n:
         return False
-    oldest = min(x["date"] for x in s["new"])
+    oldest = min(x["date"] for x in fresh)
     age = (time.time() - time.mktime(time.strptime(oldest, "%Y-%m-%d"))) / 86400
     return n >= CONFIG["rules"]["minFiles"] or age >= CONFIG["rules"]["maxAgeDays"]
 
@@ -318,7 +357,7 @@ def report(result, other):
         out.append("· ".join(extra))
         out.append("")
         for x in s["new"]:
-            bits = [x["date"], x["kind"]]
+            bits = [x["date"], x["kind"]] + (["old file, added again"] if x.get("reopened") else [])
             if x.get("pages"):
                 bits.append(f"{x['pages']} p.")
             if x["ext"] == "pdf":
@@ -383,6 +422,12 @@ def main(argv):
                 paths.append(rel(p.resolve()) if p.is_absolute() or p.exists() else a)
         n = add_done(paths)
         print(f"{len(n)} files marked as used.")
+        return
+    if argv[:1] == ["reopen"]:
+        undo = "--undo" in argv
+        paths = [rel(Path(a).expanduser().resolve()) if Path(a).expanduser().exists() else a for a in argv[1:] if a != "--undo"]
+        set_reopened(paths, not undo)
+        print(f"{len(paths)} files {'taken out of' if undo else 'put back into'} the inbox.")
         return
     if argv[:1] == ["prep"]:
         import prep
