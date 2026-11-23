@@ -97,18 +97,26 @@
   const lv = (g) => (SCH.by ? g[SCH.by.f] : g.grade);
   const lvName = (v) => (SCH.by ? SCH.by.names[v] || v : "Grade " + v);
   // Anchors: #sjas, #optima/grade-4, #speech/en open that school and its grade (or language) filter; no filter = all.
-  // The address follows the switch and the filter (replaceState: no extra Back steps), so a link can be copied at any time.
+  // A side bar part may follow: #sjas/grade-4/revision-t2, #sjas/revision-t1 (all grades), #sjas/games; none = Subjects.
+  // The address follows the switch, the filter and the part (replaceState: no extra Back steps), so a link can be copied at any time.
+  const isPart = (p) => /^(subjects|games|revision-t\d+)$/.test(p);
   function fromHash() {
-    const [sc, f] = decodeURIComponent(location.hash.slice(1)).split("/");
+    const [sc, ...rest] = decodeURIComponent(location.hash.slice(1)).split("/");
     if (!SCHOOLS.some((s) => s.k === sc)) return false;
     school = sc;
+    const f = rest.find((p) => p && !isPart(p));
+    const p = rest.find(isPart);
     store.set("st-school", school);
     store.set(key("st-grade"), (f || "all").replace(/^grade-/, ""));
+    store.set(key("st-sec"), p ? p.replace(/^revision-/, "") : "subjects");
     return true;
   }
-  function toHash() {
+  // the address of part k (subjects, games, t1 …) with the school and grade filter
+  function hashFor(k) {
     const f = grade === "all" ? "" : "/" + (SCH.by ? grade : "grade-" + grade);
-    history.replaceState(null, "", "#" + school + f);
+    const p =
+      k === "subjects" ? "" : "/" + k.replace(/^t(\d+)$/, "revision-t$1");
+    return "#" + school + f + p;
   }
   function useSchool() {
     SCH = SCHOOLS.find((s) => s.k === school);
@@ -193,7 +201,6 @@
       }),
   );
   function draw() {
-    toHash();
     document.getElementById("filters").innerHTML = ["all", ...grades]
       .map((v) => {
         const n =
@@ -278,8 +285,11 @@
       })
       .filter((p) => p.k !== "games" || p.n); // a school without Games cards: no Games button
     const all = parts.map((p) => p.k);
+    if (!all.includes(sec)) sec = "subjects";
+    history.replaceState(null, "", hashFor(sec));
     Kit.sideNav(document.getElementById("list"), parts, {
       open: sec,
+      href: hashFor,
       pick(k) {
         const dir = all.indexOf(k) > all.indexOf(sec) ? 1 : -1;
         sec = k;

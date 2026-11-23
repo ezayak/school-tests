@@ -371,6 +371,7 @@ window.Kit = (function () {
   // Landscape tablet: a bar on the left; phone or portrait: a row of tabs on top. Only one section: no bar.
   // opt = {open, pick}: the page keeps the open section itself (the home page, whose address holds the school and grade):
   // open = the key of the open section, a tap calls pick(key); no URL, no memory, no hashchange listener.
+  // opt.href(key) (optional): the link of each button, so it can be copied (the home page: #sjas/grade-4/revision-t2).
   function sideNav(host, secs, opt) {
     const key = "snav:" + location.pathname;
     secs = secs.filter(Boolean);
@@ -403,7 +404,7 @@ window.Kit = (function () {
     host.innerHTML = `<div class="snav-wrap"><nav class="snav" aria-label="Sections">${secs
       .map(
         (s) =>
-          `<a href="#${esc(s.k)}" data-sec="${esc(s.k)}"><span class="si" aria-hidden="true">${esc(s.ic || "")}</span><span class="st">${esc(s.t)}${s.ar ? `<span class="sa ar" dir="rtl">${esc(s.ar)}</span>` : ""}</span>${s.n != null ? `<span class="sn">${esc(s.n)}</span>` : ""}</a>`,
+          `<a href="${esc(opt && opt.href ? opt.href(s.k) : "#" + s.k)}" data-sec="${esc(s.k)}"><span class="si" aria-hidden="true">${esc(s.ic || "")}</span><span class="st">${esc(s.t)}${s.ar ? `<span class="sa ar" dir="rtl">${esc(s.ar)}</span>` : ""}</span>${s.n != null ? `<span class="sn">${esc(s.n)}</span>` : ""}</a>`,
       )
       .join("")}</nav><div class="snav-panel"></div></div>`;
     const panel = host.querySelector(".snav-panel");
