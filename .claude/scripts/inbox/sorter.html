@@ -1117,25 +1117,36 @@
         flex: 1;
         min-height: 0;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 300px;
-        grid-template-rows: auto auto 1fr;
+        grid-template-columns: minmax(0, 1fr) 320px;
         border: 0;
         border-radius: 0;
         box-shadow: none;
       }
       #big .page .thumb {
-        grid-column: 1;
-        grid-row: 1 / span 3;
         min-height: 0;
         background: var(--bg);
       }
-      #big .page .checks,
-      #big .page .chips,
-      #big .page .extra {
-        grid-column: 2;
+      #big .side {
+        min-height: 0;
+        overflow-y: auto;
+      }
+      #big .side h3 {
+        margin: 0;
+        padding: 14px 16px 6px;
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      #big .side .fields {
+        padding: 0 16px 16px;
+        border-bottom: 1px solid var(--line);
+      }
+      #big .side .fields textarea {
+        height: 72px;
       }
       #big .page .checks {
-        padding: 12px 16px;
+        padding: 6px 16px 12px;
       }
       #big .page.picked .checks {
         background: var(--accent-soft);
@@ -1209,14 +1220,8 @@
           grid-template-rows: 60vh;
           overflow-y: auto;
         }
-        #big .page .thumb {
-          grid-row: 1;
-        }
-        #big .page .checks,
-        #big .page .chips,
-        #big .page .extra {
-          grid-column: 1;
-          grid-row: auto;
+        #big .side {
+          overflow: visible;
         }
       }
     </style>
@@ -1869,35 +1874,6 @@
         ]
           .filter(Boolean)
           .join(" · ");
-        const kind = $("select", {
-          onchange: (e) => {
-            f.note.kind = e.target.value;
-            card.classList.toggle("skipped", f.note.kind === "skip");
-            save(f.file);
-          },
-        });
-        for (const [v, t] of KINDS) {
-          const o = $("option", { value: v, text: t });
-          if ((f.note.kind || "") === v) o.selected = true;
-          kind.append(o);
-        }
-        const target = $("input", {
-          list: "targets",
-          placeholder: "e.g. Lesson 4-3, Unit 2 Week 5",
-          value: f.note.target || "",
-          oninput: (e) => {
-            f.note.target = e.target.value;
-            save(f.file);
-          },
-        });
-        const text = $("textarea", {
-          placeholder: "What the teacher said, words you can read…",
-          oninput: (e) => {
-            f.note.text = e.target.value;
-            save(f.file);
-          },
-        });
-        text.value = f.note.text || "";
         card.append(
           $(
             "div",
@@ -1912,12 +1888,8 @@
               class: "meta",
               text: f.file.split("/").slice(0, -1).join(" / ") + " · " + meta,
             }),
-            $(
-              "div",
-              { class: "fields" },
-              $("label", {}, "Goes to", target),
-              $("label", {}, "What is it?", kind),
-              $("label", { class: "wide" }, "Note for Claude", text),
+            fileFields(f, () =>
+              card.classList.toggle("skipped", f.note.kind === "skip"),
             ),
           ),
         );
@@ -1992,6 +1964,46 @@
           );
         }
         return card;
+      }
+
+      // A file's Goes to / What is it? / Note for Claude, on its card and in the page popup. onKind: after the kind changes.
+      function fileFields(f, onKind = () => {}) {
+        const kind = $("select", {
+          onchange: (e) => {
+            f.note.kind = e.target.value;
+            onKind();
+            save(f.file);
+          },
+        });
+        for (const [v, t] of KINDS) {
+          const o = $("option", { value: v, text: t });
+          if ((f.note.kind || "") === v) o.selected = true;
+          kind.append(o);
+        }
+        const target = $("input", {
+          list: "targets",
+          placeholder: "e.g. Lesson 4-3, Unit 2 Week 5",
+          value: f.note.target || "",
+          oninput: (e) => {
+            f.note.target = e.target.value;
+            save(f.file);
+          },
+        });
+        const text = $("textarea", {
+          placeholder: "What the teacher said, words you can read…",
+          oninput: (e) => {
+            f.note.text = e.target.value;
+            save(f.file);
+          },
+        });
+        text.value = f.note.text || "";
+        return $(
+          "div",
+          { class: "fields" },
+          $("label", {}, "Goes to", target),
+          $("label", {}, "What is it?", kind),
+          $("label", { class: "wide" }, "Note for Claude", text),
+        );
       }
 
       // big: the box drawn in the page's popup (the picture doesn't open it again)
@@ -2160,6 +2172,17 @@
         });
         close.innerHTML = ICON_CLOSE;
         const box = pageBox(f, pic, n, () => {}, true);
+        // One column beside the picture: the file's fields, then the page's own controls (moved from its box)
+        box.append(
+          $(
+            "div",
+            { class: "side" },
+            $("h3", { text: "File" }),
+            fileFields(f),
+            $("h3", { text: "Page" }),
+            ...box.querySelectorAll(".checks, .chips, .extra"),
+          ),
+        );
         const thumb = box.querySelector(".thumb");
         thumb.append(
           arrow(-1, "prev", "Previous page", "‹"),
