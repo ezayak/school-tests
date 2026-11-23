@@ -21,6 +21,7 @@ nothing ticked = all new files of the subject), then in the **Build** panel (on 
 **Build lesson** button in the bar at the bottom opens it) choose New lesson / Update a lesson, write which lesson
 and, if needed, what to do, and press **Create / Update lesson**. `build.py` (below) runs it and "Recent builds" shows Waiting → Building → Checking → Live / Failed;
 the same result comes on Telegram with the commit link. Used pages are unticked and marked "used: <lesson>".
+The Build card and "Recent builds" each have a **⤢** button that opens them full screen (**✕** or Esc closes).
 
 ## The sorting page
 
