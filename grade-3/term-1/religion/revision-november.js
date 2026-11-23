@@ -16,6 +16,7 @@ window.LESSON = {
     ["index.html", "Religion lessons"],
   ],
   tapq: true,
+  checkq: true,
   tabs: [
     {
       k: "choose",

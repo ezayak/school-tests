@@ -22,7 +22,7 @@ Sorting:
 
 What to build: `uN-lesson-M.js` + `uN-lesson-M.html` (`node .claude/scripts/scaffold/new.js grade-3/term-1/religion/uN-lesson-M.html --like grade-3/term-1/religion/u2-lesson-4.html --title "…"`, then `format.js` on the new page for the item format), pictures in `img/uN-lesson-M/` (`pdftoppm -r 300`, then PIL; story ~700px, small activity pictures ~300px).
 
-- `n: "rel-uNlM"`, `tapq: true`, `links` back to "Religion lessons", `tabs`: story · games · verse, plus hw only when there is real homework for this lesson.
+- `n: "rel-uNlM"`, `tapq: true`, `checkq: true` (Check button, the answer read aloud), `links` back to "Religion lessons", `tabs`: story · games · verse, plus hw only when there is real homework for this lesson.
 - Story: the book text word for word in short parts (one picture each, reuse a picture for two parts if needed); the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.
 - Games: every activity of the lesson, one section each, plus the lesson's أسئلة الدرس (unless it is the homework).
   Every section's `en` / `uk` starts with its book page: "Activity 2 (p. 8): …" / "Завдання 2 (с. 8): …", "Lesson questions (p. 9): …".

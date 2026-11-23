@@ -804,3 +804,9 @@ body {
 .opts.where {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+/* L.checkq: the option picked before Check */
+.opt.sel,
+.tfbtn.sel {
+  background: var(--hl);
+  color: #1b2440;
+}
