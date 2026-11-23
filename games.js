@@ -364,6 +364,20 @@ window.GAMES = [
     // the page and pictures are offline through the Grade 3 Français entry's "also"
   },
   {
+    grade: 3,
+    term: 2,
+    period: "Mid-term exam",
+    subject: "Social Studies",
+    title: "Explorers Quest",
+    lesson: "Ch. 3 L2 · Early Explorers · slides + Graded Homework 1",
+    topics:
+      "Columbus, Amerigo Vespucci, Louis Jolliet, John Cabot · Spain, France and England · spices, gold, wealth, fur traders",
+    path: "grade-3/term-2/social-studies/revision-1.html",
+    questions: 39,
+    year: "2026–2027",
+    // the page is offline through the Grade 3 Social Studies entry's "also" (pictures: the lesson's)
+  },
+  {
     grade: 4,
     term: 1,
     period: "Mid-term exam",
@@ -2806,7 +2820,7 @@ window.GAMES = [
     topics:
       "Ch. 3 · Early Explorers: Columbus, Amerigo Vespucci, Louis Jolliet, John Cabot · Spain, France and England",
     path: "grade-3/social-studies/index.html",
-    countLabel: "1 lesson · Chapter 3",
+    countLabel: "1 lesson · Chapter 3 · 1 revision",
     year: "2026–2027",
     also: [
       "grade-3/social-studies/lessons.js",
@@ -2844,6 +2858,8 @@ window.GAMES = [
       "grade-3/social-studies/chapter-3/img/lesson-2/world-map.jpg",
       "grade-3/social-studies/chapter-3/lesson-2.html",
       "grade-3/social-studies/chapter-3/lesson-2.js",
+      "grade-3/term-2/social-studies/revision-1.html",
+      "grade-3/term-2/social-studies/revision-1.js",
     ],
   },
   {
