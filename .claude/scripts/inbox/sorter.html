@@ -15,27 +15,51 @@
     <!-- A tool page served by sorter.py, not part of the app: its styles stay here. -->
     <style>
       :root {
-        --bg: #f6f5f2;
+        --bg: #f4f3ef;
         --card: #fff;
-        --ink: #1f2328;
-        --muted: #6b7280;
-        --line: #dedbd5;
-        --accent: #2563eb;
-        --skip: #9ca3af;
-        --ans: #16a34a;
-        --other: #d97706;
+        --soft: #fafaf8;
+        --ink: #1b1b1a;
+        --ink2: #3a3936;
+        --muted: #5f5e5a;
+        --line: #e2e0da;
+        --line2: #efeeea;
+        --field: #c9c6be;
+        --accent: #1f4fd1;
+        --accent-soft: #e8eefc;
+        --use: #1e6b3a;
+        --use-soft: #e3f2e7;
+        --skip: #5f5e5a;
+        --ans: #a85400;
+        --other: #5b3fa8;
+        --later: #6b4e00;
+        --later-soft: #fff1c2;
+        --fix: #8a4200;
+        --fix-soft: #fdefd9;
+        --fix-line: #f1d2a6;
       }
       @media (prefers-color-scheme: dark) {
         :root {
           --bg: #17181b;
           --card: #222327;
+          --soft: #1c1d20;
           --ink: #e8e6e3;
+          --ink2: #c9c7c3;
           --muted: #9aa0a6;
           --line: #3a3b40;
+          --line2: #2e2f33;
+          --field: #4a4b50;
           --accent: #7aa2ff;
-          --skip: #6b7280;
-          --ans: #4ade80;
-          --other: #fbbf24;
+          --accent-soft: #24304d;
+          --use: #4ade80;
+          --use-soft: #1d3326;
+          --skip: #8b9097;
+          --ans: #f59e4b;
+          --other: #a78bfa;
+          --later: #f5d36b;
+          --later-soft: #3a3115;
+          --fix: #f5a65b;
+          --fix-soft: #3a2a17;
+          --fix-line: #5c4123;
         }
       }
       * {
@@ -46,7 +70,7 @@
         background: var(--bg);
         color: var(--ink);
         font:
-          15px/1.4 system-ui,
+          15px/1.45 system-ui,
           sans-serif;
       }
       header {
@@ -56,61 +80,145 @@
         display: flex;
         gap: 12px;
         align-items: center;
-        padding: 10px 16px;
+        padding: 10px 24px;
+        min-height: 56px;
         background: var(--card);
         border-bottom: 1px solid var(--line);
       }
       header h1 {
         font-size: 17px;
         margin: 0;
-        flex: 1;
       }
-      #saved {
+      #totals {
+        flex: 1;
         color: var(--muted);
         font-size: 13px;
       }
+      #saved {
+        color: var(--use);
+        font-size: 13px;
+        font-weight: 600;
+      }
       .wrap {
         display: flex;
-        gap: 16px;
-        padding: 16px;
+        gap: 24px;
+        padding: 24px;
+        align-items: flex-start;
       }
       nav {
-        flex: 0 0 210px;
+        flex: 0 0 240px;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 20px;
+      }
+      .kid {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .kid h3 {
+        margin: 0;
+        padding: 0 8px 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink2);
+      }
+      .kid h3 span {
+        width: 26px;
+        height: 26px;
+        border-radius: 13px;
+        background: var(--ink);
+        color: var(--bg);
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       nav button {
+        min-height: 52px;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
         text-align: left;
-        padding: 9px 10px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--card);
+        border: 2px solid transparent;
+        border-radius: 10px;
+        background: none;
         color: var(--ink);
         font: inherit;
+        font-weight: 600;
         cursor: pointer;
       }
       nav button.on {
+        background: var(--card);
         border-color: var(--accent);
-        box-shadow: inset 3px 0 0 var(--accent);
       }
       nav small {
-        color: var(--muted);
         display: block;
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--muted);
+      }
+      nav small.ok {
+        color: var(--use);
+        font-weight: 600;
+      }
+      nav small.fix {
+        color: var(--fix);
+        font-weight: 600;
+      }
+      .count {
+        flex: none;
+        min-width: 28px;
+        height: 22px;
+        padding: 0 8px;
+        border-radius: 11px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       main {
         flex: 1;
         min-width: 0;
       }
+      main > h1 {
+        margin: 0 0 16px;
+        font-size: 24px;
+      }
       @media (max-width: 760px) {
+        header {
+          padding: 10px 16px;
+        }
         .wrap {
           flex-direction: column;
           padding: 12px 16px;
+          gap: 16px;
         }
         nav {
           flex: none;
+          align-self: stretch;
           flex-direction: row;
+          gap: 12px;
           overflow-x: auto;
+        }
+        .kid {
+          flex-direction: row;
+          align-items: center;
+        }
+        .kid h3 {
+          padding: 0;
+        }
+        .kid h3 b {
+          display: none;
         }
         nav button {
           flex: 0 0 auto;
@@ -119,15 +227,18 @@
       .file {
         background: var(--card);
         border: 1px solid var(--line);
-        border-radius: 10px;
-        padding: 12px;
-        margin-bottom: 14px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        overflow: hidden;
       }
       .file.skipped {
         opacity: 0.55;
       }
+      .file .head {
+        padding: 16px 20px;
+      }
       .file h2 {
-        font-size: 15px;
+        font-size: 16px;
         margin: 0 0 2px;
         overflow-wrap: anywhere;
       }
@@ -136,54 +247,105 @@
         font-size: 13px;
         margin-bottom: 8px;
       }
-      .row {
+      .fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+      }
+      .fields label {
         display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 8px;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink2);
       }
       input,
       select,
       textarea {
         font: inherit;
+        font-size: 14px;
+        font-weight: 400;
         color: var(--ink);
-        background: var(--bg);
-        border: 1px solid var(--line);
-        border-radius: 6px;
-        padding: 6px 8px;
-      }
-      .row input {
-        flex: 1 1 180px;
+        background: var(--card);
+        border: 1px solid var(--field);
+        border-radius: 8px;
+        padding: 0 12px;
+        min-height: 40px;
+        min-width: 0;
       }
       textarea {
         width: 100%;
-        min-height: 36px;
+        padding: 9px 12px;
         resize: vertical;
+      }
+      .fields textarea {
+        min-height: 40px;
+        height: 40px;
+      }
+      .ticks {
+        padding: 12px 20px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        background: var(--soft);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .ticks button {
+        font: inherit;
+        min-height: 36px;
+        padding: 0 12px;
+        border-radius: 8px;
+        border: 1px solid var(--field);
+        background: var(--card);
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .ticks .n-pick {
+        color: var(--accent);
+      }
+      .ticks .n-keep {
+        color: var(--later);
       }
       .pages {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 10px;
-        margin-top: 8px;
+        grid-template-columns: repeat(auto-fill, minmax(172px, 1fr));
+        gap: 14px;
+        padding: 16px 20px 20px;
       }
       .page {
-        border: 2px solid var(--line);
-        border-radius: 8px;
-        padding: 4px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
       }
-      .page[data-s="skip"] {
-        border-color: var(--skip);
+      .page.picked {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px var(--accent);
       }
-      .page[data-s="skip"] img {
-        opacity: 0.35;
+      .page .checks {
+        padding: 6px 10px;
+        border-bottom: 1px solid var(--line2);
       }
-      .page[data-s="answers"] {
-        border-color: var(--ans);
+      .page .checks .pick {
+        min-height: 32px;
+        margin: 0;
       }
-      .page[data-s="other"] {
-        border-color: var(--other);
+      .page .checks .keep input {
+        accent-color: var(--later);
+      }
+      .page .thumb {
+        position: relative;
+        padding: 8px;
       }
       .page img {
+        display: block;
         width: 100%;
         height: 170px;
         object-fit: contain;
@@ -191,79 +353,134 @@
         background: #fff;
         border-radius: 4px;
       }
+      .page[data-s="skip"] img {
+        opacity: 0.35;
+      }
+      .tag {
+        position: absolute;
+        top: 12px;
+        padding: 2px 8px;
+        border-radius: 99px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .tag.role {
+        left: 12px;
+        color: #fff;
+        background: var(--use);
+      }
+      .page[data-s="skip"] .tag.role {
+        background: var(--skip);
+      }
+      .page[data-s="answers"] .tag.role {
+        background: var(--ans);
+      }
+      .page[data-s="other"] .tag.role {
+        background: var(--other);
+      }
+      .tag.later {
+        right: 12px;
+        color: var(--later);
+        background: var(--later-soft);
+      }
       .page .n {
+        padding: 0 10px 6px;
         font-size: 12px;
-        color: var(--muted);
+        font-weight: 600;
+        color: var(--ink2);
       }
       .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 3px;
-        margin: 4px 0;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        padding: 0 8px 8px;
       }
       .chips button {
-        font: 12px system-ui;
-        padding: 3px 6px;
-        border-radius: 99px;
+        font: 600 12px system-ui;
+        min-height: 36px;
+        padding: 0 2px;
+        white-space: nowrap;
+        border-radius: 6px;
         border: 1px solid var(--line);
-        background: none;
-        color: var(--ink);
+        background: var(--card);
+        color: var(--ink2);
         cursor: pointer;
       }
       .chips button.on {
-        background: var(--accent);
-        border-color: var(--accent);
+        --c: var(--use);
+        background: var(--c);
+        border-color: var(--c);
         color: #fff;
       }
-      .page input,
-      .page textarea {
-        width: 100%;
+      .chips button.on[data-v="skip"] {
+        --c: var(--skip);
+      }
+      .chips button.on[data-v="answers"] {
+        --c: var(--ans);
+      }
+      .chips button.on[data-v="other"] {
+        --c: var(--other);
+      }
+      .page .extra {
+        padding: 0 8px 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .page .extra textarea {
         font-size: 13px;
-        margin-top: 3px;
+        min-height: 36px;
+      }
+      .single {
+        padding: 12px 20px 16px;
       }
       .btn {
         font: inherit;
-        padding: 6px 12px;
-        border-radius: 6px;
+        font-weight: 600;
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 8px;
         border: 1px solid var(--accent);
         background: var(--accent);
         color: #fff;
         cursor: pointer;
       }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .row input {
+        flex: 1 1 180px;
+      }
+      .pad {
+        padding: 16px 20px;
+      }
+      .btn.plain {
+        border-color: var(--field);
+        background: var(--card);
+        color: var(--ink);
+      }
       .empty {
         color: var(--muted);
         padding: 30px 0;
       }
-      .page.picked {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 2px var(--accent);
-      }
       .pick {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         font-size: 13px;
+        font-weight: 500;
         cursor: pointer;
         margin-bottom: 3px;
       }
       .pick input {
         width: 20px;
         height: 20px;
+        min-height: 0;
         margin: 0;
-      }
-      .ticks {
-        display: flex;
-        gap: 6px;
-        margin-top: 8px;
-      }
-      .ticks button {
-        font: 13px system-ui;
-        padding: 4px 10px;
-        border-radius: 6px;
-        border: 1px solid var(--line);
-        background: none;
-        color: var(--ink);
-        cursor: pointer;
+        accent-color: var(--accent);
       }
       .build {
         position: sticky;
@@ -319,6 +536,7 @@
   <body>
     <header>
       <h1>📥 School inbox</h1>
+      <span id="totals"></span>
       <span id="saved"></span>
     </header>
     <div class="wrap">
@@ -403,11 +621,36 @@
       function render() {
         const nav = document.getElementById("nav");
         nav.replaceChildren();
+        const kids = {};
         for (const s of data.subjects) {
+          if (!kids[s.kid]) {
+            kids[s.kid] = $(
+              "div",
+              { class: "kid" },
+              $(
+                "h3",
+                {},
+                $("span", { text: s.kid.charAt(0) }),
+                $("b", { text: s.kid }),
+              ),
+            );
+            nav.append(kids[s.kid]);
+          }
           const sorted = s.files.filter(
             (f) => f.note.kind || f.note.target,
           ).length;
-          nav.append(
+          // One line under the subject name: what to do next there
+          const state = s.reviews.length
+            ? [`${s.reviews.length} to fix`, "fix"]
+            : s.ready
+              ? ["Ready to build", "ok"]
+              : s.files.some((f) => !f.pictures.length && f.ext === "pdf")
+                ? ["Needs page pictures", ""]
+                : sorted
+                  ? [`${sorted} of ${s.files.length} sorted`, ""]
+                  : ["Not sorted yet", ""];
+          if (s.reviews.length && sorted) state[0] += ` · ${sorted} sorted`;
+          kids[s.kid].append(
             $(
               "button",
               {
@@ -417,22 +660,29 @@
                   render();
                 },
               },
-              `${s.kid} · ${s.name}`,
-              $("small", {
-                text: [
-                  s.files.length &&
-                    `${s.files.length} new · ${sorted} sorted${s.ready ? " · ready" : ""}`,
-                  s.reviews.length && `✎ ${s.reviews.length} to fix`,
-                ]
-                  .filter(Boolean)
-                  .join(" · "),
-              }),
+              $(
+                "span",
+                {},
+                s.name,
+                $("small", { class: state[1], text: state[0] }),
+              ),
+              s.files.length
+                ? $("span", { class: "count", text: s.files.length })
+                : "",
             ),
           );
         }
+        const all = (k) => data.subjects.reduce((n, s) => n + s[k].length, 0);
+        document.getElementById("totals").textContent = [
+          `${all("files")} new files`,
+          all("reviews") && `${all("reviews")} to fix`,
+        ]
+          .filter(Boolean)
+          .join(" · ");
         const main = document.getElementById("main");
         main.replaceChildren();
         const s = data.subjects.find((x) => x.id === current);
+        if (s) main.append($("h1", { text: `${s.kid} · ${s.name}` }));
         if (data.otherReviews.length)
           main.append(
             $("p", {
@@ -551,7 +801,7 @@
         label();
         return $(
           "section",
-          { class: "file" },
+          { class: "file pad" },
           $("h2", { text: "✎ Review notes to fix" }),
           ...list,
           text,
@@ -720,7 +970,7 @@
         }
         const target = $("input", {
           list: "targets",
-          placeholder: "Goes to (e.g. Lesson 4-3, Unit 2 Week 5)",
+          placeholder: "e.g. Lesson 4-3, Unit 2 Week 5",
           value: f.note.target || "",
           oninput: (e) => {
             f.note.target = e.target.value;
@@ -728,8 +978,7 @@
           },
         });
         const text = $("textarea", {
-          placeholder:
-            "Note for Claude (what the teacher said, words you can read, …)",
+          placeholder: "What the teacher said, words you can read…",
           oninput: (e) => {
             f.note.text = e.target.value;
             save(f.file);
@@ -737,42 +986,67 @@
         });
         text.value = f.note.text || "";
         card.append(
-          $("h2", { text: name, dir: "auto" }),
-          $("div", {
-            class: "meta",
-            text: f.file.split("/").slice(0, -1).join(" / ") + " · " + meta,
-          }),
-          $("div", { class: "row" }, target, kind),
-          text,
+          $(
+            "div",
+            { class: "head" },
+            $("h2", { text: name, dir: "auto" }),
+            $("div", {
+              class: "meta",
+              text: f.file.split("/").slice(0, -1).join(" / ") + " · " + meta,
+            }),
+            $(
+              "div",
+              { class: "fields" },
+              $("label", {}, "Goes to", target),
+              $("label", {}, "What is it?", kind),
+              $("label", {}, "Note for Claude", text),
+            ),
+          ),
         );
         if (f.pictures.length) {
           const grid = $("div", { class: "pages" });
-          f.pictures.forEach((pic, i) => grid.append(pageBox(f, pic, i + 1)));
-          if (f.pictures.length > 1) {
-            const tickAll = (on) => {
-              f.pictures.forEach((_, i) => {
-                const pn = f.note.pages[i + 1] || (f.note.pages[i + 1] = {});
-                pn.pick = on;
-              });
-              save(f.file);
-              render();
-            };
-            card.append(
-              $(
-                "div",
-                { class: "ticks" },
-                $("button", {
-                  text: "☑ Tick all",
-                  onclick: () => tickAll(true),
-                }),
-                $("button", {
-                  text: "☐ Tick none",
-                  onclick: () => tickAll(false),
-                }),
-              ),
-            );
-          }
-          card.append(grid);
+          // The bar above the pages: tick all / none and how many are ticked or kept
+          const nPick = $("span", { class: "n-pick" });
+          const nKeep = $("span", { class: "n-keep" });
+          const recount = () => {
+            const ps = Object.values(f.note.pages);
+            nPick.textContent = `${ps.filter((p) => p.pick).length} for this lesson`;
+            const k = ps.filter((p) => p.keep).length;
+            nKeep.textContent = k ? `${k} kept for later` : "";
+          };
+          f.pictures.forEach((pic, i) =>
+            grid.append(pageBox(f, pic, i + 1, recount)),
+          );
+          const tickAll = (on) => {
+            f.pictures.forEach((_, i) => {
+              const pn = f.note.pages[i + 1] || (f.note.pages[i + 1] = {});
+              pn.pick = on;
+            });
+            save(f.file);
+            render();
+          };
+          recount();
+          card.append(
+            $(
+              "div",
+              { class: "ticks" },
+              f.pictures.length > 1
+                ? $("button", {
+                    text: "☑ Tick all",
+                    onclick: () => tickAll(true),
+                  })
+                : "",
+              f.pictures.length > 1
+                ? $("button", {
+                    text: "☐ Tick none",
+                    onclick: () => tickAll(false),
+                  })
+                : "",
+              nPick,
+              nKeep,
+            ),
+            grid,
+          );
         } else if (f.ext !== "pdf") {
           // A video or photo has no page pictures: one tick for the whole file (kept as page 1)
           const pn = f.note.pages[1] || (f.note.pages[1] = {});
@@ -787,17 +1061,21 @@
           tick.checked = !!pn.pick;
           card.append(
             $(
-              "label",
-              { class: "pick" },
-              tick,
-              pn.used ? `Use again (used: ${pn.used})` : "Use for the lesson",
+              "div",
+              { class: "single" },
+              $(
+                "label",
+                { class: "pick" },
+                tick,
+                pn.used ? `Use again (used: ${pn.used})` : "Use for the lesson",
+              ),
             ),
           );
         }
         return card;
       }
 
-      function pageBox(f, pic, n) {
+      function pageBox(f, pic, n, recount) {
         const pn = f.note.pages[n] || (f.note.pages[n] = {});
         const box = $("div", {
           class: "page" + (pn.pick ? " picked" : ""),
@@ -810,27 +1088,40 @@
             box.classList.toggle("picked", pn.pick);
             save(f.file);
             updateBuild();
+            recount();
           },
         });
         tick.checked = !!pn.pick;
-        box.append(
-          $(
-            "label",
-            { class: "pick" },
-            tick,
-            pn.used ? `Use again (used: ${pn.used})` : "Use for the lesson",
-          ),
-        );
+        const later = $("span", { class: "tag later", text: "Later" });
+        later.hidden = !pn.keep;
         const keep = $("input", {
           type: "checkbox",
           onchange: (e) => {
             pn.keep = e.target.checked;
+            later.hidden = !pn.keep;
             save(f.file);
+            recount();
           },
         });
         keep.checked = !!pn.keep;
-        box.append($("label", { class: "pick" }, keep, "📌 Keep for later"));
-        const extra = $("div");
+        box.append(
+          $(
+            "div",
+            { class: "checks" },
+            $(
+              "label",
+              { class: "pick" },
+              tick,
+              pn.used ? `Use again (used: ${pn.used})` : "Use for the lesson",
+            ),
+            $("label", { class: "pick keep" }, keep, "Keep for later"),
+          ),
+        );
+        const role = $("span", { class: "tag role" });
+        const showRole = () =>
+          (role.textContent = STATES.find((x) => x[0] === (pn.s || ""))[1]);
+        showRole();
+        const extra = $("div", { class: "extra" });
         const drawExtra = () => {
           extra.replaceChildren();
           if (pn.s === "other")
@@ -860,15 +1151,17 @@
           chips.append(
             $("button", {
               class: (pn.s || "") === v ? "on" : "",
+              "data-v": v,
+              "aria-pressed": (pn.s || "") === v,
               text: t,
               onclick: () => {
                 pn.s = v;
                 box.dataset.s = v;
-                chips
-                  .querySelectorAll("button")
-                  .forEach((b, i) =>
-                    b.classList.toggle("on", STATES[i][0] === v),
-                  );
+                chips.querySelectorAll("button").forEach((b, i) => {
+                  b.classList.toggle("on", STATES[i][0] === v);
+                  b.setAttribute("aria-pressed", STATES[i][0] === v);
+                });
+                showRole();
                 drawExtra();
                 save(f.file);
               },
@@ -877,16 +1170,22 @@
         }
         drawExtra();
         box.append(
-          $("img", {
-            src: "/img/" + pic.split("/").map(encodeURIComponent).join("/"),
-            loading: "lazy",
-            alt: "page " + n,
-            onclick: (e) => {
-              const big = document.getElementById("big");
-              big.querySelector("img").src = e.target.src;
-              big.style.display = "flex";
-            },
-          }),
+          $(
+            "div",
+            { class: "thumb" },
+            $("img", {
+              src: "/img/" + pic.split("/").map(encodeURIComponent).join("/"),
+              loading: "lazy",
+              alt: "page " + n,
+              onclick: (e) => {
+                const big = document.getElementById("big");
+                big.querySelector("img").src = e.target.src;
+                big.style.display = "flex";
+              },
+            }),
+            role,
+            later,
+          ),
           $("div", {
             class: "n",
             text: f.pictures.length > 1 ? "Page " + n : "",
