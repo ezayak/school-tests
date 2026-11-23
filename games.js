@@ -539,6 +539,32 @@ window.GAMES = [
   },
   {
     grade: 4,
+    term: 2,
+    period: "Mid-term exam",
+    subject: "Religion",
+    title: "Religion Revision",
+    lesson:
+      "مُرَاجَعَةُ شَهْرِ نُوفَمْبِرَ · Revision November, Unit 2: memory verses and lessons 3–5",
+    topics:
+      "Simeon and Luke 2:25–32, the five memory verses, Elijah and the rain, Deborah and Barak, Saint Abanoub, Zacchaeus the tax collector · choose, true or false, complete, who said it, who am I, match, answer · 12 golden verses",
+    path: "grade-4/term-2/religion/revision-november.html",
+    questions: 101,
+    year: "2026–2027",
+    // Grade 4 Religion has no subject entry yet: the page's files are in this card's own "also"
+    also: [
+      "grade-4/term-2/religion/revision-november.js",
+      "grade-4/term-2/religion/img/revision-november/angel.jpg",
+      "grade-4/term-2/religion/img/revision-november/john-lamb.jpg",
+      "grade-4/term-2/religion/img/revision-november/kids.jpg",
+      "grade-4/term-2/religion/img/revision-november/lamb.jpg",
+      "grade-4/term-2/religion/img/revision-november/zacchaeus-call.jpg",
+      "grade-4/term-2/religion/img/revision-november/zacchaeus-climb.jpg",
+      "grade-4/term-2/religion/img/revision-november/zacchaeus-jericho.jpg",
+      "grade-4/term-2/religion/img/revision-november/zacchaeus-repent.jpg",
+    ],
+  },
+  {
+    grade: 4,
     term: 1,
     period: "Final exam",
     subject: "Math",
