@@ -49,6 +49,7 @@ That press is the approval: do not ask questions, do not wait for approval, do n
   checks the commits and pushes them itself.
 - Change only the subject's lesson files, games.js, sw.js and done.txt. Never change an engine, shared/, a skill or
   CLAUDE.md: if the lesson needs that, build what you can without it and say so at the end.
+- A revision (the file's kind is `revision`, or the job is a revision / review): also the `revision` skill.
 - When ticked pages are given, use only those. Run `inbox.py done` only for files that are used up:
   a big file (a book) of which only some pages were ticked stays in the inbox.
 - A «Fix notes» job: fix only the review notes given, as in a «fix review notes» session (the subject's skill),

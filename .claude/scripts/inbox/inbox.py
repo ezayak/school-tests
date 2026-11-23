@@ -52,7 +52,10 @@ HINTS = [
 ]
 KINDS = [
     (r"\blivre p\.|cahier d.exercices|^le[cç]on\b", "slides"),
-    (r"model answer|mod[eè]le de r[eé]ponse|answer key|memo", "key"),
+    (r"model answer|mod[eè]le de r[eé]ponse|answer key|نموذج (حل|ا[جإ]ابة)|حل المراجعة", "key"),
+    # before "memo" and "test": "Memo for MidTerm Exam", "Exercices d'application de mi-terme", "MidTerm.pdf" are revisions
+    (r"revision|r[eé]vision|مراجعة|exercices d.applica|\bexam\b.*memo|memo.*\bexam|mid.?term|final.?term|\bmidt\b|\breview\b", "revision"),
+    (r"memo", "key"),
     (r"devoir|\bhw\b|homework|واجب", "homework"),
     (r"extra.?practice|practice|تدريبات", "practice"),
     (r"quiz|test|exam|assessment|تقييم", "test"),
@@ -280,6 +283,9 @@ def report(result, other):
         extra = []
         if s["skill"]:
             extra.append(f"skill `{s['skill']}`")
+        # a revision (guessed or set by the parent) is built with the `revision` skill next to the subject's own
+        if any("revision" in (x["kind"], notes.get(x["file"], {}).get("kind")) for x in s["new"]):
+            extra.append("revision files: also skill `revision`")
         extra.append(f"log `{s['log']}`" if s["log"] else "no SOURCES.md")
         if not s["app_exists"]:
             extra.append(f"`{s['app']}` not built yet")

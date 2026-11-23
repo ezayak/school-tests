@@ -42,7 +42,9 @@ On a tablet or phone the page opens on the subject list; tap a subject to sort i
 Per file:
 
 - **Where it goes**: the lesson, e.g. "Lesson 4-3" (the list offers the guesses of `inbox.py` and the lessons already named);
-- **What it is**: Lesson pages / slides, Classwork, Homework, Test / quiz, Answer key / model answers, Video, or Skip: nothing to build;
+- **What it is**: Lesson pages / slides, Classwork, Homework, Test / quiz, Revision / exam memo, Answer key / model answers, Video, or Skip: nothing to build;
+  **Revision** = a teacher's revision sheet (مراجعة), exam practice (Exercices d'application de mi-terme / final), an exam memo (what the exam covers) or the book's chapter / unit review.
+  `inbox.py` guesses it from the name or the first text; a subject with a revision file shows "also skill `revision`" (the `revision` skill, next to the subject's own);
 - **Note**: anything Claude should know (what the teacher said, which exercise is for which day).
 
 A file starts folded (only these fields); **Show N pages ▾** opens its page pictures, **Hide pages ▴** folds it again.
