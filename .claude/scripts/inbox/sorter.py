@@ -97,10 +97,7 @@ def password_ok(header):
 
 
 def load_notes():
-    try:
-        return json.loads(NOTES.read_text())
-    except (OSError, ValueError):
-        return {}
+    return inbox.load_notes()  # moved files keep their notes
 
 
 def save_note(file, note):

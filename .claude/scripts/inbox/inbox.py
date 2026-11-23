@@ -3,6 +3,8 @@
 
 The list of subjects is in subjects.json (add a subject there). A file counts as used when
 its path is in done.txt (every file there when the tool started, plus what was built since).
+A file moved to another folder (at the end of a term into "Term N/") is still used: a used file of the same
+child with the same name counts (the downloader starts every name with the date). Its notes follow it.
 
   inbox.py                    report of the new files (Markdown), grouped by subject
   inbox.py --subject g4-math  only one subject
@@ -90,6 +92,17 @@ def load_done():
     if r.returncode == 0:
         text += "\n" + r.stdout
     return {l.strip() for l in text.splitlines() if l.strip() and not l.startswith("#")}
+
+
+def by_name(r):
+    """The key that finds a moved file again: the child (first folder) and the file name."""
+    parts = r.split("/")
+    return parts[0], parts[-1]
+
+
+def is_used(r, done, done_names):
+    """In done.txt, or moved: a used file of the same child has the same name (done_names = {by_name(d) for d in done})."""
+    return r in done or by_name(r) in done_names
 
 
 def add_done(paths):
@@ -196,6 +209,7 @@ def describe(p, cache):
 
 def scan(only=None):
     done = load_done()
+    done_names = {by_name(d) for d in done}
     cache = json.loads(CACHE_FILE.read_text()) if CACHE_FILE.exists() else {}
     claimed = set()
     result = []
@@ -204,7 +218,7 @@ def scan(only=None):
         claimed |= {rel(p) for p in files}
         if only and s["id"] != only:
             continue
-        new = sorted((p for p in files if rel(p) not in done), key=lambda p: p.name)
+        new = sorted((p for p in files if not is_used(rel(p), done, done_names)), key=lambda p: p.name)
         app = REPO / s["app"]
         result.append(
             {
@@ -225,7 +239,7 @@ def scan(only=None):
     if not only:
         for p in all_files():
             r = rel(p)
-            if r not in claimed and r not in done:
+            if r not in claimed and not is_used(r, done, done_names):
                 folder = "/".join(r.split("/")[:2]) if "/" in r.split("/", 1)[-1] else r.split("/")[0]
                 other.setdefault(folder, 0)
                 other[folder] += 1
@@ -246,10 +260,22 @@ NOTES = Path("~/.local/share/school-inbox/notes.json").expanduser()  # written b
 
 
 def load_notes():
+    """The sorting notes by file path. A note whose file was moved (end of term) is given the new path,
+    found by child and name; it is saved under the new path at the next save (sorter.py, build.py)."""
     try:
-        return json.loads(NOTES.read_text())
+        notes = json.loads(NOTES.read_text())
     except (OSError, ValueError):
         return {}
+    gone = [k for k in notes if not (ROOT / k).exists()]
+    if gone:
+        now = {}
+        for p in all_files():
+            now.setdefault(by_name(rel(p)), []).append(rel(p))
+        for k in gone:
+            there = now.get(by_name(k), [])
+            if len(there) == 1 and there[0] not in notes:
+                notes[there[0]] = notes.pop(k)
+    return notes
 
 
 def note_lines(n):

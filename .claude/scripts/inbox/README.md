@@ -158,6 +158,7 @@ python3 .claude/scripts/inbox/sorter.py --set-password     # in a terminal; then
 - A subject without a `skill` is watched and reported, but «build inbox» and the Build bar have no rules for it yet: build it in a normal session.
 - Not watched: Lucas Math, Optima, Music, Speech, projects.
 - Baseline (2026-11-20): every file there was then counts as used, except `Alex/Arabic/book/`.
+- **Files moved** (e.g. into `Term 2/` at the end of a term) stay used: a used file of the same child with the same name counts, and its sorting notes follow it.
 
 The subjects now:
 
