@@ -194,34 +194,231 @@
         margin: 0 0 16px;
         font-size: 24px;
       }
+      .kid > div {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .banner,
+      .back {
+        display: none;
+      }
+      .notes {
+        background: var(--card);
+        border: 1px solid var(--fix-line);
+        border-radius: 12px;
+        margin-bottom: 16px;
+        overflow: hidden;
+      }
+      .notes .top {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 4px 10px;
+        padding: 12px 20px;
+        background: var(--fix-soft);
+      }
+      .notes h2 {
+        flex: 1 0 auto;
+        margin: 0;
+        font-size: 15px;
+      }
+      .notes .top span {
+        font-size: 13px;
+        color: var(--fix);
+      }
+      .notes .list {
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .note {
+        display: flex;
+        gap: 12px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .note:has(input:checked) {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px var(--accent);
+      }
+      .note input {
+        flex: none;
+        width: 20px;
+        height: 20px;
+        min-height: 0;
+        margin: 2px 0 0;
+        accent-color: var(--accent);
+      }
+      .note > span {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .note b {
+        font-size: 16px;
+      }
+      .note time {
+        margin-left: 10px;
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--muted);
+      }
+      .note .seen {
+        padding: 5px 9px;
+        border-radius: 6px;
+        background: var(--bg);
+        font-size: 12px;
+        color: var(--muted);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .note a {
+        align-self: flex-start;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--accent);
+      }
+      .notes .go {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 12px;
+      }
+      .notes .go label {
+        flex: 1 1 260px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink2);
+      }
+      /* Tablet and phone: two screens, the subject list (no #hash) and one subject (#subject-id) */
+      @media (max-width: 1100px) {
+        .wrap {
+          padding: 20px;
+        }
+        body.list main,
+        body.list #bar {
+          display: none !important;
+        }
+        body:not(.list) nav {
+          display: none;
+        }
+        nav {
+          flex: 1;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          align-items: start;
+          gap: 24px;
+        }
+        .kid {
+          gap: 10px;
+        }
+        .kid h3 {
+          padding: 0 4px;
+        }
+        .kid > div {
+          gap: 0;
+          background: var(--card);
+          border: 1px solid var(--line);
+          border-radius: 12px;
+          overflow: hidden;
+        }
+        .kid button {
+          width: 100%;
+          min-height: 68px;
+          padding: 12px 16px;
+          border: none;
+          border-bottom: 1px solid var(--line2);
+          border-radius: 0;
+          font-size: 17px;
+        }
+        .kid button.on {
+          border-color: var(--line2);
+        }
+        .kid button > span:first-child {
+          flex: 1;
+        }
+        .kid button:last-child {
+          border-bottom: none;
+        }
+        nav small {
+          font-size: 14px;
+        }
+        .kid button::after {
+          content: "›";
+          color: var(--muted);
+          font-size: 22px;
+        }
+        .banner {
+          grid-column: 1 / -1;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          min-height: 64px;
+          padding: 12px 18px;
+          border-radius: 12px;
+          border: 1px solid var(--fix-line);
+          background: var(--fix-soft);
+          color: var(--ink);
+          font: inherit;
+          text-align: left;
+          cursor: pointer;
+        }
+        .banner b {
+          display: block;
+          font-size: 17px;
+        }
+        .banner small {
+          color: var(--fix);
+          font-size: 14px;
+        }
+        .banner::after {
+          content: "Review ›";
+          margin-left: auto;
+          color: var(--fix);
+          font-weight: 600;
+        }
+        .back {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 48px;
+          height: 48px;
+          margin-left: -12px;
+          border: none;
+          background: none;
+          color: var(--ink);
+          font-size: 30px;
+          cursor: pointer;
+        }
+        main > h1 {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+      }
       @media (max-width: 760px) {
         header {
           padding: 10px 16px;
         }
         .wrap {
-          flex-direction: column;
           padding: 12px 16px;
-          gap: 16px;
         }
         nav {
-          flex: none;
-          align-self: stretch;
-          flex-direction: row;
-          gap: 12px;
-          overflow-x: auto;
+          grid-template-columns: 1fr;
         }
-        .kid {
-          flex-direction: row;
-          align-items: center;
-        }
-        .kid h3 {
-          padding: 0;
-        }
-        .kid h3 b {
-          display: none;
-        }
-        nav button {
-          flex: 0 0 auto;
+        .kid button {
+          min-height: 60px;
+          font-size: 16px;
         }
       }
       .file {
@@ -453,9 +650,6 @@
       }
       .row input {
         flex: 1 1 180px;
-      }
-      .pad {
-        padding: 16px 20px;
       }
       .btn.plain {
         border-color: var(--field);
@@ -803,9 +997,24 @@
       async function load() {
         const r = await fetch("/api/inbox");
         data = await r.json();
+        route();
+      }
+
+      // #subject-id in the address: which subject is open. No hash on a tablet or phone: the subject list.
+      function route() {
+        const id = decodeURIComponent(location.hash.slice(1));
+        document.body.classList.toggle("list", !id);
+        sheet(false);
+        if (data.subjects.some((s) => s.id === id)) current = id;
         if (!data.subjects.some((s) => s.id === current))
           current = data.subjects[0]?.id ?? null;
         render();
+      }
+
+      function openSubject(id) {
+        if (location.hash.slice(1) === id) route();
+        else location.hash = id;
+        window.scrollTo(0, 0);
       }
 
       function save(file) {
@@ -848,17 +1057,20 @@
         const kids = {};
         for (const s of data.subjects) {
           if (!kids[s.kid]) {
-            kids[s.kid] = $(
-              "div",
-              { class: "kid" },
+            kids[s.kid] = $("div");
+            nav.append(
               $(
-                "h3",
-                {},
-                $("span", { text: s.kid.charAt(0) }),
-                $("b", { text: s.kid }),
+                "div",
+                { class: "kid" },
+                $(
+                  "h3",
+                  {},
+                  $("span", { text: s.kid.charAt(0) }),
+                  $("b", { text: s.kid }),
+                ),
+                kids[s.kid],
               ),
             );
-            nav.append(kids[s.kid]);
           }
           const sorted = s.files.filter(
             (f) => f.note.kind || f.note.target,
@@ -879,10 +1091,7 @@
               "button",
               {
                 class: s.id === current ? "on" : "",
-                onclick: () => {
-                  current = s.id;
-                  render();
-                },
+                onclick: () => openSubject(s.id),
               },
               $(
                 "span",
@@ -896,6 +1105,25 @@
             ),
           );
         }
+        // Tablet / phone list: a banner on top for the review notes
+        const withNotes = data.subjects.filter((x) => x.reviews.length);
+        if (withNotes.length) {
+          const n = withNotes.reduce((a, x) => a + x.reviews.length, 0);
+          nav.prepend(
+            $(
+              "button",
+              { class: "banner", onclick: () => openSubject(withNotes[0].id) },
+              $(
+                "span",
+                {},
+                $("b", { text: `✎ ${n} note${n === 1 ? "" : "s"} to fix` }),
+                $("small", {
+                  text: withNotes.map((x) => `${x.kid} · ${x.name}`).join(", "),
+                }),
+              ),
+            ),
+          );
+        }
         const all = (k) => data.subjects.reduce((n, s) => n + s[k].length, 0);
         document.getElementById("totals").textContent = [
           `${all("files")} new files`,
@@ -906,7 +1134,20 @@
         const main = document.getElementById("main");
         main.replaceChildren();
         const s = data.subjects.find((x) => x.id === current);
-        if (s) main.append($("h1", { text: `${s.kid} · ${s.name}` }));
+        if (s)
+          main.append(
+            $(
+              "h1",
+              {},
+              $("button", {
+                class: "back",
+                "aria-label": "Back to subjects",
+                text: "‹",
+                onclick: () => (location.hash = ""),
+              }),
+              `${s.kid} · ${s.name}`,
+            ),
+          );
         if (data.otherReviews.length)
           main.append(
             $("p", {
@@ -964,6 +1205,7 @@
       }
 
       // The review notes written in the app (review mode) on this subject's pages; «Fix notes» runs build.py on the ticked ones.
+      const APP = "https://ezayak.github.io/school-tests/"; // the app, where the notes' pages are
       const fixPicks = {}; // note id -> ticked (all ticked at first), kept while the page is open
       function reviewCard(s) {
         const btn = $("button", { class: "btn" });
@@ -973,8 +1215,9 @@
           btn.textContent = `🛠 Fix ${n} note${n === 1 ? "" : "s"}`;
           btn.disabled = !n;
         };
-        const text = $("textarea", {
-          placeholder: "What to do (optional), for all ticked notes",
+        const text = $("input", {
+          type: "text",
+          placeholder: "e.g. same fix for every reading game",
         });
         const list = s.reviews.map((x) => {
           const tick = $("input", {
@@ -986,22 +1229,33 @@
           });
           tick.checked = fixPicks[x.id] !== false;
           return $(
-            "div",
-            { class: "job" },
+            "label",
+            { class: "note" },
+            tick,
             $(
-              "label",
-              { class: "pick" },
-              tick,
-              `${x.title || x.page} · ${x.at}`,
+              "span",
+              {},
+              $(
+                "span",
+                {},
+                $("b", { text: x.title || x.page, dir: "auto" }),
+                $("time", { text: x.at }),
+              ),
+              x.item
+                ? $("span", {
+                    class: "seen",
+                    text: "Seen on: " + x.item,
+                    dir: "auto",
+                  })
+                : "",
+              $("span", { text: x.text, dir: "auto" }),
+              $("a", {
+                href: APP + x.page,
+                target: "_blank",
+                rel: "noopener",
+                text: "Open the lesson",
+              }),
             ),
-            x.item
-              ? $("div", {
-                  class: "meta",
-                  text: "On screen: " + x.item,
-                  dir: "auto",
-                })
-              : "",
-            $("div", { text: x.text, dir: "auto" }),
           );
         });
         btn.onclick = async () => {
@@ -1026,11 +1280,29 @@
         label();
         return $(
           "section",
-          { class: "file pad" },
-          $("h2", { text: "✎ Review notes to fix" }),
-          ...list,
-          text,
-          btn,
+          { class: "notes" },
+          $(
+            "div",
+            { class: "top" },
+            $("h2", { text: "✎ Notes to fix" }),
+            $("span", { text: "Tick the notes Claude should fix now" }),
+          ),
+          $(
+            "div",
+            { class: "list" },
+            ...list,
+            $(
+              "div",
+              { class: "go" },
+              $(
+                "label",
+                {},
+                "What to do (optional, for all ticked notes)",
+                text,
+              ),
+              btn,
+            ),
+          ),
         );
       }
 
@@ -1501,6 +1773,7 @@
         if (s && s.preparing === "running") setTimeout(poll, 3000);
       }
 
+      window.addEventListener("hashchange", route);
       document.getElementById("big").onclick = (e) =>
         (e.currentTarget.style.display = "none");
       load();
