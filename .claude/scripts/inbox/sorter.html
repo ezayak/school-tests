@@ -482,26 +482,244 @@
         margin: 0;
         accent-color: var(--accent);
       }
-      .build {
+      /* The build panel: on the right on a wide screen; on a tablet or phone a bar at the bottom opens it as a sheet */
+      aside {
+        flex: 0 0 340px;
         position: sticky;
-        bottom: 0;
-        z-index: 2;
+        top: 72px;
+        max-height: calc(100vh - 88px);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      aside:empty {
+        display: none;
+      }
+      .build,
+      .recent {
         background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .build {
         border: 2px solid var(--accent);
-        border-radius: 10px;
-        padding: 12px;
-        margin-top: 8px;
       }
-      .build h2 {
+      .build .over {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .build h2,
+      .recent h2 {
+        font-size: 18px;
+        margin: 0;
+      }
+      .recent h2 {
         font-size: 15px;
-        margin: 0 0 8px;
       }
-      .build .btn:disabled {
+      .build .sum {
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: var(--bg);
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .build .sum small {
+        display: block;
+        font-weight: 400;
+        color: var(--muted);
+      }
+      .build label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink2);
+      }
+      .modes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+      }
+      .modes button {
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        min-height: 40px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink2);
+        cursor: pointer;
+      }
+      .modes button.on {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+      .build .btn {
+        min-height: 44px;
+        font-size: 15px;
+      }
+      .btn:disabled {
         opacity: 0.5;
       }
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .sheet-head {
+        display: none;
+      }
+      #bar,
+      #shade {
+        display: none;
+      }
+      @media (max-width: 1100px) {
+        aside {
+          display: none;
+        }
+        body.has-bar .wrap {
+          padding-bottom: 110px;
+        }
+        body.has-bar #bar {
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 3;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 12px 24px 20px;
+          background: var(--card);
+          border-top: 1px solid var(--line);
+          box-shadow: 0 -6px 20px rgba(20, 20, 19, 0.08);
+        }
+        #bar div {
+          flex: 1;
+          min-width: 0;
+          font-size: 16px;
+          font-weight: 700;
+        }
+        #bar small {
+          display: block;
+          font-size: 13px;
+          font-weight: 400;
+          color: var(--muted);
+        }
+        #bar .btn {
+          min-height: 52px;
+          padding: 0 28px;
+          border-radius: 26px;
+          font-size: 16px;
+        }
+        body.open #shade {
+          display: block;
+          position: fixed;
+          inset: 0;
+          z-index: 4;
+          background: rgba(0, 0, 0, 0.4);
+        }
+        body.open aside {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          align-items: start;
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          top: auto;
+          z-index: 5;
+          max-height: 85vh;
+          padding: 0 24px 28px;
+          background: var(--card);
+          border-radius: 24px 24px 0 0;
+        }
+        body.open aside .build,
+        body.open aside .recent {
+          border: none;
+          padding: 0;
+        }
+        .sheet-head {
+          grid-column: 1 / -1;
+          position: sticky;
+          top: 0;
+          z-index: 1;
+          display: flex;
+          justify-content: flex-end;
+          padding: 10px 0 0;
+          background: var(--card);
+        }
+        .sheet-head button {
+          width: 48px;
+          height: 48px;
+          border: none;
+          background: none;
+          color: var(--ink);
+          font-size: 24px;
+          cursor: pointer;
+        }
+      }
+      @media (max-width: 760px) {
+        body.has-bar #bar {
+          padding: 10px 16px 16px;
+        }
+        #bar .btn {
+          padding: 0 20px;
+        }
+        body.open aside {
+          padding: 0 16px 20px;
+        }
+      }
       .jobs {
-        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         font-size: 13px;
+      }
+      .jobs:empty::before {
+        content: "No builds yet.";
+        color: var(--muted);
+      }
+      .jobs .job {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .jobs .meta {
+        margin: 0;
+      }
+      .jobs .job b {
+        font-size: 14px;
+      }
+      .status {
+        align-self: flex-start;
+        padding: 1px 8px;
+        border-radius: 99px;
+        font-size: 12px;
+        font-weight: 700;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+      .status.pushed {
+        background: var(--use-soft);
+        color: var(--use);
+      }
+      .status.failed {
+        background: var(--fix-soft);
+        color: var(--fix);
       }
       .job {
         border-top: 1px solid var(--line);
@@ -542,7 +760,13 @@
     <div class="wrap">
       <nav id="nav"></nav>
       <main id="main"><p class="empty">Loading…</p></main>
+      <aside id="side" aria-label="Build lesson"></aside>
     </div>
+    <div id="bar">
+      <div><span id="bar-n"></span><small id="bar-k"></small></div>
+      <button class="btn" onclick="sheet(true)">Build lesson</button>
+    </div>
+    <div id="shade" onclick="sheet(false)"></div>
     <div id="big"><img alt="" /></div>
     <datalist id="targets"></datalist>
     <script>
@@ -692,6 +916,8 @@
           );
         if (!s) {
           main.append($("p", { class: "empty", text: "No new files. 🎉" }));
+          document.getElementById("side").replaceChildren();
+          document.body.classList.remove("has-bar", "open");
           return;
         }
         if (s.reviews.length) main.append(reviewCard(s));
@@ -729,13 +955,12 @@
           main.append($("p", {}, btn, err));
         }
         for (const f of s.files) main.append(fileCard(f));
-        if (s.files.length) main.append(buildBar(s));
-        else {
-          // Only review notes: no build bar, but the jobs (the fixes) still show
-          jobsBox = $("div", { class: "jobs" });
-          main.append($("section", { class: "build" }, jobsBox));
-          loadJobs(s.id);
-        }
+        const side = document.getElementById("side");
+        side.replaceChildren();
+        document.body.classList.toggle("has-bar", !!s.files.length);
+        if (!s.files.length) sheet(false);
+        if (s.files.length) side.append(...buildBar(s));
+        else main.append(recentCard(s)); // Only review notes: no build panel, but the jobs (the fixes) still show
       }
 
       // The review notes written in the app (review mode) on this subject's pages; «Fix notes» runs build.py on the ticked ones.
@@ -817,23 +1042,42 @@
       function ticked(s) {
         let pages = 0;
         let files = 0;
+        let kept = 0;
         for (const f of s.files) {
-          const n = Object.values(f.note.pages || {}).filter(
-            (p) => p.pick,
-          ).length;
+          const ps = Object.values(f.note.pages || {});
+          const n = ps.filter((p) => p.pick).length;
           pages += n;
           if (n) files++;
+          kept += ps.filter((p) => p.keep).length;
         }
-        return { pages, files };
+        return { pages, files, kept };
       }
 
       function updateBuild() {
         const s = data.subjects.find((x) => x.id === current);
         if (!s || !countLine) return;
         const t = ticked(s);
-        countLine.textContent = t.pages
-          ? `${t.pages} page${t.pages > 1 ? "s" : ""} ticked in ${t.files} file${t.files > 1 ? "s" : ""}: only these are used.`
-          : "No page ticked: all new files of this subject are used (with your notes).";
+        countLine.replaceChildren(
+          t.pages
+            ? `${t.pages} page${t.pages > 1 ? "s" : ""} ticked in ${t.files} file${t.files > 1 ? "s" : ""}: only these are used.`
+            : "No page ticked: all new files of this subject are used (with your notes).",
+          $("small", {
+            text: t.kept
+              ? `${t.kept} kept for later · notes are sent too`
+              : "Notes are sent too",
+          }),
+        );
+        document.getElementById("bar-n").textContent = t.pages
+          ? `${t.pages} page${t.pages > 1 ? "s" : ""} ticked`
+          : "No page ticked: all files";
+        document.getElementById("bar-k").textContent = t.kept
+          ? `${t.kept} kept for later`
+          : `${s.kid} · ${s.name}`;
+      }
+
+      // The bottom sheet on a tablet or phone (the panel stays on the right on a wide screen)
+      function sheet(open) {
+        document.body.classList.toggle("open", open);
       }
 
       function buildBar(s) {
@@ -846,23 +1090,32 @@
             b.mode === "new" ? "🛠 Create lesson" : "🛠 Update lesson";
           btn.disabled = !b.target.trim();
         };
-        const mode = $("select", {
-          onchange: (e) => {
-            b.mode = e.target.value;
-            label();
-          },
-        });
+        const modes = $("div", { class: "modes" });
         for (const [v, t] of [
           ["new", "New lesson"],
           ["update", "Update a lesson"],
         ]) {
-          const o = $("option", { value: v, text: t });
-          if (b.mode === v) o.selected = true;
-          mode.append(o);
+          modes.append(
+            $("button", {
+              type: "button",
+              "data-v": v,
+              class: b.mode === v ? "on" : "",
+              "aria-pressed": b.mode === v,
+              text: t,
+              onclick: () => {
+                b.mode = v;
+                modes.querySelectorAll("button").forEach((m) => {
+                  m.classList.toggle("on", m.dataset.v === v);
+                  m.setAttribute("aria-pressed", m.dataset.v === v);
+                });
+                label();
+              },
+            }),
+          );
         }
         const target = $("input", {
           list: "targets",
-          placeholder: "Which lesson (e.g. Lesson 4-3, الدرس 5)",
+          placeholder: "e.g. Lesson 4-3, الدرس 5",
           value: b.target,
           oninput: (e) => {
             b.target = e.target.value;
@@ -870,8 +1123,8 @@
           },
         });
         const text = $("textarea", {
-          placeholder:
-            "What to do (optional): e.g. only the story and the words, exercises next time",
+          rows: 3,
+          placeholder: "e.g. only the story and the words, exercises next time",
           oninput: (e) => (b.text = e.target.value),
         });
         text.value = b.text;
@@ -892,34 +1145,66 @@
             body: JSON.stringify({ subject: s.id, ...b }),
           });
           if (!r.ok) alert((await r.json()).error || "Not sent");
-          else b.text = "";
+          else {
+            b.text = "";
+            text.value = "";
+          }
           label();
           loadJobs(s.id);
         };
         label();
-        countLine = $("div", { class: "meta" });
-        jobsBox = $("div", { class: "jobs" });
-        const bar = $(
+        countLine = $("div", { class: "sum" });
+        const card = $(
           "section",
           { class: "build" },
-          $("h2", { text: `Build ${s.kid} · ${s.name}` }),
-          $("div", { class: "row" }, mode, target),
-          text,
+          $(
+            "div",
+            {},
+            $("div", { class: "over", text: "Build" }),
+            $("h2", { text: `${s.kid} · ${s.name}` }),
+          ),
           countLine,
+          $("label", {}, "Where should it go?", modes),
+          $("label", {}, "Which lesson", target),
+          $("label", {}, "What to do (optional)", text),
           btn,
-          jobsBox,
+          $("div", {
+            class: "hint",
+            text: 'Fill in "Which lesson" to start. You can keep sorting while it builds.',
+          }),
         );
         updateBuild();
+        const head = $(
+          "div",
+          { class: "sheet-head" },
+          $("button", {
+            type: "button",
+            "aria-label": "Close",
+            text: "✕",
+            onclick: () => sheet(false),
+          }),
+        );
+        return [head, card, recentCard(s)];
+      }
+
+      // Recent builds and fixes of this subject (build.py's jobs), refreshed while one runs
+      function recentCard(s) {
+        jobsBox = $("div", { class: "jobs" });
         loadJobs(s.id);
-        return bar;
+        return $(
+          "section",
+          { class: "recent" },
+          $("h2", { text: "Recent builds" }),
+          jobsBox,
+        );
       }
 
       const STATUS = {
-        queued: "⏳ waiting",
-        running: "🛠 building",
-        checking: "🔍 checking",
-        pushed: "✅ live",
-        failed: "❌ failed",
+        queued: "⏳ Waiting",
+        running: "🛠 Building",
+        checking: "🔍 Checking",
+        pushed: "Live",
+        failed: "Failed",
       };
       let jobsTimer = null;
 
@@ -930,8 +1215,21 @@
         if (subject !== current || !jobsBox) return;
         jobsBox.replaceChildren(
           ...jobs.map((j) => {
-            const head = `${STATUS[j.status] || j.status} · ${{ new: "new", update: "update", fix: "fix" }[j.mode]} “${j.target}” · ${j.created}`;
-            const box = $("div", { class: "job" }, $("div", { text: head }));
+            const kind = { new: "New", update: "Update", fix: "Fix" }[j.mode];
+            const box = $(
+              "div",
+              { class: "job" },
+              $(
+                "div",
+                { class: "meta" },
+                $("span", {
+                  class: "status " + j.status,
+                  text: STATUS[j.status] || j.status,
+                }),
+                ` ${kind} · ${j.created}`,
+              ),
+              $("b", { text: j.target, dir: "auto" }),
+            );
             if (j.result) box.append($("div", { text: j.result, dir: "auto" }));
             if (j.tail.length && j.status !== "pushed")
               box.append($("pre", { text: j.tail.join("\n") }));
@@ -1101,6 +1399,7 @@
             later.hidden = !pn.keep;
             save(f.file);
             recount();
+            updateBuild();
           },
         });
         keep.checked = !!pn.keep;
