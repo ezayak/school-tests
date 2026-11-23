@@ -13,6 +13,7 @@ window.LESSON = {
     ["index.html", "Religion lessons"],
   ],
   tapq: true,
+  checkq: true,
   tabs: [
     { k: "story", ic: "📖", t: "Story", ar: "الْقِصَّةُ" },
     {

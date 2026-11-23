@@ -754,7 +754,7 @@ plus `shared/drag-words.css` and `shared/common.js` for the verse tiles, like `h
 A lesson is `uN-lesson-M.html` (copy `u2-lesson-4.html`, change the `.js`) + `uN-lesson-M.js` + pictures in `img/uN-lesson-M/` (cropped from the book, ~700px; the
 small activity pictures ~300px). Same format as an Arabic lesson (`stories`, `gloss`, `exercises`), with:
 
-- `n: "rel-u2l4"` (a text key, so it saves apart from the Arabic lessons), `tapq: true`, `links` back to `index.html` ("Religion lessons")
+- `n: "rel-u2l4"` (a text key, so it saves apart from the Arabic lessons), `tapq: true`, `checkq: true` (choose / ✓✗: tap an option, then Check; the answer is read aloud, with Listen / Slowly to hear it again), `links` back to `index.html` ("Religion lessons")
 - `tabs`: Story · Games · Golden verse (· Homework, when there is real homework). A custom tab named `story` gets the normal story list with part-by-part navigation; one named `verse` gets the verse games;
   the others show their exercises (`tab: "games"` / `tab: "hw"`). A tab can have `sub: [en, ar]`, the line above its exercise list.
 - Story: the book text in short parts with full tashkeel, a picture on each part, `en` / `uk` for each part; the "هَيَّا بِنَا نُصَلِّي" prayer is a second text.
