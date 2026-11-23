@@ -102,6 +102,20 @@ def prompt(job):
         if job["text"]:
             out.append(f"Parent's description: {job['text']}")
         return "\n".join(out)
+    if job["mode"] == "revision":
+        out = [
+            f"build inbox {job['subject']}",
+            "",
+            f"Job: Create a revision «{job['target']}» ({s['kid']} · {s['name']}, skills {s.get('skill')} and revision)",
+            "from the lessons already built in the app that the parent names below: their questions, words and exercises.",
+            f"Parent's description (the lessons, what to do): {job['text']}",
+        ]
+        if job["picks"]:
+            out.append("Also use these ticked pages (pictures: ~/.cache/school-inbox/<file without extension>/pages/p-N.jpg):")
+            out += [f"- {p['file']}: p. {', '.join(map(str, p['pages']))}" for p in job["picks"]]
+        else:
+            out.append("No files: do not use the subject's new files and do not run `inbox.py done`; the SOURCES.md row names the lessons as the source.")
+        return "\n".join(out)
     verb = "Create a new lesson" if job["mode"] == "new" else "Update the existing lesson"
     out = [
         f"build inbox {job['subject']}",

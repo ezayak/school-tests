@@ -1504,13 +1504,15 @@
           // One line under the subject name: what to do next there
           const state = s.reviews.length
             ? [`${s.reviews.length} to fix`, "fix"]
-            : s.ready
-              ? ["Ready to build", "ok"]
-              : s.files.some((f) => !f.pictures.length && f.ext === "pdf")
-                ? ["Needs page pictures", ""]
-                : sorted
-                  ? [`${sorted} of ${s.files.length} sorted`, ""]
-                  : ["Not sorted yet", ""];
+            : !s.files.length
+              ? ["Nothing new · revision", ""]
+              : s.ready
+                ? ["Ready to build", "ok"]
+                : s.files.some((f) => !f.pictures.length && f.ext === "pdf")
+                  ? ["Needs page pictures", ""]
+                  : sorted
+                    ? [`${sorted} of ${s.files.length} sorted`, ""]
+                    : ["Not sorted yet", ""];
           if (s.reviews.length && sorted) state[0] += ` · ${sorted} sorted`;
           kids[s.kid].append(
             $(
@@ -1647,10 +1649,15 @@
         for (const f of s.files) main.append(fileCard(f));
         const side = document.getElementById("side");
         side.replaceChildren();
-        document.body.classList.toggle("has-bar", !!s.files.length);
-        if (!s.files.length) sheet(false);
-        if (s.files.length) side.append(...buildBar(s));
-        else main.append(recentCard(s)); // Only review notes: no build panel, but the jobs (the fixes) still show
+        document.body.classList.add("has-bar");
+        if (!s.files.length)
+          main.append(
+            $("p", {
+              class: "empty",
+              text: "No new files. A revision can still be built from the lessons already in the app (Build → Revision from lessons).",
+            }),
+          );
+        side.append(...buildBar(s));
         fullScreen(full);
       }
 
@@ -1779,10 +1786,13 @@
         const s = data.subjects.find((x) => x.id === current);
         if (!s || !countLine) return;
         const t = ticked(s);
+        const rev = (builds[s.id] || {}).mode === "revision";
         countLine.replaceChildren(
           t.pages
             ? `${t.pages} page${t.pages > 1 ? "s" : ""} ticked in ${t.files} file${t.files > 1 ? "s" : ""}: only these are used.`
-            : "No page ticked: all new files of this subject are used (with your notes).",
+            : rev
+              ? "No page ticked: built only from the lessons you name, no files."
+              : "No page ticked: all new files of this subject are used (with your notes).",
           $("small", {
             text: t.kept
               ? `${t.kept} kept for later · notes are sent too`
@@ -1791,7 +1801,9 @@
         );
         document.getElementById("bar-n").textContent = t.pages
           ? `${t.pages} page${t.pages > 1 ? "s" : ""} ticked`
-          : "No page ticked: all files";
+          : rev
+            ? "Revision from lessons"
+            : "No page ticked: all files";
         document.getElementById("bar-k").textContent = t.kept
           ? `${t.kept} kept for later`
           : `${s.kid} · ${s.name}`;
@@ -1834,17 +1846,49 @@
       function buildBar(s) {
         const b =
           builds[s.id] ||
-          (builds[s.id] = { mode: "new", target: "", text: "" });
+          (builds[s.id] = {
+            mode: s.files.length ? "new" : "revision",
+            target: "",
+            text: "",
+          });
         const btn = $("button", { class: "btn" });
+        const PH = {
+          lesson: [
+            "e.g. Lesson 4-3, الدرس 5",
+            "e.g. only the story and the words, exercises next time",
+            "What to do (optional)",
+          ],
+          revision: [
+            "e.g. Mid-term 2 revision (Term 2)",
+            "e.g. Lessons 2-1 to 2-4 and 3-1, only the words and the questions",
+            "Which lessons (and what to do)",
+          ],
+        };
         const label = () => {
-          btn.textContent =
-            b.mode === "new" ? "🛠 Create lesson" : "🛠 Update lesson";
-          btn.disabled = !b.target.trim();
+          const rev = b.mode === "revision";
+          btn.textContent = {
+            new: "🛠 Create lesson",
+            update: "🛠 Update lesson",
+            revision: "🛠 Create revision",
+          }[b.mode];
+          btn.disabled = !b.target.trim() || (rev && !b.text.trim());
+          const [pt, px, lx] = PH[rev ? "revision" : "lesson"];
+          target.placeholder = pt;
+          text.placeholder = px;
+          textLabel.firstChild.textContent = lx;
+          targetLabel.firstChild.textContent = rev
+            ? "Name of the revision"
+            : "Which lesson";
+          hint.textContent = rev
+            ? "Fill in its name and the lessons to start. You can keep sorting while it builds."
+            : 'Fill in "Which lesson" to start. You can keep sorting while it builds.';
+          updateBuild();
         };
         const modes = $("div", { class: "modes" });
         for (const [v, t] of [
           ["new", "New lesson"],
           ["update", "Update a lesson"],
+          ["revision", "Revision from lessons"],
         ]) {
           modes.append(
             $("button", {
@@ -1875,14 +1919,23 @@
         });
         const text = $("textarea", {
           rows: 3,
-          placeholder: "e.g. only the story and the words, exercises next time",
-          oninput: (e) => (b.text = e.target.value),
+          oninput: (e) => {
+            b.text = e.target.value;
+            label();
+          },
         });
+        const hint = $("div", { class: "hint" });
+        const targetLabel = $("label", {}, "Which lesson", target);
+        const textLabel = $("label", {}, "What to do (optional)", text);
         text.value = b.text;
         btn.onclick = async () => {
           const t = ticked(s);
-          const what = t.pages ? `${t.pages} ticked pages` : "all new files";
-          const verb = b.mode === "new" ? "Create" : "Update";
+          const what = t.pages
+            ? `${t.pages} ticked pages`
+            : b.mode === "revision"
+              ? "the lessons you named"
+              : "all new files";
+          const verb = b.mode === "update" ? "Update" : "Create";
           if (
             !confirm(
               `${verb} "${b.target}" from ${what}?\nClaude builds it, checks it and pushes it live.`,
@@ -1903,7 +1956,6 @@
           label();
           loadJobs(s.id);
         };
-        label();
         countLine = $("div", { class: "sum" });
         const card = $(
           "section",
@@ -1921,15 +1973,12 @@
           ),
           countLine,
           $("label", {}, "Where should it go?", modes),
-          $("label", {}, "Which lesson", target),
-          $("label", {}, "What to do (optional)", text),
+          targetLabel,
+          textLabel,
           btn,
-          $("div", {
-            class: "hint",
-            text: 'Fill in "Which lesson" to start. You can keep sorting while it builds.',
-          }),
+          hint,
         );
-        updateBuild();
+        label();
         const head = $(
           "div",
           { class: "sheet-head" },
@@ -1976,7 +2025,12 @@
         if (subject !== current || !jobsBox) return;
         jobsBox.replaceChildren(
           ...jobs.map((j) => {
-            const kind = { new: "New", update: "Update", fix: "Fix" }[j.mode];
+            const kind = {
+              new: "New",
+              update: "Update",
+              revision: "Revision",
+              fix: "Fix",
+            }[j.mode];
             const box = $(
               "div",
               { class: "job" },

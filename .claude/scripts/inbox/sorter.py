@@ -131,8 +131,8 @@ def inbox_data():
     for x in review.open_notes():
         reviews.setdefault(review.subject_of(x["page"], inbox.CONFIG["subjects"]), []).append(x)
     for s in result:
-        if not s["new"] and not reviews.get(s["id"]):
-            continue
+        if not s["new"] and not reviews.get(s["id"]) and not s.get("skill"):
+            continue  # a subject with a skill stays listed: a revision can be built from its lessons alone
         files = []
         for x in s["new"]:
             files.append({**x, "pictures": pictures(x["file"]), "note": notes.get(x["file"], {})})
@@ -207,7 +207,9 @@ def new_job(body):
     result, _ = inbox.scan(body.get("subject"))
     s = next((x for x in result if x["id"] == body.get("subject")), None)
     mode, target, text = body.get("mode"), str(body.get("target") or "").strip(), str(body.get("text") or "").strip()
-    if not s or mode not in ("new", "update") or not target or len(target) > 200 or len(text) > 4000:
+    if not s or mode not in ("new", "update", "revision") or not target or len(target) > 200 or len(text) > 4000:
+        return None
+    if mode == "revision" and not text:  # the lessons it goes over are written there
         return None
     notes = load_notes()
     picks = []
@@ -221,7 +223,7 @@ def new_job(body):
         "mode": mode,
         "target": target,
         "text": text,
-        "picks": picks,  # empty: all new files of the subject
+        "picks": picks,  # empty: all new files of the subject (a revision: no files, only its lessons)
         "status": "queued",
         "created": time.strftime("%Y-%m-%d %H:%M"),
     }
