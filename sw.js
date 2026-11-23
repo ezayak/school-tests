@@ -2,7 +2,7 @@
 // Every game listed in games.js is downloaded automatically, so adding a game
 // only needs games.js to change. Shared styles/scripts live in shared/ and are listed in CORE.
 // Bump VERSION if you want to force a full refresh.
-const VERSION = "v216";
+const VERSION = "v217";
 const CACHE = "study-games-" + VERSION;
 const CORE = [
   "./",
