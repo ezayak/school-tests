@@ -1642,6 +1642,7 @@
     `<details class="readp help"><summary>💡 Help · مُسَاعَدَةٌ</summary><p class="ar tapw" dir="rtl">${tapHTML(h.q)}</p>${trText(h) ? `<p class="qhelp">${esc(trText(h))}</p>` : ""}<div class="opts long">${opts.map((o, j) => `<button type="button" class="opt aro" data-h="${j}"><span class="L">${"ABCDEF"[j]}</span><span class="ow"><span class="ar">${esc(o.t)}</span>${o.tr ? `<small>${esc(o.tr)}</small>` : ""}</span></button>`).join("")}</div></details>`;
   const qHTML = (q) => esc(q).replace(/_{3,}/g, '<span class="gap"></span>');
   function exItem() {
+    hush();
     const it = xs.list[xs.i],
       n = xs.list.length,
       last = xs.i + 1 >= n;
@@ -1720,13 +1721,23 @@
     }
     const A = document.getElementById("ans"),
       F = document.getElementById("fbx");
-    const after = (ok, html) => {
+    // spoken (L.checkq): the answer is read aloud, with Listen / Slowly buttons to hear it again
+    const after = (ok, html, spoken) => {
       document.getElementById("pts").textContent = xs.score;
       const cd = H.querySelector(".exq");
       cd.classList.add("answered");
       if (innerWidth > innerHeight)
         cd.querySelectorAll("details").forEach((d) => (d.open = false));
       F.innerHTML = fbHTML(ok, html, last);
+      if (spoken) {
+        F.querySelector(".fb").insertAdjacentHTML(
+          "beforeend",
+          `<div class="audio"><button type="button" class="abtn" id="fbSay"><span class="e">🔊</span> Listen to the answer</button><button type="button" class="abtn" id="fbSlow"><span class="e">🐢</span> Slowly</button></div>`,
+        );
+        F.querySelector("#fbSay").onclick = () => say(spoken);
+        F.querySelector("#fbSlow").onclick = () => say(spoken, true);
+        say(spoken);
+      }
       setTimeout(() => {
         const nb = document.getElementById("nextBtn");
         if (!nb) return;
@@ -1739,31 +1750,59 @@
         exItem();
       };
     };
-    if (it.type === "tf") {
-      A.innerHTML = `<div class="tfrow"><button type="button" class="tfbtn" id="tf-1" data-v="1">✓ <span class="ar">صَحِيحٌ</span></button><button type="button" class="tfbtn" id="tf-0" data-v="0">✗ <span class="ar">خَطَأٌ</span></button></div>`;
-      A.querySelectorAll("[data-v]").forEach(
+    // L.checkq (Religion): a tapped option is only picked (it can be changed), the Check button answers;
+    // without it the first tap answers
+    const pickThenCheck = (sel, judge) => {
+      const bs = A.querySelectorAll(sel);
+      if (!L.checkq) return bs.forEach((b) => (b.onclick = () => judge(b)));
+      A.insertAdjacentHTML(
+        "beforeend",
+        `<div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" id="checkBtn" type="button" disabled>Check</button></div>`,
+      );
+      const cb = A.querySelector("#checkBtn");
+      let picked = null;
+      bs.forEach(
         (b) =>
           (b.onclick = () => {
-            const v = b.dataset.v === "1",
-              ok = v === it.a;
-            A.querySelectorAll("[data-v]").forEach((x) => {
-              x.disabled = true;
-              if ((x.dataset.v === "1") === it.a) x.classList.add("right");
-            });
-            if (!ok) b.classList.add("wrong");
-            if (ok) xs.score++;
-            else
-              xs.miss.push({
-                q: it.q,
-                your: v ? "✓ صَحِيحٌ" : "✗ خَطَأٌ",
-                right: it.a ? "✓ صَحِيحٌ" : "✗ خَطَأٌ",
-              });
-            after(
-              ok,
-              `${it.a ? "✓ صَحِيحٌ (true)" : "✗ خَطَأٌ (false)"}${it.x ? `<br><span class="ar" dir="rtl" style="font-size:1.3rem">${esc(it.x)}</span>` : ""}`,
-            );
+            bs.forEach((x) => x.classList.toggle("sel", x === b));
+            picked = b;
+            cb.disabled = false;
           }),
       );
+      cb.onclick = () => {
+        if (!picked) return;
+        picked.classList.remove("sel");
+        cb.parentNode.remove();
+        judge(picked);
+      };
+    };
+    if (it.type === "tf") {
+      A.innerHTML = `<div class="tfrow"><button type="button" class="tfbtn" id="tf-1" data-v="1">✓ <span class="ar">صَحِيحٌ</span></button><button type="button" class="tfbtn" id="tf-0" data-v="0">✗ <span class="ar">خَطَأٌ</span></button></div>`;
+      const judgeTf = (b) => {
+        const v = b.dataset.v === "1",
+          ok = v === it.a;
+        A.querySelectorAll("[data-v]").forEach((x) => {
+          x.disabled = true;
+          if ((x.dataset.v === "1") === it.a) x.classList.add("right");
+        });
+        if (!ok) b.classList.add("wrong");
+        if (ok) xs.score++;
+        else
+          xs.miss.push({
+            q: it.q,
+            your: v ? "✓ صَحِيحٌ" : "✗ خَطَأٌ",
+            right: it.a ? "✓ صَحِيحٌ" : "✗ خَطَأٌ",
+          });
+        after(
+          ok,
+          `${it.a ? "✓ صَحِيحٌ (true)" : "✗ خَطَأٌ (false)"}${it.x ? `<br><span class="ar" dir="rtl" style="font-size:1.3rem">${esc(it.x)}</span>` : ""}`,
+          L.checkq &&
+            speakable(
+              (it.a ? "صَحِيحٌ" : "خَطَأٌ") + (it.x ? ". " + it.x : ""),
+            ),
+        );
+      };
+      pickThenCheck("[data-v]", judgeTf);
     } else if (it.type === "mc") {
       // keep: ["ت", "ة", "ه"] → the options always in this order (the same buttons every time), not shuffled
       const opts = it.keep
@@ -1772,31 +1811,29 @@
             .sort((x, y) => it.keep.indexOf(x.t) - it.keep.indexOf(y.t))
         : shuf(it.o.map((t, j) => ({ t, ok: j === 0 })));
       A.innerHTML = `<div class="opts ${opts.some((o) => o.t.length > 18) ? "long" : ""}">${opts.map((o, j) => `<button type="button" class="opt aro" id="opt-${j}" data-j="${j}"><span class="L">${"ABCDEF"[j]}</span><span class="ar">${esc(o.t)}</span></button>`).join("")}</div>`;
-      A.querySelectorAll("[data-j]").forEach(
-        (b) =>
-          (b.onclick = () => {
-            const o = opts[+b.dataset.j];
-            A.querySelectorAll("[data-j]").forEach((x, j) => {
-              x.disabled = true;
-              if (opts[j].ok) x.classList.add("right");
-              else if (x !== b) x.classList.add("dim");
-            });
-            if (!o.ok) b.classList.add("wrong");
-            const right = it.o[0];
-            if (o.ok) xs.score++;
-            else xs.miss.push({ q: it.q, your: o.t, right });
-            // a listen-first question with no gap ("which letter do you hear?") shows the right answer, not the question again
-            const full =
-              it.say && !/_{3,}/.test(it.q)
-                ? right
-                : it.q.replace(/_{3,}/, right);
-            after(
-              o.ok,
-              `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc(full)}</span>`,
-            );
-            say(it.say || speakable(full));
-          }),
-      );
+      const judgeMc = (b) => {
+        const o = opts[+b.dataset.j];
+        A.querySelectorAll("[data-j]").forEach((x, j) => {
+          x.disabled = true;
+          if (opts[j].ok) x.classList.add("right");
+          else if (x !== b) x.classList.add("dim");
+        });
+        if (!o.ok) b.classList.add("wrong");
+        const right = it.o[0];
+        if (o.ok) xs.score++;
+        else xs.miss.push({ q: it.q, your: o.t, right });
+        // a listen-first question with no gap ("which letter do you hear?") shows the right answer, not the question again
+        const full =
+          it.say && !/_{3,}/.test(it.q) ? right : it.q.replace(/_{3,}/, right);
+        after(
+          o.ok,
+          `<span class="ar" dir="rtl" style="font-size:1.35rem">${esc(full)}</span>`,
+          // a question with no gap ("who said it?"): the answer alone is read
+          L.checkq && (it.say || speakable(/_{3,}/.test(it.q) ? full : right)),
+        );
+        if (!L.checkq) say(it.say || speakable(full));
+      };
+      pickThenCheck("[data-j]", judgeMc);
     } else if (it.type === "open") {
       A.innerHTML = `<p class="note">Say or write your answer, then check it.</p><div class="row"><button type="button" class="btn" id="showA">Show the answer</button></div>`;
       document.getElementById("showA").onclick = () => {
@@ -2063,6 +2100,7 @@
     }
   }
   function exEnd() {
+    hush();
     const sec = xs.sec;
     const H = exH();
     exTop(H);
