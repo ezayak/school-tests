@@ -1752,7 +1752,7 @@
         exItem();
       };
     };
-    // L.checkq (Religion): a tapped option is only picked (it can be changed), the Check button answers;
+    // L.checkq (Religion): a tapped option is only picked (it can be changed) and read aloud, the Check button answers;
     // without it the first tap answers
     const pickThenCheck = (sel, judge) => {
       const bs = A.querySelectorAll(sel);
@@ -1769,6 +1769,8 @@
             bs.forEach((x) => x.classList.toggle("sel", x === b));
             picked = b;
             cb.disabled = false;
+            const ar = b.querySelector(".ar");
+            say(speakable((ar || b).textContent));
           }),
       );
       cb.onclick = () => {
