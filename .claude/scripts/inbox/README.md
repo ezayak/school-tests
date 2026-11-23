@@ -17,8 +17,9 @@ They were made to save tokens: Claude reads short text reports and small contact
 5. **`/clear`** after the lesson is committed: one lesson per session.
 
 Or **build from the sorting page**, without a Claude session: tick the pages to use ("Use for the lesson"; Tick all / none per file;
-nothing ticked = all new files of the subject), then in the **Build** bar at the bottom choose New lesson / Update a lesson, write which lesson
-and, if needed, what to do, and press **Create / Update lesson**. `build.py` (below) runs it and the bar shows ⏳ → 🛠 → 🔍 → ✅ live / ❌ failed;
+nothing ticked = all new files of the subject), then in the **Build** panel (on the right on a wide screen; on a tablet or phone the
+**Build lesson** button in the bar at the bottom opens it) choose New lesson / Update a lesson, write which lesson
+and, if needed, what to do, and press **Create / Update lesson**. `build.py` (below) runs it and "Recent builds" shows Waiting → Building → Checking → Live / Failed;
 the same result comes on Telegram with the commit link. Used pages are unticked and marked "used: <lesson>".
 
 ## The sorting page
@@ -33,6 +34,10 @@ The page (`sorter.py` + `sorter.html`, always on as `school-sorter.service`) sho
 
 As an app (once per device): open the https address in Chrome, ⋮ → "Add to home screen" → Install (only https installs: Chrome refuses plain http).
 
+On a wide screen the subjects are on the left (grouped by child, with what is next: Ready to build, Needs page pictures, N to fix…).
+On a tablet or phone the page opens on the subject list; tap a subject to sort it, ‹ to go back. The open subject is in the address
+(`…/#g4-math`), so a bookmark opens it directly.
+
 Per file:
 
 - **Where it goes**: the lesson, e.g. "Lesson 4-3" (the list offers the guesses of `inbox.py` and the lessons already named);
@@ -40,10 +45,10 @@ Per file:
 - **Note**: anything Claude should know (what the teacher said, which exercise is for which day).
 
 Per page (under each page picture; tap a picture to see it big): **Use** / **Skip** / **Answers** / **Other lesson**, a note
-(words that can't be read), and the **Use for the lesson** tick for the Build bar. Everything is saved as you type ("Saved ✓").
+(words that can't be read), and the **Use for the lesson** tick for the Build panel. Everything is saved as you type ("Saved ✓").
 **Other lesson** = this page belongs to a different lesson than the file (type which one in "Which lesson?").
-**📌 Keep for later** = the page still has something to build (e.g. half homework, half lesson): `inbox.py done` leaves a file with a 📌 page
-in the inbox; untick 📌 once the page is fully used.
+**Keep for later** (a "Later" tag on the picture) = the page still has something to build (e.g. half homework, half lesson): `inbox.py done`
+leaves a file with such a page in the inbox; untick it once the page is fully used.
 
 A subject whose files are not prepared yet (no page pictures) has a **Prepare page pictures** button: it runs `prep` (pictures, text, OCR) on the Pi.
 The notes go to `~/.local/share/school-inbox/notes.json` and are printed by `inbox.py --subject <id>`, so «build inbox <id>» follows them.
@@ -61,7 +66,7 @@ To write down what is wrong in a lesson while looking at it on the tablet, witho
 3. The note goes to the sorting page on the Pi ("Note sent ✓"): from the app on GitHub Pages to https://mollers-pi.cheetah-krait.ts.net
    (the Tailscale app must be on), from the local test server to http://127.0.0.1:8770. When the Pi can't be reached, it says
    "Saved here", waits on the device (a number on the ✎ button) and is sent by itself later.
-4. **Fix from the sorting page**: the subject's tab shows its notes at the top ("✎ Review notes to fix", all ticked);
+4. **Fix from the sorting page**: the subject shows its notes at the top ("✎ Notes to fix", all ticked; on a tablet or phone the list has a banner);
    untick the ones to keep for later and press **🛠 Fix N notes**. `build.py` runs it like a lesson job (checks, pushes, Telegram)
    and marks the notes fixed after the push. Notes on pages of no subject (Optima, speech games) are listed but fixed in a session.
    **Or** in a new Claude session, write «fix review notes». Claude runs `review.py`, fixes each note with its subject's skill, commits,
