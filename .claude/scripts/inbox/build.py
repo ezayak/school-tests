@@ -55,7 +55,10 @@ That press is the approval: do not ask questions, do not wait for approval, do n
 - A «Fix notes» job: fix only the review notes given, as in a «fix review notes» session (the subject's skill),
   in one commit, then the bump. Never run `review.py done`: the job script marks the notes fixed after the push.
   A note that needs an engine or shared/ change: leave it and say so at the end.
-- If you cannot do it (pages unreadable, the task unclear, the lesson not found), commit nothing.
+- If you cannot do it (pages unreadable, the task unclear, the lesson not found, an engine change needed), commit
+  nothing and start your last message with one line `Not done: <the cause, in a few words>`
+  (e.g. `Not done: needs a change to the engine arabic-lesson.js, not allowed in this job`).
+  The job page and Telegram show that line as the reason; the parent continues this conversation in a normal chat.
 - Your last message is sent to the parent on Telegram: 2-4 short lines, what was built or why not."""
 
 
@@ -146,6 +149,11 @@ def run_claude(job, wt):
     p = subprocess.Popen(cmd, cwd=wt, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     final, start = "", time.time()
     for raw in p.stdout:
+        if not job.get("session") and '"session_id"' in raw:
+            try:  # every event carries it; saved at once so a killed run can be continued too
+                save(job, session=json.loads(raw)["session_id"])
+            except (ValueError, KeyError):
+                pass
         if time.time() - start > TIMEOUT:
             p.kill()
             raise RuntimeError("took longer than 90 minutes")
@@ -163,15 +171,24 @@ def run_claude(job, wt):
     return final.strip()
 
 
-def checks(job, wt):
+def not_done(final):
+    """Claude's own reason for committing nothing: its `Not done: …` line, else the start of its message."""
+    m = re.search(r"^\W*Not done:\s*(.+)$", final, re.M | re.I)
+    if m:
+        return "Not done: " + m.group(1).strip()
+    return "Not done (Claude gave no reason): " + (final.splitlines()[0][:200] if final else "no message")
+
+
+def checks(job, wt, final):
     """Problems with the commits on this branch (empty list = good to push)."""
     s = subject_of(job)
     changed = [f for f in git("diff", "--name-only", "origin/main..HEAD", cwd=wt).splitlines() if f]
+    loose = git("status", "--short", cwd=wt)
     problems = []
+    if loose:  # checked first: work that was done but not committed must never go unnoticed
+        problems.append("changed but not committed (kept in the worktree): " + loose.replace("\n", ", ")[:300])
     if not changed:
-        return ["nothing was committed"]
-    if git("status", "--porcelain", cwd=wt):
-        problems.append("files left uncommitted: " + git("status", "--short", cwd=wt).replace("\n", ", ")[:300])
+        return problems or [not_done(final)]
     app = s["app"].rstrip("/") + "/"
     others = [f for f in changed if not f.startswith(app) and f not in SHARED_FILES]
     if others:
@@ -220,7 +237,7 @@ def run(job):
     log(job, f"worktree {wt} from origin/main ({git('rev-parse', '--short', 'origin/main')})")
     final = run_claude(job, wt)
     save(job, status="checking", result=final[:1500])
-    problems = checks(job, wt)
+    problems = checks(job, wt, final)
     if not problems:
         git("fetch", "-q", "origin")
         r = subprocess.run(["git", "rebase", "-q", "origin/main"], cwd=wt, capture_output=True, text=True)
@@ -230,8 +247,13 @@ def run(job):
     if problems:
         for p in problems:
             log(job, "✗ " + p)
-        save(job, status="failed", problems=problems, worktree=str(wt))
-        return f"❌ {s['kid']} · {s['name']}: «{job['target']}» not pushed\n" + "\n".join("• " + p for p in problems) + f"\n{final[:600]}\nKept: {wt} (branch {branch})"
+        # Nothing is removed: the worktree, the branch and Claude's conversation stay to be continued.
+        resume = f"cd {wt} && claude --resume {job['session']}" if job.get("session") else ""
+        save(job, status="failed", problems=problems, worktree=str(wt), branch=branch, resume=resume)
+        if job["mode"] == "fix":
+            review.analysis({x["id"] for x in job["notes"]}, job["id"], final, resume)
+        more = f"\nContinue in a normal chat: {resume}" if resume else ""
+        return f"❌ {s['kid']} · {s['name']}: «{job['target']}» not pushed\n" + "\n".join("• " + p for p in problems) + f"\n{final[:600]}\nKept: {wt} (branch {branch}){more}"
     commits = git("log", "--format=%h %s", "origin/main..HEAD", cwd=wt).splitlines()
     git("push", "-q", "origin", "HEAD:main", cwd=wt)
     head = git("rev-parse", "HEAD", cwd=wt)

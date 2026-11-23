@@ -59,6 +59,16 @@ def done(ids):
         write(notes)
 
 
+def analysis(ids, job, text, resume):
+    """A «Fix notes» job that fixed nothing: its findings go on the notes (still open), so the next session starts from them."""
+    with LOCK:
+        notes = load()
+        for x in notes:
+            if x["id"] in ids:
+                x.setdefault("analysis", []).append({"job": job, "text": text[:4000], "resume": resume})
+        write(notes)
+
+
 def subject_of(page, subjects):
     """The subject whose app folder holds the page; a term folder doesn't count
     (grade-4/term-1/english/… belongs to the English of grade-4/term-2/english). None = no subject (Optima, speech…)."""
@@ -87,6 +97,10 @@ def report(show_all=False):
             if x["item"]:
                 out.append(f"  - on screen: {x['item']}")
             out.append(f"  - note: {x['text']}")
+            for a in x.get("analysis", []):
+                out.append(f"  - job {a['job']} (not fixed): " + a["text"].replace("\n", " "))
+                if a["resume"]:
+                    out.append(f"    continue that conversation: {a['resume']}")
     return "\n".join(out)
 
 

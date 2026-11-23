@@ -1188,6 +1188,17 @@
         border-top: 1px solid var(--line);
         padding: 6px 0;
       }
+      .job .problem {
+        color: var(--fix);
+        font-weight: 700;
+      }
+      .job .kept {
+        font-family: monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        user-select: all;
+      }
       .job pre {
         margin: 4px 0 0;
         max-height: 160px;
@@ -1980,7 +1991,22 @@
               ),
               $("b", { text: j.target, dir: "auto" }),
             );
+            for (const p of j.problems || [])
+              box.append(
+                $("div", { class: "problem", text: "✗ " + p, dir: "auto" }),
+              );
             if (j.result) box.append($("div", { text: j.result, dir: "auto" }));
+            if (j.status === "failed" && j.worktree)
+              box.append(
+                $("div", {
+                  class: "kept",
+                  text:
+                    `Kept: ${j.worktree} (branch ${j.branch || "build/" + j.id})` +
+                    (j.resume
+                      ? `\nContinue in a normal chat:\n${j.resume}`
+                      : ""),
+                }),
+              );
             if (j.tail.length && j.status !== "pushed")
               box.append($("pre", { text: j.tail.join("\n") }));
             return box;
