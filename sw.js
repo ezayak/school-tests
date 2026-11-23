@@ -17,6 +17,7 @@ const CORE = [
   "./english-hub.js",
   "./shared/theme.css",
   "./shared/quiz.css",
+  "./shared/quest.js",
   "./shared/common.js",
   "./shared/lesson.css",
   "./shared/story.css",
