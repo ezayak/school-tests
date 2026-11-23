@@ -190,7 +190,13 @@ def checks(job, wt, final):
     if not changed:
         return problems or [not_done(final)]
     app = s["app"].rstrip("/") + "/"
-    others = [f for f in changed if not f.startswith(app) and f not in SHARED_FILES]
+    folders = [app]
+    # an exam revision goes in the folder of the job's term: grade-N/term-T/<subject>/ (CLAUDE.md "Revisions")
+    grade = re.match(r"grade-\d+/", app)
+    term = re.search(r"\bterm\s*\(?(\d)", job.get("target", ""), re.I)
+    if grade and term:
+        folders.append(f"{grade.group(0)}term-{term.group(1)}/{Path(app).name}/")
+    others = [f for f in changed if not f.startswith(tuple(folders)) and f not in SHARED_FILES]
     if others:
         problems.append("changed outside the lesson's folder: " + ", ".join(others[:8]))
     present = [f for f in changed if (wt / f).exists()]

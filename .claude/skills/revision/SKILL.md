@@ -27,9 +27,14 @@ is a word list, not a revision: the `english-dictation` skill.
 
 ## 2. Where it goes
 
-- **The file**: in the subject's app folder, next to its lessons (`subjects.json` `app`; a build job may change only that folder):
-  `revision-N.js` + `.html` for an exam revision (A, B, C), `revision-<month>.js` for a monthly sheet, `review.js` in the chapter / unit folder for D.
-  Never a new file in `mid-term-1/` or `final-term-1/`.
+- **The file**:
+  - An exam revision (A, B, C): `revision-N.js` + `.html` in the folder of the exam's term, `grade-N/term-T/<subject>/`
+    (T = the term of the job or of the sheet, «Term (2)» → `term-2`; `<subject>` = the last part of `subjects.json` `app`:
+    `grade-4/social-studies` → `grade-4/term-2/social-studies/`). Its pictures in `img/revision-N/` there. A build job may change this folder and the app folder.
+    When the subject's lessons are elsewhere, the page's lesson scripts are loaded by their relative path, and `hub` in the data points to the subject's hub
+    (or to the home page `../../../index.html` when the subject has none).
+  - A monthly sheet: `revision-<month>.js` in the subject's app folder, next to its lessons; D: `review.js` in the chapter / unit folder.
+  - Never a new file in `mid-term-1/` or `final-term-1/`.
 - **The page**: `node .claude/scripts/scaffold/new.js <new>.html --like <sibling>` with the sibling of the same engine:
 
   | Engine                                                      | Sibling                                                                                                       |
@@ -42,7 +47,8 @@ is a word list, not a revision: the `english-dictation` skill.
 
 - **The card**:
   - Tied to an exam (mid-term or final: A, B, C): a card in `games.js` with `period: "Mid-term exam"` or `"Final exam"`, `grade`, `term`, `subject`
-    (one card per subject and period). The page's files go in the subject entry's `also` (`register.py add`), and the card says so in a comment, as the French and English revision cards do.
+    (one card per subject and period): it shows under the "Revision T" button of the home page's side bar. The page's files go in the subject entry's `also`
+    (`register.py add`), and the card says so in a comment, as the French and English revision cards do; a subject with no entry: in the card's own `also`.
   - Not tied to an exam (a monthly sheet, D): in the subject's own list (`lessons.js` / `dictations.js`) after the lessons it covers, `n: "Revision"` or `"Review"`
     (Religion: `nAr: "مُرَاجَعَةٌ"`), its `note` with the counts.
   - Then the subject entry's `countLabel` / `topics` (e.g. "18 lessons · 1 revision"), `register.py check`, the `SOURCES.md` row, `inbox.py done` (sheet **and** key), and the bump in its own commit.

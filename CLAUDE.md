@@ -70,7 +70,9 @@ Rules, sources and procedure: the `social-studies-lesson` skill.
 ## Revisions (every subject)
 
 A revision sheet (مراجعة), exam practice (Exercices d'application), exam memo or the book's chapter / unit review (inbox kind `revision`): the `revision` skill together with the subject's skill.
-New revisions are data for the subject's engine in its own folder, never new pages in `mid-term-1/` / `final-term-1/`.
+New revisions are data for the subject's engine, never new pages in `mid-term-1/` / `final-term-1/`.
+An exam revision (mid-term / final) goes in the folder of the exam's term, `grade-N/term-T/<subject>/` (T = the job's "Term T"),
+with a `games.js` card `term: T`, `period: "Mid-term exam"` / `"Final exam"`: it shows under that term's "Revision T" button. Lessons stay where they are.
 
 ## Ukrainian reading (Optima, Grade 3)
 
