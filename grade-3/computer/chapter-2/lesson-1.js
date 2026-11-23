@@ -622,12 +622,6 @@ window.LESSON = {
         },
         {
           type: "mc",
-          q: "Is “the sense” one of the [senses] of a robot?",
-          opts: ["No", "Yes"],
-          img: "sensors",
-        },
-        {
-          type: "mc",
           q: "Can a robot help a [doctor] during surgery?",
           opts: ["Yes", "No"],
           img: "hospital",
