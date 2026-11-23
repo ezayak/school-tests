@@ -92,8 +92,13 @@ Folder `optima/grade-3/math/`, engine `shared/math-uk.js` + `.css`. Rules, proce
 
 Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a game is only a data file). Format in README: "Speech games (Мовлення)".
 
-- Arabic voice: Google's online voice first, the device voice only offline (`Kit.voice(lang, {online: true})`, set by the engine for `lang: "ar"`).
-  The Arabic voice installed on the parent's tablet does not speak, so never prefer it.
+- Arabic voice, referrer and tashkeel: see "Arabic voice (every page)" below.
+
+## Arabic voice (every page)
+
+- Arabic is spoken only by Google's online voice. The device voice is used only offline, never when online, even if one is installed:
+  the Arabic voice installed on the parent's tablet does not speak. This holds for every engine and page that speaks Arabic
+  (Arabic and Religion lessons, `arabic-lesson.js`, speech games, dictations): `Kit.voice("ar", {online: true})` or the same order.
 - Every Arabic page (speech games, lessons, revisions) has `<meta name="referrer" content="no-referrer" />` in `<head>`: Google refuses the online voice with a referrer.
 - Arabic text is classical Arabic with full tashkeel (the online voice does not read Egyptian dialect correctly).
 

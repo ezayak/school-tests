@@ -70,7 +70,8 @@
   const bolt =
     '<svg viewBox="0 0 16 16" aria-hidden="true" width="16" height="16"><path d="M9 1L3 9h4l-1 6 6-8H8z" fill="#1B2440"/></svg>';
 
-  /* ---------- voice: the device's Arabic voice, else Google's online voice (same as Arabic revision) ---------- */
+  /* ---------- voice: Google's online voice while online, the device's Arabic voice only offline
+     (the Arabic voice installed on the parent's tablet does not speak) ---------- */
   const TTS = "speechSynthesis" in window;
   let voice = null;
   function pickVoice() {
@@ -153,7 +154,8 @@
   function say(text, slow, boundary) {
     hush();
     if (!text) return;
-    if (voice) {
+    if (navigator.onLine) sayOnline(text, slow);
+    else if (voice) {
       try {
         const u = new SpeechSynthesisUtterance(text);
         u.lang = voice.lang;
@@ -168,7 +170,7 @@
         }
         speechSynthesis.speak(u);
       } catch (e) {}
-    } else if (navigator.onLine) sayOnline(text, slow);
+    }
   }
   const speakable = (s) =>
     String(s).replace(/_{2,}/g, "…").replace(/[«»]/g, "");
