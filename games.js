@@ -378,6 +378,20 @@ window.GAMES = [
     // the page is offline through the Grade 3 Social Studies entry's "also" (pictures: the lesson's)
   },
   {
+    grade: 3,
+    term: 2,
+    period: "Mid-term exam",
+    subject: "Religion",
+    title: "Religion Revision",
+    lesson: "مُرَاجَعَةُ شَهْرِ نُوفَمْبِرَ · Revision November, Units 2–3",
+    topics:
+      "Daniel and the three young men, Joseph in prison and at Pharaoh's palace, the Holy Family in Egypt, the bunch of grapes, the widow's son at Nain · choose, true or false, complete, who said it, who am I, order, match",
+    path: "grade-3/term-2/religion/revision-november.html",
+    questions: 116,
+    year: "2026–2027",
+    // the page is offline through the Grade 3 Religion entry's "also" (pictures: the lessons')
+  },
+  {
     grade: 4,
     term: 1,
     period: "Mid-term exam",
@@ -1051,9 +1065,9 @@ window.GAMES = [
     hub: true,
     lesson: "التربية الدينية المسيحية · Read, listen & practise each lesson",
     topics:
-      "Units 1–3 · all 18 lessons of Term 1 + the November revision · آدَمُ وَحَوَّاءُ · التَّنَاوُلُ · يُوسُفُ الصِّدِّيقُ · دَانِيَالُ · الْعَائِلَةُ الْمُقَدَّسَةُ فِي مِصْرَ · السَّامِرِيُّ الصَّالِحُ · دَاوُدُ وَيُونَاثَانُ: stories with pictures, audio & translation, the book's activities as games, golden verses",
+      "Units 1–3 · all 18 lessons of Term 1 · آدَمُ وَحَوَّاءُ · التَّنَاوُلُ · يُوسُفُ الصِّدِّيقُ · دَانِيَالُ · الْعَائِلَةُ الْمُقَدَّسَةُ فِي مِصْرَ · السَّامِرِيُّ الصَّالِحُ · دَاوُدُ وَيُونَاثَانُ: stories with pictures, audio & translation, the book's activities as games, golden verses",
     path: "grade-3/term-1/religion/index.html",
-    countLabel: "18 lessons · 1 revision",
+    countLabel: "18 lessons",
     year: "2026–2027",
     // uses the Arabic lesson engine (listed in the Arabic entry's "also")
     also: [
@@ -1246,8 +1260,8 @@ window.GAMES = [
       "grade-3/term-1/religion/img/u3-lesson-5/tree.jpg",
       "grade-3/term-1/religion/u3-lesson-6.html",
       "grade-3/term-1/religion/u3-lesson-6.js",
-      "grade-3/term-1/religion/revision-november.html",
-      "grade-3/term-1/religion/revision-november.js",
+      "grade-3/term-2/religion/revision-november.html",
+      "grade-3/term-2/religion/revision-november.js",
       "grade-3/term-1/religion/img/u3-lesson-6/fight.jpg",
       "grade-3/term-1/religion/img/u3-lesson-6/friends.jpg",
       "grade-3/term-1/religion/img/u3-lesson-6/goliath.jpg",

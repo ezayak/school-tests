@@ -172,13 +172,4 @@ window.LESSONS = [
     cover: "img/u3-lesson-6/friends.jpg",
     note: "Story in 6 parts · 5 games · golden verse",
   },
-  {
-    n: "Revision",
-    nAr: "مُرَاجَعَةٌ",
-    title: "مُرَاجَعَةُ شَهْرِ نُوفَمْبِرَ",
-    en: "Revision · November (Units 2–3)",
-    path: "revision-november.html",
-    cover: "img/u2-lesson-5/map.jpg",
-    note: "116 questions · 9 games · story reminder on every question",
-  },
 ];
