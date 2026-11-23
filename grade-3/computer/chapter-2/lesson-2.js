@@ -1,4 +1,4 @@
-// Computer · Grade 3 · Chapter 2 · Unit 2 · Lesson 2 « Working with text » (book pages 36–37 and 44–51).
+// Computer · Grade 3 · Chapter 2 · Unit 2 · Lesson 2 « Working with text » (book pages 36–37 and 44–51, Graded Classwork 2 with its model answer).
 // All the content of the lesson. The how-to's are done in Mini Word (wordsim.js); words are "w:<paragraph>:<word>"
 // in the book's text (start doc "robots": 0 Robots! · 1 Robots are all around us … · 2 There are robots … · 3 When I go …).
 (function () {
@@ -803,6 +803,73 @@
             q: "Can you use Ctrl+B, Ctrl+I or Ctrl+U without selecting?",
             opts: ["No", "Yes"],
             x: "[Select] the text first.",
+          },
+        ],
+      },
+      {
+        k: "cw2",
+        t: "Graded Classwork 2",
+        en: "Working with text",
+        ic: "🏫",
+        from: "Practical Graded Classwork (2)",
+        items: [
+          {
+            type: "mc",
+            q: "You can find the [Font] group in the … tab.",
+            opts: ["Home", "File"],
+          },
+          {
+            type: "mc",
+            q: "To [Bold], use:",
+            opts: ["Ctrl+B", "B+Ctrl", "Shift+B"],
+          },
+          {
+            type: "mc",
+            q: "To [Italic], use:",
+            opts: ["Ctrl+I", "I+Ctrl", "Shift+I"],
+          },
+          {
+            type: "mc",
+            q: "To [Underline], use:",
+            opts: ["Ctrl+U", "U+Ctrl", "Shift+U"],
+          },
+          {
+            type: "mc",
+            q: "Does the [Text highlight] tool add colour behind the selected text?",
+            opts: ["Yes", "No"],
+            img: "highlighted",
+          },
+          {
+            type: "mc",
+            q: "Ctrl+F is used to…",
+            opts: ["find a word", "capitalize the letter “F”"],
+            img: "find",
+          },
+          {
+            type: "mc",
+            q: "… is used to [reverse] an action.",
+            opts: ["Ctrl+Z", "Shift+Z", "Z+Ctrl"],
+            img: "undo",
+          },
+          {
+            type: "mc",
+            q: "Where can you find the [zoom] tool in your Word document?",
+            opts: ["Status bar", "File tab", "Title bar"],
+            img: "zoom",
+          },
+          {
+            type: "mc",
+            q: "Where can you find the [Find] command?",
+            opts: ["Home tab", "Status bar", "Help tab"],
+          },
+          {
+            type: "multi",
+            q: "Which shortcut keys can be used [without selecting] the text first?",
+            opts: [
+              { t: "Ctrl+F", ok: true },
+              { t: "Ctrl+Z", ok: true },
+              { t: "Ctrl+U" },
+            ],
           },
         ],
       },

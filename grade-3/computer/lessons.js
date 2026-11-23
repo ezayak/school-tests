@@ -67,7 +67,7 @@ window.CS_LESSONS = {
           en: "Font, size, colour, bold, italic, underline, highlight, Find, Undo, zoom",
           path: "lesson-2.html",
           cover: "img/lesson-2/highlighted.jpg",
-          note: "10 picture cards · 10 how-to's in Mini Word · 5 games · 6 exercises",
+          note: "10 picture cards · 10 how-to's in Mini Word · 5 games · 7 exercises",
         },
         {
           n: 3,

@@ -10,7 +10,9 @@ Source folder: `~/Documents/2026-2027/Lucas/Computer/`.
 
 Before 2026-11-20: every file in the folder was already used (listed in `.claude/scripts/inbox/done.txt`).
 
-| Date       | File                                                              | Goes to                                   | Status    |
-| ---------- | ----------------------------------------------------------------- | ----------------------------------------- | --------- |
-| 2026-11-23 | `20261123-G.3_G.C1T.2.pdf` (Graded Classwork 1, Unit 1 L1 Robots) | `chapter-2/lesson-1.js` · `cw1`           | **built** |
-| 2026-11-23 | `20261123-G.3_G.C1T.2_Model_Ans.pdf` (its model answer)           | `chapter-2/lesson-1.js` · `cw1` (answers) | **built** |
+| Date       | File                                                                         | Goes to                                   | Status    |
+| ---------- | ---------------------------------------------------------------------------- | ----------------------------------------- | --------- |
+| 2026-11-23 | `20261123-G.3_G.C1T.2.pdf` (Graded Classwork 1, Unit 1 L1 Robots)            | `chapter-2/lesson-1.js` · `cw1`           | **built** |
+| 2026-11-23 | `20261123-G.3_G.C1T.2_Model_Ans.pdf` (its model answer)                      | `chapter-2/lesson-1.js` · `cw1` (answers) | **built** |
+| 2026-11-23 | `20261123-G.3_G.C2T.2.pdf` (Graded Classwork 2, Unit 2 L2 Working with text) | `chapter-2/lesson-2.js` · `cw2`           | **built** |
+| 2026-11-23 | `20261123-G.3_G.H2T.2Model_Ans.pdf` (its model answer, titled Classwork 2)   | `chapter-2/lesson-2.js` · `cw2` (answers) | **built** |
