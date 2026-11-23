@@ -44,6 +44,8 @@ Per file:
 - **What it is**: Lesson pages / slides, Classwork, Homework, Test / quiz, Answer key / model answers, Video, or Skip: nothing to build;
 - **Note**: anything Claude should know (what the teacher said, which exercise is for which day).
 
+A file starts folded (only these fields); **Show N pages ▾** opens its page pictures, **Hide pages ▴** folds it again.
+
 Per page (under each page picture; tap a picture to see it big): **Use** / **Skip** / **Answers** / **Other lesson**, a note
 (words that can't be read), and the **Use for the lesson** tick for the Build panel. Everything is saved as you type ("Saved ✓").
 **Other lesson** = this page belongs to a different lesson than the file (type which one in "Which lesson?").
