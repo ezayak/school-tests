@@ -38,6 +38,8 @@ Rules for every Arabic file:
 - Full tashkeel on all Arabic. `en` and `uk` on every text, section and item.
 - `gloss` has every Arabic word of the texts, questions, options and model answers (one entry per word without tashkeel is enough). Check it with a script before calling it done: no word without a gloss, no item without a picture (tests: the text has it), every `img` path exists.
 - Pictures: crop from the scan (`pdftoppm -r 400`, then PIL), or reuse one from `img/lesson-*/`. An emoji `ic` is at most 2 emoji with no space ("🧴🧴"); more get cut off on a landscape tablet.
+- **Revision** (a separate sheet: مراجعة لغة عربية, monthly or mid-term, its key نموذج حل): the `revision` skill, kind A. A new file goes in `grade-3/term-1/arabic/` (`revision-<name>.js`),
+  shaped like `mid-term-1/arabic-revision.js`: `stories` with the texts the sheet asks about (copied from the lessons), `gloss` ("4. Gloss"), `exercises` in the sheet's order, `exSub`, `exPics`.
 - Then: entry in `LESSONS` / `TESTS` / `HOMEWORK` (`lessons.js`); the new files and pictures in `also` of the Arabic entry in `games.js`, plus its `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 - Check in the browser: the list on `index.html`, each tab, one typed answer.
 
@@ -68,7 +70,7 @@ Rules for every Arabic file:
 - Each workbook page says at the top what it is: الْفَتْرَةُ (period) and the lesson title, أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ (classwork, skip), ثَانِيًا: الْأَدَاءَاتُ الْمَنْزِلِيَّةُ (homework), التَّقْيِيمُ الْأُسْبُوعِيُّ with الْمَجْمُوعَةُ (أ)(ب)(ج) (a test). The week number is in the row of numbers at the top (الْأُسْبُوعُ). The printed page number is at the bottom corner.
 - Scans can repeat a page or skip one; the PDF page → book page offset can change in the middle of a scan. Log book pages by the printed number.
 - Handwriting and red marks are Lucas's answers and the teacher's marking: ignore them, they are not the key.
-- Skip: classwork, reviews (مُرَاجَعَةٌ عَامَّةٌ …) unless asked, a sheet already built (same book pages in `TESTS` / `HOMEWORK`). Say which pages were skipped and why.
+- Skip: classwork, the workbook's reviews (مُرَاجَعَةٌ عَامَّةٌ …) unless asked (a separate revision sheet is not skipped: "Revision" above), a sheet already built (same book pages in `TESTS` / `HOMEWORK`). Say which pages were skipped and why.
 - The user decides the order. Old sheets (the earlier weeks) may be wanted first.
 - Tests are numbered by workbook page, not by build order (the user's wish). Known so far (hw-tests.pdf, Nov 2026):
   test-1 p. 7–8 «بعد إعلان نتيجة المسابقة» · test-2 p. 12 «جلس والدي بجواري» · test-3 p. 16–17 «في بداية حصة اللغة العربية» ·

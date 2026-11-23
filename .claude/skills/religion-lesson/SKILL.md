@@ -41,6 +41,8 @@ Rules:
   (حَلَمَ / حُلْمَ, مِنْ / مَنْ, حَدَثَ / حَدَثٍ) get their own exact-tashkeel keys. Check with a script: no word without a gloss, no item without a picture, every `img` exists, every gap once.
 - Fill the gloss with the `arabic` skill's three steps (its "4. Gloss"): `check.js <file> --missing` → `gloss-reuse.js` over `grade-3/term-1/religion/*.js grade-3/term-1/arabic/*.js`
   (about half the words are already glossed there) → write only the words left, then `gloss-insert.js`. Read the reused lines first: a gloss can carry another text's meaning.
+- **Revision** (the teacher's مراجعة sheet and its key): the `revision` skill, kind A. Model: `revision-november.js` (tabs by question type, a "Read / listen" fold with the story part under every question,
+  the gloss filled as above); its card in `LESSONS` after the lessons it covers (`n: "Revision"`, `nAr: "مُرَاجَعَةٌ"`).
 - Then: entry in `LESSONS` (`religion/lessons.js`); files + pictures in `also` of the Religion entry in `games.js`, plus `countLabel` / `topics`; `VERSION` bump in `sw.js` last.
 - A change to the engine must leave the Arabic pages as they were: check an Arabic lesson (story → Words button) and a test (fixed text, no part navigation).
 - Check in the browser: the list, each tab, the verse games (tiles move with real taps, not script `.click()`).

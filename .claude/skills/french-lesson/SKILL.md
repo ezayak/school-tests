@@ -33,7 +33,7 @@ What to build:
   Exercices: every book "Parle" / cahier exercise / sheet task, one section each, `from` = where it is ("Cahier p. 7 ex. 5"); a sheet task the lesson already has is not built twice.
   Dictée: a "(by spelling)" sheet or list = one entry in `dictee` (its words and its sentences, a picture on each); the engine makes the build-from-letters and hear-and-type games.
 - **Revision** `revision-N.js` + `revision-N.html` (`new.js --like revision-1.html`; the page loads every lesson it uses before its own file: fix that list): Exercices only, the term sheet's tasks in its order,
-  then the lessons' main exercises through `ref: "N:k"`; pictures from the lessons (`img: "lesson-2/parle-9"`), never new copies.
+  then the lessons' main exercises through `ref: "N:k"`; pictures from the lessons (`img: "lesson-2/parle-9"`), never new copies. Kinds, card and checks: the `revision` skill.
 - Item types: put in order → `order` (`q` for "Réponds" / "Regarde et écris"); write a word with a sound → `letters`; choose / entoure / oui-non question → `mc` (right one first, `full` for the whole answer);
   complete a verb, a capital letter, . ? ! → `fill`; "Mets un (x) si c'est une phrase" → `yn` with `ask`, `x`, `fix`; listen and point → `tap`; relie → `match`.
 

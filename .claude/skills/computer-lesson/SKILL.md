@@ -19,6 +19,8 @@ Alex has aphasia: short sentences, a picture on every card and question, and eve
 
 - Every blue "N.N.N To …" box = a how-to in the pretend program, every Hands on task = an exercise in the book's order. A skill the program can't do yet = a program change first, in its own stage, and the older lessons must still play.
 - Logs in `grade-4/computer/`: `SOURCES.md` (every screenshot folder, figure, sheet, video → `file · key`, or why skipped), `TODO.md`, `UNVERIFIED.md` (Hands on answers have no key in the screenshots). Update them with every lesson, in the same commit.
+- **Revision** (the book's unit review pages, an exam memo): the `revision` skill. A reused practice task in Mini Windows / Word / Outlook / Edge needs its program's files on the revision page too.
+  The old `term-1/final-term-1/computer-revision.html` is not a model.
 - Words missing or unreadable: never guess; ask. Then: card in `lessons.js` (under its chapter), files and pictures (not videos) in `also` of the Computer entry in `games.js`, plus `countLabel` / `topics`; a new shared program file in CORE of `sw.js`; `VERSION` bump in `sw.js` last.
 
 ## 1. Find what is new

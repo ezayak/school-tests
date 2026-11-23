@@ -67,6 +67,11 @@ Folder `grade-4/science/topic-N/`, engine `shared/computer-lesson.js` (`<body da
 Folder `grade-4/social-studies/chapter-N/`, engines `shared/computer-lesson.js` (`<body data-subject="Social Studies">`) and `shared/story.js`.
 Rules, sources and procedure: the `social-studies-lesson` skill.
 
+## Revisions (every subject)
+
+A revision sheet (مراجعة), exam practice (Exercices d'application), exam memo or the book's chapter / unit review (inbox kind `revision`): the `revision` skill together with the subject's skill.
+New revisions are data for the subject's engine in its own folder, never new pages in `mid-term-1/` / `final-term-1/`.
+
 ## Ukrainian reading (Optima, Grade 3)
 
 «Складова ракета» texts in `optima/grade-3/ukr-lit/`, engine `shared/reading.js` + `.css`. Rules and checks: the `ukr-reading` skill.

@@ -50,6 +50,9 @@ What to build:
   word sort, "write the words that contain …" → `sort`; match a word to its meaning → `match` or `mc`; complete a verb, fill a gap → `mc` with likely wrong forms;
   rewrite / combine / correct a sentence → `mc` (which is right) or `order` (build it from cards); question about a text, writing task → `open` with a model answer.
 
+**Revision** (an exam memo, a mid-term / final revision): the `revision` skill (a memo is kind C). Model: README "English revision" and `term-1/english/revision-1.js`
+(`ref` from the weeks' `EN_DATA`). Its card is a "Mid-term exam" / "Final exam" card in `games.js`, not an entry in `dictations.js`.
+
 Then:
 
 - Entry in `term-1/english/dictations.js` (`kind: "Lesson"` / `"Story"`, `term: N` for a later term, which shows a "Term N" tag; path from the term-1 folder: `"../../term-2/english/…"`).
