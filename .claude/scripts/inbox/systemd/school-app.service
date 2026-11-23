@@ -1,0 +1,9 @@
+[Unit]
+Description=Study Games, local copy (https://mollers-pi.cheetah-krait.ts.net:8443; http://mollers-pi.local:8780)
+
+[Service]
+ExecStart=/usr/bin/python3 /home/olena/projects/school-tests/.claude/scripts/app-server.py --lan
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

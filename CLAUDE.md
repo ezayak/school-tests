@@ -110,6 +110,8 @@ Folder `speech/<lang>/<group>/`, engine `shared/speech.js` (don't copy it; a gam
 
 - Local server: `python3 -m http.server 8765 --bind 127.0.0.1` from the repo root; open the hubs:
   `index.html`, `grade-4/term-1/{french,english}/index.html`, `grade-{3,4}/computer/index.html`, `grade-3/term-1/english/index.html`.
+- From another computer or tablet: the user service `school-app.service` (`.claude/scripts/app-server.py --lan`) serves this working copy at
+  https://mollers-pi.cheetah-krait.ts.net:8443 (Tailscale) and http://mollers-pi.local:8780 (home network); port 8765 stays free for checks.
 - The service worker caches aggressively. For old-vs-new comparisons, use a fresh port or unregister the SW first.
 - For a refactor of generated markup, compare old and new HTML output in node (the two versions should produce the same string).
 - JS syntax check: `node --check <file>`.
