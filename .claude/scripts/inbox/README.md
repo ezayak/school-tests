@@ -56,7 +56,8 @@ Per page (under each page picture; tap a picture to see it big): **Use** / **Ski
 leaves a file with such a page in the inbox; untick it once the page is fully used.
 
 **+ Add an old file** (at the bottom of the subject list, and at the top of every subject) brings back a file already used for a lesson,
-to build a new lesson with it: choose the subject, search by name or date, tap the file. It shows in the subject's list with an "old file" tag
+to build a new lesson with it: choose the subject, search by name or date, tap a file to see it (its pages on the left, on a phone on top;
+the first 4 pages of a PDF not prepared yet, a video's frames), then **+ Add**. It shows in the subject's list with an "old file" tag
 and is sorted, ticked and built like a new one (press **Prepare page pictures** if it has no pictures yet). `inbox.py done` (after the lesson)
 takes it out again, or **✕ Take out** on its card. It is kept in `~/.local/share/school-inbox/reopened.json`, not by removing its line from `done.txt`
 (that file is also read from GitHub), and it doesn't make the subject "ready" for the Telegram message.

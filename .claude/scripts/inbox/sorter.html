@@ -699,13 +699,77 @@
         margin-top: 8px;
       }
       #old {
-        width: min(560px, calc(100vw - 32px));
-        max-height: min(85vh, 680px);
+        width: min(1100px, calc(100vw - 32px));
+        height: min(88vh, 820px);
         padding: 16px;
         border: 0;
         border-radius: 12px;
         background: var(--card);
         color: var(--ink);
+      }
+      #old[open] {
+        display: flex;
+        flex-direction: column;
+      }
+      /* the preview on the left, the subject, search and list on the right; on a phone the preview on top */
+      #old .cols {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        gap: 16px;
+      }
+      #old .pv,
+      #old .choose {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      #old .pv {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--soft);
+        padding: 10px;
+      }
+      #old .pv .bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+      #old .pv .bar div {
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      #old .pv .bar small {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      #old .shots {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      #old .shots img {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #fff;
+      }
+      #old .list button.on {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+      }
+      @media (max-width: 760px) {
+        #old .cols {
+          grid-template-columns: 1fr;
+          grid-template-rows: 45% 1fr;
+        }
       }
       #old::backdrop {
         background: rgba(0, 0, 0, 0.45);
@@ -726,10 +790,11 @@
         margin-bottom: 8px;
       }
       #old .list {
+        flex: 1;
+        min-height: 0;
         display: flex;
         flex-direction: column;
         gap: 4px;
-        max-height: 50vh;
         overflow: auto;
       }
       #old .list button {
@@ -1944,7 +2009,76 @@
           oninput: () => show(),
         });
         const box = $("div", { class: "list" });
+        const pv = $("div", { class: "pv" });
         let files = [];
+        let chosen = null;
+        // A tap on a file: its pages on the left, and the Add button there
+        const see = async (f, item) => {
+          chosen = f;
+          box
+            .querySelectorAll("button.on")
+            .forEach((b) => b.classList.remove("on"));
+          item.classList.add("on");
+          const add = $("button", {
+            type: "button",
+            class: "btn",
+            text: "+ Add",
+            onclick: () => reopen(pick.value, f, true),
+          });
+          const shots = $(
+            "div",
+            { class: "shots" },
+            $("p", { class: "empty", text: "Loading the preview…" }),
+          );
+          const info = $("small", {
+            text: f.split("/").slice(0, -1).join(" / "),
+          });
+          pv.replaceChildren(
+            $(
+              "div",
+              { class: "bar" },
+              $(
+                "div",
+                { dir: "auto" },
+                $("b", { text: f.split("/").pop() }),
+                info,
+              ),
+              add,
+            ),
+            shots,
+          );
+          const r = await fetch(
+            `/api/preview?subject=${encodeURIComponent(pick.value)}&file=${encodeURIComponent(f)}`,
+          );
+          if (chosen !== f) return; // another file was tapped meanwhile
+          const got = r.ok ? await r.json() : { pictures: [] };
+          if (
+            got.pages &&
+            got.pages > got.pictures.length &&
+            got.pictures.length
+          )
+            info.textContent += ` · first ${got.pictures.length} of ${got.pages} pages`;
+          else if (got.pages) info.textContent += ` · ${got.pages} p.`;
+          shots.replaceChildren(
+            ...(got.pictures.length
+              ? got.pictures.map((src, i) =>
+                  $("img", {
+                    src:
+                      "/img/" +
+                      src.split("/").map(encodeURIComponent).join("/"),
+                    alt: `page ${i + 1}`,
+                    loading: "lazy",
+                  }),
+                )
+              : [
+                  $("p", { class: "empty", text: "No preview for this file." }),
+                ]),
+          );
+        };
+        const hint = () =>
+          pv.replaceChildren(
+            $("p", { class: "empty", text: "Tap a file to see it here." }),
+          );
         const show = () => {
           const q = find.value.trim().toLowerCase();
           const hits = files.filter((f) => f.toLowerCase().includes(q));
@@ -1956,7 +2090,8 @@
                     {
                       type: "button",
                       dir: "auto",
-                      onclick: () => reopen(pick.value, f, true),
+                      class: f === chosen ? "on" : "",
+                      onclick: (e) => see(f, e.currentTarget),
                     },
                     $("b", { text: f.split("/").pop() }),
                     $("small", { text: f.split("/").slice(0, -1).join(" / ") }),
@@ -1976,6 +2111,8 @@
           box.replaceChildren($("p", { class: "empty", text: "Loading…" }));
           const r = await fetch("/api/used/" + encodeURIComponent(pick.value));
           files = (await r.json()).files;
+          chosen = null;
+          hint();
           show();
         };
         oldBox.replaceChildren(
@@ -1993,11 +2130,14 @@
           ),
           $("p", {
             class: "meta",
-            text: "A file already used for a lesson, back into the list to build with again.",
+            text: "A file already used for a lesson, back into the list to build with again. Tap a file to see it, then + Add.",
           }),
-          pick,
-          find,
-          box,
+          $(
+            "div",
+            { class: "cols" },
+            pv,
+            $("div", { class: "choose" }, pick, find, box),
+          ),
         );
         oldBox.showModal();
         list();

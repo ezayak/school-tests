@@ -22,6 +22,7 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import secrets
 import subprocess
 import sys
@@ -29,7 +30,7 @@ import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import unquote, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -156,11 +157,44 @@ def subject_by_id(sid):
     return next((x for x in inbox.CONFIG["subjects"] if x["id"] == sid), None)
 
 
+def of_subject(sid, f):
+    """True when f is a file of that subject (what the old-file popup may show or add)."""
+    s = subject_by_id(sid)
+    return bool(s) and isinstance(f, str) and f in {inbox.rel(p) for p in inbox.files_of(s)}
+
+
+PREVIEW_PAGES = 4  # a PDF without page pictures: only its first pages, enough to recognise it
+
+
+def preview(sid, f):
+    """The old-file popup's preview: the page pictures prep made, or quick ones (no OCR): the first pages of a PDF,
+    a photo, a video's frame sheet. Made once, in the file's cache folder (a later prep replaces them)."""
+    if not of_subject(sid, f):
+        return None
+    src = inbox.ROOT / f
+    ext = src.suffix.lower()
+    pages = None
+    if ext == ".pdf":
+        m = re.search(r"^Pages:\s+(\d+)", inbox.run(["pdfinfo", str(src)]), re.M)
+        pages = int(m.group(1)) if m else None
+    pics = pictures(f)
+    if not pics and ext == ".pdf":
+        d = prep.CACHE / Path(f).parent / Path(f).stem / "preview"
+        if not any(d.glob("p-*.jpg")):
+            d.mkdir(parents=True, exist_ok=True)
+            subprocess.run(["pdftoppm", "-jpeg", "-scale-to", str(prep.THUMB * 2), "-l", str(PREVIEW_PAGES), str(src), str(d / "p")], capture_output=True, timeout=120)
+        shots = sorted(d.glob("p-*.jpg"), key=lambda p: int(p.stem.split("-")[-1]))
+        pics = [p.relative_to(prep.CACHE).as_posix() for p in shots]
+    elif not pics and ext in (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov", ".webm", ".mkv"):
+        prep.prep(src)  # no OCR: quick
+        pics = pictures(f)
+    return {"pictures": pics, "pages": pages}
+
+
 def reopen(body):
     """«+ Add an old file» (open: true) or ✕ Take out (open: false): only a used file of that subject."""
-    s = subject_by_id(body.get("subject"))
-    f = body.get("file")
-    if not s or not isinstance(f, str) or f not in {inbox.rel(p) for p in inbox.files_of(s)}:
+    s, f = body.get("subject"), body.get("file")
+    if not of_subject(s, f):
         return False
     with LOCK:
         inbox.set_reopened([f], bool(body.get("open")))
@@ -308,6 +342,10 @@ class Handler(BaseHTTPRequestHandler):
         if path.startswith("/api/used/"):
             s = subject_by_id(unquote(path[10:]))
             return self.send(200, {"files": inbox.used_files(s) if s else []})
+        if path == "/api/preview":
+            q = parse_qs(urlparse(self.path).query)
+            got = preview(q.get("subject", [""])[0], q.get("file", [""])[0])
+            return self.send(200 if got else 400, got or {"error": "not a file of this subject"})
         if path.startswith("/api/jobs/"):
             return self.send(200, {"jobs": list_jobs(unquote(path[10:]).replace("/", ""))})
         if path.startswith("/img/"):
