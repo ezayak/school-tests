@@ -293,11 +293,14 @@ window.LESSON = {
       en: "The explorers",
       ic: "🧭",
       items: [
-        mc("Who is he?", [
-          ["Christopher Columbus", "columbus"],
-          ["Amerigo Vespucci", "amerigo"],
-          ["John Cabot", "cabot"],
-        ]),
+        // the picture of the Learn card «Christopher Columbus», names only (portraits would give the answer away)
+        {
+          type: "mc",
+          q: "Look at the picture. This explorer sailed across the [Atlantic Ocean] in 1492. Who is he?",
+          opts: ["Christopher Columbus", "Amerigo Vespucci", "John Cabot"],
+          img: "columbus",
+          x: "It is [Christopher Columbus]. Look at the card «Christopher Columbus» in Learn.",
+        },
         mc("Who explored the [Mississippi River] in 1673?", [
           ["Louis Jolliet", "jolliet"],
           ["Christopher Columbus", "columbus"],
