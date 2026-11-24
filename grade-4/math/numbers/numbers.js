@@ -11,7 +11,8 @@
 //        A wrong step is shown right and the walk goes on as it should.
 //     📋 With the steps: the number, the four checks on screen, Prime / Composite.
 //     ⚡ On my own: the number, Prime / Composite.
-//   Practice: ⚖️ Even or odd (1–99) · ÷ 3 (💡 Help: the digits are added, animated) · ÷ 5 · ÷ 7 (8–99, 💡 Help: the 7 list).
+//   Yes / No buttons: «can be divided by p» in bold; for 3 the digits 3 6 9 / 1 2 4 5 7 8 under them.
+//   Practice: ⚖️ Even or odd (1–99) · ÷ 3 (💡 Help: the child adds the digits on a number pad, «Try again» when wrong) · ÷ 5 · ÷ 7 (8–99, 💡 Help: the 7 list).
 // A round = 10 numbers, half of them "yes" (prime / even / divisible); a prime round's composites are 2 even and 3 odd.
 // After each answer: ✓ / ✗, why, n = a × b and its dots (a rectangle; a prime makes only one line), Next →.
 // Score: the numbers right the first time (Step by step: every step of the number right).
@@ -181,12 +182,28 @@
     { v: 1, t: "Even", s: chips([0, 2, 4, 6, 8]), c: "ev" },
     { v: 0, t: "Odd", s: chips([1, 3, 5, 7, 9]), c: "od" },
   ];
+  // Yes / No of «Can it be divided by p?»: the words in bold; for 3 the one digit left under each answer
+  const D3 = { yes: [3, 6, 9], no: [1, 2, 4, 5, 7, 8] };
   const YN = (p) => [
-    { v: 1, ic: "✓", t: "Yes", s: p ? `÷ ${p}` : "", c: "y" },
-    { v: 0, ic: "✗", t: "No", s: p ? `not ÷ ${p}` : "", c: "n" },
+    {
+      v: 1,
+      ic: "✓",
+      t: "Yes",
+      s: p ? `<strong>can be divided by ${p}</strong>` : "",
+      ch: p === 3 ? chips(D3.yes) : "",
+      c: "y",
+    },
+    {
+      v: 0,
+      ic: "✗",
+      t: "No",
+      s: p ? `<strong>cannot be divided by ${p}</strong>` : "",
+      ch: p === 3 ? chips(D3.no) : "",
+      c: "n",
+    },
   ];
   const ans = (opts) =>
-    `<div class="ng-ans">${opts.map((o) => `<button type="button" class="ng-a ${o.c}" data-v="${o.v}">${o.ic ? `<span class="ng-ic">${o.ic}</span>` : ""}<b>${esc(o.t)}</b>${o.s ? `<small>${o.s}</small>` : ""}</button>`).join("")}</div>`;
+    `<div class="ng-ans">${opts.map((o) => `<button type="button" class="ng-a ${o.c}" data-v="${o.v}">${o.ic ? `<span class="ng-ic">${o.ic}</span>` : ""}<b>${esc(o.t)}</b>${o.s ? `<small>${o.s}</small>` : ""}${o.ch || ""}</button>`).join("")}</div>`;
   // tap → the right one green, a wrong one red → cb(right?)
   function bindAns(right, cb) {
     const bs = [...app.querySelectorAll(".ng-a")];
@@ -229,25 +246,67 @@
     `<div class="ng-row"><span class="ng-t a">${r.a}</span><span class="ng-op">+</span><span class="ng-t b">${r.b}</span><span class="ng-op eq">=</span><span class="ng-t s">${r.s}</span></div>`;
   const sumEnd = (end) =>
     `<div class="ng-row end"><span class="ng-op">→</span><span class="ng-t s">${end}</span>${chips([3, 6, 9], "c369")}</div>`;
-  // 💡 Help of the ÷ 3 game: the rows appear one after another, each one said
-  function animSums(n, box) {
+  // the number pad (the look of shared/math.css): 1–9, ⌫ 0 ✓
+  const pad = () =>
+    `<div class="ng-go"><div class="mx-pad" role="group" aria-label="Number pad">${[
+      1, 2, 3, 4, 5, 6, 7, 8, 9,
+    ]
+      .map((d) => `<button type="button" data-k="${d}">${d}</button>`)
+      .join(
+        "",
+      )}<button type="button" data-k="del" class="del" aria-label="Delete">⌫</button><button type="button" data-k="0">0</button><button type="button" data-k="ok" class="ok" aria-label="Check">✓</button></div></div>`;
+  // 💡 Help of the ÷ 3 game: «Add the digits», the child types each sum on the pad;
+  // wrong → «Try again»; a sum of two digits → a new row adds its digits; one digit left → «3, 6 or 9?»
+  function addSums(n, box) {
     stop();
     const { rows, end } = sums(n);
-    box.innerHTML = `<div class="ng-sum"></div>`;
-    const el = box.firstChild;
-    let k = 0;
-    const tick = () => {
-      if (k < rows.length) {
-        const r = rows[k++];
-        el.insertAdjacentHTML("beforeend", sumRow(r));
-        say(`${r.a} plus ${r.b} equals ${r.s}`);
-        later(tick, 2600);
-      } else {
-        el.insertAdjacentHTML("beforeend", sumEnd(end));
-        say(`${end}. Is it 3, 6 or 9?`);
-      }
+    box.innerHTML = `<p class="ng-q"><b>Add the digits</b></p><div class="ng-sum"></div><p class="ng-note" aria-live="polite"></p>${pad()}`;
+    const el = box.querySelector(".ng-sum"),
+      msg = box.querySelector(".ng-note"),
+      padEl = box.querySelector(".mx-pad");
+    let k = 0,
+      typed = "",
+      cell = null;
+    const row = () => {
+      const r = rows[k];
+      el.insertAdjacentHTML(
+        "beforeend",
+        `<div class="ng-row"><span class="ng-t a">${r.a}</span><span class="ng-op">+</span><span class="ng-t b">${r.b}</span><span class="ng-op eq">=</span><span class="ng-t s">?</span></div>`,
+      );
+      cell = el.lastChild.querySelector(".ng-t.s");
+      typed = "";
+      say(`${r.a} plus ${r.b} equals?`);
     };
-    tick();
+    const key = (d) => {
+      if (!cell || k >= rows.length) return;
+      if (d === "del") typed = typed.slice(0, -1);
+      else if (d !== "ok") typed = (typed + d).slice(0, 2);
+      else {
+        if (!typed) return;
+        const r = rows[k];
+        if (+typed !== r.s) {
+          msg.textContent = "✗ Try again";
+          typed = "";
+          cell.textContent = "?";
+          return say(`Try again. ${r.a} plus ${r.b} equals?`);
+        }
+        msg.textContent = "";
+        k++;
+        if (k < rows.length) {
+          say(`Right! ${r.s} has two digits. Add again!`);
+          cell = null; // no typing until the next row is there
+          return later(row, 1800);
+        }
+        padEl.closest(".ng-go").remove();
+        el.insertAdjacentHTML("beforeend", sumEnd(end));
+        return say(`Right! ${end}. Is it 3, 6 or 9?`);
+      }
+      cell.textContent = typed || "?";
+    };
+    padEl
+      .querySelectorAll("[data-k]")
+      .forEach((b) => (b.onclick = () => key(b.dataset.k)));
+    row();
   }
 
   // ---------- the games: {id, ic, t, sub, deal() → numbers, ask(n, i, done(right first time?)), key(n) → the answer} ----------
@@ -294,7 +353,7 @@
       const strip = (k) =>
         `<div class="ng-steps">${P.map((p, j) => `<span class="ng-st${j === k ? " on" : ""}${res[j] === true ? " yes" : res[j] === false ? " no" : ""}">÷ ${p}${res[j] === undefined ? "" : res[j] ? " ✓" : " ✗"}</span>`).join("")}<span class="ng-st end${k === P.length ? " on" : ""}">💎 / 🧱</span></div>`;
       const head = (k) =>
-        `${strip(k)}<h2 class="ng-sh">Can <b>${P[k]}</b> divide it?</h2>`;
+        `${strip(k)}<h2 class="ng-sh"><b>Can it be divided by ${P[k]}?</b></h2>`;
       // a Yes / No step: right = it divides; then the next check, or the verdict
       const yn = (k, right, html, words) =>
         bindAns(right ? 1 : 0, (ok) => {
@@ -311,7 +370,7 @@
         frame(
           g,
           i,
-          `${head(k)}${num(n, "last")}<p class="ng-q">${q}</p>${chips(list, "big")}${ans(YN())}`,
+          `${head(k)}${num(n, "last")}<p class="ng-q">${q}</p>${chips(list, "big")}${ans(YN(P[k]))}`,
           words,
         );
         const yes = list.includes(last(n));
@@ -345,7 +404,7 @@
           const ask = () => {
             go.hidden = true;
             app.querySelector(".ng-qbox").innerHTML =
-              `<p class="ng-q">Is it 3, 6 or 9?</p>${chips([3, 6, 9], "big")}${ans(YN())}`;
+              `<p class="ng-q">Is it 3, 6 or 9?</p>${chips([3, 6, 9], "big")}${ans(YN(3))}`;
             say(`${one}. Is it 3, 6 or 9?`);
             const yes = one % 3 === 0;
             yn(
@@ -386,7 +445,7 @@
           frame(
             g,
             i,
-            `${head(k)}${num(n)}<p class="ng-q">Is ${n} in the 7 list?</p>${sevens()}${ans(YN())}`,
+            `${head(k)}${num(n)}<p class="ng-q">Is ${n} in the 7 list?</p>${sevens()}${ans(YN(7))}`,
             `Now 7. Look at the 7 list. Is ${n} in the list?`,
           );
           const yes = SEVENS.includes(n);
@@ -502,8 +561,8 @@
         frame(
           this,
           i,
-          `${num(n, o.how)}<p class="ng-q">Can ${p} divide it?</p>${o.help ? `<div class="ng-go"><button type="button" class="abtn ng-help">💡 Help</button></div><div class="ng-helpbox"></div>` : ""}${ans(YN(p))}`,
-          `${n}. Can ${p} divide ${n}?`,
+          `${num(n, o.how)}<p class="ng-q"><b>Can it be divided by ${p}?</b></p>${o.help ? `<div class="ng-go"><button type="button" class="abtn ng-help">💡 Help</button></div><div class="ng-helpbox"></div>` : ""}${ans(YN(p))}`,
+          `${n}. Can ${n} be divided by ${p}?`,
         );
         if (o.help) {
           const box = app.querySelector(".ng-helpbox");
@@ -527,7 +586,7 @@
     sub: "Add the digits → 3 6 9",
     from: 10,
     how: "two",
-    help: animSums,
+    help: addSums,
     why(n, yes) {
       const { rows, end } = sums(n);
       return [
