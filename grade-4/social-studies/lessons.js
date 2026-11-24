@@ -43,8 +43,8 @@ window.CS_LESSONS = {
           title: "People and the Land",
           en: "Adapt to the land, change it with technology: irrigation, the Ogallala Aquifer, saving resources; the story of Marjory Stoneman Douglas",
           path: "lesson-4.html",
-          cover: "img/lesson-4/mountain-home.jpg",
-          note: "17 picture cards · 1 story · 4 games · 5 exercises",
+          cover: "img/lesson-4/t-cover.jpg",
+          note: "26 picture cards · 1 story · 5 games · 6 exercises",
           term: 2,
         },
         {

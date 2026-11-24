@@ -1,9 +1,10 @@
 // Social Studies · Grade 4 · Chapter 1 · Lesson 4 « People and the Land » (myWorld Interactive 4, book pp. 28–33).
 // All the content of the lesson. The engine is shared/computer-lesson.js (no Mini Windows).
-// Learn: the book's text in easy words (picture cards), the book's vocabulary + the booklet's words, the story « Marjory Stoneman Douglas » (p. 36, story-douglas.html).
-// Exercises: Term 2 booklet, Lesson 4 exercise sheet (pp. 3–5), Graded Homework (1) of Term 2 (with 💡 Help), and the book's Reading Checks and Lesson 4 Check (pp. 29–33).
+// Learn: the teacher's slides « People and the Land » (20261118, slides 2–16, their pictures t-*.jpg) with the book's facts the booklet asks about (picture cards), the book's vocabulary + the booklet's words, the story « Marjory Stoneman Douglas » (p. 36, story-douglas.html).
+// Exercises: Term 2 booklet, Lesson 4 exercise sheet (pp. 3–5), Graded Homework (1) of Term 2 (with 💡 Help), the teacher's Quiz Time (slide 15), and the book's Reading Checks and Lesson 4 Check (pp. 29–33).
 // The booklet has no answer key: the answers follow the book (grade-4/social-studies/UNVERIFIED.md).
-// Pictures: .claude/skills/social-studies-lesson/scripts/pictures/chapter-1-lesson-4.py (book crops, the booklet's irrigation drawing, e-*.jpg drawings).
+// Pictures: .claude/skills/social-studies-lesson/scripts/pictures/chapter-1-lesson-4.py (book crops, the booklet's irrigation drawing, e-*.jpg drawings);
+// t-*.jpg: the photos of the teacher's slides (pdfimages -j, at most 720 px wide; t-fun, t-houses, t-sprinklers, t-wind-sun made with two_pictures of draw.py).
 
 // Every answer has a picture (Alex has aphasia: the picture explains the word or the sentence).
 // mc(q, [[answer, picture], …], more): the first answer is right; a picture is a file name in img/lesson-4/ or 1–2 emoji.
@@ -95,15 +96,17 @@ window.LESSON = {
   title: "People and the Land",
   unit: "Chapter 1 · Lesson 4",
   book: "Book pp. 28–33",
-  cover: "mountain-home",
+  cover: "t-cover",
   question: {
     q: "How do people [adapt to] the land, and how do they [change] it?",
     a: "People [adapt]: they change their clothes, homes and activities to fit the place. People [change] the land with [technology] to meet their needs, and they use technology to [save] resources.",
-    img: "mountain-home",
+    img: "t-beach-forest",
   },
-  // the book's Vocabulary and Academic Vocabulary (p. 28), + the booklet's words (skyway, treatment plant)
+  // the book's Vocabulary and Academic Vocabulary (p. 28), + the booklet's words (skyway, treatment plant), + the teacher's Word Wall (slide 16)
   words: [
-    { w: "Adapt", m: "to change to fit a new place or new conditions" },
+    { w: "Adapt", m: "to change to fit a new place" },
+    { w: "Beach house", m: "a house built on or near a beach" },
+    { w: "Stilts", m: "poles that lift a house up" },
     { w: "Technology", m: "using tools and science to do work" },
     { w: "Irrigation", m: "using technology to bring water to crops" },
     { w: "Aquifer", m: "a layer of rock under the ground that holds water" },
@@ -115,24 +118,51 @@ window.LESSON = {
       w: "Treatment plant",
       m: "a place that cleans water before and after we use it",
     },
+    { w: "Water treatment", m: "cleaning water so it is safe to use" },
+    { w: "Planting", m: "putting seeds in the ground to grow" },
+    { w: "Renewable", m: "we can use it again and again (wind, sun)" },
   ],
 
+  // Learn follows the teacher's slides « People and the Land » (20261118, 16 slides: easier than the book, with their pictures t-*.jpg);
+  // the book's facts the booklet asks about (pp. 28–33) are added where they fit.
   ideas: [
-    // p. 28
+    // slide 2 · book p. 28
     {
-      t: "Where people live",
+      t: "Where we live matters",
       lines: [
-        "Some people live near the [ocean], some near [mountains] or [plains].",
+        "Our world has [mountains], [plains] and [beaches].",
+        "Some people love to live near the [ocean]. Others want to be close to [mountains].",
+        "In a new place, we have to [adapt]!",
+      ],
+      img: "t-beach-forest",
+    },
+    {
+      t: "Living near resources",
+      lines: [
         "Some people live near [natural resources]: they [depend] on them for their jobs.",
         "Miners live near the [coal mines] of Illinois.",
       ],
       img: "mountain-home",
     },
-    // p. 29: People Adapt to the Environment
+    // slide 3 · book p. 29
     {
-      t: "Adapt = change to fit",
+      t: "Big word: adapt",
       lines: [
-        "To [adapt] means to change to fit a new place.",
+        "To [adapt] means to change so you fit a new place.",
+        "[Cold] place? You wear a warm coat and boots.",
+        "[Hot] place? You wear a hat and drink more water.",
+      ],
+      vis: {
+        kind: "strip",
+        items: [
+          { e: "❄️🧥", label: "Cold: coat and boots" },
+          { e: "☀️👒", label: "Hot: hat and water" },
+        ],
+      },
+    },
+    {
+      t: "Florida or Wisconsin",
+      lines: [
         "You move from warm [Florida] to cold [Wisconsin].",
         "You wear [warm clothes] and use more [heat].",
       ],
@@ -144,30 +174,54 @@ window.LESSON = {
         ],
       },
     },
+    // slide 4 · book p. 29
     {
-      t: "New place, new activities",
+      t: "Our fun changes with the place",
       lines: [
-        "In [Florida] you swim and [surf] in the ocean.",
-        "In [Wisconsin] you swim in a [lake] in summer.",
-        "In winter you [ski] down snowy hills.",
+        "At the beach in [Florida]: swim, [surf] and relax!",
+        "In [snowy places]: [ski] and snowboard!",
+        "In [Wisconsin] you can swim in a [lake] in summer.",
       ],
-      vis: {
-        kind: "strip",
-        items: [
-          { e: "🏄", label: "Florida: surf" },
-          { e: "🏊", label: "Wisconsin: lake" },
-          { e: "⛷️", label: "Wisconsin: ski" },
-        ],
-      },
+      img: "t-fun",
+    },
+    // slide 5 · book p. 29
+    {
+      t: "Smart buildings",
+      lines: [
+        "People build their houses to fit the place where they live.",
+        "In places with a lot of [rain] or [snow], houses have [steep, sloped roofs].",
+        "Why? So the snow and rain [slide off].",
+      ],
+      img: "t-snow-house",
     },
     {
       t: "Steep roofs",
       lines: [
-        "Where there is a lot of [rain] or [snow], houses have [steep roofs].",
-        "Rain and snow [slide off]. They do not stay on top.",
+        "A [steep] roof: the snow slides off.",
+        "A [flat] roof: the heavy snow stays on top.",
       ],
       img: "e-roof",
     },
+    {
+      t: "Beach houses",
+      lines: [
+        "At the beach, water can rise high during [storms].",
+        "So people build [beach houses] on tall [poles]. The house stays up high and dry.",
+        "A [beach house] is a house built on or near a beach. Example: the coast in [North Carolina].",
+      ],
+      img: "t-beach-house",
+    },
+    // slide 6 · book p. 29
+    {
+      t: "Houses on stilts",
+      lines: [
+        "[Stilts] are tall poles that raise a house up.",
+        "Beach houses on stilts stay above [flood water]!",
+        "They are built strong for [strong winds] and [heavy rain].",
+      ],
+      img: "t-stilts",
+    },
+    // book p. 29 (the booklet asks about it)
     {
       t: "Tunnels between buildings",
       lines: [
@@ -177,76 +231,87 @@ window.LESSON = {
       ],
       img: "e-skyway",
     },
-    {
-      t: "Houses on stilts",
-      lines: [
-        "At the beach in [North Carolina], the water can rise.",
-        "Houses stand on [stilts] (tall legs), so the water does not come in.",
-        "They are built strong for [strong winds] and [heavy rain].",
-      ],
-      img: "stilts",
-    },
-    // p. 30: People Change the Environment
+    // slide 7 · book p. 30
     {
       t: "People change the land",
       lines: [
-        "[American Indians] [burned] prairies and forests to [clear] the land.",
-        "That made rich soil and grass for animals.",
-        "[European settlers] [cut down] forests to make fields for planting.",
+        "For thousands of years, [Native Americans] [burned] forests and prairies to change the land.",
+        "Why? To [clear] the land and make [rich soil]!",
+        "The new grass fed the animals.",
+      ],
+      img: "t-burn",
+    },
+    // slide 8
+    {
+      t: "How fire helps the soil",
+      lines: [
+        "1. Fire [clears] trees and bushes.",
+        "2. [Ash] goes into the soil.",
+        "3. [Rich soil] helps new plants grow.",
+      ],
+      img: "t-fire-soil",
+    },
+    // slide 9 · book p. 30
+    {
+      t: "People keep changing the land",
+      lines: [
+        "[European settlers] in the [Northeast] cut down trees to clear fields for [planting].",
+        "[Planting]: putting seeds in the ground to grow.",
       ],
       vis: {
         kind: "strip",
         items: [
-          { e: "🔥🌾", label: "Burn the prairie" },
           { e: "🪓🌲", label: "Cut down trees" },
+          { e: "🌱🟫", label: "Planting" },
         ],
       },
     },
+    // slide 12 · book p. 30
     {
-      t: "Technology",
+      t: "The power of technology",
       lines: [
-        "[Technology] is using [tools] and [science] to do work.",
-        "In the 1800s, people cut down trees [by hand], with saws and axes.",
-        "Today [big machines] clear the land quickly, for homes, shops and farms.",
+        "Over time, people made [bigger changes] to the land, thanks to [technology].",
+        "[Technology] is the use of [tools] and [scientific knowledge].",
+        "In the 1800s people cut trees [by hand]. Today [big machines] clear the land quickly.",
       ],
-      img: "then-now",
+      img: "t-bulldozer",
     },
     {
       t: "Building big",
       lines: [
-        "People build [roads] on mountains, [highways] and [bridges] over rivers.",
-        "They build [dams] to hold back rivers.",
+        "Today, people use technology to build large structures:",
+        "[roads], [bridges] over rivers and [dams] that hold back rivers.",
       ],
-      vis: {
-        kind: "strip",
-        items: [
-          { e: "⛰️🛣️", label: "Roads" },
-          { e: "🌉", label: "Bridges" },
-          { e: "🧱💧", label: "Dams" },
-        ],
-      },
+      img: "t-roads",
     },
-    // p. 31: irrigation and the Ogallala Aquifer
+    // slide 10 · book p. 31
     {
       t: "Irrigation",
       lines: [
         "[Irrigation] is using technology to bring [water] to [crops].",
-        "The water comes in [pipes] from lakes, rivers and streams.",
+        "Some farms are far from water. So [pipes] bring water from lakes, streams and rivers to the plants.",
       ],
+      img: "t-sprinklers",
+    },
+    {
+      t: "Irrigation drawing",
+      lines: ["The water goes from the river, in [pipes], to the [crops]."],
       img: "irrigation-drawing",
     },
+    // slide 11 · book p. 31
     {
       t: "Aquifer",
       lines: [
-        "An [aquifer] is a layer of [rock under the ground] that holds [water].",
-        "Farms far from rivers [pump] the water up from an aquifer.",
+        "Some farms use water from [under the ground].",
+        "An [aquifer] is an underground layer of [rock] that holds [water].",
+        "Farms [pump] the water up from the aquifer.",
       ],
-      img: "e-aquifer",
+      img: "t-aquifer",
     },
     {
       t: "The Ogallala Aquifer",
       lines: [
-        "The [Ogallala Aquifer] is a big aquifer in the [center] of the USA, under [8 states].",
+        "The [Ogallala Aquifer] is a very big aquifer in the [central US], under [8 states].",
         "Its water helps farms grow [wheat] and [corn].",
         "Nearly all its water is used for [irrigation].",
       ],
@@ -260,39 +325,66 @@ window.LESSON = {
       ],
       img: "pivot",
     },
-    // p. 32: Saving Resources with Technology
+    // book p. 32 · slide 15 (quiz)
     {
       t: "Saving the aquifer",
       lines: [
-        "First, people carried the water in open [ditches]. The sun dried up a lot of it.",
+        "First, people carried the water in open [ditches]. The sun dried up a lot of it ([evaporation]).",
         "They took water out [faster] than the rain put it back.",
-        "Now [tunnels under the ground] carry the water, and better irrigation [wastes less].",
+        "Now [tunnels under the ground] carry the water, and nothing is lost to the sun.",
       ],
       img: "e-tunnel",
     },
+    // book p. 32 · slide 15 (quiz)
     {
       t: "Factories clean the air",
       lines: [
+        "[Air] is a natural resource that everyone needs to live.",
         "Factories make dirty air: [pollution].",
         "A [scrubber] cleans the air with water or chemicals before it goes out.",
       ],
       img: "e-scrubber",
     },
+    // slide 13 · book p. 32
     {
-      t: "Clean water",
+      t: "Saving water with technology",
       lines: [
-        "[Treatment plants] clean water [before] it goes to homes, so we can drink it.",
-        "They clean the dirty water [after] we use it, and send it back into [rivers].",
+        "People use new technologies to [conserve] (save) resources.",
+        "We clean water [before] we use it and [after] we use it.",
+      ],
+      vis: {
+        kind: "strip",
+        items: [
+          { e: "🏞️💧", label: "1. Pump water from lakes and rivers" },
+          { e: "🏭🧽", label: "2. A treatment plant cleans it" },
+          { e: "🏠🚿", label: "3. We use it at home" },
+          { e: "♻️🌊", label: "4. Clean again, back to rivers" },
+        ],
+      },
+    },
+    {
+      t: "Water treatment",
+      lines: [
+        "A [treatment plant] cleans water so it is safe to [drink].",
+        "Used water is cleaned again and goes back to [rivers], lakes and the ocean.",
       ],
       img: "e-treatment",
     },
-    // p. 33
+    // slide 14 · book p. 33
     {
-      t: "Energy from wind and sun",
+      t: "Clean energy from wind and sun",
       lines: [
-        "[Wind turbines] make electricity from the [wind]. [Solar panels] use the [sun].",
-        "Wind, sun and ocean waves are [renewable]: they never run out.",
-        "[Oil] is [nonrenewable]: it can run out. Wind and sun help us [save] oil.",
+        "[Wind turbines] have big blades. When the wind blows, the blades spin. This makes [energy].",
+        "[Solar panels] sit in the sun. They use [sunlight] to make energy.",
+        "Wind and sun are [renewable]: we can use them again and again!",
+      ],
+      img: "t-wind-sun",
+    },
+    {
+      t: "Saving oil",
+      lines: [
+        "[Oil] is [nonrenewable]: it can run out.",
+        "Use [renewable] energy, like the sun, wind and ocean [waves], to save oil.",
       ],
       img: "wind-turbines",
     },
@@ -419,10 +511,49 @@ window.LESSON = {
         {
           type: "match",
           pairs: [
-            { img: "bulldozer", label: "Technology: tools and science" },
+            { img: "then-now", label: "Technology: tools and science" },
             { img: "e-scrubber", label: "Scrubber: cleans the air" },
             { img: "e-treatment", label: "Treatment plant: cleans water" },
             { img: "wind-turbines", label: "Wind turbine: wind → electricity" },
+          ],
+        },
+      ],
+    },
+    {
+      k: "steps",
+      t: "What comes next?",
+      en: "The teacher's steps: fire and soil, clean water",
+      ic: "🔢",
+      items: [
+        {
+          type: "order",
+          t: "How fire helps the soil",
+          ask: "Put the steps in order: 1, 2, 3.",
+          hint: "Look at the card «How fire helps the soil» in Learn.",
+          img: "t-fire-soil",
+          steps: [
+            { say: "Fire clears trees and bushes.", e: "🔥🌳" },
+            { say: "Ash goes into the soil.", e: "⚫🟫" },
+            { say: "Rich soil helps new plants grow.", e: "🌱" },
+          ],
+        },
+        {
+          type: "order",
+          t: "Saving water with technology",
+          ask: "Put the steps in order: 1, 2, 3, 4.",
+          hint: "Look at the card «Saving water with technology» in Learn.",
+          img: "e-treatment",
+          steps: [
+            { say: "Pump water from lakes and rivers.", e: "🏞️💧" },
+            {
+              say: "A treatment plant cleans the water so it is safe to drink.",
+              e: "🏭🧽",
+            },
+            { say: "We use it at homes and businesses.", e: "🏠🚿" },
+            {
+              say: "Used water is cleaned and goes back to rivers.",
+              e: "♻️🌊",
+            },
           ],
         },
       ],
@@ -720,6 +851,39 @@ window.LESSON = {
           },
         ),
       ].map((it, k) => ({ ...it, help: HW_HELP[k] })),
+    },
+    {
+      k: "quiz",
+      t: "Quiz Time",
+      en: "The teacher's questions (slide 15)",
+      ic: "❓",
+      from: "Teacher's slides « People and the Land » · Quiz Time (slide 15)",
+      items: [
+        {
+          type: "open",
+          q: "How did people protect the [Ogallala Aquifer]?",
+          a: "They built [tunnels underground] to move water without losing it to [evaporation].",
+          img: "e-tunnel",
+        },
+        {
+          type: "open",
+          q: "Why must factories help protect the [air]?",
+          a: "[Air] is a natural resource that everyone needs to live.",
+          img: "e-scrubber",
+        },
+        {
+          type: "open",
+          q: "Where is water cleaned before and after we use it?",
+          a: "At [water treatment plants]. Then it returns to rivers, lakes, and the ocean.",
+          img: "e-treatment",
+        },
+        {
+          type: "open",
+          q: "How can we protect [nonrenewable] energy without using less?",
+          a: "Use [renewable] energy like the sun, wind, and waves.",
+          img: "t-wind-sun",
+        },
+      ],
     },
     {
       k: "check",
