@@ -11,7 +11,7 @@ They were made to save tokens: Claude reads short text reports and small contact
    - prepares the files: page pictures, contact sheets, the text layer and OCR (see `prep` below), so nothing has to be done when the session starts.
 3. **Sort** (optional, saves the most questions): open **https://mollers-pi.cheetah-krait.ts.net** on the phone or tablet (anywhere, Tailscale app on, no password),
    or http://mollers-pi.local:8770 at home (password), or http://127.0.0.1:8770 on the Pi. Per file: where it goes ("Lesson 4-3"), what it is (homework, slides, answer key, skip…), a note.
-   Per page: Use / Skip / Answers / Other lesson, and a note (words that can't be read, what the teacher said). More in "The sorting page" below.
+   Per page: the chips This lesson / Later / Answers, and a note (words that can't be read, what the teacher said). More in "The sorting page" below.
 4. **Build**: in a **new** Claude session, write «build inbox g4-math». Claude reads `inbox.py --subject g4-math` (your notes included), the contact sheets and the text,
    then follows the subject's skill. After the lesson: a row in the subject's `SOURCES.md`, `inbox.py done <files>`, `register.py`, commit.
 5. **`/clear`** after the lesson is committed: one lesson per session.
@@ -52,11 +52,16 @@ Per file:
 
 A file starts folded (only these fields); **Show N pages ▾** opens its page pictures, **Hide pages ▴** folds it again.
 
-Per page (under each page picture; tap a picture to see it big): **Use** / **Skip** / **Answers** / **Other lesson**, a note
-(words that can't be read), and the **Use for the lesson** tick for the Build panel. Everything is saved as you type ("Saved ✓").
-**Other lesson** = this page belongs to a different lesson than the file (type which one in "Which lesson?").
-**Keep for later** (a "Later" tag on the picture) = the page still has something to build (e.g. half homework, half lesson): `inbox.py done`
-leaves a file with such a page in the inbox; untick it once the page is fully used.
+Per page (under each page picture, and beside it when a picture is open big): three chips, each on or off by itself,
+with the same tag on the picture, and a note (words that can't be read). Everything is saved as you type ("Saved ✓").
+
+- **This lesson** = the page goes into the lesson of the Build panel; only these pages are used (none on: all new files of the subject).
+  After the build it turns off and the page shows "used: <lesson>"; the chip then reads **Use again**.
+- **Later** = the page still has something to build (another lesson, or half homework, half lesson): `inbox.py done`
+  leaves a file with such a page in the inbox; "Which lesson?" (if you know) says where it goes. Turn it off once the page is fully used.
+- **Answers** = this page is the answer key or model answer (for a whole file: "What it is" → Answer key).
+
+A page with no chip on is not used when any page is on **This lesson**; a file with nothing to build: "What it is" → Skip.
 
 **+ Add an old file** (at the bottom of the subject list, and at the top of every subject) brings back a file already used for a lesson,
 to build a new lesson with it: choose the subject, search by name or date, tap a file to see it (its pages on the left, on a phone on top;

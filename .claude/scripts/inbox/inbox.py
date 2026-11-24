@@ -326,6 +326,13 @@ def load_notes():
         notes = json.loads(NOTES.read_text())
     except (OSError, ValueError):
         return {}
+    for n in notes.values():  # the page marks of before the chips This lesson / Later / Answers
+        for v in n.get("pages", {}).values():
+            s = v.pop("s", "")
+            if s == "answers":
+                v["answers"] = True
+            elif s == "other":
+                v["keep"] = True
     gone = [k for k in notes if not (ROOT / k).exists()]
     if gone:
         now = {}
@@ -344,13 +351,10 @@ def note_lines(n):
     head = " · ".join(x for x in (n.get("target") and "→ " + n["target"], n.get("kind")) if x)
     if head or n.get("text"):
         out.append("  - parent: " + " · ".join(x for x in (head, n.get("text", "").replace("\n", " / ")) if x))
-    names = {"skip": "skip", "answers": "answers here", "other": "other lesson"}
     for p, v in sorted(n.get("pages", {}).items(), key=lambda kv: int(kv[0])):
-        bits = ["☑ ticked" if v.get("pick") else "", names.get(v.get("s"), "")]
-        if v.get("target"):
-            bits.append("→ " + v["target"])
+        bits = ["☑ this lesson" if v.get("pick") else "", "answers here" if v.get("answers") else ""]
         if v.get("keep"):
-            bits.append("📌 keep for later")
+            bits.append("📌 keep for later" + (" → " + v["target"] if v.get("target") else ""))
         if v.get("text"):
             bits.append(v["text"].replace("\n", " / "))
         out.append(f"  - p. {p}: " + " · ".join(b for b in bits if b))

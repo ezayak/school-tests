@@ -28,9 +28,7 @@
         --accent-soft: #e8eefc;
         --use: #1e6b3a;
         --use-soft: #e3f2e7;
-        --skip: #5f5e5a;
         --ans: #a85400;
-        --other: #5b3fa8;
         --later: #6b4e00;
         --later-soft: #fff1c2;
         --fix: #8a4200;
@@ -52,9 +50,7 @@
           --accent-soft: #24304d;
           --use: #4ade80;
           --use-soft: #1d3326;
-          --skip: #8b9097;
           --ans: #f59e4b;
-          --other: #a78bfa;
           --later: #f5d36b;
           --later-soft: #3a3115;
           --fix: #f5a65b;
@@ -575,17 +571,6 @@
         border-color: var(--accent);
         box-shadow: 0 0 0 2px var(--accent);
       }
-      .page .checks {
-        padding: 6px 10px;
-        border-bottom: 1px solid var(--line2);
-      }
-      .page .checks .pick {
-        min-height: 32px;
-        margin: 0;
-      }
-      .page .checks .keep input {
-        accent-color: var(--later);
-      }
       .page .thumb {
         position: relative;
         padding: 8px;
@@ -599,33 +584,38 @@
         background: #fff;
         border-radius: 4px;
       }
-      .page[data-s="skip"] img {
-        opacity: 0.35;
-      }
-      .tag {
+      /* The tags on the picture: the same colours as the chips that are on */
+      .tags {
         position: absolute;
         top: 12px;
+        left: 12px;
+        right: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        pointer-events: none;
+      }
+      .tag {
         padding: 2px 8px;
         border-radius: 99px;
         font-size: 11px;
         font-weight: 700;
-      }
-      .tag.role {
-        left: 12px;
         color: #fff;
-        background: var(--use);
+        background: var(--c);
       }
-      .page[data-s="skip"] .tag.role {
-        background: var(--skip);
+      .tag[data-v="pick"],
+      .chips button[data-v="pick"] {
+        --c: var(--accent);
       }
-      .page[data-s="answers"] .tag.role {
-        background: var(--ans);
+      .tag[data-v="keep"],
+      .chips button[data-v="keep"] {
+        --c: var(--later);
       }
-      .page[data-s="other"] .tag.role {
-        background: var(--other);
+      .tag[data-v="answers"],
+      .chips button[data-v="answers"] {
+        --c: var(--ans);
       }
-      .tag.later {
-        right: 12px;
+      .tag[data-v="keep"] {
         color: var(--later);
         background: var(--later-soft);
       }
@@ -652,20 +642,21 @@
         color: var(--ink2);
         cursor: pointer;
       }
+      .chips button[data-v="pick"] {
+        grid-column: 1 / -1;
+      }
       .chips button.on {
-        --c: var(--use);
         background: var(--c);
         border-color: var(--c);
         color: #fff;
       }
-      .chips button.on[data-v="skip"] {
-        --c: var(--skip);
+      .chips button.on[data-v="keep"] {
+        color: var(--later);
+        background: var(--later-soft);
       }
-      .chips button.on[data-v="answers"] {
-        --c: var(--ans);
-      }
-      .chips button.on[data-v="other"] {
-        --c: var(--other);
+      .single .chips {
+        max-width: 260px;
+        padding: 0;
       }
       .page .extra {
         padding: 0 8px 8px;
@@ -845,22 +836,6 @@
         border-radius: 99px;
         background: var(--later-soft);
         color: var(--later);
-      }
-      .pick {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        font-weight: 500;
-        cursor: pointer;
-        margin-bottom: 3px;
-      }
-      .pick input {
-        width: 20px;
-        height: 20px;
-        min-height: 0;
-        margin: 0;
-        accent-color: var(--accent);
       }
       /* The build panel: on the right on a wide screen; on a tablet or phone a bar at the bottom opens it as a sheet */
       aside {
@@ -1309,16 +1284,6 @@
       #big .side .fields textarea {
         height: 72px;
       }
-      #big .page .checks {
-        padding: 6px 16px 12px;
-      }
-      #big .page.picked .checks {
-        background: var(--accent-soft);
-      }
-      #big .page .checks .pick {
-        min-height: 44px;
-        font-size: 15px;
-      }
       #big .page .chips {
         padding: 14px 16px 8px;
       }
@@ -1421,11 +1386,11 @@
         ["video", "Video"],
         ["skip", "Skip: nothing to build"],
       ];
-      const STATES = [
-        ["", "Use"],
-        ["skip", "Skip"],
-        ["answers", "Answers"],
-        ["other", "Other lesson"],
+      // The chips under each page: [field in the note, chip, tag on the picture]
+      const PAGE_CHIPS = [
+        ["pick", "This lesson", "This lesson"],
+        ["keep", "Later", "Later"],
+        ["answers", "Answers", "Answers"],
       ];
       let data = { subjects: [] };
       let current = null;
@@ -1485,7 +1450,7 @@
         const pages = {};
         for (const [p, v] of Object.entries(n.pages || {})) {
           const pv = {};
-          for (const k of ["s", "target", "text", "pick", "used", "keep"])
+          for (const k of ["pick", "keep", "answers", "target", "text", "used"])
             if (v[k]) pv[k] = v[k];
           if (Object.keys(pv).length) pages[p] = pv;
         }
@@ -1860,10 +1825,10 @@
         const rev = (builds[s.id] || {}).mode === "revision";
         countLine.replaceChildren(
           t.pages
-            ? `${t.pages} page${t.pages > 1 ? "s" : ""} ticked in ${t.files} file${t.files > 1 ? "s" : ""}: only these are used.`
+            ? `${t.pages} page${t.pages > 1 ? "s" : ""} on «This lesson» in ${t.files} file${t.files > 1 ? "s" : ""}: only these are used.`
             : rev
-              ? "No page ticked: built only from the lessons you name, no files."
-              : "No page ticked: all new files of this subject are used (with your notes).",
+              ? "No page on «This lesson»: built only from the lessons you name, no files."
+              : "No page on «This lesson»: all new files of this subject are used (with your notes).",
           $("small", {
             text: t.kept
               ? `${t.kept} kept for later · notes are sent too`
@@ -1871,10 +1836,10 @@
           }),
         );
         document.getElementById("bar-n").textContent = t.pages
-          ? `${t.pages} page${t.pages > 1 ? "s" : ""} ticked`
+          ? `${t.pages} page${t.pages > 1 ? "s" : ""} for this lesson`
           : rev
             ? "Revision from lessons"
-            : "No page ticked: all files";
+            : "No page chosen: all files";
         document.getElementById("bar-k").textContent = t.kept
           ? `${t.kept} kept for later`
           : `${s.kid} · ${s.name}`;
@@ -2002,7 +1967,7 @@
         btn.onclick = async () => {
           const t = ticked(s);
           const what = t.pages
-            ? `${t.pages} ticked pages`
+            ? `${t.pages} pages for this lesson`
             : b.mode === "revision"
               ? "the lessons you named"
               : "all new files";
@@ -2338,7 +2303,7 @@
           ).length;
           fold.textContent = open
             ? "Hide pages ▴"
-            : `Show ${n} page${n === 1 ? "" : "s"}${ticked ? ` · ${ticked} ticked` : ""} ▾`;
+            : `Show ${n} page${n === 1 ? "" : "s"}${ticked ? ` · ${ticked} for this lesson` : ""} ▾`;
           fold.setAttribute("aria-expanded", open);
         };
         const meta = [
@@ -2380,7 +2345,7 @@
         );
         if (f.pictures.length) {
           const grid = $("div", { class: "pages" });
-          // The bar above the pages: tick all / none and how many are ticked or kept
+          // The bar above the pages: all / none on «This lesson» and how many are for this lesson or kept
           const nPick = $("span", { class: "n-pick" });
           const nKeep = $("span", { class: "n-keep" });
           const recount = () => {
@@ -2408,13 +2373,13 @@
               { class: "ticks" },
               f.pictures.length > 1
                 ? $("button", {
-                    text: "☑ Tick all",
+                    text: "All: this lesson",
                     onclick: () => tickAll(true),
                   })
                 : "",
               f.pictures.length > 1
                 ? $("button", {
-                    text: "☐ Tick none",
+                    text: "None",
                     onclick: () => tickAll(false),
                   })
                 : "",
@@ -2426,26 +2391,22 @@
         } else if (f.ext !== "pdf") {
           // A video or photo has no page pictures: one tick for the whole file (kept as page 1)
           const pn = f.note.pages[1] || (f.note.pages[1] = {});
-          const tick = $("input", {
-            type: "checkbox",
-            onchange: (e) => {
-              pn.pick = e.target.checked;
+          const chip = $("button", {
+            type: "button",
+            "data-v": "pick",
+            text: pn.used ? `Use again (used: ${pn.used})` : "This lesson",
+            onclick: () => {
+              pn.pick = !pn.pick;
+              chip.classList.toggle("on", pn.pick);
+              chip.setAttribute("aria-pressed", pn.pick);
               save(f.file);
               updateBuild();
             },
           });
-          tick.checked = !!pn.pick;
+          chip.classList.toggle("on", !!pn.pick);
+          chip.setAttribute("aria-pressed", !!pn.pick);
           card.append(
-            $(
-              "div",
-              { class: "single" },
-              $(
-                "label",
-                { class: "pick" },
-                tick,
-                pn.used ? `Use again (used: ${pn.used})` : "Use for the lesson",
-              ),
-            ),
+            $("div", { class: "single" }, $("div", { class: "chips" }, chip)),
           );
         }
         return card;
@@ -2494,59 +2455,23 @@
       // big: the box drawn in the page's popup (the picture doesn't open it again)
       function pageBox(f, pic, n, recount, big = false) {
         const pn = f.note.pages[n] || (f.note.pages[n] = {});
-        const box = $("div", {
-          class: "page" + (pn.pick ? " picked" : ""),
-          "data-s": pn.s || "",
-        });
-        const tick = $("input", {
-          type: "checkbox",
-          onchange: (e) => {
-            pn.pick = e.target.checked;
-            box.classList.toggle("picked", pn.pick);
-            save(f.file);
-            updateBuild();
-            recount();
-          },
-        });
-        tick.checked = !!pn.pick;
-        const later = $("span", { class: "tag later", text: "Later" });
-        later.hidden = !pn.keep;
-        const keep = $("input", {
-          type: "checkbox",
-          onchange: (e) => {
-            pn.keep = e.target.checked;
-            later.hidden = !pn.keep;
-            save(f.file);
-            recount();
-            updateBuild();
-          },
-        });
-        keep.checked = !!pn.keep;
-        box.append(
-          $(
-            "div",
-            { class: "checks" },
-            $(
-              "label",
-              { class: "pick" },
-              tick,
-              pn.used ? `Use again (used: ${pn.used})` : "Use for the lesson",
+        const box = $("div", { class: "page" + (pn.pick ? " picked" : "") });
+        // The tags on the picture: one for each chip that is on
+        const tags = $("div", { class: "tags" });
+        const showTags = () =>
+          tags.replaceChildren(
+            ...PAGE_CHIPS.filter(([k]) => pn[k]).map(([k, , tag]) =>
+              $("span", { class: "tag", "data-v": k, text: tag }),
             ),
-            $("label", { class: "pick keep" }, keep, "Keep for later"),
-          ),
-        );
-        const role = $("span", { class: "tag role" });
-        const showRole = () =>
-          (role.textContent = STATES.find((x) => x[0] === (pn.s || ""))[1]);
-        showRole();
+          );
         const extra = $("div", { class: "extra" });
         const drawExtra = () => {
           extra.replaceChildren();
-          if (pn.s === "other")
+          if (pn.keep)
             extra.append(
               $("input", {
                 list: "targets",
-                placeholder: "Which lesson?",
+                placeholder: "Which lesson? (if you know)",
                 value: pn.target || "",
                 oninput: (e) => {
                   pn.target = e.target.value;
@@ -2564,28 +2489,30 @@
           t.value = pn.text || "";
           extra.append(t);
         };
+        // Each chip turns on and off by itself: a page can be for this lesson and also kept for later
         const chips = $("div", { class: "chips" });
-        for (const [v, t] of STATES) {
-          chips.append(
-            $("button", {
-              class: (pn.s || "") === v ? "on" : "",
-              "data-v": v,
-              "aria-pressed": (pn.s || "") === v,
-              text: t,
-              onclick: () => {
-                pn.s = v;
-                box.dataset.s = v;
-                chips.querySelectorAll("button").forEach((b, i) => {
-                  b.classList.toggle("on", STATES[i][0] === v);
-                  b.setAttribute("aria-pressed", STATES[i][0] === v);
-                });
-                showRole();
-                drawExtra();
-                save(f.file);
-              },
-            }),
-          );
+        for (const [k, label] of PAGE_CHIPS) {
+          const b = $("button", {
+            type: "button",
+            "data-v": k,
+            text: k === "pick" && pn.used ? "Use again" : label,
+            onclick: () => {
+              pn[k] = !pn[k];
+              b.classList.toggle("on", pn[k]);
+              b.setAttribute("aria-pressed", pn[k]);
+              box.classList.toggle("picked", !!pn.pick);
+              showTags();
+              if (k === "keep") drawExtra();
+              save(f.file);
+              updateBuild();
+              recount();
+            },
+          });
+          b.classList.toggle("on", !!pn[k]);
+          b.setAttribute("aria-pressed", !!pn[k]);
+          chips.append(b);
         }
+        showTags();
         drawExtra();
         box.append(
           $(
@@ -2597,12 +2524,16 @@
               alt: "page " + n,
               onclick: () => big || openBig(f, n),
             }),
-            role,
-            later,
+            tags,
           ),
           $("div", {
             class: "n",
-            text: f.pictures.length > 1 ? "Page " + n : "",
+            text: [
+              f.pictures.length > 1 ? "Page " + n : "",
+              pn.used ? "used: " + pn.used : "",
+            ]
+              .filter(Boolean)
+              .join(" · "),
           }),
           chips,
           extra,
@@ -2665,7 +2596,7 @@
             $("h3", { text: "File" }),
             fileFields(f),
             $("h3", { text: "Page" }),
-            ...box.querySelectorAll(".checks, .chips, .extra"),
+            ...box.querySelectorAll(".chips, .extra"),
           ),
         );
         const thumb = box.querySelector(".thumb");
