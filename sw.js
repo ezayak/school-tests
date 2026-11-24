@@ -51,6 +51,7 @@ const CORE = [
   "./shared/math-uk.js",
   "./shared/times-games.css",
   "./shared/times-games.js",
+  "./shared/number-games.css",
   "./shared/word-games.css",
   "./shared/word-games.js",
   "./icons/icon-192.png",

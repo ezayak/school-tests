@@ -46,6 +46,7 @@ grade-4/
   math/                    ← Math: all terms, Computer lesson engine + shared/math.js
     index.html, lessons.js ← list of lessons, by book unit
     unit-2/ unit-3/ unit-4/ ← one lesson page per unit (<name>.html/.js, img/cover.jpg)
+    numbers/               ← Games part: «Prime or composite?» (index.html, numbers.js; styles shared/number-games.css)
 optima/                    ← the Ukrainian school (school: "optima" in games.js)
   grade-3/
     ukr-lit/               ← Українська література: index.html (list of texts), texts.js, <text>.html/.js

@@ -52,6 +52,17 @@ window.GAMES = [
     countLabel: "÷ 2–12 · 🎲 random",
   },
   {
+    period: "Games",
+    subject: "Math",
+    title: "Prime or composite?",
+    lesson: "Numbers to 99: check ÷ 2, ÷ 3, ÷ 5, ÷ 7",
+    topics:
+      "Step by step, with the steps or on my own · practice: even or odd, divide by 3 (add the digits), by 5, by 7 (the 7 list)",
+    path: "grade-4/math/numbers/index.html",
+    countLabel: "🧭 📋 ⚡ · ⚖️ 3️⃣ 5️⃣ 7️⃣",
+    also: ["grade-4/math/numbers/numbers.js"],
+  },
+  {
     grade: 3,
     term: 1,
     period: "Mid-term exam",

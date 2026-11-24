@@ -1,0 +1,576 @@
+/* Grade 4 Math "Prime or composite?" games (grade-4/math/numbers/numbers.js). Loads after theme.css, lesson.css, math.css.
+   Made for a child with aphasia: big numbers and buttons, colour for each idea (prime / composite, even / odd, yes / no). */
+
+/* the home screen: a prime is one line of dots, a composite a rectangle */
+.ng-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.ng-ex {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  padding: 12px;
+}
+.ng-ex > b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.4rem;
+}
+.ng-ex small {
+  color: var(--muted);
+}
+.ng-ex.pr,
+.ng-a.pr,
+.ng-verd.pr {
+  background: color-mix(in srgb, var(--cool) 18%, var(--card));
+}
+.ng-ex.co,
+.ng-a.co,
+.ng-verd.co {
+  background: color-mix(in srgb, var(--ke) 20%, var(--card));
+}
+/* the sound switch: 🔇 off (grey), 🔊 on (yellow) */
+.ng-sound {
+  font-family: var(--emoji);
+}
+.ng-sound[aria-pressed="false"] {
+  opacity: 0.6;
+}
+.ng-sound[aria-pressed="true"] {
+  background: var(--hl);
+}
+.ng-pick {
+  gap: 12px;
+}
+.ng-h {
+  font-size: 1.4rem;
+}
+
+/* a game screen */
+.ng-play {
+  align-items: stretch;
+}
+.ng-play .hud {
+  flex-wrap: nowrap;
+}
+.ng-play .qnum {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ng-play .count {
+  white-space: nowrap;
+}
+.ng-num {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  font-family: var(--display);
+  font-size: clamp(5rem, 22vw, 8.5rem);
+  line-height: 1;
+}
+.ng-d {
+  padding: 4px 2px;
+  border-radius: 18px;
+  border: 4px solid transparent;
+}
+.ng-d.hl {
+  padding: 4px 10px;
+  margin-left: 4px;
+  background: var(--hl);
+  border-color: var(--ink);
+  color: #1b2440;
+  animation: ng-pulse 1.2s ease-in-out 2;
+}
+.ng-num.two .ng-d:first-child:not(:last-child) {
+  color: var(--cool);
+}
+.ng-num.two .ng-d:last-child:not(:first-child) {
+  color: var(--ke);
+}
+.ng-q,
+.ng-sh {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.7rem;
+  text-align: center;
+  margin: 0;
+}
+.ng-sh b {
+  color: var(--accent);
+}
+.ng-note {
+  text-align: center;
+  font-size: 1.25rem;
+  margin: 0;
+}
+.ng-hl {
+  background: var(--hl);
+  color: #1b2440;
+  border-radius: 6px;
+  padding: 0 6px;
+}
+
+/* digit chips: 0 2 4 6 8, 3 6 9 … */
+.ng-chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+.ng-chip {
+  min-width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 1.15rem;
+  padding: 0 6px;
+}
+.ng-chips.big {
+  display: flex;
+  gap: 10px;
+}
+.ng-chips.big .ng-chip {
+  min-width: 56px;
+  height: 56px;
+  font-size: 1.8rem;
+  background: var(--hl);
+  color: #1b2440;
+}
+.ng-chips.small .ng-chip {
+  min-width: 30px;
+  height: 28px;
+  font-size: 0.95rem;
+}
+
+/* the answer buttons */
+.ng-ans {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.ng-a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 130px;
+  padding: 12px;
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.ng-a:active {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.ng-a:disabled {
+  cursor: default;
+}
+.ng-a b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 1;
+}
+.ng-a small {
+  color: var(--muted);
+  font-size: 1rem;
+}
+.ng-ic {
+  font-family: var(--emoji);
+  font-size: 2.4rem;
+  line-height: 1;
+}
+.ng-a.y .ng-ic {
+  color: var(--good);
+}
+.ng-a.n .ng-ic {
+  color: var(--bad);
+}
+.ng-a.ev {
+  background: color-mix(in srgb, var(--cool) 16%, var(--card));
+}
+.ng-a.od {
+  background: color-mix(in srgb, var(--pe) 16%, var(--card));
+}
+.ng-a.ok {
+  background: color-mix(in srgb, var(--good) 35%, var(--card));
+  border-color: var(--good);
+  outline: 4px solid var(--good);
+}
+.ng-a.no {
+  background: color-mix(in srgb, var(--bad) 30%, var(--card));
+  animation: ng-shake 0.4s ease-in-out 2;
+}
+.ng-a:disabled:not(.ok):not(.no) {
+  opacity: 0.5;
+}
+
+/* the answer's box */
+.ng-fbh {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.ng-fbh:empty {
+  display: none;
+}
+.ng-fb {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  border: 3px solid var(--good);
+  border-radius: 18px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--good) 10%, var(--card));
+  animation: ng-pop 0.35s ease-out;
+}
+.ng-fb.no {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 10%, var(--card));
+}
+.ng-fbt {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 2rem;
+  color: var(--good);
+}
+.ng-fb.no .ng-fbt {
+  color: var(--bad);
+}
+.ng-why {
+  font-size: 1.3rem;
+  margin: 0;
+}
+.ng-verd {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  margin: 0;
+  padding: 6px 18px;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+}
+
+/* n = a × b and its dots */
+.ng-proof {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.ng-eq {
+  font-family: var(--display);
+  font-size: 1.8rem;
+}
+.ng-eq .a {
+  color: var(--cool);
+}
+.ng-eq .b {
+  color: var(--ke);
+}
+.ng-dots {
+  display: grid;
+  grid-template-columns: repeat(var(--c), 1fr);
+  gap: 3px;
+  width: min(100%, calc(var(--c) * 22px));
+}
+.ng-dots i {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--ke);
+}
+.ng-dots.ng-line {
+  gap: 2px;
+}
+.ng-dots.ng-line i {
+  background: var(--cool);
+}
+
+/* Step by step: the strip of checks */
+.ng-steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.ng-st {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: var(--card);
+  color: var(--muted);
+}
+.ng-st.on {
+  background: var(--hl);
+  color: #1b2440;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.ng-st.yes {
+  background: color-mix(in srgb, var(--good) 30%, var(--card));
+  color: var(--ink);
+}
+.ng-st.no {
+  background: color-mix(in srgb, var(--bad) 18%, var(--card));
+  color: var(--ink);
+}
+
+/* adding the digits: a + b = s, the parts appear one after another */
+.ng-sum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ng-sum:empty {
+  display: none;
+}
+.ng-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: 2.6rem;
+  line-height: 1.1;
+}
+.ng-row small {
+  font-family: var(--body);
+  font-size: 1rem;
+  color: var(--muted);
+}
+.ng-t {
+  min-width: 64px;
+  text-align: center;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  padding: 2px 10px;
+  background: var(--card);
+}
+.ng-t.a {
+  color: var(--cool);
+}
+.ng-t.b {
+  color: var(--ke);
+}
+.ng-t.s {
+  background: var(--hl);
+  color: #1b2440;
+}
+.ng-row > * {
+  animation: ng-in 0.4s ease-out both;
+}
+.ng-row > .ng-op {
+  animation-delay: 0.5s;
+}
+.ng-row > .ng-t.b {
+  animation-delay: 0.25s;
+}
+.ng-row > .ng-op.eq {
+  animation-delay: 1s;
+}
+.ng-row > .ng-t.s {
+  animation: ng-pop 0.5s ease-out 1.3s both;
+}
+.ng-row.end > * {
+  animation-delay: 0s;
+}
+.ng-go {
+  display: flex;
+  justify-content: center;
+}
+.ng-go[hidden] {
+  display: none;
+}
+.ng-qbox,
+.ng-helpbox {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+.ng-qbox:empty,
+.ng-helpbox:empty {
+  display: none;
+}
+
+/* the 7 list */
+.ng-seven {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+.ng-sv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 4px 2px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--card));
+}
+.ng-sv b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.1;
+}
+.ng-sv small {
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.ng-sv.hit {
+  background: var(--hl);
+  color: #1b2440;
+  outline: 4px solid var(--good);
+  animation: ng-pop 0.5s ease-out;
+}
+.ng-sv.hit small {
+  color: #1b2440;
+}
+
+/* With the steps: the four checks */
+.ng-rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.ng-rule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  padding: 8px 10px;
+}
+.ng-rule.seven,
+.ng-rule.all {
+  grid-column: 1 / -1;
+}
+.ng-rule.all {
+  justify-content: center;
+  border-style: dashed;
+}
+.ng-rk {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+.ng-rt {
+  font-weight: 700;
+}
+
+/* the result */
+.ng-res {
+  align-items: center;
+  text-align: center;
+}
+.ng-mood {
+  font-family: var(--emoji);
+  font-size: 6rem;
+  line-height: 1.1;
+  animation: ng-pop 0.6s ease-out;
+}
+.ng-score {
+  font-family: var(--display);
+  font-size: 2.8rem;
+  margin: 0;
+  color: var(--accent);
+}
+.ng-best {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.ng-wrong {
+  width: min(460px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font-size: 1.2rem;
+}
+.ng-endnav {
+  justify-content: center;
+}
+
+@keyframes ng-pop {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+}
+@keyframes ng-in {
+  from {
+    transform: translateY(-16px);
+    opacity: 0;
+  }
+}
+@keyframes ng-pulse {
+  50% {
+    transform: scale(1.12);
+  }
+}
+@keyframes ng-shake {
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+@media (max-width: 480px) {
+  .ng-intro,
+  .ng-rules {
+    grid-template-columns: 1fr;
+  }
+  .ng-a {
+    min-height: 110px;
+  }
+  .ng-a b {
+    font-size: 1.6rem;
+  }
+  .ng-row {
+    font-size: 2rem;
+  }
+  .ng-sv b {
+    font-size: 1.2rem;
+  }
+  .ng-sv small {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ng-play *,
+  .ng-res * {
+    animation-duration: 0.01s !important;
+    animation-delay: 0s !important;
+  }
+}
