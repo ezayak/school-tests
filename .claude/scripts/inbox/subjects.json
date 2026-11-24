@@ -62,6 +62,7 @@
       "name": "Arabic",
       "folders": ["Alex/Arabic"],
       "app": "grade-4/term-1/arabic",
+      "skill": "arabic",
       "ocr": "ara"
     },
     {
@@ -78,6 +79,7 @@
       "name": "Religion",
       "folders": ["Alex/Religion"],
       "app": "grade-4/term-1/religion",
+      "skill": "religion-lesson",
       "ocr": "ara"
     },
     {
@@ -134,6 +136,7 @@
       "folders": ["Lucas/Computer"],
       "booklets": ["Computer"],
       "app": "grade-3/computer",
+      "skill": "computer-lesson",
       "ocr": "eng"
     },
     {
@@ -143,6 +146,7 @@
       "folders": ["Lucas/Science"],
       "booklets": ["Science"],
       "app": "grade-3/term-1/science",
+      "skill": "science-lesson",
       "ocr": "eng"
     },
     {

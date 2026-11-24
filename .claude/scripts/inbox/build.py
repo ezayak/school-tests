@@ -104,10 +104,15 @@ def prompt(job):
             out.append(f"Parent's description: {job['text']}")
         return "\n".join(out)
     if job["mode"] == "revision":
+        skills = (
+            f"skills {s['skill']} and revision"
+            if s.get("skill")
+            else f"skill revision; no subject skill: follow the sibling lessons in {s.get('app')}"
+        )
         out = [
             f"build inbox {job['subject']}",
             "",
-            f"Job: Create a revision «{job['target']}» ({s['kid']} · {s['name']}, skills {s.get('skill')} and revision)",
+            f"Job: Create a revision «{job['target']}» ({s['kid']} · {s['name']}, {skills})",
             "from the lessons already built in the app that the parent names below: their questions, words and exercises.",
             f"Parent's description (the lessons, what to do): {job['text']}",
         ]

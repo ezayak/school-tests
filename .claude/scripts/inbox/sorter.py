@@ -123,6 +123,11 @@ def pictures(rel):
     return [p.relative_to(prep.CACHE).as_posix() for p in pages]
 
 
+def by_name(s):
+    """Kids, then their subjects, by alphabet (case ignored: Science before SS Arabic)."""
+    return (s["kid"].casefold(), s["name"].casefold())
+
+
 def inbox_data():
     result, _ = inbox.scan()
     notes = load_notes()
@@ -130,9 +135,8 @@ def inbox_data():
     reviews = {}
     for x in review.open_notes():
         reviews.setdefault(review.subject_of(x["page"], inbox.CONFIG["subjects"]), []).append(x)
-    for s in result:
-        if not s["new"] and not reviews.get(s["id"]) and not s.get("skill"):
-            continue  # a subject with a skill stays listed: a revision can be built from its lessons alone
+    for s in sorted(result, key=by_name):
+        # every subject stays listed, even with nothing new: a revision can be built from its lessons alone
         files = []
         for x in s["new"]:
             files.append({**x, "pictures": pictures(x["file"]), "note": notes.get(x["file"], {})})
@@ -148,8 +152,8 @@ def inbox_data():
             }
         )
     # Notes on pages of no subject (Optima, speech games…): shown, fixed in a Claude session
-    # "all": every subject, for «+ Add an old file» (a subject with nothing new is not in "subjects")
-    every = [{"id": s["id"], "kid": s["kid"], "name": s["name"]} for s in inbox.CONFIG["subjects"]]
+    # "all": every subject, for «+ Add an old file»
+    every = [{"id": s["id"], "kid": s["kid"], "name": s["name"]} for s in sorted(inbox.CONFIG["subjects"], key=by_name)]
     return {"subjects": subjects, "otherReviews": reviews.get(None, []), "all": every}
 
 

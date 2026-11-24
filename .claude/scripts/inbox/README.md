@@ -23,7 +23,7 @@ and, if needed, what to do, and press **Create / Update lesson**. `build.py` (be
 the same result comes on Telegram with the commit link. Used pages are unticked and marked "used: <lesson>".
 **Revision from lessons** (the third choice) builds a revision with no new files, only from lessons already in the app: name it
 (e.g. "Mid-term 2 revision (Term 2)": the term decides its folder) and write the lessons in "Which lessons"; ticked pages, if any, are used too.
-Every subject with a skill stays in the list for this, even with nothing new ("Nothing new · revision").
+Every subject stays in the list for this, even with nothing new ("Nothing new · revision").
 The Build card and "Recent builds" (which scrolls inside its card) each have a **⤢** button that opens them in a big popup (**✕**, Esc or a tap outside closes).
 
 ## The sorting page
