@@ -1188,6 +1188,9 @@
         color: var(--fix);
         font-weight: 700;
       }
+      .job .copy {
+        align-self: flex-start;
+      }
       .job .kept {
         font-family: monospace;
         font-size: 12px;
@@ -2054,6 +2057,23 @@
       };
       let jobsTimer = null;
 
+      // navigator.clipboard needs https or localhost; the home-network address is plain http.
+      async function copyText(text, btn) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const t = $("textarea", { readonly: "" });
+          t.value = text;
+          document.body.append(t);
+          t.select();
+          document.execCommand("copy");
+          t.remove();
+        }
+        const was = btn.textContent;
+        btn.textContent = "✓ Copied";
+        setTimeout(() => (btn.textContent = was), 1500);
+      }
+
       async function loadJobs(subject) {
         clearTimeout(jobsTimer);
         const r = await fetch("/api/jobs/" + encodeURIComponent(subject));
@@ -2095,6 +2115,14 @@
                     (j.resume
                       ? `\nContinue in a normal chat:\n${j.resume}`
                       : ""),
+                }),
+              );
+            if (j.status === "failed" && j.resume)
+              box.append(
+                $("button", {
+                  class: "btn plain copy",
+                  text: "📋 Copy command",
+                  onclick: (e) => copyText(j.resume, e.currentTarget),
                 }),
               );
             if (j.tail.length && j.status !== "pushed")
