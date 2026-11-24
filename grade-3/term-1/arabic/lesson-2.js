@@ -11,6 +11,7 @@ window.LESSON = {
   stories: [
     {
       title: "السَّعَادَةُ فِي الْمُسَاعَدَةِ",
+      video: "ZAi0FSZ7_xU", // the school's YouTube video of this text
       en: "Happiness in Helping",
       uk: "Щастя в допомозі",
       kind: "Lesson text",
