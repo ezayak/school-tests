@@ -117,6 +117,7 @@ window.LESSON = {
     },
     {
       title: "الْأَسَدُ الْمُمَيَّزُ",
+      video: "O2SWYQnrRwM", // the school's YouTube video of this text
       en: "The Special Lion",
       uk: "Особливий лев",
       kind: "Reading with the family · p. 220–221",
