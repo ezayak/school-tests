@@ -21,6 +21,18 @@ const tf = (q, a, x, vis) => ({
   vis,
   x,
 });
+// one long row (17 balls) as a picture that shrinks to fit the frame: an "array" row of 17 is wider than the frame
+const ballRow = (n, e, cap) => ({
+  kind: "geo",
+  w: n * 22 - 22,
+  h: 10,
+  items: Array.from({ length: n }, (_, i) => ({
+    t: "text",
+    p: [i * 22, 12],
+    s: e,
+  })),
+  cap,
+});
 // the checks below throw when the page loads if a "prime" answer is not prime
 [53, 83, 89, 101, 19, 67].forEach((n) => {
   if (!isPrime(n)) throw new Error(`lesson-5-2: ${n} is not prime`);
@@ -83,7 +95,7 @@ window.LESSON = {
         "17 has exactly [one] factor pair: 1 × 17.",
         "17 is a [prime] number.",
       ],
-      vis: { kind: "array", r: 1, c: 17, e: "⚽", cap: "1 row of 17" },
+      vis: ballRow(17, "⚽", "1 row of 17"),
     },
     {
       t: "Even and odd",
@@ -174,7 +186,7 @@ window.LESSON = {
           q: "17 soccer balls in equal rows. In how many different ways?",
           a: 2,
           post: "ways",
-          vis: { kind: "array", r: 1, c: 17, e: "⚽", cap: "" },
+          vis: ballRow(17, "⚽", ""),
           x: "Only 1 row of 17 or 17 rows of 1: [2] ways.",
         },
         primeQ(12),
