@@ -72,6 +72,6 @@ npx --no-install prettier --write <the changed files>
 ## 7. Report and commit
 
 - Report: the words and sentences, where the words came from (sheet / the week's spelling list), any unreadable word, what was checked. Wait for approval.
-- Commits (no Co-Authored-By line): the dictation (page, data file, `dictations.js`, `games.js`, `SOURCES.md`), then `sw.js: VERSION vN` on its own.
+- Commits (no Co-Authored-By line): the dictation (page, data file, `dictations.js`, `games.js`, `SOURCES.md`) and the `sw.js` VERSION bump, in one commit.
 - A change to `shared/spelling.js` must leave every dictation as it was: render every screen of the old and new engine with the same `Math.random` seed and compare
   (all dictations: `grep -rl "shared/spelling.js" --include=*.html grade-*`).

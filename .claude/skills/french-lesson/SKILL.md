@@ -112,9 +112,9 @@ npx --no-install prettier --write <changed files>; node --check <each .js>
 
 ## 6. Register and report
 
-- `lessons.js` card; in `games.js` the French entry's `also` (the `.html`, `.js`, every picture), `countLabel` ("N lessons") and `topics`; `VERSION` bump in `sw.js` last, in its own commit.
+- `lessons.js` card; in `games.js` the French entry's `also` (the `.html`, `.js`, every picture), `countLabel` ("N lessons") and `topics`; `VERSION` bump in `sw.js` last, in the lesson's commit.
 - Report: what was built (by book / cahier / sheet page), what was left out and why (listening, open speaking, pages for later), unverified answers, typos fixed, words or names to ask about. Then wait for approval.
-- Commits when approved: engine change · lesson · formatting-only (if any) · `sw.js` bump. No Co-Authored-By line (CLAUDE.md).
+- Commits when approved: engine change · formatting-only (if any) · lesson with the `sw.js` bump. No Co-Authored-By line (CLAUDE.md).
 
 ## 7. Grade 3: book lessons (« Léo et Théo Plus 1 »)
 

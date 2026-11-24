@@ -95,7 +95,7 @@ Check at least: the tiles, every slide, one exercise of each group with 📝 Р�
   (note = pages, exercise count, the table games), the files and pictures in `also` of the Математика entry in `games.js` and its `countLabel`.
   Run it again after changing the lesson (it replaces, never doubles). Then `prettier --write` those files and run `check.js`. Update `topics` by hand when a book section starts.
 - Show the user: what was built (slides, groups), what was left out and why, anything unsure. Wait for approval (or, when the user asked for a batch, commit each lesson and show them together).
-- Commit each lesson on its own; engine changes in their own commit before it. Bump `VERSION` in `sw.js` once, last, in its own commit.
+- Commit each lesson on its own; engine changes in their own commit before it. Bump `VERSION` in `sw.js` once, in the last commit.
 
 ## Lessons learned
 

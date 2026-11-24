@@ -92,7 +92,7 @@ bash $SH <scratchpad>/c.png $D lesson-N.html "reset;tab:tasks;click:#g-0;go:2" 1
 
 Check: the whole text is there in reading order (two columns on a tablet), each page fits 1280×800 with the bar, the sentences split where the book's sentences end, every question slide, a phone width.
 
-- One commit per lesson (the lesson's files, `lessons.js`, `games.js`); `VERSION` bump in `sw.js` once, last, in its own commit.
+- One commit per lesson (the lesson's files, `lessons.js`, `games.js`); `VERSION` bump in `sw.js` once, in the last commit.
 - Show the user: the text, the questions and their answers (the oral ones with the model answer), what was left out.
 
 ## The reader (shared/ukr-lesson.js)

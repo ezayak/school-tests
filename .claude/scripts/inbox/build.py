@@ -44,9 +44,9 @@ RULES = """You run unattended: the parent pressed «Create / Update lesson» or 
 That press is the approval: do not ask questions, do not wait for approval, do not show diffs.
 - Follow CLAUDE.md and the subject's skill as in a normal «build inbox» session. First read the parent's
   memory notes: ~/.claude/projects/-home-olena-projects-school-tests/memory/MEMORY.md (and the files it lists).
-- Commit on the current branch (a git worktree made for this job): the lesson (with its SOURCES.md row and
-  done.txt) in one commit, then `register.py bump "<reason>"` alone in a last commit. Never push: the job script
-  checks the commits and pushes them itself.
+- Commit on the current branch (a git worktree made for this job): ONE commit with everything: the lesson
+  (with its SOURCES.md row and done.txt) and the sw.js bump (`register.py bump "<reason>"` last, before committing).
+  Never push: the job script checks the commit and pushes it itself.
 - Change only the subject's lesson files, games.js, sw.js and done.txt. The subject's files may be in, or move to,
   any term folder of its grade (grade-N/term-T/<subject>/), e.g. a revision moved to another term.
   Never change an engine, shared/, a skill or CLAUDE.md: if the lesson needs that, build what you can without it and say so at the end.
@@ -54,7 +54,7 @@ That press is the approval: do not ask questions, do not wait for approval, do n
 - When ticked pages are given, use only those. Run `inbox.py done` only for files that are used up:
   a big file (a book) of which only some pages were ticked stays in the inbox.
 - A «Fix notes» job: fix only the review notes given, as in a «fix review notes» session (the subject's skill),
-  in one commit, then the bump. Never run `review.py done`: the job script marks the notes fixed after the push.
+  in one commit together with the bump. Never run `review.py done`: the job script marks the notes fixed after the push.
   A note that needs an engine or shared/ change: leave it and say so at the end.
 - If you cannot do it (pages unreadable, the task unclear, the lesson not found, an engine change needed), commit
   nothing and start your last message with one line `Not done: <the cause, in a few words>`

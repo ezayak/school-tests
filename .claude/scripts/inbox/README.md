@@ -139,7 +139,7 @@ python3 .claude/scripts/inbox/inbox.py --telegram [--prep] # what the 19:00 run 
 
 python3 .claude/scripts/inbox/register.py add grade-4/math/index.html <files / picture folders>
 python3 .claude/scripts/inbox/register.py check [<hub> | <folder>]
-python3 .claude/scripts/inbox/register.py bump "French Grade 3 Unité 3"   # then commit sw.js alone
+python3 .claude/scripts/inbox/register.py bump "French Grade 3 Unité 3"   # then commit sw.js with the lesson
 
 python3 .claude/scripts/inbox/sorter.py --set-password     # in a terminal; then: systemctl --user restart school-sorter
 ```

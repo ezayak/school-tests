@@ -84,7 +84,7 @@ The tiles are tapped with real pointer events (`.click()` does not move them). L
 
 - The head has `part: {k, tab, ic, t}` (the book section) and `card: {en, cover}`; `node .claude/scripts/ukr-lesson-add.js optima/grade-3/ukr-mova`
   makes `lesson-N.html`, rebuilds `lessons.js` and the «Українська мова» entry of `games.js` (files, pictures, `countLabel`, `topics`).
-- `prettier --write` the changed files, run the check again. Bump `VERSION` in `sw.js` once, last, in its own commit.
+- `prettier --write` the changed files, run the check again. Bump `VERSION` in `sw.js` once, in the last commit.
 - Show the user: slides, groups, what was left out and why, the answers that were worked out without a key. Commit each lesson on its own.
 
 ## Lessons learned

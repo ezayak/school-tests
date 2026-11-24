@@ -111,4 +111,4 @@ Add every new file and picture (not videos) to `also` (`python3 .claude/scripts/
 python3 .claude/scripts/inbox/register.py check grade-4/computer   # 0 missing, 0 not listed (except video/)
 ```
 
-Commit that, then bump `VERSION` in `sw.js` in its own last commit. Don't push unless the user asks.
+Bump `VERSION` in `sw.js` and commit it together with that. Don't push unless the user asks.

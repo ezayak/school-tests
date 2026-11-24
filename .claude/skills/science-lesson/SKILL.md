@@ -82,4 +82,4 @@ The machine is a Raspberry Pi: headless Chromium fails when memory is short (oth
 
 ## 7. Offline, at the end of a batch
 
-Add every new file and picture to `also` (`python3 .claude/scripts/inbox/register.py add <hub> <files / picture folders>`) of the Science entry in `games.js`, update its `topics` (the Term N part) and `countLabel`, then `python3 .claude/scripts/inbox/register.py check grade-4/science` (0 missing, 0 not listed; `.md` files are ignored). Commit, then bump `VERSION` in `sw.js` in its own last commit. Don't push unless asked.
+Add every new file and picture to `also` (`python3 .claude/scripts/inbox/register.py add <hub> <files / picture folders>`) of the Science entry in `games.js`, update its `topics` (the Term N part) and `countLabel`, then `python3 .claude/scripts/inbox/register.py check grade-4/science` (0 missing, 0 not listed; `.md` files are ignored). Bump `VERSION` in `sw.js`, then commit it together with the lesson. Don't push unless asked.

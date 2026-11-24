@@ -181,7 +181,7 @@ def bump(reason):
     new = f"v{int(m.group(1)) + 1}"
     SW.write_text(text.replace(m.group(0), f'const VERSION = "{new}";', 1))
     print(f"sw.js: VERSION {new}")
-    print(f'git add sw.js && git commit -m "sw.js: VERSION {new} ({reason})"')
+    print(f"commit sw.js together with the change ({reason})")
 
 
 if __name__ == "__main__":

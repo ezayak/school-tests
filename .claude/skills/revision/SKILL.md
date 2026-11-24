@@ -66,7 +66,7 @@ is a word list, not a revision: the `english-dictation` skill.
     (`register.py add`), and the card says so in a comment, as the French and English revision cards do; a subject with no entry: in the card's own `also`.
   - Not tied to an exam (a monthly sheet, D): in the subject's own list (`lessons.js` / `dictations.js`) after the lessons it covers, `n: "Revision"` or `"Review"`
     (Religion: `nAr: "مُرَاجَعَةٌ"`), its `note` with the counts.
-  - Then the subject entry's `countLabel` / `topics` (e.g. "18 lessons · 1 revision"), `register.py check`, the `SOURCES.md` row, `inbox.py done` (sheet **and** key), and the bump in its own commit.
+  - Then the subject entry's `countLabel` / `topics` (e.g. "18 lessons · 1 revision"), `register.py check`, the `SOURCES.md` row, `inbox.py done` (sheet **and** key), and the bump, all in the revision's commit.
 
 ## 3. Reuse, don't copy
 

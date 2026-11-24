@@ -101,4 +101,4 @@ The machine is a Raspberry Pi: run one browser at a time; if Chromium cannot ope
 
 ## 7. Offline, at the end of a batch
 
-Add every new file and picture to `also` (`python3 .claude/scripts/inbox/register.py add <hub> <files / picture folders>`) of the Social Studies entry in `games.js`, update its `topics` and `countLabel`, then `python3 .claude/scripts/inbox/register.py check grade-4/social-studies` (0 missing, 0 not listed). Commit, then bump `VERSION` in `sw.js` in its own last commit. Don't push unless asked.
+Add every new file and picture to `also` (`python3 .claude/scripts/inbox/register.py add <hub> <files / picture folders>`) of the Social Studies entry in `games.js`, update its `topics` and `countLabel`, then `python3 .claude/scripts/inbox/register.py check grade-4/social-studies` (0 missing, 0 not listed). Bump `VERSION` in `sw.js`, then commit it together with the lesson. Don't push unless asked.
