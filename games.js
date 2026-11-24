@@ -586,6 +586,12 @@ window.GAMES = [
       "grade-4/term-2/religion/img/revision-november/zacchaeus-climb.jpg",
       "grade-4/term-2/religion/img/revision-november/zacchaeus-jericho.jpg",
       "grade-4/term-2/religion/img/revision-november/zacchaeus-repent.jpg",
+      "grade-4/term-2/religion/img/revision-november/abanoub-crown.jpg",
+      "grade-4/term-2/religion/img/revision-november/abanoub-family.jpg",
+      "grade-4/term-2/religion/img/revision-november/abanoub-governor.jpg",
+      "grade-4/term-2/religion/img/revision-november/abanoub-kids.jpg",
+      "grade-4/term-2/religion/img/revision-november/abanoub-miracles.jpg",
+      "grade-4/term-2/religion/img/revision-november/abanoub-prison.jpg",
     ],
   },
   {

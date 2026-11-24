@@ -7,6 +7,8 @@
      20261121-الواجب علي درس يوحنا يمهد الطريق للسيد المسيح.pdf (only its golden-verse questions: Q2.3, Q2.5, Q3),
    - the memory-verse slides 20261121-att.XSLCX…pdf (the five verses, pictures), the Zacchaeus page 20261114-زكا العشار.jpeg (story, pictures),
      20261121-شرح الدرس طفولة السيد المسيح g4.pdf (only Simeon in the temple, the setting of Luke 2:25–32), 20261121-att.hQRU…pdf (the John 1:29 picture).
+   Pictures: the story pictures of the sources (Abanoub: the 6 slides of 20261107-درس القديس ابانوب.pdf, cropped; Zacchaeus: the jpeg; verses: the slides).
+   Elijah, Deborah and Simeon have no pictures in the sources, so their questions keep emojis (review note mwugy179so58).
    Homework without a key: answers from the lesson sheets. Questions that are on two sheets are asked once.
    The short stories under "Read / listen" are written from the sheets' sentences (there is no book text in the app).
    Luke 2:25–32 is the Van Dyke text (no source page has it); Elijah's verse is 1 Kings 17:1 (the sheet prints «1 صم 17:47», the reference of Deborah's verse).
@@ -145,24 +147,28 @@ window.LESSON = {
       parts: [
         {
           para: "طِفْلٌ مِنْ نَهِيسَةَ",
+          img: "img/revision-november/abanoub-family.jpg",
           ar: "وُلِدَ الْقِدِّيسُ أَبَانُوبُ فِي قَرْيَةِ نَهِيسَةَ بِمُحَافَظَةِ الدَّقَهْلِيَّةِ، وَاسْمُ وَالِدِهِ مَقَارُ وَاسْمُ أُمِّهِ مَرْيَمُ، وَكَانَتْ أُسْرَتُهُ تُحِبُّ اللهَ. وَأَمَرَ الْمَلِكُ دِقْلِدْيَانُوسُ الْمَسِيحِيِّينَ بِالسُّجُودِ لِلْأَوْثَانِ.",
           en: "Saint Abanoub was born in the village of Nahisa in Dakahlia governorate. His father was called Makar and his mother Mary, and his family loved God. King Diocletian ordered the Christians to bow down to idols.",
           uk: "Святий Абануб народився в селі Нахіса в мухафазі Дакахлія. Його батька звали Макар, а матір — Марія, і його родина любила Бога. Цар Діоклетіан наказав християнам поклонятися ідолам.",
         },
         {
           para: "أَمَامَ وَالِي سَمَنُّودَ",
+          img: "img/revision-november/abanoub-governor.jpg",
           ar: "كَانَ أَبَانُوبُ طِفْلًا صَغِيرًا عُمْرُهُ اثْنَا عَشَرَ عَامًا، لَكِنَّهُ وَقَفَ بِشَجَاعَةٍ أَمَامَ وَالِي سَمَنُّودَ وَأَعْلَنَ إِيمَانَهُ قَائِلًا: «أَنَا أَعْبُدُ رَبِّي وَإِلَهِي وَمُخَلِّصِي يَسُوعَ، وَلَنْ أَسْجُدَ لِآلِهَةٍ أُخْرَى». غَضِبَ الْوَالِي وَوَضَعَهُ فِي السِّجْنِ، وَفَشِلَ فِي إِقْنَاعِهِ بِالسُّجُودِ لِلْأَوْثَانِ.",
           en: 'Abanoub was a small child of twelve, but he stood bravely before the governor of Samannoud and declared his faith: "I worship my Lord, my God and my Saviour Jesus, and I will not bow down to other gods." The governor was angry and put him in prison, but he failed to make him bow down to the idols.',
           uk: "Абануб був маленькою дитиною дванадцяти років, але він сміливо став перед правителем Саманнуда й визнав свою віру: «Я поклоняюся моєму Господу, Богові й Спасителю Ісусу і не вклонюся іншим богам». Правитель розгнівався й кинув його до в'язниці, але не зміг змусити його вклонитися ідолам.",
         },
         {
           para: "الْمَلَاكُ مِيخَائِيلُ",
+          img: "img/revision-november/abanoub-prison.jpg",
           ar: "ظَهَرَ الْمَلَاكُ مِيخَائِيلُ لِلْقِدِّيسِ أَبَانُوبَ فِي السِّجْنِ وَقَالَ لَهُ: «لَسْتَ وَحْدَكَ يَا أَبَانُوبُ، اللهُ مَعَكَ»، فَشَجَّعَهُ وَأَعْطَاهُ قُوَّةً. ثُمَّ أَرْسَلَهُ وَالِي سَمَنُّودَ إِلَى وَالِي أَتْرِيبَ لِإِصْرَارِهِ عَلَى إِيمَانِهِ.",
           en: 'The angel Michael appeared to Saint Abanoub in the prison and said to him: "You are not alone, Abanoub: God is with you." He encouraged him and gave him strength. Then the governor of Samannoud sent him to the governor of Atrib, because he held on to his faith.',
           uk: "Ангел Михаїл з'явився святому Абанубу у в'язниці й сказав йому: «Ти не сам, Абанубе: Бог з тобою». Він підбадьорив його й дав йому силу. Потім правитель Саманнуда відіслав його до правителя Атріба, бо той твердо тримався своєї віри.",
         },
         {
           para: "إِكْلِيلُ الشَّهَادَةِ",
+          img: "img/revision-november/abanoub-crown.jpg",
           ar: "تَعَرَّضَ الْقِدِّيسُ أَبَانُوبُ لِلتَّعْذِيبِ فِي الْإِسْكَنْدَرِيَّةِ، وَالرَّبُّ يَسُوعُ كَانَ يُقَوِّيهِ، وَآمَنَ الْكَثِيرُ مِنَ النَّاسِ بِسَبَبِ شَجَاعَتِهِ. أَمَرَ وَالِي الْإِسْكَنْدَرِيَّةِ بِقَتْلِهِ، فَاسْتُشْهِدَ بِقَطْعِ رَأْسِهِ، وَنَالَ إِكْلِيلَ الشَّهَادَةِ وَهُوَ فِي عُمْرِ اثْنَيْ عَشَرَ عَامًا. وَدُفِنَ فِي سَمَنُّودَ، وَبُنِيَتْ كَنِيسَةٌ عَلَى اسْمِهِ هُنَاكَ.",
           en: "Saint Abanoub was tortured in Alexandria, and the Lord Jesus gave him strength; many people believed because of his courage. The governor of Alexandria ordered him to be killed: he was martyred by beheading and received the crown of martyrdom at the age of twelve. He was buried in Samannoud, and a church was built there in his name.",
           uk: "Святого Абануба катували в Александрії, а Господь Ісус додавав йому сили; багато людей увірувало через його мужність. Правитель Александрії наказав його вбити: йому відтяли голову, і він здобув вінець мучеництва у віці дванадцяти років. Його поховали в Саманнуді, і там збудували церкву на його ім'я.",
@@ -349,6 +355,7 @@ window.LESSON = {
       re: "Philippians 4:13",
       en: "I can do all things in Christ who strengthens me.",
       uk: "Усе можу в Христі, що зміцнює мене.",
+      img: "img/revision-november/abanoub-kids.jpg",
       gaps: [
         ["أَسْتَطِيعُ", "أَكْتُبُ", "أَخَافُ"],
         ["شَيْءٍ", "بَيْتٍ", "يَوْمٍ"],
@@ -1241,7 +1248,7 @@ window.LESSON = {
           en: "Saint Abanoub was born in the governorate of ___.",
           uk: "Святий Абануб народився в мухафазі ___.",
           read: [3, 0],
-          ic: "🏡",
+          img: "img/revision-november/abanoub-family.jpg",
         },
         {
           type: "mc",
@@ -1250,7 +1257,7 @@ window.LESSON = {
           en: "Abanoub's family loved ___. (God · worshipping idols · trade)",
           uk: "Родина Абануба любила ___. (Бога · поклоніння ідолам · торгівлю)",
           read: [3, 0],
-          ic: "👨‍👩‍👦",
+          img: "img/revision-november/abanoub-family.jpg",
         },
         {
           type: "mc",
@@ -1259,7 +1266,7 @@ window.LESSON = {
           en: "King Diocletian ordered ___ to bow down to idols. (the Christians · the Jews · the pagans)",
           uk: "Цар Діоклетіан наказав ___ поклонятися ідолам. (християнам · юдеям · язичникам)",
           read: [3, 0],
-          ic: "👑",
+          img: "img/revision-november/abanoub-governor.jpg",
         },
         {
           type: "mc",
@@ -1268,7 +1275,7 @@ window.LESSON = {
           en: "Saint Abanoub stood before the governor of Samannoud with ___. (courage · fear · sadness)",
           uk: "Святий Абануб стояв перед правителем Саманнуда з ___. (мужністю · страхом · сумом)",
           read: [3, 1],
-          ic: "💪",
+          img: "img/revision-november/abanoub-governor.jpg",
         },
         {
           type: "mc",
@@ -1277,7 +1284,7 @@ window.LESSON = {
           en: "The angel ___ appeared to Saint Abanoub in prison.",
           uk: "Ангел ___ з'явився святому Абанубу у в'язниці.",
           read: [3, 2],
-          img: "img/revision-november/angel.jpg",
+          img: "img/revision-november/abanoub-prison.jpg",
         },
         {
           type: "mc",
@@ -1286,7 +1293,7 @@ window.LESSON = {
           en: "Saint Abanoub received the crown of martyrdom at the age of ___.",
           uk: "Святий Абануб здобув вінець мучеництва у віці ___ років.",
           read: [3, 3],
-          ic: "👑",
+          img: "img/revision-november/abanoub-crown.jpg",
         },
         {
           type: "mc",
@@ -1295,7 +1302,7 @@ window.LESSON = {
           en: "The governor of ___ was angry with Abanoub and put him in prison.",
           uk: "Правитель ___ розгнівався на Абануба й кинув його до в'язниці.",
           read: [3, 1],
-          ic: "⛓️",
+          img: "img/revision-november/abanoub-prison.jpg",
         },
       ],
     },
@@ -1440,7 +1447,7 @@ window.LESSON = {
           en: "Even though I was young, I declared my faith with all courage. Who am I? I am ___",
           uk: "Хоч я був малий, я сміливо визнав свою віру. Хто я? Я ___",
           read: [3, 1],
-          ic: "👦",
+          img: "img/revision-november/abanoub-governor.jpg",
         },
         {
           type: "mc",
@@ -1453,7 +1460,7 @@ window.LESSON = {
           en: "I failed to make Abanoub bow down to the idols. Who am I? I am ___",
           uk: "Я не зміг змусити Абануба вклонитися ідолам. Хто я? Я ___",
           read: [3, 1],
-          ic: "🏛️",
+          img: "img/revision-november/abanoub-miracles.jpg",
         },
         {
           type: "mc",
@@ -1466,7 +1473,7 @@ window.LESSON = {
           en: "I ordered Abanoub to be killed because of his strong faith. Who am I? I am ___",
           uk: "Я наказав убити Абануба через його сильну віру. Хто я? Я ___",
           read: [3, 3],
-          ic: "🏛️",
+          img: "img/revision-november/abanoub-crown.jpg",
         },
       ],
     },
@@ -1621,7 +1628,7 @@ window.LESSON = {
           en: "The governor of Samannoud was not angry about Abanoub's faith.",
           uk: "Правитель Саманнуда не розгнівався через віру Абануба.",
           read: [3, 1],
-          ic: "🏛️",
+          img: "img/revision-november/abanoub-governor.jpg",
         },
         {
           type: "tf",
@@ -1630,7 +1637,7 @@ window.LESSON = {
           en: "The governor of Samannoud sent Abanoub to the governor of Atrib, because he held on to his faith.",
           uk: "Правитель Саманнуда відіслав Абануба до правителя Атріба, бо той тримався своєї віри.",
           read: [3, 2],
-          ic: "🏛️",
+          img: "img/revision-november/abanoub-governor.jpg",
         },
         {
           type: "tf",
@@ -1639,7 +1646,7 @@ window.LESSON = {
           en: "Many people believed because of Abanoub's courage.",
           uk: "Багато людей увірувало через мужність Абануба.",
           read: [3, 3],
-          ic: "👥",
+          img: "img/revision-november/abanoub-miracles.jpg",
         },
         {
           type: "tf",
@@ -1648,7 +1655,7 @@ window.LESSON = {
           en: "Saint Abanoub's courage showed when he declared his faith before the governor of Samannoud.",
           uk: "Мужність святого Абануба виявилася, коли він визнав свою віру перед правителем Саманнуда.",
           read: [3, 1],
-          ic: "💪",
+          img: "img/revision-november/abanoub-governor.jpg",
         },
         {
           type: "tf",
@@ -1657,7 +1664,7 @@ window.LESSON = {
           en: "The angel who appeared to Abanoub in prison was the angel Michael.",
           uk: "Ангел, який з'явився Абанубу у в'язниці, — це ангел Михаїл.",
           read: [3, 2],
-          img: "img/revision-november/angel.jpg",
+          img: "img/revision-november/abanoub-prison.jpg",
         },
         {
           type: "tf",
@@ -1666,7 +1673,7 @@ window.LESSON = {
           en: "Saint Abanoub was martyred by beheading in Alexandria and buried in Samannoud.",
           uk: "Святому Абанубу відтяли голову в Александрії, і його поховали в Саманнуді.",
           read: [3, 3],
-          ic: "👑",
+          img: "img/revision-november/abanoub-crown.jpg",
         },
         {
           type: "tf",
@@ -1675,7 +1682,7 @@ window.LESSON = {
           en: "A church was built in the name of Saint Abanoub in Samannoud.",
           uk: "У Саманнуді збудували церкву на ім'я святого Абануба.",
           read: [3, 3],
-          ic: "⛪",
+          img: "img/revision-november/abanoub-crown.jpg",
         },
         {
           type: "tf",
@@ -1684,7 +1691,7 @@ window.LESSON = {
           en: "Saint Abanoub was tortured in Alexandria, and the Lord Jesus gave him strength.",
           uk: "Святого Абануба катували в Александрії, а Господь Ісус додавав йому сили.",
           read: [3, 3],
-          ic: "💪",
+          img: "img/revision-november/abanoub-miracles.jpg",
         },
         {
           type: "tf",
@@ -1694,7 +1701,7 @@ window.LESSON = {
           en: "The angel Gabriel appeared to Abanoub in prison and encouraged him.",
           uk: "Ангел Гавриїл з'явився Абанубу у в'язниці й підбадьорив його.",
           read: [3, 2],
-          img: "img/revision-november/angel.jpg",
+          img: "img/revision-november/abanoub-prison.jpg",
         },
         {
           type: "tf",
@@ -1704,7 +1711,7 @@ window.LESSON = {
           en: "The governor managed to make Saint Abanoub bow down to the idols.",
           uk: "Правителю вдалося змусити святого Абануба вклонитися ідолам.",
           read: [3, 1],
-          ic: "🗿",
+          img: "img/revision-november/abanoub-governor.jpg",
         },
         {
           type: "tf",
@@ -1714,7 +1721,7 @@ window.LESSON = {
           en: "Saint Abanoub was born in the village of Nahisa in Asyut governorate.",
           uk: "Святий Абануб народився в селі Нахіса в мухафазі Асьют.",
           read: [3, 0],
-          ic: "🏡",
+          img: "img/revision-november/abanoub-family.jpg",
         },
       ],
     },
@@ -1903,7 +1910,7 @@ window.LESSON = {
           en: '"I worship my Lord, my God and my Saviour Jesus, and I will not bow down to other gods." Who said it, and to whom?',
           uk: "«Я поклоняюся моєму Господу, Богові й Спасителю Ісусу і не вклонюся іншим богам». Хто це сказав і кому?",
           read: [3, 1],
-          ic: "👦",
+          img: "img/revision-november/abanoub-governor.jpg",
         },
         {
           type: "mc",
@@ -1916,7 +1923,7 @@ window.LESSON = {
           en: '"You are not alone, Abanoub: God is with you." Who said it, and to whom?',
           uk: "«Ти не сам, Абанубе: Бог з тобою». Хто це сказав і кому?",
           read: [3, 2],
-          img: "img/revision-november/angel.jpg",
+          img: "img/revision-november/abanoub-prison.jpg",
         },
         {
           type: "mc",
@@ -1974,7 +1981,7 @@ window.LESSON = {
           en: '"I can do all things in ___ who strengthens me." (Philippians 4:13)',
           uk: "«Усе можу в ___, що зміцнює мене». (Филип'ян 4:13)",
           read: [3, 3],
-          ic: "💪",
+          img: "img/revision-november/abanoub-kids.jpg",
         },
         {
           type: "mc",
@@ -2307,7 +2314,7 @@ window.LESSON = {
           en: "How old was Abanoub when he declared his faith to the governor of Samannoud? (a small child of twelve)",
           uk: "Скільки років було Абанубу, коли він визнав свою віру перед правителем Саманнуда? (маленька дитина, дванадцять років)",
           read: [3, 1],
-          ic: "👦",
+          img: "img/revision-november/abanoub-governor.jpg",
           help: {
             q: "كَمْ كَانَ عُمْرُهُ؟",
             en: "How old was he?",
@@ -2326,7 +2333,7 @@ window.LESSON = {
           en: "What is Saint Abanoub's village? What are his parents' names? (Nahisa in Dakahlia; his father Makar, his mother Mary)",
           uk: "Яке село святого Абануба? Як звали його батьків? (Нахіса в Дакахлії; батько Макар, мати Марія)",
           read: [3, 0],
-          ic: "🏡",
+          img: "img/revision-november/abanoub-family.jpg",
           help: {
             q: "مَا اسْمُ قَرْيَتِهِ؟",
             en: "What is his village called?",
