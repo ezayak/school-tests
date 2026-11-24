@@ -11,7 +11,7 @@
 //        A wrong step is shown right and the walk goes on as it should.
 //     📋 With the steps: the number, the four checks on screen, Prime / Composite.
 //     ⚡ On my own: the number, Prime / Composite.
-//   Practice: ⚖️ Even or odd (1–99) · ÷ 3 (💡 Help: the digits are added, animated) · ÷ 5 · ÷ 7 (💡 Help: the 7 list).
+//   Practice: ⚖️ Even or odd (1–99) · ÷ 3 (💡 Help: the digits are added, animated) · ÷ 5 · ÷ 7 (8–99, 💡 Help: the 7 list).
 // A round = 10 numbers, half of them "yes" (prime / even / divisible); a prime round's composites are 2 even and 3 odd.
 // After each answer: ✓ / ✗, why, n = a × b and its dots (a rectangle; a prime makes only one line), Next →.
 // Score: the numbers right the first time (Step by step: every step of the number right).
@@ -24,7 +24,8 @@
   const KEY = "ng-math4-best";
   const ROUND = 10;
   const P = [2, 3, 5, 7];
-  const SEVENS = Array.from({ length: 14 }, (_, i) => 7 * (i + 1));
+  // the 7 list starts at 14: 7 × 1 would make 7 look composite (7 itself is prime: its ÷ 7 check says No)
+  const SEVENS = Array.from({ length: 13 }, (_, i) => 7 * (i + 2));
   const get = (k, d) => {
     try {
       const v = localStorage.getItem(k);
@@ -121,9 +122,9 @@
   }
   const chips = (list, cls) =>
     `<span class="ng-chips${cls ? " " + cls : ""}">${list.map((c) => `<span class="ng-chip">${c}</span>`).join("")}</span>`;
-  // the 7 list: 7 × 1 … 7 × 14; hit = the number to light
+  // the 7 list: 7 × 2 … 7 × 14; hit = the number to light
   const sevens = (hit) =>
-    `<div class="ng-seven">${SEVENS.map((s, k) => `<span class="ng-sv${s === hit ? " hit" : ""}" data-s="${s}"><b>${s}</b><small>7 × ${k + 1}</small></span>`).join("")}</div>`;
+    `<div class="ng-seven">${SEVENS.map((s) => `<span class="ng-sv${s === hit ? " hit" : ""}" data-s="${s}"><b>${s}</b><small>7 × ${s / 7}</small></span>`).join("")}</div>`;
   // n = a × b and n dots in a rows of b (a prime: 1 row of n)
   function proof(n) {
     const f = factor(n);
@@ -355,7 +356,10 @@
             );
           };
           let r = 0;
-          if (!rows.length) return later(ask, 1500);
+          if (!rows.length) {
+            go.hidden = true; // one digit: nothing to add
+            return later(ask, 1500);
+          }
           app.querySelector(".ng-add").onclick = (e) => {
             const row = rows[r++];
             el.insertAdjacentHTML("beforeend", sumRow(row));
@@ -385,7 +389,7 @@
             `${head(k)}${num(n)}<p class="ng-q">Is ${n} in the 7 list?</p>${sevens()}${ans(YN())}`,
             `Now 7. Look at the 7 list. Is ${n} in the list?`,
           );
-          const yes = n % 7 === 0;
+          const yes = SEVENS.includes(n);
           bindAns(yes ? 1 : 0, (ok) => {
             if (!ok) clean = false;
             const t = app.querySelector(`.ng-sv[data-s="${n}"]`);
@@ -545,7 +549,7 @@
   const DIV7 = divGame(7, {
     ic: "7️⃣",
     sub: "The 7 list",
-    from: 1,
+    from: 8, // not 7: it is not in the 7 list
     help(n, box) {
       box.innerHTML = sevens();
       say("The 7 list. Is the number in it?");
