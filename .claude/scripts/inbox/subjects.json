@@ -152,6 +152,7 @@
       "folders": ["Lucas/S.S.English"],
       "booklets": ["SS"],
       "app": "grade-3/term-1/social-studies",
+      "skill": "social-studies-lesson",
       "ocr": "eng"
     }
   ]

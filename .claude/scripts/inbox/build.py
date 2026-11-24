@@ -204,14 +204,11 @@ def checks(job, wt, final):
         problems.append("changed but not committed (kept in the worktree): " + loose.replace("\n", ", ")[:300])
     if not changed:
         return problems or [not_done(final)]
-    app = s["app"].rstrip("/") + "/"
-    # the subject's files may be in (or move to) any term folder of its grade: grade-N/term-T/<subject>/
-    # (an exam revision goes in the folder of the exam's term, CLAUDE.md "Revisions")
-    grade = re.match(r"grade-\d+/", app)
-    terms = re.compile(re.escape(grade.group(0)) + r"term-\d+/" + re.escape(Path(app).name) + "/") if grade else None
-    others = [
-        f for f in changed if not f.startswith(app) and not (terms and terms.match(f)) and f not in SHARED_FILES
-    ]
+    # the subject's files may be in (or move to) any term folder of its grade, or none: grade-N/[term-T/]<subject>/
+    # (an exam revision goes in the folder of the exam's term, CLAUDE.md "Revisions"); as review.py subject_of
+    norm = lambda p: re.sub(r"/term-\d+/", "/", "/" + p.strip("/") + "/")
+    app = norm(s["app"])
+    others = [f for f in changed if not norm(f).startswith(app) and f not in SHARED_FILES]
     if others:
         problems.append("changed outside the lesson's folder: " + ", ".join(others[:8]))
     present = [f for f in changed if (wt / f).exists()]
