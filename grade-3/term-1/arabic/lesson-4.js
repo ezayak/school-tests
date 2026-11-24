@@ -11,6 +11,7 @@ window.LESSON = {
   stories: [
     {
       title: "أَخْلَاقُنَا",
+      video: "ZIJ2zpfQerk", // the school's YouTube video of this text
       en: "Our Manners",
       uk: "Наші чесноти",
       kind: "Lesson text (poem)",
@@ -115,6 +116,7 @@ window.LESSON = {
     },
     {
       title: "الرِّسَالَةُ الصَّغِيرَةُ",
+      video: "3X90WEiuCUo", // the school's YouTube video of this text
       en: "The Little Note",
       uk: "Маленька записка",
       kind: "Story for reading · p. 160",

@@ -11,6 +11,7 @@ window.LESSON = {
   stories: [
     {
       title: "وَرَقَةٌ مِنَ التَّارِيخِ",
+      video: "KWBxy7yehBM", // the school's YouTube video of this text
       en: "A Page from History",
       uk: "Сторінка з історії",
       kind: "Reading text · p. 190–191",

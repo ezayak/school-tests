@@ -19,6 +19,7 @@
             uk: L.uk,
             intro: L.intro,
             parts: L.story.parts,
+            video: L.story.video,
           },
         ]
       : []);
@@ -546,7 +547,7 @@
       tk = tokens(p.ar);
     const fixed = !!L.tabs && tab !== "story"; // a test: one text per tab, no list, no part navigation
     const nextTab = TABS[TABS.findIndex((t) => t.k === tab) + 1];
-    P.innerHTML = `${fixed ? "" : `<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span></div>`}
+    P.innerHTML = `${fixed ? "" : `<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span>${ST.video ? `<button type="button" class="abtn vidbtn" id="vidBtn"${navigator.onLine === false ? " hidden" : ""}><span class="e">🎬</span> Story video</button>` : ""}</div>`}
     ${ST.intro && part === 0 ? `<details class="readp"><summary>About this text · تمهيد</summary><p class="ar" dir="rtl" style="font-size:1.25rem;line-height:1.9;margin:8px 0">${esc(ST.intro.ar)}</p>${trText(ST.intro) ? `<p class="trans">${esc(trText(ST.intro))}</p>` : ""}</details>` : ""}
     <div class="part${p.img ? "" : " noimg"}">
       ${p.img ? `<div class="pic"><img src="${esc(p.img)}" alt=""></div>` : ""}
@@ -618,6 +619,8 @@
       P.scrollIntoView({ block: "nearest" });
     };
     if (fixed) return;
+    const vb = document.getElementById("vidBtn");
+    if (vb) vb.onclick = () => showVideo(ST.video, ST.title);
     document.getElementById("prevBtn").onclick = () => part > 0 && go(part - 1);
     const nx = document.getElementById("nextPart");
     if (nx) nx.onclick = () => go(part + 1);
@@ -670,6 +673,35 @@
     popEl.querySelector("#popSay").onclick = () => say(word, true);
     popEl.querySelector("#popX").onclick = closePop;
   }
+  /* ---------- the school's YouTube video of a text (L.story.video / stories[i].video: the video id),
+     in a popup over the page; the button shows only while online ---------- */
+  function showVideo(id, title) {
+    hush();
+    closePop();
+    const v = document.createElement("div");
+    v.className = "vpop";
+    v.setAttribute("role", "dialog");
+    // the page sends no referrer (Google voice), but YouTube's player needs one to play
+    v.innerHTML = `<div class="vpop-in"><div class="vpop-bar"><b class="ar" dir="rtl">🎬 ${esc(title)}</b><button type="button" class="x" aria-label="Close">✕</button></div>
+    <div class="vpop-frame"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1" title="Story video" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div></div>`;
+    const close = () => {
+      v.remove();
+      document.body.classList.remove("vopen");
+      removeEventListener("keydown", esc_);
+    };
+    const esc_ = (e) => e.key === "Escape" && close();
+    v.querySelector(".x").onclick = close;
+    v.onclick = (e) => e.target === v && close();
+    addEventListener("keydown", esc_);
+    document.body.appendChild(v);
+    document.body.classList.add("vopen");
+  }
+  const vidNet = () =>
+    document
+      .querySelectorAll(".vidbtn")
+      .forEach((b) => (b.hidden = navigator.onLine === false));
+  addEventListener("online", vidNet);
+  addEventListener("offline", vidNet);
   document.addEventListener("click", (e) => {
     if (
       popEl &&

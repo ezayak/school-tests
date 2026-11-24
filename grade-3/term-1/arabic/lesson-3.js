@@ -11,6 +11,7 @@ window.LESSON = {
   stories: [
     {
       title: "أَوَّلُ مَنْ رَفَعَ يَدَهُ",
+      video: "gVacdLPEvC0", // the school's YouTube video of this text
       en: "The First to Raise a Hand",
       uk: "Перша, хто підняв руку",
       kind: "Lesson text",

@@ -11,6 +11,7 @@ window.LESSON = {
   stories: [
     {
       title: "صُنْدُوقُ الِابْتِكَارِ",
+      video: "3ymUs95MpFU", // the school's YouTube video of this text
       en: "The Idea Box",
       uk: "Скринька винаходів",
       kind: "Reading text · p. 172–173",

@@ -12,6 +12,7 @@ window.LESSON = {
   stories: [
     {
       title: "وَطَنِي",
+      video: "EIprTbd3p6o", // the school's YouTube video of this text
       en: "My Homeland",
       uk: "Моя батьківщина",
       kind: "Lesson text (poem) · p. 206",

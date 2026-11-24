@@ -12,6 +12,7 @@ window.LESSON = {
   stories: [
     {
       title: "الْعُصْفُورُ الْجَرِيءُ",
+      video: "rBdsUbakCz8", // the school's YouTube video of this text
       en: "The Brave Sparrow",
       uk: "Сміливий горобчик",
       kind: "Listening text · p. 164–165",
