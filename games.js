@@ -569,11 +569,11 @@ window.GAMES = [
     subject: "Religion",
     title: "Religion Revision",
     lesson:
-      "مُرَاجَعَةُ شَهْرِ نُوفَمْبِرَ · Revision November, Unit 2: memory verses, lessons 3–5 and John the Baptist",
+      "مُرَاجَعَةُ شَهْرِ نُوفَمْبِرَ · Revision November, Unit 2: memory verses, lessons 3–6",
     topics:
-      "Simeon and Luke 2:25–32, the five memory verses, Elijah and the rain, Deborah and Barak, Saint Abanoub, Zacchaeus the tax collector, John prepares the way · choose, true or false, complete, who said it, who am I, match, answer · 12 golden verses",
+      "Simeon and Luke 2:25–32, the five memory verses, Elijah and the rain, Deborah and Barak, Saint Abanoub, Zacchaeus the tax collector · choose, true or false, complete, who said it, who am I, match, answer · 12 golden verses",
     path: "grade-4/term-2/religion/revision-november.html",
-    questions: 122,
+    questions: 101,
     year: "2026–2027",
     // Grade 4 Religion has no subject entry yet: the page's files are in this card's own "also"
     also: [
@@ -592,11 +592,16 @@ window.GAMES = [
       "grade-4/term-2/religion/img/revision-november/abanoub-kids.jpg",
       "grade-4/term-2/religion/img/revision-november/abanoub-miracles.jpg",
       "grade-4/term-2/religion/img/revision-november/abanoub-prison.jpg",
-      "grade-4/term-2/religion/img/revision-november/john-zechariah.jpg",
-      "grade-4/term-2/religion/img/revision-november/john-desert.jpg",
-      "grade-4/term-2/religion/img/revision-november/john-repent.jpg",
-      "grade-4/term-2/religion/img/revision-november/john-baptize.jpg",
-      "grade-4/term-2/religion/img/revision-november/john-priests.jpg",
+      "grade-4/term-2/religion/img/revision-november/dab-army.jpg",
+      "grade-4/term-2/religion/img/revision-november/dab-barak.jpg",
+      "grade-4/term-2/religion/img/revision-november/dab-battle.jpg",
+      "grade-4/term-2/religion/img/revision-november/dab-king.jpg",
+      "grade-4/term-2/religion/img/revision-november/dab-palm.jpg",
+      "grade-4/term-2/religion/img/revision-november/el-ahab.jpg",
+      "grade-4/term-2/religion/img/revision-november/el-brook.jpg",
+      "grade-4/term-2/religion/img/revision-november/el-fire.jpg",
+      "grade-4/term-2/religion/img/revision-november/el-prophets.jpg",
+      "grade-4/term-2/religion/img/revision-november/simeon.jpg",
     ],
   },
   {
