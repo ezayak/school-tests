@@ -566,6 +566,20 @@ window.GAMES = [
     grade: 4,
     term: 2,
     period: "Mid-term exam",
+    subject: "Math",
+    title: "Math Quest",
+    lesson: "Lessons 4-3, 4-4, 5-1, 5-2, 14-2",
+    topics:
+      "Times as many: multiply or divide to compare, bar diagrams · Factors and factor pairs · Prime and composite numbers · Acute, right and obtuse angles, ¼ turns",
+    path: "grade-4/term-2/math/revision-1.html",
+    questions: 139,
+    year: "2026–2027",
+    // the page is offline through the Grade 4 Math entry's "also" (pictures: the lessons')
+  },
+  {
+    grade: 4,
+    term: 2,
+    period: "Mid-term exam",
     subject: "Religion",
     title: "Religion Revision",
     lesson:
@@ -2928,6 +2942,8 @@ window.GAMES = [
       "grade-4/math/unit-14/lesson-14-10.html",
       "grade-4/math/unit-14/lesson-14-10.js",
       "grade-4/math/unit-14/img/lesson-14-10/curious.jpg",
+      "grade-4/term-2/math/revision-1.html",
+      "grade-4/term-2/math/revision-1.js",
     ],
   },
   {

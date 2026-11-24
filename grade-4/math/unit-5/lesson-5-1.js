@@ -1,5 +1,5 @@
 // Math · Grade 4 · Lesson 5-1 « Understand Factors of a Number » (Reveal Math, Unit 5).
-// Sources: Student Edition Vol. 1 p. 131–134, Student Practice Book p. 35–36. No teacher's key for this lesson. Log: grade-4/math/SOURCES.md.
+// Sources: Student Edition Vol. 1 p. 131–134, Student Practice Book p. 35–36. Checked with the teacher's key 20261119-L_5-1.pdf (On My Own p. 133–134). Log: grade-4/math/SOURCES.md.
 // Factor pairs come from shared/math-kit.js (factorPairs, pairsQ: choose all the pairs, near misses as wrong ones); arrays from shared/math.js.
 const { factorPairs, pairsQ } = MathKit;
 // "Can n things go in equal rows of k?"

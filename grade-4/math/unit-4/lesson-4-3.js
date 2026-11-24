@@ -1,5 +1,5 @@
 // Math · Grade 4 · Lesson 4-3 « Solve Comparison Problems Using Multiplication » (Reveal Math, Unit 4).
-// Sources: Student Edition Vol. 1 p. 113–116, Student Practice Book p. 31–32. No teacher's key for this lesson yet. Log: grade-4/math/SOURCES.md. School video: video/l4-3-multiplication.mp4 (class replay, 2026-11-21).
+// Sources: Student Edition Vol. 1 p. 113–116, Student Practice Book p. 31–32. Checked with the teacher's key 20261116-L_4-3.pdf (On My Own p. 115–116). Log: grade-4/math/SOURCES.md. School video: video/l4-3-multiplication.mp4 (class replay, 2026-11-21).
 // Drawings: bar (the bar diagram; the unknown is yellow with "?"), lines.
 const fmt = (n) => n.toLocaleString("en-US");
 // "lb has n times as many as la": la known → lb unknown

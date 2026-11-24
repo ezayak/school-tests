@@ -451,11 +451,18 @@ Built into the unit pages before the book lessons (one page per unit, see the he
 
 ## School sheets and keys from 2026-11-16 (Math folder root)
 
-| File                                   | What                                         | Goes to                                          | Status                           |
-| -------------------------------------- | -------------------------------------------- | ------------------------------------------------ | -------------------------------- |
-| 20261116-L_14-2.pdf                    | teacher's key, book p. 221–222               | `unit-14/lesson-14-2`                            | built (checked)                  |
-| 20261116-Extra_Practice_-_L14-2.pdf    | class sheet: classify angles, rotation, draw | `unit-14/lesson-14-2` · `school` (draw: skipped) | built                            |
-| 20261116-L_4-3.pdf, 20261116-L_4-4.pdf | teacher's keys for Lessons 4-3 and 4-4       | `unit-4/lesson-4-3`, `lesson-4-4`                | planned (check against the keys) |
+| File                                   | What                                          | Goes to                                                     | Status                               |
+| -------------------------------------- | --------------------------------------------- | ----------------------------------------------------------- | ------------------------------------ |
+| 20261116-L_14-2.pdf                    | teacher's key, book p. 221–222                | `unit-14/lesson-14-2`                                       | built (checked)                      |
+| 20261116-Extra_Practice_-_L14-2.pdf    | class sheet: classify angles, rotation, draw  | `unit-14/lesson-14-2` · `school` (draw: skipped)            | built                                |
+| 20261116-L_4-3.pdf, 20261116-L_4-4.pdf | teacher's keys for Lessons 4-3 and 4-4        | `unit-4/lesson-4-3`, `lesson-4-4`; `term-2/math/revision-1` | built (checked: every answer agrees) |
+| 20261119-L_5-1.pdf                     | teacher's key for Lesson 5-1, book p. 133–134 | `unit-5/lesson-5-1`; `term-2/math/revision-1`               | built (checked: every answer agrees) |
+
+## Term 2 revisions
+
+| Source                                                                                                                                                                                             | What                             | Goes to                                                                                                                                                    | Status |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| the parent's note (2026-11-24): « Lessons 4-3, 4-4, 5-1, 5-2 and 14-2 », with 20261116-L_4-3.pdf, 20261116-L_4-4.pdf, 20261119-L_5-1.pdf, 20261116-L_14-2.pdf, 20261116-Extra_Practice_-_L14-2.pdf | Mid-term 2 revision (Math Quest) | `term-2/math/revision-1` (132 questions + 7 matching rounds: the lessons' book, Practice Book and Extra Practice items; open answers and drawing left out) | built  |
 
 ## School videos (Math folder root; online only, not saved offline)
 
