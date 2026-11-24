@@ -224,7 +224,7 @@
   flex-direction: column;
   gap: 1px;
 }
-.wd-grp .wd-gin:has(> .wd-row + .wd-row) {
+.wd-grp .wd-gin.rows {
   flex-direction: column;
   gap: 5px;
 }

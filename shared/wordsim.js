@@ -1962,7 +1962,7 @@
         ? btn(t, `${ic(icn)}<span>${label}</span>`, "big " + cls)
         : deco(`${ic(icn)}<span>${label}</span>`, "big " + cls);
     const group = (name, inner, cls = "", launch) =>
-      `<div class="wd-grp ${cls}"><div class="wd-gin">${inner}</div><div class="wd-gl">${name}${launch ? btn(launch, ic("launcher"), "lch", name + " settings") : ""}</div></div>`;
+      `<div class="wd-grp ${cls}"><div class="wd-gin${(inner.match(/class="wd-row"/g) || []).length > 1 ? " rows" : ""}">${inner}</div><div class="wd-gl">${name}${launch ? btn(launch, ic("launcher"), "lch", name + " settings") : ""}</div></div>`;
     const sw = (t, color, label, on) =>
       `<button type="button" class="wd-b sw${on ? " on" : ""}" data-t="${esc(t)}" aria-label="${esc(label)}" style="background:${color}"></button>`;
     const chev = '<i class="wd-chev"></i>';
