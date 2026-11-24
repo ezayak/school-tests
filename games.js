@@ -381,6 +381,20 @@ window.GAMES = [
     grade: 3,
     term: 2,
     period: "Mid-term exam",
+    subject: "Computer",
+    title: "RoboWord Quest",
+    lesson: "Unit 2 · L1 Robots in our daily lives, L2 Working with text",
+    topics:
+      "What a robot is, fixed and mobile robots, sensors, motors, energy, where robots help us, advantages and disadvantages · Bold, Italic, Underline, Font Color, Highlight, Find, Undo, zoom, shortcut keys",
+    path: "grade-3/term-2/computer/revision-1.html",
+    questions: 120,
+    year: "2026–2027",
+    // the page is offline through the Grade 3 Computer entry's "also" (pictures: the lessons')
+  },
+  {
+    grade: 3,
+    term: 2,
+    period: "Mid-term exam",
     subject: "Religion",
     title: "Religion Revision",
     lesson:
@@ -2929,7 +2943,7 @@ window.GAMES = [
     topics:
       "Ch. 1 · Storage, Print, Capture, Interacting · Ch. 2 · Robots, Working with text, Paragraphs, Checking & saving",
     path: "grade-3/computer/index.html",
-    countLabel: "8 lessons · 2 chapters",
+    countLabel: "8 lessons · 2 chapters · 1 revision",
     year: "2026–2027",
     // the school videos (computer/video/) are online only, so they are not listed here
     also: [
@@ -3027,6 +3041,8 @@ window.GAMES = [
       "grade-3/computer/chapter-2/img/lesson-4/saveas.jpg",
       "grade-3/computer/chapter-2/img/lesson-4/saved.jpg",
       "grade-3/computer/chapter-2/img/lesson-4/spelling.jpg",
+      "grade-3/term-2/computer/revision-1.html",
+      "grade-3/term-2/computer/revision-1.js",
     ],
   },
   {
