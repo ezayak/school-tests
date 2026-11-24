@@ -29,6 +29,12 @@ Scan: `~/Documents/2026-2027/Lucas/French/book/outN.png`, one two-page spread pe
 - One lesson at a time: build, check (`french-lesson` skill scripts), show, wait for approval, commit; `VERSION` bump in `sw.js` last.
 - Order: Unité 0 → 1 → 2 → 3 → 4 → 5 → 6, then « Vive les fêtes ! », « Grand jeu de l'oie » (revision game), Projet de lecture (a story).
 
+## Teacher's material in a book lesson
+
+At the parent's request (2026-11-24), the teacher's « V. avoir » slides (`20261123-V. avoir .pdf`, 9 slides) and the sheet `20261123-Document (62) (1).pdf`
+(« Complète avec verbe avoir », « Exercice 2 : Choisis la bonne réponse », 2 pages) went into `unite-2`: one story slide per pronoun + all together,
+the `verb` tile, exercises `avoir1` / `avoir2` (both multiple choice).
+
 ## Book pages
 
 | File        | Pages | Content                                                                                         | Built into                                                                                                   |

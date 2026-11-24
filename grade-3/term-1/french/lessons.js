@@ -22,10 +22,10 @@ const BOOK = [
   {
     n: 2,
     title: "Voici ma famille !",
-    en: "Here is my family! · mon frère, ma sœur…, les nombres de 0 à 12, les animaux, le son [y]",
+    en: "Here is my family! · mon frère, ma sœur…, les nombres de 0 à 12, les animaux, le son [y], le verbe avoir",
     path: "unite-2.html",
     cover: "img/unite-2/p1.jpg",
-    note: "Livre p. 16–25 · 3 videos · 31 words · 4 games · 10 exercises",
+    note: "Livre p. 16–25 · le verbe avoir · 3 videos · 31 words · 4 games · 12 exercises",
   },
   {
     n: 3,

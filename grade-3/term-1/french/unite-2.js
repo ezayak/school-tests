@@ -2,6 +2,9 @@
 // les animaux domestiques, the songs, le son [y], les bébés animaux, Mes compétences 1·2 (l’arbre généalogique). Book exercises only.
 // Left out: p. 21 ex. 13 (find the dogs and tortoises in the picture), p. 22 ex. 1 and ex. 3 (personal choices), p. 23 Brico,
 // p. 25 ex. 2–3 (draw and describe a classmate's family tree). Songs (p. 17 ex. 4, p. 21 ex. 12) and dialogues are in the story.
+// Added at the parent's request (teacher's material, not the book): le verbe avoir from the slides « V. avoir » (9 slides, pictures
+// img/unite-2/avoir, j-ai … elles-ont: one story slide per pronoun + all together, and the verb tile) and the sheet
+// « Complète avec verbe avoir » ex. 1–2 (both as multiple choice: avoir1, avoir2).
 // The engine is grade-4/term-1/french/french-lesson.js. Pictures: img/unite-2/<name>.jpg (book scan out12–out19, own size).
 // Videos: video/cartoon-2.mp4 (p. 16 ex. 1), video-2.mp4 (p. 18 ex. 5), civilisation-2.mp4 (p. 22 ex. 2); online only.
 (function () {
@@ -508,6 +511,211 @@
     ["Hector", "Il", "His", "Його звати Гектор.", "اسمه هكتور."],
   ])
     DICT[`${g} s’appelle ${n}.`] = [`${en} name is ${n}.`, uk, ar];
+  // Le verbe avoir (the teacher's slides « V. avoir » and the sheet « Complète avec verbe avoir · Choisis la bonne réponse »)
+  // [pronoun + verb, picture, en, uk, ar]
+  const AVOIR = [
+    ["J’ai", "j-ai", "I have", "Я маю", "أنا عندي"],
+    ["Tu as", "tu-as", "You have", "Ти маєш", "أنتَ عندك"],
+    ["Il a", "il-a", "He has", "Він має", "هو عنده"],
+    ["Elle a", "elle-a", "She has", "Вона має", "هي عندها"],
+    ["Nous avons", "nous-avons", "We have", "Ми маємо", "نحن عندنا"],
+    ["Vous avez", "vous-avez", "You have (many)", "Ви маєте", "أنتم عندكم"],
+    [
+      "Ils ont",
+      "ils-ont",
+      "They have (boys)",
+      "Вони мають (хлопці)",
+      "هم عندهم",
+    ],
+    [
+      "Elles ont",
+      "elles-ont",
+      "They have (girls)",
+      "Вони мають (дівчата)",
+      "هنّ عندهنّ",
+    ],
+  ];
+  AVOIR.forEach(([fr, , en, uk, ar]) => (DICT[fr] = [en, uk, ar]));
+  // [sentence, emoji, wrong options, en, uk, ar]: ex. 1 (Complète) then ex. 2 (Choisis, the sheet's options)
+  const AV1 = [
+    [
+      "J’ai un cartable.",
+      "🎒",
+      ["as", "a"],
+      "I have a school bag.",
+      "У мене є портфель.",
+      "عندي حقيبة مدرسية.",
+    ],
+    [
+      "Tu as un joli vélo.",
+      "🚲",
+      ["a", "ai"],
+      "You have a nice bike.",
+      "У тебе є гарний велосипед.",
+      "عندك درّاجة جميلة.",
+    ],
+    [
+      "Il a un ballon.",
+      "⚽",
+      ["as", "ont"],
+      "He has a ball.",
+      "У нього є м’яч.",
+      "عنده كرة.",
+    ],
+    [
+      "Elle a une poupée.",
+      "🪆",
+      ["ai", "avez"],
+      "She has a doll.",
+      "У неї є лялька.",
+      "عندها دمية.",
+    ],
+    [
+      "Nous avons des crayons.",
+      "✏️",
+      ["avez", "ont"],
+      "We have pencils.",
+      "У нас є олівці.",
+      "عندنا أقلام رصاص.",
+    ],
+    [
+      "Vous avez des cahiers.",
+      "📓",
+      ["avons", "as"],
+      "You have notebooks.",
+      "У вас є зошити.",
+      "عندكم دفاتر.",
+    ],
+    [
+      "Ils ont des jouets.",
+      "🧸",
+      ["a", "avons"],
+      "They have toys.",
+      "У них є іграшки.",
+      "عندهم ألعاب.",
+    ],
+    [
+      "Elles ont des robes.",
+      "👗",
+      ["avez", "a"],
+      "They have dresses.",
+      "У них є сукні.",
+      "عندهنّ فساتين.",
+    ],
+    [
+      "J’ai un frère.",
+      "👦",
+      ["a", "ont"],
+      "I have a brother.",
+      "У мене є брат.",
+      "عندي أخ.",
+    ],
+    [
+      "Tu as une sœur.",
+      "👧",
+      ["ai", "avons"],
+      "You have a sister.",
+      "У тебе є сестра.",
+      "عندك أخت.",
+    ],
+  ];
+  const AV2 = [
+    [
+      "J’ai un livre.",
+      "📖",
+      ["as", "a"],
+      "I have a book.",
+      "У мене є книжка.",
+      "عندي كتاب.",
+    ],
+    [
+      "Tu as un chat.",
+      "🐱",
+      ["a", "avons"],
+      "You have a cat.",
+      "У тебе є кіт.",
+      "عندك قطّ.",
+    ],
+    [
+      "Il a un stylo.",
+      "🖊️",
+      ["ont", "ai"],
+      "He has a pen.",
+      "У нього є ручка.",
+      "عنده قلم.",
+    ],
+    [
+      "Elle a une gomme.",
+      "🧽",
+      ["as", "avons"],
+      "She has an eraser.",
+      "У неї є гумка.",
+      "عندها ممحاة.",
+    ],
+    [
+      "Nous avons une maison.",
+      "🏠",
+      ["avez", "ont"],
+      "We have a house.",
+      "У нас є будинок.",
+      "عندنا بيت.",
+    ],
+    [
+      "Vous avez un chien.",
+      "🐶",
+      ["avons", "as"],
+      "You have a dog.",
+      "У вас є собака.",
+      "عندكم كلب.",
+    ],
+    [
+      "Ils ont des crayons.",
+      "✏️",
+      ["a", "avez"],
+      "They have pencils.",
+      "У них є олівці.",
+      "عندهم أقلام رصاص.",
+    ],
+    [
+      "Elles ont des fleurs.",
+      "💐",
+      ["avons", "a"],
+      "They have flowers.",
+      "У них є квіти.",
+      "عندهنّ أزهار.",
+    ],
+    [
+      "J’ai une règle.",
+      "📏",
+      ["as", "avez"],
+      "I have a ruler.",
+      "У мене є лінійка.",
+      "عندي مسطرة.",
+    ],
+    [
+      "Tu as un sac.",
+      "👜",
+      ["avons", "ont"],
+      "You have a bag.",
+      "У тебе є сумка.",
+      "عندك حقيبة.",
+    ],
+  ];
+  AV1.concat(AV2).forEach(([fr, , , en, uk, ar]) => (DICT[fr] = [en, uk, ar]));
+  // the pronoun, the verb form and the rest: "J’ai un livre." → ["J’", "ai", " un livre."], "Tu as…" → ["Tu ", "as", …]
+  const cut = (fr) =>
+    fr.match(/^(J’|\S+ )(ai|as|a|avons|avez|ont)( .*)$/).slice(1);
+  // a multiple-choice item: « Tu ___ un chat. », « J’___ un livre. » (the sheet prints « Je »), the right form first
+  const avMc = ([fr, emoji, wrong]) => {
+    const [p, v, rest] = cut(fr);
+    return {
+      type: "mc",
+      emoji,
+      q: `${p}___${rest}`,
+      opts: [v, ...wrong],
+      full: fr,
+    };
+  };
   const line = (who, fr) => ({ who, fr });
   const W = (fr, img) => ({
     fr,
@@ -607,6 +815,7 @@
       },
       { k: "story", img: "p6" },
       { k: "words", img: "chien" },
+      { k: "verb", img: "avoir" },
       {
         k: "video",
         v: "video-2",
@@ -877,7 +1086,40 @@
           "Elle s’appelle Lucie.",
         ].map((fr) => line("", fr)),
       },
+      // Le verbe avoir: one slide per pronoun, then all of them together (the teacher's slides)
+      ...AVOIR.map(([fr, img], i) => ({
+        title: `🐝 Le verbe avoir · ${fr}`,
+        img,
+        lines: [line("", fr), line("", AV1[i][0])],
+      })),
+      {
+        title: "🐝 Le verbe avoir · tous ensemble",
+        img: "avoir",
+        lines: AVOIR.map(([fr]) => line("", fr)),
+      },
     ],
+
+    // Le verbe avoir: all the pronouns together (the slides one by one are at the end of the story)
+    verb: {
+      t: "Le verbe avoir",
+      en: "The verb avoir (to have)",
+      img: "avoir",
+      games: [
+        { t: "✍️ Complète avec avoir", x: "avoir1" },
+        { t: "🔘 Choisis la bonne réponse", x: "avoir2" },
+      ],
+      rows: AV1.slice(0, 8).map(([fr, emoji]) => {
+        const [p, v, rest] = cut(fr);
+        const stem = v.startsWith("av") ? "av" : "";
+        return {
+          p: p.trim(),
+          stem,
+          end: v.slice(stem.length),
+          name: rest.slice(1, -1),
+          emoji,
+        };
+      }),
+    },
 
     build: [
       { fr: "frère", img: "p4" },
@@ -1090,6 +1332,24 @@
             ],
           },
         ],
+      },
+      {
+        k: "avoir1",
+        t: "Complète avec le verbe avoir",
+        en: "The verb avoir: pick the right form",
+        img: "avoir",
+        from: "Fiche Le verbe avoir ex. 1",
+        keep: true,
+        items: AV1.map(avMc),
+      },
+      {
+        k: "avoir2",
+        t: "Choisis la bonne réponse",
+        en: "The verb avoir: choose the right answer",
+        img: "j-ai",
+        from: "Fiche Le verbe avoir ex. 2",
+        keep: true,
+        items: AV2.map(avMc),
       },
     ],
 
