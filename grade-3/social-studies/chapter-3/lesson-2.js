@@ -23,9 +23,10 @@ const mc = (q, answers, more) => {
 // a picture for the question (file name or emoji)
 const pic = (p) => (/^[a-z]/.test(p) ? { img: p } : { emoji: p });
 // the three countries
-const SPAIN = ["Spain", "spain-flag"],
-  FRANCE = ["France", "france-flag"],
-  ENGLAND = ["England", "uk-flag"];
+// (flag emoji, not pictures: the picture and the word on one line, small answer buttons)
+const SPAIN = ["Spain", "🇪🇸"],
+  FRANCE = ["France", "🇫🇷"],
+  ENGLAND = ["England", "🇬🇧"];
 const country = (q, p, right, x) =>
   mc(q, [right, ...[SPAIN, FRANCE, ENGLAND].filter((c) => c !== right)], {
     ...pic(p),
@@ -372,7 +373,7 @@ window.LESSON = {
           "[Great Britain] wanted to become more powerful by claiming land.",
         ),
         country(
-          "The Spanish searched for [gold] and other riches.",
+          "Explorers from which country searched for [gold] and other riches?",
           "gold",
           SPAIN,
           "The [Spanish] (from Spain) searched for gold and other riches.",
@@ -461,9 +462,9 @@ window.LESSON = {
         mc(
           "Correct the word: Christopher Columbus was an [American] explorer.",
           [
-            ["Italian", "columbus"],
-            ["French", "france-flag"],
-            ["English", "uk-flag"],
+            ["Italian", "🇮🇹"],
+            ["French", "🇫🇷"],
+            ["English", "🇬🇧"],
           ],
           {
             img: "columbus",
@@ -478,9 +479,9 @@ window.LESSON = {
         mc(
           "Correct the word: Spain wanted Christopher Columbus to sail to [London] to search for spices.",
           [
-            ["China", "china"],
-            ["Florida", "florida-map"],
-            ["France", "france-flag"],
+            ["China", "🇨🇳"],
+            ["Florida", "🌴🇺🇸"],
+            ["France", "🇫🇷"],
           ],
           {
             img: "routes",
