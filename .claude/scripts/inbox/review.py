@@ -59,6 +59,17 @@ def done(ids):
         write(notes)
 
 
+def decline(ids):
+    """A note the parent turned down on the sorting page (a duplicate…): closed, nothing fixed."""
+    with LOCK:
+        notes = load()
+        for x in notes:
+            if x["id"] in ids and not x.get("done"):
+                x["done"] = time.strftime("%Y-%m-%d")
+                x["declined"] = True
+        write(notes)
+
+
 def analysis(ids, job, text, resume):
     """A «Fix notes» job that fixed nothing: its findings go on the notes (still open), so the next session starts from them."""
     with LOCK:
@@ -92,7 +103,7 @@ def report(show_all=False):
     for page, notes in pages.items():
         out.append(f"## {page}  ({notes[0]['title']})")
         for x in notes:
-            mark = f" (done {x['done']})" if x.get("done") else ""
+            mark = f" ({'declined' if x.get('declined') else 'done'} {x['done']})" if x.get("done") else ""
             out.append(f"- `{x['id']}` {x['at']}{mark}")
             if x["item"]:
                 out.append(f"  - on screen: {x['item']}")

@@ -201,6 +201,19 @@ def reopen(body):
     return True
 
 
+def remove_skipped(body):
+    """«Remove skipped files»: the new files of a subject marked «Skip: nothing to build» leave the list (as used)."""
+    result, _ = inbox.scan(body.get("subject"))
+    s = next((x for x in result if x["id"] == body.get("subject")), None)
+    if not s:
+        return None
+    notes = load_notes()
+    files = [x["file"] for x in s["new"] if notes.get(x["file"], {}).get("kind") == "skip"]
+    with LOCK:
+        inbox.add_skipped(files)
+    return files
+
+
 def new_job(body):
     """A «Create / Update lesson» press: saved as jobs/<id>.json (status "queued"), then the runner is started.
     The ticked pages are read from the notes, so the job says exactly what the page showed."""
@@ -378,6 +391,12 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, {"ok": True})
         if path == "/api/reopen":
             return self.send(200 if reopen(body) else 400, {"ok": True})
+        if path == "/api/decline" and isinstance(body.get("ids"), list):
+            review.decline({str(x) for x in body["ids"]})
+            return self.send(200, {"ok": True})
+        if path == "/api/remove-skipped":
+            files = remove_skipped(body)
+            return self.send(200 if files is not None else 400, {"removed": files or []})
         if path == "/api/review":
             return self.send(200 if review.add(body) else 400, {"ok": True})
         if path == "/api/build":

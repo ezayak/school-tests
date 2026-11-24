@@ -65,6 +65,9 @@ and is sorted, ticked and built like a new one (press **Prepare page pictures** 
 takes it out again, or **✕ Take out** on its card. It is kept in `~/.local/share/school-inbox/reopened.json`, not by removing its line from `done.txt`
 (that file is also read from GitHub), and it doesn't make the subject "ready" for the Telegram message.
 
+**🗑 Remove N skipped files** (next to **+ Add an old file**, when the subject has files marked "Skip: nothing to build") takes them off the list:
+they count as used (kept in `~/.local/share/school-inbox/skipped.json`, not in `done.txt`); **+ Add an old file** brings one back.
+
 A subject whose files are not prepared yet (no page pictures) has a **Prepare page pictures** button: it runs `prep` (pictures, text, OCR) on the Pi.
 The notes go to `~/.local/share/school-inbox/notes.json` and are printed by `inbox.py --subject <id>`, so «build inbox <id>» follows them.
 
@@ -83,7 +86,7 @@ To write down what is wrong in a lesson while looking at it on the tablet, witho
    "Saved here", waits on the device (a number on the ✎ button) and is sent by itself later.
 4. **Fix from the sorting page**: the subject shows its notes at the top ("✎ Notes to fix", all ticked; on a tablet or phone the list has a banner);
    untick the ones to keep for later and press **🛠 Fix N notes**. `build.py` runs it like a lesson job (checks, pushes, Telegram)
-   and marks the notes fixed after the push. Notes on pages of no subject (Optima, speech games) are listed but fixed in a session.
+   and marks the notes fixed after the push. **✕ Decline** on a note (a duplicate, a note sent twice) closes it without a fix (`review.py --all` shows it as declined). Notes on pages of no subject (Optima, speech games) are listed but fixed in a session.
    **Or** in a new Claude session, write «fix review notes». Claude runs `review.py`, fixes each note with its subject's skill, commits,
    then `review.py done <ids>`. One subject per session.
 
@@ -199,6 +202,7 @@ The subjects now:
 | Prepared files               | `~/.cache/school-inbox/<Kid>/<Subject>/<file>/` (`sheet-N.jpg`, `pages/p-N.jpg`, `text.txt`, `ocr.txt`) |
 | The parent's sorting notes   | `~/.local/share/school-inbox/notes.json`                                                                |
 | Old files added again        | `~/.local/share/school-inbox/reopened.json`                                                             |
+| Skipped files removed        | `~/.local/share/school-inbox/skipped.json`                                                              |
 | The page password (hash)     | `~/.local/share/school-inbox/password` (PBKDF2, readable by you only)                                   |
 | OCR languages                | `~/.local/share/tessdata/` (eng, ara, fra, ukr from tessdata_best)                                      |
 | Telegram bot token and owner | from `school-hw`: keyring `telegram-homework` / `Alex`, `var/telegram/owner.json`                       |

@@ -285,6 +285,22 @@
         font-weight: 600;
         color: var(--accent);
       }
+      .note .acts {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .note .decline {
+        min-height: 36px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--card);
+        color: var(--muted);
+        font: inherit;
+        font-size: 13px;
+        cursor: pointer;
+      }
       .notes .go {
         display: flex;
         flex-wrap: wrap;
@@ -688,6 +704,11 @@
         border-color: var(--field);
         background: var(--card);
         color: var(--ink);
+      }
+      .file-acts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
       }
       .empty {
         color: var(--muted);
@@ -1601,15 +1622,23 @@
           document.body.classList.remove("has-bar", "open");
           return;
         }
+        const skipped = s.files.filter((f) => f.note.kind === "skip").length;
         main.append(
           $(
             "p",
-            {},
+            { class: "file-acts" },
             $("button", {
               class: "btn plain",
               text: "+ Add an old file",
               onclick: () => addOld(s.id),
             }),
+            skipped
+              ? $("button", {
+                  class: "btn plain",
+                  text: `🗑 Remove ${skipped} skipped file${skipped === 1 ? "" : "s"}`,
+                  onclick: () => removeSkipped(s, skipped),
+                })
+              : "",
           ),
         );
         if (s.reviews.length) main.append(reviewCard(s));
@@ -1706,12 +1735,23 @@
                   })
                 : "",
               $("span", { text: x.text, dir: "auto" }),
-              $("a", {
-                href: APP + x.page,
-                target: "_blank",
-                rel: "noopener",
-                text: "Open the lesson",
-              }),
+              $(
+                "span",
+                { class: "acts" },
+                $("a", {
+                  href: APP + x.page,
+                  target: "_blank",
+                  rel: "noopener",
+                  text: "Open the lesson",
+                }),
+                $("button", {
+                  type: "button",
+                  class: "decline",
+                  text: "✕ Decline",
+                  title: "Take this note off the list without fixing it",
+                  onclick: (e) => decline(e, x),
+                }),
+              ),
             ),
           );
         });
@@ -1761,6 +1801,37 @@
             ),
           ),
         );
+      }
+
+      // ✕ Decline: a note turned down (a duplicate…), closed without a fix
+      async function decline(e, x) {
+        e.preventDefault(); // not a tap on the note's tick
+        if (
+          !confirm("Decline this note?\nIt leaves the list; nothing is fixed.")
+        )
+          return;
+        await fetch("/api/decline", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: [x.id] }),
+        });
+        await load();
+      }
+
+      // «Remove skipped files»: the files marked «Skip: nothing to build» leave the list (they count as used)
+      async function removeSkipped(s, n) {
+        if (
+          !confirm(
+            `Remove ${n} skipped file${n === 1 ? "" : "s"} from the list?\n«+ Add an old file» brings one back.`,
+          )
+        )
+          return;
+        await fetch("/api/remove-skipped", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ subject: s.id }),
+        });
+        await load();
       }
 
       // The «Create / Update lesson» bar: what to build, sent to /api/build; build.py runs it.

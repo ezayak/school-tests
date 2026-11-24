@@ -93,7 +93,7 @@ def load_done():
     r = subprocess.run(["git", "show", "origin/main:" + DONE_FILE.relative_to(REPO).as_posix()], cwd=REPO, capture_output=True, text=True)
     if r.returncode == 0:
         text += "\n" + r.stdout
-    return {l.strip() for l in text.splitlines() if l.strip() and not l.startswith("#")}
+    return {l.strip() for l in text.splitlines() if l.strip() and not l.startswith("#")} | load_skipped()
 
 
 def by_name(r):
@@ -143,6 +143,27 @@ def set_reopened(paths, on=True):
         tmp = REOPENED.with_suffix(".tmp")
         tmp.write_text(json.dumps(sorted(now), ensure_ascii=False, indent=0))
         tmp.replace(REOPENED)
+
+
+# Files marked «Skip: nothing to build» and removed with the sorting page's «Remove skipped files»: they count as used.
+# Kept here and not in done.txt, because the sorting page runs in the main working copy (done.txt is in git).
+SKIPPED = Path("~/.local/share/school-inbox/skipped.json").expanduser()
+
+
+def load_skipped():
+    try:
+        return set(json.loads(SKIPPED.read_text()))
+    except (OSError, ValueError):
+        return set()
+
+
+def add_skipped(paths):
+    now = load_skipped() | set(paths)
+    SKIPPED.parent.mkdir(parents=True, exist_ok=True)
+    tmp = SKIPPED.with_suffix(".tmp")
+    tmp.write_text(json.dumps(sorted(now), ensure_ascii=False, indent=0))
+    tmp.replace(SKIPPED)
+    set_reopened(paths, False)
 
 
 def used_files(subject):
