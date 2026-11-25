@@ -41,6 +41,16 @@ window.LESSONS = [
     note: "Book pp. 10–19 · 12 parts with short summaries · 10 games · 9 exercises (book + workbook pp. 4–5)",
   },
   {
+    n: "2",
+    unit: 1,
+    nAr: "الثَّانِي",
+    title: "الْخَرِيطَةُ فِي حَيَاتِنَا",
+    en: "The map in our lives",
+    path: "u1-lesson-2.html",
+    cover: "img/u1-lesson-2/map.jpg",
+    note: "Book pp. 20–24 · 17 parts with short summaries · 7 games · 11 exercises (book + workbook pp. 6–9)",
+  },
+  {
     n: "1",
     unit: 2,
     nAr: "الْأَوَّلُ",
