@@ -51,6 +51,16 @@ window.LESSONS = [
     note: "Book pp. 20–24 · 17 parts with short summaries · 7 games · 11 exercises (book + workbook pp. 6–9)",
   },
   {
+    n: "3",
+    unit: 1,
+    nAr: "الثَّالِثُ",
+    title: "تَطَوُّرُ الْخَرِيطَةِ",
+    en: "How the map developed",
+    path: "u1-lesson-3.html",
+    cover: "img/u1-lesson-3/cover.jpg",
+    note: "Book pp. 25–30 · 11 parts with short summaries · 10 games · 12 exercises (book + workbook pp. 10–12)",
+  },
+  {
     n: "1",
     unit: 2,
     nAr: "الْأَوَّلُ",
