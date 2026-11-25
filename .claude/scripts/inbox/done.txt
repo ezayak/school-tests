@@ -947,3 +947,6 @@ Alex/Religion/20261121-شرح درس دبوره وباراق.pdf
 Lucas/French/20261123-Document (62) (1).pdf
 Alex/Religion/20261121-att.hQRUdXWaEjfm6THkBqaqFiCjXoGrIgCQ-CmE-JMWIU4.pdf
 Alex/Religion/20261121-الواجب علي درس يوحنا يمهد الطريق للسيد المسيح.pdf
+Alex/Computer/20261125-CW1_for_T2-_G4-Model_Answers.pdf
+Alex/Computer/20261125-CW2_for_T2-_G4-Model_Answers.pdf
+Alex/Computer/20261125-HW1_for_T2-G4_-Model_Answers.pdf

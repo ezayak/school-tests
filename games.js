@@ -573,7 +573,7 @@ window.GAMES = [
     topics:
       "Picture Format, Remove Background, Crop, Wrap Text, SmartArt pyramid & cycle, Shapes, Find and Replace, Spelling and Grammar",
     path: "grade-4/term-2/computer/revision-1.html",
-    questions: 82,
+    questions: 94,
     year: "2026–2027",
     // the page is offline through the Grade 4 Computer entry's "also" (pictures: the lessons')
   },

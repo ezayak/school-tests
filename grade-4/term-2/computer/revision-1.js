@@ -3,7 +3,9 @@
 // Source: the parent's note for Mid-term 2 (2026-11-23): « Unit 2, Lesson 2 Working with Images and Graphics, Lesson 3 Editing and Grammar Check ».
 // No new school sheet: the questions are the lessons' own (grade-4/computer/chapter-2/lesson-2.js, lesson-3.js: book pages 68–85, HW1 for Term 2),
 // their pictures by path, the Mini Word button icons (shared/wordsim.js, loaded by the page) drawn as in the lessons.
-// No answer key: the answers are the lessons' (the Hands on! answers are in grade-4/computer/UNVERIFIED.md).
+// School sheets (2026-11-25, with Model Answers): CW1 for Term 2 « U2 L2 », CW2 for Term 2 « U2 L3 », HW1 for Term 2 « U2 L2 »:
+// their questions not already in the Quest were added (CW1, CW2 sections), with the keys' answers; HW1 was already all here.
+// Other answers are the lessons' (the Hands on! answers are in grade-4/computer/UNVERIFIED.md).
 // Changed to fit the Quest: « Do it in Mini Word » missions and « Steps in order » became « which button / what comes next » questions;
 // the words of both lessons became matching rounds. Left out: the lessons' open answers (the SmartArt about sports, food water and shelter).
 
@@ -355,6 +357,57 @@ window.QUEST = {
       "The Picture Format tab changes the size, shape, colour and position.",
     ),
 
+    /* ===== Lesson 2 · CW1 for Term 2 (key: Model Answers, 2026-11-25) ===== */
+    {
+      l: 2,
+      svg: btn("removebg", "Remove Background"),
+      q: "Who am I? You use me to delete the background.",
+      o: ["Remove Background", "Position"],
+      x: "Remove Background keeps only the main subject.",
+    },
+    {
+      l: 2,
+      svg: btn("piceffects", "Picture Effects"),
+      q: "Who am I? You use me to add a shadow to the image.",
+      o: ["Picture Effects", "Picture Border"],
+      x: "Picture Effects: shadow, glow, reflection or 3-D.",
+    },
+    {
+      l: 2,
+      svg: btn("wraptext", "Wrap Text"),
+      q: "Who am I? You use me to control text around the picture.",
+      o: ["Wrap Text", "Crop"],
+      x: "Wrap Text: how the text goes around the picture.",
+    },
+    {
+      l: 2,
+      svg: btn("crop", "Crop"),
+      q: "Who am I? You use me to remove part of the picture.",
+      o: ["Crop", "Position"],
+      x: "Crop cuts away the parts you don't want.",
+    },
+    {
+      l: 2,
+      svg: btn("position", "Position"),
+      q: "Who am I? You use me to change the position of the picture.",
+      o: ["Position", "Picture Styles"],
+      x: "Position: where the picture is on the page.",
+    },
+    tf(
+      2,
+      'You can change the position of a picture from the "Arrange" group.',
+      true,
+      { p: P2("arrange") },
+      "Picture Format tab › Arrange group › Position.",
+    ),
+    {
+      l: 2,
+      p: P2("picture-styles"),
+      q: "Where can you add a border around the picture? Which group?",
+      o: ["Picture Styles", "Font"],
+      x: "Picture Format tab › Picture Styles group › Picture Border.",
+    },
+
     /* ===== Lesson 2 · Do it in Mini Word, Steps in order (the lesson's how-to's) ===== */
     {
       l: 2,
@@ -612,6 +665,46 @@ window.QUEST = {
       { svg: btn("spelling", "Spelling") },
       "You click the right word yourself.",
     ),
+
+    /* ===== Lesson 3 · CW2 for Term 2 (key: Model Answers, 2026-11-25) ===== */
+    {
+      l: 3,
+      svg: btn("spelling", "Spelling"),
+      q: "Who am I? I check for spelling mistakes.",
+      o: ["Spelling and Grammar", "Paste", "Replace"],
+      x: "The ABC ✓ button: Spelling and Grammar.",
+    },
+    {
+      l: 3,
+      svg: btn("replace", "Replace"),
+      q: "Who am I? I find a word and replace it with another one.",
+      o: ["Replace", "Cut", "Copy"],
+      x: "Replace: Home tab › Editing group.",
+    },
+    tf(
+      3,
+      "You cannot fix any grammar mistakes in MS Word.",
+      false,
+      { p: P3("grammar") },
+      "Spelling and Grammar helps you fix grammar mistakes.",
+    ),
+    tf(
+      3,
+      'You can click on "Copy" to change a word by another one.',
+      false,
+      { svg: word("Copy") },
+      "Copy does not change words. Replace changes a word by another one.",
+    ),
+    {
+      l: 3,
+      p: P3("replace-btn"),
+      q: "Where can you replace a word? Which group?",
+      o: [
+        "Editing (Find, Replace, Select)",
+        "Clipboard (Cut, Copy, Format Painter)",
+      ],
+      x: "Home tab › Editing group › Replace.",
+    },
 
     /* ===== Lesson 3 · Do it in Mini Word, Steps in order, Dear Marco ===== */
     {
