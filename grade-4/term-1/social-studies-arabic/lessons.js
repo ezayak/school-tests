@@ -71,6 +71,17 @@ window.LESSONS = [
     note: "Book pp. 31–35 · 15 parts with short summaries · 7 games · 12 exercises (book + workbook pp. 12–15)",
   },
   {
+    n: "review",
+    unit: 1,
+    label: ["Unit 1", "مُرَاجَعَةُ الْوَحْدَةِ الْأُولَى"],
+    nAr: "",
+    title: "مُرَاجَعَةُ الْوَحْدَةِ الْأُولَى",
+    en: "Unit 1 review",
+    path: "u1-review.html",
+    cover: "img/u1-review/w-map.jpg",
+    note: "36 parts from Lessons 1–4 · 29 questions from the book's unit review (pp. 36–37) · 39 from the workbook's monthly practice (pp. 16–18)",
+  },
+  {
     n: "1",
     unit: 2,
     nAr: "الْأَوَّلُ",

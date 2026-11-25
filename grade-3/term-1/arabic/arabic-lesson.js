@@ -353,7 +353,8 @@
       };
     const soon = `<div class="soon">More lessons will be added here, one by one.</div>`;
     // LIST_HEAD.units (SS Arabic): one section per unit instead of "Lessons", [{u, ic, t, ar}];
-    // a lesson goes in the section whose u is its unit; "More lessons…" under the last unit only
+    // a lesson goes in the section whose u is its unit; "More lessons…" under the last unit only;
+    // an entry's optional label [en, ar] replaces "Lesson" / "الدرس" on its card (a unit review)
     const units = (LH.units || []).map((x, i, a) =>
       sec(
         "unit-" + x.u,
@@ -362,7 +363,7 @@
         x.ar,
         LS.filter((l) => l.unit === x.u),
         LS.filter((l) => l.unit === x.u)
-          .map((l) => card(l, "Lesson", "الدرس"))
+          .map((l) => card(l, ...(l.label || ["Lesson", "الدرس"])))
           .join("") + (i === a.length - 1 ? soon : ""),
       ),
     );
