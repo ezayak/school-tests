@@ -76,3 +76,9 @@ the `verb` tile, exercises `avoir1` / `avoir2` (both multiple choice).
 | out53       | 68–69 | Grand jeu de l'oie (revision of the year)                                                       | not yet · `jeu-oie`                                                                                          |
 | out55–out74 | 70–95 | Projet de lecture : Mamie Pétronille et le ruban jaune (story)                                  | not yet · `story-petronille`                                                                                 |
 | out75       | 96    | Mamie Pétronille · Jouons ensemble ! (Associe · Lis et dessine · Aimes-tu cette histoire ?)     | not yet · `story-petronille`                                                                                 |
+
+## Revisions
+
+| File       | Source                                                                                                                      | Built into                                                                                                                                                                                                                                                 |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| revision-2 | The lessons in the app (parent's request, 2026-11-25): `unite-2` Voici ma famille !, la famille de Léo et Théo, 0–12, avoir | « Révision · Mi-terme 2 » (games.js card Term 2 «Mid-term exam»; page next to the lessons for the pictures): 3 Dictée spelling games (famille, nombres, avoir), new noms / qui / relie / combien, `u2:` reponds, vf, famille, nombres, age, avoir1, avoir2 |

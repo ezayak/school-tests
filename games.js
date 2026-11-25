@@ -378,6 +378,21 @@ window.GAMES = [
     grade: 3,
     term: 2,
     period: "Mid-term exam",
+    subject: "French",
+    title: "Révision · Mi-terme 2",
+    lesson:
+      "Unité 2 Voici ma famille ! · les nombres de 0 à 12 · le verbe avoir",
+    topics:
+      "La famille (by spelling), la famille de Léo et Théo (les noms), les nombres de 0 à 12 (by spelling), le verbe avoir (by spelling)",
+    path: "grade-3/term-1/french/revision-2.html",
+    countLabel: "3 spelling games · 11 exercises",
+    year: "2026–2027",
+    // the page sits next to the lessons (its pictures are Unité 2's); offline through the Grade 3 Français entry's "also"
+  },
+  {
+    grade: 3,
+    term: 2,
+    period: "Mid-term exam",
     subject: "Social Studies",
     title: "Explorers Quest",
     lesson: "Ch. 3 L2 · Early Explorers · slides + Graded Homework 1",
@@ -1509,6 +1524,8 @@ window.GAMES = [
       "grade-3/term-1/french/revision-1.js",
       "grade-3/term-1/french/unite-3.html",
       "grade-3/term-1/french/unite-3.js",
+      "grade-3/term-1/french/revision-2.html",
+      "grade-3/term-1/french/revision-2.js",
       "grade-3/term-1/french/img/lesson-1/age.jpg",
       "grade-3/term-1/french/img/lesson-1/ahmed.jpg",
       "grade-3/term-1/french/img/lesson-1/bonjour.jpg",
