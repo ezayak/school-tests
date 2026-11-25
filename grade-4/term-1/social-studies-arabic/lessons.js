@@ -8,6 +8,12 @@ window.LIST_HEAD = {
   // one section of the side bar per unit (a lesson's unit: N puts it there)
   units: [
     {
+      u: 1,
+      ic: "🧭",
+      t: "Unit 1",
+      ar: "الْوَحْدَةُ الْأُولَى",
+    },
+    {
       u: 2,
       ic: "🏙️",
       t: "Unit 2",
@@ -24,6 +30,16 @@ window.LIST_HEAD = {
     "Pick a lesson. Learn: the book's text to read and listen to, with pictures (tap any word to see what it means). Games: the book's activities and games. Exercises: the book's exercises and the workbook (الأداءات والتقييمات).",
 };
 window.LESSONS = [
+  {
+    n: "1",
+    unit: 1,
+    nAr: "الْأَوَّلُ",
+    title: "الْأَمَاكِنُ وَالِاتِّجَاهَاتُ مِنْ حَوْلِنَا",
+    en: "Places and directions around us",
+    path: "u1-lesson-1.html",
+    cover: "img/u1-lesson-1/rose.jpg",
+    note: "Book pp. 10–19 · 12 parts with short summaries · 10 games · 9 exercises (book + workbook pp. 4–5)",
+  },
   {
     n: "1",
     unit: 2,

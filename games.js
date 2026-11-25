@@ -1723,9 +1723,9 @@ window.GAMES = [
     lesson:
       "الدِّرَاسَاتُ الِاجْتِمَاعِيَّةُ · Learn, play & practise each lesson",
     topics:
-      "Units 2–3 · كَيْفَ تَبْدُو مَدِينَتُنَا؟ · تَطَوُّرُ مَدِينَتِنَا · الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا · مَدِينَتُنَا فِي الْمُسْتَقْبَلِ · أَيْنَ تَقَعُ مُحَافَظَتِي؟ · عَلَمُ وَطَنِنَا مِصْرَ · مِصْرُ عَلَى خَرِيطَةِ الْعَالَمِ · تَضَارِيسُ أَرْضِنَا الْجَمِيلَةِ · ثَرَوَاتُ مِصْرَ الطَّبِيعِيَّةُ وَالْبَشَرِيَّةُ · الْمَعَالِمُ التَّارِيخِيَّةُ فِي مِصْرَ: the book's text with pictures, audio & translation and a short summary under each part, the book's activities as games, the book's exercises and the workbook",
+      "Units 1–3 · الْأَمَاكِنُ وَالِاتِّجَاهَاتُ مِنْ حَوْلِنَا · كَيْفَ تَبْدُو مَدِينَتُنَا؟ · تَطَوُّرُ مَدِينَتِنَا · الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا · مَدِينَتُنَا فِي الْمُسْتَقْبَلِ · أَيْنَ تَقَعُ مُحَافَظَتِي؟ · عَلَمُ وَطَنِنَا مِصْرَ · مِصْرُ عَلَى خَرِيطَةِ الْعَالَمِ · تَضَارِيسُ أَرْضِنَا الْجَمِيلَةِ · ثَرَوَاتُ مِصْرَ الطَّبِيعِيَّةُ وَالْبَشَرِيَّةُ · الْمَعَالِمُ التَّارِيخِيَّةُ فِي مِصْرَ: the book's text with pictures, audio & translation and a short summary under each part, the book's activities as games, the book's exercises and the workbook",
     path: "grade-4/term-1/social-studies-arabic/index.html",
-    countLabel: "10 lessons",
+    countLabel: "11 lessons",
     year: "2026–2027",
     // uses the Arabic lesson engine (listed in the Grade 3 Arabic entry's "also")
     also: [
@@ -1750,6 +1750,8 @@ window.GAMES = [
       "grade-4/term-1/social-studies-arabic/u3-lesson-4.js",
       "grade-4/term-1/social-studies-arabic/u3-lesson-5.html",
       "grade-4/term-1/social-studies-arabic/u3-lesson-5.js",
+      "grade-4/term-1/social-studies-arabic/u1-lesson-1.html",
+      "grade-4/term-1/social-studies-arabic/u1-lesson-1.js",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-3/cover.jpg",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-3/doctor.jpg",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-3/fire-truck.jpg",
@@ -1921,6 +1923,21 @@ window.GAMES = [
       "grade-4/term-1/social-studies-arabic/img/u3-lesson-5/w-zoser.jpg",
       "grade-4/term-1/social-studies-arabic/img/u3-lesson-5/worldmap.jpg",
       "grade-4/term-1/social-studies-arabic/img/u3-lesson-5/zoser.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/compass.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/cover.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/directions.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/furniture.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/plan-ahmed.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/plan-laila.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/rose.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/routes.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/school-plan.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/stars.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/sunrise.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/w-arrow-a.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/w-arrow-b.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/w-arrow-c.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u1-lesson-1/w-compass.jpg",
     ],
   },
   {
