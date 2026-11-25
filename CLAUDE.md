@@ -81,6 +81,11 @@ SS Arabic on the SS Arabic revision engine `shared/ss-arabic-revision.js` (the `
 An exam revision (mid-term / final) goes in the folder of the exam's term, `grade-N/term-T/<subject>/` (T = the job's "Term T"),
 with a `games.js` card `term: T`, `period: "Mid-term exam"` / `"Final exam"`: it shows under that term's "Revision T" button. Lessons stay where they are.
 
+## Sheet quizzes (photos from Telegram)
+
+Folder `quiz/<kid>/<slug>/`, engine `shared/sheet-quiz.js`: a school sheet as a homework helper (no right or wrong, a picture and simple help on every question), not in the menu.
+Rules and checks: the `sheet-quiz` skill.
+
 ## Ukrainian reading (Optima, Grade 3)
 
 «Складова ракета» texts in `optima/grade-3/ukr-lit/`, engine `shared/reading.js` + `.css`. Rules and checks: the `ukr-reading` skill.

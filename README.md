@@ -14,6 +14,7 @@ index.html            ← home page, lists every game from games.js
 index.css             ← home page layout (loads after shared/theme.css)
 games.js              ← catalog: one entry per game
 shared/               ← the one place for styling and shared helpers (see "Styling")
+quiz/<kid>/<slug>/    ← sheet quizzes from Telegram photos (not in the menu, see "Sheet quizzes")
 grade-3/
   term-1/
     mid-term-1/            ← revisions
@@ -95,6 +96,7 @@ live in `shared/theme.css`; change them there and every page follows.
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `shared/theme.css`                               | colours (light/dark), fonts, page, cards, buttons, menu tiles, the typing box (`.spell-in`, `.diff`)                                                                                                                                                                                                                                                                                                                                                                                   | every page, first                                                                                                                      |
 | `shared/quiz.css`                                | quiz parts: score bar, picture, answers, matching, results, SVG drawing colours                                                                                                                                                                                                                                                                                                                                                                                                        | quiz games, Arabic lessons                                                                                                             |
+| `shared/sheet-quiz.js`                           | the sheet quiz: a school sheet as a homework helper, no right or wrong, a picture + 💡 help + 🔊 on every question, « My answers », Mini programs in a popup (data: `window.SHEET` in `quiz.js`)                                                                                                                                                                                                                                                                                       | sheet quizzes (`quiz/`)                                                                                                                |
 | `shared/arabic.css`                              | Arabic text, Arabic answers, folder tabs, Bible verse and reference                                                                                                                                                                                                                                                                                                                                                                                                                    | Arabic and Religion lessons, Arabic revision quizzes                                                                                   |
 | `shared/arabic-revision.css`                     | word tools, English toggle                                                                                                                                                                                                                                                                                                                                                                                                                                                             | religion / Arabic social-studies revisions                                                                                             |
 | `shared/ss-arabic-revision.js`                   | the SS Arabic revision engine: Revision sheet sections + Mixed, Key terms games (data: `window.SSA_REV` in `revision-N.js`)                                                                                                                                                                                                                                                                                                                                                            | Grade 4 SS Arabic revisions                                                                                                            |
@@ -425,6 +427,18 @@ Without a name it just says "Ready?".
 
 Tap any page title (in an exercise: the "… · 1/10" line at the top) 6 times quickly: "Review mode on" and a ✎ button. ✎ writes a note about what is on screen; it goes to the sorting page on the Pi
 and Claude fixes it on «fix review notes». 6 taps again turn it off. Details: `.claude/scripts/inbox/README.md` ("Review mode").
+
+## Sheet quizzes (photos from Telegram)
+
+A homework helper for one school sheet: send photos of the sheet to Alex's bot (an Alex quiz) or Lucas's bot (a Lucas quiz), with an optional caption
+("Computer U2 L3", "for Thursday"). Claude makes every question of the sheet a multiple-choice question with a picture (a lesson picture or emoji),
+a 💡 explanation in simple words and a 🔊 button; computer questions can open Mini Word / Windows / Outlook / Edge in a popup. The quiz never shows right or wrong:
+the end screen, « My answers », lists the child's answers in the sheet's order, to copy onto the paper (kept on the device until « Start again »).
+The bot answers with the link, e.g. `https://ezayak.github.io/school-tests/quiz/alex/20261125-computer-u2l3/`.
+
+- Files: `quiz/<kid>/<YYYYMMDD>-<subject>-<what>/` (`index.html`, `quiz.js`, `img/`), engine `shared/sheet-quiz.js` (format at its top), demo `quiz/demo/`.
+- Not in `games.js` (no menu, opened by the link), not precached (no `sw.js` bump per quiz; a quiz works offline once opened).
+- Rules: the `sheet-quiz` skill. New folder and checks: `node .claude/scripts/sheet-quiz.js new <kid> <slug>` / `check <folder>`.
 
 ## Publish with GitHub Pages
 
