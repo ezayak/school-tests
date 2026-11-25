@@ -45,4 +45,13 @@ window.LESSONS = [
     cover: "img/u2-lesson-4/cover.jpg",
     note: "Book pp. 58–61 · 9 parts with short summaries · 5 games · 11 exercises (book + workbook pp. 30–34)",
   },
+  {
+    n: "5 (Unit 2)",
+    nAr: "الْخَامِسُ",
+    title: "أَيْنَ تَقَعُ مُحَافَظَتِي؟",
+    en: "Where is my governorate?",
+    path: "u2-lesson-5.html",
+    cover: "img/u2-lesson-5/cover.jpg",
+    note: "Book pp. 62–67 · 8 parts with short summaries · 5 games · 13 exercises (book + workbook pp. 35–38)",
+  },
 ];
