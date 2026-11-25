@@ -10,6 +10,15 @@ window.LIST_HEAD = {
 };
 window.LESSONS = [
   {
+    n: "1 (Unit 2)",
+    nAr: "الْأَوَّلُ",
+    title: "كَيْفَ تَبْدُو مَدِينَتُنَا؟",
+    en: "What does our city look like?",
+    path: "u2-lesson-1.html",
+    cover: "img/u2-lesson-1/cover.jpg",
+    note: "Book pp. 40–45 · 13 parts with short summaries · 6 games · 12 exercises (book + workbook pp. 19–21)",
+  },
+  {
     n: "3 (Unit 2)",
     nAr: "الثَّالِثُ",
     title: "الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا",
