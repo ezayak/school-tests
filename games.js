@@ -1723,9 +1723,9 @@ window.GAMES = [
     lesson:
       "الدِّرَاسَاتُ الِاجْتِمَاعِيَّةُ · Learn, play & practise each lesson",
     topics:
-      "Units 2–3 · كَيْفَ تَبْدُو مَدِينَتُنَا؟ · تَطَوُّرُ مَدِينَتِنَا · الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا · مَدِينَتُنَا فِي الْمُسْتَقْبَلِ · أَيْنَ تَقَعُ مُحَافَظَتِي؟ · عَلَمُ وَطَنِنَا مِصْرَ: the book's text with pictures, audio & translation and a short summary under each part, the book's activities as games, the book's exercises and the workbook",
+      "Units 2–3 · كَيْفَ تَبْدُو مَدِينَتُنَا؟ · تَطَوُّرُ مَدِينَتِنَا · الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا · مَدِينَتُنَا فِي الْمُسْتَقْبَلِ · أَيْنَ تَقَعُ مُحَافَظَتِي؟ · عَلَمُ وَطَنِنَا مِصْرَ · مِصْرُ عَلَى خَرِيطَةِ الْعَالَمِ: the book's text with pictures, audio & translation and a short summary under each part, the book's activities as games, the book's exercises and the workbook",
     path: "grade-4/term-1/social-studies-arabic/index.html",
-    countLabel: "6 lessons",
+    countLabel: "7 lessons",
     year: "2026–2027",
     // uses the Arabic lesson engine (listed in the Grade 3 Arabic entry's "also")
     also: [
@@ -1742,6 +1742,8 @@ window.GAMES = [
       "grade-4/term-1/social-studies-arabic/u2-lesson-5.js",
       "grade-4/term-1/social-studies-arabic/u3-lesson-1.html",
       "grade-4/term-1/social-studies-arabic/u3-lesson-1.js",
+      "grade-4/term-1/social-studies-arabic/u3-lesson-2.html",
+      "grade-4/term-1/social-studies-arabic/u3-lesson-2.js",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-3/cover.jpg",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-3/doctor.jpg",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-3/fire-truck.jpg",
@@ -1831,6 +1833,16 @@ window.GAMES = [
       "grade-4/term-1/social-studies-arabic/img/u3-lesson-1/timeline.jpg",
       "grade-4/term-1/social-studies-arabic/img/u3-lesson-1/tourist.jpg",
       "grade-4/term-1/social-studies-arabic/img/u3-lesson-1/trains.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/army.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/borders.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/continents.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/egyptmap.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/hemispheres.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/oceans.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/oldnew.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/pies.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/w-compass.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u3-lesson-2/worldmap.jpg",
     ],
   },
   {

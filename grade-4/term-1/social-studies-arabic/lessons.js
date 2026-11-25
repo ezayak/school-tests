@@ -63,4 +63,13 @@ window.LESSONS = [
     cover: "img/u3-lesson-1/cover.jpg",
     note: "Book pp. 72–77 · 11 parts with short summaries · 6 games · 10 exercises (book + workbook pp. 44–47)",
   },
+  {
+    n: "2 (Unit 3)",
+    nAr: "الثَّانِي",
+    title: "مِصْرُ عَلَى خَرِيطَةِ الْعَالَمِ",
+    en: "Egypt on the world map",
+    path: "u3-lesson-2.html",
+    cover: "img/u3-lesson-2/worldmap.jpg",
+    note: "Book pp. 78–83 · 8 parts with short summaries · 7 games · 12 exercises (book + workbook pp. 47–49)",
+  },
 ];
