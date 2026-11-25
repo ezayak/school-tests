@@ -94,6 +94,7 @@
         uk: "Рельєф нашої прекрасної землі",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "NEldZVhgCr0",
         cover: P("fjord"),
         parts: [
           {

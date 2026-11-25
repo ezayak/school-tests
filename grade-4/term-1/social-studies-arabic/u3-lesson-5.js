@@ -122,6 +122,7 @@
         uk: "Історичні пам'ятки Єгипту",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "btAqCA1TK3M",
         cover: P("cover"),
         parts: [
           {
