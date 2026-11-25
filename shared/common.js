@@ -715,6 +715,58 @@ window.Kit = (function () {
     return { list, has, add, clear, counts };
   })();
 
+  /* ---------- Quest pictures (shared/quest.js, the sheet quiz): one picture per question in a 320×180 box ----------
+     q.p: a picture (a name → <dir>/<name>.jpg; with an extension or a "/" used as it is), q.ps: pictures A B C…,
+     q.svg: a drawing, q.e: emoji ("🌍 🌦️"). The f-* / lbl classes are in shared/quiz.css. */
+  const IMG = (p, dir) => (/[./]/.test(p) ? p : `${dir}/${p}.jpg`);
+  const qem = (x, y, s, c) =>
+    `<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central">${c}</text>`;
+  const qtx = (x, y, t, c = "lbl") =>
+    `<text class="${c}" x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central">${t}</text>`;
+  const QSKY = '<rect class="f-sky" width="320" height="180"/>';
+  // whole pictures in a grid (2×2 for four), each with its letter A, B, C… like the answer buttons
+  const tiles = (ps, dir) => {
+    const n = ps.length,
+      cols = n > 3 ? 2 : n,
+      rows = Math.ceil(n / cols),
+      w = (320 - 6 * (cols + 1)) / cols,
+      h = (180 - 6 * (rows + 1)) / rows;
+    return (
+      QSKY +
+      ps
+        .map((p, i) => {
+          const x = 6 + (i % cols) * (w + 6),
+            y = 6 + Math.floor(i / cols) * (h + 6);
+          return `<rect class="f-card" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>${qtx(x + 14, y + h / 2, "ABCD"[i], "lbl-big")}<image href="${IMG(p, dir)}" x="${x + 28}" y="${y + 3}" width="${w - 31}" height="${h - 6}" preserveAspectRatio="xMidYMid meet"/>`;
+        })
+        .join("")
+    );
+  };
+  // emoji picture: each group of emoji in its own slot, so a long row never runs off the picture
+  const emo = (e) => {
+    const g = e.split(" "),
+      s = Math.min(
+        80,
+        280 /
+          g.length /
+          Math.max(...g.map((x) => x.replace(/[️‍]/g, "").length / 2)),
+      );
+    return (
+      QSKY +
+      g
+        .map((x, i) =>
+          qem(160 + (i - (g.length - 1) / 2) * (300 / g.length), 90, s, x),
+        )
+        .join("")
+    );
+  };
+  const qPic = (q, dir) =>
+    q.p
+      ? `<img class="scene pic fit" src="${IMG(q.p, dir)}" alt="Picture for the question">`
+      : q.e || q.ps || q.svg
+        ? `<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${q.ps ? tiles(q.ps, dir) : q.svg ? QSKY + q.svg : emo(q.e)}</svg></div>`
+        : "";
+
   return {
     esc,
     shuf,
@@ -724,6 +776,7 @@ window.Kit = (function () {
     scene,
     idiom,
     blocks,
+    qPic,
     dragTiles,
     voice,
     sideNav,

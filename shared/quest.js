@@ -23,55 +23,8 @@
   const MC = D.mc || [],
     MT = D.mt || [];
 
-  /* ---------- pictures ---------- */
-  const IMG = (p) => (/[./]/.test(p) ? p : `${D.imgDir}/${p}.jpg`);
-  const em = (x, y, s, c) =>
-    `<text class="emo" x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central">${c}</text>`;
-  const tx = (x, y, t, c = "lbl") =>
-    `<text class="${c}" x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central">${t}</text>`;
-  const SKY = '<rect class="f-sky" width="320" height="180"/>';
-  // whole pictures in a grid (2×2 for four), each with its letter A, B, C… like the answer buttons
-  const tiles = (ps) => {
-    const n = ps.length,
-      cols = n > 3 ? 2 : n,
-      rows = Math.ceil(n / cols),
-      w = (320 - 6 * (cols + 1)) / cols,
-      h = (180 - 6 * (rows + 1)) / rows;
-    return (
-      SKY +
-      ps
-        .map((p, i) => {
-          const x = 6 + (i % cols) * (w + 6),
-            y = 6 + Math.floor(i / cols) * (h + 6);
-          return `<rect class="f-card" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>${tx(x + 14, y + h / 2, "ABCD"[i], "lbl-big")}<image href="${IMG(p)}" x="${x + 28}" y="${y + 3}" width="${w - 31}" height="${h - 6}" preserveAspectRatio="xMidYMid meet"/>`;
-        })
-        .join("")
-    );
-  };
-  // emoji picture: each group of emoji in its own slot, so a long row never runs off the picture
-  const emo = (e) => {
-    const g = e.split(" "),
-      s = Math.min(
-        80,
-        280 /
-          g.length /
-          Math.max(...g.map((x) => x.replace(/[️‍]/g, "").length / 2)),
-      );
-    return (
-      SKY +
-      g
-        .map((x, i) =>
-          em(160 + (i - (g.length - 1) / 2) * (300 / g.length), 90, s, x),
-        )
-        .join("")
-    );
-  };
-  const scene = (q) =>
-    q.p
-      ? `<img class="scene pic fit" src="${IMG(q.p)}" alt="Picture for the question">`
-      : q.e || q.ps || q.svg
-        ? `<div class="scene" role="img" aria-label="Picture for the question"><svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet">${q.ps ? tiles(q.ps) : q.svg ? SKY + q.svg : emo(q.e)}</svg></div>`
-        : "";
+  // one picture per question (the helpers are shared with the sheet quiz: Kit.qPic in common.js)
+  const scene = (q) => Kit.qPic(q, D.imgDir);
 
   /* ---------- choices on the start screen ---------- */
   const LESSONS = [{ n: 0, l: "All lessons" }, ...(D.lessons || [])];
