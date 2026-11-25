@@ -416,10 +416,11 @@ def short(result):
     return "\n".join(lines)
 
 
-def telegram(text):
-    """Private message to the owner through the Alex homework bot (token and owner from school-hw)."""
+def telegram(text, kid="Alex"):
+    """Private message to the owner through a homework bot, Alex's by default (token and owner from school-hw)."""
     hw = Path.home() / "projects/school-hw"
-    token = run([str(hw / ".venv/bin/python"), "-c", "import keyring;print(keyring.get_password('telegram-homework','Alex') or '')"]).strip()
+    kid = kid if kid in ("Alex", "Lucas") else "Alex"
+    token = run([str(hw / ".venv/bin/python"), "-c", "import keyring;print(keyring.get_password('telegram-homework','" + kid + "') or '')"]).strip()
     owner = json.loads((hw / "var/telegram/owner.json").read_text())
     if not token:
         sys.exit("No bot token in the keyring.")

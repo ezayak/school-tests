@@ -4,7 +4,7 @@
   build.py              run every queued job (what school-build.service does; the page starts it)
   build.py --list       the jobs and their status
 
-Per job (~/.local/share/school-inbox/jobs/<id>.json, written by sorter.py):
+Per job (~/.local/share/school-inbox/jobs/<id>.json, written by sorter.py, or by quiz.py for a sheet quiz from the Telegram bot):
   1. a fresh git worktree from origin/main in ~/.cache/school-inbox/build/<id> (your own checkout is never touched)
   2. Claude (claude -p) builds the lesson there with the subject's skill and commits; it never pushes
   3. this script checks the commits itself: files only in the subject's folder (+ games.js, sw.js, done.txt),
@@ -35,6 +35,7 @@ CLAUDE = Path("~/.local/bin/claude").expanduser()
 BUDGET = str(inbox.CONFIG["rules"].get("buildBudgetUsd", 10))  # US dollars per job, at most
 TIMEOUT = 90 * 60  # seconds per job
 COMMIT_URL = "https://github.com/ezayak/school-tests/commit/"
+SITE = "https://ezayak.github.io/school-tests/"  # GitHub Pages: a sheet quiz's link is SITE + quiz/<kid>/<slug>/
 # Files a lesson job may change outside the subject's app folder
 SHARED_FILES = {"games.js", "sw.js", ".claude/scripts/inbox/done.txt"}
 PRETTIER = Path("~/node_modules/.bin/prettier").expanduser()  # 3.9.10, as CLAUDE.md says
@@ -60,6 +61,8 @@ That press is the approval: do not ask questions, do not wait for approval, do n
   nothing and start your last message with one line `Not done: <the cause, in a few words>`
   (e.g. `Not done: needs a change to the engine arabic-lesson.js, not allowed in this job`).
   The job page and Telegram show that line as the reason; the parent continues this conversation in a normal chat.
+- A «quiz» job (photos of a school sheet from the Telegram bot): the `sheet-quiz` skill. Change only the new folder quiz/<kid>/<slug>/:
+  no games.js, no sw.js, no done.txt, no SOURCES.md. The job script adds the quiz's link to your last message.
 - Your last message is sent to the parent on Telegram: 2-4 short lines, what was built or why not."""
 
 
@@ -83,11 +86,30 @@ def git(*args, cwd=None, check=True):
 
 
 def subject_of(job):
+    if job["mode"] == "quiz":  # the subject is found from the sheet
+        return {"id": "quiz", "kid": job["kid"], "name": "Sheet quiz", "app": "quiz/" + job["kid"].lower()}
     return next(s for s in inbox.CONFIG["subjects"] if s["id"] == job["subject"])
+
+
+def quiz_dirs(changed):
+    """The quiz folders a quiz job made: quiz/<kid>/<slug>/."""
+    return sorted({"/".join(f.split("/")[:3]) for f in changed if f.startswith("quiz/") and f.count("/") >= 3})
 
 
 def prompt(job):
     s = subject_of(job)
+    if job["mode"] == "quiz":
+        grade = {"Alex": "Grade 4", "Lucas": "Grade 3"}.get(job["kid"], "")
+        return "\n".join(
+            [
+                "Make a sheet quiz (skill sheet-quiz)",
+                "",
+                f"Job: the parent sent photos of {job['kid']}'s school sheet ({grade}) to the Telegram bot. Make it a sheet quiz in quiz/{job['kid'].lower()}/.",
+                f"Parent's caption: {job['text'] or '(none: find the subject and the lesson from the sheet)'}",
+                "The photos, in order (open each once):",
+                *[f"- {p}" for p in job["photos"]],
+            ]
+        )
     if job["mode"] == "fix":
         out = [
             "fix review notes",
@@ -209,6 +231,8 @@ def checks(job, wt, final):
         problems.append("changed but not committed (kept in the worktree): " + loose.replace("\n", ", ")[:300])
     if not changed:
         return problems or [not_done(final)]
+    if job["mode"] == "quiz":
+        return problems + quiz_checks(wt, changed)
     # the subject's files may be in (or move to) any term folder of its grade, or none: grade-N/[term-T/]<subject>/
     # (an exam revision goes in the folder of the exam's term, CLAUDE.md "Revisions"); as review.py subject_of
     norm = lambda p: re.sub(r"/term-\d+/", "/", "/" + p.strip("/") + "/")
@@ -231,6 +255,32 @@ def checks(job, wt, final):
         problems.append("register.py check: " + r.stdout.strip().replace("\n", " ")[:300])
     if set(changed) - {".claude/scripts/inbox/done.txt"} and "sw.js" not in changed:
         problems.append("sw.js VERSION not bumped")
+    return problems
+
+
+def quiz_checks(wt, changed):
+    """A quiz job: one new folder quiz/<kid>/<slug>/ and nothing else; Prettier, node --check, sheet-quiz.js check."""
+    problems = []
+    others = [f for f in changed if not f.startswith("quiz/")]
+    if others:
+        problems.append("changed outside quiz/: " + ", ".join(others[:8]))
+    dirs = quiz_dirs(changed)
+    if len(dirs) != 1:
+        problems.append(f"expected one quiz folder, found {len(dirs)}: " + ", ".join(dirs[:4]))
+    present = [f for f in changed if (wt / f).exists()]
+    pretty = [f for f in present if Path(f).suffix in PRETTIER_EXT]
+    if pretty:
+        r = subprocess.run([str(PRETTIER), "--check", *pretty], cwd=wt, capture_output=True, text=True)
+        if r.returncode:
+            problems.append("Prettier: " + (r.stdout + r.stderr).strip().replace("\n", " ")[-300:])
+    for f in (f for f in present if f.endswith(".js")):
+        r = subprocess.run(["node", "--check", f], cwd=wt, capture_output=True, text=True)
+        if r.returncode:
+            problems.append(f"node --check {f}: {r.stderr.strip().splitlines()[-1] if r.stderr.strip() else 'error'}")
+    for d in dirs:
+        r = subprocess.run(["node", ".claude/scripts/sheet-quiz.js", "check", d], cwd=wt, capture_output=True, text=True)
+        if r.returncode:
+            problems.append(f"sheet-quiz.js check {d}: " + (r.stdout + r.stderr).strip().replace("\n", " ")[:400])
     return problems
 
 
@@ -278,15 +328,20 @@ def run(job):
         more = f"\nContinue in a normal chat: {resume}" if resume else ""
         return f"❌ {s['kid']} · {s['name']}: «{job['target']}» not pushed\n" + "\n".join("• " + p for p in problems) + f"\n{final[:600]}\nKept: {wt} (branch {branch}){more}"
     commits = git("log", "--format=%h %s", "origin/main..HEAD", cwd=wt).splitlines()
+    changed_files = git("diff", "--name-only", "origin/main..HEAD", cwd=wt).splitlines()
     git("push", "-q", "origin", "HEAD:main", cwd=wt)
     head = git("rev-parse", "HEAD", cwd=wt)
     log(job, "✓ pushed: " + "; ".join(commits))
     if job["mode"] == "fix":
         review.done({x["id"] for x in job["notes"]})
-    else:
+    elif job["mode"] != "quiz":
         clear_picks(job)
     git("worktree", "remove", "--force", str(wt))
     git("branch", "-D", branch)
+    if job["mode"] == "quiz":
+        link = SITE + quiz_dirs(changed_files)[0] + "/"
+        save(job, status="pushed", commits=commits, url=link)
+        return f"✅ {s['kid']} · sheet quiz is ready (opens in a minute or two, while GitHub Pages updates):\n{link}\n\n{final[:800]}"
     save(job, status="pushed", commits=commits, url=COMMIT_URL + head)
     return f"✅ {s['kid']} · {s['name']}: «{job['target']}» is live\n{final[:800]}\n{COMMIT_URL + head}"
 
@@ -317,7 +372,7 @@ def main():
                 save(job, status="failed", problems=[str(e)])
                 message = f"❌ «{job['target']}»: {e}"
             try:
-                inbox.telegram(message)
+                inbox.telegram(message, job.get("kid", "Alex"))  # a sheet quiz answers through the bot it came from
             except Exception as e:
                 log(job, f"Telegram: {e}")
 

@@ -128,6 +128,7 @@ The notes are kept in `~/.local/share/school-inbox/review.json`. Only the app's 
 | `subjects.json`       | The settings (below)                                                                                                        |
 | `done.txt`            | Every file already used (one path per line). Committed with the lesson that used it                                         |
 | `build.py`            | Runs the page's Create / Update lesson jobs: Claude in a worktree, checks, push to main, Telegram                           |
+| `quiz.py`             | Queues a sheet quiz job from the Telegram bot's photos (`quiz.py add --kid Alex [--caption …] <photos>`)                    |
 | `systemd/`            | `school-inbox.service` + `.timer` (19:00), `school-sorter.service` (the page, always on), `school-build.service` (the jobs) |
 
 Commands (from the repo root):
@@ -223,6 +224,10 @@ A press on Create / Update lesson saves `~/.local/share/school-inbox/jobs/<id>.j
 3. the script itself checks the commits: only files in the subject's app folder + `games.js`, `sw.js`, `done.txt`; Prettier; `node --check`; `register.py check`; `sw.js` bumped;
 4. all good: rebased on `origin/main` and **pushed to main** (live on the tablets), the worktree removed. Anything wrong: nothing pushed,
    the worktree and the branch `build/<id>` stay (named in the Telegram message) for a look in a normal session.
+
+**Sheet quiz jobs** (mode `quiz`): photos of a school sheet sent to Alex's or Lucas's bot are queued by `quiz.py add` (photos in `~/.local/share/school-inbox/quiz/<id>/`)
+and run the same way with the `sheet-quiz` skill. The job may change only one new folder `quiz/<kid>/<slug>/` (no `games.js`, no `sw.js` bump); the checks add
+`sheet-quiz.js check`, and the answer comes through the bot the photos were sent to, with the quiz's link (GitHub Pages) instead of the commit.
 
 After a job pushed, your own checkout is behind: `git pull --rebase` before your next push.
 
