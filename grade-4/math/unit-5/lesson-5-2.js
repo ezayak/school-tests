@@ -1,5 +1,6 @@
 // Math · Grade 4 · Lesson 5-2 « Understand Prime and Composite Numbers » (Reveal Math, Unit 5).
-// Sources: Student Edition Vol. 1 p. 137–140, Student Practice Book p. 37–38. No teacher's key for this lesson. Log: grade-4/math/SOURCES.md.
+// Sources: Student Edition Vol. 1 p. 137–140, Student Practice Book p. 37–38.
+// Teacher's key 20261125-L_5-2.pdf (On My Own p. 139–140): every answer agrees. Class sheet 20261125-L5-2.pdf (no key): the 🏫 School set. Log: grade-4/math/SOURCES.md.
 // Prime or composite is worked out by shared/math-kit.js (primeQ, isPrime, factorPairs).
 const { isPrime, primeQ } = MathKit;
 const pick = (q, right, wrong, x, more = {}) => ({
@@ -275,7 +276,7 @@ window.LESSON = {
           "Which number greater than 75 is composite?",
           76,
           [79, 83, 89],
-          "76 = 2 × 38: it has more than one factor pair.",
+          "76 = 2 × 38: it has more than one factor pair. (The key: 80 = 8 × 10.)",
         ),
         {
           type: "tf",
@@ -291,7 +292,6 @@ window.LESSON = {
           a: 15,
           post: "round buttons",
           img: "buttons",
-          // unverified: counted from the book's picture (23 square, 15 round, 17 triangle buttons)
           x: "3 rows of 5: [15] round buttons.",
         },
         {
@@ -313,7 +313,7 @@ window.LESSON = {
               "12 = 1 × 12 = 2 × 6 = 3 × 4 → composite",
             ],
           },
-          // unverified: a model answer, the book gives none
+          // unverified: the key says "Answers may vary"; a model answer
           a: "A prime number has exactly one factor pair: 1 and itself. A composite number has more than one factor pair.",
         },
       ],
@@ -366,6 +366,56 @@ window.LESSON = {
           vis: { kind: "lines", rows: ["41 = 1 × 41"] },
           x: "41 is [prime]: only 1 × 41 and 41 × 1.",
         },
+      ],
+    },
+    {
+      k: "sheet",
+      g: "🏫 School",
+      t: "Class sheet 5-2",
+      en: "Prime or composite? Choose",
+      ic: "🏫",
+      from: "Class sheet 5-2",
+      keep: true,
+      items: [
+        ...[41, 42, 22, 37].map((n) => primeQ(n)),
+        pick("Which number is [prime]?", 5, [1, 4, 9], "5 = [1 × 5] only.", {
+          keep: ["1", "4", "5", "9"],
+        }),
+        pick(
+          "Which number is [composite]?",
+          10,
+          [5, 7, 11],
+          "10 = 1 × 10 = [2 × 5]: more than one factor pair.",
+          { keep: ["5", "7", "10", "11"] },
+        ),
+        pick(
+          "The [smallest] prime number is …",
+          2,
+          [1, 3, 4],
+          "2 = [1 × 2] only. 1 is not prime.",
+          { keep: ["1", "2", "3", "4"] },
+        ),
+        pick(
+          "A [composite] number has more than … factor pair(s).",
+          1,
+          [2, 3, 4],
+          "A prime number has [1] factor pair; a composite number has more.",
+          { keep: ["1", "2", "3", "4"] },
+        ),
+        pick(
+          "The [smallest odd] prime number is …",
+          3,
+          [1, 2, 4],
+          "3 = [1 × 3] only. 2 is even, 1 is not prime.",
+          { keep: ["1", "2", "3", "4"] },
+        ),
+        pick(
+          "Which number is a [factor] of every number?",
+          1,
+          [2, 3, 4],
+          "Every number = [1] × itself.",
+          { keep: ["1", "2", "3", "4"] },
+        ),
       ],
     },
   ],

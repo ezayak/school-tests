@@ -643,7 +643,7 @@ window.GAMES = [
     topics:
       "Times as many: multiply or divide to compare, bar diagrams · Factors and factor pairs · Prime and composite numbers · Acute, right and obtuse angles, ¼ turns",
     path: "grade-4/term-2/math/revision-1.html",
-    questions: 139,
+    questions: 149,
     year: "2026–2027",
     // the page is offline through the Grade 4 Math entry's "also" (pictures: the lessons')
   },

@@ -2,10 +2,11 @@
 // A Quest for shared/quest.js (format at the top of that file). Its card is in games.js (Grade 4 · Term 2 · Mid-term exam).
 // Source: the parent's note for Mid-term 2 (2026-11-24): « Lessons: 4-3, 4-4, 5-1, 5-2 and 14-2 », with the school files
 // 20261116-L_4-3.pdf, 20261116-L_4-4.pdf, 20261119-L_5-1.pdf, 20261116-L_14-2.pdf (the teacher's keys of On My Own) and
-// 20261116-Extra_Practice_-_L14-2.pdf (class sheet, no key). No new exercises: the questions are the lessons' own
+// 20261116-Extra_Practice_-_L14-2.pdf (class sheet, no key);
+// added 2026-11-25: 20261125-L_5-2.pdf (the key of 5-2 On My Own) and the class sheet 20261125-L5-2.pdf (no key). No new exercises: the questions are the lessons' own
 // (grade-4/math/unit-4/lesson-4-3.js, lesson-4-4.js, unit-5/lesson-5-1.js, lesson-5-2.js, unit-14/lesson-14-2.js:
 // Be Curious, Learn, Work Together, On My Own, Practice Book, the Extra Practice sheet), their pictures by path.
-// Answers: the keys of 4-3, 4-4, 5-1 and 14-2 (they agree with the lessons); 5-2 and the Extra Practice sheet have no key (the lessons' answers).
+// Answers: the keys of 4-3, 4-4, 5-1, 5-2 and 14-2 (they agree with the lessons); the 5-2 class sheet and the Extra Practice sheet have no key (worked out).
 // Changed to fit the Quest: typed numbers became A B C D answers (the right one and the likely mistakes: multiplied instead of divided,
 // subtracted, one off); « choose all the factor pairs » became « which list has all the pairs »; « choose all » became one right answer.
 // The bar diagrams, arrays and angles are drawn here in SVG, as in the lessons. Left out: the open answers (What do you notice?,
@@ -969,6 +970,62 @@ window.QUEST = {
       "41 is prime: only 1 × 41 and 41 × 1.",
       ["Yes, she is", "No, she is not"],
     ),
+    // the class sheet 20261125-L5-2.pdf (no key)
+    ...[41, 42, 22, 37].map((n) => primeQ("5-2", n)),
+    {
+      l: "5-2",
+      svg: lines("1 · 4 · 5 · 9"),
+      q: "Which number is prime?",
+      o: ["1", "4", "5", "9"],
+      c: 2,
+      k: 1,
+      x: "5 = 1 × 5 only. 4 = 2 × 2, 9 = 3 × 3; 1 is not prime.",
+    },
+    {
+      l: "5-2",
+      svg: lines("5 · 7 · 10 · 11"),
+      q: "Which number is composite?",
+      o: ["5", "7", "10", "11"],
+      c: 2,
+      k: 1,
+      x: "10 = 1 × 10 = 2 × 5. 5, 7 and 11 are prime.",
+    },
+    {
+      l: "5-2",
+      svg: lines("1 · 2 · 3 · 4"),
+      q: "The smallest prime number is …",
+      o: ["1", "2", "3", "4"],
+      c: 1,
+      k: 1,
+      x: "2 = 1 × 2 only. 1 is not prime.",
+    },
+    {
+      l: "5-2",
+      svg: lines("1 · 2 · 3 · 4"),
+      q: "A composite number has more than … factor pair(s).",
+      o: ["1", "2", "3", "4"],
+      c: 0,
+      k: 1,
+      x: "A prime number has 1 factor pair; a composite number has more.",
+    },
+    {
+      l: "5-2",
+      svg: lines("1 · 2 · 3 · 4"),
+      q: "The smallest odd prime number is …",
+      o: ["1", "2", "3", "4"],
+      c: 2,
+      k: 1,
+      x: "3 = 1 × 3 only. 2 is even, 1 is not prime.",
+    },
+    {
+      l: "5-2",
+      svg: lines("1 · 2 · 3 · 4"),
+      q: "Which number is a factor of every number?",
+      o: ["1", "2", "3", "4"],
+      c: 0,
+      k: 1,
+      x: "Every number = 1 × itself.",
+    },
 
     /* ===== Lesson 14-2 · Classify angles ===== */
     classQ("∠ABC: what kind of angle is it?", 90, 0),
