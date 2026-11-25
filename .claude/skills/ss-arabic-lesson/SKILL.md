@@ -50,7 +50,13 @@ pictures in `img/uN-lesson-M/` (render the page with `pdftoppm -scale-to-y 1440`
 - `en` / `uk` on every part, summary point, section and item; `match` pairs as `{l, r, en: [l, r], uk: [l, r]}`.
 - `gloss` (tap a word → EN / UA): every Arabic word of the parts, `para`, `sum`, titles, questions, options, answers, `x`, pairs.
   `node .claude/skills/arabic/scripts/check.js <file> --missing` → `gloss-reuse.js` over `grade-4/term-1/social-studies-arabic/*.js` (and the Arabic / Religion lessons) →
-  write the rest as `word|en|uk` → `gloss-insert.js` → Prettier. `check.js` does not read `sum`: check the summary words too (every token of `parts[].sum.ar` has a gloss).
+  write the rest as `word|en|uk` → `gloss-insert.js` → Prettier. `check.js` does not read `sum` or `order` sentences:
+  `node .claude/skills/ss-arabic-lesson/scripts/missing.js <file>` lists every word still without a gloss (must print 0).
+- Reused glosses match by bare letters, so read them all before inserting; the SS lessons (`u*-lesson-*.js` here) are the safest source.
+  Wrong ones seen: أَقْدَمِ "I give" (oldest), الْأَسْوَدِ "the lions" (black), أُمَّ "or" (mother), عَبِّرْ "through" (express), حَلُّ "took" (solving),
+  صِحَّةِ "health" in «دلل على صحة العبارة» (truth). Put the right ones in the `word|en|uk` list and drop them from the reused list.
+  `gloss-insert.js` skips a word whose bare letters are already in the gloss: a second meaning of the same letters (صِحَّةَ next to صِحَّةٍ) goes in by hand
+  as its own exact-tashkeel key (the engine tries the exact key first).
 - Workbook answers have no key: say so in the header and in the message; open answers are model answers.
 - Then: the lesson in `LESSONS` (`lessons.js`, `note` with the counts); `register.py add grade-4/term-1/social-studies-arabic/index.html <files> <img folder>`, `register.py check`,
   the card's `countLabel` / `topics` in `games.js` (Grade 4 "Social Studies (Arabic)" entry); SOURCES.md rows (book pages, workbook pages, teacher's files);
