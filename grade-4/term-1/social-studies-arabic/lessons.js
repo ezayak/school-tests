@@ -61,6 +61,16 @@ window.LESSONS = [
     note: "Book pp. 25–30 · 11 parts with short summaries · 10 games · 12 exercises (book + workbook pp. 10–12)",
   },
   {
+    n: "4",
+    unit: 1,
+    nAr: "الرَّابِعُ",
+    title: "مَصَادِرُ جَمْعِ الْمَعْلُومَاتِ",
+    en: "Sources of information",
+    path: "u1-lesson-4.html",
+    cover: "img/u1-lesson-4/cover.jpg",
+    note: "Book pp. 31–35 · 15 parts with short summaries · 7 games · 12 exercises (book + workbook pp. 12–15)",
+  },
+  {
     n: "1",
     unit: 2,
     nAr: "الْأَوَّلُ",
