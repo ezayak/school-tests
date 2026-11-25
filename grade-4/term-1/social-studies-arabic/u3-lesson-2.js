@@ -88,6 +88,7 @@
         uk: "Єгипет на карті світу",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "yxk9YtsH3H4",
         cover: P("worldmap"),
         parts: [
           {

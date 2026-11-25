@@ -86,6 +86,7 @@
         uk: "Який вигляд має наше місто?",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "D9TBxKcouEw",
         cover: P("cover"),
         parts: [
           {
