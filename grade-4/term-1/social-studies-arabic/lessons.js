@@ -16,6 +16,6 @@ window.LESSONS = [
     en: "Service places in our city",
     path: "u2-lesson-3.html",
     cover: "img/u2-lesson-3/cover.jpg",
-    note: "Book pp. 52–57 · 14 parts · 6 games · 11 exercises (book + workbook pp. 26–29)",
+    note: "Book pp. 52–57 · 14 parts with short summaries · 6 games · 11 exercises (book + workbook pp. 26–29)",
   },
 ];

@@ -538,6 +538,43 @@
         }),
     );
   }
+  // a part's short summary in simple words (SS Arabic): p.sum = {ar: [points], en: [points], uk: [points]} (or one string each),
+  // shown under the text in an open box, words tappable like the text, 🔊 reads the points
+  const sumPts = (x) => (Array.isArray(x) ? x : x ? [x] : []);
+  function sumHTML(sum) {
+    if (!sum) return "";
+    const t = tr === "off" ? [] : sumPts(sum[tr]);
+    return `<details class="readp" open><summary>📌 In short · بِاخْتِصَارٍ</summary>${sumPts(
+      sum.ar,
+    )
+      .map(
+        (s, j) =>
+          `<p class="ar tapw" dir="rtl" style="margin:6px 0">• ${tokens(s)
+            .map(
+              (w, i) =>
+                `${esc(w.pre)}<span class="w" data-sum="${j}:${i}">${esc(w.core)}</span>${esc(w.post)}`,
+            )
+            .join(" ")}</p>`,
+      )
+      .join(
+        "",
+      )}<div class="audio"><button type="button" class="abtn" id="sumSay"><span class="e">🔊</span> Listen</button></div>${t.length ? `<ul class="trans">${t.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>` : ""}</details>`;
+  }
+  function bindSum(sum) {
+    if (!sum) return;
+    const pts = sumPts(sum.ar);
+    document.getElementById("sumSay").onclick = () => say(pts.join(" "));
+    document.querySelectorAll("[data-sum]").forEach(
+      (s) =>
+        (s.onclick = (e) => {
+          e.stopPropagation();
+          const [j, i] = s.dataset.sum.split(":").map(Number);
+          const w = tokens(pts[j])[i];
+          s.classList.add("on");
+          showPop(w.core, gloss(w.core), () => s.classList.remove("on"));
+        }),
+    );
+  }
   function storyPanel(P) {
     if (story === null || !STORIES[story]) return storyList(P);
     const ST = STORIES[story],
@@ -547,7 +584,7 @@
       tk = tokens(p.ar);
     const fixed = !!L.tabs && tab !== "story"; // a test: one text per tab, no list, no part navigation
     const nextTab = TABS[TABS.findIndex((t) => t.k === tab) + 1];
-    P.innerHTML = `${fixed ? "" : `<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span>${ST.video ? `<button type="button" class="abtn vidbtn" id="vidBtn"${navigator.onLine === false ? " hidden" : ""}><span class="e">🎬</span> Story video</button>` : ""}</div>`}
+    P.innerHTML = `${fixed ? "" : `<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span>${ST.video ? `<button type="button" class="abtn vidbtn" id="vidBtn"${navigator.onLine === false ? " hidden" : ""}><span class="e">🎬</span> ${esc(ST.videoT || "Story video")}</button>` : ""}</div>`}
     ${ST.intro && part === 0 ? `<details class="readp"><summary>About this text · تمهيد</summary><p class="ar" dir="rtl" style="font-size:1.25rem;line-height:1.9;margin:8px 0">${esc(ST.intro.ar)}</p>${trText(ST.intro) ? `<p class="trans">${esc(trText(ST.intro))}</p>` : ""}</details>` : ""}
     <div class="part${p.img ? "" : " noimg"}">
       ${p.img ? `<div class="pic"><img src="${esc(p.img)}" alt=""></div>` : ""}
@@ -558,6 +595,7 @@
         ${noVoiceNote()}
         ${trText(p) ? `<p class="trans">${esc(trText(p))}</p>` : ""}
         <p class="hintline">Tap any word to see what it means.</p>
+        ${sumHTML(p.sum)}
       </div>
     </div>
     ${
@@ -567,6 +605,7 @@
       <div class="dots" dir="rtl">${PS.map((_, i) => `<button type="button" id="dot-${i}" data-dot="${i}" aria-label="Part ${i + 1}" aria-current="${i === part}"></button>`).join("")}</div>
       ${part < PS.length - 1 ? `<button type="button" class="btn" id="nextPart"><span class="na">التالي ←</span> <small>Next</small></button>` : story < STORIES.length - 1 ? `<button type="button" class="btn" id="nextText"><span class="na">النص التالي ←</span> <small>Next text</small></button>` : nextTab ? `<button type="button" class="btn" id="toNextTab"><span class="na">${esc(nextTab.ar)} ←</span> <small>${esc(nextTab.t)}</small></button>` : ""}</div>`
     }`;
+    bindSum(p.sum);
     const txt = document.getElementById("storyText");
     const spans = [...txt.querySelectorAll(".w")];
     onWord = (ci) => {

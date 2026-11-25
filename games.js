@@ -1667,7 +1667,7 @@ window.GAMES = [
     lesson:
       "الدِّرَاسَاتُ الِاجْتِمَاعِيَّةُ · Learn, play & practise each lesson",
     topics:
-      "Unit 2 · الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا: the book's text with pictures, audio & translation, the book's activities as games, the book's exercises and the workbook",
+      "Unit 2 · الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا: the book's text with pictures, audio & translation and a short summary under each part, the book's activities as games, the book's exercises and the workbook",
     path: "grade-4/term-1/social-studies-arabic/index.html",
     countLabel: "1 lesson",
     year: "2026–2027",
