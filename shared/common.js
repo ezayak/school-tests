@@ -668,6 +668,53 @@ window.Kit = (function () {
     return api;
   })();
 
+  /* ---------- the word clipboard: words saved from a lesson's word pop-up for My dictations ---------- */
+  // localStorage "saved-words": {lang: [{w, en, uk, …}]}; lang as in My dictations ("ar", "en-US", "fr-FR", "uk-UA"),
+  // each word with its translations by language code. The maker's Paste (my-dictations/maker.js) reads it.
+  const saved = (function () {
+    const KEY = "saved-words";
+    const all = () => {
+      try {
+        const o = JSON.parse(localStorage.getItem(KEY) || "{}");
+        return o && typeof o === "object" && !Array.isArray(o) ? o : {};
+      } catch (e) {
+        return {};
+      }
+    };
+    const put = (o) => {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(o));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    };
+    const list = (lang) => (Array.isArray(all()[lang]) ? all()[lang] : []);
+    const has = (lang, w) => list(lang).some((x) => x.w === w);
+    // tr: {en: "…", uk: "…"}; false when there is no room on the device
+    function add(lang, w, tr) {
+      const o = all();
+      const a = Array.isArray(o[lang]) ? o[lang] : [];
+      if (!a.some((x) => x.w === w)) a.push({ w, ...(tr || {}) });
+      o[lang] = a;
+      return put(o);
+    }
+    // only the words of this language
+    function clear(lang) {
+      const o = all();
+      delete o[lang];
+      put(o);
+    }
+    // the languages with saved words, and how many: {ar: 5}
+    const counts = () =>
+      Object.fromEntries(
+        Object.entries(all())
+          .filter(([, a]) => Array.isArray(a) && a.length)
+          .map(([k, a]) => [k, a.length]),
+      );
+    return { list, has, add, clear, counts };
+  })();
+
   return {
     esc,
     shuf,
@@ -683,5 +730,6 @@ window.Kit = (function () {
     frac,
     fracSay,
     review,
+    saved,
   };
 })();

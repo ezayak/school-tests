@@ -734,6 +734,17 @@ body.vopen {
 }
 
 /* word pop-up: listen and close buttons the same size */
+/* word pop-up: the word clipboard (Add / Clear) under the translations */
+.wpop .wsave {
+  grid-column: 1/-1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.wpop .wsave .abtn[disabled] {
+  opacity: 0.6;
+}
 .wpop .wbtns .abtn,
 .wpop .wbtns .x {
   width: 44px;

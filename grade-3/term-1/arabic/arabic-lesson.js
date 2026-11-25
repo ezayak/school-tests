@@ -668,10 +668,37 @@
     popEl.setAttribute("role", "dialog");
     popEl.innerHTML = `<div class="wa ar" dir="rtl">${esc(word)}</div>
     <div class="wt"><b>EN</b>${esc(g ? g[0] : "—")}</div><div class="wbtns"><button type="button" class="abtn" id="popSay" aria-label="Listen"><span class="e">🔊</span></button><button type="button" class="x" id="popX" aria-label="Close">✕</button></div>
-    <div class="wt"><b>UA</b>${esc(g ? g[1] : "—")}</div>`;
+    <div class="wt"><b>UA</b>${esc(g ? g[1] : "—")}</div><div class="wsave" id="popSave"></div>`;
     document.body.appendChild(popEl);
     popEl.querySelector("#popSay").onclick = () => say(word, true);
     popEl.querySelector("#popX").onclick = closePop;
+    savePart(word, g);
+  }
+  // the word clipboard (Kit.saved, for My dictations): Add, and Clear while it holds Arabic words
+  function savePart(word, g) {
+    const box = popEl && popEl.querySelector("#popSave");
+    if (!box) return;
+    // the buttons are drawn again on a tap: the page's click (outside the pop-up → close) must not see it
+    box.onclick = (e) => e.stopPropagation();
+    const S = Kit.saved;
+    const n = S.list("ar").length;
+    const inIt = S.has("ar", word);
+    box.innerHTML = `<button type="button" class="abtn" id="popAdd"${inIt ? " disabled" : ""}>${inIt ? "✓ In clipboard" : "📋 Add to clipboard"}</button>${n ? `<button type="button" class="abtn" id="popClear">🧹 Clear clipboard (${n})</button>` : ""}`;
+    box.querySelector("#popAdd").onclick = () => {
+      const tr = {};
+      if (g && g[0]) tr.en = g[0];
+      if (g && g[1]) tr.uk = g[1];
+      if (!S.add("ar", word, tr))
+        return void (box.querySelector("#popAdd").textContent =
+          "No room on this device");
+      savePart(word, g);
+    };
+    const c = box.querySelector("#popClear");
+    if (c)
+      c.onclick = () => {
+        S.clear("ar");
+        savePart(word, g);
+      };
   }
   /* ---------- the school's YouTube video of a text (L.story.video / stories[i].video: the video id),
      in a popup over the page; the button shows only while online ---------- */

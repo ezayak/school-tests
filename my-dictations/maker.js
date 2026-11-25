@@ -200,10 +200,71 @@ ${all.length ? `<section class="md-list">${all.map(itemHTML).join("")}</section>
     .join("")}</div></div>
   <label class="md-lab">Words and sentences<textarea class="md-text" id="text" dir="auto" rows="12" spellcheck="false" placeholder="pitch&#10;teacher&#10;cheese&#10;1. The runner needed to stretch.&#10;2. What is your favorite color?">${esc(draft.text)}</textarea></label>
   <p class="hint">One word or sentence on each line. Numbers like “1.” are taken away.<span id="trHint"${draft.show === "tr" ? "" : " hidden"}> The translations are found on the internet; you can also write them yourself after a dash: <b>cat - кіт</b>.</span></p>
+  <div class="md-saved" id="savedBox"></div>
   <div class="row"><button class="btn big" type="button" data-act="next">Next →</button></div>
   <p class="md-msg bad" id="pmsg"></p>
 </section>`;
+    savedAsk = "";
+    savedPart();
     window.scrollTo(0, 0);
+  }
+
+  /* ---------- Paste the words saved from a lesson's word pop-up (Kit.saved, "📋 Add to clipboard") ---------- */
+  const LANG_EN = {
+    ar: "Arabic",
+    "en-US": "English",
+    "fr-FR": "French",
+    "uk-UA": "Ukrainian",
+  };
+  const langName = (k) => LANG_EN[k] || (M.LANGS[k] ? M.LANGS[k].name : k);
+  let savedAsk = ""; // the language just pasted: the question “Clear the clipboard?” is shown
+  let savedNote = ""; // the notice: saved words in another language
+  function savedPart() {
+    const box = document.getElementById("savedBox");
+    if (!box) return;
+    const n = Kit.saved.counts();
+    const mine = n[draft.lang] || 0;
+    const total = Object.values(n).reduce((a, b) => a + b, 0);
+    box.innerHTML = `${total && !savedAsk ? `<button class="abtn" type="button" data-act="paste">📋 Paste saved words (${mine || total})</button>` : ""}
+  ${savedNote ? `<div class="md-note pop" role="alert">${savedNote}</div>` : ""}
+  ${savedAsk ? `<div class="md-note pop"><p>Clear the clipboard? (the ${esc(langName(savedAsk))} words saved from the lessons)</p><div class="row"><button class="abtn" type="button" data-act="clearSaved">🧹 Yes, clear it</button><button class="abtn" type="button" data-act="keepSaved">No, keep them</button></div></div>` : ""}`;
+  }
+  function pasteSaved() {
+    draft.title = document.getElementById("title").value;
+    const ta = document.getElementById("text");
+    const n = Kit.saved.counts();
+    const mine = Kit.saved.list(draft.lang);
+    const others = Object.keys(n).filter((k) => k !== draft.lang);
+    const otherNote = (k) =>
+      `You have saved words in <b>${esc(langName(k))}</b> (${n[k]}). To paste them, set “Language of the words” above to <b>${esc(M.LANGS[k] ? M.LANGS[k].name : k)}</b>.${M.LANGS[k] ? ` <button class="abtn" type="button" data-act="lang" data-lang="${esc(k)}">Set ${esc(langName(k))}</button>` : ""}`;
+    if (!mine.length) {
+      savedNote = others.map(otherNote).join("<br>");
+      return savedPart();
+    }
+    // the words not in the list yet, with their translation after a dash when the game shows translations
+    const have = new Set(
+      M.wordsOnly(ta.value)
+        .split("\n")
+        .map((l) => M.plain(l, draft.lang).trim()),
+    );
+    const tr = draft.show === "tr";
+    const lines = mine
+      .filter((x) => !have.has(M.plain(x.w, draft.lang).trim()))
+      .map((x) => (tr && x[draft.to] ? `${x.w} - ${x[draft.to]}` : x.w));
+    if (lines.length)
+      ta.value =
+        (ta.value.trim() ? ta.value.replace(/\s*$/, "\n") : "") +
+        lines.join("\n");
+    draft.text = ta.value;
+    fitLang();
+    savedNote = others.length ? others.map(otherNote).join("<br>") : "";
+    savedNote =
+      (lines.length
+        ? `Pasted ${lines.length} word${lines.length === 1 ? "" : "s"}.`
+        : "These words are already in the list.") +
+      (savedNote ? "<br>" + savedNote : "");
+    savedAsk = draft.lang;
+    savedPart();
   }
   // the language buttons follow the letters of the text (Arabic letters → العربية), so a list is never played
   // in the wrong game; the parent can still pick French for Latin letters
@@ -471,7 +532,18 @@ ${part(false)}${part(true)}
         draft.title = document.getElementById("title").value;
         draft.text = document.getElementById("text").value;
         fitLang();
+        savedNote = "";
+        savedPart();
         return;
+      case "paste":
+        return pasteSaved();
+      case "clearSaved":
+        Kit.saved.clear(savedAsk);
+        savedAsk = savedNote = "";
+        return savedPart();
+      case "keepSaved":
+        savedAsk = savedNote = "";
+        return savedPart();
       case "show":
         draft.show = b.dataset.show;
         app

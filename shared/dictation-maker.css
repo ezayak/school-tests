@@ -325,3 +325,28 @@ a.btn {
     animation: none;
   }
 }
+
+/* Step 1: Paste the words saved from a lesson's word pop-up, and its notices */
+.md-saved {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  margin: 4px 0 8px;
+}
+.md-saved:empty {
+  display: none;
+}
+.md-note {
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: var(--card);
+  padding: 10px 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.md-note p {
+  margin: 0 0 8px;
+}
+.md-note .abtn {
+  margin-top: 6px;
+}
