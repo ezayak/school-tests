@@ -36,4 +36,13 @@ window.LESSONS = [
     cover: "img/u2-lesson-3/cover.jpg",
     note: "Book pp. 52–57 · 14 parts with short summaries · 6 games · 11 exercises (book + workbook pp. 26–29)",
   },
+  {
+    n: "4 (Unit 2)",
+    nAr: "الرَّابِعُ",
+    title: "مَدِينَتُنَا فِي الْمُسْتَقْبَلِ",
+    en: "Our city in the future",
+    path: "u2-lesson-4.html",
+    cover: "img/u2-lesson-4/cover.jpg",
+    note: "Book pp. 58–61 · 9 parts with short summaries · 5 games · 11 exercises (book + workbook pp. 30–34)",
+  },
 ];

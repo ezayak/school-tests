@@ -1668,9 +1668,9 @@ window.GAMES = [
     lesson:
       "الدِّرَاسَاتُ الِاجْتِمَاعِيَّةُ · Learn, play & practise each lesson",
     topics:
-      "Unit 2 · كَيْفَ تَبْدُو مَدِينَتُنَا؟ · تَطَوُّرُ مَدِينَتِنَا · الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا: the book's text with pictures, audio & translation and a short summary under each part, the book's activities as games, the book's exercises and the workbook",
+      "Unit 2 · كَيْفَ تَبْدُو مَدِينَتُنَا؟ · تَطَوُّرُ مَدِينَتِنَا · الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا · مَدِينَتُنَا فِي الْمُسْتَقْبَلِ: the book's text with pictures, audio & translation and a short summary under each part, the book's activities as games, the book's exercises and the workbook",
     path: "grade-4/term-1/social-studies-arabic/index.html",
-    countLabel: "3 lessons",
+    countLabel: "4 lessons",
     year: "2026–2027",
     // uses the Arabic lesson engine (listed in the Grade 3 Arabic entry's "also")
     also: [
@@ -1681,6 +1681,8 @@ window.GAMES = [
       "grade-4/term-1/social-studies-arabic/u2-lesson-1.js",
       "grade-4/term-1/social-studies-arabic/u2-lesson-2.html",
       "grade-4/term-1/social-studies-arabic/u2-lesson-2.js",
+      "grade-4/term-1/social-studies-arabic/u2-lesson-4.html",
+      "grade-4/term-1/social-studies-arabic/u2-lesson-4.js",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-3/cover.jpg",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-3/doctor.jpg",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-3/fire-truck.jpg",
@@ -1734,6 +1736,19 @@ window.GAMES = [
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-2/w-water.jpg",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-2/watch.jpg",
       "grade-4/term-1/social-studies-arabic/img/u2-lesson-2/water.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/akhenaten.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/coast.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/cover.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/farm.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/solar.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/transport.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/values.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/w-ai.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/w-city.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/w-drone.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/w-king.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/w-machines.jpg",
+      "grade-4/term-1/social-studies-arabic/img/u2-lesson-4/w-solar.jpg",
     ],
   },
   {
