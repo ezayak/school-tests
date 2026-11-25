@@ -81,4 +81,13 @@ window.LESSONS = [
     cover: "img/u3-lesson-3/fjord.jpg",
     note: "Book pp. 84–89 · 10 parts with short summaries · 7 games · 13 exercises (book + workbook pp. 50–52)",
   },
+  {
+    n: "4 (Unit 3)",
+    nAr: "الرَّابِعُ",
+    title: "ثَرَوَاتُ مِصْرَ الطَّبِيعِيَّةُ وَالْبَشَرِيَّةُ",
+    en: "Egypt's natural and human wealth",
+    path: "u3-lesson-4.html",
+    cover: "img/u3-lesson-4/cover.jpg",
+    note: "Book pp. 90–97 · 17 parts with short summaries · 7 games · 10 exercises (book + workbook pp. 53–56)",
+  },
 ];
