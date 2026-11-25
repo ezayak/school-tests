@@ -90,4 +90,13 @@ window.LESSONS = [
     cover: "img/u3-lesson-4/cover.jpg",
     note: "Book pp. 90–97 · 17 parts with short summaries · 7 games · 10 exercises (book + workbook pp. 53–56)",
   },
+  {
+    n: "5 (Unit 3)",
+    nAr: "الْخَامِسُ",
+    title: "الْمَعَالِمُ التَّارِيخِيَّةُ فِي مِصْرَ",
+    en: "Historic landmarks in Egypt",
+    path: "u3-lesson-5.html",
+    cover: "img/u3-lesson-5/cover.jpg",
+    note: "Book pp. 98–105 · 12 parts with short summaries · 9 games · 12 exercises (book + workbook pp. 56–59)",
+  },
 ];
