@@ -5,12 +5,28 @@ window.LIST_HEAD = {
   eyebrow: "Grade 4 · الدِّرَاسَاتُ الِاجْتِمَاعِيَّةُ",
   p: "Social Studies (Arabic)",
   k: "Lessons",
+  // one section of the side bar per unit (a lesson's unit: N puts it there)
+  units: [
+    {
+      u: 2,
+      ic: "🏙️",
+      t: "Unit 2",
+      ar: "الْوَحْدَةُ الثَّانِيَةُ",
+    },
+    {
+      u: 3,
+      ic: "🇪🇬",
+      t: "Unit 3",
+      ar: "الْوَحْدَةُ الثَّالِثَةُ",
+    },
+  ],
   howto:
     "Pick a lesson. Learn: the book's text to read and listen to, with pictures (tap any word to see what it means). Games: the book's activities and games. Exercises: the book's exercises and the workbook (الأداءات والتقييمات).",
 };
 window.LESSONS = [
   {
-    n: "1 (Unit 2)",
+    n: "1",
+    unit: 2,
     nAr: "الْأَوَّلُ",
     title: "كَيْفَ تَبْدُو مَدِينَتُنَا؟",
     en: "What does our city look like?",
@@ -19,7 +35,8 @@ window.LESSONS = [
     note: "Book pp. 40–45 · 13 parts with short summaries · 6 games · 12 exercises (book + workbook pp. 19–21)",
   },
   {
-    n: "2 (Unit 2)",
+    n: "2",
+    unit: 2,
     nAr: "الثَّانِي",
     title: "تَطَوُّرُ مَدِينَتِنَا",
     en: "How our city developed",
@@ -28,7 +45,8 @@ window.LESSONS = [
     note: "Book pp. 46–51 · 13 parts with short summaries · 6 games · 11 exercises (book + workbook pp. 22–25)",
   },
   {
-    n: "3 (Unit 2)",
+    n: "3",
+    unit: 2,
     nAr: "الثَّالِثُ",
     title: "الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا",
     en: "Service places in our city",
@@ -37,7 +55,8 @@ window.LESSONS = [
     note: "Book pp. 52–57 · 14 parts with short summaries · 6 games · 11 exercises (book + workbook pp. 26–29)",
   },
   {
-    n: "4 (Unit 2)",
+    n: "4",
+    unit: 2,
     nAr: "الرَّابِعُ",
     title: "مَدِينَتُنَا فِي الْمُسْتَقْبَلِ",
     en: "Our city in the future",
@@ -46,7 +65,8 @@ window.LESSONS = [
     note: "Book pp. 58–61 · 9 parts with short summaries · 5 games · 11 exercises (book + workbook pp. 30–34)",
   },
   {
-    n: "5 (Unit 2)",
+    n: "5",
+    unit: 2,
     nAr: "الْخَامِسُ",
     title: "أَيْنَ تَقَعُ مُحَافَظَتِي؟",
     en: "Where is my governorate?",
@@ -55,7 +75,8 @@ window.LESSONS = [
     note: "Book pp. 62–67 · 8 parts with short summaries · 5 games · 13 exercises (book + workbook pp. 35–38)",
   },
   {
-    n: "1 (Unit 3)",
+    n: "1",
+    unit: 3,
     nAr: "الْأَوَّلُ",
     title: "عَلَمُ وَطَنِنَا مِصْرَ",
     en: "The flag of our homeland, Egypt",
@@ -64,7 +85,8 @@ window.LESSONS = [
     note: "Book pp. 72–77 · 11 parts with short summaries · 6 games · 10 exercises (book + workbook pp. 44–47)",
   },
   {
-    n: "2 (Unit 3)",
+    n: "2",
+    unit: 3,
     nAr: "الثَّانِي",
     title: "مِصْرُ عَلَى خَرِيطَةِ الْعَالَمِ",
     en: "Egypt on the world map",
@@ -73,7 +95,8 @@ window.LESSONS = [
     note: "Book pp. 78–83 · 8 parts with short summaries · 7 games · 12 exercises (book + workbook pp. 47–49)",
   },
   {
-    n: "3 (Unit 3)",
+    n: "3",
+    unit: 3,
     nAr: "الثَّالِثُ",
     title: "تَضَارِيسُ أَرْضِنَا الْجَمِيلَةِ",
     en: "The landforms of our beautiful land",
@@ -82,7 +105,8 @@ window.LESSONS = [
     note: "Book pp. 84–89 · 10 parts with short summaries · 7 games · 13 exercises (book + workbook pp. 50–52)",
   },
   {
-    n: "4 (Unit 3)",
+    n: "4",
+    unit: 3,
     nAr: "الرَّابِعُ",
     title: "ثَرَوَاتُ مِصْرَ الطَّبِيعِيَّةُ وَالْبَشَرِيَّةُ",
     en: "Egypt's natural and human wealth",
@@ -91,7 +115,8 @@ window.LESSONS = [
     note: "Book pp. 90–97 · 17 parts with short summaries · 7 games · 10 exercises (book + workbook pp. 53–56)",
   },
   {
-    n: "5 (Unit 3)",
+    n: "5",
+    unit: 3,
     nAr: "الْخَامِسُ",
     title: "الْمَعَالِمُ التَّارِيخِيَّةُ فِي مِصْرَ",
     en: "Historic landmarks in Egypt",

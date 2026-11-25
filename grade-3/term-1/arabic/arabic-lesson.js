@@ -351,16 +351,34 @@
         n: list.length,
         html: `<div class="lessons">${html}</div>`,
       };
-    Kit.sideNav(document.getElementById("secs"), [
+    const soon = `<div class="soon">More lessons will be added here, one by one.</div>`;
+    // LIST_HEAD.units (SS Arabic): one section per unit instead of "Lessons", [{u, ic, t, ar}];
+    // a lesson goes in the section whose u is its unit; "More lessons…" under the last unit only
+    const units = (LH.units || []).map((x, i, a) =>
       sec(
-        "lessons",
-        "📖",
-        LH.k,
-        LH.ar || "الدُّرُوسُ",
-        LS,
-        LS.map((l) => card(l, "Lesson", "الدرس")).join("") +
-          `<div class="soon">More lessons will be added here, one by one.</div>`,
+        "unit-" + x.u,
+        x.ic,
+        x.t,
+        x.ar,
+        LS.filter((l) => l.unit === x.u),
+        LS.filter((l) => l.unit === x.u)
+          .map((l) => card(l, "Lesson", "الدرس"))
+          .join("") + (i === a.length - 1 ? soon : ""),
       ),
+    );
+    Kit.sideNav(document.getElementById("secs"), [
+      ...(LH.units
+        ? units
+        : [
+            sec(
+              "lessons",
+              "📖",
+              LH.k,
+              LH.ar || "الدُّرُوسُ",
+              LS,
+              LS.map((l) => card(l, "Lesson", "الدرس")).join("") + soon,
+            ),
+          ]),
       sec(
         "tests",
         "📝",
