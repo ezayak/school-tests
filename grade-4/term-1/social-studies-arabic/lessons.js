@@ -19,6 +19,15 @@ window.LESSONS = [
     note: "Book pp. 40–45 · 13 parts with short summaries · 6 games · 12 exercises (book + workbook pp. 19–21)",
   },
   {
+    n: "2 (Unit 2)",
+    nAr: "الثَّانِي",
+    title: "تَطَوُّرُ مَدِينَتِنَا",
+    en: "How our city developed",
+    path: "u2-lesson-2.html",
+    cover: "img/u2-lesson-2/cover.jpg",
+    note: "Book pp. 46–51 · 13 parts with short summaries · 6 games · 11 exercises (book + workbook pp. 22–25)",
+  },
+  {
     n: "3 (Unit 2)",
     nAr: "الثَّالِثُ",
     title: "الْأَمَاكِنُ الْخِدْمِيَّةُ فِي مَدِينَتِنَا",
