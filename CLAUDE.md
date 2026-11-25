@@ -31,11 +31,16 @@ Read README.md first. It has the structure, the lesson/dictation formats and the
 
 ## Arabic (Grade 3): lessons, tests, homework
 
-Folder `grade-3/term-1/arabic/`, engine `arabic-lesson.js` (also the engine of Religion: a change must leave both as they were). Lessons, tests, homework: the `arabic` skill.
+Folder `grade-3/term-1/arabic/`, engine `arabic-lesson.js` (also the engine of Religion and SS Arabic: a change must leave all three as they were). Lessons, tests, homework: the `arabic` skill.
 
 ## Religion (Grade 3): lessons
 
 Folder `grade-3/term-1/religion/`, engine `../arabic/arabic-lesson.js` (shared with Arabic). Rules, sources and checks: the `religion-lesson` skill.
+
+## Social Studies in Arabic (Grade 4): lessons
+
+Folder `grade-4/term-1/social-studies-arabic/`, engine `../../../grade-3/term-1/arabic/arabic-lesson.js` (shared with Arabic and Religion). Tabs Learn (the book's text, a short summary under each part, an optional lesson video) · Games · Exercises (the book and the workbook).
+Rules, sources and procedure: the `ss-arabic-lesson` skill.
 
 ## French (Grade 3 and 4): lessons and revisions
 

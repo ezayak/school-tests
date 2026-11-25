@@ -71,6 +71,7 @@
       "name": "SS Arabic",
       "folders": ["Alex/SSArabic"],
       "app": "grade-4/term-1/social-studies-arabic",
+      "skill": "ss-arabic-lesson",
       "ocr": "ara"
     },
     {
