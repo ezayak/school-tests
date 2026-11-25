@@ -107,6 +107,7 @@
         uk: "Природні й людські багатства Єгипту",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "06Csj_A5NLk",
         cover: P("cover"),
         parts: [
           {
