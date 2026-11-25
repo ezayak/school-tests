@@ -72,4 +72,13 @@ window.LESSONS = [
     cover: "img/u3-lesson-2/worldmap.jpg",
     note: "Book pp. 78–83 · 8 parts with short summaries · 7 games · 12 exercises (book + workbook pp. 47–49)",
   },
+  {
+    n: "3 (Unit 3)",
+    nAr: "الثَّالِثُ",
+    title: "تَضَارِيسُ أَرْضِنَا الْجَمِيلَةِ",
+    en: "The landforms of our beautiful land",
+    path: "u3-lesson-3.html",
+    cover: "img/u3-lesson-3/fjord.jpg",
+    note: "Book pp. 84–89 · 10 parts with short summaries · 7 games · 13 exercises (book + workbook pp. 50–52)",
+  },
 ];
