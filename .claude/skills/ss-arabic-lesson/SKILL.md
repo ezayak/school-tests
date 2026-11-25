@@ -56,5 +56,5 @@ pictures in `img/uN-lesson-M/` (render the page with `pdftoppm -scale-to-y 1440`
   the card's `countLabel` / `topics` in `games.js` (Grade 4 "Social Studies (Arabic)" entry); SOURCES.md rows (book pages, workbook pages, teacher's files);
   `inbox.py done` for the teacher's files used up; `register.py bump` last, one commit.
 - The engine `grade-3/term-1/arabic/arabic-lesson.js` is shared with Arabic and Religion: a change only adds optional fields (as `sum`, `videoT`); never change what they show.
-- **Revision** (the teacher's مراجعة, a month or exam revision): the `revision` skill. Its section 0 still names the look of the Mid-term 1 SS Arabic page; ask the parent
-  whether the revision should be on this lesson engine (as the Religion revisions) before building one.
+- **Revision** (the teacher's مراجعة, a month or exam revision): the `ss-arabic-revision` skill with the `revision` skill: a data file `revision-N.js` for `shared/ss-arabic-revision.js`,
+  its card under the exam (Revision T → Mid-term / Final), not in the lessons list.

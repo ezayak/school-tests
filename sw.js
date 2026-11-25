@@ -2,7 +2,7 @@
 // Every game listed in games.js is downloaded automatically, so adding a game
 // only needs games.js to change. Shared styles/scripts live in shared/ and are listed in CORE.
 // Bump VERSION if you want to force a full refresh.
-const VERSION = "v240";
+const VERSION = "v241";
 const CACHE = "study-games-" + VERSION;
 const CORE = [
   "./",
@@ -33,6 +33,7 @@ const CORE = [
   "./shared/netsim.js",
   "./shared/arabic.css",
   "./shared/arabic-revision.css",
+  "./shared/ss-arabic-revision.js",
   "./shared/spelling.css",
   "./shared/spelling.js",
   "./shared/spelling-ar.js",

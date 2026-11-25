@@ -40,7 +40,7 @@ Folder `grade-3/term-1/religion/`, engine `../arabic/arabic-lesson.js` (shared w
 ## Social Studies in Arabic (Grade 4): lessons
 
 Folder `grade-4/term-1/social-studies-arabic/`, engine `../../../grade-3/term-1/arabic/arabic-lesson.js` (shared with Arabic and Religion). Tabs Learn (the book's text, a short summary under each part, an optional lesson video) · Games · Exercises (the book and the workbook).
-Rules, sources and procedure: the `ss-arabic-lesson` skill.
+Rules, sources and procedure: the `ss-arabic-lesson` skill. Revisions: `revision-N.js` on `shared/ss-arabic-revision.js`, the `ss-arabic-revision` skill.
 
 ## French (Grade 3 and 4): lessons and revisions
 
@@ -77,7 +77,7 @@ Rules, sources and procedure: the `social-studies-lesson` skill.
 A revision sheet (مراجعة), exam practice (Exercices d'application), exam memo or the book's chapter / unit review (inbox kind `revision`): the `revision` skill together with the subject's skill.
 New revisions are data files, never new pages in `mid-term-1/` / `final-term-1/`: Social Studies, Science, Math and Computer on the Quest engine `shared/quest.js`
 (the look of the Term 1 Quest pages), English, French, Arabic and Religion on the subject's lesson engine,
-SS Arabic in the look of `grade-4/term-1/mid-term-1/social-studies-arabic-revision.html` (the `revision` skill, section 0).
+SS Arabic on the SS Arabic revision engine `shared/ss-arabic-revision.js` (the `ss-arabic-revision` skill; model `grade-4/term-1/social-studies-arabic/revision-1.js`).
 An exam revision (mid-term / final) goes in the folder of the exam's term, `grade-N/term-T/<subject>/` (T = the job's "Term T"),
 with a `games.js` card `term: T`, `period: "Mid-term exam"` / `"Final exam"`: it shows under that term's "Revision T" button. Lessons stay where they are.
 
