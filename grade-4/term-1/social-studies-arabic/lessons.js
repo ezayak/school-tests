@@ -54,4 +54,13 @@ window.LESSONS = [
     cover: "img/u2-lesson-5/cover.jpg",
     note: "Book pp. 62–67 · 8 parts with short summaries · 5 games · 13 exercises (book + workbook pp. 35–38)",
   },
+  {
+    n: "1 (Unit 3)",
+    nAr: "الْأَوَّلُ",
+    title: "عَلَمُ وَطَنِنَا مِصْرَ",
+    en: "The flag of our homeland, Egypt",
+    path: "u3-lesson-1.html",
+    cover: "img/u3-lesson-1/cover.jpg",
+    note: "Book pp. 72–77 · 11 parts with short summaries · 6 games · 10 exercises (book + workbook pp. 44–47)",
+  },
 ];
