@@ -8,6 +8,12 @@ window.LIST_HEAD = {
   // one section of the side bar per unit (a lesson's unit: N puts it there)
   units: [
     {
+      u: 1,
+      ic: "🧭",
+      t: "Unit 1",
+      ar: "الْوَحْدَةُ الْأُولَى",
+    },
+    {
       u: 2,
       ic: "🏙️",
       t: "Unit 2",
@@ -24,6 +30,57 @@ window.LIST_HEAD = {
     "Pick a lesson. Learn: the book's text to read and listen to, with pictures (tap any word to see what it means). Games: the book's activities and games. Exercises: the book's exercises and the workbook (الأداءات والتقييمات).",
 };
 window.LESSONS = [
+  {
+    n: "1",
+    unit: 1,
+    nAr: "الْأَوَّلُ",
+    title: "الْأَمَاكِنُ وَالِاتِّجَاهَاتُ مِنْ حَوْلِنَا",
+    en: "Places and directions around us",
+    path: "u1-lesson-1.html",
+    cover: "img/u1-lesson-1/rose.jpg",
+    note: "Book pp. 10–19 · 12 parts with short summaries · 10 games · 9 exercises (book + workbook pp. 4–5)",
+  },
+  {
+    n: "2",
+    unit: 1,
+    nAr: "الثَّانِي",
+    title: "الْخَرِيطَةُ فِي حَيَاتِنَا",
+    en: "The map in our lives",
+    path: "u1-lesson-2.html",
+    cover: "img/u1-lesson-2/map.jpg",
+    note: "Book pp. 20–24 · 17 parts with short summaries · 7 games · 11 exercises (book + workbook pp. 6–9)",
+  },
+  {
+    n: "3",
+    unit: 1,
+    nAr: "الثَّالِثُ",
+    title: "تَطَوُّرُ الْخَرِيطَةِ",
+    en: "How the map developed",
+    path: "u1-lesson-3.html",
+    cover: "img/u1-lesson-3/cover.jpg",
+    note: "Book pp. 25–30 · 11 parts with short summaries · 10 games · 12 exercises (book + workbook pp. 10–12)",
+  },
+  {
+    n: "4",
+    unit: 1,
+    nAr: "الرَّابِعُ",
+    title: "مَصَادِرُ جَمْعِ الْمَعْلُومَاتِ",
+    en: "Sources of information",
+    path: "u1-lesson-4.html",
+    cover: "img/u1-lesson-4/cover.jpg",
+    note: "Book pp. 31–35 · 15 parts with short summaries · 7 games · 12 exercises (book + workbook pp. 12–15)",
+  },
+  {
+    n: "review",
+    unit: 1,
+    label: ["Unit 1", "مُرَاجَعَةُ الْوَحْدَةِ الْأُولَى"],
+    nAr: "",
+    title: "مُرَاجَعَةُ الْوَحْدَةِ الْأُولَى",
+    en: "Unit 1 review",
+    path: "u1-review.html",
+    cover: "img/u1-review/w-map.jpg",
+    note: "36 parts from Lessons 1–4 · 29 questions from the book's unit review (pp. 36–37) · 39 from the workbook's monthly practice (pp. 16–18)",
+  },
   {
     n: "1",
     unit: 2,
