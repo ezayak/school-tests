@@ -75,6 +75,7 @@
         uk: "Як розвивалося наше місто",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "JLIFWdncB6g",
         cover: P("cover"),
         parts: [
           {

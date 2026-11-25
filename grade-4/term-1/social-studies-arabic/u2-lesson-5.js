@@ -90,6 +90,7 @@
         uk: "Де моя мухафаза?",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "BTcfeqTO8LM",
         cover: P("cover"),
         parts: [
           {

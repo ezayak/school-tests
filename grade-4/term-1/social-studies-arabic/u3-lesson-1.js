@@ -94,6 +94,7 @@
         uk: "Прапор нашої батьківщини — Єгипту",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "7IW4eCOngto",
         cover: P("cover"),
         parts: [
           {

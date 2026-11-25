@@ -74,6 +74,7 @@
         uk: "Наше місто в майбутньому",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "WZtRyvPBEm8",
         cover: P("cover"),
         parts: [
           {

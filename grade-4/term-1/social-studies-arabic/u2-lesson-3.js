@@ -72,6 +72,7 @@
         uk: "Місця послуг у нашому місті",
         kind: "The lesson · الدَّرْسُ",
         videoT: "Lesson video",
+        video: "_HwclRk5GF0",
         cover: P("cover"),
         parts: [
           {
