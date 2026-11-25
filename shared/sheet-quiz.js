@@ -10,6 +10,7 @@
 //   title: ["Grammar", "Check"],         // two words of the big title (orange, blue)
 //   imgDir: "img",                       // p: "find" → img/find.jpg (a name with an extension or a "/" is used as it is)
 //   cover: "find" | { e: "📄 ✏️" },       // the start picture
+//   story: "story.html",                 // a story on the sheet: its page (shared/story.js, no summary, done: back here); 📖 buttons
 //   qs: [ { n: "1a",                     // the number on the sheet
 //           part: "A · Choose the correct answer",  // the sheet's part (shown above the question)
 //           q: "the question as on the sheet",
@@ -138,6 +139,7 @@
     <h1 class="hero-title"><span class="p">${esc(D.title[0])}</span> <span class="k">${esc(D.title[1])}</span></h1>
     ${qPic(cover, D.imgDir)}
     <p class="howto">Your sheet has ${QS.length} questions. Look at the picture. Read the 💡 help, or press 🔊 to hear it. Then choose your answer. You can go back and change it. At the end you see all your answers, to write on the sheet.</p>
+    ${D.story ? `<div class="row"><a class="btn big" href="${esc(D.story)}">📖 Read the story</a></div>` : ""}
     <div class="row">${n ? `<button class="btn big" id="goOn" type="button">Go on · ${n} of ${QS.length} done</button><button class="btn ghost" id="mine" type="button">My answers</button>` : `<button class="btn big" id="goOn" type="button">Start</button>`}</div>
   </section>`;
     document.getElementById("goOn").onclick = () => {
@@ -159,7 +161,7 @@
     ${qPic(q, D.imgDir)}
     <p class="qtext" ${RTL ? 'dir="rtl" lang="ar"' : ""}>${esc(q.q)}</p>
     ${q.help ? `<div class="sq-help" ${RTL ? 'dir="rtl" lang="ar"' : ""}><b>💡</b><span>${esc(q.help)}</span></div>` : ""}
-    <div class="row sq-tools">${V.ok ? '<button class="btn ghost" id="say" type="button">🔊 Listen</button>' : ""}${sim ? `<button class="btn ghost" id="sim" type="button">🖥 Try it in ${esc(sim.name)}</button>` : ""}</div>
+    <div class="row sq-tools">${D.story ? `<a class="btn ghost" href="${esc(D.story)}">📖 Story</a>` : ""}${V.ok ? '<button class="btn ghost" id="say" type="button">🔊 Listen</button>' : ""}${sim ? `<button class="btn ghost" id="sim" type="button">🖥 Try it in ${esc(sim.name)}</button>` : ""}</div>
     <div class="opts ${long ? "long" : ""}" ${RTL ? 'dir="rtl"' : ""}>${q.o.map((t, k) => `<button type="button" class="opt ${ans[i] === t ? "chosen" : ""}" data-k="${k}" aria-pressed="${ans[i] === t}"><span class="L">${"ABCD"[k]}</span><span>${esc(t)}</span></button>`).join("")}</div>
     <div class="row sq-nav"><button class="btn ghost" id="back" type="button">← Back</button><button class="btn next" id="next" type="button">${i + 1 < QS.length ? "Next →" : "My answers"}</button></div>
   </section>`;

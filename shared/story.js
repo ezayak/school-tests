@@ -2,6 +2,8 @@
 // Made for a child with aphasia: the story reads itself (🔊 sentence by sentence, 🐢 word by word) and the word being read
 // lights up; every page has one easy sentence; the vocabulary words show their meaning; every question has a picture and can be heard.
 // Other subjects (Social Studies) set STORY.subject (the back link and the tab title) and may have no questions (no Questions tab).
+// A sheet quiz's story (quiz/…/story.js) has no summary (no Summary tab, only the easy sentence of each page) and STORY.done:
+// {path, label}, the button on the last page (back to the quiz).
 (function () {
   "use strict";
   const { esc, shuf, star } = Kit;
@@ -25,6 +27,7 @@
   const KEY = S.key || "story";
   const SUBJ = S.subject || "English";
   const QUIZ = !!(S.questions && S.questions.length);
+  const SUM = !!(S.summary && S.summary.length);
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   /* ---------- voice (device voices, English) ---------- */
@@ -259,7 +262,9 @@
   /* ---------- the page: header + 3 tabs ---------- */
   const TABS = [
     { k: "read", ic: "📖", t: "Read", sub: `${S.pages.length} pages` },
-    { k: "sum", ic: "🗺️", t: "Summary", sub: `${S.summary.length} cards` },
+    ...(SUM
+      ? [{ k: "sum", ic: "🗺️", t: "Summary", sub: `${S.summary.length} cards` }]
+      : []),
     ...(QUIZ
       ? [
           {
@@ -322,7 +327,7 @@
     <div class="nav"><button type="button" class="btn" data-prev${pg ? "" : " disabled"} aria-label="Previous page">◀</button>
       <div class="dotsnav">${S.pages.map((_, i) => `<button type="button" class="dot${i === pg ? " on" : ""}" data-pg="${i}" aria-label="Page ${i + 1}"></button>`).join("")}</div>
       <button type="button" class="btn" data-next${last ? " disabled" : ""} aria-label="Next page">▶</button></div>
-    ${last ? `<div class="row center"><button type="button" class="btn big" data-sum>The end! See the summary →</button></div>` : ""}`;
+    ${last && SUM ? `<div class="row center"><button type="button" class="btn big" data-sum>The end! See the summary →</button></div>` : ""}${last && !SUM && S.done ? `<div class="row center"><a class="btn big" href="${esc(S.done.path)}">${esc(S.done.label)} →</a></div>` : ""}`;
     const box = panel.querySelector(".gloss");
     bindWords(panel, box);
     bindChecks(panel);

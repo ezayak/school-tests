@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // Sheet quizzes (shared/sheet-quiz.js; the `sheet-quiz` skill): a new quiz folder, and the checks before committing one.
 //
-//   node .claude/scripts/sheet-quiz.js new <kid> <slug> [--lang en|fr|ar] [--title "Two words"]
+//   node .claude/scripts/sheet-quiz.js new <kid> <slug> [--lang en|fr|ar] [--title "Two words"] [--story]
 //        → quiz/<kid>/<slug>/index.html (the page) + quiz.js (an empty frame); never overwrites. Prints the folder.
+//          --story: also story.html + story.js (a story on the sheet, for shared/story.js: no summary, done → the quiz).
 //   node .claude/scripts/sheet-quiz.js check <quiz folder>
 //        → every question has n, q, help, 2–4 answers and one picture; no answer key (c); pictures exist;
 //          sim apps known; the Arabic page has the no-referrer meta. Exit code 1 when something is wrong.
@@ -17,7 +18,7 @@ const opt = (n, d) => {
   return i >= 0 ? args.splice(i, 2)[1] : d;
 };
 
-function page(depth, title, lang) {
+function page(depth, title, lang, story) {
   const up = "../".repeat(depth);
   const ar = lang === "ar";
   return `<!doctype html>
@@ -55,15 +56,13 @@ function page(depth, title, lang) {
       href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap"
     />
     <link rel="stylesheet" href="${up}shared/theme.css" />
-    <link rel="stylesheet" href="${up}shared/quiz.css" />
+    ${story ? `<link rel="stylesheet" href="${up}shared/lesson.css" />\n    <link rel="stylesheet" href="${up}shared/story.css" />` : `<link rel="stylesheet" href="${up}shared/quiz.css" />`}
     <title>${title}</title>
   </head>
-  <body>
+  <body${story ? ' data-view="story"' : ""}>
     <main class="wrap" id="app"></main>
     <script src="${up}shared/common.js"></script>
-    <script src="${up}quiz-common.js"></script>
-    <script src="quiz.js"></script>
-    <script src="${up}shared/sheet-quiz.js"></script>
+    ${story ? `<script src="story.js"></script>\n    <script src="${up}shared/story.js"></script>` : `<script src="${up}quiz-common.js"></script>\n    <script src="quiz.js"></script>\n    <script src="${up}shared/sheet-quiz.js"></script>`}
   </body>
 </html>
 `;
@@ -86,17 +85,40 @@ window.SHEET = {
 `;
 }
 
+function storyFrame(kid, slug) {
+  return `// The story of the sheet quiz in this folder (quiz.js: story: "story.html"), for shared/story.js (format: README « story-*.js format »).
+// Every part of the story is a page with its "easy" sentence (the summary of that part); no summary: [] (no whole-story summary), no questions
+// (they are the quiz's). Source: TODO the photos.
+
+window.STORY = {
+  key: "quiz-${kid}-${slug}-story",
+  subject: "Sheet quiz",
+  hub: "index.html",
+  done: { path: "index.html", label: "Now the questions" },
+  title: "",
+  cover: "",
+  gloss: {},
+  pages: [],
+};
+`;
+}
+
 function create() {
-  const [kid, slug] = args;
+  const [kid, slug] = args.filter((a) => a !== "--story");
   const lang = opt("--lang", "en");
   if (!kid || !slug || !/^[a-z0-9-]+$/.test(kid + slug))
     throw new Error("usage: new <kid> <slug> (lower case, digits, -)");
   const title = opt("--title", "Sheet Helper");
+  const story = args.includes("--story");
   const dir = path.join(REPO, "quiz", kid, slug);
   if (fs.existsSync(dir)) throw new Error(dir + " exists already");
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, "index.html"), page(3, title, lang));
   fs.writeFileSync(path.join(dir, "quiz.js"), frame(kid, slug, lang, title));
+  if (story) {
+    fs.writeFileSync(path.join(dir, "story.html"), page(3, title, lang, true));
+    fs.writeFileSync(path.join(dir, "story.js"), storyFrame(kid, slug));
+  }
   console.log(path.relative(REPO, dir));
 }
 
@@ -144,6 +166,37 @@ function check() {
     if (q.sim && !SIMS.includes(q.sim.app))
       bad.push(`${w}: sim.app must be one of ${SIMS.join(", ")}`);
   });
+  if (D.story) {
+    // the story: one page per part, each with its easy sentence (the part's summary) and a picture; no whole-story summary
+    const sc = { window: {} };
+    vm.createContext(sc);
+    try {
+      if (!fs.existsSync(path.join(dir, D.story)))
+        throw new Error(`${D.story} not found`);
+      vm.runInContext(fs.readFileSync(path.join(dir, "story.js"), "utf8"), sc);
+      const S = sc.window.STORY;
+      if (!S) throw new Error("story.js sets no window.STORY");
+      for (const f of ["key", "title", "cover", "done"])
+        if (!S[f]) bad.push(`STORY.${f} is missing`);
+      if (S.cover && !fs.existsSync(path.resolve(dir, S.cover)))
+        bad.push(`STORY.cover ${S.cover} not found`);
+      if ((S.summary || []).length)
+        bad.push("STORY.summary: no whole-story summary in a sheet quiz");
+      if ((S.questions || []).length)
+        bad.push("STORY.questions: the questions are the quiz's");
+      if (!(S.pages || []).length) bad.push("STORY.pages: empty");
+      (S.pages || []).forEach((g, i) => {
+        if (!g.easy) bad.push(`story page ${i + 1}: no easy sentence`);
+        if (!(g.text || []).length) bad.push(`story page ${i + 1}: no text`);
+        if (!(g.img || g.emoji || g.vis))
+          bad.push(`story page ${i + 1}: no picture (img, emoji or vis)`);
+        if (g.img && !fs.existsSync(path.resolve(dir, g.img)))
+          bad.push(`story page ${i + 1}: picture ${g.img} not found`);
+      });
+    } catch (e) {
+      bad.push("story: " + e.message);
+    }
+  }
   if (bad.length) {
     console.log(bad.map((b) => "✗ " + b).join("\n"));
     process.exit(1);

@@ -67,12 +67,27 @@ Nothing added that the sheet doesn't ask.
 - `eyebrow`: "Subject · the sheet's title · the lesson" (e.g. "Computer · Classwork 2 · Unit 2 Lesson 3"); `title`: two words for the topic;
   `cover`: the lesson's main picture or emoji. The header comment says the sheet, the date, the photos and what was changed to fit.
 
+## 4b. A story on the sheet
+
+A sheet with a story or a reading text (a reading comprehension, a passage with questions under it): the story goes on its own page
+with the story engine (`shared/story.js`), read aloud with the word lighting up, and the quiz links to it (📖 Read the story, 📖 Story on every question).
+
+- Make the folder with `--story` (`new … --story`): `story.html` + `story.js` next to the quiz; in `quiz.js` set `story: "story.html"`.
+- `story.js` (format: README « `story-*.js` format »): `title`, `by`, `kind`, `cover` (a crop of the sheet's picture or a lesson picture),
+  `pages`: **one page per part** of the story (its paragraphs or sections, as the sheet divides it; a long paragraph may be its own part),
+  each with `text` **exactly as printed** (no fixing of misprints: the parent's memory « Book text as printed »), a picture (`img`: a crop, or `emoji` / `vis`)
+  and `easy`: **one easy sentence that sums up that part** (simple words, as the quiz's help). `gloss`: the hard words of the text with a short meaning.
+- **No whole-story summary**: `summary` stays out (no Summary tab), and no `questions` (the sheet's questions are the quiz's).
+  `done: {path: "index.html", label: "Now the questions"}` is the button on the last page.
+- The story engine reads English only: for a French or Arabic text, no story page; the questions' `help` says where in the text to look.
+- The quiz's questions about the story: `help` says which part to read again ("Read part 2 again: the boy is at the camp."), never the answer.
+
 ## 5. Check and commit
 
 ```bash
 npx --no-install prettier --write quiz/<kid>/<slug>
 node --check quiz/<kid>/<slug>/quiz.js
-node .claude/scripts/sheet-quiz.js check quiz/<kid>/<slug>
+node .claude/scripts/sheet-quiz.js check quiz/<kid>/<slug>   # the story too, when there is one
 ```
 
 - Not in `games.js`, no `register.py`, **no `sw.js` bump** (quiz pages are not precached; they work offline once opened).

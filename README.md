@@ -436,6 +436,8 @@ a 💡 explanation in simple words and a 🔊 button; computer questions can ope
 the end screen, « My answers », lists the child's answers in the sheet's order, to copy onto the paper (kept on the device until « Start again »).
 The bot answers with the link, e.g. `https://ezayak.github.io/school-tests/quiz/alex/20261125-computer-u2l3/`.
 
+- A story on the sheet (English) gets its own page next to the quiz (`story.html` / `story.js` on `shared/story.js`): one page per part of the story,
+  each with its easy sentence, no whole-story summary; the quiz has 📖 buttons to it.
 - Files: `quiz/<kid>/<YYYYMMDD>-<subject>-<what>/` (`index.html`, `quiz.js`, `img/`), engine `shared/sheet-quiz.js` (format at its top), demo `quiz/demo/`.
 - Not in `games.js` (no menu, opened by the link), not precached (no `sw.js` bump per quiz; a quiz works offline once opened).
 - Rules: the `sheet-quiz` skill. New folder and checks: `node .claude/scripts/sheet-quiz.js new <kid> <slug>` / `check <folder>`.
@@ -544,10 +546,11 @@ window.STORY = {
   pages: [{ch: "Chapter 1 · …", img | emoji | vis, text: ["paragraph", …, {box: "Side box title", p: "…"}], easy: "one easy sentence"}, …],
                                              // text exactly as in the book; *word* = italic
                                              // poem: true on a page = text is the lines of one stanza, shown one per row
-  summary: [{t: "Characters", img | emoji | vis, text}, …],      // vis: an animated emoji picture (see English lessons)
+  summary: [{t: "Characters", img | emoji | vis, text}, …],      // vis: an animated emoji picture (see English lessons); none = no Summary tab
   questions: [{tag: "Stop and check", img | emoji | vis, q, o: [right, wrong, wrong], x: "why (optional)"},   // first option is right; shuffled on screen
               {type: "open", tag, img | emoji, q, a: "model answer"}, …],
   subject: "Social Studies",                 // optional: the subject of the back link and the tab title (default "English"); no questions = no Questions tab
+  done: {path: "index.html", label: "Now the questions"},  // optional: the button on the last page when there is no summary (a sheet quiz's story)
 };
 ```
 
