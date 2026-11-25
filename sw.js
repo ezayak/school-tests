@@ -2,7 +2,7 @@
 // Every game listed in games.js is downloaded automatically, so adding a game
 // only needs games.js to change. Shared styles/scripts live in shared/ and are listed in CORE.
 // Bump VERSION if you want to force a full refresh.
-const VERSION = "v255";
+const VERSION = "v256";
 const CACHE = "study-games-" + VERSION;
 const CORE = [
   "./",
@@ -18,6 +18,7 @@ const CORE = [
   "./shared/theme.css",
   "./shared/quiz.css",
   "./shared/quest.js",
+  "./shared/sheet-quiz.js",
   "./shared/common.js",
   "./shared/lesson.css",
   "./shared/story.css",

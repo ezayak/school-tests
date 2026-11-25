@@ -498,3 +498,79 @@
   height: 0;
   overflow: hidden;
 }
+
+/* ---------- Sheet quiz (shared/sheet-quiz.js): a chosen answer, the help, the popup with a pretend program ---------- */
+.opt.chosen {
+  background: color-mix(in srgb, var(--cool) 22%, var(--card));
+  border-color: var(--cool);
+}
+.opt.chosen .L {
+  background: var(--cool);
+  color: #fff;
+  border-color: var(--cool);
+}
+.sq-help {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border-radius: 14px;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--hl) 28%, var(--card));
+  font-size: 1.1rem;
+  line-height: 1.45;
+}
+.sq-tools:empty {
+  display: none;
+}
+.sq-nav {
+  justify-content: space-between;
+  margin-top: 12px;
+}
+.sq-mine li {
+  border-left-color: var(--cool);
+  padding: 0;
+}
+.sq-goto {
+  display: block;
+  width: 100%;
+  text-align: inherit;
+  padding: 10px 12px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+.simdlg {
+  width: min(96vw, 1100px);
+  max-width: none;
+  padding: 10px;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--ink);
+}
+.simdlg::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+.simhead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.simhead span {
+  flex: 1;
+  color: var(--muted);
+}
+.simhead b {
+  flex: none;
+}
+.simhead .btn {
+  margin-left: auto;
+  padding: 6px 14px;
+}
+.simbox {
+  width: 100%;
+  max-width: calc((100vh - 120px) * 16 / 9);
+  margin: 0 auto;
+}
