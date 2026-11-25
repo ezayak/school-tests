@@ -4,12 +4,19 @@ window.LIST_HEAD = {
   eyebrow: "Grade 3 · التربية الدينية المسيحية",
   p: "Religion",
   k: "Lessons",
+  // one section of the side bar per unit (a lesson's unit: N puts it there)
+  units: [
+    { u: 1, ic: "1️⃣", t: "Unit 1", ar: "الْوَحْدَةُ الْأُولَى" },
+    { u: 2, ic: "2️⃣", t: "Unit 2", ar: "الْوَحْدَةُ الثَّانِيَةُ" },
+    { u: 3, ic: "3️⃣", t: "Unit 3", ar: "الْوَحْدَةُ الثَّالِثَةُ" },
+  ],
   howto:
     "Pick a lesson. Each lesson has the story to read and listen to (tap any word to see what it means), the activities from the book as games, the golden verse and, when there is one, the homework.",
 };
 window.LESSONS = [
   {
-    n: "1 (Unit 1)",
+    n: "1",
+    unit: 1,
     nAr: "الْأَوَّلُ",
     title: "آدَمُ وَحَوَّاءُ",
     en: "Adam and Eve",
@@ -18,7 +25,8 @@ window.LESSONS = [
     note: "Story in 7 parts · 5 games · golden verse",
   },
   {
-    n: "2 (Unit 1)",
+    n: "2",
+    unit: 1,
     nAr: "الثَّانِي",
     title: "بَعْضُ الْآيَاتِ الذَّهَبِيَّةِ",
     en: "Some golden verses",
@@ -27,7 +35,8 @@ window.LESSONS = [
     note: "5 golden verses · 10 words · 6 games",
   },
   {
-    n: "3 (Unit 1)",
+    n: "3",
+    unit: 1,
     nAr: "الثَّالِثُ",
     title: "التَّنَاوُلُ · خَمِيسُ الْعَهْدِ",
     en: "Holy Communion · Covenant Thursday",
@@ -36,7 +45,8 @@ window.LESSONS = [
     note: "Story in 7 parts · 4 games · golden verse",
   },
   {
-    n: "4 (Unit 1)",
+    n: "4",
+    unit: 1,
     nAr: "الرَّابِعُ",
     title: "حَيَاةُ يُوسُفَ الصِّدِّيقِ (١) · الطُّفُولَةُ",
     en: "The Life of Joseph the Righteous (1) · Childhood",
@@ -45,7 +55,8 @@ window.LESSONS = [
     note: "Story in 9 parts · 6 games · golden verse",
   },
   {
-    n: "5 (Unit 1)",
+    n: "5",
+    unit: 1,
     nAr: "الْخَامِسُ",
     title: "الرُّعَاةُ وَالْمَجُوسُ",
     en: "The Shepherds and the Wise Men",
@@ -54,7 +65,8 @@ window.LESSONS = [
     note: "Story in 7 parts · 4 games · golden verse",
   },
   {
-    n: "6 (Unit 1)",
+    n: "6",
+    unit: 1,
     nAr: "السَّادِسُ",
     title: "الثِّقَةُ بِاللهِ · دَانِيَالُ فِي جُبِّ الْأُسُودِ",
     en: "Trusting God · Daniel in the lions' den",
@@ -63,7 +75,8 @@ window.LESSONS = [
     note: "Story in 6 parts · 4 games · golden verse",
   },
   {
-    n: "1 (Unit 2)",
+    n: "1",
+    unit: 2,
     nAr: "الْأَوَّلُ",
     title:
       "سُلْطَانُ الرَّبِّ يَسُوعَ عَلَى الْأَمْرَاضِ · شِفَاءُ مَرِيضِ بَيْتِ حِسْدَا",
@@ -73,16 +86,18 @@ window.LESSONS = [
     note: "Story in 6 parts · 5 games · golden verse",
   },
   {
-    n: "2 (Unit 2)",
+    n: "2",
+    unit: 2,
     nAr: "الثَّانِي",
     title: "بَعْضُ الْآيَاتِ الذَّهَبِيَّةِ",
-    en: "Some golden verses (Unit 2)",
+    en: "Some golden verses",
     path: "u2-lesson-2.html",
     cover: "img/u2-lesson-2/boy.jpg",
     note: "7 golden verses · 7 words · 5 games",
   },
   {
-    n: "3 (Unit 2)",
+    n: "3",
+    unit: 2,
     nAr: "الثَّالِثُ",
     title: "الصَّوْمُ · دَانِيَالُ وَالْفِتْيَةُ الثَّلَاثَةُ",
     en: "Fasting · Daniel and the three young men",
@@ -91,7 +106,8 @@ window.LESSONS = [
     note: "Story in 5 parts · 5 games · golden verse",
   },
   {
-    n: "4 (Unit 2)",
+    n: "4",
+    unit: 2,
     nAr: "الرَّابِعُ",
     title: "حَيَاةُ يُوسُفَ الصِّدِّيقِ (٢) · فِي السِّجْنِ",
     en: "The Life of Joseph the Righteous (2) · In Prison",
@@ -100,7 +116,8 @@ window.LESSONS = [
     note: "Story in 12 parts · 5 games · golden verse",
   },
   {
-    n: "5 (Unit 2)",
+    n: "5",
+    unit: 2,
     nAr: "الْخَامِسُ",
     title: "الْعَائِلَةُ الْمُقَدَّسَةُ فِي مِصْرَ",
     en: "The Holy Family in Egypt",
@@ -109,7 +126,8 @@ window.LESSONS = [
     note: "Story in 7 parts · 5 games · golden verse",
   },
   {
-    n: "6 (Unit 2)",
+    n: "6",
+    unit: 2,
     nAr: "السَّادِسُ",
     title: "الْمَحَبَّةُ · عُنْقُودُ الْعِنَبِ",
     en: "Love · The bunch of grapes",
@@ -118,7 +136,8 @@ window.LESSONS = [
     note: "Story in 6 parts · 5 games · golden verse",
   },
   {
-    n: "1 (Unit 3)",
+    n: "1",
+    unit: 3,
     nAr: "الْأَوَّلُ",
     title: "سُلْطَانُ الرَّبِّ يَسُوعَ عَلَى الْمَوْتِ",
     en: "The Lord Jesus' power over death · The widow's son at Nain",
@@ -127,16 +146,18 @@ window.LESSONS = [
     note: "Story in 6 parts · 5 games · golden verse",
   },
   {
-    n: "2 (Unit 3)",
+    n: "2",
+    unit: 3,
     nAr: "الثَّانِي",
     title: "بَعْضُ الْآيَاتِ الذَّهَبِيَّةِ",
-    en: "Some golden verses (Unit 3)",
+    en: "Some golden verses",
     path: "u3-lesson-2.html",
     cover: "img/u3-lesson-2/boy.jpg",
     note: "5 golden verses · 4 words · 4 games",
   },
   {
-    n: "3 (Unit 3)",
+    n: "3",
+    unit: 3,
     nAr: "الثَّالِثُ",
     title: "مَحَبَّةُ اللهِ وَالْقَرِيبِ · السَّامِرِيُّ الصَّالِحُ",
     en: "Loving God and our neighbour · The Good Samaritan",
@@ -145,7 +166,8 @@ window.LESSONS = [
     note: "Story in 6 parts · 5 games · golden verse",
   },
   {
-    n: "4 (Unit 3)",
+    n: "4",
+    unit: 3,
     nAr: "الرَّابِعُ",
     title: "حَيَاةُ يُوسُفَ الصِّدِّيقِ (٣) · فِي قَصْرِ فِرْعَوْنَ",
     en: "The Life of Joseph the Righteous (3) · In Pharaoh's palace",
@@ -154,7 +176,8 @@ window.LESSONS = [
     note: "Story in 6 parts · 5 games · golden verse",
   },
   {
-    n: "5 (Unit 3)",
+    n: "5",
+    unit: 3,
     nAr: "الْخَامِسُ",
     title:
       "الْقِدِّيسُ بَاخُومِيُوسُ · الْجُنْدِيُّ الَّذِي أَحَبَّ الْمَسِيحَ",
@@ -164,7 +187,8 @@ window.LESSONS = [
     note: "Story in 6 parts · 5 games · golden verse",
   },
   {
-    n: "6 (Unit 3)",
+    n: "6",
+    unit: 3,
     nAr: "السَّادِسُ",
     title: "الصَّدَاقَةُ · دَاوُدُ وَيُونَاثَانُ",
     en: "Friendship · David and Jonathan",
