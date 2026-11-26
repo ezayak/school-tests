@@ -6,7 +6,7 @@ window.LIST_HEAD = {
   eyebrow: "Grade 4 · اللغة العربية",
   grade: 4,
   p: "Arabic",
-  k: "Lessons, Tests & Reading",
+  k: "Lessons, Tests, Homework & Reading",
   // one section of the side bar per unit (a lesson's unit: N puts it there); a unit with no lesson yet has no button
   units: [
     { u: 1, ic: "1️⃣", t: "Unit 1", ar: "الْوَحْدَةُ الْأُولَى" },
@@ -17,6 +17,16 @@ window.LIST_HEAD = {
     "Lessons from the book: the text to read and listen to (tap any word to see what it means), the new words and the book's exercises as games. Weekly tests from the book with every group (A, B, C). Reading: learn to read step by step: the letters and their harakat, then words, then sentences. Read each card aloud, listen to check, and play the games.",
 };
 window.LESSONS = [
+  {
+    n: "3",
+    unit: 3,
+    nAr: "الثَّالِثُ",
+    title: "أَفْعَالٌ صَغِيرَةٌ وَنَتَائِجُ كَبِيرَةٌ",
+    en: "Small Deeds, Big Results",
+    path: "u3-lesson-3.html",
+    cover: "img/u3-lesson-3/cover.jpg",
+    note: "Story · grammar · spelling · writing · classwork · 23 words · 107 exercises",
+  },
   {
     n: "4",
     unit: 3,
@@ -40,6 +50,15 @@ window.TESTS = [
     note: "Groups A · B · C · 20 questions · the poem «طريق السعادة» (book p. 49–50)",
   },
   {
+    n: "p. 62–63",
+    nAr: "ص ٦٢–٦٣",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · Small Deeds, Big Results",
+    path: "test-p62.html",
+    cover: "img/u3-lesson-3/cover.jpg",
+    note: "Groups A · B · C · 12 questions · the story «أفعال صغيرة ونتائج كبيرة» (Unit 3 Lesson 3, book p. 62–63)",
+  },
+  {
     n: "p. 65–67",
     nAr: "ص ٦٥–٦٧",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
@@ -47,5 +66,18 @@ window.TESTS = [
     path: "test-p65.html",
     cover: "img/u3-lesson-4/cover.jpg",
     note: "Groups A · B · C · 47 questions · the poem «في البستان» (Unit 3 Lesson 4, book p. 65–67)",
+  },
+];
+// Homework (the الأداءات المنزلية parts of the workbook pages): named by the book pages, like the tests. Listed under "Homework".
+window.HOMEWORK = [
+  {
+    n: "p. 60–64",
+    nAr: "ص ٦٠–٦٤",
+    title: "أَفْعَالٌ صَغِيرَةٌ وَنَتَائِجُ كَبِيرَةٌ",
+    en: "Homework · Small Deeds, Big Results",
+    path: "hw-p60.html",
+    cover: "img/u3-lesson-3/cover.jpg",
+    label: ["Homework", "الْأَدَاءَاتُ الْمَنْزِلِيَّةُ"],
+    note: "p. 60 · 61 · 62 · 64 · 15 questions · Unit 3 Lesson 3",
   },
 ];
