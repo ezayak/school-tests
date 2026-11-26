@@ -91,6 +91,16 @@ window.TESTS = [
 // Homework (the الأداءات المنزلية parts of the workbook pages): named by the book pages, like the tests. Listed under "Homework".
 window.HOMEWORK = [
   {
+    n: "p. 47–49",
+    nAr: "ص ٤٧–٤٩",
+    title: "طَرِيقُ السَّعَادَةِ",
+    en: "Homework · The Road to Happiness",
+    path: "hw-p47.html",
+    cover: "../../../grade-3/term-1/arabic/img/lesson-4/cover.jpg",
+    label: ["Homework", "الْأَدَاءَاتُ الْمَنْزِلِيَّةُ"],
+    note: "p. 47 · 49 · 8 questions · Unit 2, the poem «طريق السعادة»",
+  },
+  {
     n: "p. 52",
     nAr: "ص ٥٢",
     title: "رِسَالَةٌ إِلَى أَصْدِقَاءِ الطَّبِيعَةِ",
