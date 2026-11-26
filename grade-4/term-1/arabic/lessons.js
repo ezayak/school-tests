@@ -18,6 +18,16 @@ window.LIST_HEAD = {
 };
 window.LESSONS = [
   {
+    n: "1",
+    unit: 3,
+    nAr: "الْأَوَّلُ",
+    title: "رِسَالَةٌ إِلَى أَصْدِقَاءِ الطَّبِيعَةِ",
+    en: "A Letter to the Friends of Nature",
+    path: "u3-lesson-1.html",
+    cover: "img/u3-lesson-1/cover.jpg",
+    note: "Listening text · classwork · 14 words · 23 exercises",
+  },
+  {
     n: "2",
     unit: 3,
     nAr: "الثَّانِي",
@@ -80,6 +90,26 @@ window.TESTS = [
 ];
 // Homework (the الأداءات المنزلية parts of the workbook pages): named by the book pages, like the tests. Listed under "Homework".
 window.HOMEWORK = [
+  {
+    n: "p. 52",
+    nAr: "ص ٥٢",
+    title: "رِسَالَةٌ إِلَى أَصْدِقَاءِ الطَّبِيعَةِ",
+    en: "Homework · A Letter to the Friends of Nature",
+    path: "hw-p52.html",
+    cover: "img/u3-lesson-1/cover.jpg",
+    label: ["Homework", "الْأَدَاءَاتُ الْمَنْزِلِيَّةُ"],
+    note: "p. 52 · 3 questions · Unit 3 Lesson 1",
+  },
+  {
+    n: "p. 53–57",
+    nAr: "ص ٥٣–٥٧",
+    title: "رِسَالَةُ الشَّجَرَةِ الْعَجُوزِ",
+    en: "Homework · The Old Tree's Message",
+    path: "hw-p53.html",
+    cover: "img/u3-lesson-2/cover.jpg",
+    label: ["Homework", "الْأَدَاءَاتُ الْمَنْزِلِيَّةُ"],
+    note: "p. 53 · 55 · 56 · 57 · 12 questions · Unit 3 Lesson 2",
+  },
   {
     n: "p. 60–64",
     nAr: "ص ٦٠–٦٤",
