@@ -17,7 +17,7 @@ The user sends scans of Lucas's book pages (PDFs in `~/Documents/2026-2027/Lucas
 Sorting a scan:
 
 - Each page header says the lesson (title of the story, الأسبوع week number, الفترة period). Match it to `lessons.js` by title. A scan can hold pages of two lessons: put each page with its own lesson, and say so.
-- أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ = classwork (skip unless asked). ثَانِيًا: الْأَدَاءَاتُ الْمَنْزِلِيَّةُ = homework. التَّقْيِيمُ sheets with groups (أ)(ب)(ج) = tests.
+- أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ = classwork: it goes into the lesson of its week (see "Classwork" below). ثَانِيًا: الْأَدَاءَاتُ الْمَنْزِلِيَّةُ = homework. التَّقْيِيمُ sheets with groups (أ)(ب)(ج) = tests.
 - Handwriting on the page is Lucas's own answers: ignore it, it is not the key. Duplicate pages in a scan: use the cleanest one.
 - A page already built (same page in an earlier scan, a test already in `TESTS`): skip it and say so.
 - Words missing or covered in the scan: never guess. List them and ask.
@@ -29,6 +29,10 @@ What to build:
 - **Test** `test-N.js` + `test-N.html` (`new.js --like test-1.html`, see "3. Build"): one tab per group, the sheet's paragraph with a picture above the tasks, items without pictures. See "Arabic tests" below.
 - **Homework** `hw-N.js` + `hw-N.html` for Lesson N (`new.js --like hw-3.html`, see "3. Build"): one tab per book page, only the homework tasks, a picture (`img` or emoji `ic`) on every item.
   More homework for a lesson that already has `hw-N` = new tabs in it.
+- **Classwork** (أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ, every الْفَتْرَةُ of the week, also grammar, spelling and speaking periods): sections in the lesson of that week (`lesson-N.js` / `uN-lesson-M.js`), after the book's exercises,
+  `k: "cw-<topic>"` (`cw-nahw`, `cw-imla`, `cw-poem` …), `t` starting «الْأَدَاءَاتُ الصَّفِّيَّةُ: …», `en` / `uk` with the workbook page («Classwork (workbook p. 64): …»), an `exPics` picture for each section;
+  answers from the key when there is one, the header comment names the workbook pages; the lesson's `note` in `lessons.js` says «classwork» and the new exercise count.
+  The lesson isn't built yet: the classwork waits for it (log it in SOURCES as waiting). Speaking or drawing tasks with no answer to check are left out (say so in the header).
 - Item type: one word to write → `word` (list every accepted answer); choices given in brackets → `mc` (right one first); words to put in order (رَتِّبْ) → `build` with `a` = the sentence (word tiles, `Kit.dragTiles`; the page loads drag-words.css and shared/common.js); sentence, writing, copying → `open` with a model answer.
   A writing task (new ending, write about yourself) gets a folded `help` question that leads to an idea; its options are `[ar, en, uk]`, so they are translated.
 - `en` / `uk` translate every Arabic word they mention; never a transliteration like «tamdee».
@@ -67,10 +71,10 @@ Rules for every Arabic file:
   pdftoppm -r 40 -jpeg "<scan>.pdf" <scratchpad>/hw/p    # then make contact sheets with PIL and Read them
   pdftoppm -r 200 -f N -l N -png "<scan>.pdf" <scratchpad>/hw/p   # one page to read the Arabic (a whole page is readable)
   ```
-- Each workbook page says at the top what it is: الْفَتْرَةُ (period) and the lesson title, أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ (classwork, skip), ثَانِيًا: الْأَدَاءَاتُ الْمَنْزِلِيَّةُ (homework), التَّقْيِيمُ الْأُسْبُوعِيُّ with الْمَجْمُوعَةُ (أ)(ب)(ج) (a test). The week number is in the row of numbers at the top (الْأُسْبُوعُ). The printed page number is at the bottom corner.
+- Each workbook page says at the top what it is: الْفَتْرَةُ (period) and the lesson title, أَوَّلًا: الْأَدَاءَاتُ الصَّفِّيَّةُ (classwork: into the lesson), ثَانِيًا: الْأَدَاءَاتُ الْمَنْزِلِيَّةُ (homework), التَّقْيِيمُ الْأُسْبُوعِيُّ with الْمَجْمُوعَةُ (أ)(ب)(ج) (a test). The week number is in the row of numbers at the top (الْأُسْبُوعُ). The printed page number is at the bottom corner.
 - Scans can repeat a page or skip one; the PDF page → book page offset can change in the middle of a scan. Log book pages by the printed number.
 - Handwriting and red marks are Lucas's answers and the teacher's marking: ignore them, they are not the key.
-- Skip: classwork, the workbook's reviews (مُرَاجَعَةٌ عَامَّةٌ …) unless asked (a separate revision sheet is not skipped: "Revision" above), a sheet already built (same book pages in `TESTS` / `HOMEWORK`). Say which pages were skipped and why.
+- Skip: the workbook's reviews (مُرَاجَعَةٌ عَامَّةٌ …) unless asked (a separate revision sheet is not skipped: "Revision" above), a sheet already built (same book pages in `TESTS` / `HOMEWORK`). Say which pages were skipped and why.
 - The user decides the order. Old sheets (the earlier weeks) may be wanted first.
 - Tests are numbered by workbook page, not by build order (the user's wish). Known so far (hw-tests.pdf, Nov 2026):
   test-1 p. 7–8 «بعد إعلان نتيجة المسابقة» · test-2 p. 12 «جلس والدي بجواري» · test-3 p. 16–17 «في بداية حصة اللغة العربية» ·
