@@ -18,6 +18,16 @@ window.LIST_HEAD = {
 };
 window.LESSONS = [
   {
+    n: "2",
+    unit: 3,
+    nAr: "الثَّانِي",
+    title: "رِسَالَةُ الشَّجَرَةِ الْعَجُوزِ",
+    en: "The Old Tree's Message",
+    path: "u3-lesson-2.html",
+    cover: "img/u3-lesson-2/cover.jpg",
+    note: "Story · grammar · spelling · writing · classwork · 16 words · 138 exercises",
+  },
+  {
     n: "3",
     unit: 3,
     nAr: "الثَّالِثُ",
