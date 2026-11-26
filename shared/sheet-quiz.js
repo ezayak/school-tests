@@ -1,5 +1,6 @@
 // Sheet quiz: a school sheet (photos sent to the Telegram bot) made into a homework helper, with the look of the Quest pages.
-// No right or wrong, no score: every question is explained (a picture, simple words, 🔊), the child chooses an answer,
+// No right or wrong, no score: every question is explained (a picture, simple words, 🔊: read slowly when it opens, again with
+// the help on 🔊; a tapped answer is read too), the child chooses an answer,
 // can go back and change it, and the end shows « My answers » in the sheet's order, to copy onto the paper.
 // A page loads theme.css + quiz.css, then common.js, quiz-common.js, its data file (window.SHEET), then this file.
 //
@@ -44,9 +45,28 @@
     { en: "en-US", fr: "fr-FR", ar: "ar" }[D.lang || "en"] || "en-US",
     { online: RTL },
   );
-  const speak = (t) => {
+  // the question is read slowly when it opens (and by 🔊, then the help); a tapped answer is read at once
+  const SLOW = 0.6,
+    ANSWER = 0.8;
+  const sayable = (t) =>
+    String(t || "").replace(
+      /_{2,}/g,
+      D.lang === "en" || !D.lang ? " blank " : " ",
+    );
+  let turn = 0; // a newer speak() stops the lines still waiting of an older one
+  const speak = (lines, rate) => {
+    const me = ++turn;
     V.hush();
-    V.say(t, 0.85);
+    lines
+      .filter(Boolean)
+      .reduce(
+        (p, t) => p.then(() => me === turn && V.say(sayable(t), rate)),
+        Promise.resolve(),
+      );
+  };
+  const hush = () => {
+    turn++;
+    V.hush();
   };
 
   /* ---------- 🖥 Try it: a pretend program in a popup ---------- */
@@ -119,7 +139,7 @@
   /* ---------- screens ---------- */
   let at = -1; // -1 = the start screen, QS.length = « My answers »
   const go = (i) => {
-    V.hush();
+    hush();
     at = i;
     render();
   };
@@ -138,7 +158,7 @@
     <div class="topbar"><a class="back" href="${ROOT}index.html">← All games</a><span class="eyebrow">${esc(D.eyebrow)}</span></div>
     <h1 class="hero-title"><span class="p">${esc(D.title[0])}</span> <span class="k">${esc(D.title[1])}</span></h1>
     ${qPic(cover, D.imgDir)}
-    <p class="howto">Your sheet has ${QS.length} questions. Look at the picture. Read the 💡 help, or press 🔊 to hear it. Then choose your answer. You can go back and change it. At the end you see all your answers, to write on the sheet.</p>
+    <p class="howto">Your sheet has ${QS.length} questions. Each question is read to you slowly. Look at the picture. Read the 💡 help, or press 🔊 to hear the question and the help again. Then choose your answer: it is read to you too. You can go back and change it. At the end you see all your answers, to write on the sheet.</p>
     ${D.story ? `<div class="row"><a class="btn big" href="${esc(D.story)}">📖 Read the story</a></div>` : ""}
     <div class="row">${n ? `<button class="btn big" id="goOn" type="button">Go on · ${n} of ${QS.length} done</button><button class="btn ghost" id="mine" type="button">My answers</button>` : `<button class="btn big" id="goOn" type="button">Start</button>`}</div>
   </section>`;
@@ -170,6 +190,7 @@
         (b.onclick = () => {
           ans[i] = q.o[+b.dataset.k];
           keep();
+          speak([ans[i]], ANSWER);
           app.querySelectorAll(".opt").forEach((x) => {
             x.classList.toggle("chosen", x === b);
             x.setAttribute("aria-pressed", x === b);
@@ -178,7 +199,8 @@
         }),
     );
     const s = document.getElementById("say");
-    if (s) s.onclick = () => speak([q.q, q.help].filter(Boolean).join(". "));
+    if (s) s.onclick = () => speak([q.q, q.help], SLOW);
+    if (V.ok) speak([q.q], SLOW); // opened by a tap (Start, Next, Back), so the browser lets it speak
     if (sim) document.getElementById("sim").onclick = () => openSim(q.sim);
     document.getElementById("back").onclick = () => go(i - 1);
     document.getElementById("next").onclick = () => go(i + 1);
