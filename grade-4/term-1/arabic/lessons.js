@@ -91,6 +91,16 @@ window.TESTS = [
 // Homework (the الأداءات المنزلية parts of the workbook pages): named by the book pages, like the tests. Listed under "Homework".
 window.HOMEWORK = [
   {
+    n: "p. 39–45",
+    nAr: "ص ٣٩–٤٥",
+    title: "فَكِّرْ قَلِيلًا .. تَرْبَحْ كَثِيرًا",
+    en: "Homework · Think a Little, Gain a Lot",
+    path: "hw-p39.html",
+    cover: "img/u2-lesson-3/cover.jpg",
+    label: ["Homework", "الْأَدَاءَاتُ الْمَنْزِلِيَّةُ"],
+    note: "p. 39 · 40 · 44 · 45 · 19 questions · Unit 2 Lesson 3",
+  },
+  {
     n: "p. 47–49",
     nAr: "ص ٤٧–٤٩",
     title: "طَرِيقُ السَّعَادَةِ",
