@@ -1,6 +1,6 @@
 // Sheet quiz: a school sheet (photos sent to the Telegram bot) made into a homework helper, with the look of the Quest pages.
-// No right or wrong, no score: every question is explained (a picture, simple words, 🔊: read slowly when it opens, again with
-// the help on 🔊; a tapped answer is read too), the child chooses an answer,
+// No right or wrong, no score: every question is explained (a picture, simple words, 🔊 Listen reads the question and the help,
+// 🐢 Slow on = slower reading; a tapped answer is read too), the child chooses an answer,
 // can go back and change it, and the end shows « My answers » in the sheet's order, to copy onto the paper.
 // A page loads theme.css + quiz.css, then common.js, quiz-common.js, its data file (window.SHEET), then this file.
 //
@@ -45,9 +45,14 @@
     { en: "en-US", fr: "fr-FR", ar: "ar" }[D.lang || "en"] || "en-US",
     { online: RTL },
   );
-  // the question is read slowly when it opens (and by 🔊, then the help); a tapped answer is read at once
-  const SLOW = 0.6,
-    ANSWER = 0.8;
+  // 🔊 Listen reads the question, then the help; a tapped answer is read at once. 🐢 Slow (on or off, kept on the device) slows both.
+  const RATE = 0.9,
+    SLOW = 0.6;
+  let slow = false;
+  try {
+    slow = localStorage.getItem("sheet-quiz-slow") === "1";
+  } catch (e) {}
+  const rate = () => (slow ? SLOW : RATE);
   const sayable = (t) =>
     String(t || "").replace(
       /_{2,}/g,
@@ -158,7 +163,7 @@
     <div class="topbar"><a class="back" href="${ROOT}index.html">← All games</a><span class="eyebrow">${esc(D.eyebrow)}</span></div>
     <h1 class="hero-title"><span class="p">${esc(D.title[0])}</span> <span class="k">${esc(D.title[1])}</span></h1>
     ${qPic(cover, D.imgDir)}
-    <p class="howto">Your sheet has ${QS.length} questions. Each question is read to you slowly. Look at the picture. Read the 💡 help, or press 🔊 to hear the question and the help again. Then choose your answer: it is read to you too. You can go back and change it. At the end you see all your answers, to write on the sheet.</p>
+    <p class="howto">Your sheet has ${QS.length} questions. Look at the picture. Read the 💡 help, or press 🔊 Listen to hear the question and the help (🐢 Slow reads more slowly). Then choose your answer: it is read to you. You can go back and change it. At the end you see all your answers, to write on the sheet.</p>
     ${D.story ? `<div class="row"><a class="btn big" href="${esc(D.story)}">📖 Read the story</a></div>` : ""}
     <div class="row">${n ? `<button class="btn big" id="goOn" type="button">Go on · ${n} of ${QS.length} done</button><button class="btn ghost" id="mine" type="button">My answers</button>` : `<button class="btn big" id="goOn" type="button">Start</button>`}</div>
   </section>`;
@@ -181,7 +186,7 @@
     ${qPic(q, D.imgDir)}
     <p class="qtext" ${RTL ? 'dir="rtl" lang="ar"' : ""}>${esc(q.q)}</p>
     ${q.help ? `<div class="sq-help" ${RTL ? 'dir="rtl" lang="ar"' : ""}><b>💡</b><span>${esc(q.help)}</span></div>` : ""}
-    <div class="row sq-tools">${D.story ? `<a class="btn ghost" href="${esc(D.story)}">📖 Story</a>` : ""}${V.ok ? '<button class="btn ghost" id="say" type="button">🔊 Listen</button>' : ""}${sim ? `<button class="btn ghost" id="sim" type="button">🖥 Try it in ${esc(sim.name)}</button>` : ""}</div>
+    <div class="row sq-tools">${D.story ? `<a class="btn ghost" href="${esc(D.story)}">📖 Story</a>` : ""}${V.ok ? `<button class="btn ghost" id="say" type="button">🔊 Listen</button><button class="btn ghost sq-toggle" id="slow" type="button" aria-pressed="${slow}">🐢 Slow</button>` : ""}${sim ? `<button class="btn ghost" id="sim" type="button">🖥 Try it in ${esc(sim.name)}</button>` : ""}</div>
     <div class="opts ${long ? "long" : ""}" ${RTL ? 'dir="rtl"' : ""}>${q.o.map((t, k) => `<button type="button" class="opt ${ans[i] === t ? "chosen" : ""}" data-k="${k}" aria-pressed="${ans[i] === t}"><span class="L">${"ABCD"[k]}</span><span>${esc(t)}</span></button>`).join("")}</div>
     <div class="row sq-nav"><button class="btn ghost" id="back" type="button">← Back</button><button class="btn next" id="next" type="button">${i + 1 < QS.length ? "Next →" : "My answers"}</button></div>
   </section>`;
@@ -190,7 +195,7 @@
         (b.onclick = () => {
           ans[i] = q.o[+b.dataset.k];
           keep();
-          speak([ans[i]], ANSWER);
+          speak([ans[i]], rate());
           app.querySelectorAll(".opt").forEach((x) => {
             x.classList.toggle("chosen", x === b);
             x.setAttribute("aria-pressed", x === b);
@@ -199,8 +204,16 @@
         }),
     );
     const s = document.getElementById("say");
-    if (s) s.onclick = () => speak([q.q, q.help], SLOW);
-    if (V.ok) speak([q.q], SLOW); // opened by a tap (Start, Next, Back), so the browser lets it speak
+    if (s) s.onclick = () => speak([q.q, q.help], rate());
+    const sl = document.getElementById("slow");
+    if (sl)
+      sl.onclick = () => {
+        slow = !slow;
+        sl.setAttribute("aria-pressed", slow);
+        try {
+          localStorage.setItem("sheet-quiz-slow", slow ? "1" : "0");
+        } catch (e) {}
+      };
     if (sim) document.getElementById("sim").onclick = () => openSim(q.sim);
     document.getElementById("back").onclick = () => go(i - 1);
     document.getElementById("next").onclick = () => go(i + 1);

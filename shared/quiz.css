@@ -574,3 +574,11 @@
   max-width: calc((100vh - 120px) * 16 / 9);
   margin: 0 auto;
 }
+/* 🐢 Slow: a button that is on or off */
+.sq-toggle[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--card);
+}
+.sq-toggle[aria-pressed="true"]::after {
+  content: " ✓";
+}
