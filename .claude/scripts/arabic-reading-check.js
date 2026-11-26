@@ -60,9 +60,11 @@ for (const s of L.exercises) {
     if (it.a && typeof it.a === "string" && !it.plain) need(it.a);
     (it.also || []).forEach(need);
     if (it.help) {
-      need(it.help.q);
-      it.help.o.forEach((o) => need(Array.isArray(o) ? o[0] : o));
+      if (it.help.q) need(it.help.q);
+      (it.help.o || []).forEach((o) => need(Array.isArray(o) ? o[0] : o));
+      (it.help.qs || []).forEach((o) => need(Array.isArray(o) ? o[0] : o));
     }
+    (it.words || []).forEach((o) => need(Array.isArray(o) ? o[0] : o));
     if (it.type === "mc" && it.o.length < 2) probs.push(id + ": options");
   });
 }

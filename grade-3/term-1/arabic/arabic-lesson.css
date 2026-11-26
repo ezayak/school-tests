@@ -875,3 +875,48 @@ body.vopen {
   background: var(--hl);
   color: #1b2440;
 }
+/* a test / homework text in a box that can be folded (storyPanel, fixed tabs) */
+.readp.sttext > summary {
+  font-size: 1.05rem;
+}
+.readp.sttext[open] > summary {
+  margin-bottom: 8px;
+}
+/* help with guiding questions (it.help.qs): one sentence each */
+.helpqs {
+  margin: 8px 0 0;
+  padding-inline-start: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.helpqs li p {
+  margin: 0 0 4px;
+}
+/* words the child can use in a written answer (it.words): chips with the translation under the word */
+.helpws {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  direction: rtl;
+}
+.helpws li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid var(--grid);
+  border-radius: 10px;
+  padding: 4px 10px;
+  background: var(--card);
+}
+.helpws .ar {
+  font-size: 1.3rem;
+  line-height: 1.7;
+}
+.helpws small {
+  direction: ltr;
+  opacity: 0.8;
+}

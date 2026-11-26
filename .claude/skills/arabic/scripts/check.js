@@ -43,8 +43,10 @@ const add = (s) => {
     });
     if (it.help) {
       add(it.help.q);
-      it.help.o.forEach((o) => add(Array.isArray(o) ? o[0] : o));
+      (it.help.o || []).forEach((o) => add(Array.isArray(o) ? o[0] : o));
+      (it.help.qs || []).forEach((o) => add(Array.isArray(o) ? o[0] : o));
     }
+    (it.words || []).forEach((o) => add(Array.isArray(o) ? o[0] : o));
   });
 });
 ["opposites", "plurals", "meanings"].forEach((k) =>

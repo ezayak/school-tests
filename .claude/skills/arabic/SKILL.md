@@ -34,7 +34,9 @@ What to build:
   answers from the key when there is one, the header comment names the workbook pages; the lesson's `note` in `lessons.js` says «classwork» and the new exercise count.
   The lesson isn't built yet: the classwork waits for it (log it in SOURCES as waiting). Speaking or drawing tasks with no answer to check are left out (say so in the header).
 - Item type: one word to write → `word` (list every accepted answer); choices given in brackets → `mc` (right one first); words to put in order (رَتِّبْ) → `build` with `a` = the sentence (word tiles, `Kit.dragTiles`; the page loads drag-words.css and shared/common.js); sentence, writing, copying → `open` with a model answer.
-  A writing task (new ending, write about yourself) gets a folded `help` question that leads to an idea; its options are `[ar, en, uk]`, so they are translated.
+  A writing task in a lesson (new ending, write about yourself) gets a folded `help` question that leads to an idea; its options are `[ar, en, uk]`, so they are translated.
+  In homework and tests every written answer (`open`, not `plain`) gets `help: {qs: [[ar, en, uk], …]}` (one guiding question per sentence of the model answer, in its order)
+  and `words: [[ar, en, uk], …]` (the main words of the model answer, 3–8). A long text is split into its paragraphs (parts, one picture each): the page shows ← → arrows.
 - `en` / `uk` translate every Arabic word they mention; never a transliteration like «tamdee».
 
 Rules for every Arabic file:

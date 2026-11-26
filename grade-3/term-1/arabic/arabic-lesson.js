@@ -468,6 +468,7 @@
       P.innerHTML = `<div id="tText"></div><div id="tEx"></div>`;
       if (T.story != null) {
         story = T.story;
+        part = +store.get(KEY + "part-" + story, 0) || 0;
         storyPanel(P.querySelector("#tText"));
       }
       exHost = P.querySelector("#tEx");
@@ -601,14 +602,17 @@
     if (part >= PS.length || part < 0) part = 0;
     const p = PS[part],
       tk = tokens(p.ar);
-    const fixed = !!L.tabs && tab !== "story"; // a test: one text per tab, no list, no part navigation
+    // a test / homework tab: one text, no list; a text in several parts gets the arrows; the text can be folded (remembered) to make room for the questions
+    const fixed = !!L.tabs && tab !== "story";
+    const many = !fixed || PS.length > 1;
+    const folded = fixed && store.get(KEY + "fold", "") === "1";
     const nextTab = TABS[TABS.findIndex((t) => t.k === tab) + 1];
-    P.innerHTML = `${fixed ? "" : `<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span>${ST.video ? `<button type="button" class="abtn vidbtn" id="vidBtn"${navigator.onLine === false ? " hidden" : ""}><span class="e">🎬</span> ${esc(ST.videoT || "Story video")}</button>` : ""}</div>`}
+    P.innerHTML = `${fixed ? `<details class="readp sttext"${folded ? "" : " open"}><summary>📖 The text · النَّصُّ${PS.length > 1 ? ` · part ${part + 1} of ${PS.length}` : ""}</summary>` : `<div class="sthead"><button type="button" class="abtn" id="stBack" aria-label="Back to the list of texts">← Texts</button><span class="sttitle ar" dir="rtl">${esc(ST.title)}</span>${ST.video ? `<button type="button" class="abtn vidbtn" id="vidBtn"${navigator.onLine === false ? " hidden" : ""}><span class="e">🎬</span> ${esc(ST.videoT || "Story video")}</button>` : ""}</div>`}
     ${ST.intro && part === 0 ? `<details class="readp"><summary>About this text · تمهيد</summary><p class="ar" dir="rtl" style="font-size:1.25rem;line-height:1.9;margin:8px 0">${esc(ST.intro.ar)}</p>${trText(ST.intro) ? `<p class="trans">${esc(trText(ST.intro))}</p>` : ""}</details>` : ""}
     <div class="part${p.img ? "" : " noimg"}">
       ${p.img ? `<div class="pic"><img src="${esc(p.img)}" alt=""></div>` : ""}
       <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
-        <span class="pchip"><span class="ar" dir="rtl">${esc(p.para)}</span>${fixed ? "" : `<span>· Part ${part + 1} of ${PS.length}</span>`}</span>
+        <span class="pchip"><span class="ar" dir="rtl">${esc(p.para)}</span>${many ? `<span>· Part ${part + 1} of ${PS.length}</span>` : ""}</span>
         <p class="story ar" dir="rtl" id="storyText">${tk.map((t, i) => `${esc(t.pre)}<span class="w" data-i="${i}">${esc(t.core)}</span>${esc(t.post)}`).join(" ")}</p>
         <div class="audio"><button type="button" class="abtn big" id="say1"><span class="e">🔊</span> Listen</button><button type="button" class="abtn" id="say2"><span class="e">🐢</span> Slowly</button><button type="button" class="abtn" id="pauseBtn"><span class="e">⏸</span> Pause</button><button type="button" class="abtn" id="stopBtn"><span class="e">⏹</span> Stop</button></div>
         ${noVoiceNote()}
@@ -618,12 +622,12 @@
       </div>
     </div>
     ${
-      fixed
-        ? ""
-        : `<div class="nav" dir="rtl"><button type="button" class="btn ghost" id="prevBtn" ${part === 0 ? "disabled" : ""}><span class="na">→ السابق</span> <small>Back</small></button>
+      many
+        ? `<div class="nav" dir="rtl"><button type="button" class="btn ghost" id="prevBtn" ${part === 0 ? "disabled" : ""}><span class="na">→ السابق</span> <small>Back</small></button>
       <div class="dots" dir="rtl">${PS.map((_, i) => `<button type="button" id="dot-${i}" data-dot="${i}" aria-label="Part ${i + 1}" aria-current="${i === part}"></button>`).join("")}</div>
-      ${part < PS.length - 1 ? `<button type="button" class="btn" id="nextPart"><span class="na">التالي ←</span> <small>Next</small></button>` : story < STORIES.length - 1 ? `<button type="button" class="btn" id="nextText"><span class="na">النص التالي ←</span> <small>Next text</small></button>` : nextTab ? `<button type="button" class="btn" id="toNextTab"><span class="na">${esc(nextTab.ar)} ←</span> <small>${esc(nextTab.t)}</small></button>` : ""}</div>`
-    }`;
+      ${part < PS.length - 1 ? `<button type="button" class="btn" id="nextPart"><span class="na">التالي ←</span> <small>Next</small></button>` : fixed ? `<span></span>` : story < STORIES.length - 1 ? `<button type="button" class="btn" id="nextText"><span class="na">النص التالي ←</span> <small>Next text</small></button>` : nextTab ? `<button type="button" class="btn" id="toNextTab"><span class="na">${esc(nextTab.ar)} ←</span> <small>${esc(nextTab.t)}</small></button>` : ""}</div>`
+        : ""
+    }${fixed ? "</details>" : ""}`;
     bindSum(p.sum);
     const txt = document.getElementById("storyText");
     const spans = [...txt.querySelectorAll(".w")];
@@ -676,12 +680,25 @@
       storyPanel(P);
       P.scrollIntoView({ block: "nearest" });
     };
+    if (fixed) {
+      const fd = P.querySelector("details.sttext");
+      fd.ontoggle = () => {
+        store.set(KEY + "fold", fd.open ? "" : "1");
+        if (!fd.open) hush();
+      };
+    }
+    if (many) {
+      document.getElementById("prevBtn").onclick = () =>
+        part > 0 && go(part - 1);
+      const nx = document.getElementById("nextPart");
+      if (nx) nx.onclick = () => go(part + 1);
+      P.querySelectorAll("[data-dot]").forEach(
+        (b) => (b.onclick = () => go(+b.dataset.dot)),
+      );
+    }
     if (fixed) return;
     const vb = document.getElementById("vidBtn");
     if (vb) vb.onclick = () => showVideo(ST.video, ST.title);
-    document.getElementById("prevBtn").onclick = () => part > 0 && go(part - 1);
-    const nx = document.getElementById("nextPart");
-    if (nx) nx.onclick = () => go(part + 1);
     const nt = document.getElementById("nextText");
     if (nt)
       nt.onclick = () => {
@@ -700,9 +717,6 @@
     };
     const tw = document.getElementById("toNextTab");
     if (tw) tw.onclick = () => goTab(nextTab.k);
-    P.querySelectorAll("[data-dot]").forEach(
-      (b) => (b.onclick = () => go(+b.dataset.dot)),
-    );
   }
 
   /* ---------- word pop-up ---------- */
@@ -1759,6 +1773,24 @@
   const helpOpt = (o) => (Array.isArray(o) ? o : [o]);
   const helpHTML = (h, opts) =>
     `<details class="readp help"><summary>💡 Help · مُسَاعَدَةٌ</summary><p class="ar tapw" dir="rtl">${tapHTML(h.q)}</p>${trText(h) ? `<p class="qhelp">${esc(trText(h))}</p>` : ""}<div class="opts long">${opts.map((o, j) => `<button type="button" class="opt aro" data-h="${j}"><span class="L">${"ABCDEF"[j]}</span><span class="ow"><span class="ar">${esc(o.t)}</span>${o.tr ? `<small>${esc(o.tr)}</small>` : ""}</span></button>`).join("")}</div></details>`;
+  // it.help = {qs: [[ar, en, uk], …]} (homework, tests): guiding questions (tap-a-word, translation, no 🔊), each answered with one sentence; together they make the answer
+  const helpQsHTML = (h) =>
+    `<details class="readp help"><summary>💡 Help · مُسَاعَدَةٌ</summary><p class="qhelp">Answer each question with one sentence: together they make your answer.</p><ol class="helpqs">${h.qs
+      .map((q, j) => {
+        const [ar, en, uk] = helpOpt(q);
+        const t = trText({ en, uk });
+        return `<li><p class="ar tapw" dir="rtl">${tapHTML(ar)}</p>${t ? `<p class="qhelp">${esc(t)}</p>` : ""}</li>`;
+      })
+      .join("")}</ol></details>`;
+  // it.words = [[ar, en, uk], …] (homework, tests): the main words the child can use in the written answer, folded like the help
+  const wordsHTML = (ws) =>
+    `<details class="readp help"><summary>🧩 Words you can use · كَلِمَاتٌ تُسَاعِدُكَ</summary><ul class="helpws">${ws
+      .map((w) => {
+        const [ar, en, uk] = helpOpt(w);
+        const t = trText({ en, uk });
+        return `<li><span class="ar tapw" dir="rtl">${tapHTML(ar)}</span>${t ? `<small>${esc(t)}</small>` : ""}</li>`;
+      })
+      .join("")}</ul></details>`;
   const qHTML = (q) => esc(q).replace(/_{3,}/g, '<span class="gap"></span>');
   function exItem() {
     hush();
@@ -1775,6 +1807,7 @@
             : (STORIES[0] || { parts: [] }).parts[it.read]) || null;
     const hOpts =
       it.help &&
+      it.help.o &&
       shuf(
         it.help.o.map((o, j) => {
           const [t, en, uk] = helpOpt(o);
@@ -1797,7 +1830,8 @@
     ${it.type === "match" ? "" : `<p class="qar ar${L.tapq ? " tapw" : ""}" dir="rtl">${L.tapq ? tapHTML(qText) : qHTML(qText)}</p>`}
     ${it.type === "match" ? `<p class="qar ar" dir="rtl">${esc(it.q)}</p>` : ""}
     ${trText(it) ? `<p class="qhelp">${esc(trText(it))}</p>` : ""}
-    ${hOpts ? helpHTML(it.help, hOpts) : ""}
+    ${hOpts ? helpHTML(it.help, hOpts) : it.help && it.help.qs ? helpQsHTML(it.help) : ""}
+    ${it.words && it.words.length ? wordsHTML(it.words) : ""}
     <div class="audio"><button type="button" class="abtn" id="qSay"><span class="e">🔊</span> Read the question</button></div>
     <div id="ans"></div>
     <div id="fbx"></div>

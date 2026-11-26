@@ -699,7 +699,7 @@ A test is `test-N.html` (copy `test-1.html`, change `test-1.js`) + `test-N.js`, 
 window.LESSON = {
   n: "t1", tapq: true,                      // n: a text key, so it saves apart from the lessons; tapq: tap any word of a question or answer
   tabs: [{k: "a", ic: "📝", t: "Group A", short: "A", ar: "الْمَجْمُوعَةُ (أ)", story: 0}, …],  // one tab per group: the text, then its tasks
-  stories: [{title, parts: [{para, img, ar, en, uk}]}],   // the sheet's paragraph (one part)
+  stories: [{title, parts: [{para, img, ar, en, uk}]}],   // the sheet's paragraph; a long text in several parts gets ← → arrows
   gloss: {…},                               // every word of the text, the questions and the model answers
   exercises: [{k, tab: "a", t, en, uk, ic, items: [ … ]}, …],  // tab: which group
 };
@@ -707,6 +707,15 @@ window.LESSON = {
 
 Test items: `{type: "word", q: "… ___", a: ["right", "also right"]}` — the child types the word and taps Check (checked without tashkeel,
 alef forms or a leading ال; Show the answer stays), and `{type: "open", q, a}` for sentence answers (`plain: true` when the answer is not words, e.g. syllables "خَا / فَ"). Each item has `en` / `uk`; no picture, the text above the tasks has one.
+
+The text of a tab is in a box the child can fold (remembered on the device) to make room for the questions; a text in several parts (one paragraph each, with its picture) is read one part at a time with the arrows.
+Written answers (`open`, not `plain`) have two folded helpers under the question, both without 🔊 (tap-a-word and the translation are enough):
+
+- `help: {qs: [[ar, en, uk], …]}`: "💡 Help", guiding questions; each one is answered with one sentence, and the sentences together make the answer
+  (one question for a one-sentence answer; for a paragraph, one per sentence: title, introduction, good points, bad points, ending …)
+- `words: [[ar, en, uk], …]`: "🧩 Words you can use", the main words of the model answer (not all of them), shown as chips
+
+Items built with a helper (`O(q, a, en, uk, extra)`) take both in `extra`.
 
 After adding a test: add it to `TESTS`, add `test-N.html` / `test-N.js` to `also` in `games.js`, and bump `VERSION` in `sw.js`.
 
@@ -722,8 +731,8 @@ Same format as a test, with one tab per book page (`{k: "p31", ic, t: "Page 31",
   `{type: "build", q, a: "the sentence."}` for "رَتِّبْ": the words of `a` are tiles to drag or tap into order, like the letters in the dictation games (the end punctuation stays).
   A page with `build` loads `shared/drag-words.css` (before `arabic.css`) and `shared/common.js` (after `quiz-common.js`), like `hw-3.html`
 - a section can have its own `rule: {ar, en, uk}` (a rule given as a string only finds sections of the same file)
-- a writing task can have `help: {q, o: [right, wrong, …], en, uk}`: a folded "💡 Help" practice question shown with the task (not scored), e.g. pick the ending that is new and fits the story.
-  An option can be `[ar, en, uk]`: the translation is shown in small letters under the Arabic when the translation is on
+- a writing task has `help: {qs: […]}` and `words: […]` as in a test (above). Lessons keep the older `help: {q, o: [right, wrong, …], en, uk}`:
+  a folded "💡 Help" practice question (not scored); an option can be `[ar, en, uk]`
 
 After adding homework: add it to `HOMEWORK` (`n` = the lesson number), add `hw-N.html` / `hw-N.js` and new pictures to `also` in `games.js`, and bump `VERSION` in `sw.js`.
 
