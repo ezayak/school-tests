@@ -715,7 +715,8 @@ Written answers (`open`, not `plain`) have two folded helpers under the question
   (one question for a one-sentence answer; for a paragraph, one per sentence: title, introduction, good points, bad points, ending …)
 - `words: [[ar, en, uk], …]`: "🧩 Words you can use", the main words of the model answer (not all of them), shown as chips
 
-Items built with a helper (`O(q, a, en, uk, extra)`) take both in `extra`.
+Items built with a helper (`O(q, a, en, uk, extra)`) take both in `extra`; a file whose items are built from constants and copies (the Grade 3 tests) sets them
+at the end, in `const WRITE_HELP = { "<model answer>": {qs, words} }`, given to every written item with that answer.
 
 After adding a test: add it to `TESTS`, add `test-N.html` / `test-N.js` to `also` in `games.js`, and bump `VERSION` in `sw.js`.
 

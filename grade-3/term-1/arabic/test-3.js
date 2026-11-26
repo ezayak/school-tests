@@ -137,6 +137,7 @@ window.LESSON = {
   ],
 
   gloss: {
+    يَحْرُسُ: ["guards", "охороняє"],
     أَجِبْ: ["answer", "дай відповідь"],
     أَحْمَدُ: ["Ahmad (a name)", "Ахмад (ім'я)"],
     أُقَدِّمُ: ["I give, I present", "я пропоную"],
@@ -337,3 +338,27 @@ window.LESSON = {
     { ...COPY, k: "c4", tab: "c" },
   ],
 };
+
+// written answers: guiding questions (help.qs, one per sentence) and the main words to use (words), matched by the model answer
+const WRITE_HELP = {
+  "الْبَطَلُ هُوَ الْعَمُّ أَمِينٌ حَارِسُ الْمَدْرَسَةِ.": {
+    qs: [
+      [
+        "مَنْ يَحْرُسُ الْمَدْرَسَةَ؟",
+        "Who guards the school?",
+        "Хто охороняє школу?",
+      ],
+    ],
+    words: [
+      ["الْبَطَلُ", "the hero", "герой"],
+      ["الْعَمُّ أَمِينٌ", "uncle Amin", "дядько Амін"],
+      ["حَارِسُ الْمَدْرَسَةِ", "the school guard", "шкільний сторож"],
+    ],
+  },
+};
+window.LESSON.exercises.forEach((s) =>
+  s.items.forEach((it) => {
+    const h = it.type === "open" && WRITE_HELP[it.a];
+    if (h) Object.assign(it, { help: { qs: h.qs }, words: h.words });
+  }),
+);

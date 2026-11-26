@@ -123,6 +123,12 @@ window.LESSON = {
   ],
 
   gloss: {
+    كَيْفَ: ["how", "як"],
+    مَاذَا: ["what", "що"],
+    يَفْعَلُ: ["does", "робить"],
+    بِوَقْتِهِ: ["with his time", "зі своїм часом"],
+    وَعَمَلِهِ: ["and his work", "і роботою"],
+    يُتْقِنُ: ["does well", "робить добре"],
     أَدَاةُ: ["a word (tool)", "частка, слово"],
     أَكْمِلِ: ["complete", "доповни"],
     أَوْ: ["or", "або"],
@@ -268,3 +274,42 @@ window.LESSON = {
     SEC("c4", ...COPYT, [COPY]),
   ],
 };
+
+// written answers: guiding questions (help.qs, one per sentence) and the main words to use (words), matched by the model answer
+const WRITE_HELP = {
+  "النَّاجِحُ يَعِيشُ يَوْمَهُ كَنَحْلَةِ الْعَسَلِ، وَيَسْعَى لِحُلْمِهِ وَلَا يَعْرِفُ الْكَسَلَ، وَيَصُونُ وَقْتَهُ وَيُتْقِنُ الْعَمَلَ، وَيُطِيعُ رَبَّهُ.":
+    {
+      qs: [
+        [
+          "كَيْفَ يَعِيشُ النَّاجِحُ يَوْمَهُ؟",
+          "How does a successful person live the day?",
+          "Як успішна людина проживає свій день?",
+        ],
+        [
+          "مَاذَا يَفْعَلُ لِحُلْمِهِ؟",
+          "What does he do for his dream?",
+          "Що він робить для своєї мрії?",
+        ],
+        [
+          "مَاذَا يَفْعَلُ بِوَقْتِهِ وَعَمَلِهِ؟",
+          "What does he do with his time and work?",
+          "Що він робить зі своїм часом і роботою?",
+        ],
+      ],
+      words: [
+        ["كَنَحْلَةِ الْعَسَلِ", "like a honey bee", "як бджілка"],
+        ["يَسْعَى", "works hard for", "прагне"],
+        ["لِحُلْمِهِ", "his dream", "до своєї мрії"],
+        ["الْكَسَلَ", "laziness", "лінощі"],
+        ["يَصُونُ وَقْتَهُ", "keeps his time", "береже свій час"],
+        ["يُتْقِنُ الْعَمَلَ", "does the work well", "робить роботу добре"],
+        ["يُطِيعُ رَبَّهُ", "obeys his Lord", "слухається Бога"],
+      ],
+    },
+};
+window.LESSON.exercises.forEach((s) =>
+  s.items.forEach((it) => {
+    const h = it.type === "open" && WRITE_HELP[it.a];
+    if (h) Object.assign(it, { help: { qs: h.qs }, words: h.words });
+  }),
+);

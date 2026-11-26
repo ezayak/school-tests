@@ -76,6 +76,10 @@ window.LESSON = {
   ],
 
   gloss: {
+    أَيِّ: ["which", "яке"],
+    النَّجَاحَ: ["success", "успіху"],
+    شَيْءٍ: ["a thing", "річ"],
+    مَاذَا: ["what", "що"],
     اقْرَأِ: ["read", "прочитай"],
     الْفِقْرَةِ: ["the paragraph", "абзац"],
     التَّالِيَةَ: ["following", "такі"],
@@ -353,3 +357,55 @@ window.LESSON = {
     { ...COPY, k: "c4", tab: "c" },
   ],
 };
+
+// written answers: guiding questions (help.qs, one per sentence) and the main words to use (words), matched by the model answer
+const WRITE_HELP = {
+  "الَّذِي يُرِيدُ أَنْ يَنْجَحَ عَلَيْهِ أَنْ يُكَرِّرَ الْمُحَاوَلَاتِ، وَيَتَعَلَّمَ مِنْ أَخْطَائِهِ.":
+    {
+      qs: [
+        [
+          "مَاذَا يُكَرِّرُ مَنْ يُرِيدُ النَّجَاحَ؟",
+          "What does someone who wants success try again?",
+          "Що повторює той, хто хоче успіху?",
+        ],
+        [
+          "مِنْ أَيِّ شَيْءٍ يَتَعَلَّمُ؟",
+          "What does he learn from?",
+          "На чому він вчиться?",
+        ],
+      ],
+      words: [
+        ["يُكَرِّرَ", "repeat", "повторювати"],
+        ["الْمُحَاوَلَاتِ", "the tries", "спроби"],
+        ["يَتَعَلَّمَ", "learn", "вчитися"],
+        ["أَخْطَائِهِ", "his mistakes", "своїх помилках"],
+      ],
+    },
+  "الَّذِي يُرِيدُ أَنْ يَنْجَحَ عَلَيْهِ أَنْ يَتَعَلَّمَ مِنْ أَخْطَائِهِ وَيُكَرِّرَ الْمُحَاوَلَاتِ.":
+    {
+      qs: [
+        [
+          "مَاذَا يُكَرِّرُ مَنْ يُرِيدُ النَّجَاحَ؟",
+          "What does someone who wants success try again?",
+          "Що повторює той, хто хоче успіху?",
+        ],
+        [
+          "مِنْ أَيِّ شَيْءٍ يَتَعَلَّمُ؟",
+          "What does he learn from?",
+          "На чому він вчиться?",
+        ],
+      ],
+      words: [
+        ["يُكَرِّرَ", "repeat", "повторювати"],
+        ["الْمُحَاوَلَاتِ", "the tries", "спроби"],
+        ["يَتَعَلَّمَ", "learn", "вчитися"],
+        ["أَخْطَائِهِ", "his mistakes", "своїх помилках"],
+      ],
+    },
+};
+window.LESSON.exercises.forEach((s) =>
+  s.items.forEach((it) => {
+    const h = it.type === "open" && WRITE_HELP[it.a];
+    if (h) Object.assign(it, { help: { qs: h.qs }, words: h.words });
+  }),
+);

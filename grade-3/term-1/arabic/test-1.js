@@ -55,6 +55,11 @@ window.LESSON = {
   ],
 
   gloss: {
+    أَيِّ: ["which", "яке"],
+    أَيْنَ: ["where", "де"],
+    حَكَتْ: ["told (she)", "розповіла"],
+    شَيْءٍ: ["a thing", "річ"],
+    مَا: ["how … ! / what", "який …! / що"],
     اقْرَأِ: ["read", "прочитай"],
     الْفِقْرَةِ: ["the paragraph", "абзац"],
     التَّالِيَةَ: ["following", "такі"],
@@ -397,3 +402,55 @@ window.LESSON = {
     },
   ],
 };
+
+// written answers: guiding questions (help.qs, one per sentence) and the main words to use (words), matched by the model answer
+const WRITE_HELP = {
+  "أَعْلَنَتِ الْمُعَلِّمَةُ عَنْ مُسَابَقَةِ (ارْسُمْ حُلْمَكَ).": {
+    qs: [
+      [
+        "مَا اسْمُ الْمُسَابَقَةِ؟",
+        "What is the competition called?",
+        "Як називається конкурс?",
+      ],
+    ],
+    words: [
+      ["مُسَابَقَةِ", "competition", "конкурс"],
+      ["ارْسُمْ", "draw", "намалюй"],
+      ["حُلْمَكَ", "your dream", "свою мрію"],
+    ],
+  },
+  "اللَّوْحَةُ الْفَائِزَةُ سَتُعَلَّقُ عَلَى جِدَارِ الْمَدْرَسَةِ.": {
+    qs: [
+      [
+        "أَيْنَ سَتُعَلَّقُ اللَّوْحَةُ؟",
+        "Where will the picture be hung?",
+        "Де повісять малюнок?",
+      ],
+    ],
+    words: [
+      ["سَتُعَلَّقُ", "will be hung", "повісять"],
+      ["جِدَارِ", "the wall", "стіні"],
+      ["الْمَدْرَسَةِ", "the school", "школи"],
+    ],
+  },
+  "رِحْلَةَ نَجَاحِهَا.": {
+    qs: [
+      [
+        "عَنْ أَيِّ شَيْءٍ حَكَتْ هِبَةُ؟",
+        "What did Heba tell about?",
+        "Про що розповіла Хіба?",
+      ],
+    ],
+    words: [
+      ["تَحْكِي", "tells", "розповідає"],
+      ["رِحْلَةَ", "the journey", "шлях"],
+      ["نَجَاحِهَا", "her success", "її успіху"],
+    ],
+  },
+};
+window.LESSON.exercises.forEach((s) =>
+  s.items.forEach((it) => {
+    const h = it.type === "open" && WRITE_HELP[it.a];
+    if (h) Object.assign(it, { help: { qs: h.qs }, words: h.words });
+  }),
+);

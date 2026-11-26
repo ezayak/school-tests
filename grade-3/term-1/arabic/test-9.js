@@ -80,6 +80,14 @@ window.LESSON = {
   ],
 
   gloss: {
+    أَمْ: ["or", "чи"],
+    أَيَّ: ["which", "яке"],
+    التَّلَامِيذَ: ["the pupils", "учнів"],
+    سَأَلَ: ["asked", "запитав"],
+    كَانَ: ["was, there was", "був, була"],
+    مَادَّةٍ: ["subject (school)", "предмета"],
+    هَلْ: ["(question word: do / is)", "чи"],
+    يُعَلِّمُ: ["teaches", "навчає"],
     أَجِبْ: ["answer", "дай відповідь"],
     أَكْمِلْ: ["complete", "доповни"],
     أَنْ: ["to, that", "щоб"],
@@ -336,3 +344,57 @@ window.LESSON = {
     ]),
   ],
 };
+
+// written answers: guiding questions (help.qs, one per sentence) and the main words to use (words), matched by the model answer
+const WRITE_HELP = {
+  "مُعَلِّمُ الرِّيَاضِيَّاتِ.": {
+    qs: [
+      [
+        "أَيَّ مَادَّةٍ يُعَلِّمُ؟",
+        "Which subject does he teach?",
+        "Який предмет він викладає?",
+      ],
+    ],
+    words: [
+      ["مُعَلِّمُ", "the teacher of", "учитель"],
+      ["الرِّيَاضِيَّاتِ", "maths", "математики"],
+    ],
+  },
+  "شَرَحَ الْمُعَلِّمُ دَرْسًا جَدِيدًا.": {
+    qs: [
+      [
+        "هَلْ كَانَ الدَّرْسُ قَدِيمًا أَمْ جَدِيدًا؟",
+        "Was the lesson old or new?",
+        "Урок був старий чи новий?",
+      ],
+    ],
+    words: [
+      ["شَرَحَ", "explained", "пояснив"],
+      ["دَرْسًا", "a lesson", "урок"],
+      ["جَدِيدًا", "new", "новий"],
+    ],
+  },
+  "مَنْ عِنْدَهُ الشَّجَاعَةُ أَنْ يَحُلَّ أَوَّلَ مَسْأَلَةٍ عَلَى السَّبُّورَةِ؟":
+    {
+      qs: [
+        [
+          "مَاذَا سَأَلَ الْمُعَلِّمُ التَّلَامِيذَ؟",
+          "What did the teacher ask the pupils?",
+          "Що запитав учитель учнів?",
+        ],
+      ],
+      words: [
+        ["مَنْ", "who", "хто"],
+        ["الشَّجَاعَةُ", "the courage", "сміливість"],
+        ["يَحُلَّ", "solve", "розв'язати"],
+        ["مَسْأَلَةٍ", "a sum, a problem", "задачу"],
+        ["السَّبُّورَةِ", "the board", "дошці"],
+      ],
+    },
+};
+window.LESSON.exercises.forEach((s) =>
+  s.items.forEach((it) => {
+    const h = it.type === "open" && WRITE_HELP[it.a];
+    if (h) Object.assign(it, { help: { qs: h.qs }, words: h.words });
+  }),
+);

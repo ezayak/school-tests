@@ -65,6 +65,10 @@ window.LESSON = {
   ],
 
   gloss: {
+    التَّعَاوُنُ: ["working together", "співпраці"],
+    الْحُبُّ: ["love", "любов"],
+    الْوَفَاءُ: ["loyalty", "вірність"],
+    تَعْرِفُهَا: ["you know", "ти знаєш"],
     اقْرَأْ: ["read", "прочитай"],
     ثُمَّ: ["then", "потім"],
     أَجِبْ: ["answer", "дай відповідь"],
@@ -389,19 +393,20 @@ window.LESSON = {
           read: [IMAN, 0],
           img: "img/lesson-3/kids.jpg",
           help: {
-            q: "عَنْ مَاذَا تَتَكَلَّمُ الْفِقْرَةُ؟",
-            o: [
-              ["إِيمَانُ الشُّجَاعَةُ", "Brave Iman", "Смілива Іман"],
+            qs: [
               [
-                "رِحْلَةٌ إِلَى الْبَحْرِ",
-                "A trip to the sea",
-                "Поїздка до моря",
+                "عَنْ مَنْ تَتَكَلَّمُ الْفِقْرَةُ؟",
+                "Who is the paragraph about?",
+                "Про кого цей абзац?",
               ],
-              ["قِطَّتِي الصَّغِيرَةُ", "My little cat", "Моя маленька кицька"],
             ],
-            en: "What is the paragraph about? Then write your title.",
-            uk: "Про що цей абзац? Потім напиши свою назву.",
           },
+          words: [
+            ["إِيمَانُ", "Iman", "Іман"],
+            ["الشُّجَاعَةُ", "brave", "смілива"],
+            ["تُشَجِّعُ", "encourages", "підбадьорює"],
+            ["الْآخَرِينَ", "others", "інших"],
+          ],
           q: "ضَعْ عُنْوَانًا مُنَاسِبًا لِلْفِقْرَةِ السَّابِقَةِ.",
           a: "إِيمَانُ الشُّجَاعَةُ (أَوْ: الشَّجَاعَةُ تُشَجِّعُ الْآخَرِينَ)",
           en: "Write a good title for the paragraph. Your title can be different from the model: “Brave Iman” (or: “Courage encourages others”).",
@@ -553,15 +558,22 @@ window.LESSON = {
           type: "open",
           img: "img/lesson-4/hw-recycle.jpg",
           help: {
-            q: "أَيُّ هَذِهِ مِنَ الْأَخْلَاقِ الْجَمِيلَةِ؟",
-            o: [
-              ["الصِّدْقُ", "honesty", "правдивість"],
-              ["الْعَطَاءُ", "giving", "щедрість"],
-              ["الْكَذِبُ", "lying", "брехня"],
+            qs: [
+              [
+                "مَا الْأَخْلَاقُ الْجَمِيلَةُ الَّتِي تَعْرِفُهَا؟",
+                "What good manners do you know?",
+                "Які гарні риси ти знаєш?",
+              ],
             ],
-            en: "Which of these are good manners? Then write some yourself.",
-            uk: "Що з цього гарні чесноти? Потім напиши кілька сам.",
           },
+          words: [
+            ["الصِّدْقُ", "telling the truth", "правдивість"],
+            ["الْوَفَاءُ", "loyalty", "вірність"],
+            ["الْعَطَاءُ", "giving", "щедрість"],
+            ["الْإِخَاءُ", "brotherhood", "братерство"],
+            ["الْحُبُّ", "love", "любов"],
+            ["التَّعَاوُنُ", "working together", "співпраця"],
+          ],
           q: "اذْكُرْ بَعْضَ الْأَخْلَاقِ الْجَمِيلَةِ الَّتِي يَجِبُ أَنْ نَتَّصِفَ بِهَا.",
           a: "الصِّدْقُ، وَالْوَفَاءُ، وَالْعَطَاءُ، وَالْإِخَاءُ، وَالْحُبُّ، وَالتَّعَاوُنُ.",
           en: "Name some good manners we should have: honesty, loyalty, giving, brotherhood, love, helping each other.",

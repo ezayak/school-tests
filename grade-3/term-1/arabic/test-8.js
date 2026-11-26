@@ -97,6 +97,13 @@ window.LESSON = {
   ],
 
   gloss: {
+    أَيُّ: ["which", "яке"],
+    الْبَيْتَانِ: ["the two lines", "два рядки"],
+    الَّتِي: ["that, which", "яка"],
+    تَنْتَهِيَانِ: ["(two) end", "закінчуються"],
+    الصَّوْتِ: ["sound", "звук"],
+    بِنَفْسِ: ["with the same", "тим самим"],
+    يَذْكُرُهَا: ["names them", "називає"],
     أَجِبْ: ["answer", "дай відповідь"],
     أَخْ: ["(a sound part of a word)", "(частина слова)"],
     أَخْلَاقَنَا: ["our manners", "наші чесноти"],
@@ -348,3 +355,71 @@ window.LESSON = {
     ]),
   ],
 };
+
+// written answers: guiding questions (help.qs, one per sentence) and the main words to use (words), matched by the model answer
+const WRITE_HELP = {
+  "السَّمَاءِ – الْوَفَاءِ": {
+    qs: [
+      [
+        "اقْرَأِ الْبَيْتَيْنِ: أَيُّ كَلِمَتَيْنِ تَنْتَهِيَانِ بِنَفْسِ الصَّوْتِ؟",
+        "Read the two lines: which two words end with the same sound?",
+        "Прочитай два рядки: які два слова закінчуються однаково?",
+      ],
+    ],
+    words: [
+      ["السَّمَاءِ", "the sky", "небо"],
+      ["الْوَفَاءِ", "loyalty", "вірність"],
+      ["الْإِخَاءِ", "brotherhood", "братерство"],
+      ["الْعَطَاءِ", "giving", "щедрість"],
+    ],
+  },
+  "الْوَفَاءِ – الْإِخَاءِ": {
+    qs: [
+      [
+        "اقْرَأِ الْبَيْتَيْنِ: أَيُّ كَلِمَتَيْنِ تَنْتَهِيَانِ بِنَفْسِ الصَّوْتِ؟",
+        "Read the two lines: which two words end with the same sound?",
+        "Прочитай два рядки: які два слова закінчуються однаково?",
+      ],
+    ],
+    words: [
+      ["الْوَفَاءِ", "loyalty", "вірність"],
+      ["الْإِخَاءِ", "brotherhood", "братерство"],
+      ["الْعَطَاءِ", "giving", "щедрість"],
+    ],
+  },
+  "الصِّدْقُ، الْوَفَاءُ (وَالْحُبُّ، وَالْإِخَاءُ).": {
+    qs: [
+      [
+        "مَا الْأَخْلَاقُ الْجَمِيلَةُ الَّتِي يَذْكُرُهَا الْبَيْتَانِ؟",
+        "What good manners do the two lines name?",
+        "Які гарні риси називають два рядки?",
+      ],
+    ],
+    words: [
+      ["الصِّدْقُ", "telling the truth", "правдивість"],
+      ["الْوَفَاءُ", "loyalty", "вірність"],
+      ["الْحُبُّ", "love", "любов"],
+      ["الْإِخَاءُ", "brotherhood", "братерство"],
+    ],
+  },
+  "الْإِخَاءِ – الْعَطَاءِ": {
+    qs: [
+      [
+        "اقْرَأِ الْبَيْتَيْنِ: أَيُّ كَلِمَتَيْنِ تَنْتَهِيَانِ بِنَفْسِ الصَّوْتِ؟",
+        "Read the two lines: which two words end with the same sound?",
+        "Прочитай два рядки: які два слова закінчуються однаково?",
+      ],
+    ],
+    words: [
+      ["الْإِخَاءِ", "brotherhood", "братерство"],
+      ["الْعَطَاءِ", "giving", "щедрість"],
+      ["السَّمَاءِ", "the sky", "небо"],
+    ],
+  },
+};
+window.LESSON.exercises.forEach((s) =>
+  s.items.forEach((it) => {
+    const h = it.type === "open" && WRITE_HELP[it.a];
+    if (h) Object.assign(it, { help: { qs: h.qs }, words: h.words });
+  }),
+);
