@@ -70,6 +70,15 @@ window.TESTS = [
     note: "Groups A · B · C · 20 questions · the poem «طريق السعادة» (book p. 49–50)",
   },
   {
+    n: "p. 54–55",
+    nAr: "ص ٥٤–٥٥",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · Friends of Nature · The Old Tree's Message",
+    path: "test-p54.html",
+    cover: "img/u3-lesson-1/cover.jpg",
+    note: "Groups A · B · C · 21 questions · listening «رسالة إلى أصدقاء الطبيعة», reading «رسالة الشجرة العجوز», writing (Unit 3 Lessons 1–2, book p. 54–55)",
+  },
+  {
     n: "p. 58–59",
     nAr: "ص ٥٨–٥٩",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
