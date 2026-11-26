@@ -39,4 +39,13 @@ window.TESTS = [
     cover: "../../../grade-3/term-1/arabic/img/lesson-4/cover.jpg",
     note: "Groups A · B · C · 20 questions · the poem «طريق السعادة» (book p. 49–50)",
   },
+  {
+    n: "p. 65–67",
+    nAr: "ص ٦٥–٦٧",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · In the Orchard",
+    path: "test-p65.html",
+    cover: "img/u3-lesson-4/cover.jpg",
+    note: "Groups A · B · C · 47 questions · the poem «في البستان» (Unit 3 Lesson 4, book p. 65–67)",
+  },
 ];

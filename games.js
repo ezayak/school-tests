@@ -1703,15 +1703,17 @@ window.GAMES = [
     hub: true,
     lesson: "الْقِرَاءَةُ · Learn to read step by step",
     topics:
-      "Lessons · الدُّرُوسُ: Unit 3 Lesson 4 the poem «في البستان» (words, real and figurative expressions, the workbook classwork, the Unit 3 review, the stories «أحترم خصوصية زملائي» and «درس لا يُنسى») · Tests · التَّقْيِيمُ الْأُسْبُوعِيُّ: p. 49–50 the poem «طريق السعادة» (groups A · B · C) · Reading games · أَلْعَابُ الْقِرَاءَةِ: catch the word (fill 10 buckets, best time), complete the sentence (3 hearts, a clock) · Reading · الْقِرَاءَةُ: Step 1 · letters and harakat: read each letter, hear the sound, where is the letter, the missing letter, letters that sound alike, letter shapes, put the letters in order, progress checks 1–4 · Step 2 · three-letter words: read 65 words, hear the word, fatha or damma, picture and word, blend the letters, the letter flower · Step 3 · madd ا و ي: read 89 words, the madd letter, short or long, the missing madd letter · Step 4 · sukun: read 34 words, where is the sukun, split into syllables, the missing syllable · Step 5 · ت ة ه: read 25 words, which ending, the last letter, write the name · Step 6 · shadda: read 35 words, with or without shadda, where is the shadda, two letters in one · Step 7 · tanween: read 65 words, which tanween, hear un in an, the alif of tanween with fatha, is there tanween · Step 8 · moon and sun lam: read 70 words, moon or sun, write the word with ال · Step 9 · hamza and ى: read 26 words, qat' or wasl, أ or ا, ى or ا · Step 10 · sentences and texts: 4 texts, fast reading, order the words, dictation, meaning from context, the main idea, describe the market picture",
+      "Lessons · الدُّرُوسُ: Unit 3 Lesson 4 the poem «في البستان» (words, real and figurative expressions, the workbook classwork, the Unit 3 review, the stories «أحترم خصوصية زملائي» and «درس لا يُنسى») · Tests · التَّقْيِيمُ الْأُسْبُوعِيُّ: p. 49–50 the poem «طريق السعادة», p. 65–67 the poem «في البستان» (groups A · B · C) · Reading games · أَلْعَابُ الْقِرَاءَةِ: catch the word (fill 10 buckets, best time), complete the sentence (3 hearts, a clock) · Reading · الْقِرَاءَةُ: Step 1 · letters and harakat: read each letter, hear the sound, where is the letter, the missing letter, letters that sound alike, letter shapes, put the letters in order, progress checks 1–4 · Step 2 · three-letter words: read 65 words, hear the word, fatha or damma, picture and word, blend the letters, the letter flower · Step 3 · madd ا و ي: read 89 words, the madd letter, short or long, the missing madd letter · Step 4 · sukun: read 34 words, where is the sukun, split into syllables, the missing syllable · Step 5 · ت ة ه: read 25 words, which ending, the last letter, write the name · Step 6 · shadda: read 35 words, with or without shadda, where is the shadda, two letters in one · Step 7 · tanween: read 65 words, which tanween, hear un in an, the alif of tanween with fatha, is there tanween · Step 8 · moon and sun lam: read 70 words, moon or sun, write the word with ال · Step 9 · hamza and ى: read 26 words, qat' or wasl, أ or ا, ى or ا · Step 10 · sentences and texts: 4 texts, fast reading, order the words, dictation, meaning from context, the main idea, describe the market picture",
     path: "grade-4/term-1/arabic/index.html",
-    countLabel: "1 lesson · 10 reading steps · 2 games · 1 test",
+    countLabel: "1 lesson · 10 reading steps · 2 games · 2 tests",
     year: "2026–2027",
     // the reading cards are shared with Grade 3: their files are in the also list of the Grade 3 Arabic entry
     also: [
       "grade-4/term-1/arabic/lessons.js",
       "grade-4/term-1/arabic/test-p49.html",
       "grade-4/term-1/arabic/test-p49.js",
+      "grade-4/term-1/arabic/test-p65.html",
+      "grade-4/term-1/arabic/test-p65.js",
       "grade-4/term-1/arabic/u3-lesson-4.html",
       "grade-4/term-1/arabic/u3-lesson-4.js",
       "grade-4/term-1/arabic/img/u3-lesson-4/bird.jpg",
