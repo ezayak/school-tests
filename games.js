@@ -433,6 +433,21 @@ window.GAMES = [
     // the page is offline through the Grade 3 Religion entry's "also" (pictures: the lessons')
   },
   {
+    grade: 3,
+    term: 2,
+    period: "Mid-term exam",
+    subject: "Arabic",
+    title: "Arabic Revision",
+    lesson:
+      "مُرَاجَعَةُ شَهْرِ نُوفَمْبِرَ · Revision November, Lessons 1–4 (the November test)",
+    topics:
+      "The listening text «الزهرة والصبار», reading «السعادة في المساعدة» and «أول من رفع يده», the poem «أخلاقنا» · one, two, many · saying “not” with لم / لن · a new ending for a story · dictation and tanween · naskh handwriting",
+    path: "grade-3/term-2/arabic/revision-november.html",
+    questions: 558,
+    year: "2026–2027",
+    // the page is offline through the Grade 3 Arabic entry's "also" (pictures: the lessons')
+  },
+  {
     grade: 4,
     term: 1,
     period: "Mid-term exam",
@@ -1151,6 +1166,8 @@ window.GAMES = [
       "grade-3/term-1/arabic/img/lesson-8/seed.jpg",
       "grade-3/term-1/arabic/img/lesson-8/sprout.jpg",
       "grade-3/term-1/arabic/img/lesson-8/tree.jpg",
+      "grade-3/term-2/arabic/revision-november.html",
+      "grade-3/term-2/arabic/revision-november.js",
       "arabic-reading/lessons.js",
       "arabic-reading/hub.js",
       "arabic-reading/letters.html",
