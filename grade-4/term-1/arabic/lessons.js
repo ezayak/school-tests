@@ -18,6 +18,16 @@ window.LIST_HEAD = {
 };
 window.LESSONS = [
   {
+    n: "4",
+    unit: 2,
+    nAr: "الرَّابِعُ",
+    title: "طَرِيقُ السَّعَادَةِ",
+    en: "The Road to Happiness",
+    path: "u2-lesson-4.html",
+    cover: "img/u2-lesson-4/cover.jpg",
+    note: "Poem · classwork · Unit 2 review · 2 stories · 17 words · 101 exercises",
+  },
+  {
     n: "1",
     unit: 3,
     nAr: "الْأَوَّلُ",
