@@ -83,6 +83,24 @@
 .qtype.mt {
   background: color-mix(in srgb, var(--ke) 22%, var(--card));
 }
+/* the question's label with 🔊 and « Read taps » (shared/quest.js) */
+.qbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.qbar .abtn {
+  font-size: 1rem;
+  padding: 6px 12px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.qbar #tapSay {
+  margin-left: auto;
+}
+.qbar #tapSay[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--green) 30%, var(--card));
+}
 .qtext {
   font-size: 1.3rem;
   font-weight: 700;
@@ -499,7 +517,7 @@
   overflow: hidden;
 }
 
-/* ---------- Sheet quiz (shared/sheet-quiz.js): a chosen answer, the help, the popup with a pretend program ---------- */
+/* ---------- Sheet quiz (shared/sheet-quiz.js) and Quest « Read taps »: a chosen answer, the help, the popup with a pretend program ---------- */
 .opt.chosen {
   background: color-mix(in srgb, var(--cool) 22%, var(--card));
   border-color: var(--cool);

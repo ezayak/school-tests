@@ -16,6 +16,9 @@
 //   mt: [ { l, t: "Match each word to its meaning", p: [["🌦️", "Weather", "The condition of the air…"], …] } ],
 // };
 // An answer list ["True", "False"] shows as « True or false ».
+// Every question has 🔊 (reads the question) and « Read taps » (off when the page opens): while it is on,
+// each answer or matching box is read aloud when it is tapped, and a tapped answer is only chosen:
+// « Check » marks it, then only « Next » is left.
 (function () {
   const D = window.QUEST;
   const { esc, shuf, pick, star } = Kit;
@@ -25,6 +28,34 @@
 
   // one picture per question (the helpers are shared with the sheet quiz: Kit.qPic in common.js)
   const scene = (q) => Kit.qPic(q, D.imgDir);
+
+  /* ---------- reading aloud ---------- */
+  const lang = document.documentElement.lang || "en";
+  const V = Kit.voice(lang === "en" ? "en-US" : lang);
+  let tapSay = false; // « Read taps »: off every time the page opens
+  function say(t) {
+    if (!V.ok || !t) return;
+    V.hush();
+    setTimeout(() => V.say(t, 0.9), 60); // speaking right after cancel() is ignored by Chrome
+  }
+  const tapRead = (t) => tapSay && say(t);
+  // the question's label, 🔊 and « Read taps »
+  const qbar = (label) =>
+    `<div class="qbar">${label}${V.ok ? `<button type="button" class="abtn sm" id="sayQ" aria-label="Read the question">🔊</button><button type="button" class="abtn sm" id="tapSay" aria-pressed="${tapSay}">👆 Read taps: ${tapSay ? "On" : "Off"}</button>` : ""}</div>`;
+  // onToggle: called after « Read taps » is switched
+  function bindBar(text, onToggle) {
+    const q = document.getElementById("sayQ"),
+      t = document.getElementById("tapSay");
+    if (q) q.onclick = () => say(text);
+    if (t)
+      t.onclick = () => {
+        tapSay = !tapSay;
+        t.setAttribute("aria-pressed", tapSay);
+        t.textContent = "👆 Read taps: " + (tapSay ? "On" : "Off");
+        if (!tapSay) V.hush();
+        if (onToggle) onToggle();
+      };
+  }
 
   /* ---------- choices on the start screen ---------- */
   const LESSONS = [{ n: 0, l: "All lessons" }, ...(D.lessons || [])];
@@ -143,6 +174,7 @@
   function bindNext() {
     const n = document.getElementById("nextBtn");
     n.onclick = () => {
+      V.hush();
       S.i++;
       render();
     };
@@ -155,32 +187,63 @@
     const long = opts.some((o) => o.t.length > 34);
     const tf = q.o.length === 2 && q.o[0] === "True" && q.o[1] === "False";
     app.innerHTML = `${hud()}<section class="card pop">
-    <span class="qtype mc">${tf ? "True or false" : "Choose the answer"}</span>
+    ${qbar(`<span class="qtype mc">${tf ? "True or false" : "Choose the answer"}</span>`)}
     ${scene(q)}
     <p class="qtext">${esc(q.q)}</p>
     <div class="opts ${long ? "long" : ""}">${opts.map((o, i) => `<button type="button" class="opt" id="opt-${i}" data-i="${i}"><span class="L">${"ABCD"[i]}</span><span>${esc(o.t)}</span></button>`).join("")}</div>
     <div id="fbx"></div>
   </section>`;
-    const btns = [...app.querySelectorAll(".opt")];
+    const btns = [...app.querySelectorAll(".opt")],
+      fbx = document.getElementById("fbx");
+    let chosen = -1,
+      done = false;
+    // « Read taps » on: a tap chooses (and reads) an answer, « Check » marks it
+    function checkRow() {
+      if (done) return;
+      chosen = -1;
+      btns.forEach((x) => {
+        x.classList.remove("chosen");
+        x.setAttribute("aria-pressed", "false");
+      });
+      fbx.innerHTML = tapSay
+        ? `<div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my answer</button></div>`
+        : "";
+      const cb = document.getElementById("checkBtn");
+      if (cb) cb.onclick = () => chosen >= 0 && answer(chosen);
+    }
+    function answer(k) {
+      done = true;
+      const b = btns[k],
+        o = opts[k];
+      const right = opts.find((z) => z.ok).t;
+      btns.forEach((x, i) => {
+        x.disabled = true;
+        x.classList.remove("chosen");
+        if (opts[i].ok) x.classList.add("right");
+        else if (x !== b) x.classList.add("dim");
+      });
+      if (o.ok) S.score++;
+      else {
+        b.classList.add("wrong");
+        S.miss.push({ q: q.q, your: o.t, right });
+      }
+      document.getElementById("pts").textContent = S.score;
+      fbx.innerHTML = `<div class="fb ${o.ok ? "ok" : "no"}"><b>${o.ok ? pick(["Correct!", "Great job!", "You got it!", "Nice work!"]) : "Not quite."}</b><span>${o.ok ? "" : "The answer is <strong>" + esc(right) + "</strong>. "}${esc(q.x || "")}</span></div>${nextRow()}`;
+      bindNext();
+    }
+    bindBar(q.q, checkRow);
+    checkRow();
     btns.forEach(
-      (b) =>
+      (b, k) =>
         (b.onclick = () => {
-          const o = opts[+b.dataset.i];
-          const right = opts.find((z) => z.ok).t;
-          btns.forEach((x, i) => {
-            x.disabled = true;
-            if (opts[i].ok) x.classList.add("right");
-            else if (x !== b) x.classList.add("dim");
+          if (!tapSay) return answer(k);
+          say(opts[k].t);
+          chosen = k;
+          btns.forEach((x) => {
+            x.classList.toggle("chosen", x === b);
+            x.setAttribute("aria-pressed", x === b);
           });
-          if (o.ok) S.score++;
-          else {
-            b.classList.add("wrong");
-            S.miss.push({ q: q.q, your: o.t, right });
-          }
-          document.getElementById("pts").textContent = S.score;
-          document.getElementById("fbx").innerHTML =
-            `<div class="fb ${o.ok ? "ok" : "no"}"><b>${o.ok ? pick(["Correct!", "Great job!", "You got it!", "Nice work!"]) : "Not quite."}</b><span>${o.ok ? "" : "The answer is <strong>" + esc(right) + "</strong>. "}${esc(q.x || "")}</span></div>${nextRow()}`;
-          bindNext();
+          document.getElementById("checkBtn").disabled = false;
         }),
     );
   }
@@ -192,12 +255,13 @@
     let sel = null,
       checked = false;
     app.innerHTML = `${hud()}<section class="card pop">
-    <span class="qtype mt">Matching · ${q.p.length} points</span>
+    ${qbar(`<span class="qtype mt">Matching · ${q.p.length} points</span>`)}
     <p class="qtext">${esc(q.t)}</p>
     <p class="hint">Tap a word on the left, then tap its meaning on the right. Tap again to undo.</p>
     <div class="match"><div class="mcol" id="colL"></div><div class="mcol" id="colR"></div></div>
     <div id="fbx"><div class="row" style="justify-content:flex-end"><button class="btn" id="checkBtn" type="button" disabled>Check my matches</button></div></div>
   </section>`;
+    bindBar(q.t);
     const colL = document.getElementById("colL"),
       colR = document.getElementById("colR");
     function draw() {
@@ -222,6 +286,7 @@
         (b) =>
           (b.onclick = () => {
             const li = +b.dataset.l;
+            tapRead(q.p[li][1]);
             if (pair[li] !== undefined) {
               delete pair[li];
               sel = li;
@@ -233,6 +298,7 @@
         (b) =>
           (b.onclick = () => {
             const ri = +b.dataset.r;
+            tapRead(q.p[ri][2]);
             const owner = Object.keys(pair).find((x) => pair[x] === ri);
             if (sel === null) {
               if (owner !== undefined) {
