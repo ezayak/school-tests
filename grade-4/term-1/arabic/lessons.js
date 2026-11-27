@@ -61,6 +61,15 @@ window.LESSONS = [
 // Weekly tests: named by the book pages («حل التقييمات» book), not by a test number (the parent's wish).
 window.TESTS = [
   {
+    n: "p. 41–43",
+    nAr: "ص ٤١–٤٣",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · Think a Little, Gain a Lot",
+    path: "test-p41.html",
+    cover: "img/u2-lesson-3/cover.jpg",
+    note: "Groups A · B · C · 44 questions · «فكر قليلًا تربح كثيرًا»: reading, the subject and predicate, handwriting (Unit 2 Lesson 3, book p. 41–43)",
+  },
+  {
     n: "p. 49–50",
     nAr: "ص ٤٩–٥٠",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
