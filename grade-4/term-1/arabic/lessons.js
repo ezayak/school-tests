@@ -70,6 +70,15 @@ window.TESTS = [
     note: "Groups A · B · C · 44 questions · «فكر قليلًا تربح كثيرًا»: reading, the subject and predicate, handwriting (Unit 2 Lesson 3, book p. 41–43)",
   },
   {
+    n: "p. 45–46",
+    nAr: "ص ٤٥–٤٦",
+    title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
+    en: "Weekly test · Think a Little, Gain a Lot",
+    path: "test-p45.html",
+    cover: "img/u2-lesson-3/cover.jpg",
+    note: "Groups A · B · C · 20 questions · «فكر قليلًا تربح كثيرًا»: reading, true or false, the subject and predicate (Unit 2 Lesson 3, book p. 45–46)",
+  },
+  {
     n: "p. 49–50",
     nAr: "ص ٤٩–٥٠",
     title: "التَّقْيِيمُ الْأُسْبُوعِيُّ",
