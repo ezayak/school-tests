@@ -33,10 +33,29 @@
   const lang = document.documentElement.lang || "en";
   const V = Kit.voice(lang === "en" ? "en-US" : lang);
   let tapSay = false; // « Read taps »: off every time the page opens
+  // The device voice drops punctuation, so the text is said piece by piece (split at . , ? ! : ; before a space),
+  // with a short rest after each piece: a comma or a full stop is heard. "1,000" and "3.5" stay whole.
+  const RATE = 0.75;
+  let turn = 0; // a newer say() stops the pieces still waiting of an older one
+  const rest = (ms) => new Promise((r) => setTimeout(r, ms));
+  const hush = () => {
+    turn++;
+    V.hush();
+  };
   function say(t) {
     if (!V.ok || !t) return;
+    const me = ++turn;
     V.hush();
-    setTimeout(() => V.say(t, 0.9), 60); // speaking right after cancel() is ignored by Chrome
+    const parts = String(t)
+      .split(/(?<=[.,!?:;])\s+/)
+      .filter((x) => x.trim());
+    parts.reduce(
+      (p, x) =>
+        p
+          .then(() => me === turn && V.say(x, RATE))
+          .then(() => me === turn && rest(/,$/.test(x) ? 150 : 350)),
+      rest(60), // speaking right after cancel() is ignored by Chrome
+    );
   }
   const tapRead = (t) => tapSay && say(t);
   // the question's label, 🔊 and « Read taps »
@@ -52,7 +71,7 @@
         tapSay = !tapSay;
         t.setAttribute("aria-pressed", tapSay);
         t.textContent = "👆 Read taps: " + (tapSay ? "On" : "Off");
-        if (!tapSay) V.hush();
+        if (!tapSay) hush();
         if (onToggle) onToggle();
       };
   }
@@ -174,7 +193,7 @@
   function bindNext() {
     const n = document.getElementById("nextBtn");
     n.onclick = () => {
-      V.hush();
+      hush();
       S.i++;
       render();
     };
